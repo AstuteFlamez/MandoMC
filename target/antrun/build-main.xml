@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project name="maven-antrun-" default="main">
-  <target name="main">
-    <copy file="/Users/bilal/Desktop/coding/spigot/MandoMC/target/MandoMC.jar" todir="/Users/bilal/Desktop/coding/spigot/testServer/plugins/" />
-  </target>
-</project>
