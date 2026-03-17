@@ -1,0 +1,64 @@
+parkour:
+  
+  world: ilum
+  
+  start:
+    x: 11.639
+    y: -60
+    z: -55.57
+    yaw: 0
+    pitch: 0
+  
+  settings:
+    allow-commands:
+    - msg
+    - r
+    - help
+    - parkourfinish
+    - essentials:tp
+  
+  spawn:
+    world: BlackSpireOutpost
+    x: -4.5
+    y: 93
+    z: -2.5
+    yaw: 46.349
+    pitch: -3.599
+  
+  rewards:
+    commands:
+    - eco give %player% 500
+    - give %player% diamond 3
+  
+  leaderboards:
+    global:
+      world: ilum
+      x: -2.024
+      y: -59.875
+      z: -48.248
+      limit: 10
+    skilled:
+      world: ilum
+      x: -0.747
+      y: -59.875
+      z: -42.738
+      limit: 10
+      permission: mmc.leaderboards.parkour
+  
+  checkpoints:
+    '1':
+      x: 27
+      y: -51
+      z: -60
+    '2':
+      x: 80
+      y: -46
+      z: -57
+    '3':
+      x: -111
+      y: 144
+      z: -186
+    '4':
+      x: -120
+      y: -37
+      z: -230

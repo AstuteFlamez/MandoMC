@@ -1,0 +1,124 @@
+name: MandoMC
+version: 1.0
+main: com.bilal.mandomc.MandoMC
+api-version: 1.21
+
+author: Bilal
+description: Core plugin for the MandoMC server
+
+softdepend:
+  - PlaceholderAPI
+  - WeaponMechanics
+  - ModelEngine
+
+commands:
+
+  # -------------------------
+  # Item Commands
+  # -------------------------
+
+  key:
+    description: Give a dungeon key
+    usage: /key <dungeon> <door>
+    permission: mandomc.admin
+
+  note:
+    description: Give money notes
+    usage: /note <amount>
+    permission: mandomc.admin
+
+  get:
+    description: Opens the item browser or gives yourself a custom item
+    usage: /get [item]
+    permission: mandomc.items.get
+
+  give:
+    description: Give a custom item to a player
+    usage: /give <player> [item]
+    permission: mandomc.items.give
+
+  recipes:
+    description: View custom item recipes
+    usage: /recipes [item]
+    permission: mandomc.recipes.view
+
+  # -------------------------
+  # Server Commands
+  # -------------------------
+
+  mmcreload:
+    description: Reload all plugin configurations
+    usage: /mmcreload
+    permission: mandomc.admin.reload
+
+  test:
+    description: Debug command for testing features
+    permission: mandomc.admin.test
+
+  event:
+    description: Event admin command
+    usage: /event
+    aliases: [events]
+
+  # -------------------------
+  # Warp Commands
+  # -------------------------
+
+  warps:
+    description: Opens the warp menu
+    usage: /warp
+    aliases: [warp, w]
+    permission: mandomc.warp.use
+
+  # -------------------------
+  # Internal Commands
+  # -------------------------
+
+  parkourfinish:
+    description: Internal parkour system command
+    usage: /parkourfinish <player>
+
+
+permissions:
+
+  # -------------------------
+  # Item Permissions
+  # -------------------------
+
+  mandomc.items.get:
+    description: Allows a player to obtain custom items
+    default: op
+
+  mandomc.items.give:
+    description: Allows giving custom items to other players
+    default: op
+
+  mandomc.recipes.view:
+    description: Allows viewing custom recipes
+    default: true
+
+  # -------------------------
+  # Admin Permissions
+  # -------------------------
+
+  mandomc.admin:
+    default: op
+
+  mandomc.admin.reload:
+    description: Allows reloading the plugin configs
+    default: op
+
+  mandomc.admin.test:
+    description: Allows running debug commands
+    default: op
+
+  # -------------------------
+  # Gameplay Permissions
+  # -------------------------
+
+  mandomc.warp.use:
+    description: Allows using warp menu
+    default: true
+
+  mandomc.event.admin:
+    default: op

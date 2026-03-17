@@ -1,0 +1,847 @@
+items:
+
+  # ========================
+  # VEHICLE COMPONENTS
+  # ========================
+
+  tiefighter_cockpit:
+    material: ECHO_SHARD
+    name: '&8TIE Fighter Cockpit'
+    custom_model_data: 350
+    rarity: Rare
+    category: Component
+    tags: [VEHICLE, COMPONENT]
+    lore:
+      - '&7The central control module of a'
+      - '&7TIE Fighter.'
+
+    recipe:
+      - 'ASA'
+      - 'BCB'
+      - 'ASA'
+    ingredients:
+      A: durasteel_sheet
+      B: transparisteel_shard
+      C: circuit_board
+      S: wiring_coil
+
+  tiefighter_wing:
+    material: ECHO_SHARD
+    name: '&8TIE Fighter Wing'
+    custom_model_data: 351
+    rarity: Rare
+    category: Component
+    tags: [VEHICLE, COMPONENT]
+    lore:
+      - '&7A reinforced solar panel wing'
+      - '&7used by Imperial fighters.'
+
+    recipe:
+      - 'AAA'
+      - 'BCB'
+      - 'AAA'
+    ingredients:
+      A: durasteel_sheet
+      B: energy_conduits
+      C: alloy_plating
+
+
+  x_wing_cockpit:
+    material: ECHO_SHARD
+    name: '&cX-Wing Cockpit'
+    custom_model_data: 352
+    rarity: Epic
+    category: Component
+    tags: [VEHICLE, COMPONENT]
+    lore:
+      - '&7Advanced cockpit system used in'
+      - '&7Rebel starfighters.'
+
+    recipe:
+      - 'ASA'
+      - 'BCB'
+      - 'ADA'
+    ingredients:
+      A: electrum_sheet
+      B: transparisteel_shard
+      C: circuit_board
+      D: precision_crafted_lens
+      S: wiring_coil
+
+
+  x_wing_left_wing:
+    material: ECHO_SHARD
+    name: '&cX-Wing Left Wing'
+    custom_model_data: 353
+    rarity: Epic
+    category: Component
+    tags: [VEHICLE, COMPONENT]
+    lore:
+      - '&7A precision-engineered wing for'
+      - '&7X-Wing starfighters.'
+
+    recipe:
+      - 'AAA'
+      - 'BCB'
+      - 'DED'
+    ingredients:
+      A: electrum_sheet
+      B: energy_conduits
+      C: alloy_plating
+      D: fusion_coil_stabilizer
+      E: plasma_capacitor_array
+
+
+  x_wing_right_wing:
+    material: ECHO_SHARD
+    name: '&cX-Wing Right Wing'
+    custom_model_data: 354
+    rarity: Epic
+    category: Component
+    tags: [VEHICLE, COMPONENT]
+    lore:
+      - '&7Mirrored counterpart of the left'
+      - '&7wing assembly.'
+
+    recipe:
+      - 'AAA'
+      - 'BCB'
+      - 'DED'
+    ingredients:
+      A: electrum_sheet
+      B: energy_conduits
+      C: alloy_plating
+      D: fusion_coil_stabilizer
+      E: plasma_capacitor_array
+
+  money_note:
+    material: PAPER
+    name: '&aMoney Note'
+    custom_model_data: 30
+
+    rarity: Rare
+    category: Note
+
+    tags:
+      - NOTE
+
+    lore:
+      - '&7Right click to redeem.'
+  
+  keycard:
+    material: ECHO_SHARD
+    name: '&bKeycard'
+    custom_model_data: 20
+
+    rarity: Uncommon
+    category: Key
+
+    tags:
+      - KEY
+
+    lore:
+      - '&7A security keycard used'
+      - '&7to unlock restricted doors.'
+
+  cortosis_alloy_frame:
+    material: ECHO_SHARD
+    name: '&fCortosis Alloy Frame'
+    custom_model_data: 100
+    rarity: Legendary
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7A rare cortosis-infused frame'
+      - '&7resistant to energy weapons.'
+
+  fusion_coil_stabilizer:
+    material: ECHO_SHARD
+    name: '&bFusion Coil Stabilizer'
+    custom_model_data: 101
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Stabilizes volatile fusion output'
+      - '&7for consistent performance.'
+
+  high_efficiency_energy_segment:
+    material: ECHO_SHARD
+    name: '&bHigh Efficiency Energy Segment'
+    custom_model_data: 102
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Optimized for maximum energy flow'
+      - '&7with minimal loss.'
+
+  high_tech_stabilizer:
+    material: ECHO_SHARD
+    name: '&bHigh-Tech Stabilizer'
+    custom_model_data: 103
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Advanced stabilizer used in'
+      - '&7precision-grade systems.'
+
+  incredibly_strong_and_light_frame:
+    material: ECHO_SHARD
+    name: '&fLightweight Reinforced Frame'
+    custom_model_data: 104
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Strong yet lightweight frame'
+      - '&7ideal for mobility builds.'
+
+  ionized_focusing_lens:
+    material: ECHO_SHARD
+    name: '&bIonized Focusing Lens'
+    custom_model_data: 105
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Focuses ionized energy into'
+      - '&7precise, high-output beams.'
+
+  kyber_tech_recoil_dampener:
+    material: ECHO_SHARD
+    name: '&dKyber-Tech Recoil Dampener'
+    custom_model_data: 106
+    rarity: Epic
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Uses kyber energy to absorb'
+      - '&7massive recoil forces.'
+
+  plasma_capacitor_array:
+    material: ECHO_SHARD
+    name: '&bPlasma Capacitor Array'
+    custom_model_data: 107
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Stores and stabilizes plasma'
+      - '&7for rapid discharge.'
+
+  precision_crafted_lens:
+    material: ECHO_SHARD
+    name: '&aPrecision Crafted Lens'
+    custom_model_data: 108
+    rarity: Uncommon
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Improves targeting precision'
+      - '&7in energy-based weapons.'
+
+  state_of_the_art_recoil_dampener:
+    material: ECHO_SHARD
+    name: '&dState-of-the-Art Dampener'
+    custom_model_data: 109
+    rarity: Epic
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Top-tier recoil suppression system'
+      - '&7used in elite equipment.'
+
+
+  # ========================
+  # 110–117 (COMMON)
+  # ========================
+
+  basic_emitter_coil:
+    material: ECHO_SHARD
+    name: '&7Basic Emitter Coil'
+    custom_model_data: 110
+    rarity: Common
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7A simple emitter component'
+      - '&7used in basic devices.'
+
+  basic_ion_chamber:
+    material: ECHO_SHARD
+    name: '&7Basic Ion Chamber'
+    custom_model_data: 111
+    rarity: Common
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7A basic chamber for storing'
+      - '&7ionized particles.'
+
+  basic_power_cell:
+    material: ECHO_SHARD
+    name: '&7Basic Power Cell'
+    custom_model_data: 112
+    rarity: Common
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Low-capacity energy source'
+      - '&7for simple machinery.'
+
+  makeshift_recoil_buffer:
+    material: ECHO_SHARD
+    name: '&7Makeshift Recoil Buffer'
+    custom_model_data: 113
+    rarity: Common
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Crude buffer offering minimal'
+      - '&7recoil reduction.'
+
+  old_and_worn_barrel_liner:
+    material: ECHO_SHARD
+    name: '&7Worn Barrel Liner'
+    custom_model_data: 114
+    rarity: Common
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Degraded liner with reduced'
+      - '&7effectiveness.'
+
+  old_ion_chamber:
+    material: ECHO_SHARD
+    name: '&7Old Ion Chamber'
+    custom_model_data: 115
+    rarity: Common
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Outdated and inefficient'
+      - '&7ion storage unit.'
+
+  primitive_recoil_buffer:
+    material: ECHO_SHARD
+    name: '&7Primitive Recoil Buffer'
+    custom_model_data: 116
+    rarity: Common
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Barely reduces recoil but'
+      - '&7still somewhat useful.'
+
+  rough_power_cell:
+    material: ECHO_SHARD
+    name: '&7Rough Power Cell'
+    custom_model_data: 117
+    rarity: Common
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Unrefined energy source'
+      - '&7with unstable output.'
+
+
+  # ========================
+  # 118–129 (UNCOMMON)
+  # ========================
+
+  simple_emitter_coil:
+    material: ECHO_SHARD
+    name: '&aSimple Emitter Coil'
+    custom_model_data: 118
+    rarity: Uncommon
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Improved emission efficiency'
+      - '&7over basic models.'
+
+  worn_barrel_liner:
+    material: ECHO_SHARD
+    name: '&aWorn Barrel Liner'
+    custom_model_data: 119
+    rarity: Uncommon
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Functional but shows wear'
+      - '&7from extended use.'
+
+  barrel_liner:
+    material: ECHO_SHARD
+    name: '&aBarrel Liner'
+    custom_model_data: 120
+    rarity: Uncommon
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Standard liner that enhances'
+      - '&7weapon durability.'
+
+  durable_mid_grade_power_core:
+    material: ECHO_SHARD
+    name: '&aMid-Grade Power Core'
+    custom_model_data: 121
+    rarity: Uncommon
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Reliable energy core used in'
+      - '&7mid-tier equipment.'
+
+  durasteel_power_core:
+    material: ECHO_SHARD
+    name: '&aDurasteel Power Core'
+    custom_model_data: 122
+    rarity: Uncommon
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Reinforced core offering better'
+      - '&7stability and durability.'
+
+  enhanced_ion_chamber:
+    material: ECHO_SHARD
+    name: '&aEnhanced Ion Chamber'
+    custom_model_data: 123
+    rarity: Uncommon
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Improved containment for'
+      - '&7higher efficiency.'
+
+  finely_tuned_emitter_coil:
+    material: ECHO_SHARD
+    name: '&aFinely Tuned Emitter Coil'
+    custom_model_data: 124
+    rarity: Uncommon
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Calibrated for precision output'
+      - '&7and improved accuracy.'
+
+  modular_recoil_buffer:
+    material: ECHO_SHARD
+    name: '&aModular Recoil Buffer'
+    custom_model_data: 125
+    rarity: Uncommon
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Upgradeable system for adaptable'
+      - '&7recoil control.'
+
+  precision_emitter_coil:
+    material: ECHO_SHARD
+    name: '&aPrecision Emitter Coil'
+    custom_model_data: 126
+    rarity: Uncommon
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Designed for superior accuracy'
+      - '&7in energy projection.'
+
+  recoil_reduction_system:
+    material: ECHO_SHARD
+    name: '&aRecoil Reduction System'
+    custom_model_data: 127
+    rarity: Uncommon
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Reduces recoil impact for smoother'
+      - '&7weapon handling.'
+
+  reinforced_barrel_liner:
+    material: ECHO_SHARD
+    name: '&aReinforced Barrel Liner'
+    custom_model_data: 128
+    rarity: Uncommon
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Extra durable liner built for'
+      - '&7high-output systems.'
+
+  reinforced_ion_chamber:
+    material: ECHO_SHARD
+    name: '&aReinforced Ion Chamber'
+    custom_model_data: 129
+    rarity: Uncommon
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Enhanced chamber with improved'
+      - '&7structural integrity.'
+
+
+  # ========================
+  # 130–164 (RARE / EPIC RESOURCES)
+  # ========================
+
+  alloy_plating:
+    material: ECHO_SHARD
+    name: '&bAlloy Plating'
+    custom_model_data: 130
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Durable plating used in advanced builds.'
+
+  batteries:
+    material: ECHO_SHARD
+    name: '&bBatteries'
+    custom_model_data: 131
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Portable energy storage units.'
+
+  biosample:
+    material: ECHO_SHARD
+    name: '&bBiosample'
+    custom_model_data: 132
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Biological sample used for research.'
+
+  circuit_board:
+    material: ECHO_SHARD
+    name: '&bCircuit Board'
+    custom_model_data: 133
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Core component of electronic systems.'
+
+  coaxium_fragment:
+    material: ECHO_SHARD
+    name: '&dCoaxium Fragment'
+    custom_model_data: 134
+    rarity: Epic
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Highly volatile and powerful energy source.'
+
+  cryo_gel:
+    material: ECHO_SHARD
+    name: '&bCryo Gel'
+    custom_model_data: 135
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Used to cool high-temperature systems.'
+
+  detonator:
+    material: ECHO_SHARD
+    name: '&cDetonator'
+    custom_model_data: 136
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Triggers explosive reactions.'
+
+  detonite:
+    material: ECHO_SHARD
+    name: '&cDetonite'
+    custom_model_data: 137
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Highly explosive compound.'
+
+  duracrete_chunk:
+    material: ECHO_SHARD
+    name: '&7Duracrete Chunk'
+    custom_model_data: 138
+    rarity: Common
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Basic construction material.'
+
+  duraplast:
+    material: ECHO_SHARD
+    name: '&bDuraplast'
+    custom_model_data: 139
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Lightweight yet durable polymer.'
+
+  energy_conduits:
+    material: ECHO_SHARD
+    name: '&bEnergy Conduits'
+    custom_model_data: 140
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Transfers energy efficiently.'
+
+  glitterstim_fibers:
+    material: ECHO_SHARD
+    name: '&dGlitterstim Fibers'
+    custom_model_data: 141
+    rarity: Epic
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Rare fibers with unusual properties.'
+
+  gundark_sinew:
+    material: ECHO_SHARD
+    name: '&bGundark Sinew'
+    custom_model_data: 142
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Strong organic material.'
+
+  hutta_silk:
+    material: ECHO_SHARD
+    name: '&bHutta Silk'
+    custom_model_data: 143
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Luxurious and durable fabric.'
+
+  hyperspace_coil_fragment:
+    material: ECHO_SHARD
+    name: '&dHyperspace Coil Fragment'
+    custom_model_data: 144
+    rarity: Epic
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Fragment of a hyperspace drive component.'
+
+  isotope_5:
+    material: ECHO_SHARD
+    name: '&dIsotope-5'
+    custom_model_data: 145
+    rarity: Epic
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Extremely rare and unstable isotope.'
+
+  metal_casing:
+    material: ECHO_SHARD
+    name: '&7Metal Casing'
+    custom_model_data: 146
+    rarity: Common
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Basic structural component.'
+
+  metal_scrap:
+    material: ECHO_SHARD
+    name: '&7Metal Scrap'
+    custom_model_data: 147
+    rarity: Common
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Discarded pieces of metal.'
+
+  micro_servo_motor:
+    material: ECHO_SHARD
+    name: '&bMicro Servo Motor'
+    custom_model_data: 148
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Precision motor for mechanical systems.'
+
+  myocaine_gel:
+    material: ECHO_SHARD
+    name: '&bMyocaine Gel'
+    custom_model_data: 149
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Used for biological enhancement or healing.'
+
+  nova_crystal_dust:
+    material: ECHO_SHARD
+    name: '&dNova Crystal Dust'
+    custom_model_data: 150
+    rarity: Epic
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Residue of highly energetic crystals.'
+
+  plastoid:
+    material: ECHO_SHARD
+    name: '&bPlastoid'
+    custom_model_data: 151
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Common armor material.'
+
+  quadanium_steel:
+    material: ECHO_SHARD
+    name: '&bQuadanium Steel'
+    custom_model_data: 152
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7High-strength construction alloy.'
+
+  refined_coaxium:
+    material: ECHO_SHARD
+    name: '&dRefined Coaxium'
+    custom_model_data: 153
+    rarity: Epic
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Stabilized form of raw coaxium.'
+
+  refined_kolto:
+    material: ECHO_SHARD
+    name: '&bRefined Kolto'
+    custom_model_data: 154
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Medical substance with healing properties.'
+
+  ronto_hide:
+    material: ECHO_SHARD
+    name: '&7Ronto Hide'
+    custom_model_data: 155
+    rarity: Common
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Tough organic material.'
+
+  ryll_spice:
+    material: ECHO_SHARD
+    name: '&dRyll Spice'
+    custom_model_data: 156
+    rarity: Epic
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Highly valuable and volatile substance.'
+
+  scrap_heap:
+    material: ECHO_SHARD
+    name: '&7Scrap Heap'
+    custom_model_data: 157
+    rarity: Common
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7A pile of discarded parts'
+      - '&7waiting to be repurposed.'
+
+  switch:
+    material: ECHO_SHARD
+    name: '&7Switch'
+    custom_model_data: 158
+    rarity: Common
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7A basic control component'
+      - '&7used in simple circuits.'
+
+  synthetic_polymer:
+    material: ECHO_SHARD
+    name: '&bSynthetic Polymer'
+    custom_model_data: 159
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Engineered material with enhanced'
+      - '&7flexibility and durability.'
+
+  synthrubber:
+    material: ECHO_SHARD
+    name: '&bSynthrubber'
+    custom_model_data: 160
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Artificial rubber compound used'
+      - '&7in advanced machinery.'
+
+  tibanna_gas_vial:
+    material: ECHO_SHARD
+    name: '&dTibanna Gas Vial'
+    custom_model_data: 161
+    rarity: Epic
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7A pressurized vial of tibanna gas'
+      - '&7used to power blaster systems.'
+
+  transparisteel_shard:
+    material: ECHO_SHARD
+    name: '&bTransparisteel Shard'
+    custom_model_data: 162
+    rarity: Rare
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7A fragment of transparent yet'
+      - '&7incredibly durable material.'
+
+  wiring_coil:
+    material: ECHO_SHARD
+    name: '&7Wiring Coil'
+    custom_model_data: 163
+    rarity: Common
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7Coiled wiring used to connect'
+      - '&7electrical components.'
+
+  zersium:
+    material: ECHO_SHARD
+    name: '&dZersium'
+    custom_model_data: 164
+    rarity: Epic
+    category: Material
+    tags: [MATERIAL]
+    lore:
+      - '&7A rare and mysterious element'
+      - '&7with powerful unknown properties.'
