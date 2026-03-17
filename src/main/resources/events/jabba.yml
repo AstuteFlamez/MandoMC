@@ -1,0 +1,11 @@
+id: jabba
+
+enabled: true
+display-name: "&2Jabba's Palace"
+weight: 20
+icon: GOLD_BLOCK
+description:
+  - "&7Fight through Jabba's palace and"
+  - "&7unlock doors with keycards."
+cooldown-cycles: 2
+settings: {}

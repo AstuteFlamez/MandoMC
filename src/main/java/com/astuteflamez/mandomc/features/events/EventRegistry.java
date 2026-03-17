@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.astuteflamez.mandomc.features.events.types.ScavengerHuntEvent;
 import com.astuteflamez.mandomc.features.events.types.jabba_dungeon.JabbaDungeonEvent;
 import com.astuteflamez.mandomc.features.events.types.koth.KothEvent;
 import com.astuteflamez.mandomc.features.events.types.mining.BeskarRushEvent;
@@ -15,7 +14,6 @@ public class EventRegistry {
 
     public EventRegistry() {
         register("koth", KothEvent::new);
-        register("scavenger", ScavengerHuntEvent::new);
         register("beskar", BeskarRushEvent::new);
         register("jabba", JabbaDungeonEvent::new);
     }

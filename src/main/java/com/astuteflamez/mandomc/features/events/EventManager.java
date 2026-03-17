@@ -38,50 +38,93 @@ public class EventManager {
 
     public void load() {
         saveDefaultConfigIfNeeded();
+        saveDefaultEventsIfNeeded();
 
+        // Load main config (scheduler/gui)
         File file = new File(plugin.getDataFolder(), "events.yml");
         this.config = YamlConfiguration.loadConfiguration(file);
 
         definitions.clear();
 
-        ConfigurationSection section = config.getConfigurationSection("events");
-        if (section != null) {
-            for (String id : section.getKeys(false)) {
-                ConfigurationSection eventSec = section.getConfigurationSection(id);
-                if (eventSec == null) continue;
+        // 🔥 NEW: Load from /events folder
+        File folder = new File(plugin.getDataFolder(), "events");
+        if (!folder.exists()) {
+            folder.mkdirs();
+            Bukkit.getLogger().warning("[MandoMC] Created /events folder. Add event yml files there.");
+            return;
+        }
 
-                boolean enabled = eventSec.getBoolean("enabled", true);
-                String displayName = color(eventSec.getString("display-name", id));
-                int weight = Math.max(0, eventSec.getInt("weight", 0));
-                Material icon = Material.matchMaterial(eventSec.getString("icon", "PAPER"));
-                if (icon == null) icon = Material.PAPER;
+        File[] files = folder.listFiles((dir, name) -> name.endsWith(".yml"));
+        if (files == null) return;
 
-                List<String> description = color(eventSec.getStringList("description"));
-                int cooldownCycles = Math.max(0, eventSec.getInt("cooldown-cycles", 0));
+        for (File eventFile : files) {
 
-                Map<String, Object> settings = new HashMap<>();
-                ConfigurationSection settingsSec = eventSec.getConfigurationSection("settings");
-                if (settingsSec != null) {
-                    for (String key : settingsSec.getKeys(false)) {
-                        settings.put(key, settingsSec.get(key));
-                    }
-                }
+            YamlConfiguration yaml = YamlConfiguration.loadConfiguration(eventFile);
 
-                EventDefinition definition = new EventDefinition(
-                        id,
-                        enabled,
-                        displayName,
-                        weight,
-                        icon,
-                        description,
-                        cooldownCycles,
-                        settings
-                );
-
-                definitions.put(id.toLowerCase(), definition);
+            String id = yaml.getString("id");
+            if (id == null) {
+                Bukkit.getLogger().warning("[MandoMC] Missing 'id' in " + eventFile.getName());
+                continue;
             }
+
+            id = id.toLowerCase();
+
+            boolean enabled = yaml.getBoolean("enabled", true);
+            String displayName = color(yaml.getString("display-name", id));
+            int weight = Math.max(0, yaml.getInt("weight", 0));
+
+            Material icon = Material.matchMaterial(yaml.getString("icon", "PAPER"));
+            if (icon == null) icon = Material.PAPER;
+
+            List<String> description = color(yaml.getStringList("description"));
+            int cooldownCycles = Math.max(0, yaml.getInt("cooldown-cycles", 0));
+
+            Map<String, Object> settings = new HashMap<>();
+            ConfigurationSection settingsSec = yaml.getConfigurationSection("settings");
+            if (settingsSec != null) {
+                for (String key : settingsSec.getKeys(false)) {
+                    settings.put(key, settingsSec.get(key));
+                }
+            }
+
+            EventDefinition definition = new EventDefinition(
+                    id,
+                    enabled,
+                    displayName,
+                    weight,
+                    icon,
+                    description,
+                    cooldownCycles,
+                    settings
+            );
+
+            definitions.put(id, definition);
         }
     }
+
+    private void saveDefaultEventsIfNeeded() {
+        File folder = new File(plugin.getDataFolder(), "events");
+
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        // List of default event files you ship
+        String[] defaults = {
+            "events/koth.yml",
+            "events/beskar.yml",
+            "events/jabba.yml"
+        };
+
+        for (String path : defaults) {
+            File outFile = new File(plugin.getDataFolder(), path);
+
+            if (!outFile.exists()) {
+                plugin.saveResource(path, false);
+                Bukkit.getLogger().info("[MandoMC] Created default " + path);
+            }
+        }
+}
 
     public void reload() {
         load();
@@ -97,6 +140,30 @@ public class EventManager {
             plugin.saveResource("events.yml", false);
         }
     }
+
+    public File getEventFile(String id) {
+        return new File(plugin.getDataFolder(), "events/" + id.toLowerCase() + ".yml");
+    }
+
+    public boolean setEnabled(String id, boolean enabled) {
+        File file = getEventFile(id);
+
+        if (!file.exists()) return false;
+
+        YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
+        yaml.set("enabled", enabled);
+
+        try {
+            yaml.save(file);
+            reload();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // ===== EVERYTHING BELOW UNCHANGED =====
 
     public void tickSchedulerPhase(EventPhase phase) {
         switch (phase) {
@@ -132,21 +199,16 @@ public class EventManager {
                     startQueuedEvent(true);
                 }
             }
-            default -> {
-            }
+            default -> {}
         }
     }
 
     public boolean startEvent(String id, boolean broadcast) {
         EventDefinition definition = definitions.get(id.toLowerCase());
-        if (definition == null) {
-            return false;
-        }
+        if (definition == null) return false;
 
         GameEvent event = registry.create(definition);
-        if (event == null) {
-            return false;
-        }
+        if (event == null) return false;
 
         if (activeEvent != null && activeEvent.isRunning()) {
             forceEndActiveEvent(false);
@@ -169,14 +231,10 @@ public class EventManager {
 
     public boolean queueEvent(String id) {
         EventDefinition definition = definitions.get(id.toLowerCase());
-        if (definition == null) {
-            return false;
-        }
+        if (definition == null) return false;
 
         GameEvent event = registry.create(definition);
-        if (event == null) {
-            return false;
-        }
+        if (event == null) return false;
 
         queuedEvent = event;
         state = EventState.STARTING_SOON;
@@ -211,9 +269,7 @@ public class EventManager {
                     .collect(Collectors.toList());
         }
 
-        if (eligible.isEmpty()) {
-            return null;
-        }
+        if (eligible.isEmpty()) return null;
 
         int totalWeight = eligible.stream().mapToInt(EventDefinition::getWeight).sum();
         int roll = ThreadLocalRandom.current().nextInt(totalWeight) + 1;
@@ -290,9 +346,7 @@ public class EventManager {
                 .filter(def -> cooldowns.getOrDefault(def.getId(), 0) <= 0)
                 .collect(Collectors.toList());
 
-        if (eligible.isEmpty()) {
-            return Collections.emptyMap();
-        }
+        if (eligible.isEmpty()) return Collections.emptyMap();
 
         int total = eligible.stream().mapToInt(EventDefinition::getWeight).sum();
         Map<String, Double> map = new LinkedHashMap<>();
@@ -309,17 +363,6 @@ public class EventManager {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime nextHour = now.truncatedTo(ChronoUnit.HOURS).plusHours(1);
         return ChronoUnit.SECONDS.between(now, nextHour);
-    }
-
-    public long getSecondsUntilMinute(int minute) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime target = now.withMinute(minute).withSecond(0).withNano(0);
-
-        if (!target.isAfter(now)) {
-            target = target.plusHours(1);
-        }
-
-        return ChronoUnit.SECONDS.between(now, target);
     }
 
     public void broadcastConfiguredMessage(String path, String eventName) {
@@ -361,32 +404,8 @@ public class EventManager {
         return state;
     }
 
-    public String getLastEventId() {
-        return lastEventId;
-    }
-
     public EventDefinition getDefinition(String id) {
         return definitions.get(id.toLowerCase());
-    }
-
-    public boolean setEnabled(String id, boolean enabled) {
-        File file = new File(plugin.getDataFolder(), "events.yml");
-        YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
-
-        if (!yaml.contains("events." + id)) {
-            return false;
-        }
-
-        yaml.set("events." + id + ".enabled", enabled);
-
-        try {
-            yaml.save(file);
-            reload();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 
     public List<String> getEventIds() {
@@ -394,18 +413,8 @@ public class EventManager {
     }
 
     public void broadcastTitle(String title, String subtitle) {
-
-        String coloredTitle = color(title);
-        String coloredSubtitle = color(subtitle);
-
         for (Player player : Bukkit.getOnlinePlayers()) {
-            player.sendTitle(
-                    coloredTitle,
-                    coloredSubtitle,
-                    10,   // fade in
-                    60,   // stay
-                    10    // fade out
-            );
+            player.sendTitle(color(title), color(subtitle), 10, 60, 10);
         }
     }
 }

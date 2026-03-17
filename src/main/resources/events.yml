@@ -1,208 +1,105 @@
-scheduler:
-  enabled: true
-
-  announcements:
-    end-warning-minute: 50
-    end-minute: 55
-    start-warning-minute: 55
-    start-minute: 0
-
-  messages:
-    current-event-ending:
-      - "&c&lEVENT ENDING SOON"
-      - "&7%event% ends in &c5 minutes&7."
-    next-event-warning:
-      - "&6&lEVENT STARTING SOON"
-      - "&7%event% starts in &65 minutes&7."
-    event-start:
-      - "&a&lEVENT STARTED"
-      - "&7%event% has begun!"
-    event-end:
-      - "&c&lEVENT ENDED"
-      - "&7%event% has ended."
-
-gui:
-  title: "&8Server Events"
-  size: 27
-  filler: GRAY_STAINED_GLASS_PANE
-
-events:
-  koth:
-    enabled: true
-    display-name: "&6King of the Hill"
-    weight: 30
-    icon: BEACON
+warps:
+  Earth:
+    slot: 18
+    name: '&a&lEarth'
+    material: STICK
+    custommodeldata: 1
+    world: world
     description:
-      - "&7Hold the hill uncontested to spawn the reward chest."
-    cooldown-cycles: 1
-    settings:
-      world: Hoth
-      x: -148.0
-      y: 27.0
-      z: 141.0
+    - '&b&r&fđġ'
+    - '&c→ Claimable'
+    x: 681
+    y: 93
+    z: -161
+    yaw: 246.898
+    pitch: -5.7
 
-      radius: 8.0
-      capture-seconds: 20
-      y-tolerance: 4.0
-
-      bossbar-title: "&6KOTH &7- Hold the hill!"
-      bossbar-color: BLUE
-      bossbar-style: SOLID
-
-      boundary-particle: HAPPY_VILLAGER
-      spiral-particle: END_ROD
-
-      chest-material: CHEST
-
-      start-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &6KOTH &7has started at &f(%x%, %y%, %z%) &7on the planet &fHoth&7!"
-      capture-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &a%player% &7is capturing the hill!"
-      contested-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cThe hill is contested!"
-      winner-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &a%player% &7captured the hill!"
-      timeout-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cKOTH expired with no winner."
-      chest-spawn-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &6A reward chest has appeared at the hill!"
-      chest-claimed-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &e%player% &7claimed the KOTH reward chest!"
-
-      reward-commands:
-        - "crate key give %player% legendary 1"
-        - "eco give %player% 5000"
-
-  scavenger:
-    enabled: true
-    display-name: "&bScavenger Hunt"
-    weight: 25
-    icon: CHEST
+  Tatooine:
+    slot: 34
+    name: '&6&lTatooine'
+    material: STICK
+    custommodeldata: 7
+    world: JabbasPalace
     description:
-      - "&7Search the map for hidden loot."
-    cooldown-cycles: 1
-    settings: {}
-
-  beskar:
-    enabled: true
-    display-name: "&6Beskar Rush"
-    weight: 10
-    icon: NETHERITE_INGOT
-    description:
-      - "&7Race across the map to mine"
-      - "&7rare deposits of &fBeskar&7."
-    cooldown-cycles: 3
-
-    settings:
-
-      world: Geonosis
-
-      duration: 600
-
-      start-message:
-        - "&6&lBESKAR RUSH"
-        - "&7Ancient &fBeskar deposits &7have appeared across the planet!"
-        - "&7Mine them before other players do."
-
-      mined-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7%player% &7mined a piece of &fBeskar&7!"
-
-      end-message:
-        - "&6&lBESKAR RUSH"
-        - "&7The &fBeskar deposits &7have been exhausted."
-
-      ores:
-        start-spawn: 18
-        max-active: 18
-        respawn-delay: 45
-        hits-to-break: 5
-        lifetime: 300
-
-      drops:
-        min: 1
-        max: 3
-
-      spawn-points:
-        - Geonosis,-32,88,-47
-        - Geonosis,-31,93,-56
-        - Geonosis,-26,101,-70
-        - Geonosis,-21,105,-75
-        - Geonosis,-15,101,-73
-        - Geonosis,-9,104,-65
-        - Geonosis,-12,98,-53
-        - Geonosis,-14,93,-52
-        - Geonosis,-16,86,-51
-        - Geonosis,-13,89,-59
-        - Geonosis,-13,87,-64
-        - Geonosis,-24,85,-66
-        - Geonosis,-28,89,-58
-        - Geonosis,-33,95,-49
-        - Geonosis,-34,91,-44
-        - Geonosis,-38,94,-39
-        - Geonosis,-44,96,-35
-        - Geonosis,-48,96,-32
-        - Geonosis,-51,92,-27
-        - Geonosis,-53,90,-18
-        - Geonosis,-47,93,-12
-        - Geonosis,-41,96,-9
-        - Geonosis,-38,92,-7
-        - Geonosis,-35,86,-3
-        - Geonosis,-34,82,-6
-        - Geonosis,-21,81,-18
-        - Geonosis,-23,83,-24
-        - Geonosis,-19,89,-21
-        - Geonosis,-11,93,-18
-        - Geonosis,-7,94,-13
-        - Geonosis,-8,90,-10
-        - Geonosis,-1,92,-5
-        - Geonosis,0,90,2
-        - Geonosis,-3,86,-3
-        - Geonosis,-3,82,3
-        - Geonosis,-2,88,8
-        - Geonosis,1,92,7
-        - Geonosis,4,98,9
-        - Geonosis,6,104,9
-        - Geonosis,4,104,15
-        - Geonosis,-2,97,17
-        - Geonosis,-3,92,14
-        - Geonosis,-6,86,16
-        - Geonosis,-6,87,21
-        - Geonosis,-3,87,26
-        - Geonosis,-2,87,31
-        - Geonosis,-2,95,23
-        - Geonosis,1,99,27
-        - Geonosis,4,102,31
-        - Geonosis,3,101,36
-        - Geonosis,1,93,39
-        - Geonosis,0,91,44
-        - Geonosis,2,96,50
-        - Geonosis,4,102,49
-        - Geonosis,5,107,47
-        - Geonosis,5,109,56
-        - Geonosis,1,104,59
-        - Geonosis,-3,97,65
-        - Geonosis,-2,94,61
-        - Geonosis,-5,91,65
-        - Geonosis,-7,97,72
-        - Geonosis,-8,100,73
-        - Geonosis,-12,93,76
-        - Geonosis,-12,100,84
-        - Geonosis,-9,106,83
-        - Geonosis,-15,92,83
-        - Geonosis,-21,83,88
-        - Geonosis,-23,85,93
-        - Geonosis,-28,79,97
-        - Geonosis,-24,87,99
-        - Geonosis,-22,92,96
-        - Geonosis,-21,98,99
-        - Geonosis,-20,104,102
-        - Geonosis,-20,108,107
-        - Geonosis,-20,102,110
-        - Geonosis,-19,106,113
-        - Geonosis,-20,97,115
-        - Geonosis,-22,93,112
-        - Geonosis,-21,91,116
-        - Geonosis,-20,94,120
+    - '&b&r&fđġ'
+    - "&2→ Jabba's Palace"
+    x: -151.50145560046846
+    y: -50.0
+    z: 64.45313312033605
+    yaw: 0
+    pitch: -7.350019
   
-  jabba:
-    enabled: true
-    display-name: "&2Jabba's Palace"
-    weight: 20
-    icon: GOLD_BLOCK
+  Spawn:
+    slot: 41
+    name: '&b&lSpawn'
+    material: STICK
+    custommodeldata: 2
+    world: BlackSpireOutpost
     description:
-      - "&7Fight through Jabba's palace and"
-      - "&7unlock doors with keycards."
-    cooldown-cycles: 2
-    settings: {}
+    - '&b&r&fđġ'
+    - '&a→ Spawn'
+    x: -0.25469257621634944
+    y: 93.0
+    z: -16.29781739902013
+    yaw: -9.002167
+    pitch: -0.90001816
+  
+  Ilum:
+    slot: 11
+    name: '&b&lIlum'
+    material: stick
+    custommodeldata: 3
+    world: Ilum
+    description:
+    - '&b&r&fĕġ'
+    - '&3→ Kyber Crystals'
+    x: 11
+    y: -60
+    z: -56
+    yaw: 1.8
+    pitch: 4.5
+  
+  Hoth:
+    slot: 49
+    name: '&f&lHoth'
+    material: STICK
+    custommodeldata: 4
+    world: Hoth
+    description:
+    - '&b&r&fĕġ'
+    - '&c→ KOTH'
+    x: -47
+    y: 80
+    z: -153
+    yaw: -18.75
+    pitch: -1.65
+  
+  Concordia:
+    slot: 23
+    name: '&c&lConcordia'
+    material: STICK
+    custommodeldata: 5
+    world: Geonosis
+    description:
+    - '&b&r&fĖġ'
+    - '&8→ Beskar Mining'
+    x: 191
+    y: 105
+    z: -55
+    yaw: 43.61
+    pitch: -1.05
+  
+  DeathStar:
+    slot: 15
+    name: '&8&lDeath Star'
+    material: STICK
+    custommodeldata: 6
+    world: DeathStar
+    description:
+    - '&b&r&fĖġ'
+    - '&c→ Chest Hunt'
+    x: -74
+    y: 17
+    z: 163
+    yaw: 253.044
+    pitch: -0.737

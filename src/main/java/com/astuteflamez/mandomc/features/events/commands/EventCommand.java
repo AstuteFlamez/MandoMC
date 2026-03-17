@@ -112,7 +112,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
 
             case "reload" -> {
                 manager.reload();
-                sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Reloaded events.yml");
+                sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Reloaded event system.");
             }
 
             case "status" -> {

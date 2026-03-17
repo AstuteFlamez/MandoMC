@@ -1,0 +1,39 @@
+id: koth
+
+enabled: true
+display-name: "&6King of the Hill"
+weight: 30
+icon: BEACON
+description:
+  - "&7Hold the hill uncontested to spawn the reward chest."
+cooldown-cycles: 1
+settings:
+  world: Hoth
+  x: -148.0
+  y: 27.0
+  z: 141.0
+
+  radius: 8.0
+  capture-seconds: 20
+  y-tolerance: 4.0
+
+  bossbar-title: "&6KOTH &7- Hold the hill!"
+  bossbar-color: BLUE
+  bossbar-style: SOLID
+
+  boundary-particle: HAPPY_VILLAGER
+  spiral-particle: END_ROD
+
+  chest-material: CHEST
+
+  start-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &6KOTH &7has started at &f(%x%, %y%, %z%) &7on the planet &fHoth&7!"
+  capture-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &a%player% &7is capturing the hill!"
+  contested-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cThe hill is contested!"
+  winner-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &a%player% &7captured the hill!"
+  timeout-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cKOTH expired with no winner."
+  chest-spawn-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &6A reward chest has appeared at the hill!"
+  chest-claimed-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &e%player% &7claimed the KOTH reward chest!"
+
+  reward-commands:
+    - "crate key give %player% legendary 1"
+    - "eco give %player% 5000"
