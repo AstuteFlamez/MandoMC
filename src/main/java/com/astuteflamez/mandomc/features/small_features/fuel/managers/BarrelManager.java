@@ -13,7 +13,37 @@ public class BarrelManager {
     private static final String HOLOGRAM_TAG = "rhydonium_barrel_hologram";
 
     /* ------------------------------------------------
-       Update barrel model based on fuel %
+       INVENTORY ITEM (6–10)
+    ------------------------------------------------ */
+
+    public static ItemStack updateItem(ItemStack item) {
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return item;
+
+        int fuel = FuelManager.getCurrentFuel(item);
+        int max = FuelManager.getMaxFuel(item);
+
+        if (max <= 0) return item;
+
+        double percent = (fuel * 100.0) / max;
+
+        int cmd;
+
+        if (percent >= 100) cmd = 10;
+        else if (percent >= 75) cmd = 9;
+        else if (percent >= 50) cmd = 8;
+        else if (percent >= 25) cmd = 7;
+        else cmd = 6;
+
+        meta.setCustomModelData(cmd);
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    /* ------------------------------------------------
+       ARMORSTAND MODEL (10–14)
     ------------------------------------------------ */
 
     public static ItemStack updateModel(ItemStack item) {
@@ -21,35 +51,48 @@ public class BarrelManager {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return item;
 
-        int currentFuel = FuelManager.getCurrentFuel(item);
-        int maxFuel = FuelManager.getMaxFuel(item);
+        int fuel = FuelManager.getCurrentFuel(item);
+        int max = FuelManager.getMaxFuel(item);
 
-        if (maxFuel <= 0) return item;
+        if (max <= 0) return item;
 
-        int percent = (int) ((double) currentFuel / maxFuel * 100);
+        double percent = (fuel * 100.0) / max;
 
-        int model;
+        int stage;
 
-        if (percent >= 100) {
-            model = 10;
-        } else if (percent >= 75) {
-            model = 9;
-        } else if (percent >= 50) {
-            model = 8;
-        } else if (percent >= 25) {
-            model = 7;
-        } else {
-            model = 6;
-        }
+        if (percent >= 100) stage = 4;
+        else if (percent >= 75) stage = 3;
+        else if (percent >= 50) stage = 2;
+        else if (percent >= 25) stage = 1;
+        else stage = 0;
 
-        meta.setCustomModelData(model);
+        int cmd = 11 + stage;
+
+        meta.setCustomModelData(cmd);
         item.setItemMeta(meta);
 
         return item;
     }
 
     /* ------------------------------------------------
-       Create hologram above barrel
+       Apply +5 offset when placing
+    ------------------------------------------------ */
+
+    public static ItemStack applyPlacementOffset(ItemStack item) {
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null || !meta.hasCustomModelData()) return item;
+
+        int cmd = meta.getCustomModelData();
+
+        meta.setCustomModelData(cmd + 5);
+        item.setItemMeta(meta);
+
+        return item;
+    }
+
+    /* ------------------------------------------------
+       Create hologram
     ------------------------------------------------ */
 
     public static ArmorStand createHologram(ArmorStand barrel) {
@@ -71,16 +114,16 @@ public class BarrelManager {
     }
 
     /* ------------------------------------------------
-       Update hologram fuel bar
+       Update hologram
     ------------------------------------------------ */
 
     public static void updateHologram(ArmorStand barrel, ArmorStand holo) {
 
-        ItemStack barrelItem = barrel.getEquipment().getHelmet();
-        if (barrelItem == null) return;
+        ItemStack item = barrel.getEquipment().getHelmet();
+        if (item == null) return;
 
-        int fuel = FuelManager.getCurrentFuel(barrelItem);
-        int max = FuelManager.getMaxFuel(barrelItem);
+        int fuel = FuelManager.getCurrentFuel(item);
+        int max = FuelManager.getMaxFuel(item);
 
         if (max <= 0) return;
 
@@ -98,20 +141,14 @@ public class BarrelManager {
         StringBuilder bar = new StringBuilder();
 
         for (int i = 0; i < 10; i++) {
-
-            if (i < filled) {
-                bar.append(color).append("■");
-            } else {
-                bar.append(ChatColor.DARK_GRAY).append("■");
-            }
+            if (i < filled) bar.append(color).append("■");
+            else bar.append(ChatColor.DARK_GRAY).append("■");
         }
 
         holo.setCustomName(bar.toString());
     }
 
-    /* ------------------------------------------------
-       Find hologram passenger
-    ------------------------------------------------ */
+    /* ------------------------------------------------ */
 
     public static ArmorStand getHologram(ArmorStand barrel) {
 
@@ -126,10 +163,6 @@ public class BarrelManager {
 
         return null;
     }
-
-    /* ------------------------------------------------
-       Remove hologram when barrel removed
-    ------------------------------------------------ */
 
     public static void removeHologram(ArmorStand barrel) {
 

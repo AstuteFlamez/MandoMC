@@ -27,7 +27,7 @@ public class BarrelPlaceListener implements Listener {
         ItemStack item = player.getInventory().getItemInMainHand();
         ItemStack model = ItemRegistry.get("rhydonium_barrel_block");
 
-        if (item == null) return;
+        if (item == null || model == null) return;
 
         /* --------------------------------
            Check fuel tag
@@ -44,7 +44,7 @@ public class BarrelPlaceListener implements Listener {
         event.setCancelled(true);
 
         /* --------------------------------
-           Update fuel
+           Transfer fuel from item → model
         -------------------------------- */
 
         int currentFuel = FuelManager.getCurrentFuel(item);
@@ -66,13 +66,24 @@ public class BarrelPlaceListener implements Listener {
         stand.setSmall(false);
         stand.setInvulnerable(true);
 
-        /* Tag the armor stand so we know it's a barrel */
+        /* Tag the armor stand */
 
         stand.addScoreboardTag("rhydonium_barrel");
 
-        /* Put barrel item model on head */
+        /* --------------------------------
+           Apply +5 offset + animation
+        -------------------------------- */
 
-        stand.getEquipment().setHelmet(model.clone());
+        ItemStack placed = model.clone();
+
+        placed = BarrelManager.applyPlacementOffset(placed); // +5 CMD
+        placed = BarrelManager.updateModel(placed);           // animation (10–14)
+
+        stand.getEquipment().setHelmet(placed);
+
+        /* --------------------------------
+           Create hologram
+        -------------------------------- */
 
         ArmorStand holo = BarrelManager.createHologram(stand);
         stand.addPassenger(holo);

@@ -46,7 +46,7 @@ public class BarrelPickupListener implements Listener {
         ItemStack barrelItem = ItemRegistry.get("rhydonium_barrel");
         int currentFuel = FuelManager.getCurrentFuel(barrelModel);
         FuelManager.updateFuel(barrelItem, currentFuel);
-        barrelItem = BarrelManager.updateModel(barrelItem);
+        barrelItem = BarrelManager.updateItem(barrelItem);
 
         if (barrelItem != null) {
             player.getInventory().addItem(barrelItem);

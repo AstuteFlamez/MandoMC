@@ -32,7 +32,7 @@ public class BarrelFuelTransferManager {
                 MandoMC.getInstance(),
                 () -> transferTick(player, canister, barrel),
                 0L,
-                4L
+                2L
         );
 
         transfers.put(player.getUniqueId(), task);

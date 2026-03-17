@@ -31,7 +31,7 @@ public class VehicleFuelTransferManager {
                 MandoMC.getInstance(),
                 () -> transferTick(player, canister, vehicleTank),
                 0L,
-                4L
+                2L
         );
 
         transfers.put(player.getUniqueId(), task);
