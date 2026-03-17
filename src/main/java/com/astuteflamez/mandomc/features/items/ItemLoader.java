@@ -52,7 +52,9 @@ public class ItemLoader {
                     item = FuelFactory.applyStats(item, id);
                 } 
 
-                ItemRegistry.register(id, item, category);
+                String rarity = section.getString("rarity", "Common");
+
+                ItemRegistry.register(id, item, category, rarity, tags);
 
                 sections.put(id, section);
             }

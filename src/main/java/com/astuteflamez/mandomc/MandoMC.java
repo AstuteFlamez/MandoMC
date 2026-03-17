@@ -14,6 +14,7 @@ import com.astuteflamez.mandomc.features.events.EventScheduler;
 import com.astuteflamez.mandomc.features.events.commands.EventCommand;
 import com.astuteflamez.mandomc.features.events.listeners.EventMenuListener;
 import com.astuteflamez.mandomc.features.events.types.jabba_dungeon.DoorListener;
+import com.astuteflamez.mandomc.features.events.types.jabba_dungeon.JabbaChestListener;
 import com.astuteflamez.mandomc.features.events.types.jabba_dungeon.KeyCommand;
 import com.astuteflamez.mandomc.features.events.types.koth.KothChestListener;
 import com.astuteflamez.mandomc.features.events.types.koth.KothEvent;
@@ -316,6 +317,7 @@ public final class MandoMC extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new KothChestListener(), this);
         Bukkit.getPluginManager().registerEvents(new DoorListener(this), this);
         Bukkit.getPluginManager().registerEvents(new BeskarMiningListener(eventManager),this);
+        Bukkit.getPluginManager().registerEvents(new JabbaChestListener(), this);
     }
 
     private void registerModelEngineControllers() {

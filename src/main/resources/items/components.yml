@@ -4,6 +4,14 @@ items:
   # VEHICLE COMPONENTS
   # ========================
 
+  purple_xwing:
+    material: ECHO_SHARD
+    name: '&5&lX-Wing Starfighter'
+    custom_model_data: 4
+
+    rarity: Legendary
+    category: Vehicle
+
   tiefighter_cockpit:
     material: ECHO_SHARD
     name: '&8TIE Fighter Cockpit'
@@ -160,7 +168,7 @@ items:
     custom_model_data: 101
     rarity: Rare
     category: Material
-    tags: [MATERIAL]
+    tags: [MATERIAL, JABBA]
     lore:
       - '&7Stabilizes volatile fusion output'
       - '&7for consistent performance.'
@@ -226,7 +234,7 @@ items:
     custom_model_data: 107
     rarity: Rare
     category: Material
-    tags: [MATERIAL]
+    tags: [MATERIAL, JABBA]
     lore:
       - '&7Stores and stabilizes plasma'
       - '&7for rapid discharge.'
@@ -237,7 +245,7 @@ items:
     custom_model_data: 108
     rarity: Uncommon
     category: Material
-    tags: [MATERIAL]
+    tags: [MATERIAL, JABBA]
     lore:
       - '&7Improves targeting precision'
       - '&7in energy-based weapons.'
@@ -494,7 +502,7 @@ items:
     custom_model_data: 130
     rarity: Rare
     category: Material
-    tags: [MATERIAL]
+    tags: [MATERIAL, JABBA]
     lore:
       - '&7Durable plating used in advanced builds.'
 
@@ -524,7 +532,7 @@ items:
     custom_model_data: 133
     rarity: Rare
     category: Material
-    tags: [MATERIAL]
+    tags: [MATERIAL, JABBA]
     lore:
       - '&7Core component of electronic systems.'
 
@@ -594,7 +602,7 @@ items:
     custom_model_data: 140
     rarity: Rare
     category: Material
-    tags: [MATERIAL]
+    tags: [MATERIAL, JABBA]
     lore:
       - '&7Transfers energy efficiently.'
 
@@ -819,7 +827,7 @@ items:
     custom_model_data: 162
     rarity: Rare
     category: Material
-    tags: [MATERIAL]
+    tags: [MATERIAL, JABBA]
     lore:
       - '&7A fragment of transparent yet'
       - '&7incredibly durable material.'
@@ -830,7 +838,7 @@ items:
     custom_model_data: 163
     rarity: Common
     category: Material
-    tags: [MATERIAL]
+    tags: [MATERIAL, JABBA]
     lore:
       - '&7Coiled wiring used to connect'
       - '&7electrical components.'

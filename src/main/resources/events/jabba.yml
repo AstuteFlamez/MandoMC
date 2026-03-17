@@ -8,4 +8,29 @@ description:
   - "&7Fight through Jabba's palace and"
   - "&7unlock doors with keycards."
 cooldown-cycles: 2
-settings: {}
+
+settings:
+
+  world: JabbasPalace
+
+  spawn-points:
+    - JabbasPalace,-145,-49,82
+    - JabbasPalace,-143,-48,84
+    - JabbasPalace,-145,-51,97
+    - JabbasPalace,-156,-49,95
+    - JabbasPalace,-156,-49,88
+    - JabbasPalace,-146,-46,100
+    - JabbasPalace,-153,-50,106
+    - JabbasPalace,-133,-50,105
+    - JabbasPalace,-170,-44,114
+    - JabbasPalace,-130,-49,122
+    - JabbasPalace,-131,-49,120
+    - JabbasPalace,-120,-49,121
+    - JabbasPalace,-100,-42,121
+    - JabbasPalace,-103,-42,103
+    - JabbasPalace,-93,-61,115
+    - JabbasPalace,-93,-62,115
+    - JabbasPalace,-92,-62,115
+    - JabbasPalace,-83,-42,121
+    - JabbasPalace,-80,-42,113
+    - JabbasPalace,-73,-59,76

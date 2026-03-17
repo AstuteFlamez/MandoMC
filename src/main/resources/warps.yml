@@ -13,6 +13,21 @@ warps:
     z: -161
     yaw: 246.898
     pitch: -5.7
+
+  Tatooine:
+    slot: 34
+    name: '&6&lTatooine'
+    material: STICK
+    custommodeldata: 7
+    world: JabbasPalace
+    description:
+    - '&b&r&fđġ'
+    - "&2→ Jabba's Palace"
+    x: -151.50145560046846
+    y: -50.0
+    z: 64.45313312033605
+    yaw: 0
+    pitch: -7.350019
   
   Spawn:
     slot: 41
@@ -23,11 +38,11 @@ warps:
     description:
     - '&b&r&fđġ'
     - '&a→ Spawn'
-    x: -4.5
-    y: 93
-    z: -2.5
-    yaw: 46.349
-    pitch: -3.599
+    x: -0.25469257621634944
+    y: 93.0
+    z: -16.29781739902013
+    yaw: -9.002167
+    pitch: -0.90001816
   
   Ilum:
     slot: 11
