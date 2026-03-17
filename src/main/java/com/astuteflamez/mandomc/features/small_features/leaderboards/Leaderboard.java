@@ -22,23 +22,9 @@ public class Leaderboard {
         this.location = location;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getPlaceholder() {
-        return placeholder;
-    }
-
-    public String getPermission() {
-        return permission;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public List<TextDisplay> getDisplays() {
-        return displays;
-    }
+    public String getId() { return id; }
+    public String getPlaceholder() { return placeholder; }
+    public String getPermission() { return permission; }
+    public Location getLocation() { return location; }
+    public List<TextDisplay> getDisplays() { return displays; }
 }

@@ -89,27 +89,26 @@ public class LeaderboardRenderer {
         }
     }
 
-    private static void spawnLine(Leaderboard board,
-                                  Location loc,
-                                  Component text,
-                                  float scale){
+        private static void spawnLine(Leaderboard board, Location loc, Component text, float scale){
 
-        TextDisplay d = loc.getWorld().spawn(loc, TextDisplay.class);
+                TextDisplay d = loc.getWorld().spawn(loc, TextDisplay.class);
 
-        d.text(text);
+                // 🔥 TAGGING (CRITICAL)
+                d.addScoreboardTag("mandomc_lb");
+                d.addScoreboardTag("lb_" + board.getId());
 
-        d.setShadowed(true);
-        d.setSeeThrough(true);
-        d.setBillboard(Display.Billboard.CENTER);
+                d.text(text);
+                d.setShadowed(true);
+                d.setSeeThrough(true);
+                d.setBillboard(Display.Billboard.CENTER);
+                d.setBackgroundColor(Color.fromARGB(20,0,0,0));
 
-        d.setBackgroundColor(Color.fromARGB(20,0,0,0));
+                var t = d.getTransformation();
+                t.getScale().set(scale, scale, scale);
+                d.setTransformation(t);
 
-        var t = d.getTransformation();
-        t.getScale().set(scale, scale, scale);
-        d.setTransformation(t);
-
-        board.getDisplays().add(d);
-    }
+                board.getDisplays().add(d);
+        }
 
     private static void clearBoard(Leaderboard board){
 

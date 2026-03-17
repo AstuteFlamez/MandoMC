@@ -2,29 +2,30 @@ package com.astuteflamez.mandomc.features.parkour.managers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Display;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.TextDisplay;
-import org.bukkit.plugin.Plugin;
 
+import com.astuteflamez.mandomc.MandoMC;
 import com.astuteflamez.mandomc.features.parkour.TimeFormatter;
 import com.astuteflamez.mandomc.features.parkour.configs.ParkourConfig;
 import com.astuteflamez.mandomc.features.parkour.managers.ParkourTimeManager.PlayerTime;
 
 public class ParkourLeaderboardManager {
 
-    private final Plugin plugin;
+    private final MandoMC plugin;
     private final ParkourTimeManager timeManager;
 
     private final List<TextDisplay> displays = new ArrayList<>();
 
-    public ParkourLeaderboardManager(Plugin plugin, ParkourTimeManager timeManager) {
+    // 🔥 TAG (used for cleanup)
+    private static final String TAG = "mandomc_pk_lb";
+
+    public ParkourLeaderboardManager(MandoMC plugin, ParkourTimeManager timeManager) {
         this.plugin = plugin;
         this.timeManager = timeManager;
     }
@@ -52,18 +53,20 @@ public class ParkourLeaderboardManager {
 
         if (section == null) return;
 
-        String worldName = section.getString("world");
-        World world = Bukkit.getWorld(worldName);
-
+        World world = Bukkit.getWorld(section.getString("world"));
         if (world == null) return;
 
-        double x = section.getDouble("x");
-        double y = section.getDouble("y");
-        double z = section.getDouble("z");
+        Location loc = new Location(
+                world,
+                section.getDouble("x"),
+                section.getDouble("y"),
+                section.getDouble("z")
+        );
 
         int limit = section.getInt("limit", 10);
 
-        Location loc = new Location(world, x, y, z);
+        // 🔥 CLEANUP OLD DISPLAYS (from restart)
+        cleanupOldDisplays(loc);
 
         List<PlayerTime> top = timeManager.getTop(limit);
 
@@ -79,14 +82,14 @@ public class ParkourLeaderboardManager {
 
                 if (permission != null) {
 
-                    var player = Bukkit.getOfflinePlayer(
-                            java.util.UUID.fromString(pt.uuid)
-                    );
+                    var player = Bukkit.getOfflinePlayer(UUID.fromString(pt.uuid));
 
                     if (!player.isOnline() ||
+                            player.getPlayer() == null ||
                             !player.getPlayer().hasPermission(permission)) {
 
                         text = "§e" + (i + 1) + ".";
+
                     } else {
 
                         text = "§e" + (i + 1) + ". §f" + pt.name +
@@ -100,7 +103,6 @@ public class ParkourLeaderboardManager {
                 }
 
             } else {
-
                 text = "§e" + (i + 1) + ".";
             }
 
@@ -110,33 +112,45 @@ public class ParkourLeaderboardManager {
 
     private void spawnLine(Location loc, String text) {
 
-        TextDisplay display = (TextDisplay) loc.getWorld()
-                .spawnEntity(loc, EntityType.TEXT_DISPLAY);
+        TextDisplay display = loc.getWorld().spawn(loc, TextDisplay.class);
+
+        // 🔥 TAGGING (CRITICAL)
+        display.addScoreboardTag(TAG);
 
         display.setText(text);
-
         display.setShadowed(true);
-
-        display.setBackgroundColor(Color.fromARGB(0,0,0,0));
-
+        display.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
         display.setBillboard(Display.Billboard.CENTER);
-
         display.setSeeThrough(false);
 
         displays.add(display);
     }
 
     private void clearBoards() {
-
-        for (TextDisplay display : displays) {
-            display.remove();
-        }
-
+        displays.forEach(Entity::remove);
         displays.clear();
     }
 
-    public void startAutoUpdate() {
+    // 🔥 CLEANUP OLD DISPLAYS ON STARTUP
+    private void cleanupOldDisplays(Location base) {
 
+        if (base.getWorld() == null) return;
+
+        for (Entity entity : base.getWorld().getNearbyEntities(base, 5, 5, 5)) {
+            if (entity instanceof TextDisplay display &&
+                display.getScoreboardTags().contains(TAG)) {
+
+                display.remove();
+            }
+        }
+    }
+
+    // 🔥 CALL THIS IN onDisable
+    public void removeAllDisplays() {
+        clearBoards();
+    }
+
+    public void startAutoUpdate() {
         Bukkit.getScheduler().runTaskTimer(
                 plugin,
                 this::updateLeaderboards,

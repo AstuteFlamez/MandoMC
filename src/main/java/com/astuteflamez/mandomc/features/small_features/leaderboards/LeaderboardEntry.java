@@ -14,15 +14,7 @@ public class LeaderboardEntry {
         this.value = value;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public double getValue() {
-        return value;
-    }
-
-    public UUID getUUID() {
-        return uuid;
-    }
+    public UUID getUUID() { return uuid; }
+    public String getName() { return name; }
+    public double getValue() { return value; }
 }
