@@ -1,9 +1,9 @@
 name: MandoMC
 version: 1.0
-main: com.bilal.mandomc.MandoMC
+main: com.astuteflamez.mandomc.MandoMC
 api-version: 1.21
 
-author: Bilal
+author: AstuteFlamez
 description: Core plugin for the MandoMC server
 
 softdepend:
