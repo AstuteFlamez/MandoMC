@@ -36,6 +36,11 @@ commands:
     description: Give a custom item to a player
     usage: /give <player> [item]
     permission: mandomc.items.give
+  
+  Drop:
+    description: Drop item at location
+    usage: /drop <item> <x> <y> <z> <world>
+    permission: mandomc.items.drop
 
   recipes:
     description: View custom item recipes

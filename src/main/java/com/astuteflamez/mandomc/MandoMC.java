@@ -28,7 +28,6 @@ import com.astuteflamez.mandomc.features.parkour.managers.*;
 import com.astuteflamez.mandomc.features.small_features.fuel.listeners.*;
 import com.astuteflamez.mandomc.features.small_features.leaderboards.LeaderboardManager;
 import com.astuteflamez.mandomc.features.small_features.lightsabers.listeners.*;
-import com.astuteflamez.mandomc.features.small_features.teleportation.TeleportWarmupListener;
 import com.astuteflamez.mandomc.features.small_features.warps.*;
 import com.astuteflamez.mandomc.features.vehicles.Vehicle;
 import com.astuteflamez.mandomc.features.vehicles.listeners.*;
@@ -186,10 +185,12 @@ public final class MandoMC extends JavaPlugin {
 
         GetCommand get = new GetCommand();
         GiveCommand give = new GiveCommand();
+        DropCommand drop = new DropCommand();
         RecipeCommand recipe = new RecipeCommand();
 
         safeCommand("get", get, get);
         safeCommand("give", give, give);
+        safeCommand("drop", drop, drop);
         safeCommand("recipes", recipe, recipe);
 
         safeCommand("parkourfinish", new ParkourFinishCommand(parkourManager));
@@ -265,9 +266,7 @@ public final class MandoMC extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new KothChestListener(), this);
         Bukkit.getPluginManager().registerEvents(new DoorListener(this), this);
         Bukkit.getPluginManager().registerEvents(new BeskarMiningListener(eventManager), this);
-        Bukkit.getPluginManager().registerEvents(new JabbaChestListener(), this);
-
-        Bukkit.getPluginManager().registerEvents(new TeleportWarmupListener(), this);
+        Bukkit.getPluginManager().registerEvents(new JabbaChestListener(eventManager), this);
     }
 
     private void registerModelEngineControllers() {

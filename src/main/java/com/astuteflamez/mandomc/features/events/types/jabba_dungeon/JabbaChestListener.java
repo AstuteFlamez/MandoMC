@@ -9,28 +9,47 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.astuteflamez.mandomc.features.items.ItemRegistry;
+import com.astuteflamez.mandomc.features.events.EventManager;
+import com.astuteflamez.mandomc.features.events.GameEvent;
 
 import java.util.*;
 
 public class JabbaChestListener implements Listener {
 
     private final Random random = new Random();
+    private final EventManager eventManager;
+
+    public JabbaChestListener(EventManager eventManager) {
+        this.eventManager = eventManager;
+    }
 
     @EventHandler
     public void onClick(PlayerInteractEvent event) {
 
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        Player player = event.getPlayer();
+
+        // 🔥 DEBUG EVENT + WORLD CHECK
+        if (!isJabbaActive(player)) {
+            return;
+        }
+
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
 
         Block block = event.getClickedBlock();
-        if (block == null || block.getType() != Material.CHEST) return;
+        if (block == null) {
+            return;
+        }
 
-        // 🔥 Prevent opening chest GUI
+        if (block.getType() != Material.CHEST) {
+            return;
+        }
+
         event.setCancelled(true);
 
-        Player player = event.getPlayer();
         Location loc = block.getLocation();
 
-        // 🔥 Particle effect
         loc.getWorld().spawnParticle(
                 Particle.TOTEM_OF_UNDYING,
                 loc.clone().add(0.5, 1, 0.5),
@@ -39,7 +58,6 @@ public class JabbaChestListener implements Listener {
                 0.1
         );
 
-        // 🔥 Sound
         loc.getWorld().playSound(
                 loc,
                 Sound.ENTITY_PLAYER_LEVELUP,
@@ -47,7 +65,6 @@ public class JabbaChestListener implements Listener {
                 1.2f
         );
 
-        // 🔥 Get JABBA items
         List<String> jabbaItems = ItemRegistry.getItemIds().stream()
                 .filter(id -> ItemRegistry.hasTag(id, "JABBA"))
                 .toList();
@@ -68,11 +85,27 @@ public class JabbaChestListener implements Listener {
 
         player.sendMessage("§6You looted a stash!");
 
-        // 🔥 Remove chest
         block.setType(Material.AIR);
     }
 
-    // 🔥 Weighted rarity picker
+    private boolean isJabbaActive(Player player) {
+
+        GameEvent active = eventManager.getActiveEvent();
+
+        if (active == null) {
+            return false;
+        }
+
+        if (!active.getId().equalsIgnoreCase("jabba")) {
+            return false;
+        }
+
+        boolean worldMatch = player.getWorld().getName()
+                .equalsIgnoreCase("JabbasPalace");
+
+        return worldMatch;
+    }
+
     private String pickWeighted(List<String> items) {
 
         Map<String, Double> weights = new HashMap<>();
