@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import com.astuteflamez.mandomc.core.MandoMC;
+import com.astuteflamez.mandomc.MandoMC;
 import com.astuteflamez.mandomc.mechanics.fuel.managers.CanisterManager;
 import com.astuteflamez.mandomc.system.items.ItemUtils;
 import com.astuteflamez.mandomc.system.items.configs.ItemsConfig;

@@ -10,7 +10,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
-import com.astuteflamez.mandomc.core.MandoMC;
+import com.astuteflamez.mandomc.MandoMC;
 import com.astuteflamez.mandomc.system.events.AbstractGameEvent;
 import com.astuteflamez.mandomc.system.events.EventDefinition;
 import com.astuteflamez.mandomc.system.events.EventManager;

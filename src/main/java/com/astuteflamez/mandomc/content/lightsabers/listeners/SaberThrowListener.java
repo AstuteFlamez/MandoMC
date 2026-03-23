@@ -16,7 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
-import com.astuteflamez.mandomc.core.MandoMC;
+import com.astuteflamez.mandomc.MandoMC;
 import com.astuteflamez.mandomc.system.items.ItemUtils;
 import com.astuteflamez.mandomc.system.items.configs.ItemsConfig;
 

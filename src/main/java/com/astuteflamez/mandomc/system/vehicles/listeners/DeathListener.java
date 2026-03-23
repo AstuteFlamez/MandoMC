@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-import com.astuteflamez.mandomc.core.MandoMC;
+import com.astuteflamez.mandomc.MandoMC;
 import com.astuteflamez.mandomc.system.vehicles.Vehicle;
 
 public class DeathListener implements Listener {

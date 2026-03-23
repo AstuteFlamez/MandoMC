@@ -3,7 +3,7 @@ package com.astuteflamez.mandomc.system.events;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.astuteflamez.mandomc.core.MandoMC;
+import com.astuteflamez.mandomc.MandoMC;
 
 import java.time.LocalDateTime;
 

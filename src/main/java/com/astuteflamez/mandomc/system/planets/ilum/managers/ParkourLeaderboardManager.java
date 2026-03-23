@@ -10,7 +10,7 @@ import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TextDisplay;
 
-import com.astuteflamez.mandomc.core.MandoMC;
+import com.astuteflamez.mandomc.MandoMC;
 import com.astuteflamez.mandomc.system.planets.ilum.TimeFormatter;
 import com.astuteflamez.mandomc.system.planets.ilum.configs.ParkourConfig;
 import com.astuteflamez.mandomc.system.planets.ilum.managers.ParkourTimeManager.PlayerTime;

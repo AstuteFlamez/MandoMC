@@ -3,7 +3,7 @@ package com.astuteflamez.mandomc.mechanics.warps;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.astuteflamez.mandomc.core.MandoMC;
+import com.astuteflamez.mandomc.MandoMC;
 
 import java.io.*;
 

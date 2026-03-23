@@ -5,7 +5,7 @@ import org.bukkit.event.*;
 import org.bukkit.event.inventory.*;
 import org.bukkit.metadata.FixedMetadataValue;
 
-import com.astuteflamez.mandomc.core.MandoMC;
+import com.astuteflamez.mandomc.MandoMC;
 import com.astuteflamez.mandomc.system.items.ItemUtils;
 import com.astuteflamez.mandomc.system.items.RecipeRegistry;
 import com.astuteflamez.mandomc.system.items.guis.RecipeBrowserGUI;

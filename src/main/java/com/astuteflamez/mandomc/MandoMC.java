@@ -1,4 +1,4 @@
-package com.astuteflamez.mandomc.core;
+package com.astuteflamez.mandomc;
 
 import java.util.HashMap;
 import java.util.UUID;

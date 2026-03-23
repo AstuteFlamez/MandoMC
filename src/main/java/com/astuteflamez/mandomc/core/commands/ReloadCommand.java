@@ -4,7 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.astuteflamez.mandomc.core.MandoMC;
+import com.astuteflamez.mandomc.MandoMC;
 import com.astuteflamez.mandomc.mechanics.warps.WarpConfig;
 import com.astuteflamez.mandomc.system.items.configs.ItemsConfig;
 import com.astuteflamez.mandomc.system.planets.ilum.configs.ParkourConfig;

@@ -2,7 +2,7 @@ package com.astuteflamez.mandomc.system.items;
 
 import org.bukkit.NamespacedKey;
 
-import com.astuteflamez.mandomc.core.MandoMC;
+import com.astuteflamez.mandomc.MandoMC;
 
 /**
  * Central registry of {@link NamespacedKey}s used for item metadata.

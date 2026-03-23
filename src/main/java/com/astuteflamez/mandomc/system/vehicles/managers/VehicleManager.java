@@ -1,6 +1,6 @@
 package com.astuteflamez.mandomc.system.vehicles.managers;
 
-import com.astuteflamez.mandomc.core.MandoMC;
+import com.astuteflamez.mandomc.MandoMC;
 import com.astuteflamez.mandomc.system.items.ItemUtils;
 import com.astuteflamez.mandomc.system.items.configs.ItemsConfig;
 import com.astuteflamez.mandomc.system.vehicles.Vehicle;

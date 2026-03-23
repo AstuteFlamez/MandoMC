@@ -1,6 +1,6 @@
 package com.astuteflamez.mandomc.system.vehicles.movement;
 
-import com.astuteflamez.mandomc.core.MandoMC;
+import com.astuteflamez.mandomc.MandoMC;
 import com.astuteflamez.mandomc.system.vehicles.Vehicle;
 import com.astuteflamez.mandomc.system.vehicles.VehicleData;
 import com.astuteflamez.mandomc.system.vehicles.managers.VehicleFuelManager;
