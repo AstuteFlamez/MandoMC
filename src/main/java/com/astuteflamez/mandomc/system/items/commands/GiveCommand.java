@@ -11,37 +11,52 @@ import com.astuteflamez.mandomc.system.items.guis.ItemBrowserGUI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Handles the /give command.
+ *
+ * Allows giving items to another player or opening the item
+ * browser GUI targeting a player.
+ */
 public class GiveCommand implements CommandExecutor, TabCompleter {
 
     private static final String PERMISSION = "mandomc.items.give";
 
+    /**
+     * Executes the give command.
+     *
+     * /give <player> → opens GUI
+     * /give <player> <item> → gives item
+     *
+     * @param sender the command sender
+     * @param command the command
+     * @param label command label
+     * @param args arguments
+     * @return true if handled
+     */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!sender.hasPermission(PERMISSION)) {
-            sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cYou do not have permission to run this command.You don't have permission.");
+            sender.sendMessage(prefix("&cYou do not have permission."));
             return true;
         }
 
         if (args.length == 0) {
-            sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Usage: /give <player> [item]");
+            sender.sendMessage(prefix("&7Usage: /give <player> [item]"));
             return true;
         }
 
         Player target = Bukkit.getPlayerExact(args[0]);
-
         if (target == null) {
-            sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Player not found.");
+            sender.sendMessage(prefix("&7Player not found."));
             return true;
         }
 
-        /*
-         * Open GUI if item not specified
-         */
+        // Open GUI
         if (args.length == 1) {
 
             if (!(sender instanceof Player player)) {
-                sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Console must specify an item.");
+                sender.sendMessage(prefix("&7Console must specify an item."));
                 return true;
             }
 
@@ -49,27 +64,23 @@ public class GiveCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        /*
-         * Give specific item
-         */
+        // Give item
         String id = args[1].toLowerCase();
 
         ItemStack item = ItemRegistry.get(id);
-
         if (item == null) {
-            sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Unknown item.");
+            sender.sendMessage(prefix("&7Unknown item."));
             return true;
         }
 
         target.getInventory().addItem(item.clone());
 
-        sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §aGave §f" + id + " §ato §f" + target.getName());
-
+        sender.sendMessage(prefix("&aGave &f" + id + " &ato &f" + target.getName()));
         return true;
     }
 
-    /*
-     * TAB COMPLETION
+    /**
+     * Handles tab completion.
      */
     @Override
     public List<String> onTabComplete(CommandSender sender,
@@ -79,11 +90,8 @@ public class GiveCommand implements CommandExecutor, TabCompleter {
 
         if (!sender.hasPermission(PERMISSION)) return List.of();
 
-        /*
-         * Player names
-         */
+        // Player names
         if (args.length == 1) {
-
             String input = args[0].toLowerCase();
 
             return Bukkit.getOnlinePlayers()
@@ -93,11 +101,8 @@ public class GiveCommand implements CommandExecutor, TabCompleter {
                     .collect(Collectors.toList());
         }
 
-        /*
-         * Item IDs
-         */
+        // Item IDs
         if (args.length == 2) {
-
             String input = args[1].toLowerCase();
 
             return ItemRegistry.getItemIds()
@@ -107,5 +112,19 @@ public class GiveCommand implements CommandExecutor, TabCompleter {
         }
 
         return List.of();
+    }
+
+    /**
+     * Formats a prefixed message.
+     */
+    private String prefix(String message) {
+        return color("&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» " + message);
+    }
+
+    /**
+     * Applies color formatting.
+     */
+    private String color(String text) {
+        return org.bukkit.ChatColor.translateAlternateColorCodes('&', text);
     }
 }

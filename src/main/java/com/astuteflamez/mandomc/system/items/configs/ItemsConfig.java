@@ -11,6 +11,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.JarFile;
 
+/**
+ * Manages all item configuration files.
+ *
+ * Loads all YAML files from the items folder, copies defaults
+ * from the plugin jar, and provides access to item data.
+ */
 public class ItemsConfig {
 
     private static final Map<String, FileConfiguration> configs = new HashMap<>();
@@ -18,29 +24,34 @@ public class ItemsConfig {
 
     private static File itemsFolder;
 
-    /*
-     * Setup items folder, copy defaults, and load configs
+    /**
+     * Initializes the items configuration system.
+     *
+     * Creates the items folder, copies default configs,
+     * and loads all configuration files.
      */
     public static void setup() {
 
-        itemsFolder = new File(MandoMC.getInstance().getDataFolder(), "items");
+        MandoMC plugin = MandoMC.getInstance();
+
+        itemsFolder = new File(plugin.getDataFolder(), "items");
 
         if (!itemsFolder.exists()) {
             itemsFolder.mkdirs();
         }
 
-        copyDefaults();
+        copyDefaults(plugin);
         loadAll();
     }
 
-    /*
-     * Copies every .yml inside resources/items/ into the items folder
+    /**
+     * Copies all default item config files from the plugin jar.
      */
-    private static void copyDefaults() {
+    private static void copyDefaults(MandoMC plugin) {
 
         try {
 
-            File jar = new File(
+            File jarFileLocation = new File(
                     MandoMC.class
                             .getProtectionDomain()
                             .getCodeSource()
@@ -48,7 +59,7 @@ public class ItemsConfig {
                             .toURI()
             );
 
-            try (JarFile jarFile = new JarFile(jar)) {
+            try (JarFile jarFile = new JarFile(jarFileLocation)) {
 
                 jarFile.stream().forEach(entry -> {
 
@@ -57,14 +68,13 @@ public class ItemsConfig {
                     if (!name.startsWith("items/") || !name.endsWith(".yml")) return;
 
                     String fileName = name.substring(name.lastIndexOf("/") + 1);
+                    File outputFile = new File(itemsFolder, fileName);
 
-                    File outFile = new File(itemsFolder, fileName);
-
-                    if (outFile.exists()) return;
+                    if (outputFile.exists()) return;
 
                     try (
                             InputStream input = jarFile.getInputStream(entry);
-                            OutputStream output = new FileOutputStream(outFile)
+                            OutputStream output = new FileOutputStream(outputFile)
                     ) {
 
                         byte[] buffer = new byte[1024];
@@ -74,23 +84,23 @@ public class ItemsConfig {
                             output.write(buffer, 0, length);
                         }
 
-                        System.out.println("[MandoMC] Generated item config: " + fileName);
+                        plugin.getLogger().info("Generated item config: " + fileName);
 
                     } catch (IOException e) {
+                        plugin.getLogger().severe("Failed to copy item config: " + fileName);
                         e.printStackTrace();
                     }
-
                 });
-
             }
 
         } catch (Exception e) {
+            plugin.getLogger().severe("Failed to load item configs from jar.");
             e.printStackTrace();
         }
     }
 
-    /*
-     * Loads every .yml file in the items folder
+    /**
+     * Loads all YAML config files from the items folder.
      */
     public static void loadAll() {
 
@@ -98,7 +108,6 @@ public class ItemsConfig {
         files.clear();
 
         File[] list = itemsFolder.listFiles();
-
         if (list == null) return;
 
         for (File file : list) {
@@ -106,33 +115,39 @@ public class ItemsConfig {
             if (!file.getName().endsWith(".yml")) continue;
 
             String id = file.getName().replace(".yml", "");
-
             FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
             configs.put(id, config);
             files.put(id, file);
         }
 
-        System.out.println("[MandoMC] Loaded " + configs.size() + " item config files.");
+        MandoMC.getInstance().getLogger()
+                .info("Loaded " + configs.size() + " item config files.");
     }
 
-    /*
-     * Get config by filename
-     * Example: ItemsConfig.get("lightsabers")
+    /**
+     * Gets a specific config by id (filename without extension).
+     *
+     * @param id config id
+     * @return configuration or null
      */
     public static FileConfiguration get(String id) {
         return configs.get(id);
     }
 
-    /*
-     * Get all configs
+    /**
+     * Gets all loaded item configs.
+     *
+     * @return map of config id to configuration
      */
     public static Map<String, FileConfiguration> getAll() {
         return configs;
     }
 
-    /*
-     * Save a specific config
+    /**
+     * Saves a specific config file.
+     *
+     * @param id config id
      */
     public static void save(String id) {
 
@@ -144,40 +159,45 @@ public class ItemsConfig {
         try {
             config.save(file);
         } catch (IOException e) {
-            System.out.println("[MandoMC] Couldn't save item config: " + id);
+            MandoMC.getInstance().getLogger()
+                    .severe("Couldn't save item config: " + id);
+            e.printStackTrace();
         }
     }
 
-    /*
-     * Save all configs
+    /**
+     * Saves all loaded configs.
      */
     public static void saveAll() {
-
         for (String id : configs.keySet()) {
             save(id);
         }
     }
 
-    /*
-     * Reload entire items folder
+    /**
+     * Reloads all item configs.
      */
     public static void reload() {
         loadAll();
     }
 
+    /**
+     * Retrieves a specific item's configuration section.
+     *
+     * Searches all loaded config files for the given item id.
+     *
+     * @param itemId the item id
+     * @return the item section or null if not found
+     */
     public static ConfigurationSection getItemSection(String itemId) {
 
         for (FileConfiguration config : configs.values()) {
 
-            if (!config.contains("items")) continue;
-
             ConfigurationSection items = config.getConfigurationSection("items");
-
             if (items == null) continue;
 
-            if (items.contains(itemId)) {
-                return items.getConfigurationSection(itemId);
-            }
+            ConfigurationSection section = items.getConfigurationSection(itemId);
+            if (section != null) return section;
         }
 
         return null;

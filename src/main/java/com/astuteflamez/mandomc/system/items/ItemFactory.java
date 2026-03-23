@@ -15,9 +15,18 @@ import net.md_5.bungee.api.ChatColor;
 
 import java.util.*;
 
+/**
+ * Factory for creating items and registering recipes.
+ *
+ * Handles:
+ * - Item creation from configuration
+ * - Lore building
+ * - Persistent data tagging
+ * - Crafting and smelting recipe registration
+ */
 public class ItemFactory {
 
-    private static final Map<String, String> rarityIcons = Map.of(
+    private static final Map<String, String> RARITY_ICONS = Map.of(
             "Common", "\u0111",
             "Uncommon", "\u0116",
             "Rare", "\u0115",
@@ -26,7 +35,7 @@ public class ItemFactory {
             "Mythic", "\u0114"
     );
 
-    private static final Map<String, String> categoryIcons = Map.ofEntries(
+    private static final Map<String, String> CATEGORY_ICONS = Map.ofEntries(
             Map.entry("Ammo", "\u0123"),
             Map.entry("Armor", "\u0109"),
             Map.entry("Component", "\u010A"),
@@ -40,40 +49,103 @@ public class ItemFactory {
             Map.entry("Fuel", "\u0122")
     );
 
+    /*
+     * =========================
+     * ITEM CREATION
+     * =========================
+     */
+
+    /**
+     * Creates an item from configuration.
+     *
+     * @param id      the item id
+     * @param section the configuration section
+     * @return constructed ItemStack (fallback to STONE if invalid)
+     */
     public static ItemStack createItem(String id, ConfigurationSection section) {
+
+        Material material = resolveMaterial(id, section);
+        if (material == null) return new ItemStack(Material.STONE);
+
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return item;
+
+        applyBasicMeta(meta, id, section);
+        applyPersistentData(meta, id, section);
+        applyLore(meta, section);
+
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    /**
+     * Resolves a material from configuration.
+     *
+     * @param id      the item id
+     * @param section the config section
+     * @return resolved material or null if invalid
+     */
+    private static Material resolveMaterial(String id, ConfigurationSection section) {
 
         String materialName = section.getString("material");
 
         if (materialName == null) {
-            Bukkit.getLogger().warning("[MandoMC] Item " + id + " missing material.");
-            return new ItemStack(Material.STONE);
+            log("Item " + id + " missing material.");
+            return null;
         }
 
         Material material = Material.matchMaterial(materialName);
 
         if (material == null) {
-            Bukkit.getLogger().warning("[MandoMC] Invalid material for item " + id + ": " + materialName);
-            return new ItemStack(Material.STONE);
+            log("Invalid material for item " + id + ": " + materialName);
         }
 
-        ItemStack item = new ItemStack(material);
-        ItemMeta meta = item.getItemMeta();
+        return material;
+    }
 
-        if (meta == null) return item;
+    /**
+     * Applies basic display metadata.
+     *
+     * @param meta    the item meta
+     * @param id      the item id
+     * @param section the config section
+     */
+    private static void applyBasicMeta(ItemMeta meta, String id, ConfigurationSection section) {
 
         meta.setDisplayName(color(section.getString("name", "")));
 
         if (section.contains("custom_model_data")) {
             meta.setCustomModelData(section.getInt("custom_model_data"));
         }
+    }
+
+    /**
+     * Applies persistent data (id and tags).
+     *
+     * @param meta    the item meta
+     * @param id      the item id
+     * @param section the config section
+     */
+    private static void applyPersistentData(ItemMeta meta, String id, ConfigurationSection section) {
 
         PersistentDataContainer data = meta.getPersistentDataContainer();
+
         data.set(ItemKeys.ITEM_ID, PersistentDataType.STRING, id);
 
         List<String> tags = section.getStringList("tags");
         if (!tags.isEmpty()) {
             data.set(ItemKeys.ITEM_TAGS, PersistentDataType.STRING, String.join(",", tags));
         }
+    }
+
+    /**
+     * Builds and applies lore to the item.
+     *
+     * @param meta    the item meta
+     * @param section the config section
+     */
+    private static void applyLore(ItemMeta meta, ConfigurationSection section) {
 
         List<String> lore = new ArrayList<>();
 
@@ -82,24 +154,32 @@ public class ItemFactory {
 
         if (rarity != null || category != null) {
 
-            String rarityIcon = rarityIcons.getOrDefault(rarity, "");
-            String categoryIcon = categoryIcons.getOrDefault(category, "");
+            String rarityIcon = RARITY_ICONS.getOrDefault(rarity, "");
+            String categoryIcon = CATEGORY_ICONS.getOrDefault(category, "");
 
             lore.add(color("&f" + rarityIcon + "  " + categoryIcon));
         }
 
-        if (section.contains("lore")) {
-            for (String line : section.getStringList("lore")) {
-                lore.add(color(line));
-            }
+        for (String line : section.getStringList("lore")) {
+            lore.add(color(line));
         }
 
         meta.setLore(lore);
-        item.setItemMeta(meta);
-
-        return item;
     }
 
+    /*
+     * =========================
+     * CRAFTING
+     * =========================
+     */
+
+    /**
+     * Registers a shaped crafting recipe.
+     *
+     * @param id      the recipe id
+     * @param result  the resulting item
+     * @param section the config section
+     */
     public static void registerRecipe(String id, ItemStack result, ConfigurationSection section) {
 
         if (!section.contains("recipe")) return;
@@ -118,22 +198,15 @@ public class ItemFactory {
 
         for (String symbol : ingredients.getKeys(false)) {
 
+            char keyChar = symbol.charAt(0);
             String value = ingredients.getString(symbol);
-            ingredientMap.put(symbol.charAt(0), value);
 
-            RecipeChoice choice;
+            ingredientMap.put(keyChar, value);
 
-            ItemStack customItem = ItemRegistry.get(value);
-
-            if (customItem != null) {
-                choice = new RecipeChoice.ExactChoice(customItem.clone());
-            } else {
-                Material mat = Material.matchMaterial(value);
-                if (mat == null) continue;
-                choice = new RecipeChoice.MaterialChoice(mat);
+            RecipeChoice choice = resolveRecipeChoice(value);
+            if (choice != null) {
+                recipe.setIngredient(keyChar, choice);
             }
-
-            recipe.setIngredient(symbol.charAt(0), choice);
         }
 
         Bukkit.addRecipe(recipe);
@@ -143,9 +216,20 @@ public class ItemFactory {
         );
     }
 
-    public static void registerSmelting(String id, ItemStack result, ConfigurationSection section) {
+    /*
+     * =========================
+     * SMELTING
+     * =========================
+     */
 
-        if (!section.contains("smelting")) return;
+    /**
+     * Registers a smelting recipe.
+     *
+     * @param id      the recipe id
+     * @param result  the resulting item
+     * @param section the config section
+     */
+    public static void registerSmelting(String id, ItemStack result, ConfigurationSection section) {
 
         ConfigurationSection smelt = section.getConfigurationSection("smelting");
         if (smelt == null) return;
@@ -155,32 +239,15 @@ public class ItemFactory {
 
         if (input == null) return;
 
-        RecipeChoice choice;
-
-        ItemStack customInput = ItemRegistry.get(input);
-
-        if (customInput != null) {
-            choice = new RecipeChoice.ExactChoice(customInput.clone());
-        } else {
-            Material mat = Material.matchMaterial(input);
-            if (mat == null) return;
-            choice = new RecipeChoice.MaterialChoice(mat);
-        }
+        RecipeChoice choice = resolveRecipeChoice(input);
+        if (choice == null) return;
 
         NamespacedKey key = new NamespacedKey(MandoMC.getInstance(), id + "_smelt");
 
         switch (furnaceType.toLowerCase()) {
-
-            case "blast":
-                Bukkit.addRecipe(new BlastingRecipe(key, result, choice, 0, 200));
-                break;
-
-            case "smoker":
-                Bukkit.addRecipe(new SmokingRecipe(key, result, choice, 0, 200));
-                break;
-
-            default:
-                Bukkit.addRecipe(new FurnaceRecipe(key, result, choice, 0, 200));
+            case "blast" -> Bukkit.addRecipe(new BlastingRecipe(key, result, choice, 0, 200));
+            case "smoker" -> Bukkit.addRecipe(new SmokingRecipe(key, result, choice, 0, 200));
+            default -> Bukkit.addRecipe(new FurnaceRecipe(key, result, choice, 0, 200));
         }
 
         RecipeRegistry.registerSmelting(
@@ -188,6 +255,44 @@ public class ItemFactory {
         );
     }
 
+    /*
+     * =========================
+     * HELPERS
+     * =========================
+     */
+
+    /**
+     * Resolves a recipe choice from an item id or material name.
+     *
+     * @param value item id or material string
+     * @return recipe choice or null if invalid
+     */
+    private static RecipeChoice resolveRecipeChoice(String value) {
+
+        ItemStack custom = ItemRegistry.get(value);
+        if (custom != null) {
+            return new RecipeChoice.ExactChoice(custom.clone());
+        }
+
+        Material mat = Material.matchMaterial(value);
+        return mat != null ? new RecipeChoice.MaterialChoice(mat) : null;
+    }
+
+    /**
+     * Logs a warning message.
+     *
+     * @param message message to log
+     */
+    private static void log(String message) {
+        MandoMC.getInstance().getLogger().warning(message);
+    }
+
+    /**
+     * Applies color formatting to text.
+     *
+     * @param text raw text
+     * @return formatted text
+     */
     private static String color(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
     }

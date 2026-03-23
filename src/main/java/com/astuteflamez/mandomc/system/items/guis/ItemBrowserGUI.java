@@ -12,37 +12,130 @@ import com.astuteflamez.mandomc.system.items.ItemRegistry;
 
 import java.util.*;
 
+/**
+ * GUI for browsing all registered items.
+ *
+ * Features:
+ * - Pagination support
+ * - Category filtering
+ * - Target player selection (for giving items)
+ */
 public class ItemBrowserGUI {
 
     private static final String TITLE = "§8Item Browser";
+    private static final int SIZE = 54;
     private static final int ITEMS_PER_PAGE = 36;
 
+    /**
+     * Opens the item browser targeting the player themselves.
+     *
+     * @param player the viewer and target
+     */
     public static void open(Player player) {
         open(player, player, 0, null);
     }
 
+    /**
+     * Opens the item browser targeting another player.
+     *
+     * @param viewer the player viewing the GUI
+     * @param target the player receiving items
+     */
     public static void open(Player viewer, Player target) {
         open(viewer, target, 0, null);
     }
 
+    /**
+     * Opens the item browser with full control.
+     *
+     * @param viewer   the player viewing the GUI
+     * @param target   the player receiving items
+     * @param page     the page index (0-based)
+     * @param category the selected category (null for all)
+     */
     public static void open(Player viewer, Player target, int page, String category) {
 
-        Inventory gui = Bukkit.createInventory(null, 54, TITLE);
+        Inventory gui = Bukkit.createInventory(null, SIZE, TITLE);
 
         fillBackground(gui);
 
         List<String> categories = getCategories();
         placeCategoryTabs(gui, categories, category);
 
-        List<String> items = getItemsForCategory(category);
+        List<String> items = getItems(category);
 
-        // 🔥 FIX: clamp page
-        int maxPage = items.isEmpty() ? 0 : (items.size() - 1) / ITEMS_PER_PAGE;
+        page = clampPage(page, items.size());
+        applyMetadata(viewer, target, page, category);
 
-        if (page > maxPage) page = maxPage;
-        if (page < 0) page = 0;
+        placeItems(gui, items, page);
+        placeNavigation(gui, page, items.size());
 
-        // 🔥 FIX: set metadata AFTER clamp
+        viewer.openInventory(gui);
+    }
+
+    /**
+     * Retrieves all categories sorted alphabetically.
+     *
+     * @return sorted list of categories
+     */
+    private static List<String> getCategories() {
+        List<String> categories = new ArrayList<>(ItemRegistry.getCategories());
+        Collections.sort(categories);
+        return categories;
+    }
+
+    /**
+     * Retrieves item ids filtered by category.
+     *
+     * @param category the category filter, or null for all items
+     * @return sorted list of item ids
+     */
+    private static List<String> getItems(String category) {
+
+        List<String> ids = new ArrayList<>();
+
+        for (String id : ItemRegistry.getItemIds()) {
+            if (category == null || category.equals(ItemRegistry.getCategory(id))) {
+                ids.add(id);
+            }
+        }
+
+        Collections.sort(ids);
+        return ids;
+    }
+
+    /**
+     * Clamps a page value to a valid range.
+     *
+     * @param page       requested page
+     * @param totalItems total number of items
+     * @return valid page index
+     */
+    private static int clampPage(int page, int totalItems) {
+
+        int maxPage = totalItems == 0 ? 0 : (totalItems - 1) / ITEMS_PER_PAGE;
+
+        if (page > maxPage) return maxPage;
+        if (page < 0) return 0;
+
+        return page;
+    }
+
+    /**
+     * Stores GUI state in player metadata.
+     *
+     * Used for:
+     * - target player tracking
+     * - pagination
+     * - category filtering
+     *
+     * @param viewer   the player viewing the GUI
+     * @param target   the target player
+     * @param page     current page
+     * @param category selected category
+     */
+    private static void applyMetadata(Player viewer, Player target, int page, String category) {
+
         viewer.setMetadata("item_browser_target",
                 new FixedMetadataValue(MandoMC.getInstance(), target.getUniqueId()));
 
@@ -51,6 +144,20 @@ public class ItemBrowserGUI {
 
         viewer.setMetadata("item_browser_category",
                 new FixedMetadataValue(MandoMC.getInstance(), category));
+    }
+
+    /**
+     * Places items into the GUI grid.
+     *
+     * Layout:
+     * - Starts at slot 9
+     * - Skips last column of each row
+     *
+     * @param gui   the inventory
+     * @param items list of item ids
+     * @param page  current page
+     */
+    private static void placeItems(Inventory gui, List<String> items, int page) {
 
         int start = page * ITEMS_PER_PAGE;
         int end = Math.min(start + ITEMS_PER_PAGE, items.size());
@@ -60,111 +167,90 @@ public class ItemBrowserGUI {
         for (int i = start; i < end; i++) {
 
             ItemStack item = ItemRegistry.get(items.get(i));
-
             if (item != null) {
                 gui.setItem(slot, item);
             }
 
             slot++;
 
+            // Skip last column
             if (slot % 9 == 0) slot++;
         }
-
-        placeNavigation(gui, page, items.size());
-
-        viewer.openInventory(gui);
     }
 
-    private static List<String> getCategories() {
-
-        List<String> categories = new ArrayList<>(ItemRegistry.getCategories());
-
-        Collections.sort(categories);
-
-        return categories;
-    }
-
-    private static List<String> getItemsForCategory(String category) {
-
-        List<String> ids = new ArrayList<>();
-
-        for (String id : ItemRegistry.getItemIds()) {
-
-            if (category == null || ItemRegistry.getCategory(id).equals(category)) {
-                ids.add(id);
-            }
-        }
-
-        Collections.sort(ids);
-
-        return ids;
-    }
-
+    /**
+     * Fills the GUI with background panes.
+     *
+     * @param gui the inventory
+     */
     private static void fillBackground(Inventory gui) {
 
-        ItemStack pane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
-
-        ItemMeta meta = pane.getItemMeta();
-        if (meta != null) {
-            meta.setDisplayName(" ");
-            pane.setItemMeta(meta);
-        }
+        ItemStack pane = createItem(Material.GRAY_STAINED_GLASS_PANE, " ");
 
         for (int i = 0; i < gui.getSize(); i++) {
             gui.setItem(i, pane);
         }
     }
 
+    /**
+     * Places category tabs in the top row.
+     *
+     * @param gui        the inventory
+     * @param categories available categories
+     * @param selected   currently selected category
+     */
     private static void placeCategoryTabs(Inventory gui, List<String> categories, String selected) {
 
         int slot = 0;
 
         for (String category : categories) {
 
-            ItemStack tab = new ItemStack(Material.PAPER);
+            String name = category.equals(selected)
+                    ? "§a" + category
+                    : "§e" + category;
 
-            ItemMeta meta = tab.getItemMeta();
-            if (meta != null) {
-
-                if (category.equals(selected)) {
-                    meta.setDisplayName("§a" + category);
-                } else {
-                    meta.setDisplayName("§e" + category);
-                }
-
-                tab.setItemMeta(meta);
-            }
-
-            gui.setItem(slot, tab);
+            gui.setItem(slot, createItem(Material.PAPER, name));
 
             slot++;
-
             if (slot >= 9) break;
         }
     }
 
+    /**
+     * Places navigation buttons (next/previous page).
+     *
+     * @param gui        the inventory
+     * @param page       current page
+     * @param totalItems total items available
+     */
     private static void placeNavigation(Inventory gui, int page, int totalItems) {
 
-        ItemStack next = new ItemStack(Material.ARROW);
-        ItemMeta nextMeta = next.getItemMeta();
-        if (nextMeta != null) {
-            nextMeta.setDisplayName("§aNext Page");
-            next.setItemMeta(nextMeta);
-        }
-
-        ItemStack prev = new ItemStack(Material.ARROW);
-        ItemMeta prevMeta = prev.getItemMeta();
-        if (prevMeta != null) {
-            prevMeta.setDisplayName("§cPrevious Page");
-            prev.setItemMeta(prevMeta);
-        }
-
         if ((page + 1) * ITEMS_PER_PAGE < totalItems) {
-            gui.setItem(53, next);
+            gui.setItem(53, createItem(Material.ARROW, "§aNext Page"));
         }
 
         if (page > 0) {
-            gui.setItem(45, prev);
+            gui.setItem(45, createItem(Material.ARROW, "§cPrevious Page"));
         }
+    }
+
+    /**
+     * Creates a simple item with a display name.
+     *
+     * @param material the item material
+     * @param name     the display name
+     * @return the created item
+     */
+    private static ItemStack createItem(Material material, String name) {
+
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+
+        if (meta != null) {
+            meta.setDisplayName(name);
+            item.setItemMeta(meta);
+        }
+
+        return item;
     }
 }

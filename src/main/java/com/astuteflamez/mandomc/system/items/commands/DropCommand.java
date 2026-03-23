@@ -14,138 +14,147 @@ import com.astuteflamez.mandomc.system.items.ItemRegistry;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles the /drop command.
+ *
+ * Allows dropping custom items or WeaponMechanics ammo at a specified
+ * location with optional world and amount parameters.
+ */
 public class DropCommand implements CommandExecutor, TabCompleter {
 
     private static final String PERMISSION = "mandomc.items.drop";
 
+    /**
+     * Executes the drop command.
+     *
+     * @param sender the command sender
+     * @param command the command
+     * @param label command label
+     * @param args arguments
+     * @return true if handled
+     */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!sender.hasPermission(PERMISSION)) {
-            sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cYou do not have permission.");
+            sender.sendMessage(prefix("&cYou do not have permission."));
             return true;
         }
 
         if (args.length == 0) {
-            sender.sendMessage("§cUsage: /drop <item> [x y z] [world] [amount]");
+            sender.sendMessage(prefix("&cUsage: /drop <item> [x y z] [world] [amount]"));
             return true;
         }
 
-        String id = args[0];
-        int amount = 1;
+        String id = args[0].toLowerCase();
 
-        Location loc;
+        Location location = parseLocation(sender, args);
+        if (location == null) return true;
 
-        // =========================
-        // 📍 LOCATION PARSING
-        // =========================
+        int amount = parseAmount(args, sender);
 
+        ItemStack item = resolveItem(id, amount);
+        if (item == null) {
+            sender.sendMessage(prefix("&7Unknown item or ammo."));
+            return true;
+        }
+
+        location.getWorld().dropItemNaturally(location, item);
+
+        sender.sendMessage(prefix("&7Dropped &f" + id + " &7x" + amount));
+        return true;
+    }
+
+    /**
+     * Parses a location from command arguments.
+     */
+    private Location parseLocation(CommandSender sender, String[] args) {
+
+        // Console must fully specify location
         if (!(sender instanceof Player player)) {
 
             if (args.length < 5) {
-                sender.sendMessage("§cConsole must specify: /drop <item> <x> <y> <z> <world> [amount]");
-                return true;
+                sender.sendMessage("&cConsole must specify: /drop <item> <x> <y> <z> <world> [amount]");
+                return null;
             }
 
             World world = Bukkit.getWorld(args[4]);
             if (world == null) {
-                sender.sendMessage("§cInvalid world.");
-                return true;
+                sender.sendMessage(prefix("&cInvalid world."));
+                return null;
             }
 
-            double x = parseDouble(args[1], sender);
-            double y = parseDouble(args[2], sender);
-            double z = parseDouble(args[3], sender);
+            Double x = parseDouble(args[1], sender);
+            Double y = parseDouble(args[2], sender);
+            Double z = parseDouble(args[3], sender);
 
-            loc = new Location(world, x, y, z);
+            if (x == null || y == null || z == null) return null;
 
-            // amount (optional)
-            if (args.length >= 6) {
-                amount = parseAmount(args[5], sender);
-            }
-
-        } else {
-
-            if (args.length == 1) {
-                loc = player.getLocation();
-
-            } else if (args.length >= 4) {
-
-                double x = parseDouble(args[1], sender);
-                double y = parseDouble(args[2], sender);
-                double z = parseDouble(args[3], sender);
-
-                World world = player.getWorld();
-
-                if (args.length >= 5) {
-                    world = Bukkit.getWorld(args[4]);
-                    if (world == null) {
-                        player.sendMessage("§cInvalid world.");
-                        return true;
-                    }
-                }
-
-                loc = new Location(world, x, y, z);
-
-                // amount (optional)
-                if (args.length >= 6) {
-                    amount = parseAmount(args[5], sender);
-                }
-
-            } else {
-                player.sendMessage("§cUsage: /drop <item> [x y z] [world] [amount]");
-                return true;
-            }
+            return new Location(world, x, y, z);
         }
 
-        // =========================
-        // 🎯 ITEM / AMMO RESOLUTION
-        // =========================
+        if (args.length == 1) {
+            return player.getLocation();
+        }
 
-        ItemStack item = ItemRegistry.get(id.toLowerCase());
+        if (args.length >= 4) {
 
-        // If not found in ItemRegistry → try WeaponMechanics ammo
-        if (item == null) {
-            item = WeaponMechanicsAPI.generateAmmo(id, false);
-        } else {
+            Double x = parseDouble(args[1], sender);
+            Double y = parseDouble(args[2], sender);
+            Double z = parseDouble(args[3], sender);
+
+            if (x == null || y == null || z == null) return null;
+
+            World world = player.getWorld();
+
+            if (args.length >= 5) {
+                world = Bukkit.getWorld(args[4]);
+                if (world == null) {
+                    sender.sendMessage(prefix("&cInvalid world."));
+                    return null;
+                }
+            }
+
+            return new Location(world, x, y, z);
+        }
+
+        sender.sendMessage(prefix("&cUsage: /drop <item> [x y z] [world] [amount]"));
+        return null;
+    }
+
+    /**
+     * Parses item amount from arguments.
+     */
+    private int parseAmount(String[] args, CommandSender sender) {
+
+        if (args.length < 6) return 1;
+
+        try {
+            return Math.max(1, Integer.parseInt(args[5]));
+        } catch (NumberFormatException e) {
+            sender.sendMessage(prefix("&cInvalid amount: " + args[5]));
+            return 1;
+        }
+    }
+
+    /**
+     * Resolves item from registry or WeaponMechanics ammo.
+     */
+    private ItemStack resolveItem(String id, int amount) {
+
+        ItemStack item = ItemRegistry.get(id);
+
+        if (item != null) {
             item.setAmount(amount);
+            return item;
         }
 
-        if (item == null) {
-            sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Unknown item or ammo.");
-            return true;
-        }
-
-        // =========================
-        // 🪂 DROP
-        // =========================
-
-        loc.getWorld().dropItemNaturally(loc, item);
-
-        sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Dropped §f" + id + " §7x" + amount);
-
-        return true;
+        return WeaponMechanicsAPI.generateAmmo(id, false);
     }
 
-    private double parseDouble(String input, CommandSender sender) {
-        try {
-            return Double.parseDouble(input);
-        } catch (NumberFormatException e) {
-            sender.sendMessage("§cInvalid number: " + input);
-            throw e;
-        }
-    }
-
-    private int parseAmount(String input, CommandSender sender) {
-        try {
-            int value = Integer.parseInt(input);
-            return Math.max(1, value);
-        } catch (NumberFormatException e) {
-            sender.sendMessage("§cInvalid amount: " + input);
-            throw e;
-        }
-    }
-
+    /**
+     * Handles tab completion.
+     */
     @Override
     public List<String> onTabComplete(CommandSender sender,
                                       Command command,
@@ -154,33 +163,33 @@ public class DropCommand implements CommandExecutor, TabCompleter {
 
         if (!sender.hasPermission(PERMISSION)) return List.of();
 
-        // Item IDs + Ammo types
+        // Items + ammo
         if (args.length == 1) {
             List<String> list = new ArrayList<>(ItemRegistry.getItemIds());
 
-            list.add("Standard_Plasma_Cells");
-            list.add("Precision_Power_Cells");
-            list.add("Ionized_Energy_Cells");
-            list.add("Tibanna_Gas_Cells");
-            list.add("Proton_Torpedo");
+            list.addAll(List.of(
+                    "Standard_Plasma_Cells",
+                    "Precision_Power_Cells",
+                    "Ionized_Energy_Cells",
+                    "Tibanna_Gas_Cells",
+                    "Proton_Torpedo"
+            ));
 
             return list;
         }
 
         // Coordinates
-        if (args.length >= 2 && args.length <= 4) {
-            if (sender instanceof Player player) {
-                Location loc = player.getLocation();
-                return switch (args.length) {
-                    case 2 -> List.of(String.valueOf(loc.getBlockX()));
-                    case 3 -> List.of(String.valueOf(loc.getBlockY()));
-                    case 4 -> List.of(String.valueOf(loc.getBlockZ()));
-                    default -> List.of();
-                };
-            }
+        if (args.length >= 2 && args.length <= 4 && sender instanceof Player player) {
+            Location loc = player.getLocation();
+            return switch (args.length) {
+                case 2 -> List.of(String.valueOf(loc.getBlockX()));
+                case 3 -> List.of(String.valueOf(loc.getBlockY()));
+                case 4 -> List.of(String.valueOf(loc.getBlockZ()));
+                default -> List.of();
+            };
         }
 
-        // World
+        // Worlds
         if (args.length == 5) {
             List<String> worlds = new ArrayList<>();
             for (World world : Bukkit.getWorlds()) {
@@ -195,5 +204,31 @@ public class DropCommand implements CommandExecutor, TabCompleter {
         }
 
         return List.of();
+    }
+
+    /**
+     * Formats a prefixed message.
+     */
+    private String prefix(String message) {
+        return color("&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» " + message);
+    }
+
+    /**
+     * Applies color formatting.
+     */
+    private String color(String text) {
+        return org.bukkit.ChatColor.translateAlternateColorCodes('&', text);
+    }
+
+    /**
+     * Safely parses a double value.
+     */
+    private Double parseDouble(String input, CommandSender sender) {
+        try {
+            return Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            sender.sendMessage(prefix("&cInvalid number: " + input));
+            return null;
+        }
     }
 }

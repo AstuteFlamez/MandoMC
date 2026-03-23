@@ -8,18 +8,36 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.astuteflamez.mandomc.system.items.ItemRegistry;
 
+import java.util.List;
+
+/**
+ * Handles all recipe browsing GUIs.
+ *
+ * Provides:
+ * - Root category menu
+ * - Category-based recipe lists
+ * - Shared layout builder for all recipe views
+ */
 public class RecipeBrowserGUI {
+
+    private static final String ROOT_TITLE = "§8Recipes";
 
     /*
      * =========================
-     * MAIN PAGE
+     * ROOT MENU
      * =========================
+     */
+
+    /**
+     * Opens the root recipe menu.
+     *
+     * Displays all available recipe categories.
+     *
+     * @param player the viewer
      */
     public static void openRoot(Player player) {
 
-        Inventory gui = Bukkit.createInventory(null, 27, "§8Recipes");
-
-        fill(gui);
+        Inventory gui = createGUI(27, ROOT_TITLE);
 
         gui.setItem(10, category("§6§lMetals", "agrinium"));
         gui.setItem(11, category("§6§lArmor", "plastoid_helmet"));
@@ -34,179 +52,143 @@ public class RecipeBrowserGUI {
 
     /*
      * =========================
-     * METALS
+     * CATEGORY SCREENS
      * =========================
+     */
+
+    /**
+     * Opens the metals recipe category.
      */
     public static void openMetals(Player player) {
-
-        Inventory gui = Bukkit.createInventory(null, 54, "§8Recipes » §6§lMetals");
-
-        fill(gui);
-
-        gui.setItem(10, ItemRegistry.get("agrinium"));
-        gui.setItem(11, ItemRegistry.get("agrinium_sheet"));
-        gui.setItem(12, ItemRegistry.get("aurodium"));
-        gui.setItem(13, ItemRegistry.get("aurodium_sheet"));
-        gui.setItem(14, ItemRegistry.get("beskar"));
-        gui.setItem(15, ItemRegistry.get("beskar_sheet"));
-
-        gui.setItem(19, ItemRegistry.get("cortosis"));
-        gui.setItem(20, ItemRegistry.get("cortosis_sheet"));
-        gui.setItem(21, ItemRegistry.get("durasteel"));
-        gui.setItem(22, ItemRegistry.get("durasteel_sheet"));
-        gui.setItem(23, ItemRegistry.get("electrum"));
-        gui.setItem(24, ItemRegistry.get("electrum_sheet"));
-
-        gui.setItem(28, ItemRegistry.get("lommite"));
-        gui.setItem(29, ItemRegistry.get("lommite_sheet"));
-        gui.setItem(30, ItemRegistry.get("mandalorian_iron"));
-        gui.setItem(31, ItemRegistry.get("mandalorian_sheet"));
-        gui.setItem(32, ItemRegistry.get("neuranium"));
-        gui.setItem(33, ItemRegistry.get("neuranium_sheet"));
-
-        gui.setItem(37, ItemRegistry.get("phrik"));
-        gui.setItem(38, ItemRegistry.get("phrik_sheet"));
-        gui.setItem(39, ItemRegistry.get("songsteel"));
-        gui.setItem(40, ItemRegistry.get("songsteel_sheet"));
-
-        gui.setItem(53, button("§cBack"));
-
-        player.openInventory(gui);
+        openCategory(player, "§8Recipes » §6§lMetals", 54, List.of(
+                "agrinium","agrinium_sheet","aurodium","aurodium_sheet","beskar","beskar_sheet",
+                "cortosis","cortosis_sheet","durasteel","durasteel_sheet","electrum","electrum_sheet",
+                "lommite","lommite_sheet","mandalorian_iron","mandalorian_sheet","neuranium","neuranium_sheet",
+                "phrik","phrik_sheet","songsteel","songsteel_sheet"
+        ));
     }
 
-    /*
-     * =========================
-     * ARMOR
-     * =========================
+    /**
+     * Opens the armor recipe category.
      */
     public static void openArmor(Player player) {
-
-        Inventory gui = Bukkit.createInventory(null, 36, "§8Recipes » §6§lArmor");
-
-        fill(gui);
-
-        gui.setItem(10, ItemRegistry.get("plastoid_helmet"));
-        gui.setItem(12, ItemRegistry.get("plastoid_chestplate"));
-        gui.setItem(14, ItemRegistry.get("plastoid_leggings"));
-        gui.setItem(16, ItemRegistry.get("plastoid_boots"));
-        gui.setItem(19, ItemRegistry.get("beskar_helmet"));
-        gui.setItem(21, ItemRegistry.get("beskar_chestplate"));
-        gui.setItem(23, ItemRegistry.get("beskar_leggings"));
-        gui.setItem(25, ItemRegistry.get("beskar_boots"));
-
-        gui.setItem(35, button("§cBack"));
-
-        player.openInventory(gui);
+        openCategory(player, "§8Recipes » §6§lArmor", 36, List.of(
+                "plastoid_helmet","plastoid_chestplate","plastoid_leggings","plastoid_boots",
+                "beskar_helmet","beskar_chestplate","beskar_leggings","beskar_boots"
+        ));
     }
 
-    /*
-     * =========================
-     * HILTS
-     * =========================
+    /**
+     * Opens the hilts recipe category.
      */
     public static void openHilts(Player player) {
-
-        Inventory gui = Bukkit.createInventory(null, 27, "§8Recipes » §6§lHilts");
-
-        fill(gui);
-
-        gui.setItem(11, ItemRegistry.get("straight_hilt"));
-        gui.setItem(12, ItemRegistry.get("great_hilt"));
-        gui.setItem(13, ItemRegistry.get("whip_hilt"));
-        gui.setItem(14, ItemRegistry.get("pike_hilt"));
-        gui.setItem(15, ItemRegistry.get("fang_hilt"));
-
-        gui.setItem(26, button("§cBack"));
-
-        player.openInventory(gui);
+        openCategory(player, "§8Recipes » §6§lHilts", 27,
+                List.of("straight_hilt","great_hilt","whip_hilt","pike_hilt","fang_hilt"));
     }
 
-    /*
-     * =========================
-     * SABERS
-     * =========================
+    /**
+     * Opens the sabers recipe category.
      */
     public static void openSabers(Player player) {
-
-        Inventory gui = Bukkit.createInventory(null, 27, "§8Recipes » §6§lSabers");
-
-        fill(gui);
-
-        gui.setItem(11, ItemRegistry.get("obiwan"));
-        gui.setItem(12, ItemRegistry.get("cal_survivor_crossguard"));
-        gui.setItem(13, ItemRegistry.get("windu"));
-        gui.setItem(14, ItemRegistry.get("quigon"));
-        gui.setItem(15, ItemRegistry.get("ventress_yellow"));
-
-        gui.setItem(26, button("§cBack"));
-
-        player.openInventory(gui);
+        openCategory(player, "§8Recipes » §6§lSabers", 27,
+                List.of("obiwan","cal_survivor_crossguard","windu","quigon","ventress_yellow"));
     }
 
-    /*
-     * =========================
-     * COMPONENTS
-     * =========================
+    /**
+     * Opens the components recipe category.
      */
     public static void openComponents(Player player) {
-
-        Inventory gui = Bukkit.createInventory(null, 27, "§8Recipes » §6§lComponents");
-
-        fill(gui);
-
-        gui.setItem(11, ItemRegistry.get("tiefighter_cockpit"));
-        gui.setItem(12, ItemRegistry.get("tiefighter_wing"));
-        gui.setItem(13, ItemRegistry.get("x_wing_cockpit"));
-        gui.setItem(14, ItemRegistry.get("x_wing_left_wing"));
-        gui.setItem(15, ItemRegistry.get("x_wing_right_wing"));
-
-        gui.setItem(26, button("§cBack"));
-
-        player.openInventory(gui);
+        openCategory(player, "§8Recipes » §6§lComponents", 27, List.of(
+                "tiefighter_cockpit","tiefighter_wing",
+                "x_wing_cockpit","x_wing_left_wing","x_wing_right_wing"
+        ));
     }
 
-    /*
-     * =========================
-     * FUEL
-     * =========================
+    /**
+     * Opens the fuel recipe category.
      */
     public static void openFuel(Player player) {
+        openCategory(player, "§8Recipes » §6§lFuel", 27,
+                List.of("rhydonium_canister","rhydonium_barrel"));
+    }
 
-        Inventory gui = Bukkit.createInventory(null, 27, "§8Recipes » §6§lFuel");
-
-        fill(gui);
-
-        gui.setItem(12, ItemRegistry.get("rhydonium_canister"));
-        gui.setItem(14, ItemRegistry.get("rhydonium_barrel"));
-
-        gui.setItem(26, button("§cBack"));
-
-        player.openInventory(gui);
+    /**
+     * Opens the vehicles recipe category.
+     */
+    public static void openVehicles(Player player) {
+        openCategory(player, "§8Recipes » §6§lVehicles", 27,
+                List.of("tiefighter","xwing"));
     }
 
     /*
      * =========================
-     * VEHICLES
+     * CORE BUILDER
      * =========================
      */
-    public static void openVehicles(Player player) {
 
-        Inventory gui = Bukkit.createInventory(null, 27, "§8Recipes » §6§lVehicles");
+    /**
+     * Opens a category GUI using a standard layout.
+     *
+     * Layout rules:
+     * - Items start at slot 10
+     * - Last column of each row is skipped
+     * - Back button is placed in final slot
+     *
+     * @param player  the viewer
+     * @param title   GUI title
+     * @param size    inventory size
+     * @param itemIds item ids to display
+     */
+    private static void openCategory(Player player, String title, int size, List<String> itemIds) {
 
-        fill(gui);
+        Inventory gui = createGUI(size, title);
 
-        gui.setItem(12, ItemRegistry.get("tiefighter"));
-        gui.setItem(14, ItemRegistry.get("xwing"));
+        int slot = 10;
 
-        gui.setItem(26, button("§cBack"));
+        for (String id : itemIds) {
+
+            ItemStack item = ItemRegistry.get(id);
+            if (item != null) {
+                gui.setItem(slot, item);
+            }
+
+            slot++;
+
+            // Skip edge columns
+            if (slot % 9 == 0) slot++;
+        }
+
+        gui.setItem(size - 1, button("§cBack"));
 
         player.openInventory(gui);
+    }
+
+    /**
+     * Creates a GUI with a filled background.
+     *
+     * @param size  inventory size
+     * @param title GUI title
+     * @return created inventory
+     */
+    private static Inventory createGUI(int size, String title) {
+
+        Inventory gui = Bukkit.createInventory(null, size, title);
+        fill(gui);
+        return gui;
     }
 
     /*
      * =========================
      * HELPERS
      * =========================
+     */
+
+    /**
+     * Creates a category icon based on an existing item.
+     *
+     * @param name   display name
+     * @param iconId item id used as icon
+     * @return display item
      */
     private static ItemStack category(String name, String iconId) {
 
@@ -224,26 +206,38 @@ public class RecipeBrowserGUI {
         return display;
     }
 
+    /**
+     * Creates a navigation button.
+     */
     private static ItemStack button(String name) {
-        ItemStack item = new ItemStack(Material.ARROW);
-        ItemMeta meta = item.getItemMeta();
-        if (meta != null) {
-            meta.setDisplayName(name);
-            item.setItemMeta(meta);
-        }
-        return item;
+        return createItem(Material.ARROW, name);
     }
 
+    /**
+     * Fills inventory with background panes.
+     */
     private static void fill(Inventory gui) {
-        ItemStack pane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
-        ItemMeta meta = pane.getItemMeta();
-        if (meta != null) {
-            meta.setDisplayName(" ");
-            pane.setItemMeta(meta);
-        }
+
+        ItemStack pane = createItem(Material.GRAY_STAINED_GLASS_PANE, " ");
 
         for (int i = 0; i < gui.getSize(); i++) {
             gui.setItem(i, pane);
         }
+    }
+
+    /**
+     * Creates a simple named item.
+     */
+    private static ItemStack createItem(Material material, String name) {
+
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+
+        if (meta != null) {
+            meta.setDisplayName(name);
+            item.setItemMeta(meta);
+        }
+
+        return item;
     }
 }
