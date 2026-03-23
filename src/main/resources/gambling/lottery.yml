@@ -1,0 +1,149 @@
+lottery:
+
+  enabled: true
+
+  # =========================
+  # 🎟 TICKETS
+  # =========================
+  ticket:
+    price: 5000
+    max-per-player: 100
+
+  # =========================
+  # 🕒 DRAW SCHEDULE (WEEKLY)
+  # =========================
+  draw:
+    day: SUNDAY
+    hour: 20
+    minute: 0
+
+  # =========================
+  # 💰 POT SETTINGS
+  # =========================
+  pot:
+    starting: 10000
+    carry-over: true
+
+  # =========================
+  # 🏆 REWARDS
+  # =========================
+  rewards:
+    winner-percentage: 0.8
+    server-percentage: 0.2
+
+  # =========================
+  # 💬 MESSAGES
+  # =========================
+  messages:
+
+    prefix: "&6[Lottery] "
+
+    no-permission: "&cYou do not have permission."
+    not-active: "&cThe lottery is currently not active."
+
+    ticket-bought: "&aYou bought &e%amount% &aticket(s) for &6$%cost%&a."
+    max-reached: "&cYou have reached the maximum number of tickets."
+
+    insufficient-funds: "&cYou do not have enough money."
+
+    draw-start: "&6&lLottery Draw Starting..."
+    draw-winner: "&6%player% &awon the lottery and received &e$%amount%&a!"
+    draw-no-players: "&cNo one entered the lottery this week."
+
+    broadcast-enter: "&e%player% &7entered the lottery (&6+%amount% tickets&7)"
+
+    time-remaining: "&eNext draw in: &6%time%"
+
+  # =========================
+  # 🧱 HOLOGRAM
+  # =========================
+  hologram:
+
+    enabled: true
+
+    location:
+      world: world
+      x: 0.5
+      y: 80.0
+      z: 0.5
+
+    update-interval: 1200  # 60 seconds
+
+    lines:
+      - "&6&lWEEKLY LOTTERY"
+      - "&7Pot: &a$%pot%"
+      - "&7Tickets: &e%tickets%"
+      - ""
+      - "&eDraw in: &6%time%"
+      - ""
+      - "&aUse /lottery to enter"
+
+  # =========================
+  # 🖥 GUI
+  # =========================
+  gui:
+
+    title: "&6Lottery"
+
+    size: 27
+
+    fill-empty: true
+
+    items:
+
+      buy_1:
+        slot: 11
+        material: PAPER
+        name: "&aBuy 1 Ticket"
+        lore:
+          - "&7Cost: &6$%price%"
+          - ""
+          - "&eClick to purchase"
+
+      buy_10:
+        slot: 13
+        material: PAPER
+        name: "&aBuy 10 Tickets"
+        lore:
+          - "&7Cost: &6$%price_10%"
+          - ""
+          - "&eClick to purchase"
+
+      buy_50:
+        slot: 15
+        material: PAPER
+        name: "&aBuy 50 Tickets"
+        lore:
+          - "&7Cost: &6$%price_50%"
+          - ""
+          - "&eClick to purchase"
+
+      info:
+        slot: 22
+        material: BOOK
+        name: "&eLottery Info"
+        lore:
+          - "&7Your Tickets: &a%player_tickets%"
+          - "&7Total Tickets: &e%tickets%"
+          - "&7Pot: &6$%pot%"
+          - ""
+          - "&eDraw in: &6%time%"
+
+  # =========================
+  # 🔊 EFFECTS (OPTIONAL)
+  # =========================
+  effects:
+
+    enabled: true
+
+    winner:
+      sound: ENTITY_PLAYER_LEVELUP
+      volume: 1.0
+      pitch: 1.0
+
+      firework: true
+
+    draw-start:
+      sound: BLOCK_BEACON_ACTIVATE
+      volume: 1.0
+      pitch: 1.0

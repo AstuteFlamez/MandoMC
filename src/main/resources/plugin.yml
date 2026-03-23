@@ -13,6 +13,8 @@ softdepend:
 
 commands:
 
+  lottery:
+
   # -------------------------
   # Item Commands
   # -------------------------
