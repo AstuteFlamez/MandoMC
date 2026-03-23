@@ -9,14 +9,40 @@ import com.astuteflamez.mandomc.mechanics.warps.WarpConfig;
 import com.astuteflamez.mandomc.system.items.configs.ItemsConfig;
 import com.astuteflamez.mandomc.system.planets.ilum.configs.ParkourConfig;
 
+/**
+ * Command used to reload plugin configurations at runtime.
+ *
+ * Reloads the main config along with all system-specific configs
+ * such as warps, parkour, and items.
+ */
 public class ReloadCommand implements CommandExecutor {
 
+    /**
+     * Main plugin instance.
+     */
     private final MandoMC plugin;
 
+    /**
+     * Creates a new reload command.
+     *
+     * @param plugin the plugin instance
+     */
     public ReloadCommand(MandoMC plugin) {
         this.plugin = plugin;
     }
 
+    /**
+     * Executes the reload command.
+     *
+     * Validates permissions, reloads all configurations,
+     * and reports status to the sender.
+     *
+     * @param sender the command sender
+     * @param command the command executed
+     * @param label the command label
+     * @param args command arguments
+     * @return true if handled
+     */
     @Override
     public boolean onCommand(CommandSender sender,
                              Command command,
