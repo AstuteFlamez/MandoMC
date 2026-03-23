@@ -238,7 +238,6 @@ public final class MandoMC extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new SaberThrowListener(), this);
         Bukkit.getPluginManager().registerEvents(new SaberToggleListener(), this);
         Bukkit.getPluginManager().registerEvents(new SaberDeflectListener(), this);
-        Bukkit.getPluginManager().registerEvents(new SaberWeaponMechanicsDeflectListener(), this);
 
         // Vehicles
         Bukkit.getPluginManager().registerEvents(new SpawnListener(), this);

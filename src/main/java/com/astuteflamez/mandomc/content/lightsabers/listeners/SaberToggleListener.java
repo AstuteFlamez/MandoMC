@@ -12,77 +12,100 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.astuteflamez.mandomc.system.items.ItemUtils;
 import com.astuteflamez.mandomc.system.items.configs.ItemsConfig;
 
+/**
+ * Handles automatic lightsaber activation and deactivation
+ * when switching hotbar slots.
+ *
+ * Turning on occurs when selecting a saber.
+ * Turning off occurs when deselecting a saber.
+ */
 public class SaberToggleListener implements Listener {
 
+    /**
+     * Handles hotbar slot switching.
+     *
+     * Activates the newly selected saber and deactivates
+     * the previously held saber.
+     *
+     * @param event the item held event
+     */
     @EventHandler
     public void onHotbarSwitch(PlayerItemHeldEvent event) {
 
         Player player = event.getPlayer();
 
-        int newSlot = event.getNewSlot();
-        int prevSlot = event.getPreviousSlot();
+        ItemStack newItem = player.getInventory().getItem(event.getNewSlot());
+        ItemStack prevItem = player.getInventory().getItem(event.getPreviousSlot());
 
-        ItemStack newItem = player.getInventory().getItem(newSlot);
-        ItemStack prevItem = player.getInventory().getItem(prevSlot);
+        // Turn on newly selected saber
+        toggleSaber(player, newItem, true, event.getNewSlot());
 
-        /* SABER TURN ON */
+        // Turn off previously held saber
+        toggleSaber(player, prevItem, false, event.getPreviousSlot());
+    }
 
-        if (newItem != null && newItem.getType() == Material.SHIELD && ItemUtils.hasTag(newItem, "SABER")) {
+    /**
+     * Toggles a saber between hilt and blade state.
+     *
+     * @param player the player
+     * @param item the item to toggle
+     * @param enable true to activate blade, false to deactivate
+     * @param slot the inventory slot
+     */
+    private void toggleSaber(Player player, ItemStack item, boolean enable, int slot) {
 
-            String itemId = ItemUtils.getItemId(newItem);
-            if (itemId == null) return;
+        if (!isSaber(item)) return;
 
-            ConfigurationSection sec = ItemsConfig.getItemSection(itemId);
-            if (sec == null) return;
+        String itemId = ItemUtils.getItemId(item);
+        ConfigurationSection section = getItemSection(itemId);
+        if (section == null) return;
 
-            ConfigurationSection hilt = sec.getConfigurationSection("hilt");
-            if (hilt == null) return;
+        ConfigurationSection hilt = section.getConfigurationSection("hilt");
+        if (hilt == null) return;
 
-            int bladeCMD = sec.getInt("custom_model_data");
-            int hiltCMD = hilt.getInt("custom_model_data");
+        int bladeCMD = section.getInt("custom_model_data");
+        int hiltCMD = hilt.getInt("custom_model_data");
 
-            ItemMeta meta = newItem.getItemMeta();
-            if (meta == null || !meta.hasCustomModelData()) return;
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null || !meta.hasCustomModelData()) return;
 
-            if (meta.getCustomModelData() == hiltCMD) {
+        int currentCMD = meta.getCustomModelData();
 
-                meta.setCustomModelData(bladeCMD);
-                newItem.setItemMeta(meta);
-
-                player.getInventory().setItem(newSlot, newItem);
-
-                player.playSound(player.getLocation(), "melee.lightsaber.on", 1f, 1f);
-            }
+        if (enable && currentCMD == hiltCMD) {
+            meta.setCustomModelData(bladeCMD);
+            applyMeta(player, item, slot, meta, "melee.lightsaber.on");
         }
 
-        /* SABER TURN OFF */
-
-        if (prevItem != null && prevItem.getType() == Material.SHIELD && ItemUtils.hasTag(prevItem, "SABER")) {
-
-            String itemId = ItemUtils.getItemId(prevItem);
-            if (itemId == null) return;
-
-            ConfigurationSection sec = ItemsConfig.getItemSection(itemId);
-            if (sec == null) return;
-
-            ConfigurationSection hilt = sec.getConfigurationSection("hilt");
-            if (hilt == null) return;
-
-            int bladeCMD = sec.getInt("custom_model_data");
-            int hiltCMD = hilt.getInt("custom_model_data");
-
-            ItemMeta meta = prevItem.getItemMeta();
-            if (meta == null || !meta.hasCustomModelData()) return;
-
-            if (meta.getCustomModelData() == bladeCMD) {
-
-                meta.setCustomModelData(hiltCMD);
-                prevItem.setItemMeta(meta);
-
-                player.getInventory().setItem(prevSlot, prevItem);
-
-                player.playSound(player.getLocation(), "melee.lightsaber.off", 1f, 1f);
-            }
+        if (!enable && currentCMD == bladeCMD) {
+            meta.setCustomModelData(hiltCMD);
+            applyMeta(player, item, slot, meta, "melee.lightsaber.off");
         }
+    }
+
+    /**
+     * Applies updated item meta and plays sound.
+     */
+    private void applyMeta(Player player, ItemStack item, int slot, ItemMeta meta, String sound) {
+
+        item.setItemMeta(meta);
+        player.getInventory().setItem(slot, item);
+
+        player.playSound(player.getLocation(), sound, 1f, 1f);
+    }
+
+    /**
+     * Checks whether an item is a valid lightsaber.
+     */
+    private boolean isSaber(ItemStack item) {
+        return item != null
+                && item.getType() == Material.SHIELD
+                && ItemUtils.hasTag(item, "SABER");
+    }
+
+    /**
+     * Retrieves item configuration section.
+     */
+    private ConfigurationSection getItemSection(String itemId) {
+        return itemId != null ? ItemsConfig.getItemSection(itemId) : null;
     }
 }
