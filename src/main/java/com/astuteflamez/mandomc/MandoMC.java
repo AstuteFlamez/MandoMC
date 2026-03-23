@@ -25,6 +25,7 @@ import com.astuteflamez.mandomc.features.parkour.commands.ParkourFinishCommand;
 import com.astuteflamez.mandomc.features.parkour.configs.ParkourConfig;
 import com.astuteflamez.mandomc.features.parkour.listeners.*;
 import com.astuteflamez.mandomc.features.parkour.managers.*;
+import com.astuteflamez.mandomc.features.persistentevents.TatooinePotListener;
 import com.astuteflamez.mandomc.features.small_features.fuel.listeners.*;
 import com.astuteflamez.mandomc.features.small_features.leaderboards.LeaderboardManager;
 import com.astuteflamez.mandomc.features.small_features.lightsabers.listeners.*;
@@ -53,8 +54,9 @@ public final class MandoMC extends JavaPlugin {
     private EventManager eventManager;
     private EventScheduler eventScheduler;
 
-    // 🔥 FIX: store leaderboard manager
     private LeaderboardManager leaderboardManager;
+
+    private TatooinePotListener potListener;
 
     @Override
     public void onEnable() {
@@ -76,8 +78,8 @@ public final class MandoMC extends JavaPlugin {
         registerListeners();
         registerModelEngineControllers();
 
-        // 🔥 IMPORTANT: initialize AFTER everything else
         setupLeaderboards();
+        setupTatooinePots();
 
         getLogger().info("§a[MandoMC] Enabled successfully!");
     }
@@ -87,13 +89,16 @@ public final class MandoMC extends JavaPlugin {
 
         shutdownEventSystem();
 
-        // 🔥 FIX: properly clean leaderboards
         if (leaderboardManager != null) {
             leaderboardManager.removeAllDisplays();
         }
 
         if (parkourLeaderboardManager != null) {
             parkourLeaderboardManager.removeAllDisplays();
+        }
+
+        if (potListener != null) {
+            potListener.disable();
         }
 
         getLogger().info("§c[MandoMC] Disabled.");
@@ -158,8 +163,13 @@ public final class MandoMC extends JavaPlugin {
     }
 
     private void setupLeaderboards() {
-        // 🔥 FIX: assign it
         leaderboardManager = new LeaderboardManager(this);
+    }
+
+    private void setupTatooinePots() {
+        potListener = new TatooinePotListener();
+        Bukkit.getPluginManager().registerEvents(potListener, this);
+        potListener.enable();
     }
 
     private void shutdownEventSystem() {
@@ -177,7 +187,7 @@ public final class MandoMC extends JavaPlugin {
 
     private void registerCommands() {
         safeCommand("warps", new WarpCommand(guiManager));
-        safeCommand("test", new TestCommand(this));
+        safeCommand("test", new TestCommand());
         safeCommand("mmcreload", new ReloadCommand(this));
 
         NoteCommand note = new NoteCommand(this);
@@ -202,7 +212,6 @@ public final class MandoMC extends JavaPlugin {
         safeCommand("key", key, key);
     }
 
-    // 🔥 cleaner + null safe command registration
     private void safeCommand(String name, org.bukkit.command.CommandExecutor exec) {
         if (getCommand(name) != null) {
             getCommand(name).setExecutor(exec);
@@ -226,18 +235,22 @@ public final class MandoMC extends JavaPlugin {
 
     private void registerListeners() {
 
+        // GUI
         Bukkit.getPluginManager().registerEvents(new GUIListener(guiManager), this);
 
+        // Items
         Bukkit.getPluginManager().registerEvents(new ItemBrowserListener(), this);
         Bukkit.getPluginManager().registerEvents(new RecipeListener(), this);
         Bukkit.getPluginManager().registerEvents(new NoteListener(this), this);
 
+        // Lightsabers
         Bukkit.getPluginManager().registerEvents(new SaberHitListener(), this);
         Bukkit.getPluginManager().registerEvents(new SaberThrowListener(), this);
         Bukkit.getPluginManager().registerEvents(new SaberToggleListener(), this);
         Bukkit.getPluginManager().registerEvents(new SaberDeflectListener(), this);
         Bukkit.getPluginManager().registerEvents(new SaberWeaponMechanicsDeflectListener(), this);
 
+        // Vehicles
         Bukkit.getPluginManager().registerEvents(new SpawnListener(), this);
         Bukkit.getPluginManager().registerEvents(new MountListener(), this);
         Bukkit.getPluginManager().registerEvents(new PickupListener(), this);
@@ -247,11 +260,13 @@ public final class MandoMC extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new RepairListener(), this);
         Bukkit.getPluginManager().registerEvents(new ShootListener(), this);
 
+        // Fuel
         Bukkit.getPluginManager().registerEvents(new BarrelPlaceListener(), this);
         Bukkit.getPluginManager().registerEvents(new BarrelPickupListener(), this);
         Bukkit.getPluginManager().registerEvents(new BarrelCanisterInteractListener(), this);
         Bukkit.getPluginManager().registerEvents(new CanisterModeSwitchListener(), this);
 
+        // Parkour
         CheckpointManager checkpointManager = new CheckpointManager(this);
         checkpointManager.loadCheckpoints();
 
@@ -262,11 +277,22 @@ public final class MandoMC extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ParkourDisconnectListener(parkourManager), this);
         Bukkit.getPluginManager().registerEvents(new ParkourRespawnListener(parkourManager), this);
 
+        // Events
         Bukkit.getPluginManager().registerEvents(new EventMenuListener(eventManager), this);
         Bukkit.getPluginManager().registerEvents(new KothChestListener(), this);
-        Bukkit.getPluginManager().registerEvents(new DoorListener(this), this);
         Bukkit.getPluginManager().registerEvents(new BeskarMiningListener(eventManager), this);
         Bukkit.getPluginManager().registerEvents(new JabbaChestListener(eventManager), this);
+
+        // 🔥 JABBA DUNGEON (FIXED)
+        Bukkit.getPluginManager().registerEvents(
+                new DoorListener(this, eventManager),
+                this
+        );
+
+        Bukkit.getPluginManager().registerEvents(
+                new JabbaDungeonMobListener(eventManager),
+                this
+        );
     }
 
     private void registerModelEngineControllers() {

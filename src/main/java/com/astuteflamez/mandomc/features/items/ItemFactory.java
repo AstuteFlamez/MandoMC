@@ -26,16 +26,18 @@ public class ItemFactory {
             "Mythic", "\u0114"
     );
 
-    private static final Map<String, String> categoryIcons = Map.of(
-            "Armor", "\u0109",
-            "Component", "\u010A",
-            "Consumable", "\u010B",
-            "Material", "\u010C",
-            "Metal", "\u010D",
-            "Valuable", "\u010E",
-            "Vehicle", "\u010F",
-            "Weapon", "\u0110",
-            "Fuel", "\u0122"
+    private static final Map<String, String> categoryIcons = Map.ofEntries(
+            Map.entry("Ammo", "\u0123"),
+            Map.entry("Armor", "\u0109"),
+            Map.entry("Component", "\u010A"),
+            Map.entry("Consumable", "\u010B"),
+            Map.entry("Key", "\u0124"),
+            Map.entry("Material", "\u010C"),
+            Map.entry("Metal", "\u010D"),
+            Map.entry("Valuable", "\u010E"),
+            Map.entry("Vehicle", "\u010F"),
+            Map.entry("Weapon", "\u0110"),
+            Map.entry("Fuel", "\u0122")
     );
 
     public static ItemStack createItem(String id, ConfigurationSection section) {

@@ -1,5 +1,7 @@
 package com.astuteflamez.mandomc.features.items.commands;
 
+import me.deecaad.weaponmechanics.WeaponMechanicsAPI;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -25,25 +27,23 @@ public class DropCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 0) {
-            sender.sendMessage("§cUsage: /drop <item> [x y z] [world]");
+            sender.sendMessage("§cUsage: /drop <item> [x y z] [world] [amount]");
             return true;
         }
 
-        String id = args[0].toLowerCase();
-        ItemStack item = ItemRegistry.get(id);
-
-        if (item == null) {
-            sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Unknown item.");
-            return true;
-        }
+        String id = args[0];
+        int amount = 1;
 
         Location loc;
 
-        // 🔥 Console MUST provide full args
+        // =========================
+        // 📍 LOCATION PARSING
+        // =========================
+
         if (!(sender instanceof Player player)) {
 
             if (args.length < 5) {
-                sender.sendMessage("§cConsole must specify: /drop <item> <x> <y> <z> <world>");
+                sender.sendMessage("§cConsole must specify: /drop <item> <x> <y> <z> <world> [amount]");
                 return true;
             }
 
@@ -59,11 +59,16 @@ public class DropCommand implements CommandExecutor, TabCompleter {
 
             loc = new Location(world, x, y, z);
 
+            // amount (optional)
+            if (args.length >= 6) {
+                amount = parseAmount(args[5], sender);
+            }
+
         } else {
 
-            // Player logic
             if (args.length == 1) {
                 loc = player.getLocation();
+
             } else if (args.length >= 4) {
 
                 double x = parseDouble(args[1], sender);
@@ -82,16 +87,42 @@ public class DropCommand implements CommandExecutor, TabCompleter {
 
                 loc = new Location(world, x, y, z);
 
+                // amount (optional)
+                if (args.length >= 6) {
+                    amount = parseAmount(args[5], sender);
+                }
+
             } else {
-                player.sendMessage("§cUsage: /drop <item> [x y z] [world]");
+                player.sendMessage("§cUsage: /drop <item> [x y z] [world] [amount]");
                 return true;
             }
         }
 
-        // 🪂 Drop item
+        // =========================
+        // 🎯 ITEM / AMMO RESOLUTION
+        // =========================
+
+        ItemStack item = ItemRegistry.get(id.toLowerCase());
+
+        // If not found in ItemRegistry → try WeaponMechanics ammo
+        if (item == null) {
+            item = WeaponMechanicsAPI.generateAmmo(id, false);
+        } else {
+            item.setAmount(amount);
+        }
+
+        if (item == null) {
+            sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Unknown item or ammo.");
+            return true;
+        }
+
+        // =========================
+        // 🪂 DROP
+        // =========================
+
         loc.getWorld().dropItemNaturally(loc, item);
 
-        sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Dropped §f" + id);
+        sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Dropped §f" + id + " §7x" + amount);
 
         return true;
     }
@@ -105,6 +136,16 @@ public class DropCommand implements CommandExecutor, TabCompleter {
         }
     }
 
+    private int parseAmount(String input, CommandSender sender) {
+        try {
+            int value = Integer.parseInt(input);
+            return Math.max(1, value);
+        } catch (NumberFormatException e) {
+            sender.sendMessage("§cInvalid amount: " + input);
+            throw e;
+        }
+    }
+
     @Override
     public List<String> onTabComplete(CommandSender sender,
                                       Command command,
@@ -113,12 +154,20 @@ public class DropCommand implements CommandExecutor, TabCompleter {
 
         if (!sender.hasPermission(PERMISSION)) return List.of();
 
-        // Item ID
+        // Item IDs + Ammo types
         if (args.length == 1) {
-            return new ArrayList<>(ItemRegistry.getItemIds());
+            List<String> list = new ArrayList<>(ItemRegistry.getItemIds());
+
+            list.add("Standard_Plasma_Cells");
+            list.add("Precision_Power_Cells");
+            list.add("Ionized_Energy_Cells");
+            list.add("Tibanna_Gas_Cells");
+            list.add("Proton_Torpedo");
+
+            return list;
         }
 
-        // Coordinates (optional suggestions)
+        // Coordinates
         if (args.length >= 2 && args.length <= 4) {
             if (sender instanceof Player player) {
                 Location loc = player.getLocation();
@@ -131,13 +180,18 @@ public class DropCommand implements CommandExecutor, TabCompleter {
             }
         }
 
-        // World names
+        // World
         if (args.length == 5) {
             List<String> worlds = new ArrayList<>();
             for (World world : Bukkit.getWorlds()) {
                 worlds.add(world.getName());
             }
             return worlds;
+        }
+
+        // Amount
+        if (args.length == 6) {
+            return List.of("1", "8", "16", "32", "64");
         }
 
         return List.of();

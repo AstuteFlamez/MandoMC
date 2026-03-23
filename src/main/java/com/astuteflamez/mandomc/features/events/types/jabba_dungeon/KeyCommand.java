@@ -1,7 +1,6 @@
 package com.astuteflamez.mandomc.features.events.types.jabba_dungeon;
 
-import org.bukkit.ChatColor;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -25,85 +24,176 @@ public class KeyCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cYou do not have permission to run this command. ");
+        if (args.length < 3) {
+            sender.sendMessage("§7Usage:");
+            sender.sendMessage("§7/key get <dungeon> <door>");
+            sender.sendMessage("§7/key give <dungeon> <door> <player>");
+            sender.sendMessage("§7/key drop <dungeon> <door> <x> <y> <z> [world]");
             return true;
         }
 
-        if (args.length != 2) {
-            player.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Usage: /key <dungeon> <door>");
-            return true;
-        }
+        String sub = args[0].toLowerCase();
 
         int door;
-
         try {
-            door = Integer.parseInt(args[1]);
+            door = Integer.parseInt(args[2]);
         } catch (NumberFormatException e) {
-            player.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Door must be a number.");
+            sender.sendMessage("§cDoor must be a number.");
             return true;
         }
 
         Integer doorId = getDoorId(door);
-
         if (doorId == null) {
-            player.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Invalid door.");
+            sender.sendMessage("§cInvalid door.");
             return true;
         }
 
-        ItemStack key = ItemRegistry.get("keycard");
-
+        ItemStack key = createKey(door, doorId);
         if (key == null) {
-            player.sendMessage(ChatColor.RED + "Keycard item not found.");
+            sender.sendMessage(ChatColor.RED + "Keycard item not found.");
             return true;
         }
 
-        ItemMeta meta = key.getItemMeta();
-        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        switch (sub) {
 
-        // store real door ID used by the door system
-        pdc.set(KEY_ID, PersistentDataType.INTEGER, doorId);
+            case "get": {
+                if (!(sender instanceof Player player)) {
+                    sender.sendMessage("§cOnly players can use this.");
+                    return true;
+                }
 
-        List<String> lore = meta.getLore() != null ? new ArrayList<>(meta.getLore()) : new ArrayList<>();
+                player.getInventory().addItem(key);
+                player.sendMessage("§7Given key for door " + door);
+                break;
+            }
 
-        lore.add("");
-        lore.add(ChatColor.GRAY + "Access:");
-        lore.add(ChatColor.AQUA + "Door " + door); // show player-facing door number
+            case "give": {
+                if (args.length < 4) {
+                    sender.sendMessage("§7Usage: /key give <dungeon> <door> <player>");
+                    return true;
+                }
 
-        meta.setLore(lore);
-        key.setItemMeta(meta);
+                Player target = Bukkit.getPlayer(args[3]);
+                if (target == null) {
+                    sender.sendMessage("§cPlayer not found.");
+                    return true;
+                }
 
-        player.getInventory().addItem(key);
+                target.getInventory().addItem(key);
+                sender.sendMessage("§7Given key to " + target.getName());
+                break;
+            }
 
-        player.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Given key for door " + door);
+            case "drop": {
+
+                if (args.length < 6) {
+                    sender.sendMessage("§7Usage: /key drop <dungeon> <door> <x> <y> <z> [world]");
+                    return true;
+                }
+
+                try {
+                    double x = Double.parseDouble(args[3]);
+                    double y = Double.parseDouble(args[4]);
+                    double z = Double.parseDouble(args[5]);
+
+                    World world;
+
+                    // ✅ If sender is player → use their world
+                    if (sender instanceof Player player) {
+                        world = player.getWorld();
+                    } else {
+                        // ✅ Console must specify world
+                        if (args.length < 7) {
+                            sender.sendMessage("§cConsole must specify world.");
+                            return true;
+                        }
+
+                        world = Bukkit.getWorld(args[6]);
+                        if (world == null) {
+                            sender.sendMessage("§cInvalid world.");
+                            return true;
+                        }
+                    }
+
+                    Location loc = new Location(world, x, y, z);
+
+                    world.dropItemNaturally(loc, key);
+
+                    sender.sendMessage("§7Dropped key at location.");
+
+                } catch (NumberFormatException e) {
+                    sender.sendMessage("§cInvalid coordinates.");
+                }
+
+                break;
+            }
+
+            default:
+                sender.sendMessage("§cUnknown subcommand.");
+        }
 
         return true;
     }
 
-    private Integer getDoorId(int door) {
+    private ItemStack createKey(int door, int doorId) {
 
-        switch (door) {
-            case 1: return 1;
-            case 2: return 5;
-            case 3: return 6;
-            case 4: return 13;
-            case 5: return 4;
-            case 6: return 7;
-            case 7: return 8;
-            case 8: return 11;
-            default: return null;
-        }
+        ItemStack key = ItemRegistry.get("keycard");
+        if (key == null) return null;
+
+        key = key.clone();
+
+        ItemMeta meta = key.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+
+        pdc.set(KEY_ID, PersistentDataType.INTEGER, doorId);
+
+        List<String> lore = meta.getLore() != null ? new ArrayList<>(meta.getLore()) : new ArrayList<>();
+        lore.add("");
+        lore.add(ChatColor.GRAY + "Access:");
+        lore.add(ChatColor.AQUA + "Room " + door);
+
+        meta.setLore(lore);
+        key.setItemMeta(meta);
+
+        return key;
+    }
+
+    private Integer getDoorId(int door) {
+        return switch (door) {
+            case 1 -> 15;
+            case 2 -> 16;
+            case 3 -> 17;
+            case 4 -> 18;
+            case 5 -> 19;
+            case 6 -> 20;
+            case 7 -> 21;
+            case 8 -> 22;
+            case 9 -> 23;
+            default -> null;
+        };
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 
         if (args.length == 1) {
-            return Collections.singletonList("jabba");
+            return Arrays.asList("get", "give", "drop");
         }
 
         if (args.length == 2) {
-            return Arrays.asList("1","2","3","4","5","6","7","8");
+            return Collections.singletonList("jabba");
+        }
+
+        if (args.length == 3) {
+            return Arrays.asList("1","2","3","4","5","6","7","8","9");
+        }
+
+        if (args.length == 4 && args[0].equalsIgnoreCase("give")) {
+            return null;
+        }
+
+        if (args.length >= 4 && args[0].equalsIgnoreCase("drop")) {
+            return Arrays.asList("~", "~ ~", "~ ~ ~");
         }
 
         return Collections.emptyList();

@@ -101,7 +101,7 @@ public class JabbaChestListener implements Listener {
         }
 
         boolean worldMatch = player.getWorld().getName()
-                .equalsIgnoreCase("JabbasPalace");
+                .equalsIgnoreCase("Tatooine");
 
         return worldMatch;
     }

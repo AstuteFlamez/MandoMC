@@ -33,12 +33,14 @@
             <url>https://repo.helpch.at/releases/</url>
         </repository>
 
+        <!-- Lumine (MythicMobs) -->
         <repository>
-            <id>nexus</id>
-            <name>Lumine Public</name>
+            <id>lumine</id>
+            <name>Lumine Releases</name>
             <url>https://mvn.lumine.io/repository/maven-public/</url>
         </repository>
 
+        <!-- FactionsUUID -->
         <repository>
             <id>factionsuuid-repo</id>
             <url>https://dependency.download/releases</url>
@@ -49,7 +51,7 @@
     <!-- Dependencies -->
     <dependencies>
 
-        <!-- Paper API (includes Adventure API) -->
+        <!-- Paper API -->
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
@@ -57,6 +59,15 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- MythicMobs -->
+        <dependency>
+            <groupId>io.lumine</groupId>
+            <artifactId>Mythic-Dist</artifactId>
+            <version>5.6.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- FactionsUUID -->
         <dependency>
             <groupId>dev.kitteh</groupId>
             <artifactId>factionsuuid</artifactId>
@@ -64,6 +75,7 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- ModelEngine -->
         <dependency>
             <groupId>com.ticxo.modelengine</groupId>
             <artifactId>ModelEngine</artifactId>
@@ -79,6 +91,7 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- WeaponMechanics -->
         <dependency>
             <groupId>com.cjcrafter</groupId>
             <artifactId>weaponmechanics</artifactId>
