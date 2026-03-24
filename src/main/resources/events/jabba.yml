@@ -11,26 +11,28 @@ cooldown-cycles: 2
 
 settings:
 
-  world: JabbasPalace
+  world: Tatooine
 
   spawn-points:
-    - JabbasPalace,-145,-49,82
-    - JabbasPalace,-143,-48,84
-    - JabbasPalace,-145,-51,97
-    - JabbasPalace,-156,-49,95
-    - JabbasPalace,-156,-49,88
-    - JabbasPalace,-146,-46,100
-    - JabbasPalace,-153,-50,106
-    - JabbasPalace,-133,-50,105
-    - JabbasPalace,-170,-44,114
-    - JabbasPalace,-130,-49,122
-    - JabbasPalace,-131,-49,120
-    - JabbasPalace,-120,-49,121
-    - JabbasPalace,-100,-42,121
-    - JabbasPalace,-103,-42,103
-    - JabbasPalace,-93,-61,115
-    - JabbasPalace,-93,-62,115
-    - JabbasPalace,-92,-62,115
-    - JabbasPalace,-83,-42,121
-    - JabbasPalace,-80,-42,113
-    - JabbasPalace,-73,-59,76
+    - Tatooine,1700,102,2206,EAST
+    - Tatooine,1667,87,2179,EAST
+    - Tatooine,1677,88,2173,EAST
+    - Tatooine,1690,73,2200,NORTH
+    - Tatooine,1688,80,2190,SOUTH
+    - Tatooine,1674,80,2228,EAST
+    - Tatooine,1655,83,2225,WEST
+    - Tatooine,1652,86,2207,SOUTH
+    - Tatooine,1659,72,2180,NORTH
+    - Tatooine,1665,74,2160,NORTH
+    - Tatooine,1660,72,2155,NORTH
+    - Tatooine,1671,72,2143,WEST
+    - Tatooine,1670,84,2161,SOUTH
+    - Tatooine,1669,95,2146,WEST
+    - Tatooine,1675,95,2164,NORTH
+    - Tatooine,1653,99,2160,EAST
+    - Tatooine,1676,99,2202,WEST
+    - Tatooine,1657,99,2223,NORTH
+    - Tatooine,1692,98,2221,NORTH
+    - Tatooine,1681,101,2213,SOUTH
+    - Tatooine,1704,102,2210,WEST
+    - Tatooine,1683,73,2202,NORTH

@@ -1,33 +1,33 @@
 warps:
-  Earth:
-    slot: 18
-    name: '&a&lEarth'
+  Alderaan:
+    slot: 15
+    name: '&a&lAlderaan'
     material: STICK
     custommodeldata: 1
-    world: world
+    world: Endor
     description:
     - '&b&r&fđġ'
     - '&c→ Claimable'
-    x: 681
-    y: 93
-    z: -161
-    yaw: 246.898
-    pitch: -5.7
-
+    x: 2048
+    y: 263
+    z: 2048
+    yaw: 90
+    pitch: 0
+  
   Tatooine:
     slot: 34
     name: '&6&lTatooine'
     material: STICK
     custommodeldata: 7
-    world: JabbasPalace
+    world: Tatooine
     description:
     - '&b&r&fđġ'
-    - "&2→ Jabba's Palace"
-    x: -151.50145560046846
-    y: -50.0
-    z: 64.45313312033605
-    yaw: 0
-    pitch: -7.350019
+    - '&2→ Jabba''s Palace'
+    x: 2451.4824043935305
+    y: 32.0
+    z: 1539.567076607729
+    yaw: -113.55322
+    pitch: -1.8000033
   
   Spawn:
     slot: 41
@@ -45,7 +45,7 @@ warps:
     pitch: -0.90001816
   
   Ilum:
-    slot: 11
+    slot: 20
     name: '&b&lIlum'
     material: stick
     custommodeldata: 3
@@ -73,33 +73,3 @@ warps:
     z: -153
     yaw: -18.75
     pitch: -1.65
-  
-  Concordia:
-    slot: 23
-    name: '&c&lConcordia'
-    material: STICK
-    custommodeldata: 5
-    world: Geonosis
-    description:
-    - '&b&r&fĖġ'
-    - '&8→ Beskar Mining'
-    x: 191
-    y: 105
-    z: -55
-    yaw: 43.61
-    pitch: -1.05
-  
-  DeathStar:
-    slot: 15
-    name: '&8&lDeath Star'
-    material: STICK
-    custommodeldata: 6
-    world: DeathStar
-    description:
-    - '&b&r&fĖġ'
-    - '&c→ Chest Hunt'
-    x: -74
-    y: 17
-    z: 163
-    yaw: 253.044
-    pitch: -0.737

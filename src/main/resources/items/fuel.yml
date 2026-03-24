@@ -11,8 +11,8 @@ items:
       - FUEL
 
     fuel:
-      max: 100
-      start: 100
+      max: 500
+      start: 500
 
     model_stages:
     - threshold: 0
@@ -55,7 +55,7 @@ items:
 
   rhydonium_barrel_block:
     material: SADDLE
-    name: '&cRhydonium Barrel Model'
+    name: '&cEmpty Rhydonium Barrel Model'
     custom_model_data: 11
     rarity: Rare
     category: Fuel
@@ -64,10 +64,37 @@ items:
       - FUEL
 
     fuel:
-      max: 100
-      start: 100
+      max: 500
+      start: 500
 
+  rhydonium_barrel_quarter:
+    material: SADDLE
+    name: '&cQuarter Rhydonium Barrel Model'
+    custom_model_data: 12
+    rarity: Rare
+    category: Fuel
 
+  rhydonium_barrel_half:
+    material: SADDLE
+    name: '&cHalf Rhydonium Barrel Model'
+    custom_model_data: 13
+    rarity: Rare
+    category: Fuel
+    
+  rhydonium_barrel_three:
+    material: SADDLE
+    name: '&c3/4 Rhydonium Barrel Model'
+    custom_model_data: 14
+    rarity: Rare
+    category: Fuel
+
+  rhydonium_barrel_full:
+    material: SADDLE
+    name: '&cFull Rhydonium Barrel Model'
+    custom_model_data: 15
+    rarity: Rare
+    category: Fuel
+  
   rhydonium_canister:
     material: BREWING_STAND
     name: '&cRhydonium Canister'
@@ -79,7 +106,7 @@ items:
       - FUEL
 
     fuel:
-      max: 25
+      max: 100
       start: 0
 
     lore:

@@ -1,105 +1,27 @@
-warps:
-  Earth:
-    slot: 18
-    name: '&a&lEarth'
-    material: STICK
-    custommodeldata: 1
-    world: world
-    description:
-    - '&b&r&fđġ'
-    - '&c→ Claimable'
-    x: 681
-    y: 93
-    z: -161
-    yaw: 246.898
-    pitch: -5.7
+scheduler:
+  enabled: true
 
-  Tatooine:
-    slot: 34
-    name: '&6&lTatooine'
-    material: STICK
-    custommodeldata: 7
-    world: JabbasPalace
-    description:
-    - '&b&r&fđġ'
-    - "&2→ Jabba's Palace"
-    x: -151.50145560046846
-    y: -50.0
-    z: 64.45313312033605
-    yaw: 0
-    pitch: -7.350019
-  
-  Spawn:
-    slot: 41
-    name: '&b&lSpawn'
-    material: STICK
-    custommodeldata: 2
-    world: BlackSpireOutpost
-    description:
-    - '&b&r&fđġ'
-    - '&a→ Spawn'
-    x: -0.25469257621634944
-    y: 93.0
-    z: -16.29781739902013
-    yaw: -9.002167
-    pitch: -0.90001816
-  
-  Ilum:
-    slot: 11
-    name: '&b&lIlum'
-    material: stick
-    custommodeldata: 3
-    world: Ilum
-    description:
-    - '&b&r&fĕġ'
-    - '&3→ Kyber Crystals'
-    x: 11
-    y: -60
-    z: -56
-    yaw: 1.8
-    pitch: 4.5
-  
-  Hoth:
-    slot: 49
-    name: '&f&lHoth'
-    material: STICK
-    custommodeldata: 4
-    world: Hoth
-    description:
-    - '&b&r&fĕġ'
-    - '&c→ KOTH'
-    x: -47
-    y: 80
-    z: -153
-    yaw: -18.75
-    pitch: -1.65
-  
-  Concordia:
-    slot: 23
-    name: '&c&lConcordia'
-    material: STICK
-    custommodeldata: 5
-    world: Geonosis
-    description:
-    - '&b&r&fĖġ'
-    - '&8→ Beskar Mining'
-    x: 191
-    y: 105
-    z: -55
-    yaw: 43.61
-    pitch: -1.05
-  
-  DeathStar:
-    slot: 15
-    name: '&8&lDeath Star'
-    material: STICK
-    custommodeldata: 6
-    world: DeathStar
-    description:
-    - '&b&r&fĖġ'
-    - '&c→ Chest Hunt'
-    x: -74
-    y: 17
-    z: 163
-    yaw: 253.044
-    pitch: -0.737
+  announcements:
+    end-warning-minute: 50
+    end-minute: 55
+    start-warning-minute: 55
+    start-minute: 0
+
+  messages:
+    current-event-ending:
+      - "&c&lEVENT ENDING SOON"
+      - "&7%event% ends in &c5 minutes&7."
+    next-event-warning:
+      - "&6&lEVENT STARTING SOON"
+      - "&7%event% starts in &65 minutes&7."
+    event-start:
+      - "&a&lEVENT STARTED"
+      - "&7%event% has begun!"
+    event-end:
+      - "&c&lEVENT ENDED"
+      - "&7%event% has ended."
+
+gui:
+  title: "&8Server Events"
+  size: 27
+  filler: GRAY_STAINED_GLASS_PANE

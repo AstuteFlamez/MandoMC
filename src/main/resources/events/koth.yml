@@ -35,5 +35,5 @@ settings:
   chest-claimed-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &e%player% &7claimed the KOTH reward chest!"
 
   reward-commands:
-    - "crate key give %player% legendary 1"
+    - "crate key give %player% pathfinder 1"
     - "eco give %player% 5000"

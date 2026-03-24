@@ -19,11 +19,11 @@ parkour:
   
   spawn:
     world: BlackSpireOutpost
-    x: -4.5
-    y: 93
-    z: -2.5
-    yaw: 46.349
-    pitch: -3.599
+    x: -0.25469257621634944
+    y: 93.0
+    z: -16.29781739902013
+    yaw: -9.002167
+    pitch: -0.90001816
   
   rewards:
     commands:
@@ -38,10 +38,10 @@ parkour:
       z: -48.248
       limit: 10
     skilled:
-      world: ilum
-      x: -0.747
-      y: -59.875
-      z: -42.738
+      world: Naboo
+      x: -12861
+      y: 146
+      z: 1289
       limit: 10
       permission: mmc.leaderboards.parkour
   

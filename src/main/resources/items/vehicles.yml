@@ -30,14 +30,26 @@ items:
       - '&7Consumes fuel while flying.'
       - '&7Refuel using &cRhydonium Canisters.'
 
+    # 🔥 NEW RECIPE
+    recipe:
+      - 'LWR'
+      - 'LCR'
+      - 'B B'
+    ingredients:
+      L: x_wing_left_wing
+      R: x_wing_right_wing
+      C: x_wing_cockpit
+      W: wiring_coil
+      B: barrel_liner
+
     fuel:
-      max: 100
-      start: 100
+      max: 1000
+      start: 1000
 
     stats:
       max_health: 200
       speed: 2.1
-      scale: 3.5
+      scale: 1
 
     systems:
       movement: AERIAL
@@ -47,12 +59,10 @@ items:
         ammo: Proton_Torpedo
         ammo_per_shot: 1
         cooldown: 2000
-        sound: vehicles.xwing_torpedo
+        sound: vehicles.xwing_shoot
 
-      movement_sound: entity.phantom.flap
-      movement_sound_time_in_ticks: 10
-
-
+      movement_sound: vehicles.xwing_fly
+      movement_sound_time_in_ticks: 460
 
   tiefighter:
     material: ECHO_SHARD
@@ -84,9 +94,18 @@ items:
       - '&7Consumes fuel while flying.'
       - '&7Refuel using &cRhydonium Canisters.'
 
+    # 🔥 NEW RECIPE
+    recipe:
+      - '   '
+      - 'WCW'
+      - '   '
+    ingredients:
+      C: tiefighter_cockpit
+      W: tiefighter_wing
+
     fuel:
-      max: 100
-      start: 100
+      max: 1000
+      start: 1000
 
     stats:
       max_health: 150
@@ -98,7 +117,7 @@ items:
 
       weapon:
         gun: TIEFighter_Lasers
-        ammo: Tibanna_Gas_Cell
+        ammo: Tibanna_Gas_Cells
         ammo_per_shot: 1
         burst: 3
         burst_interval: 3

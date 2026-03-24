@@ -135,21 +135,6 @@ items:
 
     lore:
       - '&7Right click to redeem.'
-  
-  keycard:
-    material: ECHO_SHARD
-    name: '&bKeycard'
-    custom_model_data: 20
-
-    rarity: Uncommon
-    category: Key
-
-    tags:
-      - KEY
-
-    lore:
-      - '&7A security keycard used'
-      - '&7to unlock restricted doors.'
 
   cortosis_alloy_frame:
     material: ECHO_SHARD
@@ -172,6 +157,9 @@ items:
     lore:
       - '&7Stabilizes volatile fusion output'
       - '&7for consistent performance.'
+      - ''
+      - '&2&oRecovered from the depths of'
+      - '&2&lJabba''s Palace'
 
   high_efficiency_energy_segment:
     material: ECHO_SHARD
@@ -238,6 +226,9 @@ items:
     lore:
       - '&7Stores and stabilizes plasma'
       - '&7for rapid discharge.'
+      - ''
+      - '&2&oRecovered from the depths of'
+      - '&2&lJabba''s Palace'
 
   precision_crafted_lens:
     material: ECHO_SHARD
@@ -294,10 +285,13 @@ items:
     custom_model_data: 112
     rarity: Common
     category: Material
-    tags: [MATERIAL]
+    tags: [MATERIAL, TATOOINEPOTS]
     lore:
       - '&7Low-capacity energy source'
-      - '&7for simple machinery.'
+      - '&7for simple machinery.'  
+      - ''
+      - '&6&oExtracted from a secured facility on'
+      - '&6&lTatooine'
 
   makeshift_recoil_buffer:
     material: ECHO_SHARD
@@ -398,10 +392,13 @@ items:
     custom_model_data: 121
     rarity: Uncommon
     category: Material
-    tags: [MATERIAL]
+    tags: [MATERIAL, TATOOINEPOTS]
     lore:
       - '&7Reliable energy core used in'
-      - '&7mid-tier equipment.'
+      - '&7mid-tier equipment.'  
+      - ''
+      - '&6&oExtracted from a secured facility on'
+      - '&6&lTatooine'
 
   durasteel_power_core:
     material: ECHO_SHARD
@@ -505,6 +502,9 @@ items:
     tags: [MATERIAL, JABBA]
     lore:
       - '&7Durable plating used in advanced builds.'
+      - ''
+      - '&2&oRecovered from the depths of'
+      - '&2&lJabba''s Palace'
 
   batteries:
     material: ECHO_SHARD
@@ -512,9 +512,12 @@ items:
     custom_model_data: 131
     rarity: Rare
     category: Material
-    tags: [MATERIAL]
+    tags: [MATERIAL, TATOOINEPOTS]
     lore:
-      - '&7Portable energy storage units.'
+      - '&7Portable energy storage units.'  
+      - ''
+      - '&6&oExtracted from a secured facility on'
+      - '&6&lTatooine'
 
   biosample:
     material: ECHO_SHARD
@@ -532,7 +535,7 @@ items:
     custom_model_data: 133
     rarity: Rare
     category: Material
-    tags: [MATERIAL, JABBA]
+    tags: [MATERIAL]
     lore:
       - '&7Core component of electronic systems.'
 
@@ -605,6 +608,9 @@ items:
     tags: [MATERIAL, JABBA]
     lore:
       - '&7Transfers energy efficiently.'
+      - ''
+      - '&2&oRecovered from the depths of'
+      - '&2&lJabba''s Palace'
 
   glitterstim_fibers:
     material: ECHO_SHARD
@@ -783,10 +789,13 @@ items:
     custom_model_data: 158
     rarity: Common
     category: Material
-    tags: [MATERIAL]
+    tags: [MATERIAL, TATOOINEPOTS]
     lore:
       - '&7A basic control component'
-      - '&7used in simple circuits.'
+      - '&7used in simple circuits.'  
+      - ''
+      - '&6&oExtracted from a secured facility on'
+      - '&6&lTatooine'
 
   synthetic_polymer:
     material: ECHO_SHARD
@@ -831,6 +840,9 @@ items:
     lore:
       - '&7A fragment of transparent yet'
       - '&7incredibly durable material.'
+      - ''
+      - '&2&oRecovered from the depths of'
+      - '&2&lJabba''s Palace'
 
   wiring_coil:
     material: ECHO_SHARD
@@ -842,6 +854,9 @@ items:
     lore:
       - '&7Coiled wiring used to connect'
       - '&7electrical components.'
+      - ''
+      - '&2&oRecovered from the depths of'
+      - '&2&lJabba''s Palace'
 
   zersium:
     material: ECHO_SHARD
