@@ -1,6 +1,6 @@
 name: MandoMC
 version: 1.0
-main: com.astuteflamez.mandomc.MandoMC
+main: net.mandomc.MandoMC
 api-version: 1.21
 
 author: AstuteFlamez
