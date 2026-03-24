@@ -18,7 +18,7 @@ import org.bukkit.util.Vector;
 
 import net.mandomc.MandoMC;
 import net.mandomc.system.items.ItemUtils;
-import net.mandomc.system.items.configs.ItemsConfig;
+import net.mandomc.system.items.config.ItemsConfig;
 
 import java.util.*;
 

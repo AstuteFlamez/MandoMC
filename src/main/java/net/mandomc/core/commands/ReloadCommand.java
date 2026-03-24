@@ -6,43 +6,25 @@ import org.bukkit.command.CommandSender;
 
 import net.mandomc.MandoMC;
 import net.mandomc.mechanics.warps.WarpConfig;
-import net.mandomc.system.items.configs.ItemsConfig;
+import net.mandomc.system.items.ItemRegistry;
+import net.mandomc.system.items.config.ItemsConfig;
+import net.mandomc.system.vehicles.config.VehiclesConfig;
+import net.mandomc.system.vehicles.VehicleRegistry;
 import net.mandomc.system.planets.ilum.configs.ParkourConfig;
 
 /**
  * Command used to reload plugin configurations at runtime.
  *
- * Reloads the main config along with all system-specific configs
- * such as warps, parkour, and items.
+ * Reloads all major systems including items and vehicles.
  */
 public class ReloadCommand implements CommandExecutor {
 
-    /**
-     * Main plugin instance.
-     */
     private final MandoMC plugin;
 
-    /**
-     * Creates a new reload command.
-     *
-     * @param plugin the plugin instance
-     */
     public ReloadCommand(MandoMC plugin) {
         this.plugin = plugin;
     }
 
-    /**
-     * Executes the reload command.
-     *
-     * Validates permissions, reloads all configurations,
-     * and reports status to the sender.
-     *
-     * @param sender the command sender
-     * @param command the command executed
-     * @param label the command label
-     * @param args command arguments
-     * @return true if handled
-     */
     @Override
     public boolean onCommand(CommandSender sender,
                              Command command,
@@ -58,25 +40,41 @@ public class ReloadCommand implements CommandExecutor {
 
         try {
 
-            /*
-             * Reload configs
-             */
+            /* ---------------------------
+               Core Config
+            --------------------------- */
             plugin.reloadConfig();
+
+            /* ---------------------------
+               System Configs
+            --------------------------- */
             WarpConfig.reload();
             ParkourConfig.reload();
+
+            /* ---------------------------
+               Items + Vehicles (IMPORTANT ORDER)
+            --------------------------- */
             ItemsConfig.reload();
+            ItemRegistry.reload();
+            VehiclesConfig.reload();
+            VehicleRegistry.reload();
+
+            /* ---------------------------
+               Rebuild Vehicle Mapping
+            --------------------------- */
+            VehicleRegistry.load();
 
             sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Configs reloaded.");
 
         } catch (Exception e) {
 
-            sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Reload failed. Check console.");
+            sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cReload failed. Check console.");
 
             e.printStackTrace();
             return true;
         }
 
-        sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Reload complete.");
+        sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §aReload complete.");
 
         return true;
     }

@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import net.mandomc.system.items.ItemUtils;
-import net.mandomc.system.items.configs.ItemsConfig;
+import net.mandomc.system.items.config.ItemsConfig;
 
 /**
  * Handles automatic lightsaber activation and deactivation

@@ -208,6 +208,7 @@ public class ItemFactory {
             }
         }
 
+        Bukkit.removeRecipe(key);
         Bukkit.addRecipe(recipe);
 
         RecipeRegistry.registerCrafting(
@@ -242,6 +243,8 @@ public class ItemFactory {
         if (choice == null) return;
 
         NamespacedKey key = new NamespacedKey(MandoMC.getInstance(), id + "_smelt");
+
+        Bukkit.removeRecipe(key);
 
         switch (furnaceType.toLowerCase()) {
             case "blast" -> Bukkit.addRecipe(new BlastingRecipe(key, result, choice, 0, 200));

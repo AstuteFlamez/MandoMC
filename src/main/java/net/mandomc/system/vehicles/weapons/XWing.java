@@ -1,13 +1,15 @@
 package net.mandomc.system.vehicles.weapons;
 
 import me.deecaad.weaponmechanics.WeaponMechanicsAPI;
-import net.mandomc.system.items.configs.ItemsConfig;
 import net.mandomc.system.vehicles.Vehicle;
+import net.mandomc.system.vehicles.VehicleRegistry;
+import net.mandomc.system.vehicles.config.VehiclesConfig;
 import net.mandomc.system.vehicles.utils.AmmoUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.SoundCategory;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -25,11 +27,14 @@ public class XWing implements WeaponSystem {
         Player player = Bukkit.getPlayer(vehicle.getOwnerUUID());
         if (player == null) return;
 
-        ConfigurationSection vehicleSection = ItemsConfig.getItemSection("xwing");
-        if (vehicleSection == null) return;
+        String vehicleId = VehicleRegistry.getVehicleId(vehicle.getItemId());
+        if (vehicleId == null) return;
+
+        FileConfiguration config = VehiclesConfig.get(vehicleId);
+        if (config == null) return;
 
         ConfigurationSection weaponSection =
-                vehicleSection.getConfigurationSection("systems.weapon");
+                config.getConfigurationSection("vehicle.systems.weapon");
 
         if (weaponSection == null) return;
 
@@ -50,16 +55,13 @@ public class XWing implements WeaponSystem {
         long cooldownUntil = cooldownMap.getOrDefault(uuid, 0L);
 
         if (now < cooldownUntil) {
-
             long msLeft = cooldownUntil - now;
             double secondsLeft = Math.ceil(msLeft / 100.0) / 10.0;
-
             player.sendMessage("§9§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cWeapon recharging: §e" + secondsLeft + "s");
             return;
         }
 
         if (!AmmoUtil.hasAmmo(player, ammo, ammoPerShot)) {
-
             player.sendMessage("§9§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cOut of " + ammo.replace("_", " ") + "!");
             return;
         }
@@ -67,18 +69,10 @@ public class XWing implements WeaponSystem {
         AmmoUtil.consumeAmmo(player, ammo, ammoPerShot);
 
         Vector direction = player.getLocation().getDirection();
-
         WeaponMechanicsAPI.shoot(player, gun, direction);
 
         if (sound != null) {
-
-            player.getWorld().playSound(
-                    player.getLocation(),
-                    sound,
-                    SoundCategory.MASTER,
-                    1.0f,
-                    1.0f
-            );
+            player.getWorld().playSound(player.getLocation(), sound, SoundCategory.MASTER, 1f, 1f);
         }
 
         if (cooldown > 0) {

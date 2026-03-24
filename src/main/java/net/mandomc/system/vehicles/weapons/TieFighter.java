@@ -2,13 +2,15 @@ package net.mandomc.system.vehicles.weapons;
 
 import me.deecaad.weaponmechanics.WeaponMechanicsAPI;
 import net.mandomc.MandoMC;
-import net.mandomc.system.items.configs.ItemsConfig;
 import net.mandomc.system.vehicles.Vehicle;
+import net.mandomc.system.vehicles.VehicleRegistry;
+import net.mandomc.system.vehicles.config.VehiclesConfig;
 import net.mandomc.system.vehicles.utils.AmmoUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.SoundCategory;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -24,11 +26,14 @@ public class TieFighter implements WeaponSystem {
         Player player = Bukkit.getPlayer(vehicle.getOwnerUUID());
         if (player == null) return;
 
-        ConfigurationSection vehicleSection = ItemsConfig.getItemSection("tiefighter");
-        if (vehicleSection == null) return;
+        String vehicleId = VehicleRegistry.getVehicleId(vehicle.getItemId());
+        if (vehicleId == null) return;
+
+        FileConfiguration config = VehiclesConfig.get(vehicleId);
+        if (config == null) return;
 
         ConfigurationSection weaponSection =
-                vehicleSection.getConfigurationSection("systems.weapon");
+                config.getConfigurationSection("vehicle.systems.weapon");
 
         if (weaponSection == null) return;
 

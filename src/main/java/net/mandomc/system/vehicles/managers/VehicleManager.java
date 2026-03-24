@@ -5,9 +5,10 @@ import com.ticxo.modelengine.api.model.ModeledEntity;
 
 import net.mandomc.modules.system.VehicleModule;
 import net.mandomc.system.items.ItemUtils;
-import net.mandomc.system.items.configs.ItemsConfig;
 import net.mandomc.system.vehicles.Vehicle;
 import net.mandomc.system.vehicles.VehicleData;
+import net.mandomc.system.vehicles.VehicleRegistry;
+import net.mandomc.system.vehicles.config.VehiclesConfig;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -17,6 +18,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -26,37 +28,44 @@ public class VehicleManager {
 
     public static HashMap<UUID, Integer> sound = new HashMap<>();
 
-    private static ConfigurationSection getVehicleSection(ItemStack item) {
+    /* =========================
+       CONFIG ACCESS (NEW)
+    ========================= */
 
-        String id = ItemUtils.getItemId(item);
+    private static FileConfiguration getVehicleConfig(ItemStack item) {
 
-        if (id == null) return null;
+        String itemId = ItemUtils.getItemId(item);
+        if (itemId == null) return null;
 
-        return ItemsConfig.getItemSection(id);
+        String vehicleId = VehicleRegistry.getVehicleId(itemId);
+        if (vehicleId == null) return null;
+
+        return VehiclesConfig.get(vehicleId);
     }
 
     private static ConfigurationSection getStats(ItemStack item) {
 
-        ConfigurationSection sec = getVehicleSection(item);
+        FileConfiguration config = getVehicleConfig(item);
+        if (config == null) return null;
 
-        if (sec == null) return null;
-
-        return sec.getConfigurationSection("stats");
+        return config.getConfigurationSection("vehicle.stats");
     }
 
     private static ConfigurationSection getSystems(ItemStack item) {
 
-        ConfigurationSection sec = getVehicleSection(item);
+        FileConfiguration config = getVehicleConfig(item);
+        if (config == null) return null;
 
-        if (sec == null) return null;
-
-        return sec.getConfigurationSection("systems");
+        return config.getConfigurationSection("vehicle.systems");
     }
+
+    /* =========================
+       STATS
+    ========================= */
 
     public static double getSpeed(ItemStack item) {
 
         ConfigurationSection stats = getStats(item);
-
         if (stats == null) return 40;
 
         return stats.getDouble("speed", 40);
@@ -65,7 +74,6 @@ public class VehicleManager {
     public static double getScale(ItemStack item) {
 
         ConfigurationSection stats = getStats(item);
-
         if (stats == null) return 2;
 
         return stats.getDouble("scale", 2);
@@ -73,17 +81,23 @@ public class VehicleManager {
 
     public static String getModelKey(ItemStack item) {
 
-        ConfigurationSection sec = getVehicleSection(item);
+        String itemId = ItemUtils.getItemId(item);
+        if (itemId == null) return "";
 
-        if (sec == null) return "";
+        // 🔥 model_key stays in item config
+        var section = net.mandomc.system.items.config.ItemsConfig.getItemSection(itemId);
+        if (section == null) return "";
 
-        return sec.getString("model_key", "");
+        return section.getString("model_key", "");
     }
+
+    /* =========================
+       SYSTEMS
+    ========================= */
 
     public static String getMovementSound(ItemStack item) {
 
         ConfigurationSection systems = getSystems(item);
-
         if (systems == null) return null;
 
         return systems.getString("movement_sound");
@@ -92,11 +106,14 @@ public class VehicleManager {
     public static int getMovementSoundLength(ItemStack item) {
 
         ConfigurationSection systems = getSystems(item);
-
         if (systems == null) return 0;
 
         return systems.getInt("movement_sound_time_in_ticks");
     }
+
+    /* =========================
+       VEHICLE LIFECYCLE
+    ========================= */
 
     public static void pickupVehicle(Player player) {
 
@@ -131,7 +148,6 @@ public class VehicleManager {
         ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(entity);
 
         if (modeledEntity != null) {
-
             modeledEntity.destroy();
             entity.remove();
         }
@@ -152,58 +168,19 @@ public class VehicleManager {
         Location loc = entity.getLocation();
         World world = entity.getWorld();
 
-        /* Explosion sounds */
-
+        /* Sounds */
         world.playSound(loc, Sound.ENTITY_GENERIC_EXPLODE, 2.0f, 1.0f);
         world.playSound(loc, Sound.BLOCK_ANVIL_LAND, 1.2f, 0.6f);
         world.playSound(loc, Sound.ENTITY_BLAZE_SHOOT, 1.0f, 0.5f);
 
-        /* Main explosion */
+        /* Particles */
+        world.spawnParticle(Particle.EXPLOSION, loc, 1);
 
-        world.spawnParticle(
-                Particle.EXPLOSION,
-                loc,
-                1
-        );
+        world.spawnParticle(Particle.FLAME, loc, 60, 1.5, 1.5, 1.5, 0.05);
+        world.spawnParticle(Particle.SMOKE, loc, 80, 2, 2, 2, 0.02);
+        world.spawnParticle(Particle.CRIT, loc, 40, 1.5, 1.5, 1.5, 0.2);
 
-        /* Fire burst */
-
-        world.spawnParticle(
-                Particle.FLAME,
-                loc,
-                60,
-                1.5,
-                1.5,
-                1.5,
-                0.05
-        );
-
-        /* Smoke plume */
-
-        world.spawnParticle(
-                Particle.SMOKE,
-                loc,
-                80,
-                2,
-                2,
-                2,
-                0.02
-        );
-
-        /* Sparks */
-
-        world.spawnParticle(
-                Particle.CRIT,
-                loc,
-                40,
-                1.5,
-                1.5,
-                1.5,
-                0.2
-        );
-
-        /* Optional knockback */
-
+        /* Knockback */
         for (Entity nearby : world.getNearbyEntities(loc, 4, 3, 4)) {
 
             if (nearby instanceof Player nearbyPlayer) {
@@ -222,7 +199,6 @@ public class VehicleManager {
         ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(entity);
 
         if (modeledEntity != null) {
-
             modeledEntity.destroy();
             entity.remove();
         }

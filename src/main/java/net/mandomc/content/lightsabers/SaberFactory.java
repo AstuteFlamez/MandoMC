@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import net.mandomc.MandoMC;
-import net.mandomc.system.items.configs.ItemsConfig;
+import net.mandomc.system.items.config.ItemsConfig;
 
 import java.util.ArrayList;
 import java.util.List;

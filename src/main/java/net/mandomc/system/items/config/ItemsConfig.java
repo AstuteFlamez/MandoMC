@@ -1,4 +1,4 @@
-package net.mandomc.system.items.configs;
+package net.mandomc.system.items.config;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;

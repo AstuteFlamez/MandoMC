@@ -2,14 +2,16 @@ package net.mandomc.system.vehicles.weapons;
 
 import me.deecaad.weaponmechanics.WeaponMechanicsAPI;
 import net.mandomc.modules.system.VehicleModule;
-import net.mandomc.system.items.configs.ItemsConfig;
 import net.mandomc.system.vehicles.Vehicle;
+import net.mandomc.system.vehicles.VehicleRegistry;
+import net.mandomc.system.vehicles.config.VehiclesConfig;
 import net.mandomc.system.vehicles.utils.AmmoUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.SoundCategory;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -23,14 +25,18 @@ public class SpeederBike implements WeaponSystem {
 
     @Override
     public void shoot(Vehicle vehicle) {
+
         Player player = Bukkit.getPlayer(vehicle.getOwnerUUID());
         if (player == null) return;
 
-        ConfigurationSection vehicleSection = ItemsConfig.getItemSection("speederbike");
-        if (vehicleSection == null) return;
+        String vehicleId = VehicleRegistry.getVehicleId(vehicle.getItemId());
+        if (vehicleId == null) return;
+
+        FileConfiguration config = VehiclesConfig.get(vehicleId);
+        if (config == null) return;
 
         ConfigurationSection weaponSection =
-                vehicleSection.getConfigurationSection("systems.weapon");
+                config.getConfigurationSection("vehicle.systems.weapon");
 
         if (weaponSection == null) return;
 
@@ -38,6 +44,7 @@ public class SpeederBike implements WeaponSystem {
     }
 
     private void fireWeapon(Player player, ConfigurationSection config) {
+
         String gun = config.getString("gun");
         String ammo = config.getString("ammo");
         int ammoPerShot = config.getInt("ammo_per_shot", 1);
@@ -61,14 +68,12 @@ public class SpeederBike implements WeaponSystem {
             return;
         }
 
-        // Safety check to ensure the vehicle still exists in the active map
         if (!VehicleModule.getActiveVehicles().containsKey(uuid)) return;
 
         var activeModel = VehicleModule.getActiveVehicles().get(uuid)
                 .getVehicleData()
                 .getActiveModel();
 
-        // FIX: Use .map() and .orElse() to prevent NoSuchElementException if bones are missing
         Location leftBarrel = activeModel.getBone("barrelLeft")
                 .map(bone -> bone.getLocation())
                 .orElse(player.getEyeLocation());
@@ -77,19 +82,15 @@ public class SpeederBike implements WeaponSystem {
                 .map(bone -> bone.getLocation())
                 .orElse(player.getEyeLocation());
 
-        // Consume ammo only after we are sure we can fire
         AmmoUtil.consumeAmmo(player, ammo, ammoPerShot);
 
         Vector direction = player.getLocation().getDirection();
 
         for (int i = 0; i < ammoPerShot; i++) {
-            // Alternate between left and right barrels
-            Location shootLoc = (i % 2 == 0) ? leftBarrel.clone() : rightBarrel.clone();
 
-            // Ensure projectile travels the direction player is looking
+            Location shootLoc = (i % 2 == 0) ? leftBarrel.clone() : rightBarrel.clone();
             shootLoc.setDirection(direction);
 
-            // Using shootLoc.getDirection() ensures it fires where the bone is pointing (aligned with player)
             WeaponMechanicsAPI.shoot(player, gun, shootLoc.getDirection());
         }
 

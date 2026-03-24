@@ -10,10 +10,18 @@ public class Vehicle {
     private VehicleData vehicleData;
     private UUID owner;
 
-    public Vehicle(WeaponSystem weaponSystem, VehicleData vehicleData, UUID owner) {
+    // 🔥 NEW: store item id
+    private String itemId;
+
+    public Vehicle(WeaponSystem weaponSystem,
+                   VehicleData vehicleData,
+                   UUID owner,
+                   String itemId) {
+
         this.weaponSystem = weaponSystem;
         this.vehicleData = vehicleData;
         this.owner = owner;
+        this.itemId = itemId.toLowerCase(); // normalize
     }
 
     public WeaponSystem getWeaponSystem() {
@@ -28,6 +36,10 @@ public class Vehicle {
         return owner;
     }
 
+    public String getItemId() {
+        return itemId;
+    }
+
     public void setWeaponSystem(WeaponSystem weaponSystem) {
         this.weaponSystem = weaponSystem;
     }
@@ -38,5 +50,9 @@ public class Vehicle {
 
     public void setOwnerUUID(UUID owner) {
         this.owner = owner;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId.toLowerCase();
     }
 }

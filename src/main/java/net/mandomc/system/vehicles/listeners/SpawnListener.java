@@ -57,9 +57,14 @@ public class SpawnListener implements Listener {
         World world = player.getWorld();
 
         if (isInSpawnZone(location)) {
-
             player.sendMessage("§9§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cVehicles can only be deployed in Earth.");
+            return;
+        }
 
+        // 🔥 Get itemId from PDC
+        String itemId = ItemUtils.getItemId(item);
+        if (itemId == null) {
+            player.sendMessage("§cInvalid vehicle item.");
             return;
         }
 
@@ -71,8 +76,8 @@ public class SpawnListener implements Listener {
             return;
         }
 
-        Vehicle vehicle = new Vehicle(weaponSystem, vehicleData, uuid);
-        vehicle.getVehicleData().setItem(item);
+        // 🔥 FIXED: pass itemId into Vehicle
+        Vehicle vehicle = new Vehicle(weaponSystem, vehicleData, uuid, itemId);
 
         spawnVehicleEntities(player, world, location, vehicleData);
 
@@ -99,7 +104,6 @@ public class SpawnListener implements Listener {
         if (!ItemUtils.hasTag(item, "VEHICLE")) return false;
 
         if (VehicleModule.getActiveVehicles().containsKey(uuid)) {
-
             player.sendMessage("§9§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cYou already have a vehicle deployed.");
             return false;
         }
@@ -200,7 +204,6 @@ public class SpawnListener implements Listener {
     }
 
     private void registerVehicle(UUID uuid, Vehicle vehicle) {
-
         VehicleModule.getActiveVehicles().put(uuid, vehicle);
     }
 
@@ -209,12 +212,9 @@ public class SpawnListener implements Listener {
         int amount = item.getAmount();
 
         if (amount > 1) {
-
             item.setAmount(amount - 1);
             inventory.setItemInMainHand(item);
-
         } else {
-
             inventory.setItemInMainHand(null);
         }
     }

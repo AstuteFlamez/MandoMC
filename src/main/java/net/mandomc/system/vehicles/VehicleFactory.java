@@ -3,13 +3,14 @@ package net.mandomc.system.vehicles;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import net.mandomc.MandoMC;
-import net.mandomc.system.items.configs.ItemsConfig;
+import net.mandomc.system.vehicles.config.VehiclesConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,30 +25,25 @@ public class VehicleFactory {
 
     public static ItemStack applyStats(ItemStack item, String itemId) {
 
-        ConfigurationSection section = ItemsConfig.getItemSection(itemId);
-        if (section == null) return item;
+        String vehicleId = VehicleRegistry.getVehicleId(itemId);
+        if (vehicleId == null) return item;
 
-        ConfigurationSection stats = section.getConfigurationSection("stats");
+        FileConfiguration config = VehiclesConfig.get(vehicleId);
+        if (config == null) return item;
+
+        ConfigurationSection stats = config.getConfigurationSection("vehicle.stats");
         if (stats == null) return item;
 
         double maxHealth = stats.getDouble("max_health", 100);
-        double speed = stats.getDouble("speed", 0);
+        double speed = stats.getDouble("speed", 1);
 
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return item;
-
-        /* ---------------------------
-           Store health in PDC
-        --------------------------- */
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
 
         container.set(MAX_HEALTH, PersistentDataType.DOUBLE, maxHealth);
         container.set(CURRENT_HEALTH, PersistentDataType.DOUBLE, maxHealth);
-
-        /* ---------------------------
-           Update lore
-        --------------------------- */
 
         List<String> lore = meta.hasLore()
                 ? new ArrayList<>(meta.getLore())

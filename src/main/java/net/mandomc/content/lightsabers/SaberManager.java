@@ -4,7 +4,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 import net.mandomc.system.items.ItemUtils;
-import net.mandomc.system.items.configs.ItemsConfig;
+import net.mandomc.system.items.config.ItemsConfig;
 
 /**
  * Provides access to lightsaber stat values from item configurations.

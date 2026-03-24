@@ -1,20 +1,18 @@
 package net.mandomc.system.items;
 
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+
+import net.mandomc.MandoMC;
+import net.mandomc.system.items.config.ItemsConfig;
 
 import java.util.*;
 
 /**
  * Central registry for all loaded items.
  *
- * Stores:
- * - Item instances
- * - Categories
- * - Rarities
- * - Tags
- *
- * All item ids are normalized to lowercase.
- * All tags are normalized to uppercase.
+ * Supports full reload by clearing and rebuilding from config.
  */
 public final class ItemRegistry {
 
@@ -23,15 +21,10 @@ public final class ItemRegistry {
     private static final Map<String, String> rarities = new HashMap<>();
     private static final Map<String, Set<String>> tags = new HashMap<>();
 
-    /**
-     * Registers an item and its metadata.
-     *
-     * @param id       unique item id
-     * @param item     item stack instance
-     * @param category item category
-     * @param rarity   item rarity
-     * @param itemTags list of tags associated with the item
-     */
+    /* =====================================================
+       REGISTER
+    ===================================================== */
+
     public static void register(
             String id,
             ItemStack item,
@@ -44,102 +37,105 @@ public final class ItemRegistry {
         items.put(id, item);
         categories.put(id, category);
         rarities.put(id, rarity);
-
         tags.put(id, normalizeTags(itemTags));
     }
 
-    /**
-     * Retrieves a cloned item by id.
-     *
-     * @param id item id
-     * @return cloned ItemStack or null if not found
-     */
+    /* =====================================================
+       RELOAD (🔥 THIS IS WHAT YOU NEEDED)
+    ===================================================== */
+
+    public static void reload() {
+
+        clear();
+
+        int loaded = 0;
+
+        for (FileConfiguration config : ItemsConfig.getAll().values()) {
+
+            ConfigurationSection itemsSection = config.getConfigurationSection("items");
+            if (itemsSection == null) continue;
+
+            for (String id : itemsSection.getKeys(false)) {
+
+                ConfigurationSection section = itemsSection.getConfigurationSection(id);
+                if (section == null) continue;
+
+                try {
+
+                    ItemStack item = ItemFactory.createItem(id, section);
+
+                    String category = section.getString("category", "misc");
+                    String rarity = section.getString("rarity", "common");
+                    List<String> itemTags = section.getStringList("tags");
+
+                    register(id, item, category, rarity, itemTags);
+                    loaded++;
+
+                } catch (Exception e) {
+
+                    MandoMC.getInstance().getLogger()
+                            .severe("Failed to load item: " + id);
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        MandoMC.getInstance().getLogger()
+                .info("ItemRegistry loaded " + loaded + " items.");
+    }
+
+    /* =====================================================
+       CLEAR
+    ===================================================== */
+
+    public static void clear() {
+        items.clear();
+        categories.clear();
+        rarities.clear();
+        tags.clear();
+    }
+
+    /* =====================================================
+       GETTERS
+    ===================================================== */
+
     public static ItemStack get(String id) {
         ItemStack item = items.get(normalizeId(id));
         return item == null ? null : item.clone();
     }
 
-    /**
-     * Returns all registered item ids.
-     *
-     * @return set of item ids
-     */
     public static Set<String> getItemIds() {
         return items.keySet();
     }
 
-    /**
-     * Retrieves the category of an item.
-     *
-     * @param id item id
-     * @return category or null if not found
-     */
     public static String getCategory(String id) {
         return categories.get(normalizeId(id));
     }
 
-    /**
-     * Retrieves the rarity of an item.
-     *
-     * @param id item id
-     * @return rarity (defaults to "common" if missing)
-     */
     public static String getRarity(String id) {
         return rarities.getOrDefault(normalizeId(id), "common");
     }
 
-    /**
-     * Retrieves all tags for an item.
-     *
-     * @param id item id
-     * @return set of tags (empty if none)
-     */
     public static Set<String> getTags(String id) {
         return tags.getOrDefault(normalizeId(id), Collections.emptySet());
     }
 
-    /**
-     * Checks if an item has a specific tag.
-     *
-     * @param id  item id
-     * @param tag tag to check
-     * @return true if item contains the tag
-     */
     public static boolean hasTag(String id, String tag) {
         return getTags(id).contains(tag.toUpperCase());
     }
 
-    /**
-     * Retrieves all unique categories.
-     *
-     * @return set of categories
-     */
     public static Set<String> getCategories() {
         return new HashSet<>(categories.values());
     }
 
-    /*
-     * =========================
-     * HELPERS
-     * =========================
-     */
+    /* =====================================================
+       HELPERS
+    ===================================================== */
 
-    /**
-     * Normalizes item ids to lowercase.
-     *
-     * @param id raw id
-     * @return normalized id
-     */
     private static String normalizeId(String id) {
         return id.toLowerCase();
     }
 
-    /**
-     * Normalizes tags to uppercase.
-     *
-     * @param itemTags raw tag list
-     * @return normalized tag set
-     */
     private static Set<String> normalizeTags(List<String> itemTags) {
 
         Set<String> tagSet = new HashSet<>();
@@ -153,9 +149,6 @@ public final class ItemRegistry {
         return tagSet;
     }
 
-    /**
-     * Prevent instantiation.
-     */
     private ItemRegistry() {
         throw new UnsupportedOperationException("Utility class");
     }
