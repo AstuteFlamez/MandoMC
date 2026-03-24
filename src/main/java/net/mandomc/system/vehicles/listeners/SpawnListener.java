@@ -8,7 +8,7 @@ import net.mandomc.modules.system.VehicleModule;
 import net.mandomc.system.items.ItemUtils;
 import net.mandomc.system.vehicles.Vehicle;
 import net.mandomc.system.vehicles.VehicleData;
-import net.mandomc.system.vehicles.managers.VehicleManager;
+import net.mandomc.system.vehicles.config.VehicleConfigResolver;
 import net.mandomc.system.vehicles.weapons.SpeederBike;
 import net.mandomc.system.vehicles.weapons.TieFighter;
 import net.mandomc.system.vehicles.weapons.WeaponSystem;
@@ -131,11 +131,11 @@ public class SpawnListener implements Listener {
 
     private VehicleData createVehicleData(ItemStack item) {
 
-        double speed = VehicleManager.getSpeed(item);
-        double scale = VehicleManager.getScale(item);
-        String modelKey = VehicleManager.getModelKey(item);
-        String movementSound = VehicleManager.getMovementSound(item);
-        int movementSoundLength = VehicleManager.getMovementSoundLength(item);
+        double speed = VehicleConfigResolver.getSpeed(item);
+        double scale = VehicleConfigResolver.getScale(item);
+        String modelKey = VehicleConfigResolver.getModelKey(item);
+        String movementSound = VehicleConfigResolver.getMovementSound(item);
+        int movementSoundLength = VehicleConfigResolver.getMovementSoundLength(item);
 
         VehicleData data = new VehicleData(item, speed, scale, modelKey);
 
@@ -147,7 +147,7 @@ public class SpawnListener implements Listener {
 
     private WeaponSystem createWeaponSystem(ItemStack item) {
 
-        String modelKey = VehicleManager.getModelKey(item);
+        String modelKey = VehicleConfigResolver.getModelKey(item);
 
         switch (modelKey.toLowerCase()) {
 

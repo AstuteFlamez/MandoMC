@@ -10,7 +10,6 @@ public class Vehicle {
     private VehicleData vehicleData;
     private UUID owner;
 
-    // 🔥 NEW: store item id
     private String itemId;
 
     public Vehicle(WeaponSystem weaponSystem,

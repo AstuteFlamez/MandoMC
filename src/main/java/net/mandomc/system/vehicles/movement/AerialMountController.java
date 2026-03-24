@@ -1,6 +1,5 @@
 package net.mandomc.system.vehicles.movement;
 
-import com.ticxo.modelengine.api.animation.handler.AnimationHandler;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.bone.type.Mount;
 import com.ticxo.modelengine.api.mount.controller.MountControllerType;
@@ -73,19 +72,10 @@ public class AerialMountController extends AbstractMountController {
 
             if (controller.isOnGround()) {
 
-                model.getMountManager().ifPresent(m -> m.dismountDriver());
-                VehicleManager.sound.remove(uuid);
-                player.stopSound(vehicle.getVehicleData().getMovementSound());
-                vehicle.getVehicleData().getEntity().setAI(false);
-                entity.setGravity(true);
-                AnimationHandler handler = model.getAnimationHandler();
-                handler.stopAnimation("mount");
-                handler.playAnimation("dismount", 0.2, 0.2, 1, false);
-
+                VehicleManager.dismountVehicle(player, vehicle, model);
                 return;
 
             } else {
-
                 y = -speed;
             }
         }

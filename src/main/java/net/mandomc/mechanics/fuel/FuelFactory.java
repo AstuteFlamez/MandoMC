@@ -17,7 +17,7 @@ import net.mandomc.mechanics.fuel.managers.CanisterManager;
 import net.mandomc.system.items.ItemUtils;
 import net.mandomc.system.items.config.ItemsConfig;
 import net.mandomc.system.vehicles.VehicleRegistry;
-import net.mandomc.system.vehicles.config.VehiclesConfig;
+import net.mandomc.system.vehicles.config.VehicleConfig;
 
 public class FuelFactory {
 
@@ -40,7 +40,7 @@ public class FuelFactory {
 
         if (vehicleId != null) {
 
-            FileConfiguration config = VehiclesConfig.get(vehicleId);
+            FileConfiguration config = VehicleConfig.get(vehicleId);
 
             if (config != null) {
 

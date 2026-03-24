@@ -8,7 +8,7 @@ import net.mandomc.system.items.config.ItemsConfig;
 import net.mandomc.system.items.ItemLoader;
 import net.mandomc.system.items.ItemRegistry;
 
-import net.mandomc.system.vehicles.config.VehiclesConfig;
+import net.mandomc.system.vehicles.config.VehicleConfig;
 import net.mandomc.system.vehicles.VehicleRegistry;
 
 import net.mandomc.system.planets.ilum.configs.ParkourConfig;
@@ -48,7 +48,7 @@ public class ConfigModule implements Module {
            Items + Vehicles Configs
         --------------------------- */
         ItemsConfig.setup();
-        VehiclesConfig.setup();
+        VehicleConfig.setup();
 
         /* ---------------------------
            Load order (CRITICAL)
@@ -56,7 +56,7 @@ public class ConfigModule implements Module {
 
         // 1. Load configs
         ItemsConfig.reload();
-        VehiclesConfig.reload();
+        VehicleConfig.reload();
 
         // 2. Build vehicle mappings
         VehicleRegistry.load();

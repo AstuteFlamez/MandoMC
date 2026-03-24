@@ -6,7 +6,7 @@ import java.util.Map;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import net.mandomc.MandoMC;
-import net.mandomc.system.vehicles.config.VehiclesConfig;
+import net.mandomc.system.vehicles.config.VehicleConfig;
 
 /**
  * Maps item ids -> vehicle ids.
@@ -27,7 +27,7 @@ public final class VehicleRegistry {
 
         int loaded = 0;
 
-        for (Map.Entry<String, FileConfiguration> entry : VehiclesConfig.getAll().entrySet()) {
+        for (Map.Entry<String, FileConfiguration> entry : VehicleConfig.getAll().entrySet()) {
 
             String vehicleId = normalize(entry.getKey());
             FileConfiguration config = entry.getValue();

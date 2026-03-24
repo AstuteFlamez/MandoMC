@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VehiclesConfig {
+public class VehicleConfig {
 
     private static final Map<String, FileConfiguration> configs = new HashMap<>();
     private static File vehiclesFolder;

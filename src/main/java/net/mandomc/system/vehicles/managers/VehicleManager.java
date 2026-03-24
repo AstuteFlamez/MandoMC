@@ -1,14 +1,18 @@
 package net.mandomc.system.vehicles.managers;
 
 import com.ticxo.modelengine.api.ModelEngineAPI;
+import com.ticxo.modelengine.api.animation.handler.AnimationHandler;
+import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import com.ticxo.modelengine.api.mount.controller.MountControllerType;
 
 import net.mandomc.modules.system.VehicleModule;
-import net.mandomc.system.items.ItemUtils;
 import net.mandomc.system.vehicles.Vehicle;
 import net.mandomc.system.vehicles.VehicleData;
 import net.mandomc.system.vehicles.VehicleRegistry;
-import net.mandomc.system.vehicles.config.VehiclesConfig;
+import net.mandomc.system.vehicles.config.VehicleConfig;
+import net.mandomc.system.vehicles.movement.AerialMountController;
+import net.mandomc.system.vehicles.movement.SurfaceMountController;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -17,7 +21,6 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -27,89 +30,6 @@ import org.bukkit.util.Vector;
 public class VehicleManager {
 
     public static HashMap<UUID, Integer> sound = new HashMap<>();
-
-    /* =========================
-       CONFIG ACCESS (NEW)
-    ========================= */
-
-    private static FileConfiguration getVehicleConfig(ItemStack item) {
-
-        String itemId = ItemUtils.getItemId(item);
-        if (itemId == null) return null;
-
-        String vehicleId = VehicleRegistry.getVehicleId(itemId);
-        if (vehicleId == null) return null;
-
-        return VehiclesConfig.get(vehicleId);
-    }
-
-    private static ConfigurationSection getStats(ItemStack item) {
-
-        FileConfiguration config = getVehicleConfig(item);
-        if (config == null) return null;
-
-        return config.getConfigurationSection("vehicle.stats");
-    }
-
-    private static ConfigurationSection getSystems(ItemStack item) {
-
-        FileConfiguration config = getVehicleConfig(item);
-        if (config == null) return null;
-
-        return config.getConfigurationSection("vehicle.systems");
-    }
-
-    /* =========================
-       STATS
-    ========================= */
-
-    public static double getSpeed(ItemStack item) {
-
-        ConfigurationSection stats = getStats(item);
-        if (stats == null) return 40;
-
-        return stats.getDouble("speed", 40);
-    }
-
-    public static double getScale(ItemStack item) {
-
-        ConfigurationSection stats = getStats(item);
-        if (stats == null) return 2;
-
-        return stats.getDouble("scale", 2);
-    }
-
-    public static String getModelKey(ItemStack item) {
-
-        String itemId = ItemUtils.getItemId(item);
-        if (itemId == null) return "";
-
-        // 🔥 model_key stays in item config
-        var section = net.mandomc.system.items.config.ItemsConfig.getItemSection(itemId);
-        if (section == null) return "";
-
-        return section.getString("model_key", "");
-    }
-
-    /* =========================
-       SYSTEMS
-    ========================= */
-
-    public static String getMovementSound(ItemStack item) {
-
-        ConfigurationSection systems = getSystems(item);
-        if (systems == null) return null;
-
-        return systems.getString("movement_sound");
-    }
-
-    public static int getMovementSoundLength(ItemStack item) {
-
-        ConfigurationSection systems = getSystems(item);
-        if (systems == null) return 0;
-
-        return systems.getInt("movement_sound_time_in_ticks");
-    }
 
     /* =========================
        VEHICLE LIFECYCLE
@@ -149,8 +69,9 @@ public class VehicleManager {
 
         if (modeledEntity != null) {
             modeledEntity.destroy();
-            entity.remove();
         }
+
+        entity.remove();
     }
 
     public static void explodeVehicle(Player player) {
@@ -175,7 +96,6 @@ public class VehicleManager {
 
         /* Particles */
         world.spawnParticle(Particle.EXPLOSION, loc, 1);
-
         world.spawnParticle(Particle.FLAME, loc, 60, 1.5, 1.5, 1.5, 0.05);
         world.spawnParticle(Particle.SMOKE, loc, 80, 2, 2, 2, 0.02);
         world.spawnParticle(Particle.CRIT, loc, 40, 1.5, 1.5, 1.5, 0.2);
@@ -200,7 +120,86 @@ public class VehicleManager {
 
         if (modeledEntity != null) {
             modeledEntity.destroy();
-            entity.remove();
         }
+
+        entity.remove();
+    }
+
+    /* =========================
+    MOUNT
+    ========================= */
+
+    public static void mountVehicle(Player player, Vehicle vehicle) {
+
+        UUID uuid = player.getUniqueId();
+        VehicleData data = vehicle.getVehicleData();
+        ActiveModel model = data.getActiveModel();
+
+        // Enable entity
+        data.getEntity().setAI(true);
+        data.getEntity().setGravity(false);
+
+        MountControllerType controller = resolveController(vehicle);
+
+        model.getMountManager().ifPresent(mountManager -> {
+            mountManager.setCanDrive(true);
+            mountManager.mountDriver(player, controller);
+        });
+
+        AnimationHandler handler = model.getAnimationHandler();
+        handler.playAnimation("mount", 0.3, 0.3, 1, true);
+
+        sound.put(uuid, data.getMovementSoundLength());
+
+        player.playSound(
+                player.getLocation(),
+                data.getMovementSound(),
+                1f,
+                1f
+        );
+    }
+
+    /* =========================
+    DISMOUNT
+    ========================= */
+
+    public static void dismountVehicle(Player player, Vehicle vehicle, ActiveModel model) {
+
+        UUID uuid = player.getUniqueId();
+        VehicleData data = vehicle.getVehicleData();
+
+        model.getMountManager().ifPresent(m -> m.dismountDriver());
+
+        sound.remove(uuid);
+        player.stopSound(data.getMovementSound());
+
+        data.getEntity().setAI(false);
+        data.getEntity().setGravity(true);
+
+        AnimationHandler handler = model.getAnimationHandler();
+        handler.stopAnimation("mount");
+        handler.playAnimation("dismount", 0.2, 0.2, 1, false);
+    }
+
+    /* =========================
+    CONTROLLER RESOLUTION
+    ========================= */
+
+    private static MountControllerType resolveController(Vehicle vehicle) {
+
+        String itemId = vehicle.getItemId();
+        if (itemId == null) return SurfaceMountController.SURFACE;
+
+        String vehicleId = VehicleRegistry.getVehicleId(itemId);
+        if (vehicleId == null) return SurfaceMountController.SURFACE;
+
+        FileConfiguration config = VehicleConfig.get(vehicleId);
+        if (config == null) return SurfaceMountController.SURFACE;
+
+        String movement = config.getString("vehicle.systems.movement", "SURFACE");
+
+        return movement.equalsIgnoreCase("AERIAL")
+                ? AerialMountController.AERIAL
+                : SurfaceMountController.SURFACE;
     }
 }

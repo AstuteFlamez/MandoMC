@@ -10,7 +10,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import net.mandomc.MandoMC;
-import net.mandomc.system.vehicles.config.VehiclesConfig;
+import net.mandomc.system.vehicles.config.VehicleConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class VehicleFactory {
         String vehicleId = VehicleRegistry.getVehicleId(itemId);
         if (vehicleId == null) return item;
 
-        FileConfiguration config = VehiclesConfig.get(vehicleId);
+        FileConfiguration config = VehicleConfig.get(vehicleId);
         if (config == null) return item;
 
         ConfigurationSection stats = config.getConfigurationSection("vehicle.stats");

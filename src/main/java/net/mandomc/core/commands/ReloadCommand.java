@@ -8,7 +8,7 @@ import net.mandomc.MandoMC;
 import net.mandomc.mechanics.warps.WarpConfig;
 import net.mandomc.system.items.ItemRegistry;
 import net.mandomc.system.items.config.ItemsConfig;
-import net.mandomc.system.vehicles.config.VehiclesConfig;
+import net.mandomc.system.vehicles.config.VehicleConfig;
 import net.mandomc.system.vehicles.VehicleRegistry;
 import net.mandomc.system.planets.ilum.configs.ParkourConfig;
 
@@ -56,7 +56,7 @@ public class ReloadCommand implements CommandExecutor {
             --------------------------- */
             ItemsConfig.reload();
             ItemRegistry.reload();
-            VehiclesConfig.reload();
+            VehicleConfig.reload();
             VehicleRegistry.reload();
 
             /* ---------------------------

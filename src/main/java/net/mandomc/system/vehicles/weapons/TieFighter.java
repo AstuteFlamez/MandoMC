@@ -4,7 +4,7 @@ import me.deecaad.weaponmechanics.WeaponMechanicsAPI;
 import net.mandomc.MandoMC;
 import net.mandomc.system.vehicles.Vehicle;
 import net.mandomc.system.vehicles.VehicleRegistry;
-import net.mandomc.system.vehicles.config.VehiclesConfig;
+import net.mandomc.system.vehicles.config.VehicleConfig;
 import net.mandomc.system.vehicles.utils.AmmoUtil;
 
 import org.bukkit.Bukkit;
@@ -29,7 +29,7 @@ public class TieFighter implements WeaponSystem {
         String vehicleId = VehicleRegistry.getVehicleId(vehicle.getItemId());
         if (vehicleId == null) return;
 
-        FileConfiguration config = VehiclesConfig.get(vehicleId);
+        FileConfiguration config = VehicleConfig.get(vehicleId);
         if (config == null) return;
 
         ConfigurationSection weaponSection =
