@@ -1,6 +1,6 @@
 package com.astuteflamez.mandomc.system.vehicles.movement;
 
-import com.astuteflamez.mandomc.MandoMC;
+import com.astuteflamez.mandomc.modules.system.VehicleModule;
 import com.astuteflamez.mandomc.system.vehicles.Vehicle;
 import com.astuteflamez.mandomc.system.vehicles.VehicleData;
 import com.astuteflamez.mandomc.system.vehicles.managers.VehicleFuelManager;
@@ -37,7 +37,7 @@ public class SurfaceMountController extends AbstractMountController {
 
         UUID uuid = player.getUniqueId();
 
-        Vehicle vehicle = MandoMC.activeVehicles.get(uuid);
+        Vehicle vehicle = VehicleModule.getActiveVehicles().get(uuid);
         if (vehicle == null) return;
 
         VehicleData vehicleData = vehicle.getVehicleData();

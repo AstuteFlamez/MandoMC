@@ -1,6 +1,6 @@
 package com.astuteflamez.mandomc.system.vehicles.listeners;
 
-import com.astuteflamez.mandomc.MandoMC;
+import com.astuteflamez.mandomc.modules.system.VehicleModule;
 import com.astuteflamez.mandomc.system.items.ItemUtils;
 import com.astuteflamez.mandomc.system.vehicles.Vehicle;
 import com.astuteflamez.mandomc.system.vehicles.managers.VehicleManager;
@@ -37,7 +37,7 @@ public class PickupListener implements Listener {
         }
 
         UUID uuid = player.getUniqueId();
-        Vehicle vehicle = MandoMC.activeVehicles.get(uuid);
+        Vehicle vehicle = VehicleModule.getActiveVehicles().get(uuid);
         if (vehicle == null) return;
 
         ActiveModel clickedModel = event.getModel();

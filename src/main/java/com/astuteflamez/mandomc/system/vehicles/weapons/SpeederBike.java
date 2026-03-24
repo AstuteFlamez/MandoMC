@@ -9,7 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import com.astuteflamez.mandomc.MandoMC;
+import com.astuteflamez.mandomc.modules.system.VehicleModule;
 import com.astuteflamez.mandomc.system.items.configs.ItemsConfig;
 import com.astuteflamez.mandomc.system.vehicles.Vehicle;
 import com.astuteflamez.mandomc.system.vehicles.utils.AmmoUtil;
@@ -63,9 +63,9 @@ public class SpeederBike implements WeaponSystem {
         }
 
         // Safety check to ensure the vehicle still exists in the active map
-        if (!MandoMC.activeVehicles.containsKey(uuid)) return;
+        if (!VehicleModule.getActiveVehicles().containsKey(uuid)) return;
 
-        var activeModel = MandoMC.activeVehicles.get(uuid)
+        var activeModel = VehicleModule.getActiveVehicles().get(uuid)
                 .getVehicleData()
                 .getActiveModel();
 

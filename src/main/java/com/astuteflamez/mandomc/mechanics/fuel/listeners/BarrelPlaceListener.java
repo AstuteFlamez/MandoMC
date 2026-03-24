@@ -60,7 +60,7 @@ public class BarrelPlaceListener implements Listener {
 
         ArmorStand stand = placeLoc.getWorld().spawn(placeLoc, ArmorStand.class);
 
-        stand.setInvisible(false);
+        stand.setInvisible(true);
         stand.setGravity(false);
         stand.setMarker(false);
         stand.setSmall(false);

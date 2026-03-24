@@ -1,7 +1,7 @@
 package com.astuteflamez.mandomc.system.vehicles.listeners;
 
-import com.astuteflamez.mandomc.MandoMC;
 import com.astuteflamez.mandomc.mechanics.fuel.FuelManager;
+import com.astuteflamez.mandomc.modules.system.VehicleModule;
 import com.astuteflamez.mandomc.system.items.ItemUtils;
 import com.astuteflamez.mandomc.system.vehicles.Vehicle;
 import com.astuteflamez.mandomc.system.vehicles.VehicleData;
@@ -40,7 +40,7 @@ public class MountListener implements Listener {
         ActiveModel clicked = event.getModel();
         UUID uuid = player.getUniqueId();
 
-        for (Vehicle vehicle : MandoMC.activeVehicles.values()) {
+        for (Vehicle vehicle : VehicleModule.getActiveVehicles().values()) {
 
             VehicleData vehicleData = vehicle.getVehicleData();
             ActiveModel activeModel = vehicleData.getActiveModel();

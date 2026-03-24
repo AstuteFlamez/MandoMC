@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 
-import com.astuteflamez.mandomc.MandoMC;
+import com.astuteflamez.mandomc.modules.system.VehicleModule;
 import com.astuteflamez.mandomc.system.vehicles.Vehicle;
 
 public class DeathListener implements Listener {
@@ -19,7 +19,7 @@ public class DeathListener implements Listener {
 
         Entity dead = event.getEntity();
 
-        Iterator<Map.Entry<UUID, Vehicle>> iterator = MandoMC.activeVehicles.entrySet().iterator();
+        Iterator<Map.Entry<UUID, Vehicle>> iterator = VehicleModule.getActiveVehicles().entrySet().iterator();
 
         while (iterator.hasNext()) {
 

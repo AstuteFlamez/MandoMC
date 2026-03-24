@@ -1,6 +1,6 @@
 package com.astuteflamez.mandomc.system.vehicles.listeners;
 
-import com.astuteflamez.mandomc.MandoMC;
+import com.astuteflamez.mandomc.modules.system.VehicleModule;
 import com.astuteflamez.mandomc.system.items.ItemUtils;
 import com.astuteflamez.mandomc.system.vehicles.Vehicle;
 import com.astuteflamez.mandomc.system.vehicles.VehicleData;
@@ -97,7 +97,7 @@ public class SpawnListener implements Listener {
 
         if (!ItemUtils.hasTag(item, "VEHICLE")) return false;
 
-        if (MandoMC.activeVehicles.containsKey(uuid)) {
+        if (VehicleModule.getActiveVehicles().containsKey(uuid)) {
 
             player.sendMessage("§9§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cYou already have a vehicle deployed.");
             return false;
@@ -200,7 +200,7 @@ public class SpawnListener implements Listener {
 
     private void registerVehicle(UUID uuid, Vehicle vehicle) {
 
-        MandoMC.activeVehicles.put(uuid, vehicle);
+        VehicleModule.getActiveVehicles().put(uuid, vehicle);
     }
 
     private void consumeItem(PlayerInventory inventory, ItemStack item) {

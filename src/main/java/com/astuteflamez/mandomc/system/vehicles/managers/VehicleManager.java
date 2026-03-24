@@ -1,6 +1,6 @@
 package com.astuteflamez.mandomc.system.vehicles.managers;
 
-import com.astuteflamez.mandomc.MandoMC;
+import com.astuteflamez.mandomc.modules.system.VehicleModule;
 import com.astuteflamez.mandomc.system.items.ItemUtils;
 import com.astuteflamez.mandomc.system.items.configs.ItemsConfig;
 import com.astuteflamez.mandomc.system.vehicles.Vehicle;
@@ -100,7 +100,7 @@ public class VehicleManager {
     public static void pickupVehicle(Player player) {
 
         UUID uuid = player.getUniqueId();
-        Vehicle vehicle = MandoMC.activeVehicles.get(uuid);
+        Vehicle vehicle = VehicleModule.getActiveVehicles().get(uuid);
 
         if (vehicle == null) return;
 
@@ -118,11 +118,11 @@ public class VehicleManager {
     public static void destroyVehicle(Player player) {
 
         UUID uuid = player.getUniqueId();
-        Vehicle vehicle = MandoMC.activeVehicles.get(uuid);
+        Vehicle vehicle = VehicleModule.getActiveVehicles().get(uuid);
 
         if (vehicle == null) return;
 
-        MandoMC.activeVehicles.remove(vehicle.getOwnerUUID());
+        VehicleModule.getActiveVehicles().remove(vehicle.getOwnerUUID());
 
         VehicleData data = vehicle.getVehicleData();
         Entity entity = data.getEntity();
@@ -139,11 +139,11 @@ public class VehicleManager {
     public static void explodeVehicle(Player player) {
 
         UUID uuid = player.getUniqueId();
-        Vehicle vehicle = MandoMC.activeVehicles.get(uuid);
+        Vehicle vehicle = VehicleModule.getActiveVehicles().get(uuid);
 
         if (vehicle == null) return;
 
-        MandoMC.activeVehicles.remove(vehicle.getOwnerUUID());
+        VehicleModule.getActiveVehicles().remove(vehicle.getOwnerUUID());
 
         VehicleData data = vehicle.getVehicleData();
         Entity entity = data.getEntity();

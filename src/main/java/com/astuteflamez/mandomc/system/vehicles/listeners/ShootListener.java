@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
 
-import com.astuteflamez.mandomc.MandoMC;
+import com.astuteflamez.mandomc.modules.system.VehicleModule;
 import com.astuteflamez.mandomc.system.vehicles.Vehicle;
 
 public class ShootListener implements Listener {
@@ -21,7 +21,7 @@ public class ShootListener implements Listener {
         Player player = event.getPlayer();
         
         // Check if the player is currently driving/using a vehicle
-        Vehicle vehicle = MandoMC.activeVehicles.get(player.getUniqueId());
+        Vehicle vehicle = VehicleModule.getActiveVehicles().get(player.getUniqueId());
 
         if (vehicle == null) {
             return;

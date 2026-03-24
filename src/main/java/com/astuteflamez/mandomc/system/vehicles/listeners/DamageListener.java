@@ -13,7 +13,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
-import com.astuteflamez.mandomc.MandoMC;
+import com.astuteflamez.mandomc.modules.system.VehicleModule;
 import com.astuteflamez.mandomc.system.vehicles.Vehicle;
 import com.astuteflamez.mandomc.system.vehicles.VehicleData;
 import com.astuteflamez.mandomc.system.vehicles.managers.VehicleHealthManager;
@@ -25,7 +25,7 @@ public class DamageListener implements Listener {
 
         Entity damaged = event.getEntity();
 
-        for (Vehicle vehicle : MandoMC.activeVehicles.values()) {
+        for (Vehicle vehicle : VehicleModule.getActiveVehicles().values()) {
 
             VehicleData vehicleData = vehicle.getVehicleData();
             Entity vehicleEntity = vehicleData.getEntity();
@@ -50,7 +50,7 @@ public class DamageListener implements Listener {
         Entity damaged = event.getEntity();
         Entity damager = event.getDamager();
 
-        for (Vehicle vehicle : MandoMC.activeVehicles.values()) {
+        for (Vehicle vehicle : VehicleModule.getActiveVehicles().values()) {
 
             VehicleData vehicleData = vehicle.getVehicleData();
             Entity vehicleEntity = vehicleData.getEntity();
