@@ -1,16 +1,14 @@
 package net.mandomc.modules.core;
 
 import net.mandomc.MandoMC;
+import net.mandomc.content.vehicles.VehicleRegistry;
+import net.mandomc.content.vehicles.config.VehicleConfig;
 import net.mandomc.core.module.Module;
 
 import net.mandomc.mechanics.warps.WarpConfig;
 import net.mandomc.system.items.config.ItemsConfig;
 import net.mandomc.system.items.ItemLoader;
 import net.mandomc.system.items.ItemRegistry;
-
-import net.mandomc.system.vehicles.config.VehicleConfig;
-import net.mandomc.system.vehicles.VehicleRegistry;
-
 import net.mandomc.system.planets.ilum.configs.ParkourConfig;
 
 public class ConfigModule implements Module {

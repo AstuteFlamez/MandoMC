@@ -5,11 +5,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import net.mandomc.MandoMC;
+import net.mandomc.content.vehicles.VehicleRegistry;
+import net.mandomc.content.vehicles.config.VehicleConfig;
 import net.mandomc.mechanics.warps.WarpConfig;
 import net.mandomc.system.items.ItemRegistry;
 import net.mandomc.system.items.config.ItemsConfig;
-import net.mandomc.system.vehicles.config.VehicleConfig;
-import net.mandomc.system.vehicles.VehicleRegistry;
 import net.mandomc.system.planets.ilum.configs.ParkourConfig;
 
 /**

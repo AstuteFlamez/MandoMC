@@ -9,11 +9,11 @@ import org.bukkit.NamespacedKey;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 
 import net.mandomc.MandoMC;
+import net.mandomc.content.vehicles.Vehicle;
+import net.mandomc.content.vehicles.listeners.*;
+import net.mandomc.content.vehicles.movement.AerialMountController;
+import net.mandomc.content.vehicles.movement.SurfaceMountController;
 import net.mandomc.core.module.Module;
-import net.mandomc.system.vehicles.Vehicle;
-import net.mandomc.system.vehicles.listeners.*;
-import net.mandomc.system.vehicles.movement.AerialMountController;
-import net.mandomc.system.vehicles.movement.SurfaceMountController;
 
 public class VehicleModule implements Module {
 

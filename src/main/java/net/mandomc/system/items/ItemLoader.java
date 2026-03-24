@@ -5,9 +5,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import net.mandomc.content.lightsabers.SaberFactory;
+import net.mandomc.content.vehicles.VehicleFactory;
 import net.mandomc.mechanics.fuel.FuelFactory;
 import net.mandomc.system.items.config.ItemsConfig;
-import net.mandomc.system.vehicles.VehicleFactory;
 
 import java.util.HashMap;
 import java.util.List;

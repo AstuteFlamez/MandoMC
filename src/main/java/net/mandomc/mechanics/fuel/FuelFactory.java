@@ -13,11 +13,11 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import net.mandomc.MandoMC;
+import net.mandomc.content.vehicles.VehicleRegistry;
+import net.mandomc.content.vehicles.config.VehicleConfig;
 import net.mandomc.mechanics.fuel.managers.CanisterManager;
 import net.mandomc.system.items.ItemUtils;
 import net.mandomc.system.items.config.ItemsConfig;
-import net.mandomc.system.vehicles.VehicleRegistry;
-import net.mandomc.system.vehicles.config.VehicleConfig;
 
 public class FuelFactory {
 
