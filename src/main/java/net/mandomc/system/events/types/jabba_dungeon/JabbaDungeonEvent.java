@@ -2,6 +2,7 @@ package net.mandomc.system.events.types.jabba_dungeon;
 
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
+import io.lumine.mythic.core.mobs.DespawnMode;
 import net.mandomc.system.events.AbstractGameEvent;
 import net.mandomc.system.events.EventDefinition;
 import net.mandomc.system.events.EventManager;
@@ -147,7 +148,9 @@ public class JabbaDungeonEvent extends AbstractGameEvent {
 
                 ActiveMob mob = MythicBukkit.inst()
                         .getMobManager()
-                        .spawnMob(mobType, loc);
+                        .spawnMob(mobType, loc, room);
+
+                mob.setDespawnMode(DespawnMode.PERSISTENT);
 
                 mobIds.add(mob.getEntity().getUniqueId());
             }
@@ -234,6 +237,7 @@ public class JabbaDungeonEvent extends AbstractGameEvent {
     // =========================
     // 🔥 CLEANUP (CHESTS + DOORS)
     // =========================
+
     public void cleanupDungeon() {
 
         // remove chests
@@ -244,6 +248,26 @@ public class JabbaDungeonEvent extends AbstractGameEvent {
 
         // close doors
         closeAllDoors();
+
+        // 🔥 remove all Jabba mobs
+        var mobManager = MythicBukkit.inst().getMobManager();
+
+        Set<String> targets = Set.of(
+            "Rancor",
+            "BobaFett",
+            "Bossk",
+            "GamorreanGuard",
+            "TwilekGuard",
+            "QuarrenGuard"
+        );
+
+        for (ActiveMob am : mobManager.getActiveMobs()) {
+            String type = am.getType().getInternalName();
+
+            if (targets.stream().anyMatch(t -> t.equalsIgnoreCase(type))) {
+                am.despawn(); // proper Mythic removal
+            }
+        }
     }
 
     private Location loc(String world, int x, int y, int z) {

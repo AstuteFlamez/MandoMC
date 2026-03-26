@@ -7,9 +7,11 @@ import java.util.UUID;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Display;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.TextDisplay;
 
+import de.oliver.fancyholograms.api.FancyHologramsPlugin;
+import de.oliver.fancyholograms.api.HologramManager;
+import de.oliver.fancyholograms.api.data.TextHologramData;
+import de.oliver.fancyholograms.api.hologram.Hologram;
 import net.mandomc.MandoMC;
 import net.mandomc.system.planets.ilum.TimeFormatter;
 import net.mandomc.system.planets.ilum.configs.ParkourConfig;
@@ -20,10 +22,7 @@ public class ParkourLeaderboardManager {
     private final MandoMC plugin;
     private final ParkourTimeManager timeManager;
 
-    private final List<TextDisplay> displays = new ArrayList<>();
-
-    // 🔥 TAG (used for cleanup)
-    private static final String TAG = "mandomc_pk_lb";
+    private final List<String> hologramIds = new ArrayList<>();
 
     public ParkourLeaderboardManager(MandoMC plugin, ParkourTimeManager timeManager) {
         this.plugin = plugin;
@@ -39,17 +38,18 @@ public class ParkourLeaderboardManager {
 
         if (section == null) return;
 
-        createBoard(section.getConfigurationSection("global"), null);
+        createBoard("global", section.getConfigurationSection("global"), null);
 
         ConfigurationSection skilled = section.getConfigurationSection("skilled");
 
         createBoard(
+                "skilled",
                 skilled,
                 skilled != null ? skilled.getString("permission") : null
         );
     }
 
-    private void createBoard(ConfigurationSection section, String permission) {
+    private void createBoard(String id, ConfigurationSection section, String permission) {
 
         if (section == null) return;
 
@@ -61,16 +61,14 @@ public class ParkourLeaderboardManager {
                 section.getDouble("x"),
                 section.getDouble("y"),
                 section.getDouble("z")
-        );
+        ).add(0, 2.2, 0);
 
         int limit = section.getInt("limit", 10);
 
-        // 🔥 CLEANUP OLD DISPLAYS (from restart)
-        cleanupOldDisplays(loc);
-
         List<PlayerTime> top = timeManager.getTop(limit);
+        List<String> lines = new ArrayList<>();
 
-        spawnLine(loc.clone().add(0, 2.2, 0), "§6§lParkour Leaderboard");
+        lines.add("§6§lParkour Leaderboard");
 
         for (int i = 0; i < limit; i++) {
 
@@ -106,46 +104,41 @@ public class ParkourLeaderboardManager {
                 text = "§e" + (i + 1) + ".";
             }
 
-            spawnLine(loc.clone().add(0, 2 - i * 0.25, 0), text);
+            lines.add(text);
         }
-    }
 
-    private void spawnLine(Location loc, String text) {
+        String hologramId = "parkour_lb_" + id;
 
-        TextDisplay display = loc.getWorld().spawn(loc, TextDisplay.class);
+        HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
 
-        // 🔥 TAGGING (CRITICAL)
-        display.addScoreboardTag(TAG);
+        // ✅ FIXED REMOVE
+        manager.getHologram(hologramId).ifPresent(manager::removeHologram);
 
-        display.setText(text);
-        display.setShadowed(true);
-        display.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
-        display.setBillboard(Display.Billboard.CENTER);
-        display.setSeeThrough(false);
+        // ✅ CREATE DATA
+        TextHologramData data = new TextHologramData(hologramId, loc);
+        data.setText(lines); // ✅ FIXED
+        data.setTextShadow(true);
+        data.setBackground(Color.fromARGB(0, 0, 0, 10));
 
-        displays.add(display);
+        data.setBillboard(Display.Billboard.CENTER);
+
+        // ✅ CREATE + REGISTER
+        Hologram hologram = manager.create(data);
+        manager.addHologram(hologram);
+
+        hologramIds.add(hologramId);
     }
 
     private void clearBoards() {
-        displays.forEach(Entity::remove);
-        displays.clear();
-    }
+        HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
 
-    // 🔥 CLEANUP OLD DISPLAYS ON STARTUP
-    private void cleanupOldDisplays(Location base) {
-
-        if (base.getWorld() == null) return;
-
-        for (Entity entity : base.getWorld().getNearbyEntities(base, 5, 5, 5)) {
-            if (entity instanceof TextDisplay display &&
-                display.getScoreboardTags().contains(TAG)) {
-
-                display.remove();
-            }
+        for (String id : hologramIds) {
+            manager.getHologram(id).ifPresent(manager::removeHologram);
         }
+
+        hologramIds.clear();
     }
 
-    // 🔥 CALL THIS IN onDisable
     public void removeAllDisplays() {
         clearBoards();
     }
