@@ -5,7 +5,7 @@ import net.mandomc.content.vehicles.Vehicle;
 import net.mandomc.content.vehicles.VehicleRegistry;
 import net.mandomc.content.vehicles.config.VehicleConfig;
 import net.mandomc.content.vehicles.utils.AmmoUtil;
-import net.mandomc.modules.system.VehicleModule;
+import net.mandomc.core.modules.system.VehicleModule;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

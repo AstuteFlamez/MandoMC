@@ -7,7 +7,7 @@ import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerAnimationType;
 
 import net.mandomc.content.vehicles.Vehicle;
-import net.mandomc.modules.system.VehicleModule;
+import net.mandomc.core.modules.system.VehicleModule;
 
 public class ShootListener implements Listener {
 

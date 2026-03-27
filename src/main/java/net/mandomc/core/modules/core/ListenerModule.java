@@ -1,4 +1,4 @@
-package net.mandomc.modules.core;
+package net.mandomc.core.modules.core;
 
 import org.bukkit.Bukkit;
 

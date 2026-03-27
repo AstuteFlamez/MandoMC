@@ -5,7 +5,7 @@ import com.ticxo.modelengine.api.model.ActiveModel;
 
 import net.mandomc.content.vehicles.Vehicle;
 import net.mandomc.content.vehicles.managers.VehicleManager;
-import net.mandomc.modules.system.VehicleModule;
+import net.mandomc.core.modules.system.VehicleModule;
 import net.mandomc.system.items.ItemUtils;
 
 import org.bukkit.entity.Player;

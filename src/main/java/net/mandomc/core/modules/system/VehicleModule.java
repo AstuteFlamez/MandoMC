@@ -1,4 +1,4 @@
-package net.mandomc.modules.system;
+package net.mandomc.core.modules.system;
 
 import java.util.HashMap;
 import java.util.UUID;

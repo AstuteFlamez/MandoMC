@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import net.mandomc.MandoMC;
 import net.mandomc.content.vehicles.VehicleRegistry;
 import net.mandomc.content.vehicles.config.VehicleConfig;
+import net.mandomc.mechanics.gambling.lottery.LotteryConfig;
 import net.mandomc.mechanics.warps.WarpConfig;
 import net.mandomc.system.items.ItemRegistry;
 import net.mandomc.system.items.config.ItemsConfig;
@@ -63,6 +64,8 @@ public class ReloadCommand implements CommandExecutor {
                Rebuild Vehicle Mapping
             --------------------------- */
             VehicleRegistry.load();
+
+            LotteryConfig.reload();
 
             sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Configs reloaded.");
 

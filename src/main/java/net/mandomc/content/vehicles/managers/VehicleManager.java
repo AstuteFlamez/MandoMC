@@ -12,7 +12,7 @@ import net.mandomc.content.vehicles.VehicleRegistry;
 import net.mandomc.content.vehicles.config.VehicleConfig;
 import net.mandomc.content.vehicles.movement.AerialMountController;
 import net.mandomc.content.vehicles.movement.SurfaceMountController;
-import net.mandomc.modules.system.VehicleModule;
+import net.mandomc.core.modules.system.VehicleModule;
 
 import java.util.HashMap;
 import java.util.UUID;

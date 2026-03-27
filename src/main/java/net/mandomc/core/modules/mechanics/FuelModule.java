@@ -1,4 +1,4 @@
-package net.mandomc.modules.mechanics;
+package net.mandomc.core.modules.mechanics;
 
 import org.bukkit.Bukkit;
 

@@ -11,7 +11,7 @@ import net.mandomc.content.vehicles.VehicleData;
 import net.mandomc.content.vehicles.managers.VehicleFuelManager;
 import net.mandomc.content.vehicles.managers.VehicleHUDManager;
 import net.mandomc.content.vehicles.managers.VehicleManager;
-import net.mandomc.modules.system.VehicleModule;
+import net.mandomc.core.modules.system.VehicleModule;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

@@ -1,4 +1,4 @@
-package net.mandomc.modules.core;
+package net.mandomc.core.modules.core;
 
 import net.mandomc.core.guis.GUIManager;
 import net.mandomc.core.module.Module;

@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import net.mandomc.content.vehicles.Vehicle;
 import net.mandomc.content.vehicles.VehicleData;
 import net.mandomc.content.vehicles.managers.VehicleHealthManager;
-import net.mandomc.modules.system.VehicleModule;
+import net.mandomc.core.modules.system.VehicleModule;
 
 public class DamageListener implements Listener {
 

@@ -1,11 +1,12 @@
-package net.mandomc.modules.core;
+package net.mandomc.core.modules.core;
 
 import net.mandomc.MandoMC;
 import net.mandomc.core.commands.*;
 import net.mandomc.core.module.Module;
+import net.mandomc.core.modules.system.EventModule;
+import net.mandomc.core.modules.system.planets.ParkourModule;
+import net.mandomc.mechanics.gambling.lottery.LotteryCommand;
 import net.mandomc.mechanics.warps.WarpCommand;
-import net.mandomc.modules.system.EventModule;
-import net.mandomc.modules.system.planets.ParkourModule;
 import net.mandomc.system.events.commands.EventCommand;
 import net.mandomc.system.events.types.jabba_dungeon.KeyCommand;
 import net.mandomc.system.items.commands.*;
@@ -25,6 +26,7 @@ public class CommandModule implements Module {
         safe("warps", new WarpCommand(GUIModule.GUI_MANAGER));
         safe("test", new TestCommand());
         safe("mmcreload", new ReloadCommand(plugin));
+        safe("lottery", new LotteryCommand(GUIModule.GUI_MANAGER));
 
         GetCommand get = new GetCommand();
         GiveCommand give = new GiveCommand();

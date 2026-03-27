@@ -1,4 +1,4 @@
-package net.mandomc.modules.core;
+package net.mandomc.core.modules.core;
 
 import net.mandomc.MandoMC;
 import net.mandomc.content.vehicles.VehicleRegistry;
@@ -6,6 +6,7 @@ import net.mandomc.content.vehicles.config.VehicleConfig;
 import net.mandomc.core.module.Module;
 
 import net.mandomc.mechanics.warps.WarpConfig;
+import net.mandomc.mechanics.gambling.lottery.LotteryConfig; // ✅ ADD THIS
 import net.mandomc.system.items.config.ItemsConfig;
 import net.mandomc.system.items.ItemLoader;
 import net.mandomc.system.items.ItemRegistry;
@@ -43,6 +44,11 @@ public class ConfigModule implements Module {
         ParkourConfig.save();
 
         /* ---------------------------
+           Lottery Config ✅
+        --------------------------- */
+        LotteryConfig.load(); // 🔥 THIS FIXES YOUR CRASH
+
+        /* ---------------------------
            Items + Vehicles Configs
         --------------------------- */
         ItemsConfig.setup();
@@ -59,7 +65,7 @@ public class ConfigModule implements Module {
         // 2. Build vehicle mappings
         VehicleRegistry.load();
 
-        // 3. Rebuild ALL items (🔥 THIS WAS MISSING)
+        // 3. Rebuild ALL items
         ItemRegistry.clear();
         ItemLoader.loadItems();
 

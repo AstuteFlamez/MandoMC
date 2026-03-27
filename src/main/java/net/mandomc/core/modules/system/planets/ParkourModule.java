@@ -1,4 +1,4 @@
-package net.mandomc.modules.system.planets;
+package net.mandomc.core.modules.system.planets;
 
 import org.bukkit.Bukkit;
 

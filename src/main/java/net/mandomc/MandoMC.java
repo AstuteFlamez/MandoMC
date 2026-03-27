@@ -3,17 +3,19 @@ package net.mandomc;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.mandomc.core.module.Module;
-import net.mandomc.modules.core.CommandModule;
-import net.mandomc.modules.core.ConfigModule;
-import net.mandomc.modules.core.GUIModule;
-import net.mandomc.modules.core.ListenerModule;
-import net.mandomc.modules.mechanics.FuelModule;
-import net.mandomc.modules.mechanics.WarpModule;
-import net.mandomc.modules.system.EventModule;
-import net.mandomc.modules.system.ItemModule;
-import net.mandomc.modules.system.VehicleModule;
-import net.mandomc.modules.system.planets.ParkourModule;
-import net.mandomc.modules.system.planets.TatooineModule;
+import net.mandomc.core.modules.core.CommandModule;
+import net.mandomc.core.modules.core.ConfigModule;
+import net.mandomc.core.modules.core.EconomyModule;
+import net.mandomc.core.modules.core.GUIModule;
+import net.mandomc.core.modules.core.ListenerModule;
+import net.mandomc.core.modules.mechanics.FuelModule;
+import net.mandomc.core.modules.mechanics.GamblingModule;
+import net.mandomc.core.modules.mechanics.WarpModule;
+import net.mandomc.core.modules.system.EventModule;
+import net.mandomc.core.modules.system.ItemModule;
+import net.mandomc.core.modules.system.VehicleModule;
+import net.mandomc.core.modules.system.planets.ParkourModule;
+import net.mandomc.core.modules.system.planets.TatooineModule;
 
 import java.util.List;
 
@@ -31,6 +33,8 @@ public final class MandoMC extends JavaPlugin {
 
         modules = List.of(
                 new ConfigModule(this),
+                new EconomyModule(this),
+                new GamblingModule(),
                 new GUIModule(),
                 new FuelModule(this),
                 new WarpModule(this),

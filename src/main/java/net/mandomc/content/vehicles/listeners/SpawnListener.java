@@ -11,7 +11,7 @@ import net.mandomc.content.vehicles.weapons.SpeederBike;
 import net.mandomc.content.vehicles.weapons.TieFighter;
 import net.mandomc.content.vehicles.weapons.WeaponSystem;
 import net.mandomc.content.vehicles.weapons.XWing;
-import net.mandomc.modules.system.VehicleModule;
+import net.mandomc.core.modules.system.VehicleModule;
 import net.mandomc.system.items.ItemUtils;
 
 import org.bukkit.Location;

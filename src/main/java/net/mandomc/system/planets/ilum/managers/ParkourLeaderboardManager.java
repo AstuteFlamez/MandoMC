@@ -68,8 +68,16 @@ public class ParkourLeaderboardManager {
         List<PlayerTime> top = timeManager.getTop(limit);
         List<String> lines = new ArrayList<>();
 
-        lines.add("§6§lParkour Leaderboard");
+        /* -------------------------
+           HEADER (UPDATED STYLE)
+        ------------------------- */
+        lines.add(color("&3❄ &lɪʟᴜᴍ ʟᴇᴀᴅᴇʀʙᴏᴀʀᴅ &r&3❄"));
+        lines.add(color("&3ᴛᴏᴘ ᴘᴀʀᴋᴏᴜʀ ʀᴜɴɴᴇʀѕ"));
+        lines.add(" ");
 
+        /* -------------------------
+           ENTRIES
+        ------------------------- */
         for (int i = 0; i < limit; i++) {
 
             String text;
@@ -86,22 +94,22 @@ public class ParkourLeaderboardManager {
                             player.getPlayer() == null ||
                             !player.getPlayer().hasPermission(permission)) {
 
-                        text = "§e" + (i + 1) + ".";
+                        text = color("&3" + (i + 1) + ".");
 
                     } else {
 
-                        text = "§e" + (i + 1) + ". §f" + pt.name +
-                                " §7- §a" + TimeFormatter.format(pt.best_time);
+                        text = color("&3" + (i + 1) + ". &b" + pt.name +
+                                " &7- &3" + TimeFormatter.format(pt.best_time));
                     }
 
                 } else {
 
-                    text = "§e" + (i + 1) + ". §f" + pt.name +
-                            " §7- §a" + TimeFormatter.format(pt.best_time);
+                    text = color("&3" + (i + 1) + ". &b" + pt.name +
+                            " &7- &3" + TimeFormatter.format(pt.best_time));
                 }
 
             } else {
-                text = "§e" + (i + 1) + ".";
+                text = color("&3" + (i + 1) + ".");
             }
 
             lines.add(text);
@@ -111,18 +119,16 @@ public class ParkourLeaderboardManager {
 
         HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
 
-        // ✅ FIXED REMOVE
+        // remove existing
         manager.getHologram(hologramId).ifPresent(manager::removeHologram);
 
-        // ✅ CREATE DATA
+        // create hologram
         TextHologramData data = new TextHologramData(hologramId, loc);
-        data.setText(lines); // ✅ FIXED
+        data.setText(lines);
         data.setTextShadow(true);
         data.setBackground(Color.fromARGB(0, 0, 0, 10));
-
         data.setBillboard(Display.Billboard.CENTER);
 
-        // ✅ CREATE + REGISTER
         Hologram hologram = manager.create(data);
         manager.addHologram(hologram);
 
@@ -150,5 +156,9 @@ public class ParkourLeaderboardManager {
                 20L * 10,
                 20L * 60
         );
+    }
+
+    private String color(String s) {
+        return ChatColor.translateAlternateColorCodes('&', s);
     }
 }

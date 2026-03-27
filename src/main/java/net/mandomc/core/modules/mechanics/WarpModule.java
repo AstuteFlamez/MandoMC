@@ -1,9 +1,9 @@
-package net.mandomc.modules.mechanics;
+package net.mandomc.core.modules.mechanics;
 
 import net.mandomc.MandoMC;
 import net.mandomc.core.module.Module;
+import net.mandomc.core.modules.core.GUIModule;
 import net.mandomc.mechanics.warps.WarpCommand;
-import net.mandomc.modules.core.GUIModule;
 
 public class WarpModule implements Module {
 
