@@ -1,32 +1,22 @@
 package net.mandomc.core.commands;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 /**
- * Debug command used to log a player's current location.
- *
- * Outputs the world and block coordinates to the console
- * and optionally sends the information to the player.
+ * Test command that gives the player a Notch head.
  */
 public class TestCommand implements CommandExecutor {
 
-    /**
-     * Executes the test command.
-     *
-     * Ensures the sender is a player, retrieves their location,
-     * and logs the coordinates.
-     *
-     * @param sender the command sender
-     * @param command the command executed
-     * @param label the command label
-     * @param args command arguments
-     * @return true if handled
-     */
     @Override
     public boolean onCommand(CommandSender sender,
                              Command command,
@@ -38,20 +28,28 @@ public class TestCommand implements CommandExecutor {
             return true;
         }
 
-        Location loc = player.getLocation();
+        player.getInventory().addItem(getPlayerHead(player.getUniqueId()));
 
-        String world = loc.getWorld() != null ? loc.getWorld().getName() : "null";
-
-        int x = loc.getBlockX();
-        int y = loc.getBlockY();
-        int z = loc.getBlockZ();
-
-        // Console log
-        Bukkit.getLogger().info("[SPAWN] " + world + "," + x + "," + y + "," + z);
-
-        // Optional: send to player too
-        player.sendMessage("§7Logged: §f" + world + "," + x + "," + y + "," + z);
+        player.sendMessage("§aGiven Notch head!");
 
         return true;
     }
+
+    /**
+    * Creates a player head item for a given UUID.
+    *
+    * @param uuid The UUID of the player whose head is to be created.
+    * @return An {@link ItemStack} of type PLAYER_HEAD with the player's skin.
+    */
+    public static ItemStack getPlayerHead(UUID uuid) {
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+        if (offlinePlayer.getName() == null) return null;
+
+        ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
+        skullMeta.setOwningPlayer(offlinePlayer);
+        head.setItemMeta(skullMeta);
+        return head;
+    }
+
 }

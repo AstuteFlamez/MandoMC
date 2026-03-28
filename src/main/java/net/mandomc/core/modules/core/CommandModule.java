@@ -7,6 +7,7 @@ import net.mandomc.core.modules.system.EventModule;
 import net.mandomc.core.modules.system.planets.ParkourModule;
 import net.mandomc.mechanics.gambling.lottery.LotteryCommand;
 import net.mandomc.mechanics.warps.WarpCommand;
+import net.mandomc.system.discord.DiscordCommand;
 import net.mandomc.system.events.commands.EventCommand;
 import net.mandomc.system.events.types.jabba_dungeon.KeyCommand;
 import net.mandomc.system.items.commands.*;
@@ -23,11 +24,25 @@ public class CommandModule implements Module {
     @Override
     public void enable() {
 
+        // =========================
+        // CORE
+        // =========================
         safe("warps", new WarpCommand(GUIModule.GUI_MANAGER));
         safe("test", new TestCommand());
         safe("mmcreload", new ReloadCommand(plugin));
         safe("lottery", new LotteryCommand(GUIModule.GUI_MANAGER));
 
+        // =========================
+        // DISCORD
+        // =========================
+        safe("discord", new DiscordCommand());
+
+        // ✅ LINK SYSTEM (NEW)
+        safe("link", new LinkCommand(plugin));
+
+        // =========================
+        // ITEMS
+        // =========================
         GetCommand get = new GetCommand();
         GiveCommand give = new GiveCommand();
         DropCommand drop = new DropCommand();
@@ -38,11 +53,20 @@ public class CommandModule implements Module {
         safe("drop", drop, drop);
         safe("recipes", recipe, recipe);
 
+        // =========================
+        // PARKOUR
+        // =========================
         safe("parkourfinish", new ParkourFinishCommand(ParkourModule.PARKOUR_MANAGER));
 
+        // =========================
+        // EVENTS
+        // =========================
         EventCommand eventCmd = new EventCommand(EventModule.EVENT_MANAGER);
         safe("event", eventCmd, eventCmd);
 
+        // =========================
+        // DUNGEON KEYS
+        // =========================
         KeyCommand key = new KeyCommand(plugin);
         safe("key", key, key);
     }

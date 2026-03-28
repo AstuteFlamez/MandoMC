@@ -23,7 +23,7 @@ import java.util.List;
 public class LotteryGUI extends InventoryGUI {
 
     private final GUIManager guiManager;
-    private final Economy economy = EconomyModule.ECONOMY;
+    private final Economy economy = EconomyModule.get();
 
     /**
      * Creates a new Lottery GUI instance.
@@ -138,28 +138,17 @@ public class LotteryGUI extends InventoryGUI {
 
                     Player p = (Player) event.getWhoClicked();
 
-                    double price = getPrice();
                     int max = LotteryConfig.get().getInt("lottery.max-tickets-per-player");
+                    int current = LotteryManager.getTickets(p.getUniqueId());
 
-                    if (LotteryManager.getTickets(p.getUniqueId()) >= max) {
-                        p.sendMessage(prefix("&cYou reached max tickets."));
+                    if (current >= max) {
+                        p.sendMessage(prefix("&cYou already reached max tickets."));
                         return;
                     }
 
-                    if (!economy.has(p, price)) {
-                        p.sendMessage(prefix("&cNot enough money."));
-                        return;
-                    }
+                    int remaining = max - current;
 
-                    economy.withdrawPlayer(p, price);
-                    LotteryManager.addTicket(p.getUniqueId(), price);
-
-                    LotteryStorage.save();
-
-                    p.sendMessage(prefix("&aTicket purchased!"));
-                    p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1.2f);
-
-                    guiManager.openGUI(new LotteryGUI(guiManager), p);
+                    p.showDialog(LotteryDialogFactory.create(p, remaining, getPrice()));
                 });
     }
 

@@ -8,6 +8,7 @@ import net.mandomc.core.modules.core.ConfigModule;
 import net.mandomc.core.modules.core.EconomyModule;
 import net.mandomc.core.modules.core.GUIModule;
 import net.mandomc.core.modules.core.ListenerModule;
+import net.mandomc.core.modules.mechanics.BountyModule;
 import net.mandomc.core.modules.mechanics.FuelModule;
 import net.mandomc.core.modules.mechanics.GamblingModule;
 import net.mandomc.core.modules.mechanics.WarpModule;
@@ -36,6 +37,7 @@ public final class MandoMC extends JavaPlugin {
                 new EconomyModule(this),
                 new GamblingModule(),
                 new GUIModule(),
+                new BountyModule(this),
                 new FuelModule(this),
                 new WarpModule(this),
                 new ParkourModule(this),

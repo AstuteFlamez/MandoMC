@@ -100,7 +100,7 @@ public class LotteryManager {
         double winnings = pot;
 
         if (winner != null && winner.isOnline()) {
-            EconomyModule.ECONOMY.depositPlayer(winner, winnings);
+            EconomyModule.deposit(winner, winnings);
         }
 
         Bukkit.broadcastMessage(color("&6&lLottery &8» &a"
