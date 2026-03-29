@@ -13,6 +13,9 @@ import net.mandomc.system.events.types.jabba_dungeon.KeyCommand;
 import net.mandomc.system.items.commands.*;
 import net.mandomc.system.planets.ilum.commands.ParkourFinishCommand;
 
+// ✅ ADD
+import net.mandomc.system.shops.ShopCommand;
+
 public class CommandModule implements Module {
 
     private final MandoMC plugin;
@@ -33,11 +36,18 @@ public class CommandModule implements Module {
         safe("lottery", new LotteryCommand(GUIModule.GUI_MANAGER));
 
         // =========================
+        // SHOPS ✅ NEW
+        // =========================
+        safe("shop", new ShopCommand(GUIModule.GUI_MANAGER));
+
+        // =========================
         // DISCORD
         // =========================
         safe("discord", new DiscordCommand());
 
-        // ✅ LINK SYSTEM (NEW)
+        // =========================
+        // LINK SYSTEM
+        // =========================
         safe("link", new LinkCommand(plugin));
 
         // =========================

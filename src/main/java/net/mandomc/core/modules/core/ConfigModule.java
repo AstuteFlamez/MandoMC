@@ -6,11 +6,16 @@ import net.mandomc.content.vehicles.config.VehicleConfig;
 import net.mandomc.core.module.Module;
 
 import net.mandomc.mechanics.warps.WarpConfig;
-import net.mandomc.mechanics.gambling.lottery.LotteryConfig; // ✅ ADD THIS
+import net.mandomc.mechanics.gambling.lottery.LotteryConfig;
 import net.mandomc.system.items.config.ItemsConfig;
 import net.mandomc.system.items.ItemLoader;
 import net.mandomc.system.items.ItemRegistry;
 import net.mandomc.system.planets.ilum.configs.ParkourConfig;
+
+// ✅ ADD
+import net.mandomc.system.shops.ShopLoader;
+
+import java.io.File;
 
 public class ConfigModule implements Module {
 
@@ -26,6 +31,8 @@ public class ConfigModule implements Module {
         /* ---------------------------
            Base plugin config
         --------------------------- */
+        plugin.getDataFolder().mkdirs(); // ✅ ensure folder exists
+
         plugin.getConfig().options().copyDefaults(true);
         plugin.saveDefaultConfig();
 
@@ -44,9 +51,9 @@ public class ConfigModule implements Module {
         ParkourConfig.save();
 
         /* ---------------------------
-           Lottery Config ✅
+           Lottery Config
         --------------------------- */
-        LotteryConfig.load(); // 🔥 THIS FIXES YOUR CRASH
+        LotteryConfig.load();
 
         /* ---------------------------
            Items + Vehicles Configs
@@ -62,14 +69,20 @@ public class ConfigModule implements Module {
         ItemsConfig.reload();
         VehicleConfig.reload();
 
-        // 2. Build vehicle mappings
+        // 2. Vehicles
         VehicleRegistry.load();
 
-        // 3. Rebuild ALL items
+        // 3. Items
         ItemRegistry.clear();
         ItemLoader.loadItems();
 
-        plugin.getLogger().info("All configs loaded successfully.");
+        /* ---------------------------
+           SHOPS (AFTER ITEMS) ✅
+        --------------------------- */
+        File shopsFolder = new File(plugin.getDataFolder(), "shops");
+        ShopLoader.loadAll(shopsFolder);
+
+        plugin.getLogger().info("All configs loaded successfully (including shops).");
     }
 
     @Override

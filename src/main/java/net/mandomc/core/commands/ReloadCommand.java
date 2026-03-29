@@ -9,14 +9,20 @@ import net.mandomc.content.vehicles.VehicleRegistry;
 import net.mandomc.content.vehicles.config.VehicleConfig;
 import net.mandomc.mechanics.gambling.lottery.LotteryConfig;
 import net.mandomc.mechanics.warps.WarpConfig;
+import net.mandomc.system.items.ItemLoader;
 import net.mandomc.system.items.ItemRegistry;
 import net.mandomc.system.items.config.ItemsConfig;
 import net.mandomc.system.planets.ilum.configs.ParkourConfig;
 
+// ✅ ADD
+import net.mandomc.system.shops.ShopLoader;
+
+import java.io.File;
+
 /**
  * Command used to reload plugin configurations at runtime.
  *
- * Reloads all major systems including items and vehicles.
+ * Reloads all major systems including items, vehicles, and shops.
  */
 public class ReloadCommand implements CommandExecutor {
 
@@ -51,21 +57,28 @@ public class ReloadCommand implements CommandExecutor {
             --------------------------- */
             WarpConfig.reload();
             ParkourConfig.reload();
+            LotteryConfig.reload();
 
             /* ---------------------------
-               Items + Vehicles (IMPORTANT ORDER)
+               Items + Vehicles (CRITICAL ORDER)
             --------------------------- */
+
+            // 1. Reload configs
             ItemsConfig.reload();
-            ItemRegistry.reload();
             VehicleConfig.reload();
-            VehicleRegistry.reload();
 
-            /* ---------------------------
-               Rebuild Vehicle Mapping
-            --------------------------- */
+            // 2. Rebuild items (FULL RESET)
+            ItemRegistry.clear();
+            ItemLoader.loadItems();
+
+            // 3. Rebuild vehicle mappings
             VehicleRegistry.load();
 
-            LotteryConfig.reload();
+            /* ---------------------------
+               SHOPS (AFTER ITEMS) ✅
+            --------------------------- */
+            File shopsFolder = new File(plugin.getDataFolder(), "shops");
+            ShopLoader.loadAll(shopsFolder);
 
             sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Configs reloaded.");
 

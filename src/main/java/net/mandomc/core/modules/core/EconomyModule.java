@@ -4,14 +4,29 @@ import net.mandomc.MandoMC;
 import net.mandomc.core.module.Module;
 
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
 public class EconomyModule implements Module {
 
     private final MandoMC plugin;
 
     private static Economy ECONOMY;
+
+    // =========================
+    // DATABASE CONFIG
+    // =========================
+    private String host;
+    private int port;
+    private String database;
+    private String username;
+    private String password;
 
     public EconomyModule(MandoMC plugin) {
         this.plugin = plugin;
@@ -26,7 +41,17 @@ public class EconomyModule implements Module {
             return;
         }
 
+        // Load DB config
+        host = plugin.getConfig().getString("database.host");
+        port = plugin.getConfig().getInt("database.port");
+        database = plugin.getConfig().getString("database.name");
+        username = plugin.getConfig().getString("database.username");
+        password = plugin.getConfig().getString("database.password");
+
         plugin.getLogger().info("✅ Economy hooked: " + ECONOMY.getName());
+
+        // START SYNC TASK
+        startBalanceSync();
     }
 
     private boolean setupEconomy() {
@@ -42,6 +67,47 @@ public class EconomyModule implements Module {
 
         ECONOMY = rsp.getProvider();
         return ECONOMY != null;
+    }
+
+    // =========================
+    // 🔄 SYNC TASK
+    // =========================
+    private void startBalanceSync() {
+
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+
+            if (!isReady()) return;
+
+            String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false";
+
+            try (Connection conn = DriverManager.getConnection(url, username, password)) {
+
+                PreparedStatement ps = conn.prepareStatement(
+                        "INSERT INTO balances (uuid, username, balance) VALUES (?, ?, ?) " +
+                        "ON DUPLICATE KEY UPDATE username = ?, balance = ?"
+                );
+
+                for (Player player : Bukkit.getOnlinePlayers()) {
+
+                    double balance = getBalance(player);
+
+                    ps.setString(1, player.getUniqueId().toString());
+                    ps.setString(2, player.getName());
+                    ps.setDouble(3, balance);
+
+                    ps.setString(4, player.getName());
+                    ps.setDouble(5, balance);
+
+                    ps.addBatch();
+                }
+
+                ps.executeBatch();
+
+            } catch (Exception e) {
+                plugin.getLogger().warning("❌ Balance sync failed: " + e.getMessage());
+            }
+
+        }, 20L * 60, 20L * 60); // every 60 seconds
     }
 
     @Override
@@ -77,12 +143,6 @@ public class EconomyModule implements Module {
         return ECONOMY.depositPlayer(player, amount).transactionSuccess();
     }
 
-    /**
-     * Formats money nicely with commas and 2 decimals.
-     *
-     * @param amount value to format
-     * @return formatted string
-     */
     public static String format(double amount) {
         return String.format("%,.2f", amount);
     }
