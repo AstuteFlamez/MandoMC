@@ -2,6 +2,7 @@ package net.mandomc.mechanics.bounties;
 
 import java.util.List;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import io.papermc.paper.dialog.Dialog;
@@ -33,9 +34,11 @@ public class BountyDialogFactory {
      * @param target the player being bounty-targeted
      * @return the constructed dialog
      */
-    public static Dialog create(Player placer, Player target) {
+    public static Dialog create(Player placer, OfflinePlayer target) {
+        String targetName = target.getName() == null ? "Unknown" : target.getName();
+
         return Dialog.create(builder -> builder.empty()
-                .base(DialogBase.builder(Component.text("Set Bounty on " + target.getName(), NamedTextColor.RED))
+                .base(DialogBase.builder(Component.text("Set Bounty on " + targetName, NamedTextColor.RED))
                         .body(List.of(
                                 DialogBody.plainMessage(Component.text("Choose bounty amount", NamedTextColor.GRAY))
                         ))
@@ -76,10 +79,11 @@ public class BountyDialogFactory {
 
                                     Bounty bounty = BountyStorage.getOrCreate(target.getUniqueId());
                                     bounty.addEntry(player.getUniqueId(), amount);
+                                    BountyShowcaseManager.update();
 
                                     player.getServer().broadcastMessage(
                                             LangManager.get("bounties.placed-broadcast",
-                                                    "%target%", target.getName(),
+                                                    "%target%", targetName,
                                                     "%amount%", EconomyModule.format(bounty.getTotal()))
                                     );
 

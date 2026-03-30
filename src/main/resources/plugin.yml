@@ -10,6 +10,7 @@ softdepend:
   - PlaceholderAPI
   - WeaponMechanics
   - ModelEngine
+  - FancyHolograms
 
 commands:
 
@@ -137,6 +138,10 @@ permissions:
   mandomc.warp.use:
     description: Allows using warp menu
     default: true
+
+  mandomc.bounty.gui:
+    description: Allows opening the bounty admin board
+    default: op
 
   mandomc.event.admin:
     default: op

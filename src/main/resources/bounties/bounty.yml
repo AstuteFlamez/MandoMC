@@ -10,6 +10,27 @@ bounty:
   tracking-interval: 600
 
   # =========================
+  # 🛰 SHOWCASE HOLOGRAM
+  # =========================
+  showcase:
+    enabled: true
+    id: "bounty_showcase"
+    world: "world"
+    x: 0.5
+    y: 100.0
+    z: 0.5
+    yaw: 180.0
+    pitch: 0.0
+    text-y-offset: 2.35
+    npc-y-offset: 0.0
+    lines:
+      - "&c&lBounty Terminal"
+      - "&7Target &8• &f%target%"
+      - "&7Value  &8• &6$%amount%"
+      - "&7Sector &8• &f%location%"
+      - "&7Status &8• %status%"
+
+  # =========================
   # 🖥 GUI SETTINGS
   # =========================
   gui:

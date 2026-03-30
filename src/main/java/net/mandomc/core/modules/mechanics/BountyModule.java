@@ -9,6 +9,7 @@ import net.mandomc.core.modules.core.GUIModule;
 import net.mandomc.mechanics.bounties.BountyCommand;
 import net.mandomc.mechanics.bounties.BountyConfig;
 import net.mandomc.mechanics.bounties.BountyListener;
+import net.mandomc.mechanics.bounties.BountyShowcaseManager;
 import net.mandomc.mechanics.bounties.BountyStorage;
 import net.mandomc.mechanics.bounties.BountyTrackerTask;
 
@@ -44,6 +45,7 @@ public class BountyModule implements Module {
         BountyStorage.load();
 
         BountyTrackerTask.start();
+        BountyShowcaseManager.start();
 
         Bukkit.getPluginManager().registerEvents(new BountyListener(), plugin);
 
@@ -65,6 +67,8 @@ public class BountyModule implements Module {
      */
     @Override
     public void disable() {
+        BountyShowcaseManager.stop();
+        BountyShowcaseManager.remove();
         BountyStorage.save();
         plugin.getLogger().info("Bounty module disabled.");
     }

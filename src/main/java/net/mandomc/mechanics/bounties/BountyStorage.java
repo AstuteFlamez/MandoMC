@@ -9,8 +9,12 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 
 /**
  * Persists and retrieves bounty data via a JSON file.
@@ -52,9 +56,10 @@ public class BountyStorage {
     public static void load() {
         try {
             String json = new String(Files.readAllBytes(file.toPath()));
-            if (json.isEmpty()) return;
+            if (json.trim().isEmpty()) return;
 
             JsonObject obj = JsonParser.parseString(json).getAsJsonObject();
+            bounties.clear();
 
             for (String key : obj.keySet()) {
                 UUID target = UUID.fromString(key);
@@ -68,6 +73,8 @@ public class BountyStorage {
                     double amount = entries.get(placerKey).getAsDouble();
                     bounty.addEntry(placer, amount);
                 }
+
+                readTrackingSnapshot(bountyObj, bounty);
 
                 bounties.put(target, bounty);
             }
@@ -93,6 +100,7 @@ public class BountyStorage {
                 }
 
                 obj.add("entries", entries);
+                writeTrackingSnapshot(obj, bounty);
                 root.add(bounty.getTarget().toString(), obj);
             }
 
@@ -164,5 +172,60 @@ public class BountyStorage {
                 .map(Bounty::getTarget)
                 .findFirst()
                 .orElse(null);
+    }
+
+    private static void writeTrackingSnapshot(JsonObject obj, Bounty bounty) {
+        Location loc = bounty.getLastKnownLocation();
+        if (loc == null || loc.getWorld() == null) {
+            if (bounty.getLastSeen() > 0) {
+                obj.addProperty("lastSeen", bounty.getLastSeen());
+            }
+            return;
+        }
+
+        JsonObject tracking = new JsonObject();
+        tracking.addProperty("world", loc.getWorld().getName());
+        tracking.addProperty("x", loc.getX());
+        tracking.addProperty("y", loc.getY());
+        tracking.addProperty("z", loc.getZ());
+        tracking.addProperty("yaw", loc.getYaw());
+        tracking.addProperty("pitch", loc.getPitch());
+        tracking.addProperty("lastSeen", bounty.getLastSeen());
+        obj.add("tracking", tracking);
+    }
+
+    private static void readTrackingSnapshot(JsonObject bountyObj, Bounty bounty) {
+        JsonElement trackingElement = bountyObj.get("tracking");
+        if (trackingElement != null && trackingElement.isJsonObject()) {
+            JsonObject tracking = trackingElement.getAsJsonObject();
+
+            World world = null;
+            if (tracking.has("world")) {
+                world = Bukkit.getWorld(tracking.get("world").getAsString());
+            }
+
+            if (world != null && tracking.has("x") && tracking.has("y") && tracking.has("z")) {
+                float yaw = tracking.has("yaw") ? tracking.get("yaw").getAsFloat() : 0f;
+                float pitch = tracking.has("pitch") ? tracking.get("pitch").getAsFloat() : 0f;
+                Location location = new Location(
+                        world,
+                        tracking.get("x").getAsDouble(),
+                        tracking.get("y").getAsDouble(),
+                        tracking.get("z").getAsDouble(),
+                        yaw,
+                        pitch
+                );
+                bounty.setLastKnownLocation(location);
+            }
+
+            if (tracking.has("lastSeen")) {
+                bounty.setLastSeen(tracking.get("lastSeen").getAsLong());
+            }
+            return;
+        }
+
+        if (bountyObj.has("lastSeen")) {
+            bounty.setLastSeen(bountyObj.get("lastSeen").getAsLong());
+        }
     }
 }

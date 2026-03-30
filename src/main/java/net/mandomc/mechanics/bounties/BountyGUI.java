@@ -1,7 +1,9 @@
 package net.mandomc.mechanics.bounties;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,6 +33,15 @@ import net.mandomc.core.modules.core.EconomyModule;
 public class BountyGUI extends InventoryGUI {
 
     private final GUIManager guiManager;
+    private final int page;
+
+    private static final int[] CONTENT_SLOTS = {
+            0, 1, 2, 3, 4, 5, 6, 7, 8,
+            9, 10, 11, 12, 13, 14, 15, 16, 17,
+            18, 19, 20, 21, 22, 23, 24, 25, 26,
+            27, 28, 29, 30, 31, 32, 33, 34, 35,
+            36, 37, 38, 39, 40, 41, 42, 43, 44
+    };
 
     /**
      * Creates the bounty GUI.
@@ -38,7 +49,18 @@ public class BountyGUI extends InventoryGUI {
      * @param guiManager the GUI manager for reopening this GUI after actions
      */
     public BountyGUI(GUIManager guiManager) {
+        this(guiManager, 0);
+    }
+
+    /**
+     * Creates the bounty GUI at a specific page.
+     *
+     * @param guiManager the GUI manager
+     * @param page zero-based page index
+     */
+    public BountyGUI(GUIManager guiManager, int page) {
         this.guiManager = guiManager;
+        this.page = Math.max(0, page);
     }
 
     @Override
@@ -60,9 +82,47 @@ public class BountyGUI extends InventoryGUI {
     public void decorate(Player player) {
         fillBackground();
 
-        int slot = 0;
-        for (Bounty bounty : BountyStorage.getAll()) {
-            addButton(slot++, createBountyButton(bounty, player));
+        List<Bounty> sorted = BountyStorage.getAll().stream()
+                .sorted(Comparator.comparingDouble(Bounty::getTotal).reversed())
+                .collect(Collectors.toList());
+
+        if (sorted.isEmpty()) {
+            addButton(22, new InventoryButton()
+                    .creator(p -> createStatusItem(Material.BARRIER, "&cNo Active Bounties", "&7There are no active bounty targets."))
+                    .consumer(event -> {}));
+            super.decorate(player);
+            return;
+        }
+
+        int pageSize = CONTENT_SLOTS.length;
+        int maxPage = (sorted.size() - 1) / pageSize;
+        int currentPage = Math.min(page, maxPage);
+
+        int start = currentPage * pageSize;
+        int end = Math.min(start + pageSize, sorted.size());
+
+        int slotIndex = 0;
+        for (int i = start; i < end; i++) {
+            int slot = CONTENT_SLOTS[slotIndex++];
+            addButton(slot, createBountyButton(sorted.get(i), currentPage));
+        }
+
+        addButton(49, new InventoryButton()
+                .creator(p -> createStatusItem(Material.PAPER,
+                        "&ePage " + (currentPage + 1) + "&7/&e" + (maxPage + 1),
+                        "&7Showing " + (start + 1) + "-&f" + end + "&7 of &f" + sorted.size()))
+                .consumer(event -> {}));
+
+        if (currentPage > 0) {
+            addButton(45, new InventoryButton()
+                    .creator(p -> createStatusItem(Material.ARROW, "&e&l<< Previous", "&7Go to page " + currentPage))
+                    .consumer(event -> guiManager.openGUI(new BountyGUI(guiManager, currentPage - 1), player)));
+        }
+
+        if (end < sorted.size()) {
+            addButton(53, new InventoryButton()
+                    .creator(p -> createStatusItem(Material.ARROW, "&e&lNext >>", "&7Go to page " + (currentPage + 2)))
+                    .consumer(event -> guiManager.openGUI(new BountyGUI(guiManager, currentPage + 1), player)));
         }
 
         super.decorate(player);
@@ -75,10 +135,9 @@ public class BountyGUI extends InventoryGUI {
      * Otherwise, clicking shows the target's last known location.
      *
      * @param bounty the bounty to display
-     * @param viewer the player viewing the GUI
      * @return the button
      */
-    private InventoryButton createBountyButton(Bounty bounty, Player viewer) {
+    private InventoryButton createBountyButton(Bounty bounty, int currentPage) {
         return new InventoryButton()
                 .creator(player -> buildBountyItem(bounty))
                 .consumer(event -> {
@@ -93,9 +152,12 @@ public class BountyGUI extends InventoryGUI {
                             BountyStorage.remove(bounty.getTarget());
                         }
 
+                        BountyStorage.save();
+                        BountyShowcaseManager.update();
+
                         clicker.sendMessage(LangManager.get("bounties.refunded"));
                         clicker.playSound(clicker.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1.2f);
-                        guiManager.openGUI(new BountyGUI(guiManager), clicker);
+                        guiManager.openGUI(new BountyGUI(guiManager, currentPage), clicker);
                         return;
                     }
 
@@ -163,13 +225,15 @@ public class BountyGUI extends InventoryGUI {
     private void fillBackground() {
         ConfigurationSection section = BountyConfig.get().getConfigurationSection("bounty.filler");
 
-        Material mat = Material.matchMaterial(section.getString("material", "BLACK_STAINED_GLASS_PANE"));
+        String materialName = section == null ? "BLACK_STAINED_GLASS_PANE" : section.getString("material", "BLACK_STAINED_GLASS_PANE");
+        Material mat = Material.matchMaterial(materialName);
         ItemStack filler = new ItemStack(mat == null ? Material.BLACK_STAINED_GLASS_PANE : mat);
 
         ItemMeta meta = filler.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(color(section.getString("name", " ")));
-            meta.setLore(section.getStringList("lore"));
+            String name = section == null ? " " : section.getString("name", " ");
+            meta.setDisplayName(color(name));
+            meta.setLore(section == null ? new ArrayList<>() : section.getStringList("lore"));
             filler.setItemMeta(meta);
         }
 
@@ -178,6 +242,27 @@ public class BountyGUI extends InventoryGUI {
                     .creator(player -> filler)
                     .consumer(event -> {}));
         }
+    }
+
+    /**
+     * Creates a generic status/navigation item.
+     *
+     * @param material icon material
+     * @param name display name
+     * @param loreLine single lore line
+     * @return item stack
+     */
+    private ItemStack createStatusItem(Material material, String name, String loreLine) {
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(color(name));
+            List<String> lore = new ArrayList<>();
+            lore.add(color(loreLine));
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        return item;
     }
 
     /**

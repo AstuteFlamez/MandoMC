@@ -15,6 +15,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.LangManager;
 import net.mandomc.system.events.EventManager;
 import net.mandomc.system.events.GameEvent;
 
@@ -57,7 +58,7 @@ public class DoorListener implements Listener {
             dungeon.advanceRoom();
         }
 
-        player.sendMessage("\u00a77Door unlocked.");
+        player.sendMessage(LangManager.get("jabba.door-unlocked"));
     }
 
     @EventHandler
@@ -93,6 +94,6 @@ public class DoorListener implements Listener {
             dungeon.advanceRoom();
         }
 
-        player.sendMessage("\u00a77Door unlocked.");
+        player.sendMessage(LangManager.get("jabba.door-unlocked"));
     }
 }

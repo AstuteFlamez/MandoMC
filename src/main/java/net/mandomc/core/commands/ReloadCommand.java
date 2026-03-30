@@ -10,6 +10,8 @@ import net.mandomc.MandoMC;
 import net.mandomc.content.vehicles.VehicleRegistry;
 import net.mandomc.content.vehicles.config.VehicleConfig;
 import net.mandomc.core.LangManager;
+import net.mandomc.mechanics.bounties.BountyConfig;
+import net.mandomc.mechanics.bounties.BountyShowcaseManager;
 import net.mandomc.mechanics.gambling.lottery.LotteryConfig;
 import net.mandomc.mechanics.warps.WarpConfig;
 import net.mandomc.system.items.ItemLoader;
@@ -63,6 +65,8 @@ public class ReloadCommand implements CommandExecutor {
             WarpConfig.reload();
             ParkourConfig.reload();
             LotteryConfig.reload();
+            BountyConfig.reload();
+            BountyShowcaseManager.start();
 
             ItemsConfig.reload();
             VehicleConfig.reload();

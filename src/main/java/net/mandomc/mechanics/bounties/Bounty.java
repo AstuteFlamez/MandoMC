@@ -99,7 +99,7 @@ public class Bounty {
      * @param loc the location to record
      */
     public void setLastKnownLocation(Location loc) {
-        this.lastKnownLocation = loc;
+        this.lastKnownLocation = loc == null ? null : loc.clone();
     }
 
     /**
@@ -118,6 +118,17 @@ public class Bounty {
      */
     public void setLastSeen(long lastSeen) {
         this.lastSeen = lastSeen;
+    }
+
+    /**
+     * Updates the latest tracking snapshot for this bounty target.
+     *
+     * @param loc current player location
+     * @param seenAt epoch millis timestamp
+     */
+    public void updateTracking(Location loc, long seenAt) {
+        setLastKnownLocation(loc);
+        setLastSeen(seenAt);
     }
 
     /**

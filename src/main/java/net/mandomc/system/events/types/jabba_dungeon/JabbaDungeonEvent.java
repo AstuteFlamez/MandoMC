@@ -20,7 +20,7 @@ import org.bukkit.block.data.Directional;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import io.lumine.mythic.core.mobs.DespawnMode;
-
+import net.mandomc.core.LangManager;
 import net.mandomc.system.events.AbstractGameEvent;
 import net.mandomc.system.events.EventDefinition;
 import net.mandomc.system.events.EventManager;
@@ -58,7 +58,7 @@ public class JabbaDungeonEvent extends AbstractGameEvent {
 
     @Override
     protected void onStart(EventManager manager) {
-        Bukkit.broadcastMessage("\u00a7e\u00a7l\u1d0d\u1d00\u0274\u1d05\u1d0f\u1d0d\u1d04 \u00a7r\u00a78\u00bb \u00a77The dungeon has opened!");
+        Bukkit.broadcastMessage(LangManager.get("jabba.dungeon-opened"));
 
         state = new JabbaDungeonState();
         state.setCurrentRoom(1);
@@ -71,7 +71,7 @@ public class JabbaDungeonEvent extends AbstractGameEvent {
 
     @Override
     protected void onEnd(EventManager manager) {
-        Bukkit.broadcastMessage("\u00a77Dungeon closed.");
+        Bukkit.broadcastMessage(LangManager.get("jabba.dungeon-closed"));
         cleanupDungeon();
     }
 
@@ -135,7 +135,7 @@ public class JabbaDungeonEvent extends AbstractGameEvent {
         state.setCurrentRoom(current);
         state.resetRoom();
 
-        Bukkit.broadcastMessage("\u00a77Entering Room " + current);
+        Bukkit.broadcastMessage(LangManager.get("jabba.room-enter").replace("%room%", String.valueOf(current)));
 
         if (current == 4 || current == 7 || current == 9) {
             spawnBoss(current);

@@ -2,12 +2,14 @@ package net.mandomc.mechanics.bounties;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import net.mandomc.core.LangManager;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -77,7 +79,28 @@ public class BountyCommand implements CommandExecutor, TabCompleter {
                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1f, 0.8f);
                 return true;
             }
-            guiManager.openGUI(new BountySelectGUI(guiManager, 0), player);
+
+            if (args.length == 1) {
+                guiManager.openGUI(new BountySelectGUI(guiManager, 0), player);
+                return true;
+            }
+
+            OfflinePlayer target = Bukkit.getPlayerExact(args[1]);
+            if (target == null) {
+                target = Bukkit.getOfflinePlayer(args[1]);
+            }
+
+            if (target == null || (!target.isOnline() && !target.hasPlayedBefore())) {
+                player.sendMessage(LangManager.get("bounties.player-never-joined"));
+                return true;
+            }
+
+            if (target.getUniqueId().equals(player.getUniqueId())) {
+                player.sendMessage(LangManager.get("bounties.cannot-target-self"));
+                return true;
+            }
+
+            player.showDialog(BountyDialogFactory.create(player, target));
             return true;
         }
 
@@ -108,6 +131,9 @@ public class BountyCommand implements CommandExecutor, TabCompleter {
                 BountyStorage.remove(targetId);
             }
 
+            BountyStorage.save();
+            BountyShowcaseManager.update();
+
             player.sendMessage(LangManager.get("bounties.refunded"));
             return true;
         }
@@ -126,8 +152,19 @@ public class BountyCommand implements CommandExecutor, TabCompleter {
 
         if (args.length == 2) {
             if (args[0].equalsIgnoreCase("place") || args[0].equalsIgnoreCase("gui")) {
-                return Bukkit.getOnlinePlayers().stream()
+            LinkedHashSet<String> names = Bukkit.getOnlinePlayers().stream()
                         .map(Player::getName)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+
+            if (args[0].equalsIgnoreCase("place")) {
+                Arrays.stream(Bukkit.getOfflinePlayers())
+                    .filter(OfflinePlayer::hasPlayedBefore)
+                    .map(OfflinePlayer::getName)
+                    .filter(name -> name != null && !name.isBlank())
+                    .forEach(names::add);
+            }
+
+            return names.stream()
                         .filter(name -> name.toLowerCase().startsWith(args[1].toLowerCase()))
                         .collect(Collectors.toList());
             }

@@ -126,6 +126,7 @@ koth:
 jabba:
   dungeon-opened:   "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7The dungeon has opened!"
   dungeon-closed:   "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7The dungeon has closed."
+  door-unlocked:    "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7The door has been unlocked."
   room-enter:       "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Entering Room &f%room%&7..."
   dungeon-complete: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aDungeon Complete!"
   key-dropped:      "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &eKey dropped for Room &f%room%"
@@ -211,6 +212,8 @@ bounties:
   players-only:       "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayers only."
   no-permission:      "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou do not have permission."
   player-not-found:   "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayer not found."
+  player-never-joined: "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cThat player has never joined this server."
+  cannot-target-self: "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou cannot place a bounty on yourself."
   already-placed:     "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou already have an active bounty placed."
   no-active-bounty:   "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou have no active bounty to remove."
   bounty-not-found:   "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cBounty not found."
@@ -223,7 +226,7 @@ bounties:
 
   help:
     header: "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cBounty Commands"
-    place:  "&8  /bounty place &7— Place a bounty on a player"
+    place:  "&8  /bounty place [player] &7— Place a bounty (GUI or direct)"
     remove: "&8  /bounty remove &7— Remove your active bounty"
     gui:    "&8  /bounty gui &7— Open bounty board &8(Admin)"
 

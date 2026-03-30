@@ -9,20 +9,29 @@ import net.mandomc.MandoMC;
 public class BountyTrackerTask {
 
     public static void start() {
+        long intervalTicks = 20L * Math.max(1, BountyConfig.getTrackingInterval());
+
         new BukkitRunnable() {
             @Override
             public void run() {
+                boolean updated = false;
+                long now = System.currentTimeMillis();
 
                 for (Bounty bounty : BountyStorage.getAll()) {
                     Player p = Bukkit.getPlayer(bounty.getTarget());
 
                     if (p != null && p.isOnline()) {
-                        bounty.setLastKnownLocation(p.getLocation());
-                        bounty.setLastSeen(System.currentTimeMillis());
+                        bounty.updateTracking(p.getLocation(), now);
+                        updated = true;
                     }
                 }
 
+                if (updated) {
+                    BountyStorage.save();
+                    BountyShowcaseManager.update();
+                }
+
             }
-        }.runTaskTimer(MandoMC.getInstance(), 0, 20 * 600); // 10 minutes
+        }.runTaskTimer(MandoMC.getInstance(), 0, intervalTicks);
     }
 }
