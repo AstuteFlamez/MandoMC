@@ -2,6 +2,7 @@ package net.mandomc.mechanics.bounties;
 
 import de.oliver.fancyholograms.api.FancyHologramsPlugin;
 import de.oliver.fancyholograms.api.HologramManager;
+import de.oliver.fancyholograms.api.data.ItemHologramData;
 import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
 import net.mandomc.MandoMC;
@@ -13,13 +14,15 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.entity.Display;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,8 +31,9 @@ import java.util.UUID;
  */
 public final class BountyShowcaseManager {
 
-    private static BountyShowcaseNpc currentNpc;
-    private static UUID currentTargetId;
+    private static final String BACK_SUFFIX = "_back";
+    private static final String HEAD_SUFFIX = "_head";
+    private static UUID currentHeadTargetId;
     private static BukkitTask refreshTask;
 
     private BountyShowcaseManager() {
@@ -97,7 +101,10 @@ public final class BountyShowcaseManager {
         }
 
         updateText(hologramId, base.clone().add(0, textOffset, 0), yaw, pitch, top, section);
-        syncNpc(base.clone().add(0, npcOffset, 0), yaw, pitch, top);
+        updateText(hologramId + BACK_SUFFIX, base.clone().add(0, textOffset, 0), yaw + 180F, pitch, top, section);
+        // Item hologram heads render facing opposite our text direction, so offset by 180 degrees.
+        updateHead(hologramId + HEAD_SUFFIX, base.clone().add(0, npcOffset, 0), yaw + 180F, pitch, top);
+        updateHead(hologramId + HEAD_SUFFIX + BACK_SUFFIX, base.clone().add(0, npcOffset, 0), yaw + 360F, pitch, top);
     }
 
     public static void remove() {
@@ -105,22 +112,9 @@ public final class BountyShowcaseManager {
         String hologramId = section != null ? section.getString("id", "bounty_showcase") : "bounty_showcase";
 
         removeText(hologramId);
-        removeNpc();
-    }
-
-    public static void showTo(Player player) {
-        if (currentNpc != null) {
-            currentNpc.spawnTo(player);
-        }
-    }
-
-    public static void refreshViewer(Player player) {
-        if (currentNpc == null) {
-            return;
-        }
-
-        currentNpc.destroyFor(player);
-        currentNpc.spawnTo(player);
+        removeText(hologramId + BACK_SUFFIX);
+        removeHead(hologramId + HEAD_SUFFIX);
+        removeHead(hologramId + HEAD_SUFFIX + BACK_SUFFIX);
     }
 
     private static void updateText(String hologramId, Location location, float yaw, float pitch, Bounty bounty, ConfigurationSection section) {
@@ -147,28 +141,46 @@ public final class BountyShowcaseManager {
         manager.getHologram(hologramId).ifPresent(manager::removeHologram);
     }
 
-    private static void syncNpc(Location location, float yaw, float pitch, Bounty bounty) {
+    private static void updateHead(String headId, Location location, float yaw, float pitch, Bounty bounty) {
+        HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
         UUID targetId = bounty.getTarget();
 
-        if (currentNpc != null && currentNpc.matches(targetId, location, yaw, pitch)) {
-            currentTargetId = targetId;
+        if (Objects.equals(currentHeadTargetId, targetId)) {
+            manager.getHologram(headId).ifPresent(existing -> {
+                existing.getData().setLocation(location.clone().setDirection(directionFromYawPitch(yaw, pitch)));
+            });
             return;
         }
 
-        removeNpc();
+        manager.getHologram(headId).ifPresent(manager::removeHologram);
 
-        OfflinePlayer target = Bukkit.getOfflinePlayer(targetId);
-        currentNpc = BountyShowcaseNpc.create(target, location, yaw, pitch);
-        currentTargetId = targetId;
-        currentNpc.spawnToAll();
+        ItemHologramData data = new ItemHologramData(headId, location);
+        data.setItemStack(buildTargetHead(Bukkit.getOfflinePlayer(targetId)));
+        data.setBillboard(Display.Billboard.FIXED);
+        data.setLocation(location.clone().setDirection(directionFromYawPitch(yaw, pitch)));
+
+        Hologram hologram = manager.create(data);
+        manager.addHologram(hologram);
+        currentHeadTargetId = targetId;
     }
 
-    private static void removeNpc() {
-        if (currentNpc != null) {
-            currentNpc.destroy();
+    private static void removeHead(String headId) {
+        if (Bukkit.getPluginManager().getPlugin("FancyHolograms") == null) {
+            return;
         }
-        currentNpc = null;
-        currentTargetId = null;
+
+        HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
+        manager.getHologram(headId).ifPresent(manager::removeHologram);
+        currentHeadTargetId = null;
+    }
+
+    private static ItemStack buildTargetHead(OfflinePlayer target) {
+        ItemStack head = new ItemStack(org.bukkit.Material.PLAYER_HEAD);
+        if (head.getItemMeta() instanceof SkullMeta meta) {
+            meta.setOwningPlayer(target);
+            head.setItemMeta(meta);
+        }
+        return head;
     }
 
     private static List<String> buildLines(Bounty bounty, ConfigurationSection section) {

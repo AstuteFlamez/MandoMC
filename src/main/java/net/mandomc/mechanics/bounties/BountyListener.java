@@ -1,14 +1,10 @@
 package net.mandomc.mechanics.bounties;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 
 import net.mandomc.core.modules.core.EconomyModule;
 
@@ -61,34 +57,4 @@ public class BountyListener implements Listener {
         BountyShowcaseManager.update();
     }
 
-    /**
-     * Ensures joining players receive the current showcase NPC state.
-     *
-     * @param event join event
-     */
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        BountyShowcaseManager.showTo(event.getPlayer());
-    }
-
-    /**
-     * Re-syncs the showcase NPC when a player changes worlds.
-     *
-     * @param event world change event
-     */
-    @EventHandler
-    public void onWorldChange(PlayerChangedWorldEvent event) {
-        BountyShowcaseManager.refreshViewer(event.getPlayer());
-    }
-
-    /**
-     * Re-syncs the showcase NPC after respawn when the client entity list resets.
-     *
-     * @param event respawn event
-     */
-    @EventHandler
-    public void onRespawn(PlayerRespawnEvent event) {
-        Player player = event.getPlayer();
-        Bukkit.getScheduler().runTaskLater(net.mandomc.MandoMC.getInstance(), () -> BountyShowcaseManager.refreshViewer(player), 1L);
-    }
 }

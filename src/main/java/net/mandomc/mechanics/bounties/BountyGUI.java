@@ -209,10 +209,6 @@ public class BountyGUI extends InventoryGUI {
             lore.add(color("&cNo tracking data"));
         }
 
-        lore.add("");
-        lore.add(color("&eClick to track"));
-        lore.add(color("&cClick to remove your bounty"));
-
         meta.setLore(lore);
         item.setItemMeta(meta);
 
