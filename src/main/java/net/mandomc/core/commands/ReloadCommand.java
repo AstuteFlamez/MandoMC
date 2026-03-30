@@ -1,5 +1,7 @@
 package net.mandomc.core.commands;
 
+import java.io.File;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -7,17 +9,14 @@ import org.bukkit.command.CommandSender;
 import net.mandomc.MandoMC;
 import net.mandomc.content.vehicles.VehicleRegistry;
 import net.mandomc.content.vehicles.config.VehicleConfig;
+import net.mandomc.core.LangManager;
 import net.mandomc.mechanics.gambling.lottery.LotteryConfig;
 import net.mandomc.mechanics.warps.WarpConfig;
 import net.mandomc.system.items.ItemLoader;
 import net.mandomc.system.items.ItemRegistry;
 import net.mandomc.system.items.config.ItemsConfig;
 import net.mandomc.system.planets.ilum.configs.ParkourConfig;
-
-// ✅ ADD
 import net.mandomc.system.shops.ShopLoader;
-
-import java.io.File;
 
 /**
  * Command used to reload plugin configurations at runtime.
@@ -28,69 +27,66 @@ public class ReloadCommand implements CommandExecutor {
 
     private final MandoMC plugin;
 
+    /**
+     * Creates the reload command.
+     *
+     * @param plugin the plugin instance
+     */
     public ReloadCommand(MandoMC plugin) {
         this.plugin = plugin;
     }
 
+    /**
+     * Executes the reload sequence.
+     *
+     * Requires the mmc.reload permission. Reloads core config, system configs,
+     * items, vehicles, and shops in dependency order.
+     *
+     * @param sender the command sender
+     * @param command the command
+     * @param label the command alias used
+     * @param args the command arguments
+     * @return true always
+     */
     @Override
-    public boolean onCommand(CommandSender sender,
-                             Command command,
-                             String label,
-                             String[] args) {
-
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.hasPermission("mmc.reload")) {
-            sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cYou do not have permission to run this command.");
+            sender.sendMessage(LangManager.get("core.reload.no-permission"));
             return true;
         }
 
-        sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Reloading plugin...");
+        sender.sendMessage(LangManager.get("core.reload.reloading"));
 
         try {
-
-            /* ---------------------------
-               Core Config
-            --------------------------- */
             plugin.reloadConfig();
 
-            /* ---------------------------
-               System Configs
-            --------------------------- */
             WarpConfig.reload();
             ParkourConfig.reload();
             LotteryConfig.reload();
 
-            /* ---------------------------
-               Items + Vehicles (CRITICAL ORDER)
-            --------------------------- */
-
-            // 1. Reload configs
             ItemsConfig.reload();
             VehicleConfig.reload();
 
-            // 2. Rebuild items (FULL RESET)
             ItemRegistry.clear();
             ItemLoader.loadItems();
 
-            // 3. Rebuild vehicle mappings
             VehicleRegistry.load();
 
-            /* ---------------------------
-               SHOPS (AFTER ITEMS) ✅
-            --------------------------- */
             File shopsFolder = new File(plugin.getDataFolder(), "shops");
-            ShopLoader.loadAll(shopsFolder);
+            File pluginJar = null;
+            try {
+                pluginJar = new File(plugin.getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
+            } catch (java.net.URISyntaxException ex) {
+                plugin.getLogger().warning("[Shops] Could not resolve plugin jar path — default configs may not be copied.");
+            }
+            ShopLoader.loadAll(shopsFolder, pluginJar);
 
-            sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Configs reloaded.");
+            sender.sendMessage(LangManager.get("core.reload.success"));
 
         } catch (Exception e) {
-
-            sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cReload failed. Check console.");
-
+            sender.sendMessage(LangManager.get("core.reload.failure"));
             e.printStackTrace();
-            return true;
         }
-
-        sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §aReload complete.");
 
         return true;
     }

@@ -11,6 +11,8 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import net.mandomc.core.LangManager;
+
 import net.mandomc.system.planets.ilum.ParkourItemFactory;
 import net.mandomc.system.planets.ilum.ParkourSession;
 import net.mandomc.system.planets.ilum.ParkourState;
@@ -109,7 +111,7 @@ public class ParkourManager {
             player.teleport(returnLocation);
         }
 
-        player.sendMessage("§3§lᴍᴀɴᴅᴏᴍᴄ §r§8» §aYou left the parkour.");
+        player.sendMessage(LangManager.get("parkour.left"));
 
         player.playSound(
             player.getLocation(),
@@ -183,7 +185,7 @@ public class ParkourManager {
         Location startLocation = session.getStartLocation();
 
         if (startLocation == null) {
-            player.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Start location not set.");
+            player.sendMessage(LangManager.get("parkour.start-not-set"));
             return;
         }
 
@@ -244,16 +246,16 @@ public class ParkourManager {
         leaderboardManager.updateLeaderboards();
 
         player.sendTitle(
-                "§6Course Complete!",
-                "§eRewards Granted",
+                LangManager.get("parkour.finish.title"),
+                LangManager.get("parkour.finish.subtitle"),
                 10, 60, 20
         );
 
-        player.sendMessage("§3§lᴍᴀɴᴅᴏᴍᴄ §r§8» §aYour time: §f" + TimeFormatter.format(seconds));
+        player.sendMessage(LangManager.get("parkour.finish.time", "%time%", TimeFormatter.format(seconds)));
 
         Double best = timeManager.getBestTime(player.getUniqueId());
             
-        player.sendMessage("§3§lᴍᴀɴᴅᴏᴍᴄ §r§8» §6Your best time: §f" + TimeFormatter.format(best));
+        player.sendMessage(LangManager.get("parkour.finish.best-time", "%time%", TimeFormatter.format(best)));
 
         giveRewards(player);
 

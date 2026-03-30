@@ -6,6 +6,7 @@ import net.mandomc.content.vehicles.Vehicle;
 import net.mandomc.content.vehicles.VehicleRegistry;
 import net.mandomc.content.vehicles.config.VehicleConfig;
 import net.mandomc.content.vehicles.utils.AmmoUtil;
+import net.mandomc.core.LangManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.SoundCategory;
@@ -59,7 +60,7 @@ public class TieFighter implements WeaponSystem {
                     () -> {
 
                         if (!AmmoUtil.hasAmmo(player, ammo, ammoPerShot)) {
-                            player.sendMessage("§9§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cOut of " + ammo.replace("_", " ") + "!");
+                            player.sendMessage(LangManager.get("vehicles.weapon.out-of-ammo", "%ammo%", ammo.replace("_", " ")));
                             return;
                         }
 

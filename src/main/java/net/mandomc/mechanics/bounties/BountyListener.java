@@ -1,16 +1,28 @@
 package net.mandomc.mechanics.bounties;
 
-import net.mandomc.core.modules.core.EconomyModule;
-import org.bukkit.event.*;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
+import net.mandomc.core.modules.core.EconomyModule;
+
+/**
+ * Listens for player deaths to resolve bounty payouts.
+ *
+ * When a player with an active bounty is killed, the full bounty total
+ * is deposited to the killer and the bounty is removed.
+ */
 public class BountyListener implements Listener {
 
+    /**
+     * Handles player death and pays out any active bounty to the killer.
+     *
+     * @param event the player death event
+     */
     @EventHandler
-    public void onDeath(PlayerDeathEvent e) {
-
-        Player victim = e.getEntity();
+    public void onDeath(PlayerDeathEvent event) {
+        Player victim = event.getEntity();
         Player killer = victim.getKiller();
 
         if (killer == null) return;
@@ -19,9 +31,7 @@ public class BountyListener implements Listener {
         if (bounty == null) return;
 
         double total = bounty.getTotal();
-
         EconomyModule.deposit(killer, total);
-
         BountyStorage.remove(victim.getUniqueId());
     }
 }

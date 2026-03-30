@@ -1,6 +1,10 @@
 package net.mandomc.mechanics.gambling.lottery;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Display;
 
@@ -9,7 +13,11 @@ import de.oliver.fancyholograms.api.HologramManager;
 import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Handles creation and updating of the lottery top players hologram.
@@ -47,7 +55,7 @@ public class LotteryTopHologramManager {
         Map<UUID, Integer> ticketMap = LotteryManager.getAllTickets();
 
         List<Map.Entry<UUID, Integer>> sortedEntries = new ArrayList<>(ticketMap.entrySet());
-        sortedEntries.sort((a, b) -> Integer.compare(b.getValue(), a.getValue()));
+        sortedEntries.sort((entryA, entryB) -> Integer.compare(entryB.getValue(), entryA.getValue()));
 
         int totalTickets = ticketMap.values().stream().mapToInt(Integer::intValue).sum();
 

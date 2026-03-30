@@ -12,92 +12,91 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickCallback;
 import net.kyori.adventure.text.format.NamedTextColor;
 
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.List;
 
 /**
- * Builds shop purchase dialog.
+ * Constructs the Paper API dialog shown when a player left-clicks a shop item.
+ *
+ * The dialog presents a number range slider letting the player pick between
+ * 1 and {@link ShopItem#getDialogMax()} units. One unit equals
+ * {@link ShopItem#getAmount()} items. Confirming triggers
+ * {@link ShopPurchaseHandler#purchase}.
  */
-public class ShopDialogFactory {
+public final class ShopDialogFactory {
 
-    private static final int MAX_PURCHASE = 640;
+    private ShopDialogFactory() {}
 
-    /**
-     * Creates a purchase dialog for a shop item.
-     *
-     * @param player the player
-     * @param item the shop item
-     * @param shop the shop
-     * @return dialog instance
-     */
     public static Dialog create(Player player, ShopItem item, Shop shop) {
 
-        int pricePerItem = item.getPrice();
+        int dialogMax = item.getDialogMax();
+        int pricePerItem = item.getBuyPrice();
+        int pricePerUnit = pricePerItem * item.getAmount();
+
+        ItemStack base = ShopLoader.resolveItem(item.getType(), item.getId(), "dialog", item.getId());
+
+        String itemName = (base != null
+                && base.getItemMeta() != null
+                && base.getItemMeta().hasDisplayName())
+                ? base.getItemMeta().getDisplayName().replaceAll("§[0-9a-fk-orA-FK-OR]", "")
+                : item.getId();
 
         return Dialog.create(builder -> builder.empty()
 
                 .base(DialogBase.builder(
                                 Component.text("Purchase Item", NamedTextColor.GOLD)
                         )
-
-                        .body(java.util.List.of(
+                        .body(List.of(
                                 DialogBody.plainMessage(
-                                        Component.text("Select amount to purchase", NamedTextColor.GRAY)
+                                        Component.text(itemName, NamedTextColor.WHITE)
                                 ),
                                 DialogBody.plainMessage(
-                                        Component.text("Price: $" + pricePerItem + " each", NamedTextColor.GREEN)
+                                        Component.text("$" + pricePerItem + " per item", NamedTextColor.GREEN)
                                 ),
-                                DialogBody.plainMessage(
-                                        Component.text("Max: " + MAX_PURCHASE, NamedTextColor.DARK_GRAY)
-                                )
+                                item.getAmount() > 1
+                                        ? DialogBody.plainMessage(
+                                                Component.text("Bundle of " + item.getAmount() + " — $" + pricePerUnit + " per unit", NamedTextColor.GRAY))
+                                        : DialogBody.plainMessage(Component.text(" ", NamedTextColor.DARK_GRAY))
                         ))
-
-                        .inputs(java.util.List.of(
+                        .inputs(List.of(
                                 DialogInput.numberRange(
-                                        "amount",
-                                        Component.text("Amount", NamedTextColor.GREEN),
+                                        "units",
+                                        Component.text("Amount" + (item.getAmount() > 1 ? " (units)" : ""), NamedTextColor.YELLOW),
                                         1f,
-                                        (float) MAX_PURCHASE
+                                        (float) dialogMax
                                 )
                                         .step(1f)
                                         .initial(1f)
                                         .build()
                         ))
-
                         .build()
                 )
 
                 .type(DialogType.confirmation(
 
-                        // ✅ CONFIRM BUTTON
+                        // Confirm
                         ActionButton.create(
-                                Component.text("Confirm", NamedTextColor.GREEN),
-                                Component.text("Purchase item"),
+                                Component.text("Purchase", NamedTextColor.GREEN),
+                                Component.text("Confirm purchase"),
                                 100,
                                 DialogAction.customClick((view, audience) -> {
 
-                                    if (!(audience instanceof Player p)) return;
+                                    if (!(audience instanceof Player buyer)) return;
 
-                                    Float amountF = view.getFloat("amount");
-                                    if (amountF == null) return;
+                                    Float unitsF = view.getFloat("units");
+                                    if (unitsF == null) return;
 
-                                    int amount = Math.max(1, Math.min(MAX_PURCHASE, amountF.intValue()));
+                                    int units = Math.max(1, Math.min(dialogMax, unitsF.intValue()));
+                                    int totalItems = units * item.getAmount();
 
-                                    // 🔥 MAIN PURCHASE LOGIC
-                                    ShopPurchaseHandler.purchase(p, item, amount, shop);
-
-                                    // ✅ feedback sound
-                                    p.playSound(
-                                            p.getLocation(),
-                                            Sound.ENTITY_EXPERIENCE_ORB_PICKUP,
-                                            1f,
-                                            1.2f
-                                    );
+                                    ShopPurchaseHandler.purchase(buyer, item, totalItems, shop);
 
                                 }, ClickCallback.Options.builder().uses(1).build())
                         ),
 
-                        // ❌ CANCEL BUTTON
+                        // Cancel
                         ActionButton.create(
                                 Component.text("Cancel", NamedTextColor.RED),
                                 Component.text("Close"),

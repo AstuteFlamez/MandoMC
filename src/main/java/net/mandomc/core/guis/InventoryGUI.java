@@ -20,8 +20,10 @@ public abstract class InventoryGUI implements InventoryHandler {
 
     /**
      * Backing inventory for this GUI.
+     * Initialized lazily on first access so that subclass fields are
+     * fully assigned before {@link #createInventory()} is called.
      */
-    private final Inventory inventory;
+    private Inventory inventory;
 
     /**
      * Mapping of slot indices to buttons.
@@ -29,18 +31,14 @@ public abstract class InventoryGUI implements InventoryHandler {
     private final Map<Integer, InventoryButton> buttonMap = new HashMap<>();
 
     /**
-     * Creates a new GUI and initializes its inventory.
-     */
-    public InventoryGUI() {
-        this.inventory = this.createInventory();
-    }
-
-    /**
-     * Gets the inventory backing this GUI.
+     * Gets the inventory backing this GUI, creating it on first access.
      *
      * @return the inventory
      */
     public Inventory getInventory() {
+        if (this.inventory == null) {
+            this.inventory = this.createInventory();
+        }
         return this.inventory;
     }
 

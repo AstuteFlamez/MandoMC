@@ -5,24 +5,44 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
 import net.mandomc.MandoMC;
 import net.mandomc.mechanics.fuel.FuelManager;
+import net.mandomc.core.LangManager;
 
+/**
+ * Manages ticking fuel transfers between a rhydonium canister and a vehicle's fuel tank.
+ *
+ * Supports both depositing (canister to vehicle) and extracting (vehicle to canister) modes.
+ * Each player may only have one active transfer at a time, enforced via a UUID-keyed task map.
+ */
 public class VehicleFuelTransferManager {
 
     private static final Map<UUID, BukkitTask> transfers = new HashMap<>();
 
+    /**
+     * Returns true if the given player currently has an active vehicle fuel transfer.
+     *
+     * @param player the player to check
+     * @return true if transferring
+     */
     public static boolean isTransferring(Player player) {
         return transfers.containsKey(player.getUniqueId());
     }
 
+    /**
+     * Starts a repeating fuel transfer task for the given player.
+     *
+     * Cancels any existing transfer before starting. Runs every 2 ticks.
+     *
+     * @param player      the player performing the transfer
+     * @param canister    the canister item in the player's hand
+     * @param vehicleTank the vehicle's tank item stack
+     */
     public static void startTransfer(Player player, ItemStack canister, ItemStack vehicleTank) {
-
         if (transfers.containsKey(player.getUniqueId())) return;
 
         cancelTransfer(player);
@@ -37,18 +57,26 @@ public class VehicleFuelTransferManager {
         transfers.put(player.getUniqueId(), task);
     }
 
+    /**
+     * Stops the transfer for the given player and notifies them via action bar.
+     *
+     * @param player the player whose transfer to stop
+     */
     public static void stopTransfer(Player player) {
-
         BukkitTask task = transfers.remove(player.getUniqueId());
 
         if (task != null) {
             task.cancel();
-            player.sendActionBar(ChatColor.GRAY + "⛽ Fuel transfer halted");
+            player.sendActionBar(LangManager.get("fuel.transfer-halted"));
         }
     }
 
+    /**
+     * Cancels the transfer for the given player silently.
+     *
+     * @param player the player whose transfer to cancel
+     */
     private static void cancelTransfer(Player player) {
-
         BukkitTask task = transfers.remove(player.getUniqueId());
 
         if (task != null) {
@@ -56,8 +84,17 @@ public class VehicleFuelTransferManager {
         }
     }
 
+    /**
+     * Executes one tick of a vehicle fuel transfer.
+     *
+     * Validates state (online, sneaking, items not null) before transferring one unit of fuel.
+     * Sends an action bar status message to the player.
+     *
+     * @param player      the player performing the transfer
+     * @param canister    the canister item stack (modified in place)
+     * @param vehicleTank the vehicle tank item stack (modified in place)
+     */
     private static void transferTick(Player player, ItemStack canister, ItemStack vehicleTank) {
-
         if (!player.isOnline()) {
             cancelTransfer(player);
             return;
@@ -81,16 +118,12 @@ public class VehicleFuelTransferManager {
         int canFuel = FuelManager.getCurrentFuel(canister);
         int canMax = FuelManager.getMaxFuel(canister);
 
-        /* -------------------------
-           Depositing (Canister → Vehicle)
-        ------------------------- */
-
         if (mode.equals("depositing")) {
-
             if (canFuel <= 0) {
                 player.sendActionBar(
-                        ChatColor.RED + "⚠ Canister empty "
-                        + ChatColor.GRAY + "(" + canFuel + "/" + canMax + ")"
+                        LangManager.get("fuel.vehicle.canister-empty",
+                                "%current%", String.valueOf(canFuel),
+                                "%max%", String.valueOf(canMax))
                 );
                 cancelTransfer(player);
                 return;
@@ -98,8 +131,9 @@ public class VehicleFuelTransferManager {
 
             if (vehicleFuel >= vehicleMax) {
                 player.sendActionBar(
-                        ChatColor.RED + "⚠ Vehicle fuel tank full "
-                        + ChatColor.GRAY + "(" + vehicleFuel + "/" + vehicleMax + ")"
+                        LangManager.get("fuel.vehicle.tank-full",
+                                "%current%", String.valueOf(vehicleFuel),
+                                "%max%", String.valueOf(vehicleMax))
                 );
                 cancelTransfer(player);
                 return;
@@ -112,24 +146,21 @@ public class VehicleFuelTransferManager {
             int newVehicleFuel = FuelManager.getCurrentFuel(vehicleTank);
 
             player.sendActionBar(
-                    ChatColor.GOLD + "⛽ Fueling Vehicle "
-                    + ChatColor.YELLOW + newCanFuel + "/" + canMax
-                    + ChatColor.DARK_GRAY + " → "
-                    + ChatColor.AQUA + "Vehicle "
-                    + ChatColor.YELLOW + newVehicleFuel + "/" + vehicleMax
+                    LangManager.get("fuel.vehicle.fueling",
+                            "%can%", String.valueOf(newCanFuel),
+                            "%can-max%", String.valueOf(canMax),
+                            "%vehicle%", String.valueOf(newVehicleFuel),
+                            "%vehicle-max%", String.valueOf(vehicleMax))
             );
 
             return;
         }
 
-        /* -------------------------
-           Refueling (Vehicle → Canister)
-        ------------------------- */
-
         if (vehicleFuel <= 0) {
             player.sendActionBar(
-                    ChatColor.RED + "⚠ Vehicle fuel tank empty "
-                    + ChatColor.GRAY + "(" + vehicleFuel + "/" + vehicleMax + ")"
+                    LangManager.get("fuel.vehicle.tank-empty",
+                            "%current%", String.valueOf(vehicleFuel),
+                            "%max%", String.valueOf(vehicleMax))
             );
             cancelTransfer(player);
             return;
@@ -137,8 +168,9 @@ public class VehicleFuelTransferManager {
 
         if (canFuel >= canMax) {
             player.sendActionBar(
-                    ChatColor.RED + "⚠ Canister full "
-                    + ChatColor.GRAY + "(" + canFuel + "/" + canMax + ")"
+                    LangManager.get("fuel.vehicle.canister-full",
+                            "%current%", String.valueOf(canFuel),
+                            "%max%", String.valueOf(canMax))
             );
             cancelTransfer(player);
             return;
@@ -151,11 +183,11 @@ public class VehicleFuelTransferManager {
         int newVehicleFuel = FuelManager.getCurrentFuel(vehicleTank);
 
         player.sendActionBar(
-                ChatColor.AQUA + "⛽ Draining Vehicle "
-                + ChatColor.YELLOW + newCanFuel + "/" + canMax
-                + ChatColor.DARK_GRAY + " ← "
-                + ChatColor.GOLD + "Vehicle "
-                + ChatColor.YELLOW + newVehicleFuel + "/" + vehicleMax
+                LangManager.get("fuel.vehicle.draining",
+                        "%can%", String.valueOf(newCanFuel),
+                        "%can-max%", String.valueOf(canMax),
+                        "%vehicle%", String.valueOf(newVehicleFuel),
+                        "%vehicle-max%", String.valueOf(vehicleMax))
         );
     }
 }

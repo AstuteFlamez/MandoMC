@@ -1,8 +1,7 @@
 package net.mandomc.mechanics.warps;
 
 import net.mandomc.core.guis.GUIManager;
-import net.md_5.bungee.api.ChatColor;
-
+import net.mandomc.core.LangManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -51,13 +50,13 @@ public class WarpCommand implements TabExecutor {
                              String label, String[] args) {
 
         if (!(sender instanceof Player player)) {
-            sender.sendMessage(prefix("&cPlayers only."));
+            sender.sendMessage(LangManager.get("warps.players-only"));
             return true;
         }
 
         ConfigurationSection warps = getWarpSection();
         if (warps == null) {
-            player.sendMessage(prefix("&cNo warps configured."));
+            player.sendMessage(LangManager.get("warps.no-warps"));
             return true;
         }
 
@@ -70,14 +69,14 @@ public class WarpCommand implements TabExecutor {
         String warpName = args[0];
 
         if (!warps.contains(warpName)) {
-            player.sendMessage(prefix("&cWarp not found."));
+            player.sendMessage(LangManager.get("warps.not-found"));
             return true;
         }
 
         Location location = getWarpLocation(warpName);
 
         if (location == null) {
-            player.sendMessage(prefix("&cWorld not loaded."));
+            player.sendMessage(LangManager.get("warps.world-offline"));
             return true;
         }
 
@@ -142,19 +141,5 @@ public class WarpCommand implements TabExecutor {
         float pitch = (float) config.getDouble(path + ".pitch");
 
         return new Location(world, x, y, z, yaw, pitch);
-    }
-
-    /**
-     * Applies color formatting to text.
-     */
-    private static String color(String text) {
-        return text == null ? "" : ChatColor.translateAlternateColorCodes('&', text);
-    }
-
-    /**
-     * Formats a message with plugin prefix.
-     */
-    private static String prefix(String message) {
-        return color("&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» " + message);
     }
 }

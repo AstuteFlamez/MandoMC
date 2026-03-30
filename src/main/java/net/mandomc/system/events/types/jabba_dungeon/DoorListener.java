@@ -18,6 +18,9 @@ import net.mandomc.MandoMC;
 import net.mandomc.system.events.EventManager;
 import net.mandomc.system.events.GameEvent;
 
+/**
+ * Listens for players picking up or using dungeon keys to advance through rooms.
+ */
 public class DoorListener implements Listener {
 
     private final NamespacedKey KEY_ID;
@@ -49,13 +52,12 @@ public class DoorListener implements Listener {
 
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "opendoor " + keyId);
 
-        // 🔥 GET ACTIVE EVENT (CORRECT)
         GameEvent active = eventManager.getActiveEvent();
         if (active instanceof JabbaDungeonEvent dungeon) {
             dungeon.advanceRoom();
         }
 
-        player.sendMessage("§7Door unlocked.");
+        player.sendMessage("\u00a77Door unlocked.");
     }
 
     @EventHandler
@@ -86,12 +88,11 @@ public class DoorListener implements Listener {
 
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "opendoor " + keyId);
 
-        // 🔥 GET ACTIVE EVENT
         GameEvent active = eventManager.getActiveEvent();
         if (active instanceof JabbaDungeonEvent dungeon) {
             dungeon.advanceRoom();
         }
 
-        player.sendMessage("§7Door unlocked.");
+        player.sendMessage("\u00a77Door unlocked.");
     }
 }

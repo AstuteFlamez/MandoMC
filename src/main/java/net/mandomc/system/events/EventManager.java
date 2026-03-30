@@ -7,14 +7,28 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.LangManager;
 
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
+/**
+ * Manages all active and queued game events.
+ *
+ * Loads event definitions from the /events folder, handles scheduling phases,
+ * tracks cooldowns between events, and coordinates event start and end lifecycle.
+ */
 public class EventManager {
 
     private final MandoMC plugin;
@@ -46,7 +60,6 @@ public class EventManager {
 
         definitions.clear();
 
-        // 🔥 NEW: Load from /events folder
         File folder = new File(plugin.getDataFolder(), "events");
         if (!folder.exists()) {
             folder.mkdirs();
@@ -163,8 +176,6 @@ public class EventManager {
         }
     }
 
-    // ===== EVERYTHING BELOW UNCHANGED =====
-
     public void tickSchedulerPhase(EventPhase phase) {
         switch (phase) {
             case END_WARNING -> {
@@ -223,7 +234,7 @@ public class EventManager {
         setCooldownsAfterStart(activeEvent.getId());
 
         if (broadcast) {
-            broadcastTitle("&a&lEVENT STARTED", activeEvent.getDisplayName());
+            broadcastTitle(LangManager.get("events.broadcast.started-title"), activeEvent.getDisplayName());
         }
 
         return true;
@@ -312,7 +323,7 @@ public class EventManager {
         state = EventState.IDLE;
 
         if (broadcast) {
-            broadcastTitle("&c&lEVENT ENDED", displayName);
+            broadcastTitle(LangManager.get("events.broadcast.ended-title"), displayName);
         }
     }
 
@@ -333,7 +344,7 @@ public class EventManager {
         setCooldownsAfterStart(activeEvent.getId());
 
         if (broadcast) {
-            broadcastTitle("&a&lEVENT STARTED", activeEvent.getDisplayName());
+            broadcastTitle(LangManager.get("events.broadcast.started-title"), activeEvent.getDisplayName());
         }
     }
 

@@ -8,6 +8,7 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.LangManager;
 import net.mandomc.system.events.AbstractGameEvent;
 import net.mandomc.system.events.EventDefinition;
 import net.mandomc.system.events.EventManager;
@@ -56,7 +57,7 @@ public class BeskarRushEvent extends AbstractGameEvent {
         task = new BeskarRushActiveTask(this);
         task.runTaskTimer(MandoMC.getInstance(), 0L, 20L);
 
-        Bukkit.broadcastMessage("§6§lBESKAR RUSH §7has begun!");
+        Bukkit.broadcastMessage(LangManager.get("beskar.started"));
     }
 
     @Override
@@ -73,7 +74,7 @@ public class BeskarRushEvent extends AbstractGameEvent {
             bossBar = null;
         }
 
-        Bukkit.broadcastMessage("§6§lBESKAR RUSH §7has ended.");
+        Bukkit.broadcastMessage(LangManager.get("beskar.ended"));
     }
 
     private void loadSpawnPoints() {

@@ -18,24 +18,30 @@ import net.mandomc.content.vehicles.VehicleData;
 import net.mandomc.content.vehicles.managers.VehicleHealthManager;
 import net.mandomc.core.modules.system.VehicleModule;
 
+/**
+ * Handles damage events for active vehicles.
+ *
+ * Cancels environmental damage to vehicles and routes player-inflicted
+ * damage through the custom vehicle health system.
+ */
 public class DamageListener implements Listener {
 
+    /**
+     * Cancels all environmental damage (fall, fire, etc.) to active vehicles.
+     *
+     * @param event the entity damage event
+     */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEnvironmentalDamage(EntityDamageEvent event) {
-
         Entity damaged = event.getEntity();
 
         for (Vehicle vehicle : VehicleModule.getActiveVehicles().values()) {
-
             VehicleData vehicleData = vehicle.getVehicleData();
             Entity vehicleEntity = vehicleData.getEntity();
 
             if (vehicleEntity == null) continue;
-
-            // Only process if the damaged entity IS the vehicle
             if (!vehicleEntity.getUniqueId().equals(damaged.getUniqueId())) continue;
 
-            // Cancel environmental damage (fall, lava, fire, etc.)
             if (!(event instanceof EntityDamageByEntityEvent)) {
                 event.setCancelled(true);
             }
@@ -44,25 +50,28 @@ public class DamageListener implements Listener {
         }
     }
 
+    /**
+     * Applies custom vehicle damage when a player attacks a vehicle.
+     *
+     * Prevents the vehicle owner from damaging their own vehicle.
+     * Delegates damage calculation to VehicleHealthManager.
+     *
+     * @param event the entity damage by entity event
+     */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
-
         Entity damaged = event.getEntity();
         Entity damager = event.getDamager();
 
         for (Vehicle vehicle : VehicleModule.getActiveVehicles().values()) {
-
             VehicleData vehicleData = vehicle.getVehicleData();
             Entity vehicleEntity = vehicleData.getEntity();
 
             if (vehicleEntity == null) continue;
-
-            // Only process if this entity is the vehicle
             if (!vehicleEntity.getUniqueId().equals(damaged.getUniqueId())) continue;
 
             Player owner = Bukkit.getPlayer(vehicle.getOwnerUUID());
 
-            // Owner cannot damage their own vehicle
             if (owner != null && damager.getUniqueId().equals(owner.getUniqueId())) {
                 event.setCancelled(true);
                 return;
@@ -71,25 +80,12 @@ public class DamageListener implements Listener {
             if (!(damager instanceof Player player)) return;
 
             double damage = event.getFinalDamage();
-
             ItemStack vehicleItem = vehicleData.getItem();
-
-            /* -----------------------
-               Apply custom vehicle damage
-            ----------------------- */
 
             VehicleHealthManager.damage(vehicleItem, damage, player);
 
-            double health = VehicleHealthManager.getCurrentHealth(vehicleItem);
-
-            /* -----------------------
-               Prevent entity from dying
-            ----------------------- */
-
             if (damaged instanceof LivingEntity entity) {
-
                 AttributeInstance maxHealth = entity.getAttribute(Attribute.MAX_HEALTH);
-
                 if (maxHealth != null) {
                     entity.setHealth(maxHealth.getValue());
                 }

@@ -1,5 +1,7 @@
 package net.mandomc;
 
+import java.util.List;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.mandomc.core.module.Module;
@@ -18,11 +20,15 @@ import net.mandomc.core.modules.system.VehicleModule;
 import net.mandomc.core.modules.system.planets.ParkourModule;
 import net.mandomc.core.modules.system.planets.TatooineModule;
 
-import java.util.List;
-
+/**
+ * Main plugin class for MandoMC.
+ *
+ * Initializes all subsystem modules in a defined load order and delegates
+ * lifecycle events (enable/disable) to each module.
+ */
 public final class MandoMC extends JavaPlugin {
 
-    public static MandoMC instance;
+    private static MandoMC instance;
 
     private List<Module> modules;
 
@@ -30,7 +36,7 @@ public final class MandoMC extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        getLogger().info("§a[MandoMC] Starting up...");
+        getLogger().info("[MandoMC] Starting up...");
 
         modules = List.of(
                 new ConfigModule(this),
@@ -51,15 +57,20 @@ public final class MandoMC extends JavaPlugin {
 
         modules.forEach(Module::enable);
 
-        getLogger().info("§a[MandoMC] Enabled successfully!");
+        getLogger().info("[MandoMC] Enabled successfully!");
     }
 
     @Override
     public void onDisable() {
         modules.forEach(Module::disable);
-        getLogger().info("§c[MandoMC] Disabled.");
+        getLogger().info("[MandoMC] Disabled.");
     }
 
+    /**
+     * Returns the singleton plugin instance.
+     *
+     * @return the plugin instance
+     */
     public static MandoMC getInstance() {
         return instance;
     }

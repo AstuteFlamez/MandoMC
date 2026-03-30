@@ -7,6 +7,7 @@ import com.ticxo.modelengine.api.model.ActiveModel;
 import net.mandomc.content.vehicles.Vehicle;
 import net.mandomc.content.vehicles.VehicleData;
 import net.mandomc.content.vehicles.managers.VehicleManager;
+import net.mandomc.core.LangManager;
 import net.mandomc.core.modules.system.VehicleModule;
 import net.mandomc.mechanics.fuel.FuelManager;
 import net.mandomc.system.items.ItemUtils;
@@ -47,7 +48,7 @@ public class MountListener implements Listener {
             int fuel = FuelManager.getCurrentFuel(data.getItem());
 
             if (fuel <= 0) {
-                player.sendMessage("§9§lᴍᴀɴᴅᴏᴍᴄ §r§8» §c⚠ This vehicle has no fuel.");
+                player.sendMessage(LangManager.get("vehicles.no-fuel"));
                 return;
             }
 

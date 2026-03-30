@@ -1,15 +1,19 @@
 package net.mandomc.mechanics.gambling.lottery;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import net.mandomc.core.guis.GUIManager;
 import net.mandomc.core.guis.InventoryButton;
 import net.mandomc.core.guis.InventoryGUI;
 import net.mandomc.core.modules.core.EconomyModule;
+import net.mandomc.core.LangManager;
 import net.milkbowl.vault.economy.Economy;
 
 import java.util.ArrayList;
@@ -105,7 +109,7 @@ public class LotteryGUI extends InventoryGUI {
         for (int i = 0; i < getInventory().getSize(); i++) {
             addButton(i, new InventoryButton()
                     .creator(p -> filler)
-                    .consumer(e -> {}));
+                    .consumer(eventvent -> {}));
         }
     }
 
@@ -136,19 +140,19 @@ public class LotteryGUI extends InventoryGUI {
                 .creator(p -> buildItem(section, "%price%", String.valueOf(getPrice())))
                 .consumer(event -> {
 
-                    Player p = (Player) event.getWhoClicked();
+                    Player clicker = (Player) event.getWhoClicked();
 
                     int max = LotteryConfig.get().getInt("lottery.max-tickets-per-player");
-                    int current = LotteryManager.getTickets(p.getUniqueId());
+                    int current = LotteryManager.getTickets(clicker.getUniqueId());
 
                     if (current >= max) {
-                        p.sendMessage(prefix("&cYou already reached max tickets."));
+                    clicker.sendMessage(LangManager.get("lottery.max-tickets"));
                         return;
                     }
 
                     int remaining = max - current;
 
-                    p.showDialog(LotteryDialogFactory.create(p, remaining, getPrice()));
+                    clicker.showDialog(LotteryDialogFactory.create(clicker, remaining, getPrice()));
                 });
     }
 
@@ -198,15 +202,5 @@ public class LotteryGUI extends InventoryGUI {
      */
     private String color(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
-    }
-
-    /**
-     * Formats a prefixed message.
-     *
-     * @param msg message content
-     * @return formatted message
-     */
-    private String prefix(String msg) {
-        return color("&6&lLottery &8» " + msg);
     }
 }

@@ -1,18 +1,40 @@
 package net.mandomc.system.planets.tatooine;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import net.mandomc.core.LangManager;
+
 import net.mandomc.MandoMC;
 import net.mandomc.system.items.ItemRegistry;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
+/**
+ * Handles the Tatooine decorated-pot loot system.
+ *
+ * A fixed pool of pot locations is maintained on the map. A limited number
+ * are active (visible) at any time. When a player right-clicks a pot, it
+ * breaks, drops weighted loot, and respawns at a distant location after a delay.
+ */
 public class TatooinePotListener implements Listener {
 
     private final Random random = new Random();
@@ -22,18 +44,23 @@ public class TatooinePotListener implements Listener {
 
     private final int MAX_ACTIVE = 10;
 
+    /**
+     * Constructs the listener and loads all pot locations.
+     */
     public TatooinePotListener() {
         loadLocations();
     }
 
-    // =========================
-    // INIT
-    // =========================
-
+    /**
+     * Spawns the initial set of active pots.
+     */
     public void enable() {
         spawnInitialPots();
     }
 
+    /**
+     * Removes all active pot blocks and clears the tracking set.
+     */
     public void disable() {
         for (Location loc : activePots) {
             loc.getBlock().setType(Material.AIR);
@@ -64,9 +91,8 @@ public class TatooinePotListener implements Listener {
             List<Location> available = new ArrayList<>(allLocations);
             available.removeAll(activePots);
 
-            // 🔥 filter for distance (far away)
-            available.removeIf(loc -> loc.distanceSquared(oldLoc) < 400); 
-            // 400 = 20 blocks (20^2)
+            // filter for distance (far away)
+            available.removeIf(loc -> loc.distanceSquared(oldLoc) < 400); // 400 = 20 blocks (20^2)
 
             // fallback if nothing far enough
             if (available.isEmpty()) {
@@ -79,13 +105,17 @@ public class TatooinePotListener implements Listener {
             Location newLoc = available.get(random.nextInt(available.size()));
             spawnPot(newLoc);
 
-        }, 200L); // ⏱ 10 seconds
+        }, 200L); // 10 seconds
     }
 
-    // =========================
-    // CLICK LOGIC
-    // =========================
-
+    /**
+     * Handles a player right-clicking a decorated pot.
+     *
+     * Cancels the event, plays effects, gives loot, removes the block,
+     * and schedules a respawn at a new location.
+     *
+     * @param event the player interact event
+     */
     @EventHandler
     public void onClick(PlayerInteractEvent event) {
 
@@ -104,7 +134,7 @@ public class TatooinePotListener implements Listener {
 
         Player player = event.getPlayer();
 
-        // ✨ Effects
+        // effects
         loc.getWorld().spawnParticle(
                 Particle.CLOUD,
                 loc.clone().add(0.5, 1, 0.5),
@@ -120,7 +150,7 @@ public class TatooinePotListener implements Listener {
                 1f
         );
 
-        // 🎁 Loot
+        // loot
         List<String> items = ItemRegistry.getItemIds().stream()
                 .filter(id -> ItemRegistry.hasTag(id, "TATOOINEPOTS"))
                 .toList();
@@ -138,17 +168,18 @@ public class TatooinePotListener implements Listener {
             }
         }
 
-        player.sendMessage("§6You rummage through the pot...");
+        player.sendMessage(LangManager.get("tatooine.pot-rummage"));
 
-        // 💥 Remove + respawn
         block.setType(Material.AIR);
         respawnPotDelayed(loc);
     }
 
-    // =========================
-    // WEIGHTED LOOT
-    // =========================
-
+    /**
+     * Picks a random item ID from the list using rarity-based weights.
+     *
+     * @param items the list of candidate item IDs
+     * @return the selected item ID
+     */
     private String pickWeighted(List<String> items) {
 
         Map<String, Double> weights = new HashMap<>();
@@ -187,10 +218,6 @@ public class TatooinePotListener implements Listener {
 
         return items.get(0);
     }
-
-    // =========================
-    // HARDCODED LOCATIONS
-    // =========================
 
     private void loadLocations() {
 
@@ -258,6 +285,6 @@ public class TatooinePotListener implements Listener {
         allLocations.add(new Location(world, 1677, 22, 1681));
         allLocations.add(new Location(world, 1676, 22, 1680));
 
-        // (trimmed for readability — continue same pattern)
+        // (trimmed for readability --- continue same pattern)
     }
 }

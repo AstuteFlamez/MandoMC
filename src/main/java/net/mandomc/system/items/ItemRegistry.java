@@ -7,7 +7,12 @@ import org.bukkit.inventory.ItemStack;
 import net.mandomc.MandoMC;
 import net.mandomc.system.items.config.ItemsConfig;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Central registry for all loaded items.
@@ -21,10 +26,15 @@ public final class ItemRegistry {
     private static final Map<String, String> rarities = new HashMap<>();
     private static final Map<String, Set<String>> tags = new HashMap<>();
 
-    /* =====================================================
-       REGISTER
-    ===================================================== */
-
+    /**
+     * Registers an item with its metadata.
+     *
+     * @param id       the item identifier
+     * @param item     the ItemStack to register
+     * @param category the category name
+     * @param rarity   the rarity name
+     * @param itemTags the list of tags for this item
+     */
     public static void register(
             String id,
             ItemStack item,
@@ -40,10 +50,9 @@ public final class ItemRegistry {
         tags.put(id, normalizeTags(itemTags));
     }
 
-    /* =====================================================
-       RELOAD (🔥 THIS IS WHAT YOU NEEDED)
-    ===================================================== */
-
+    /**
+     * Clears and rebuilds the registry from all loaded item configs.
+     */
     public static void reload() {
 
         clear();
@@ -84,10 +93,9 @@ public final class ItemRegistry {
                 .info("ItemRegistry loaded " + loaded + " items.");
     }
 
-    /* =====================================================
-       CLEAR
-    ===================================================== */
-
+    /**
+     * Clears all registered items and their metadata.
+     */
     public static void clear() {
         items.clear();
         categories.clear();
@@ -95,42 +103,75 @@ public final class ItemRegistry {
         tags.clear();
     }
 
-    /* =====================================================
-       GETTERS
-    ===================================================== */
-
+    /**
+     * Returns a clone of the registered item, or null if not found.
+     *
+     * @param id the item identifier
+     * @return a cloned ItemStack, or null
+     */
     public static ItemStack get(String id) {
         ItemStack item = items.get(normalizeId(id));
         return item == null ? null : item.clone();
     }
 
+    /**
+     * Returns all registered item IDs.
+     *
+     * @return the set of item IDs
+     */
     public static Set<String> getItemIds() {
         return items.keySet();
     }
 
+    /**
+     * Returns the category for the given item ID.
+     *
+     * @param id the item identifier
+     * @return the category string
+     */
     public static String getCategory(String id) {
         return categories.get(normalizeId(id));
     }
 
+    /**
+     * Returns the rarity for the given item ID, defaulting to "common".
+     *
+     * @param id the item identifier
+     * @return the rarity string
+     */
     public static String getRarity(String id) {
         return rarities.getOrDefault(normalizeId(id), "common");
     }
 
+    /**
+     * Returns the tags associated with the given item ID.
+     *
+     * @param id the item identifier
+     * @return a set of tag strings (uppercase)
+     */
     public static Set<String> getTags(String id) {
         return tags.getOrDefault(normalizeId(id), Collections.emptySet());
     }
 
+    /**
+     * Returns true if the item has the specified tag.
+     *
+     * @param id  the item identifier
+     * @param tag the tag to check (case-insensitive)
+     * @return true if the item has the tag
+     */
     public static boolean hasTag(String id, String tag) {
         return getTags(id).contains(tag.toUpperCase());
     }
 
+    /**
+     * Returns the distinct set of all registered category values.
+     *
+     * @return a set of category strings
+     */
     public static Set<String> getCategories() {
         return new HashSet<>(categories.values());
     }
-
-    /* =====================================================
-       HELPERS
-    ===================================================== */
 
     private static String normalizeId(String id) {
         return id.toLowerCase();

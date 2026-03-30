@@ -1,19 +1,33 @@
 package net.mandomc.system.events.types.jabba_dungeon;
 
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import net.mandomc.system.events.EventManager;
 import net.mandomc.system.events.GameEvent;
+import net.mandomc.core.LangManager;
 import net.mandomc.system.items.ItemRegistry;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
+/**
+ * Listens for players right-clicking chests during the Jabba's Dungeon event.
+ *
+ * When the Jabba event is active in the Tatooine world, chests give weighted-random
+ * loot from the JABBA item tag pool and are removed after looting.
+ */
 public class JabbaChestListener implements Listener {
 
     private final Random random = new Random();
@@ -28,7 +42,6 @@ public class JabbaChestListener implements Listener {
 
         Player player = event.getPlayer();
 
-        // 🔥 DEBUG EVENT + WORLD CHECK
         if (!isJabbaActive(player)) {
             return;
         }
@@ -83,7 +96,7 @@ public class JabbaChestListener implements Listener {
             }
         }
 
-        player.sendMessage("§6You looted a stash!");
+        player.sendMessage(LangManager.get("jabba.looted-stash"));
 
         block.setType(Material.AIR);
     }

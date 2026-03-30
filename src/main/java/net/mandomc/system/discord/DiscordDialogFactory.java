@@ -12,10 +12,15 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 import org.bukkit.entity.Player;
 
+import net.mandomc.core.LangManager;
+
 import java.util.List;
 
 /**
- * Builds the Discord dialog.
+ * Builds the Discord information dialog.
+ *
+ * Sends a clickable fallback message to the player and returns a dialog
+ * with the Discord invite link embedded as a clickable body element.
  */
 public class DiscordDialogFactory {
 
@@ -29,18 +34,13 @@ public class DiscordDialogFactory {
      */
     public static Dialog create(Player player) {
 
-        // 🔗 Send fallback clickable message immediately
         player.sendMessage(
-                Component.text("Click here to join: ", NamedTextColor.GRAY)
-                        .append(Component.text(DISCORD_LINK, NamedTextColor.AQUA)
-                                .clickEvent(ClickEvent.openUrl(DISCORD_LINK)))
+                net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
+                        .legacySection()
+                        .deserialize(LangManager.get("discord.join-link", "%link%", DISCORD_LINK))
         );
-
         return Dialog.create(builder -> builder.empty()
 
-                // =========================
-                // 🧱 BASE
-                // =========================
                 .base(DialogBase.builder(
                                 Component.text("Join Our Discord", NamedTextColor.AQUA)
                         )
@@ -61,9 +61,6 @@ public class DiscordDialogFactory {
                         .build()
                 )
 
-                // =========================
-                // 🔘 BUTTONS (visual only)
-                // =========================
                 .type(DialogType.confirmation(
 
                         ActionButton.create(

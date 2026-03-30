@@ -1,8 +1,10 @@
 package net.mandomc.system.items.listeners;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
 import net.mandomc.MandoMC;

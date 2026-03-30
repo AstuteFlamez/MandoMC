@@ -6,7 +6,11 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import net.mandomc.MandoMC;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class ParkourConfig {
 

@@ -11,6 +11,7 @@ import com.ticxo.modelengine.api.model.ActiveModel;
 
 import net.mandomc.content.vehicles.Vehicle;
 import net.mandomc.content.vehicles.VehicleData;
+import net.mandomc.core.LangManager;
 import net.mandomc.mechanics.fuel.FuelManager;
 
 public class VehicleFuelManager {
@@ -39,7 +40,7 @@ public class VehicleFuelManager {
 
         if (fuel <= 0) {
 
-            player.sendActionBar("§c⚠ Vehicle out of fuel!");
+            player.sendActionBar(LangManager.get("vehicles.out-of-fuel"));
 
             model.getMountManager().ifPresent(m -> m.dismountDriver());
 

@@ -1,7 +1,14 @@
 package net.mandomc.system.events.types.jabba_dungeon;
 
-import org.bukkit.*;
-import org.bukkit.command.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -9,10 +16,19 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.LangManager;
 import net.mandomc.system.items.ItemRegistry;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
+/**
+ * Handles the /key command for spawning dungeon keycards.
+ *
+ * Supports get (self), give (target player), and drop (world location) sub-commands.
+ */
 public class KeyCommand implements CommandExecutor, TabCompleter {
 
     private final NamespacedKey KEY_ID;
@@ -25,10 +41,7 @@ public class KeyCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (args.length < 3) {
-            sender.sendMessage("§7Usage:");
-            sender.sendMessage("§7/key get <dungeon> <door>");
-            sender.sendMessage("§7/key give <dungeon> <door> <player>");
-            sender.sendMessage("§7/key drop <dungeon> <door> <x> <y> <z> [world]");
+            sender.sendMessage(LangManager.get("jabba.key-cmd.usage"));
             return true;
         }
 
@@ -38,19 +51,19 @@ public class KeyCommand implements CommandExecutor, TabCompleter {
         try {
             door = Integer.parseInt(args[2]);
         } catch (NumberFormatException e) {
-            sender.sendMessage("§cDoor must be a number.");
+            sender.sendMessage(LangManager.get("jabba.key-cmd.invalid-door-number"));
             return true;
         }
 
         Integer doorId = getDoorId(door);
         if (doorId == null) {
-            sender.sendMessage("§cInvalid door.");
+            sender.sendMessage(LangManager.get("jabba.key-cmd.invalid-door"));
             return true;
         }
 
         ItemStack key = createKey(door, doorId);
         if (key == null) {
-            sender.sendMessage(ChatColor.RED + "Keycard item not found.");
+            sender.sendMessage(LangManager.get("jabba.key-cmd.item-not-found"));
             return true;
         }
 
@@ -58,36 +71,36 @@ public class KeyCommand implements CommandExecutor, TabCompleter {
 
             case "get": {
                 if (!(sender instanceof Player player)) {
-                    sender.sendMessage("§cOnly players can use this.");
+                    sender.sendMessage(LangManager.get("jabba.key-cmd.players-only"));
                     return true;
                 }
 
                 player.getInventory().addItem(key);
-                player.sendMessage("§7Given key for door " + door);
+                player.sendMessage(LangManager.get("jabba.key-cmd.given-self", "%door%", String.valueOf(door)));
                 break;
             }
 
             case "give": {
                 if (args.length < 4) {
-                    sender.sendMessage("§7Usage: /key give <dungeon> <door> <player>");
+                    sender.sendMessage(LangManager.get("jabba.key-cmd.usage-give"));
                     return true;
                 }
 
                 Player target = Bukkit.getPlayer(args[3]);
                 if (target == null) {
-                    sender.sendMessage("§cPlayer not found.");
+                    sender.sendMessage(LangManager.get("jabba.key-cmd.player-not-found"));
                     return true;
                 }
 
                 target.getInventory().addItem(key);
-                sender.sendMessage("§7Given key to " + target.getName());
+                sender.sendMessage(LangManager.get("jabba.key-cmd.given-other", "%player%", target.getName()));
                 break;
             }
 
             case "drop": {
 
                 if (args.length < 6) {
-                    sender.sendMessage("§7Usage: /key drop <dungeon> <door> <x> <y> <z> [world]");
+                    sender.sendMessage(LangManager.get("jabba.key-cmd.usage-drop"));
                     return true;
                 }
 
@@ -98,19 +111,17 @@ public class KeyCommand implements CommandExecutor, TabCompleter {
 
                     World world;
 
-                    // ✅ If sender is player → use their world
                     if (sender instanceof Player player) {
                         world = player.getWorld();
                     } else {
-                        // ✅ Console must specify world
                         if (args.length < 7) {
-                            sender.sendMessage("§cConsole must specify world.");
+                            sender.sendMessage(LangManager.get("jabba.key-cmd.must-specify-world"));
                             return true;
                         }
 
                         world = Bukkit.getWorld(args[6]);
                         if (world == null) {
-                            sender.sendMessage("§cInvalid world.");
+                            sender.sendMessage(LangManager.get("jabba.key-cmd.invalid-world"));
                             return true;
                         }
                     }
@@ -119,17 +130,17 @@ public class KeyCommand implements CommandExecutor, TabCompleter {
 
                     world.dropItemNaturally(loc, key);
 
-                    sender.sendMessage("§7Dropped key at location.");
+                    sender.sendMessage(LangManager.get("jabba.key-cmd.dropped"));
 
                 } catch (NumberFormatException e) {
-                    sender.sendMessage("§cInvalid coordinates.");
+                    sender.sendMessage(LangManager.get("jabba.key-cmd.invalid-coordinates"));
                 }
 
                 break;
             }
 
             default:
-                sender.sendMessage("§cUnknown subcommand.");
+                sender.sendMessage(LangManager.get("jabba.key-cmd.unknown-sub"));
         }
 
         return true;

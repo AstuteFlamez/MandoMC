@@ -1,0 +1,325 @@
+# ══════════════════════════════════════════
+#  MandoMC  ·  lang.yml
+#  All player-facing messages, organised by feature.
+#  Colour codes use the & prefix.
+#  Placeholders are surrounded by  %percent%  signs.
+# ══════════════════════════════════════════
+
+# ──────────────────────────────────────────
+# CORE  (reload command)
+#   prefix colour: &4  dark-red
+# ──────────────────────────────────────────
+core:
+  reload:
+    no-permission:  "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou do not have permission to run this command."
+    reloading:      "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Reloading plugin..."
+    success:        "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aReload complete."
+    failure:        "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cReload failed. Check the console."
+
+# ──────────────────────────────────────────
+# LINK / DISCORD ACCOUNT LINKING
+#   prefix colour: &9  blue
+# ──────────────────────────────────────────
+link:
+  players-only:    "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayers only."
+  already-linked:  "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou are already linked to Discord."
+  code:            "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aYour link code: &e%code%"
+  instructions:    "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Use &b/link %code% &7in Discord."
+  success:         "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &a✔ Your Discord account has been linked!"
+  error:           "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cError generating link code. Try again later."
+
+# ──────────────────────────────────────────
+# DISCORD COMMAND  (/discord)
+# ──────────────────────────────────────────
+discord:
+  players-only:  "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayers only."
+  # fallback clickable message sent before the dialog opens
+  join-link:     "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Join our Discord: &b%link%"
+
+# ──────────────────────────────────────────
+# EVENTS  (/event)
+#   prefix colour: &e  yellow
+# ──────────────────────────────────────────
+events:
+  players-only:   "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayers only."
+  no-permission:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou do not have permission to run this command."
+  unknown-sub:    "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cUnknown subcommand."
+
+  usage:
+    start:   "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cUsage: /event start <id>"
+    next:    "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /event next <id>"
+    enable:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /event enable <id>"
+    disable: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /event disable <id>"
+
+  # console-only help lines (when sender is not a player)
+  help:
+    gui:      "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7/event gui"
+    start:    "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7/event start <id>"
+    stop:     "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7/event stop"
+    forceend: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7/event forceend"
+    next:     "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7/event next <id>"
+    reroll:   "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7/event reroll"
+    status:   "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7/event status"
+    list:     "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7/event list"
+    reload:   "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7/event reload"
+    enable:   "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7/event enable <id>"
+    disable:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7/event disable <id>"
+
+  start:
+    success:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Started event &f%id%"
+    failure:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Could not start event &f%id%"
+
+  stop:
+    no-active:    "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7No active event."
+    force-ended:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Force-ended the active event."
+
+  next:
+    queued:   "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Queued next event: &f%id%"
+    failure:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Could not queue event &f%id%"
+
+  reroll:
+    no-eligible:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7No eligible event could be selected."
+    success:      "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Rerolled next event to &f%event%"
+
+  reload-done: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Reloaded the event system."
+
+  status:
+    header:    "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Event Status"
+    state:     "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7State: &f%state%"
+    active:    "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Active: &f%active%"
+    queued:    "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Queued: &f%queued%"
+    next-hour: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Next hour in: &f%seconds%s"
+
+  list:
+    header: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Configured Events:"
+    entry:  "&8- &f%id%"
+
+  enable:
+    success:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Enabled &f%id%"
+    failure:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Failed to enable &f%id%"
+
+  disable:
+    success:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Disabled &f%id%"
+    failure:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Failed to disable &f%id%"
+
+  # Broadcast titles shown to all players when an event starts / ends
+  broadcast:
+    started-title:   "&a&lEVENT STARTED"
+    ended-title:     "&c&lEVENT ENDED"
+
+# ──────────────────────────────────────────
+# KOTH EVENT  (configured partly via events.yml)
+# ──────────────────────────────────────────
+koth:
+  # These are defaults — override in events/<koth>.yml under the same keys.
+  start-message:        "&6&lKOTH &r&8» &7Hill active at &f(%x%, %y%, %z%)&7!"
+  capture-message:      "&6&lKOTH &r&8» &e%player% &7is capturing the hill!"
+  contested-message:    "&6&lKOTH &r&8» &cThe hill is contested!"
+  winner-message:       "&6&lKOTH &r&8» &a%player% &7captured the hill!"
+  timeout-message:      "&6&lKOTH &r&8» &cNo winner — KOTH ended."
+  chest-spawn-message:  "&6&lKOTH &r&8» &aA reward chest has appeared at the hill!"
+  chest-claimed-message: "&6&lKOTH &r&8» &e%player% &7claimed the reward chest!"
+
+# ──────────────────────────────────────────
+# JABBA'S DUNGEON EVENT
+# ──────────────────────────────────────────
+jabba:
+  dungeon-opened:   "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7The dungeon has opened!"
+  dungeon-closed:   "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7The dungeon has closed."
+  room-enter:       "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Entering Room &f%room%&7..."
+  dungeon-complete: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aDungeon Complete!"
+  key-dropped:      "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &eKey dropped for Room &f%room%"
+  looted-stash:     "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &6You looted a stash!"
+
+  key-cmd:
+    usage:                "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /key get <dungeon> <door>  |  give <dungeon> <door> <player>  |  drop ..."
+    invalid-door-number:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cDoor must be a number."
+    invalid-door:         "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cInvalid door."
+    item-not-found:       "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cKeycard item not found."
+    players-only:         "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayers only."
+    given-self:           "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Given key for door &f%door%"
+    usage-give:           "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /key give <dungeon> <door> <player>"
+    player-not-found:     "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayer not found."
+    given-other:          "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Given key to &f%player%"
+    usage-drop:           "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /key drop <dungeon> <door> <x> <y> <z> [world]"
+    must-specify-world:   "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cConsole must specify a world."
+    invalid-world:        "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cInvalid world."
+    dropped:              "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Key dropped at location."
+    invalid-coordinates:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cInvalid coordinates."
+    unknown-sub:          "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cUnknown subcommand."
+
+# ──────────────────────────────────────────
+# BESKAR RUSH EVENT
+# ──────────────────────────────────────────
+beskar:
+  started: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7The rush has begun!"
+  ended:   "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7The rush has ended."
+
+# ──────────────────────────────────────────
+# VEHICLES
+#   prefix colour: &9  blue
+# ──────────────────────────────────────────
+vehicles:
+  wrong-world:      "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cVehicles can only be deployed in &f%world%&c."
+  invalid-item:     "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cInvalid vehicle item."
+  no-weapon-config: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cThis vehicle has no weapon system configured."
+  deployed:         "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aVehicle deployed."
+  already-deployed: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou already have a vehicle deployed."
+  picked-up:        "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aVehicle picked up."
+  no-fuel:          "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &c⚠ This vehicle has no fuel."
+  out-of-fuel:      "&c⚠ Vehicle out of fuel!"
+  fully-repaired:   "&aVehicle fully repaired."
+  weapon:
+    recharging:  "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cWeapon recharging: &e%seconds%s"
+    out-of-ammo: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cOut of &f%ammo%&c!"
+
+# ──────────────────────────────────────────
+# LIGHTSABERS
+#   prefix colour: &3  dark-aqua
+# ──────────────────────────────────────────
+lightsabers:
+  throw-cooldown: "&3&lᴍᴀɴᴅᴏᴍᴄ &r&8» &6Saber cooldown: &c%seconds%&6s"
+
+# ──────────────────────────────────────────
+# FUEL  (action-bar messages — no plugin-prefix)
+# ──────────────────────────────────────────
+fuel:
+  transfer-halted: "&8⛽ Fuel transfer halted."
+
+  # Barrel ↔ Canister
+  barrel:
+    canister-empty: "&c⚠ Canister empty &8(%current%/%max%)"
+    barrel-full:    "&c⚠ Barrel full &8(%current%/%max%)"
+    depositing:     "&6⛽ Depositing &e%can%/%can-max% &8→ &bBarrel &e%barrel%/%barrel-max%"
+    barrel-empty:   "&c⚠ Barrel empty &8(%current%/%max%)"
+    canister-full:  "&c⚠ Canister full &8(%current%/%max%)"
+    refueling:      "&b⛽ Refueling &e%can%/%can-max% &8← &6Barrel &e%barrel%/%barrel-max%"
+
+  # Vehicle ↔ Canister
+  vehicle:
+    canister-empty: "&c⚠ Canister empty &8(%current%/%max%)"
+    tank-full:      "&c⚠ Vehicle fuel tank full &8(%current%/%max%)"
+    fueling:        "&6⛽ Fueling Vehicle &e%can%/%can-max% &8→ &bVehicle &e%vehicle%/%vehicle-max%"
+    tank-empty:     "&c⚠ Vehicle fuel tank empty &8(%current%/%max%)"
+    canister-full:  "&c⚠ Canister full &8(%current%/%max%)"
+    draining:       "&b⛽ Draining Vehicle &e%can%/%can-max% &8← &6Vehicle &e%vehicle%/%vehicle-max%"
+
+# BOUNTIES
+#   prefix colour: &c  red
+# ──────────────────────────────────────────
+bounties:
+  players-only:       "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayers only."
+  no-permission:      "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou do not have permission."
+  player-not-found:   "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayer not found."
+  already-placed:     "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou already have an active bounty placed."
+  no-active-bounty:   "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou have no active bounty to remove."
+  bounty-not-found:   "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cBounty not found."
+  something-wrong:    "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cSomething went wrong."
+  refunded:           "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aBounty removed and credits refunded."
+  no-location:        "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cNo location data available."
+  last-location:      "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &eLast known location: &f%x%, %y%, %z%"
+  not-enough-money:   "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cNot enough money."
+  placed-broadcast:   "&c⚠ &f%target% &chas a bounty of &6$%amount%&c!"
+
+  help:
+    header: "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cBounty Commands"
+    place:  "&8  /bounty place &7— Place a bounty on a player"
+    remove: "&8  /bounty remove &7— Remove your active bounty"
+    gui:    "&8  /bounty gui &7— Open bounty board &8(Admin)"
+
+# ──────────────────────────────────────────
+# LOTTERY
+#   prefix colour: &6  gold
+# ──────────────────────────────────────────
+lottery:
+  no-permission:    "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou do not have permission."
+  usage:            "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cUsage: /lottery open <player>"
+  player-not-found: "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayer not found."
+  gui-opened:       "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aOpened lottery GUI for &f%player%"
+  max-tickets:      "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou have already reached the ticket limit."
+  cant-buy-many:    "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou can't buy that many tickets."
+  not-enough-money: "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cNot enough money."
+  # %amount% = tickets bought, %cost% = total cost
+  purchased:        "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aPurchased &f%amount% ticket(s) &afor &6$%cost%&a."
+  # Broadcast when no one entered the draw
+  no-players:       "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cLottery rolled but no players entered."
+  # Broadcast announcing the winner  — %winner% = player name, %amount% = winnings
+  winner:           "&6&lLottery &r&8» &a%winner% &7won &6$%amount%&7!"
+
+# ──────────────────────────────────────────
+# WARPS
+#   prefix colour: &3  dark-aqua
+# ──────────────────────────────────────────
+warps:
+  players-only:  "&3&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayers only."
+  no-warps:      "&3&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cNo warps configured."
+  not-found:     "&3&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cWarp not found."
+  world-offline: "&3&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cWorld not loaded."
+
+# ──────────────────────────────────────────
+# PARKOUR  (Ilum)
+#   prefix colour: &3  dark-aqua  /  errors: &4  dark-red
+# ──────────────────────────────────────────
+parkour:
+  left:              "&3&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aYou left the parkour."
+  start-not-set:     "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cStart location not set."
+  commands-disabled: "&3&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Commands are disabled while in parkour."
+  server-only:       "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cThis command can only be run by the server."
+  usage-finish:      "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /parkourfinish <player>"
+  player-not-found:  "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Player not found."
+
+  finish:
+    # sendTitle arguments
+    title:     "&6Course Complete!"
+    subtitle:  "&eRewards Granted"
+    # Chat messages — %time% = formatted time string
+    time:      "&3&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aYour time: &f%time%"
+    best-time: "&3&lᴍᴀɴᴅᴏᴍᴄ &r&8» &6Your best time: &f%time%"
+
+# ──────────────────────────────────────────
+# SHOPS
+#   prefix colour: &6  gold
+# ──────────────────────────────────────────
+shops:
+  no-permission:     "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou do not have permission to use this command."
+  usage:             "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /shop <buy|sell>"
+  usage-buy:         "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /shop buy <shop> [player]"
+  usage-sell:        "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /shop sell [player]"
+  player-not-found:  "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayer not found."
+  console-no-player: "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cConsole must specify a player: /shop buy <shop> <player>"
+  not-found:         "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cShop not found: &7%shop%"
+  item-unavailable:  "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cThis item is currently unavailable."
+  not-enough-money:  "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cNot enough money. You need &6$%cost%&c."
+  inventory-full:    "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYour inventory is full."
+  # %amount% = quantity, %item% = display name, %cost% = formatted price
+  purchased:         "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aPurchased &f%amount%x %item% &afor &6$%cost%&a."
+  no-sellable:       "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7No sellable items found in your inventory."
+  # %amount% = items sold, %profit% = earnings
+  sold:              "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aSold &f%amount% item(s) &afor &6$%profit%&a."
+
+# ──────────────────────────────────────────
+# ITEMS (admin commands: /get, /give, /drop, /recipe)
+#   prefix colour: &4  dark-red
+# ──────────────────────────────────────────
+items:
+  no-permission:       "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou do not have permission."
+  players-only:        "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Only players can use this command."
+  unknown-item:        "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Unknown item: &f%id%"
+  # /get
+  received:            "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Received &f%id%&7."
+  # /give — message to the sender (admin)
+  gave:                "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aGave &f%id% &ato &f%player%&a."
+  gave-via-browser:    "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aGave item to &f%player%&a."
+  usage-give:          "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /give <player> [item]"
+  console-specify-item: "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Console must specify an item."
+  # /drop
+  usage-drop:          "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /drop <item> [x y z] [world] [amount]"
+  console-drop-full:   "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cConsole usage: /drop <item> <x> <y> <z> <world> [amount]"
+  invalid-world:       "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cInvalid world."
+  dropped:             "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Dropped &f%id% &7×&f%amount%&7."
+  invalid-amount:      "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cInvalid amount: &7%value%"
+  # /recipe
+  no-recipe:           "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7That item has no recipe."
+
+tatooine:
+  pot-rummage: "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &6You rummage through the pot..."

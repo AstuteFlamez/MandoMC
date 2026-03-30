@@ -1,10 +1,14 @@
 package net.mandomc.system.items.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import net.mandomc.core.LangManager;
 import net.mandomc.system.items.ItemRegistry;
 import net.mandomc.system.items.guis.ItemBrowserGUI;
 
@@ -37,18 +41,18 @@ public class GiveCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!sender.hasPermission(PERMISSION)) {
-            sender.sendMessage(prefix("&cYou do not have permission."));
+            sender.sendMessage(LangManager.get("items.no-permission"));
             return true;
         }
 
         if (args.length == 0) {
-            sender.sendMessage(prefix("&7Usage: /give <player> [item]"));
+            sender.sendMessage(LangManager.get("items.usage-give"));
             return true;
         }
 
         Player target = Bukkit.getPlayerExact(args[0]);
         if (target == null) {
-            sender.sendMessage(prefix("&7Player not found."));
+            sender.sendMessage(LangManager.get("items.player-not-found"));
             return true;
         }
 
@@ -56,7 +60,7 @@ public class GiveCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
 
             if (!(sender instanceof Player player)) {
-                sender.sendMessage(prefix("&7Console must specify an item."));
+                sender.sendMessage(LangManager.get("items.console-specify-item"));
                 return true;
             }
 
@@ -69,13 +73,13 @@ public class GiveCommand implements CommandExecutor, TabCompleter {
 
         ItemStack item = ItemRegistry.get(id);
         if (item == null) {
-            sender.sendMessage(prefix("&7Unknown item."));
+            sender.sendMessage(LangManager.get("items.unknown-item", "%id%", id));
             return true;
         }
 
         target.getInventory().addItem(item.clone());
 
-        sender.sendMessage(prefix("&aGave &f" + id + " &ato &f" + target.getName()));
+        sender.sendMessage(LangManager.get("items.gave", "%id%", id, "%player%", target.getName()));
         return true;
     }
 
@@ -112,19 +116,5 @@ public class GiveCommand implements CommandExecutor, TabCompleter {
         }
 
         return List.of();
-    }
-
-    /**
-     * Formats a prefixed message.
-     */
-    private String prefix(String message) {
-        return color("&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» " + message);
-    }
-
-    /**
-     * Applies color formatting.
-     */
-    private String color(String text) {
-        return org.bukkit.ChatColor.translateAlternateColorCodes('&', text);
     }
 }

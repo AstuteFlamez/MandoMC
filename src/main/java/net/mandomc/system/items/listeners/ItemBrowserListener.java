@@ -4,10 +4,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.ItemStack;
 
+import net.mandomc.core.LangManager;
 import net.mandomc.system.items.ItemRegistry;
 import net.mandomc.system.items.ItemUtils;
 import net.mandomc.system.items.guis.ItemBrowserGUI;
@@ -137,7 +140,7 @@ public class ItemBrowserListener implements Listener {
 
         target.getInventory().addItem(item.clone());
 
-        player.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §aGave item to §f" + target.getName());
+        player.sendMessage(LangManager.get("items.gave-via-browser", "%player%", target.getName()));
     }
 
     /*

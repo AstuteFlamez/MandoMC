@@ -13,15 +13,27 @@ import net.mandomc.mechanics.fuel.managers.BarrelManager;
 import net.mandomc.system.items.ItemRegistry;
 import net.mandomc.system.items.ItemUtils;
 
+/**
+ * Listens for players picking up a placed rhydonium barrel.
+ *
+ * A sneaking player right-clicking a barrel armor stand (without holding a fuel item)
+ * transfers the barrel's current fuel into a portable barrel item and removes the stand.
+ */
 public class BarrelPickupListener implements Listener {
 
+    /**
+     * Handles right-click interaction with a barrel armor stand.
+     *
+     * Cancels the event and gives the player a barrel item with matching fuel level,
+     * then removes the armor stand and its hologram.
+     *
+     * @param event the entity interact event
+     */
     @EventHandler
     public void onPickupBarrel(PlayerInteractAtEntityEvent event) {
-
         Entity entity = event.getRightClicked();
 
         if (!(entity instanceof ArmorStand stand)) return;
-
         if (!stand.getScoreboardTags().contains("rhydonium_barrel")) return;
 
         Player player = event.getPlayer();
@@ -30,17 +42,9 @@ public class BarrelPickupListener implements Listener {
 
         ItemStack hand = player.getInventory().getItemInMainHand();
 
-        /* --------------------------------
-           Hand must NOT be fuel
-        -------------------------------- */
-
         if (hand != null && ItemUtils.hasTag(hand, "FUEL")) return;
 
         event.setCancelled(true);
-
-        /* --------------------------------
-           Get barrel item
-        -------------------------------- */
 
         ItemStack barrelModel = stand.getEquipment().getHelmet();
         ItemStack barrelItem = ItemRegistry.get("rhydonium_barrel");
@@ -51,10 +55,6 @@ public class BarrelPickupListener implements Listener {
         if (barrelItem != null) {
             player.getInventory().addItem(barrelItem);
         }
-
-        /* --------------------------------
-           Remove barrel entity
-        -------------------------------- */
 
         BarrelManager.removeHologram(stand);
         stand.remove();

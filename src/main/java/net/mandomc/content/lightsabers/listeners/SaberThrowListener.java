@@ -5,7 +5,10 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.SoundCategory;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.*;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -17,10 +20,16 @@ import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.LangManager;
 import net.mandomc.system.items.ItemUtils;
 import net.mandomc.system.items.config.ItemsConfig;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Handles lightsaber throwing ability.
@@ -109,7 +118,7 @@ public class SaberThrowListener implements Listener {
         long last = cooldowns.getOrDefault(player.getUniqueId(), 0L);
         long remaining = (cooldownSeconds * 1000L - (now - last)) / 1000;
 
-        player.sendMessage("§3§lᴍᴀɴᴅᴏᴍᴄ §r§8» §6Saber cooldown: §c" + remaining + "§6s");
+        player.sendMessage(LangManager.get("lightsabers.throw-cooldown", "%seconds%", String.valueOf(remaining)));
     }
 
     /**

@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
+import net.mandomc.core.LangManager;
 import net.mandomc.system.planets.ilum.configs.ParkourConfig;
 
 import org.bukkit.entity.Player;
@@ -91,7 +92,7 @@ public class ParkourProtectionListener implements Listener {
 
         if (!allowed.contains(command)) {
 
-            player.sendMessage("§3§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Commands are disabled in parkour.");
+            player.sendMessage(LangManager.get("parkour.commands-disabled"));
 
             event.setCancelled(true);
         }

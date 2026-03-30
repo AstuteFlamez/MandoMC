@@ -9,26 +9,25 @@ import net.mandomc.MandoMC;
 import net.mandomc.content.vehicles.config.VehicleConfig;
 
 /**
- * Maps item ids -> vehicle ids.
+ * Maps item ids to vehicle ids.
  *
- * Built from vehicle configs and supports full reload.
+ * Built from vehicle configs on load and supports full reload.
  */
 public final class VehicleRegistry {
 
     private static final Map<String, String> itemToVehicle = new HashMap<>();
 
-    /* =====================================================
-       LOAD / RELOAD
-    ===================================================== */
-
+    /**
+     * Loads all vehicle-to-item mappings from config.
+     *
+     * Clears any existing mappings before loading.
+     */
     public static void load() {
-
         clear();
 
         int loaded = 0;
 
         for (Map.Entry<String, FileConfiguration> entry : VehicleConfig.getAll().entrySet()) {
-
             String vehicleId = normalize(entry.getKey());
             FileConfiguration config = entry.getValue();
 
@@ -42,50 +41,48 @@ public final class VehicleRegistry {
 
             itemId = normalize(itemId);
 
-            // ⚠️ Prevent silent overrides
             if (itemToVehicle.containsKey(itemId)) {
                 MandoMC.getInstance().getLogger()
-                        .warning("Duplicate vehicle mapping for item '" + itemId +
-                                "' (overriding previous).");
+                        .warning("Duplicate vehicle mapping for item '" + itemId + "' (overriding previous).");
             }
 
             itemToVehicle.put(itemId, vehicleId);
             loaded++;
         }
 
-        MandoMC.getInstance().getLogger()
-                .info("VehicleRegistry loaded " + loaded + " vehicles.");
+        MandoMC.getInstance().getLogger().info("VehicleRegistry loaded " + loaded + " vehicles.");
     }
 
     /**
-     * Reloads the vehicle registry.
-     *
-     * Alias for load() for consistency with other systems.
+     * Reloads the vehicle registry. Alias for load.
      */
     public static void reload() {
         load();
     }
 
-    /* =====================================================
-       CLEAR
-    ===================================================== */
-
+    /**
+     * Clears all vehicle mappings.
+     */
     public static void clear() {
         itemToVehicle.clear();
     }
 
-    /* =====================================================
-       GETTERS
-    ===================================================== */
-
+    /**
+     * Returns the vehicle id associated with the given item id.
+     *
+     * @param itemId the item id to look up
+     * @return the vehicle id, or null if not mapped
+     */
     public static String getVehicleId(String itemId) {
         return itemToVehicle.get(normalize(itemId));
     }
 
-    /* =====================================================
-       HELPERS
-    ===================================================== */
-
+    /**
+     * Normalizes an id to lowercase for consistent lookups.
+     *
+     * @param id the id to normalize
+     * @return the lowercase id, or null if the input was null
+     */
     private static String normalize(String id) {
         return id == null ? null : id.toLowerCase();
     }

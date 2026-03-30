@@ -4,6 +4,7 @@ import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import net.mandomc.system.events.EventManager;
 import net.mandomc.system.events.GameEvent;
+import net.mandomc.core.LangManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,6 +13,12 @@ import org.bukkit.event.Listener;
 
 import java.util.UUID;
 
+/**
+ * Listens for MythicMob deaths during the Jabba's Dungeon event.
+ *
+ * Tracks when the last guard in a room is killed to drop a key,
+ * and ends the dungeon when the final boss (Rancor) dies.
+ */
 public class JabbaDungeonMobListener implements Listener {
 
     private final EventManager eventManager;
@@ -35,9 +42,6 @@ public class JabbaDungeonMobListener implements Listener {
         String mobName = mob.getType().getInternalName();
         int room = state.getCurrentRoom();
 
-        // =========================
-        // 🔥 BOSSES
-        // =========================
         if (mobName.equalsIgnoreCase("Bossk") ||
             mobName.equalsIgnoreCase("BobaFett")) {
 
@@ -46,14 +50,11 @@ public class JabbaDungeonMobListener implements Listener {
         }
 
         if (mobName.equalsIgnoreCase("Rancor")) {
-            Bukkit.broadcastMessage("§aDungeon Complete!");
-            dungeon.cleanupDungeon(); // 🔥 CLOSE ALL
+            Bukkit.broadcastMessage(LangManager.get("jabba.dungeon-complete"));
+            dungeon.cleanupDungeon();
             return;
         }
 
-        // =========================
-        // 🔥 NORMAL MOB TRACKING
-        // =========================
         UUID id = event.getEntity().getUniqueId();
 
         boolean last = dungeon.removeMob(room, id);
@@ -84,6 +85,6 @@ public class JabbaDungeonMobListener implements Listener {
                         world
         );
 
-        Bukkit.broadcastMessage("§eKey dropped for Room " + room);
+        Bukkit.broadcastMessage(LangManager.get("jabba.key-dropped", "%room%", String.valueOf(room)));
     }
 }

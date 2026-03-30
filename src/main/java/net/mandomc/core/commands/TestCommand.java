@@ -13,34 +13,29 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
 /**
- * Test command that gives the player a Notch head.
+ * Test command that gives the player a head item.
  */
 public class TestCommand implements CommandExecutor {
 
     @Override
-    public boolean onCommand(CommandSender sender,
-                             Command command,
-                             String label,
-                             String[] args) {
-
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage("Players only.");
             return true;
         }
 
         player.getInventory().addItem(getPlayerHead(player.getUniqueId()));
-
         player.sendMessage("§aGiven Notch head!");
 
         return true;
     }
 
     /**
-    * Creates a player head item for a given UUID.
-    *
-    * @param uuid The UUID of the player whose head is to be created.
-    * @return An {@link ItemStack} of type PLAYER_HEAD with the player's skin.
-    */
+     * Creates a player head item for the given UUID.
+     *
+     * @param uuid the UUID of the player whose head to create
+     * @return an ItemStack of type PLAYER_HEAD with the player skin, or null if the player is unknown
+     */
     public static ItemStack getPlayerHead(UUID uuid) {
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
         if (offlinePlayer.getName() == null) return null;
@@ -51,5 +46,4 @@ public class TestCommand implements CommandExecutor {
         head.setItemMeta(skullMeta);
         return head;
     }
-
 }

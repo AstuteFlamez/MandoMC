@@ -1,10 +1,14 @@
 package net.mandomc.mechanics.gambling.lottery;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import net.mandomc.core.guis.GUIManager;
+import net.mandomc.core.LangManager;
 
 /**
  * Command for managing lottery GUI access.
@@ -37,23 +41,23 @@ public class LotteryCommand implements CommandExecutor {
         if (!(sender instanceof ConsoleCommandSender) &&
                 !sender.hasPermission("mandomc.lottery.admin")) {
 
-            sender.sendMessage("§cNo permission.");
+            sender.sendMessage(LangManager.get("lottery.no-permission"));
             return true;
         }
 
         if (args.length != 2 || !args[0].equalsIgnoreCase("open")) {
-            sender.sendMessage("§cUsage: /lottery open <player>");
+            sender.sendMessage(LangManager.get("lottery.usage"));
             return true;
         }
 
         Player target = Bukkit.getPlayer(args[1]);
         if (target == null) {
-            sender.sendMessage("§cPlayer not found.");
+            sender.sendMessage(LangManager.get("lottery.player-not-found"));
             return true;
         }
 
         guiManager.openGUI(new LotteryGUI(guiManager), target);
-        sender.sendMessage("§aOpened lottery GUI for " + target.getName());
+        sender.sendMessage(LangManager.get("lottery.gui-opened", "%player%", target.getName()));
 
         return true;
     }

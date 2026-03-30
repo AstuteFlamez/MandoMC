@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import net.mandomc.system.events.EventManager;
 import net.mandomc.system.events.GameEvent;
 import net.mandomc.system.events.guis.EventMenu;
+import net.mandomc.core.LangManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +29,18 @@ public class EventCommand implements CommandExecutor, TabCompleter {
             if (sender instanceof Player player) {
                 new EventMenu(manager).open(player);
             } else {
-                sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7/event gui");
+                sender.sendMessage(LangManager.get("events.help.gui"));
                 if (sender.hasPermission("mandomc.event.admin")) {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7/event start <id>");
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7/event stop");
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7/event forceend");
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7/event next <id>");
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7/event reroll");
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7/event status");
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7/event list");
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7/event reload");
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7/event enable <id>");
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7/event disable <id>");
+                    sender.sendMessage(LangManager.get("events.help.start"));
+                    sender.sendMessage(LangManager.get("events.help.stop"));
+                    sender.sendMessage(LangManager.get("events.help.forceend"));
+                    sender.sendMessage(LangManager.get("events.help.next"));
+                    sender.sendMessage(LangManager.get("events.help.reroll"));
+                    sender.sendMessage(LangManager.get("events.help.status"));
+                    sender.sendMessage(LangManager.get("events.help.list"));
+                    sender.sendMessage(LangManager.get("events.help.reload"));
+                    sender.sendMessage(LangManager.get("events.help.enable"));
+                    sender.sendMessage(LangManager.get("events.help.disable"));
                 }
             }
             return true;
@@ -49,7 +50,7 @@ public class EventCommand implements CommandExecutor, TabCompleter {
 
         if (sub.equals("gui")) {
             if (!(sender instanceof Player player)) {
-                sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cPlayers only.");
+                sender.sendMessage(LangManager.get("events.players-only"));
                 return true;
             }
 
@@ -58,45 +59,45 @@ public class EventCommand implements CommandExecutor, TabCompleter {
         }
 
         if (!sender.hasPermission("mandomc.event.admin")) {
-            sender.sendMessage("§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cYou do not have permission to run this command.");
+            sender.sendMessage(LangManager.get("events.no-permission"));
             return true;
         }
 
         switch (sub) {
             case "start" -> {
                 if (args.length < 2) {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cUsage: /event start <id>");
+                    sender.sendMessage(LangManager.get("events.usage.start"));
                     return true;
                 }
 
                 if (manager.startEvent(args[1], true)) {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Started event §f" + args[1]);
+                    sender.sendMessage(LangManager.get("events.start.success", "%id%", args[1]));
                 } else {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Could not start event §f" + args[1]);
+                    sender.sendMessage(LangManager.get("events.start.failure", "%id%", args[1]));
                 }
             }
 
             case "stop", "forceend" -> {
                 GameEvent active = manager.getActiveEvent();
                 if (active == null) {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7No active event.");
+                    sender.sendMessage(LangManager.get("events.stop.no-active"));
                     return true;
                 }
 
                 manager.forceEndActiveEvent(true);
-                sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Force-ended active event.");
+                sender.sendMessage(LangManager.get("events.stop.force-ended"));
             }
 
             case "next" -> {
                 if (args.length < 2) {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Usage: /event next <id>");
+                    sender.sendMessage(LangManager.get("events.usage.next"));
                     return true;
                 }
 
                 if (manager.queueEvent(args[1])) {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Queued next event §f" + args[1]);
+                    sender.sendMessage(LangManager.get("events.next.queued", "%id%", args[1]));
                 } else {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Could not queue event §f" + args[1]);
+                    sender.sendMessage(LangManager.get("events.next.failure", "%id%", args[1]));
                 }
             }
 
@@ -104,62 +105,62 @@ public class EventCommand implements CommandExecutor, TabCompleter {
                 manager.rerollNextEvent();
                 GameEvent queued = manager.getQueuedEvent();
                 if (queued == null) {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7No eligible event could be selected.");
+                    sender.sendMessage(LangManager.get("events.reroll.no-eligible"));
                 } else {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Rerolled next event to §f" + queued.getDisplayName());
+                    sender.sendMessage(LangManager.get("events.reroll.success", "%event%", queued.getDisplayName()));
                 }
             }
 
             case "reload" -> {
                 manager.reload();
-                sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Reloaded event system.");
+                sender.sendMessage(LangManager.get("events.reload-done"));
             }
 
             case "status" -> {
                 GameEvent active = manager.getActiveEvent();
                 GameEvent queued = manager.getQueuedEvent();
 
-                sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Event Status");
-                sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7State: §f" + manager.getState());
-                sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Active: §f" + (active == null ? "None" : active.getDisplayName()));
-                sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Queued: §f" + (queued == null ? "None" : queued.getDisplayName()));
-                sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Next hour in: §f" + manager.getSecondsUntilNextHour() + "s");
+                sender.sendMessage(LangManager.get("events.status.header"));
+                sender.sendMessage(LangManager.get("events.status.state", "%state%", String.valueOf(manager.getState())));
+                sender.sendMessage(LangManager.get("events.status.active", "%active%", active == null ? "None" : active.getDisplayName()));
+                sender.sendMessage(LangManager.get("events.status.queued", "%queued%", queued == null ? "None" : queued.getDisplayName()));
+                sender.sendMessage(LangManager.get("events.status.next-hour", "%seconds%", String.valueOf(manager.getSecondsUntilNextHour())));
             }
 
             case "list" -> {
-                sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Configured Events:");
+                sender.sendMessage(LangManager.get("events.list.header"));
                 for (String id : manager.getEventIds()) {
-                    sender.sendMessage("§7- §f" + id);
+                    sender.sendMessage(LangManager.get("events.list.entry", "%id%", id));
                 }
             }
 
             case "enable" -> {
                 if (args.length < 2) {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Usage: /event enable <id>");
+                    sender.sendMessage(LangManager.get("events.usage.enable"));
                     return true;
                 }
 
                 if (manager.setEnabled(args[1], true)) {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Enabled §f" + args[1]);
+                    sender.sendMessage(LangManager.get("events.enable.success", "%id%", args[1]));
                 } else {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Failed to enable §f" + args[1]);
+                    sender.sendMessage(LangManager.get("events.enable.failure", "%id%", args[1]));
                 }
             }
 
             case "disable" -> {
                 if (args.length < 2) {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Usage: /event disable <id>");
+                    sender.sendMessage(LangManager.get("events.usage.disable"));
                     return true;
                 }
 
                 if (manager.setEnabled(args[1], false)) {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Disabled §f" + args[1]);
+                    sender.sendMessage(LangManager.get("events.disable.success", "%id%", args[1]));
                 } else {
-                    sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Failed to disable §f" + args[1]);
+                    sender.sendMessage(LangManager.get("events.disable.failure", "%id%", args[1]));
                 }
             }
 
-            default -> sender.sendMessage("§e§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Unknown subcommand.");
+            default -> sender.sendMessage(LangManager.get("events.unknown-sub"));
         }
 
         return true;

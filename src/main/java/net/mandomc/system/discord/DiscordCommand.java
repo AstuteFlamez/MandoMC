@@ -6,12 +6,22 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import io.papermc.paper.dialog.Dialog;
+import net.mandomc.core.LangManager;
 
 /**
- * Opens the Discord dialog.
+ * Opens the Discord dialog for the executing player.
  */
 public class DiscordCommand implements CommandExecutor {
 
+    /**
+     * Opens the Discord information dialog for the player.
+     *
+     * @param sender the command sender
+     * @param command the executed command
+     * @param label the command label
+     * @param args command arguments
+     * @return true always
+     */
     @Override
     public boolean onCommand(CommandSender sender,
                              Command command,
@@ -19,7 +29,7 @@ public class DiscordCommand implements CommandExecutor {
                              String[] args) {
 
         if (!(sender instanceof Player player)) {
-            sender.sendMessage("Players only.");
+            sender.sendMessage(LangManager.get("discord.players-only"));
             return true;
         }
 

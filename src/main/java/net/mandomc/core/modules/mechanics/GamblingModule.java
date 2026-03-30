@@ -1,36 +1,34 @@
 package net.mandomc.core.modules.mechanics;
 
 import net.mandomc.core.module.Module;
-import net.mandomc.mechanics.gambling.lottery.*;
+import net.mandomc.mechanics.gambling.lottery.LotteryBroadcastTask;
+import net.mandomc.mechanics.gambling.lottery.LotteryHologramManager;
+import net.mandomc.mechanics.gambling.lottery.LotteryScheduler;
+import net.mandomc.mechanics.gambling.lottery.LotteryStorage;
+import net.mandomc.mechanics.gambling.lottery.LotteryTopHologramManager;
 
 /**
- * Module responsible for initializing and managing gambling systems.
+ * Manages the lifecycle of gambling systems.
  *
- * Currently handles:
- * - Lottery storage lifecycle
- * - Lottery scheduler and broadcasts
- * - Lottery holograms
+ * Currently handles the lottery subsystem: storage, scheduling,
+ * broadcast tasks, and holograms.
  */
 public class GamblingModule implements Module {
 
     /**
      * Enables the gambling module.
      *
-     * Initializes storage, loads persisted data,
-     * starts scheduled tasks, and updates holograms.
+     * Initializes storage, loads persisted data, starts scheduled tasks,
+     * and updates all lottery holograms.
      */
     @Override
     public void enable() {
-
-        // Initialize and load stored lottery data
         LotteryStorage.setup();
         LotteryStorage.load();
 
-        // Start scheduler and broadcast systems
         LotteryScheduler.start();
         LotteryBroadcastTask.start();
 
-        // Initialize holograms
         LotteryHologramManager.update();
         LotteryTopHologramManager.update();
     }
@@ -38,15 +36,11 @@ public class GamblingModule implements Module {
     /**
      * Disables the gambling module.
      *
-     * Saves current lottery state and removes active holograms.
+     * Saves the current lottery state and removes active holograms.
      */
     @Override
     public void disable() {
-
-        // Persist data
         LotteryStorage.save();
-
-        // Clean up holograms
         LotteryHologramManager.remove();
     }
 }

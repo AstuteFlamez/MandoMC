@@ -1,6 +1,10 @@
 package net.mandomc.mechanics.bounties;
 
-import io.papermc.paper.dialog.*;
+import java.util.List;
+
+import org.bukkit.entity.Player;
+
+import io.papermc.paper.dialog.Dialog;
 import io.papermc.paper.registry.data.dialog.ActionButton;
 import io.papermc.paper.registry.data.dialog.DialogBase;
 import io.papermc.paper.registry.data.dialog.action.DialogAction;
@@ -11,30 +15,30 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickCallback;
 import net.kyori.adventure.text.format.NamedTextColor;
 
-import org.bukkit.entity.Player;
-
+import net.mandomc.core.LangManager;
 import net.mandomc.core.modules.core.EconomyModule;
 
-import java.util.List;
-
 /**
- * Builds bounty dialogs.
+ * Builds the bounty placement dialog shown when a player selects a target.
+ *
+ * The dialog allows the player to choose an amount and confirm or cancel.
+ * Validation is performed in the confirm callback.
  */
 public class BountyDialogFactory {
 
+    /**
+     * Creates a bounty dialog for the given placer targeting the given player.
+     *
+     * @param placer the player placing the bounty
+     * @param target the player being bounty-targeted
+     * @return the constructed dialog
+     */
     public static Dialog create(Player placer, Player target) {
-
         return Dialog.create(builder -> builder.empty()
-
-                // =========================
-                // 🧱 BASE
-                // =========================
                 .base(DialogBase.builder(Component.text("Set Bounty on " + target.getName(), NamedTextColor.RED))
-
                         .body(List.of(
                                 DialogBody.plainMessage(Component.text("Choose bounty amount", NamedTextColor.GRAY))
                         ))
-
                         .inputs(List.of(
                                 DialogInput.numberRange(
                                         "amount",
@@ -46,55 +50,41 @@ public class BountyDialogFactory {
                                         .initial(1000f)
                                         .build()
                         ))
-
                         .build()
                 )
-
-                // =========================
-                // ✅ BUTTONS
-                // =========================
                 .type(DialogType.confirmation(
-
-                        // CONFIRM
                         ActionButton.create(
                                 Component.text("Confirm", NamedTextColor.GREEN),
                                 Component.text("Place bounty"),
                                 100,
                                 DialogAction.customClick((view, audience) -> {
+                                    if (!(audience instanceof Player player)) return;
 
-                                    if (!(audience instanceof Player p)) return;
+                                    double amount = view.getFloat("amount");
 
-                                    float amountF = view.getFloat("amount");
-                                    double amount = amountF;
-
-                                    // 🔒 VALIDATION
-                                    if (BountyStorage.hasPlaced(p.getUniqueId())) {
-                                        p.sendMessage("§cYou already placed a bounty.");
+                                    if (BountyStorage.hasPlaced(player.getUniqueId())) {
+                                        player.sendMessage(LangManager.get("bounties.already-placed"));
                                         return;
                                     }
 
-                                    if (!EconomyModule.has(p, amount)) {
-                                        p.sendMessage("§cNot enough money.");
+                                    if (!EconomyModule.has(player, amount)) {
+                                        player.sendMessage(LangManager.get("bounties.not-enough-money"));
                                         return;
                                     }
 
-                                    // 💸 withdraw
-                                    EconomyModule.withdraw(p, amount);
+                                    EconomyModule.withdraw(player, amount);
 
-                                    // 📦 store
                                     Bounty bounty = BountyStorage.getOrCreate(target.getUniqueId());
-                                    bounty.addEntry(p.getUniqueId(), amount);
+                                    bounty.addEntry(player.getUniqueId(), amount);
 
-                                    // 📢 broadcast
-                                    p.getServer().broadcastMessage(
-                                            "§c⚠ " + target.getName()
-                                                    + " has a bounty of $" + EconomyModule.format(bounty.getTotal())
+                                    player.getServer().broadcastMessage(
+                                            LangManager.get("bounties.placed-broadcast",
+                                                    "%target%", target.getName(),
+                                                    "%amount%", EconomyModule.format(bounty.getTotal()))
                                     );
 
                                 }, ClickCallback.Options.builder().uses(1).build())
                         ),
-
-                        // CANCEL
                         ActionButton.create(
                                 Component.text("Cancel", NamedTextColor.RED),
                                 Component.text("Close"),

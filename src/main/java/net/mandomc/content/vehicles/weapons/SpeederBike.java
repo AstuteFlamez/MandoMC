@@ -5,6 +5,7 @@ import net.mandomc.content.vehicles.Vehicle;
 import net.mandomc.content.vehicles.VehicleRegistry;
 import net.mandomc.content.vehicles.config.VehicleConfig;
 import net.mandomc.content.vehicles.utils.AmmoUtil;
+import net.mandomc.core.LangManager;
 import net.mandomc.core.modules.system.VehicleModule;
 
 import org.bukkit.Bukkit;
@@ -59,12 +60,12 @@ public class SpeederBike implements WeaponSystem {
         if (now < cooldownUntil) {
             long msLeft = cooldownUntil - now;
             double secondsLeft = Math.ceil(msLeft / 100.0) / 10.0;
-            player.sendMessage("§9§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cWeapon recharging: §e" + secondsLeft + "s");
+            player.sendMessage(LangManager.get("vehicles.weapon.recharging", "%seconds%", String.valueOf(secondsLeft)));
             return;
         }
 
         if (!AmmoUtil.hasAmmo(player, ammo, ammoPerShot)) {
-            player.sendMessage("§9§lᴍᴀɴᴅᴏᴍᴄ §r§8» §cOut of " + (ammo != null ? ammo.replace("_", " ") : "ammo") + "!");
+            player.sendMessage(LangManager.get("vehicles.weapon.out-of-ammo", "%ammo%", (ammo != null ? ammo.replace("_", " ") : "ammo")));
             return;
         }
 

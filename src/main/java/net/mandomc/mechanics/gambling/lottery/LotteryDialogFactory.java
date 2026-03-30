@@ -1,6 +1,6 @@
 package net.mandomc.mechanics.gambling.lottery;
 
-import io.papermc.paper.dialog.*;
+import io.papermc.paper.dialog.Dialog;
 import io.papermc.paper.registry.data.dialog.ActionButton;
 import io.papermc.paper.registry.data.dialog.DialogBase;
 import io.papermc.paper.registry.data.dialog.action.DialogAction;
@@ -16,6 +16,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import net.mandomc.core.modules.core.EconomyModule;
+import net.mandomc.core.LangManager;
 
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class LotteryDialogFactory {
                                 100,
                                 DialogAction.customClick((view, audience) -> {
 
-                                    if (!(audience instanceof Player p)) return;
+                                    if (!(audience instanceof Player buyer)) return;
 
                                     Float amountF = view.getFloat("amount");
                                     if (amountF == null) return;
@@ -81,28 +82,30 @@ public class LotteryDialogFactory {
                                     double totalCost = amount * pricePerTicket;
 
                                     int max = LotteryConfig.get().getInt("lottery.max-tickets-per-player");
-                                    int current = LotteryManager.getTickets(p.getUniqueId());
+                                    int current = LotteryManager.getTickets(buyer.getUniqueId());
 
                                     if (current + amount > max) {
-                                        p.sendMessage("§cYou can't buy that many tickets.");
+                                        buyer.sendMessage(LangManager.get("lottery.cant-buy-many"));
                                         return;
                                     }
 
-                                    if (!EconomyModule.has(p, totalCost)) {
-                                        p.sendMessage("§cNot enough money.");
+                                    if (!EconomyModule.has(buyer, totalCost)) {
+                                        buyer.sendMessage(LangManager.get("lottery.not-enough-money"));
                                         return;
                                     }
 
-                                    EconomyModule.withdraw(p, totalCost);
+                                    EconomyModule.withdraw(buyer, totalCost);
 
                                     for (int i = 0; i < amount; i++) {
-                                        LotteryManager.addTicket(p.getUniqueId(), pricePerTicket);
+                                        LotteryManager.addTicket(buyer.getUniqueId(), pricePerTicket);
                                     }
 
                                     LotteryStorage.save();
 
-                                    p.sendMessage("§aPurchased " + amount + " ticket(s) for $" + totalCost);
-                                    p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1.2f);
+                                    buyer.sendMessage(LangManager.get("lottery.purchased",
+                                            "%amount%", String.valueOf(amount),
+                                            "%cost%", String.valueOf(totalCost)));
+                                    buyer.playSound(buyer.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1.2f);
 
                                 }, ClickCallback.Options.builder().uses(1).build())
                         ),

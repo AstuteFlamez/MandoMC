@@ -2,10 +2,13 @@ package net.mandomc.mechanics.gambling.lottery;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import net.mandomc.core.LangManager;
 
 import net.mandomc.core.modules.core.EconomyModule;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -73,10 +76,6 @@ public class LotteryManager {
         tickets.putAll(loadedTickets);
     }
 
-    /* -------------------------
-       DRAW SYSTEM
-    ------------------------- */
-
     /**
      * Executes the lottery draw.
      *
@@ -87,7 +86,7 @@ public class LotteryManager {
     public static void executeDraw() {
 
         if (tickets.isEmpty()) {
-            Bukkit.broadcastMessage(color("&cLottery rolled but no players entered."));
+            Bukkit.broadcastMessage(LangManager.get("lottery.no-players"));
             return;
         }
 
@@ -103,9 +102,9 @@ public class LotteryManager {
             EconomyModule.deposit(winner, winnings);
         }
 
-        Bukkit.broadcastMessage(color("&6&lLottery &8» &a"
-                + (winner != null ? winner.getName() : "Offline Player")
-                + " won &6$" + winnings));
+        Bukkit.broadcastMessage(LangManager.get("lottery.winner",
+                "%winner%", (winner != null ? winner.getName() : "Offline Player"),
+                "%amount%", String.valueOf(winnings)));
 
         reset();
     }
@@ -146,15 +145,5 @@ public class LotteryManager {
         tickets.clear();
         pot = 0;
         LotteryStorage.save();
-    }
-
-    /**
-     * Applies color formatting to a string.
-     *
-     * @param text input text
-     * @return colored string
-     */
-    private static String color(String text) {
-        return org.bukkit.ChatColor.translateAlternateColorCodes('&', text);
     }
 }

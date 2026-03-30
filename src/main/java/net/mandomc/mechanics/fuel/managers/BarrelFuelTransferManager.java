@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -13,17 +12,38 @@ import org.bukkit.scheduler.BukkitTask;
 
 import net.mandomc.MandoMC;
 import net.mandomc.mechanics.fuel.FuelManager;
+import net.mandomc.core.LangManager;
 
+/**
+ * Manages ticking fuel transfers between a rhydonium canister and a placed barrel.
+ *
+ * Supports both depositing (canister to barrel) and extracting (barrel to canister) modes.
+ * Each player may only have one active transfer at a time, enforced via a UUID-keyed task map.
+ */
 public class BarrelFuelTransferManager {
 
     private static final Map<UUID, BukkitTask> transfers = new HashMap<>();
 
+    /**
+     * Returns true if the given player currently has an active barrel fuel transfer.
+     *
+     * @param player the player to check
+     * @return true if transferring
+     */
     public static boolean isTransferring(Player player) {
         return transfers.containsKey(player.getUniqueId());
     }
 
+    /**
+     * Starts a repeating fuel transfer task for the given player.
+     *
+     * Cancels any existing transfer before starting. Runs every 2 ticks.
+     *
+     * @param player   the player performing the transfer
+     * @param canister the canister item in the player's hand
+     * @param barrel   the barrel armor stand being targeted
+     */
     public static void startTransfer(Player player, ItemStack canister, ArmorStand barrel) {
-
         if (transfers.containsKey(player.getUniqueId())) return;
 
         cancelTransfer(player);
@@ -38,18 +58,26 @@ public class BarrelFuelTransferManager {
         transfers.put(player.getUniqueId(), task);
     }
 
+    /**
+     * Stops the transfer for the given player and notifies them via action bar.
+     *
+     * @param player the player whose transfer to stop
+     */
     public static void stopTransfer(Player player) {
-
         BukkitTask task = transfers.remove(player.getUniqueId());
 
         if (task != null) {
             task.cancel();
-            player.sendActionBar(ChatColor.GRAY + "⛽ Fuel transfer halted");
+            player.sendActionBar(LangManager.get("fuel.transfer-halted"));
         }
     }
 
+    /**
+     * Cancels the transfer for the given player silently.
+     *
+     * @param player the player whose transfer to cancel
+     */
     private static void cancelTransfer(Player player) {
-
         BukkitTask task = transfers.remove(player.getUniqueId());
 
         if (task != null) {
@@ -57,8 +85,18 @@ public class BarrelFuelTransferManager {
         }
     }
 
+    /**
+     * Executes one tick of a barrel fuel transfer.
+     *
+     * Validates state (online, sneaking, items not null) before transferring one unit of fuel.
+     * Updates barrel model visuals and hologram after each tick.
+     * Sends an action bar status message to the player.
+     *
+     * @param player   the player performing the transfer
+     * @param canister the canister item stack (modified in place)
+     * @param barrel   the target barrel armor stand
+     */
     private static void transferTick(Player player, ItemStack canister, ArmorStand barrel) {
-
         if (!player.isOnline()) {
             cancelTransfer(player);
             return;
@@ -88,16 +126,12 @@ public class BarrelFuelTransferManager {
         int canFuel = FuelManager.getCurrentFuel(canister);
         int canMax = FuelManager.getMaxFuel(canister);
 
-        /* -------------------------
-           Depositing (Canister → Barrel)
-        ------------------------- */
-
         if (mode.equals("depositing")) {
-
             if (canFuel <= 0) {
                 player.sendActionBar(
-                        ChatColor.RED + "⚠ Canister empty "
-                        + ChatColor.GRAY + "(" + canFuel + "/" + canMax + ")"
+                        LangManager.get("fuel.barrel.canister-empty",
+                                "%current%", String.valueOf(canFuel),
+                                "%max%", String.valueOf(canMax))
                 );
                 cancelTransfer(player);
                 return;
@@ -105,8 +139,9 @@ public class BarrelFuelTransferManager {
 
             if (barrelFuel >= barrelMax) {
                 player.sendActionBar(
-                        ChatColor.RED + "⚠ Barrel full "
-                        + ChatColor.GRAY + "(" + barrelFuel + "/" + barrelMax + ")"
+                        LangManager.get("fuel.barrel.barrel-full",
+                                "%current%", String.valueOf(barrelFuel),
+                                "%max%", String.valueOf(barrelMax))
                 );
                 cancelTransfer(player);
                 return;
@@ -114,8 +149,6 @@ public class BarrelFuelTransferManager {
 
             FuelManager.updateFuel(canister, canFuel - 1);
             FuelManager.updateFuel(barrelItem, barrelFuel + 1);
-
-            /* Update barrel visuals */
 
             BarrelManager.updateModel(barrelItem);
             barrel.getEquipment().setHelmet(barrelItem);
@@ -129,24 +162,21 @@ public class BarrelFuelTransferManager {
             int newBarrelFuel = FuelManager.getCurrentFuel(barrelItem);
 
             player.sendActionBar(
-                    ChatColor.GOLD + "⛽ Depositing "
-                    + ChatColor.YELLOW + newCanFuel + "/" + canMax
-                    + ChatColor.DARK_GRAY + " → "
-                    + ChatColor.AQUA + "Barrel "
-                    + ChatColor.YELLOW + newBarrelFuel + "/" + barrelMax
+                    LangManager.get("fuel.barrel.depositing",
+                            "%can%", String.valueOf(newCanFuel),
+                            "%can-max%", String.valueOf(canMax),
+                            "%barrel%", String.valueOf(newBarrelFuel),
+                            "%barrel-max%", String.valueOf(barrelMax))
             );
 
             return;
         }
 
-        /* -------------------------
-           Refueling (Barrel → Canister)
-        ------------------------- */
-
         if (barrelFuel <= 0) {
             player.sendActionBar(
-                    ChatColor.RED + "⚠ Barrel empty "
-                    + ChatColor.GRAY + "(" + barrelFuel + "/" + barrelMax + ")"
+                    LangManager.get("fuel.barrel.barrel-empty",
+                            "%current%", String.valueOf(barrelFuel),
+                            "%max%", String.valueOf(barrelMax))
             );
             cancelTransfer(player);
             return;
@@ -154,8 +184,9 @@ public class BarrelFuelTransferManager {
 
         if (canFuel >= canMax) {
             player.sendActionBar(
-                    ChatColor.RED + "⚠ Canister full "
-                    + ChatColor.GRAY + "(" + canFuel + "/" + canMax + ")"
+                    LangManager.get("fuel.barrel.canister-full",
+                            "%current%", String.valueOf(canFuel),
+                            "%max%", String.valueOf(canMax))
             );
             cancelTransfer(player);
             return;
@@ -163,8 +194,6 @@ public class BarrelFuelTransferManager {
 
         FuelManager.updateFuel(canister, canFuel + 1);
         FuelManager.updateFuel(barrelItem, barrelFuel - 1);
-
-        /* Update barrel visuals */
 
         BarrelManager.updateModel(barrelItem);
         barrel.getEquipment().setHelmet(barrelItem);
@@ -178,11 +207,11 @@ public class BarrelFuelTransferManager {
         int newBarrelFuel = FuelManager.getCurrentFuel(barrelItem);
 
         player.sendActionBar(
-                ChatColor.AQUA + "⛽ Refueling "
-                + ChatColor.YELLOW + newCanFuel + "/" + canMax
-                + ChatColor.DARK_GRAY + " ← "
-                + ChatColor.GOLD + "Barrel "
-                + ChatColor.YELLOW + newBarrelFuel + "/" + barrelMax
+                LangManager.get("fuel.barrel.refueling",
+                        "%can%", String.valueOf(newCanFuel),
+                        "%can-max%", String.valueOf(canMax),
+                        "%barrel%", String.valueOf(newBarrelFuel),
+                        "%barrel-max%", String.valueOf(barrelMax))
         );
     }
 }

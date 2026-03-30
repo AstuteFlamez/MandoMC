@@ -4,9 +4,17 @@ import org.bukkit.Bukkit;
 
 import net.mandomc.MandoMC;
 import net.mandomc.core.module.Module;
-import net.mandomc.system.planets.ilum.*;
-import net.mandomc.system.planets.ilum.listeners.*;
-import net.mandomc.system.planets.ilum.managers.*;
+import net.mandomc.system.planets.ilum.ParkourTimerDisplay;
+import net.mandomc.system.planets.ilum.listeners.ParkourCheckpointListener;
+import net.mandomc.system.planets.ilum.listeners.ParkourDisconnectListener;
+import net.mandomc.system.planets.ilum.listeners.ParkourItemListener;
+import net.mandomc.system.planets.ilum.listeners.ParkourProtectionListener;
+import net.mandomc.system.planets.ilum.listeners.ParkourRespawnListener;
+import net.mandomc.system.planets.ilum.listeners.ParkourWorldListener;
+import net.mandomc.system.planets.ilum.managers.CheckpointManager;
+import net.mandomc.system.planets.ilum.managers.ParkourLeaderboardManager;
+import net.mandomc.system.planets.ilum.managers.ParkourManager;
+import net.mandomc.system.planets.ilum.managers.ParkourTimeManager;
 
 public class ParkourModule implements Module {
 

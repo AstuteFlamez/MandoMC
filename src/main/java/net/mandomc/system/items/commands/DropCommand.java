@@ -1,12 +1,16 @@
 package net.mandomc.system.items.commands;
 
+import net.mandomc.core.LangManager;
 import me.deecaad.weaponmechanics.WeaponMechanicsAPI;
 import net.mandomc.system.items.ItemRegistry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -36,12 +40,12 @@ public class DropCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if (!sender.hasPermission(PERMISSION)) {
-            sender.sendMessage(prefix("&cYou do not have permission."));
+            sender.sendMessage(LangManager.get("items.no-permission"));
             return true;
         }
 
         if (args.length == 0) {
-            sender.sendMessage(prefix("&cUsage: /drop <item> [x y z] [world] [amount]"));
+            sender.sendMessage(LangManager.get("items.usage-drop"));
             return true;
         }
 
@@ -54,13 +58,13 @@ public class DropCommand implements CommandExecutor, TabCompleter {
 
         ItemStack item = resolveItem(id, amount);
         if (item == null) {
-            sender.sendMessage(prefix("&7Unknown item or ammo."));
+            sender.sendMessage(LangManager.get("items.unknown-item", "%id%", id));
             return true;
         }
 
         location.getWorld().dropItemNaturally(location, item);
 
-        sender.sendMessage(prefix("&7Dropped &f" + id + " &7x" + amount));
+        sender.sendMessage(LangManager.get("items.dropped", "%id%", id, "%amount%", String.valueOf(amount)));
         return true;
     }
 
@@ -79,7 +83,7 @@ public class DropCommand implements CommandExecutor, TabCompleter {
 
             World world = Bukkit.getWorld(args[4]);
             if (world == null) {
-                sender.sendMessage(prefix("&cInvalid world."));
+                sender.sendMessage(LangManager.get("items.invalid-world"));
                 return null;
             }
 
@@ -109,15 +113,15 @@ public class DropCommand implements CommandExecutor, TabCompleter {
             if (args.length >= 5) {
                 world = Bukkit.getWorld(args[4]);
                 if (world == null) {
-                    sender.sendMessage(prefix("&cInvalid world."));
-                    return null;
+                sender.sendMessage(LangManager.get("items.invalid-world"));
+                return null;
                 }
             }
 
             return new Location(world, x, y, z);
         }
 
-        sender.sendMessage(prefix("&cUsage: /drop <item> [x y z] [world] [amount]"));
+        sender.sendMessage(LangManager.get("items.usage-drop"));
         return null;
     }
 
@@ -131,7 +135,7 @@ public class DropCommand implements CommandExecutor, TabCompleter {
         try {
             return Math.max(1, Integer.parseInt(args[5]));
         } catch (NumberFormatException e) {
-            sender.sendMessage(prefix("&cInvalid amount: " + args[5]));
+            sender.sendMessage(LangManager.get("items.invalid-amount", "%amount%", args[5]));
             return 1;
         }
     }
@@ -206,27 +210,13 @@ public class DropCommand implements CommandExecutor, TabCompleter {
     }
 
     /**
-     * Formats a prefixed message.
-     */
-    private String prefix(String message) {
-        return color("&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» " + message);
-    }
-
-    /**
-     * Applies color formatting.
-     */
-    private String color(String text) {
-        return org.bukkit.ChatColor.translateAlternateColorCodes('&', text);
-    }
-
-    /**
      * Safely parses a double value.
      */
     private Double parseDouble(String input, CommandSender sender) {
         try {
             return Double.parseDouble(input);
         } catch (NumberFormatException e) {
-            sender.sendMessage(prefix("&cInvalid number: " + input));
+            sender.sendMessage(LangManager.get("items.invalid-amount", "%amount%", input));
             return null;
         }
     }

@@ -12,6 +12,12 @@ import org.bukkit.persistence.PersistentDataType;
 import net.mandomc.MandoMC;
 import net.md_5.bungee.api.ChatColor;
 
+/**
+ * Reads and writes fuel values on item stacks via PersistentDataContainer.
+ *
+ * Manages the current_fuel and max_fuel PDC keys, and keeps the
+ * "Fuel: x/y" lore line in sync after every update.
+ */
 public class FuelManager {
 
     private static final NamespacedKey CURRENT_FUEL =
@@ -20,8 +26,13 @@ public class FuelManager {
     private static final NamespacedKey MAX_FUEL =
             new NamespacedKey(MandoMC.getInstance(), "max_fuel");
 
+    /**
+     * Returns the current fuel stored in the given item's PDC.
+     *
+     * @param item the item to read from
+     * @return the current fuel, or 0 if not set
+     */
     public static int getCurrentFuel(ItemStack item) {
-
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return 0;
 
@@ -34,8 +45,13 @@ public class FuelManager {
         );
     }
 
+    /**
+     * Returns the maximum fuel stored in the given item's PDC.
+     *
+     * @param item the item to read from
+     * @return the max fuel, or 0 if not set
+     */
     public static int getMaxFuel(ItemStack item) {
-
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return 0;
 
@@ -48,13 +64,17 @@ public class FuelManager {
         );
     }
 
+    /**
+     * Updates the current fuel value in the item's PDC and refreshes the lore display.
+     *
+     * @param item    the item to update
+     * @param newFuel the new fuel value to write
+     */
     public static void updateFuel(ItemStack item, int newFuel) {
-
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return;
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
-
         int maxFuel = getMaxFuel(item);
 
         container.set(CURRENT_FUEL, PersistentDataType.INTEGER, newFuel);
@@ -64,14 +84,18 @@ public class FuelManager {
         updateDisplay(item, newFuel, maxFuel);
     }
 
+    /**
+     * Updates the "Fuel: x/y" lore line on the item.
+     *
+     * Replaces the existing fuel lore line if found, or appends a new one.
+     *
+     * @param item    the item whose lore to update
+     * @param current the current fuel value
+     * @param max     the max fuel value
+     */
     private static void updateDisplay(ItemStack item, int current, int max) {
-
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return;
-
-        /* -------------------------
-        Update Lore
-        ------------------------- */
 
         List<String> lore = meta.hasLore()
                 ? new ArrayList<>(meta.getLore())
@@ -80,11 +104,9 @@ public class FuelManager {
         boolean replaced = false;
 
         for (int i = 0; i < lore.size(); i++) {
-
             String stripped = ChatColor.stripColor(lore.get(i)).toLowerCase();
 
             if (stripped.startsWith("fuel:")) {
-
                 lore.set(i, color("&7Fuel: &c" + current + "/" + max));
                 replaced = true;
                 break;

@@ -1,6 +1,10 @@
 package net.mandomc.system.items.commands;
 
-import org.bukkit.command.*;
+import net.mandomc.core.LangManager;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import net.mandomc.system.items.ItemRegistry;
@@ -8,7 +12,8 @@ import net.mandomc.system.items.RecipeRegistry;
 import net.mandomc.system.items.guis.RecipeBrowserGUI;
 import net.mandomc.system.items.guis.RecipeViewerGUI;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -60,7 +65,7 @@ public class RecipeCommand implements CommandExecutor, TabCompleter {
 
         // Item recipe
         if (!RecipeRegistry.hasRecipe(input)) {
-            player.sendMessage(prefix("&7That item has no recipe."));
+            player.sendMessage(LangManager.get("items.no-recipe", "%id%", input));
             return true;
         }
 
@@ -122,19 +127,5 @@ public class RecipeCommand implements CommandExecutor, TabCompleter {
         );
 
         return completions;
-    }
-
-    /**
-     * Formats a prefixed message.
-     */
-    private String prefix(String message) {
-        return color("&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» " + message);
-    }
-
-    /**
-     * Applies color formatting.
-     */
-    private String color(String text) {
-        return org.bukkit.ChatColor.translateAlternateColorCodes('&', text);
     }
 }

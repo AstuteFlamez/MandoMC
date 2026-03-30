@@ -1,12 +1,18 @@
 package net.mandomc.mechanics.warps;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import net.mandomc.core.LangManager;
 import net.mandomc.core.guis.GUIManager;
 import net.mandomc.core.guis.InventoryButton;
 import net.mandomc.core.guis.InventoryGUI;
@@ -119,7 +125,7 @@ public class WarpsGUI extends InventoryGUI {
 
                     Location location = getWarpLocation(warpName, player);
                     if (location == null) {
-                        player.sendMessage(prefix("&7World is not loaded."));
+                        player.sendMessage(LangManager.get("warps.world-offline"));
                         player.closeInventory();
                         return;
                     }
@@ -165,12 +171,5 @@ public class WarpsGUI extends InventoryGUI {
      */
     private String color(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
-    }
-
-    /**
-     * Formats a prefixed message.
-     */
-    private String prefix(String message) {
-        return color("&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» " + message);
     }
 }

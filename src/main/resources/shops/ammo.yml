@@ -14,18 +14,8 @@ items:
     id: "Standard_Plasma_Cells"
     amount: 1
 
-    price:
-      type: MONEY
-      amount: 50
-
-    display:
-      name: "&bPlasma Cells"
-      lore:
-        - "&7Standard ammo for blasters"
-        - ""
-        - "&7Price: &a$%price%"
-        - "&eClick to choose amount"
-        - "&eShift-Click to buy stack"
+    buy_price: 50
+    sell_price: -1
 
   ion_cells:
     slot: 12
@@ -34,21 +24,5 @@ items:
     id: "Ionized_Energy_Cells"
     amount: 1
 
-    price:
-      type: MONEY
-      amount: 75
-
-    display:
-      name: "&dIon Cells"
-      lore:
-        - "&7Effective against droids"
-        - ""
-        - "&7Price: &a$%price%"
-        - "&eClick to choose amount"
-        - "&eShift-Click to buy stack"
-
-messages:
-  prefix: "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7"
-  not-enough-money: "&cYou don't have enough money."
-  purchased: "&aPurchased %amount%x %item%"
-  inventory-full: "&cYour inventory is full."
+    buy_price: 75
+    sell_price: -1
