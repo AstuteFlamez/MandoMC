@@ -143,8 +143,9 @@ public class VehicleConfigResolver {
     /**
      * Parses and returns the list of seat configurations for the vehicle item.
      *
-      * Each seat entry in the YAML should contain: name, slot, type, skull_url.
-      * Optional: gunner (boolean) to allow shooting from that seat.
+    * Each seat entry in the YAML should contain: name, slot, type, skull_url.
+    * Optional: gunner (boolean) to allow shooting from that seat.
+    * Optional: mount_bone (string) to control where the seat rider is mounted.
      * Entries with an unrecognised type are skipped.
       *
       * Backward compatibility:
@@ -166,6 +167,7 @@ public class VehicleConfigResolver {
             int    slot     = getInt(map, "slot", 0);
             String skullUrl = getString(map, "skull_url", "");
             String typeRaw  = getString(map, "type", "PASSENGER");
+                String mountBone = getString(map, "mount_bone", "seat");
             boolean gunner  = getBoolean(map, "gunner", false)
                     || getBoolean(map, "can_shoot", false);
 
@@ -183,7 +185,7 @@ public class VehicleConfigResolver {
                 }
             }
 
-            seats.add(new SeatConfig(name, slot, type, skullUrl, gunner));
+            seats.add(new SeatConfig(name, slot, type, skullUrl, gunner, mountBone));
         }
 
         return seats;

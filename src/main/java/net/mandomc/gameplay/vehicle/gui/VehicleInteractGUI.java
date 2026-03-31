@@ -42,7 +42,6 @@ import java.util.UUID;
 public class VehicleInteractGUI extends InventoryGUI {
 
     private static final Material FILLER_MATERIAL  = Material.GRAY_STAINED_GLASS_PANE;
-    private static final Material PICKUP_MATERIAL   = Material.MINECART;
     private static final Material NO_ACCESS_MATERIAL = Material.BARRIER;
 
     private final Vehicle vehicle;
@@ -193,7 +192,8 @@ public class VehicleInteractGUI extends InventoryGUI {
     }
 
     private ItemStack buildOwnerPickupItem(boolean hasOtherRiders) {
-        ItemStack item = new ItemStack(PICKUP_MATERIAL);
+        ItemStack base = vehicle.getVehicleData().getItem();
+        ItemStack item = base != null ? base.clone() : new ItemStack(Material.MINECART);
         ItemMeta meta  = item.getItemMeta();
         if (meta == null) return item;
 

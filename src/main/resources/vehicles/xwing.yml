@@ -21,6 +21,9 @@ vehicle:
       ammo_per_shot: 1
       cooldown: 2000
       sound: vehicles.xwing_shoot
+      spawn_bones:
+        - barrelLeft
+        - barrelRight
 
     movement_sound: vehicles.xwing_fly
     movement_sound_time_in_ticks: 460
@@ -30,4 +33,5 @@ vehicle:
       slot: 11
       type: DRIVER
       gunner: true
+      mount_bone: seat
       skull_url: "https://textures.minecraft.net/texture/5d9591c0d3262fe9d7056dd91c787a685915946739f15e349b3ddcf12a46cbb7"

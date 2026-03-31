@@ -9,8 +9,9 @@ package net.mandomc.gameplay.vehicle.model;
  * @param skullUrl base texture URL used to build the skull item for this seat's button;
  *                 must point to a valid Minecraft texture (textures.minecraft.net)
  * @param gunner   tag that allows the seat occupant to fire vehicle weapons
+ * @param mountBone mount bone name used when attaching this seat occupant to the model
  */
-public record SeatConfig(String name, int slot, SeatType type, String skullUrl, boolean gunner) {
+public record SeatConfig(String name, int slot, SeatType type, String skullUrl, boolean gunner, String mountBone) {
 
     /**
      * Returns whether the occupant of this seat is allowed to fire the vehicle's weapon.

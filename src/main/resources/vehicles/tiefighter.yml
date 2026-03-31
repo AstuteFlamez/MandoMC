@@ -24,6 +24,9 @@ vehicle:
       spread: 2
       cooldown: 0
       sound: vehicles.tie_fighter_shoot
+      spawn_bones:
+        - barrelLeft
+        - barrelRight
 
     movement_sound: vehicles.tie_fighter_fly
     movement_sound_time_in_ticks: 420
@@ -33,4 +36,5 @@ vehicle:
       slot: 13
       type: DRIVER
       gunner: true
-      skull_url: "https://textures.minecraft.net/texture/5d9591c0d3262fe9d7056dd91c787a685915946739f15e349b3ddcf12a46cbb7"
+      mount_bone: seat
+      skull_url: "https://textures.minecraft.net/texture/e9110433357ba068492f95c812098f9bcb3667d324fbc4c32d6ea8a18382ae1c"

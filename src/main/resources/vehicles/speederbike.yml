@@ -21,6 +21,9 @@ vehicle:
       ammo_per_shot: 1
       cooldown: 0
       sound: vehicles.speederbike_shoot
+      spawn_bones:
+        - barrelLeft
+        - barrelRight
 
     movement_sound: vehicles.speederbike_drive
     movement_sound_time_in_ticks: 300
@@ -30,4 +33,5 @@ vehicle:
       slot: 13
       type: DRIVER
       gunner: true
-      skull_url: "https://textures.minecraft.net/texture/5d9591c0d3262fe9d7056dd91c787a685915946739f15e349b3ddcf12a46cbb7"
+      mount_bone: seat
+      skull_url: "https://textures.minecraft.net/texture/8cfe05d41adafc75640e7cbb1d93200475c212de29d52e691323e710cf0f014d"

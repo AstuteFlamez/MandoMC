@@ -164,7 +164,7 @@ public class SeatManager {
         ActiveModel model = vehicle.getVehicleData().getActiveModel();
 
         model.getMountManager().ifPresent(mountManager ->
-                mountManager.mountPassenger("seat", player, MountControllerTypes.WALKING));
+                mountManager.mountPassenger(seat.mountBone(), player, MountControllerTypes.WALKING));
 
         vehicle.occupy(player.getUniqueId(), seat.slot());
         VehicleModule.registerOccupant(player.getUniqueId(), vehicle.getOwnerUUID());
