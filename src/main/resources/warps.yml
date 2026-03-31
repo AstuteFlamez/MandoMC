@@ -1,3 +1,11 @@
+gui:
+  title: '&3&lᴛʜᴇ ɢᴀʟᴀхʏ'
+  size: 54
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    name: ' '
+    lore: []
+
 warps:
   Alderaan:
     slot: 15

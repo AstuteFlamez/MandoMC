@@ -14,9 +14,37 @@ import java.util.Set;
  * Wraps {@code warps.yml}. Warp entries live under the {@code warps:} root key.
  */
 public class WarpConfig extends BaseConfig {
+    private static final String DEFAULT_GUI_TITLE = "&4&lMandoMC Warps";
+    private static final int DEFAULT_GUI_SIZE = 54;
 
     public WarpConfig(Plugin plugin) {
         super(plugin, "warps.yml");
+    }
+
+    /**
+     * Returns the configured GUI title for /warp menus.
+     */
+    public String getGuiTitle() {
+        return getString("gui.title", DEFAULT_GUI_TITLE);
+    }
+
+    /**
+     * Returns the configured GUI size normalized to Bukkit inventory rules.
+     */
+    public int getGuiSize() {
+        int configured = getInt("gui.size", DEFAULT_GUI_SIZE);
+        if (configured < 9 || configured > 54 || configured % 9 != 0) {
+            logger.warning("[warps.yml] Invalid gui.size '" + configured + "', using default: " + DEFAULT_GUI_SIZE);
+            return DEFAULT_GUI_SIZE;
+        }
+        return configured;
+    }
+
+    /**
+     * Returns the optional filler section for the warp GUI.
+     */
+    public ConfigurationSection getGuiFillerSection() {
+        return getSection("gui.filler");
     }
 
     /**
