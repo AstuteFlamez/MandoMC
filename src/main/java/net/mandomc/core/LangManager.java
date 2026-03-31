@@ -9,6 +9,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
 
 /**
  * Manages player-facing messages loaded from lang.yml.
@@ -54,6 +57,7 @@ public final class LangManager {
     /**
      * Returns the translated message for the given dot-separated key.
      * Colour codes ({@code &} prefix) are resolved automatically.
+     * Keys may reference other keys by setting value to {@code @other.key}.
      * If the key is missing a descriptive fallback is returned so nothing
      * silently disappears in-game.
      *
@@ -61,12 +65,12 @@ public final class LangManager {
      * @return coloured message string
      */
     public static String get(String key) {
-        String raw = lang.getString(key);
+        String raw = resolveRaw(key, new ArrayDeque<>());
         if (raw == null) {
             MandoMC.getInstance().getLogger().warning("[LangManager] Missing lang key: " + key);
             raw = "&cMissing lang key: " + key;
         }
-        return color(raw);
+        return colorize(raw);
     }
 
     /**
@@ -92,9 +96,43 @@ public final class LangManager {
         return value;
     }
 
+    public static String colorize(String text) {
+        if (text == null) {
+            return "";
+        }
+        return ChatColor.translateAlternateColorCodes('&', text);
+    }
+
+    public static List<String> colorize(List<String> lines) {
+        return lines.stream().map(LangManager::colorize).toList();
+    }
+
     // ── Internal helpers ──────────────────────────────────────────────────────
 
-    private static String color(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text);
+    private static String resolveRaw(String key, Deque<String> stack) {
+        String raw = lang.getString(key);
+        if (raw == null) {
+            return null;
+        }
+
+        if (!raw.startsWith("@")) {
+            return raw;
+        }
+
+        String targetKey = raw.substring(1).trim();
+        if (targetKey.isEmpty()) {
+            MandoMC.getInstance().getLogger().warning("[LangManager] Invalid lang reference in key: " + key);
+            return null;
+        }
+
+        if (stack.contains(key)) {
+            MandoMC.getInstance().getLogger().warning("[LangManager] Circular lang reference detected: " + String.join(" -> ", stack) + " -> " + key);
+            return null;
+        }
+
+        stack.addLast(key);
+        String resolved = resolveRaw(targetKey, stack);
+        stack.removeLast();
+        return resolved;
     }
 }

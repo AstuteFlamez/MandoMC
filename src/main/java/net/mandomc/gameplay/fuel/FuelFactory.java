@@ -13,6 +13,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.LangManager;
 import net.mandomc.gameplay.vehicle.VehicleRegistry;
 import net.mandomc.gameplay.vehicle.config.VehicleConfig;
 import net.mandomc.gameplay.fuel.manager.CanisterManager;
@@ -139,6 +140,6 @@ public class FuelFactory {
     }
 
     private static String color(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text);
+        return LangManager.colorize(text);
     }
 }

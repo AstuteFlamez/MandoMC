@@ -395,11 +395,11 @@ public class EventManager {
     }
 
     public List<String> color(List<String> input) {
-        return input.stream().map(this::color).toList();
+        return LangManager.colorize(input);
     }
 
     public String color(String input) {
-        return input == null ? "" : input.replace("&", "§");
+        return LangManager.colorize(input);
     }
 
     public YamlConfiguration getConfig() {

@@ -1,5 +1,6 @@
 package net.mandomc.server.shop.gui;
 
+import net.mandomc.core.LangManager;
 import net.mandomc.core.guis.InventoryButton;
 import net.mandomc.core.guis.InventoryGUI;
 
@@ -139,6 +140,6 @@ public class ShopGUI extends InventoryGUI {
     }
 
     private static String color(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text);
+        return LangManager.colorize(text);
     }
 }

@@ -10,8 +10,6 @@ import org.bukkit.scheduler.BukkitTask;
 import net.mandomc.core.LangManager;
 import net.mandomc.world.ilum.manager.ParkourManager;
 import net.mandomc.world.ilum.manager.ParkourTimeManager;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.mandomc.world.ilum.model.ParkourSession;
 import net.mandomc.world.ilum.util.TimeFormatter;
 
@@ -49,23 +47,21 @@ public class ParkourTimerDisplay {
                 Double bestTime =
                         timeManager.getBestTime(player.getUniqueId());
 
-                String current = TimeFormatter.format(currentSeconds);
-                String best = bestTime == null
+                String currentRaw = TimeFormatter.format(currentSeconds);
+                String bestRaw = bestTime == null
                         ? "--"
                         : TimeFormatter.format(bestTime);
 
                 String timeColor = bestTime != null && currentSeconds < bestTime ? "&a" : "&e";
+                String bestColor = bestTime == null ? "&7" : "&6";
                 String message = LangManager.get(
                         "parkour.timer-actionbar",
                         "%time-color%", timeColor,
-                        "%current%", current,
-                        "%best%", best
+                        "%current%", timeColor + currentRaw,
+                        "%best%", bestColor + bestRaw
                 );
 
-                player.spigot().sendMessage(
-                        ChatMessageType.ACTION_BAR,
-                        new TextComponent(message)
-                );
+                player.sendActionBar(message);
 
             }
 

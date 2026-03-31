@@ -5,13 +5,22 @@
 #  Placeholders are surrounded by  %percent%  signs.
 # ══════════════════════════════════════════
 
+shared:
+  no-permission:
+    command: "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou do not have permission to run this command."
+    generic: "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou do not have permission."
+  players-only:
+    blue: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayers only."
+  unknown-sub:
+    yellow: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cUnknown subcommand."
+
 # ──────────────────────────────────────────
 # CORE  (reload command)
 #   prefix colour: &4  dark-red
 # ──────────────────────────────────────────
 core:
   reload:
-    no-permission:  "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou do not have permission to run this command."
+    no-permission:  "@shared.no-permission.command"
     reloading:      "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Reloading plugin..."
     success:        "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aReload complete."
     failure:        "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cReload failed. Check the console."
@@ -21,7 +30,7 @@ core:
 #   prefix colour: &9  blue
 # ──────────────────────────────────────────
 link:
-  players-only:    "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayers only."
+  players-only:    "@shared.players-only.blue"
   already-linked:  "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou are already linked to Discord."
   code:            "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aYour link code: &e%code%"
   instructions:    "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Use &b/link %code% &7in Discord."
@@ -32,7 +41,7 @@ link:
 # DISCORD COMMAND  (/discord)
 # ──────────────────────────────────────────
 discord:
-  players-only:  "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayers only."
+  players-only:  "@shared.players-only.blue"
   # fallback clickable message sent before the dialog opens
   join-link:     "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Join our Discord: &b%link%"
 
@@ -42,8 +51,8 @@ discord:
 # ──────────────────────────────────────────
 events:
   players-only:   "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayers only."
-  no-permission:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou do not have permission to run this command."
-  unknown-sub:    "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cUnknown subcommand."
+  no-permission:  "@shared.no-permission.command"
+  unknown-sub:    "@shared.unknown-sub.yellow"
 
   usage:
     start:   "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cUsage: /event start <id>"
@@ -168,7 +177,7 @@ jabba:
     invalid-world:        "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cInvalid world."
     dropped:              "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Key dropped at location."
     invalid-coordinates:  "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cInvalid coordinates."
-    unknown-sub:          "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cUnknown subcommand."
+    unknown-sub:          "@shared.unknown-sub.yellow"
 
 # ──────────────────────────────────────────
 # BESKAR RUSH EVENT
@@ -234,7 +243,7 @@ fuel:
 # ──────────────────────────────────────────
 bounties:
   players-only:       "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayers only."
-  no-permission:      "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou do not have permission."
+  no-permission:      "@shared.no-permission.generic"
   player-not-found:   "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayer not found."
   player-never-joined: "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cThat player has never joined this server."
   cannot-target-self: "&c&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou cannot place a bounty on yourself."
@@ -259,7 +268,7 @@ bounties:
 #   prefix colour: &6  gold
 # ──────────────────────────────────────────
 lottery:
-  no-permission:    "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou do not have permission."
+  no-permission:    "@shared.no-permission.generic"
   usage:            "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cUsage: /lottery open <player>"
   player-not-found: "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayer not found."
   gui-opened:       "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aOpened lottery GUI for &f%player%"
@@ -312,7 +321,7 @@ parkour:
 #   prefix colour: &6  gold
 # ──────────────────────────────────────────
 shops:
-  no-permission:     "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou do not have permission to use this command."
+  no-permission:     "@shared.no-permission.command"
   usage:             "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /shop <buy|sell>"
   usage-buy:         "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /shop buy <shop> [player]"
   usage-sell:        "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /shop sell [player]"
@@ -333,7 +342,7 @@ shops:
 #   prefix colour: &4  dark-red
 # ──────────────────────────────────────────
 items:
-  no-permission:       "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou do not have permission."
+  no-permission:       "@shared.no-permission.generic"
   players-only:        "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Only players can use this command."
   unknown-item:        "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Unknown item: &f%id%"
   # /get

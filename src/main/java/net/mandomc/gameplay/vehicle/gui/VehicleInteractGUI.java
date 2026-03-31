@@ -66,7 +66,7 @@ public class VehicleInteractGUI extends InventoryGUI {
     protected Inventory createInventory() {
         VehicleData data  = vehicle.getVehicleData();
         String rawTitle   = data.getDisplayName();
-        String title      = ChatColor.translateAlternateColorCodes('&', rawTitle.isBlank() ? "&fVehicle" : rawTitle);
+        String title      = LangManager.colorize(rawTitle.isBlank() ? "&fVehicle" : rawTitle);
         int size          = data.getGuiSize();
 
         return Bukkit.createInventory(null, size, title);

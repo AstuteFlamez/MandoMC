@@ -1,6 +1,7 @@
 package net.mandomc.server.shop;
 
 import me.deecaad.weaponmechanics.WeaponMechanicsAPI;
+import net.mandomc.core.LangManager;
 import net.mandomc.core.integration.OptionalPluginSupport;
 import net.mandomc.server.items.ItemRegistry;
 
@@ -250,7 +251,7 @@ public final class ShopLoader {
     }
 
     private static String color(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text);
+        return LangManager.colorize(text);
     }
 
     private static void warnMissingWeaponMechanics() {

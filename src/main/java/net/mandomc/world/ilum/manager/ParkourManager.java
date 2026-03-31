@@ -104,18 +104,10 @@ public class ParkourManager {
 
         player.setGameMode(session.getSavedGamemode());
 
-        Location returnLocation = session.getReturnLocation();
+        // Always prefer configured server return spawn for parkour exits.
+        Location returnLocation = getConfiguredSpawnLocation();
         if (returnLocation == null || returnLocation.getWorld() == null) {
-            String parkourWorldName = ParkourConfig.get().getString("parkour.spawn.world");
-            double x = ParkourConfig.get().getDouble("parkour.spawn.x");
-            double y = ParkourConfig.get().getDouble("parkour.spawn.y");
-            double z = ParkourConfig.get().getDouble("parkour.spawn.z");
-            float yaw = (float) ParkourConfig.get().getDouble("parkour.spawn.yaw");
-            float pitch = (float) ParkourConfig.get().getDouble("parkour.spawn.pitch");
-            var world = Bukkit.getWorld(parkourWorldName);
-            if (world != null) {
-                returnLocation = new Location(world, x, y, z, yaw, pitch);
-            }
+            returnLocation = session.getReturnLocation();
         }
 
         // Remove session before teleport
@@ -284,6 +276,25 @@ public class ParkourManager {
         if (yaw < 0) yaw += 360;
 
         return Math.round(yaw / 90f) * 90f;
+    }
+
+    private Location getConfiguredSpawnLocation() {
+        String worldName = ParkourConfig.get().getString("parkour.spawn.world");
+        if (worldName == null || worldName.isBlank()) {
+            return null;
+        }
+
+        var world = Bukkit.getWorld(worldName);
+        if (world == null) {
+            return null;
+        }
+
+        double x = ParkourConfig.get().getDouble("parkour.spawn.x");
+        double y = ParkourConfig.get().getDouble("parkour.spawn.y");
+        double z = ParkourConfig.get().getDouble("parkour.spawn.z");
+        float yaw = (float) ParkourConfig.get().getDouble("parkour.spawn.yaw");
+        float pitch = (float) ParkourConfig.get().getDouble("parkour.spawn.pitch");
+        return new Location(world, x, y, z, yaw, pitch);
     }
 
     /**

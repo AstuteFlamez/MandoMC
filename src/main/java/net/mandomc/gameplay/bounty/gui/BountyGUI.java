@@ -291,7 +291,7 @@ public class BountyGUI extends InventoryGUI {
      * @return the colorized string
      */
     private String color(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text);
+        return LangManager.colorize(text);
     }
 
 }

@@ -172,6 +172,6 @@ public class WarpsGUI extends InventoryGUI {
      * Applies color formatting.
      */
     private String color(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text);
+        return LangManager.colorize(text);
     }
 }

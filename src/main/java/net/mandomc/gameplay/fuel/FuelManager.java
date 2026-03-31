@@ -10,6 +10,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.LangManager;
 import net.md_5.bungee.api.ChatColor;
 
 /**
@@ -143,6 +144,6 @@ public class FuelManager {
     }
 
     private static String color(String s) {
-        return ChatColor.translateAlternateColorCodes('&', s);
+        return LangManager.colorize(s);
     }
 }

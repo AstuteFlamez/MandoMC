@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.LangManager;
 import net.mandomc.server.items.config.ItemsConfig;
 
 import java.util.ArrayList;
@@ -128,6 +129,6 @@ public class SaberFactory {
      * @return the colored string
      */
     private static String color(String text) {
-        return translateAlternateColorCodes('&', text);
+        return LangManager.colorize(text);
     }
 }

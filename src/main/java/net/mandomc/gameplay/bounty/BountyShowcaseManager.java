@@ -6,6 +6,7 @@ import de.oliver.fancyholograms.api.data.ItemHologramData;
 import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
 import net.mandomc.MandoMC;
+import net.mandomc.core.LangManager;
 import net.mandomc.core.integration.OptionalPluginSupport;
 import net.mandomc.gameplay.bounty.config.BountyConfig;
 import net.mandomc.core.modules.core.EconomyModule;
@@ -322,7 +323,7 @@ public final class BountyShowcaseManager {
     }
 
     private static String color(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text);
+        return LangManager.colorize(text);
     }
 
     private static void createTextHologram(HologramManager manager, String hologramId, Location location, List<String> lines) {

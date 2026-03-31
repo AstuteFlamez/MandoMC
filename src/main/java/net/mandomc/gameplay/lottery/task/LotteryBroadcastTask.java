@@ -8,6 +8,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import net.mandomc.core.LangManager;
 import net.mandomc.gameplay.lottery.LotteryManager;
 
 /**
@@ -69,6 +70,6 @@ public class LotteryBroadcastTask {
      * @return formatted string
      */
     private static String color(String text) {
-        return org.bukkit.ChatColor.translateAlternateColorCodes('&', text);
+        return LangManager.colorize(text);
     }
 }

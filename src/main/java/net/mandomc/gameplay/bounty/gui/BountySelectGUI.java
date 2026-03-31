@@ -19,6 +19,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 
+import net.mandomc.core.LangManager;
 import net.mandomc.core.guis.GUIManager;
 import net.mandomc.core.guis.InventoryButton;
 import net.mandomc.core.guis.InventoryGUI;
@@ -211,7 +212,7 @@ public class BountySelectGUI extends InventoryGUI {
      * @return the colorized string
      */
     private String color(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text);
+        return LangManager.colorize(text);
     }
 
     /**

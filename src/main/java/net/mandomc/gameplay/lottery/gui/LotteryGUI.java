@@ -227,6 +227,6 @@ public class LotteryGUI extends InventoryGUI {
         if (text == null) {
             return "";
         }
-        return ChatColor.translateAlternateColorCodes('&', text);
+        return LangManager.colorize(text);
     }
 }

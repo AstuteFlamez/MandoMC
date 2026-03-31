@@ -18,6 +18,7 @@ import de.oliver.fancyholograms.api.HologramManager;
 import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
 import net.mandomc.MandoMC;
+import net.mandomc.core.LangManager;
 import net.mandomc.core.integration.OptionalPluginSupport;
 import net.mandomc.world.ilum.config.ParkourConfig;
 import net.mandomc.world.ilum.manager.ParkourTimeManager.PlayerTime;
@@ -187,6 +188,6 @@ public class ParkourLeaderboardManager {
     }
 
     private String color(String s) {
-        return ChatColor.translateAlternateColorCodes('&', s);
+        return LangManager.colorize(s);
     }
 }

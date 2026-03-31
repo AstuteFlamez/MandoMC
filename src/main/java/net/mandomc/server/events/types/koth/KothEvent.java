@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataType;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.LangManager;
 import net.mandomc.server.events.AbstractGameEvent;
 import net.mandomc.server.events.model.EventDefinition;
 import net.mandomc.server.events.EventManager;
@@ -319,11 +320,11 @@ public class KothEvent extends AbstractGameEvent {
     }
 
     private String color(String input) {
-        return input == null ? "" : input.replace("&", "§");
+        return LangManager.colorize(input);
     }
 
     private static String colorStatic(String input) {
-        return input == null ? "" : input.replace("&", "§");
+        return LangManager.colorize(input);
     }
 
     private static NamespacedKey markerKey() {

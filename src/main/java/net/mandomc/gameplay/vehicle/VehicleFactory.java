@@ -10,6 +10,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.LangManager;
 import net.mandomc.gameplay.vehicle.config.VehicleConfig;
 
 import java.util.ArrayList;
@@ -61,6 +62,6 @@ public class VehicleFactory {
     }
 
     private static String color(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text);
+        return LangManager.colorize(text);
     }
 }

@@ -1,5 +1,6 @@
 package net.mandomc.gameplay.lottery;
 
+import net.mandomc.core.LangManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -138,7 +139,7 @@ public class LotteryHologramManager {
      * @return colored text
      */
     private static String color(String text) {
-        return ChatColor.translateAlternateColorCodes('&', text);
+        return LangManager.colorize(text);
     }
 
     private static void createHologram(HologramManager manager, Location location, List<String> lines) {
