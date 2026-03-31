@@ -1,0 +1,228 @@
+package net.mandomc.gameplay.vehicle.listener;
+
+import java.util.UUID;
+
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Pig;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+
+import com.ticxo.modelengine.api.ModelEngineAPI;
+import com.ticxo.modelengine.api.model.ActiveModel;
+import com.ticxo.modelengine.api.model.ModeledEntity;
+
+import net.mandomc.gameplay.vehicle.model.Vehicle;
+import net.mandomc.gameplay.vehicle.model.VehicleData;
+import net.mandomc.gameplay.vehicle.config.VehicleConfigResolver;
+import net.mandomc.gameplay.vehicle.weapon.SpeederBike;
+import net.mandomc.gameplay.vehicle.weapon.TieFighter;
+import net.mandomc.gameplay.vehicle.weapon.WeaponSystem;
+import net.mandomc.gameplay.vehicle.weapon.XWing;
+import net.mandomc.core.LangManager;
+import net.mandomc.core.modules.server.VehicleModule;
+import net.mandomc.server.items.ItemUtils;
+
+/**
+ * Handles vehicle spawning when a player right-clicks with a vehicle item.
+ *
+ * Validates spawn conditions, creates the backing entity and ModelEngine model,
+ * assigns a weapon system, and registers the vehicle.
+ */
+public class SpawnListener implements Listener {
+
+    private static final String SPAWN_WORLD = "world";
+
+    private static final int X1 = 703;
+    private static final int Z1 = -176;
+    private static final int X2 = 672;
+    private static final int Z2 = -145;
+
+    /**
+     * Handles right-click interactions to spawn a vehicle.
+     *
+     * @param event the player interact event
+     */
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        if (!isValidInteraction(event)) return;
+
+        Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
+        PlayerInventory inventory = player.getInventory();
+        ItemStack item = inventory.getItemInMainHand();
+
+        if (!canSpawnVehicle(player, uuid, item)) return;
+
+        Location location = player.getLocation();
+        World world = player.getWorld();
+
+        if (isInSpawnZone(location)) {
+            player.sendMessage(LangManager.get("vehicles.wrong-world", "%world%", "Earth"));
+            return;
+        }
+
+        String itemId = ItemUtils.getItemId(item);
+        if (itemId == null) {
+            player.sendMessage(LangManager.get("vehicles.invalid-item"));
+            return;
+        }
+
+        VehicleData vehicleData = createVehicleData(item);
+        WeaponSystem weaponSystem = createWeaponSystem(item);
+
+        if (weaponSystem == null) {
+            player.sendMessage(LangManager.get("vehicles.no-weapon-config"));
+            return;
+        }
+
+        Vehicle vehicle = new Vehicle(weaponSystem, vehicleData, uuid, itemId);
+
+        spawnVehicleEntities(player, world, location, vehicleData);
+        registerVehicle(uuid, vehicle);
+        consumeItem(inventory, item);
+
+        player.sendMessage(LangManager.get("vehicles.deployed"));
+    }
+
+    /**
+     * Returns true if the interaction is a right-click from the main hand.
+     */
+    private boolean isValidInteraction(PlayerInteractEvent event) {
+        if (event.getHand() != EquipmentSlot.HAND) return false;
+        Action action = event.getAction();
+        return action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK;
+    }
+
+    /**
+     * Returns true if the player is allowed to spawn a vehicle.
+     *
+     * Fails if the item is null, not tagged as VEHICLE, or the player already
+     * has an active vehicle.
+     */
+    private boolean canSpawnVehicle(Player player, UUID uuid, ItemStack item) {
+        if (item == null) return false;
+        if (!ItemUtils.hasTag(item, "VEHICLE")) return false;
+
+        if (VehicleModule.getActiveVehicles().containsKey(uuid)) {
+            player.sendMessage(LangManager.get("vehicles.already-deployed"));
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns true if the location is within the protected spawn zone.
+     */
+    private boolean isInSpawnZone(Location loc) {
+        if (!loc.getWorld().getName().equalsIgnoreCase(SPAWN_WORLD)) return false;
+
+        double x = loc.getX();
+        double z = loc.getZ();
+
+        double minX = Math.min(X1, X2);
+        double maxX = Math.max(X1, X2);
+        double minZ = Math.min(Z1, Z2);
+        double maxZ = Math.max(Z1, Z2);
+
+        return x >= minX && x <= maxX && z >= minZ && z <= maxZ;
+    }
+
+    /**
+     * Builds a VehicleData instance from the given vehicle item's config.
+     */
+    private VehicleData createVehicleData(ItemStack item) {
+        double speed = VehicleConfigResolver.getSpeed(item);
+        double scale = VehicleConfigResolver.getScale(item);
+        String modelKey = VehicleConfigResolver.getModelKey(item);
+        String movementSound = VehicleConfigResolver.getMovementSound(item);
+        int movementSoundLength = VehicleConfigResolver.getMovementSoundLength(item);
+
+        VehicleData data = new VehicleData(item, speed, scale, modelKey);
+        data.setMovementSound(movementSound);
+        data.setMovementSoundLength(movementSoundLength);
+
+        return data;
+    }
+
+    /**
+     * Selects the weapon system for the vehicle based on its model key.
+     *
+     * @return the weapon system, or null if the model key is unrecognized
+     */
+    private WeaponSystem createWeaponSystem(ItemStack item) {
+        String modelKey = VehicleConfigResolver.getModelKey(item);
+
+        return switch (modelKey.toLowerCase()) {
+            case "xwing" -> new XWing();
+            case "tiefighter" -> new TieFighter();
+            case "speederbike" -> new SpeederBike();
+            default -> null;
+        };
+    }
+
+    /**
+     * Spawns the vehicle's backing entity and attaches the ModelEngine model.
+     */
+    private void spawnVehicleEntities(Player player, World world, Location location, VehicleData vehicleData) {
+        double scale = vehicleData.getScale();
+
+        Pig entity = world.spawn(location, Pig.class);
+        entity.setAI(false);
+        entity.setGravity(true);
+        entity.setInvisible(true);
+        entity.setInvulnerable(false);
+        entity.setPersistent(true);
+        entity.setCollidable(false);
+
+        LivingEntity living = entity;
+        living.setSilent(true);
+
+        AttributeInstance maxHealth = living.getAttribute(Attribute.MAX_HEALTH);
+        if (maxHealth != null) maxHealth.setBaseValue(40);
+        living.setHealth(40);
+
+        ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(entity);
+        ActiveModel activeModel = ModelEngineAPI.createActiveModel(vehicleData.getModelKey());
+
+        activeModel.setScale(scale);
+        activeModel.setHitboxScale(scale);
+
+        modeledEntity.addModel(activeModel, true);
+        modeledEntity.getBase().setMaxStepHeight(1.0);
+
+        vehicleData.setActiveModel(activeModel);
+        vehicleData.setModeledEntity(modeledEntity);
+        vehicleData.setEntity(entity);
+    }
+
+    /**
+     * Registers the vehicle into the active vehicle map.
+     */
+    private void registerVehicle(UUID uuid, Vehicle vehicle) {
+        VehicleModule.getActiveVehicles().put(uuid, vehicle);
+    }
+
+    /**
+     * Removes one item from the player's main hand after spawning.
+     */
+    private void consumeItem(PlayerInventory inventory, ItemStack item) {
+        int amount = item.getAmount();
+        if (amount > 1) {
+            item.setAmount(amount - 1);
+            inventory.setItemInMainHand(item);
+        } else {
+            inventory.setItemInMainHand(null);
+        }
+    }
+}

@@ -1,23 +1,27 @@
 package net.mandomc.core.modules.core;
 
-import org.bukkit.Bukkit;
-
 import net.mandomc.MandoMC;
-import net.mandomc.content.lightsabers.listeners.SaberDeflectListener;
-import net.mandomc.content.lightsabers.listeners.SaberHitListener;
-import net.mandomc.content.lightsabers.listeners.SaberThrowListener;
-import net.mandomc.content.lightsabers.listeners.SaberToggleListener;
+import net.mandomc.gameplay.lightsaber.listener.SaberDeflectListener;
+import net.mandomc.gameplay.lightsaber.listener.SaberHitListener;
+import net.mandomc.gameplay.lightsaber.listener.SaberThrowListener;
+import net.mandomc.gameplay.lightsaber.listener.SaberToggleListener;
 import net.mandomc.core.guis.GUIListener;
+import net.mandomc.core.guis.GUIManager;
+import net.mandomc.core.lifecycle.ListenerRegistrar;
 import net.mandomc.core.module.Module;
+import net.mandomc.core.services.ServiceRegistry;
 
 /**
  * Registers core event listeners shared across all subsystems.
  *
  * Includes the central GUI listener and all lightsaber interaction listeners.
+ * All listeners are tracked by a {@link ListenerRegistrar} so they are cleanly
+ * unregistered on disable (enabling safe /mmcreload).
  */
 public class ListenerModule implements Module {
 
     private final MandoMC plugin;
+    private ListenerRegistrar listenerRegistrar;
 
     /**
      * Creates the listener module.
@@ -32,14 +36,22 @@ public class ListenerModule implements Module {
      * Registers all core listeners with the Bukkit plugin manager.
      */
     @Override
-    public void enable() {
-        Bukkit.getPluginManager().registerEvents(new GUIListener(GUIModule.GUI_MANAGER), plugin);
-        Bukkit.getPluginManager().registerEvents(new SaberHitListener(), plugin);
-        Bukkit.getPluginManager().registerEvents(new SaberThrowListener(), plugin);
-        Bukkit.getPluginManager().registerEvents(new SaberToggleListener(), plugin);
-        Bukkit.getPluginManager().registerEvents(new SaberDeflectListener(), plugin);
+    public void enable(ServiceRegistry registry) {
+        listenerRegistrar = new ListenerRegistrar(plugin);
+
+        GUIManager guiManager = registry.get(GUIManager.class);
+
+        listenerRegistrar.register(new GUIListener(guiManager));
+        listenerRegistrar.register(new SaberHitListener());
+        listenerRegistrar.register(new SaberThrowListener());
+        listenerRegistrar.register(new SaberToggleListener());
+        listenerRegistrar.register(new SaberDeflectListener());
     }
 
     @Override
-    public void disable() {}
+    public void disable() {
+        if (listenerRegistrar != null) {
+            listenerRegistrar.unregisterAll();
+        }
+    }
 }

@@ -2,26 +2,20 @@ package net.mandomc.core.modules.core;
 
 import net.mandomc.core.guis.GUIManager;
 import net.mandomc.core.module.Module;
+import net.mandomc.core.services.ServiceRegistry;
 
 /**
- * Initializes the central GUI management system.
- *
- * Exposes a static reference to the GUIManager for use by other modules
- * during command and listener setup.
+ * Initializes the central GUI management system and registers it in the
+ * {@link ServiceRegistry} for downstream modules to consume.
  */
 public class GUIModule implements Module {
 
     /**
-     * The shared GUI manager instance, available after this module is enabled.
-     */
-    public static GUIManager GUI_MANAGER;
-
-    /**
-     * Instantiates the GUI manager.
+     * Instantiates the GUI manager and registers it in the service registry.
      */
     @Override
-    public void enable() {
-        GUI_MANAGER = new GUIManager();
+    public void enable(ServiceRegistry registry) {
+        registry.register(GUIManager.class, new GUIManager());
     }
 
     @Override

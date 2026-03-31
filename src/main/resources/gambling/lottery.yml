@@ -7,6 +7,13 @@ lottery:
   max-tickets-per-player: 10
 
   # -------------------------
+  # Validation
+  # -------------------------
+  validation:
+    min-ticket-price: 100
+    max-tickets-per-player: 10
+
+  # -------------------------
   # Draw Schedule (Server Time)
   # -------------------------
   draw:

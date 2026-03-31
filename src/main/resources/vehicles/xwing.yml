@@ -1,0 +1,24 @@
+vehicle:
+  item_id: xwing
+
+  fuel:
+    max: 1000
+    start: 1000
+
+  stats:
+    max_health: 200
+    speed: 2.1
+    scale: 1
+
+  systems:
+    movement: AERIAL
+
+    weapon:
+      gun: XWing_Proton_Torpedo
+      ammo: Proton_Torpedo
+      ammo_per_shot: 1
+      cooldown: 2000
+      sound: vehicles.xwing_shoot
+
+    movement_sound: vehicles.xwing_fly
+    movement_sound_time_in_ticks: 460

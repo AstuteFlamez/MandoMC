@@ -4,3 +4,4 @@ database:
   name: mandomc
   username: user
   password: CHANGE_ME
+  pool-size: 10

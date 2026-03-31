@@ -10,6 +10,14 @@ bounty:
   tracking-interval: 600
 
   # =========================
+  # ✅ VALIDATION
+  # =========================
+  validation:
+    min-amount: 100
+    max-amount: 100000
+    max-per-player: 1
+
+  # =========================
   # 🛰 SHOWCASE HOLOGRAM
   # =========================
   showcase:

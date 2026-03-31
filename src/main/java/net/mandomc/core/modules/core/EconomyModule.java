@@ -10,7 +10,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.lifecycle.TaskRegistrar;
 import net.mandomc.core.module.Module;
+import net.mandomc.core.services.ServiceRegistry;
 import net.milkbowl.vault.economy.Economy;
 
 /**
@@ -18,10 +20,15 @@ import net.milkbowl.vault.economy.Economy;
  *
  * Hooks into the registered Vault Economy provider on enable and
  * periodically syncs online player balances to the configured database.
+ *
+ * Static utility methods ({@code getBalance}, {@code has}, {@code withdraw},
+ * {@code deposit}) are retained for backward compatibility during the refactor.
+ * They will be replaced with injected {@code EconomyService} calls in Phase 5.
  */
 public class EconomyModule implements Module {
 
     private final MandoMC plugin;
+    private TaskRegistrar taskRegistrar;
 
     private static Economy economy;
 
@@ -46,7 +53,7 @@ public class EconomyModule implements Module {
      * Disables the plugin if Vault or an economy provider is unavailable.
      */
     @Override
-    public void enable() {
+    public void enable(ServiceRegistry registry) {
         if (!setupEconomy()) {
             plugin.getLogger().severe("Vault or Economy provider not found!");
             plugin.getServer().getPluginManager().disablePlugin(plugin);
@@ -61,6 +68,7 @@ public class EconomyModule implements Module {
 
         plugin.getLogger().info("Economy hooked: " + economy.getName());
 
+        taskRegistrar = new TaskRegistrar(plugin);
         startBalanceSync();
     }
 
@@ -87,9 +95,10 @@ public class EconomyModule implements Module {
      * Starts a repeating async task that syncs online player balances to the database.
      *
      * Runs every 60 seconds. Uses a batch insert/update for efficiency.
+     * The task is tracked by {@link TaskRegistrar} and cancelled on {@link #disable()}.
      */
     private void startBalanceSync() {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
+        taskRegistrar.runTimerAsync(() -> {
             if (!isReady()) return;
 
             String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false";
@@ -122,10 +131,13 @@ public class EconomyModule implements Module {
     }
 
     /**
-     * Clears the economy reference on shutdown.
+     * Cancels the balance sync task and clears the economy reference on shutdown.
      */
     @Override
     public void disable() {
+        if (taskRegistrar != null) {
+            taskRegistrar.cancelAll();
+        }
         economy = null;
     }
 

@@ -1,0 +1,27 @@
+vehicle:
+  item_id: tiefighter
+
+  fuel:
+    max: 1000
+    start: 1000
+
+  stats:
+    max_health: 150
+    speed: 3
+    scale: 1
+
+  systems:
+    movement: AERIAL
+
+    weapon:
+      gun: TIEFighter_Lasers
+      ammo: Tibanna_Gas_Cells
+      ammo_per_shot: 1
+      burst: 3
+      burst_interval: 3
+      spread: 2
+      cooldown: 0
+      sound: vehicles.tie_fighter_shoot
+
+    movement_sound: vehicles.tie_fighter_fly
+    movement_sound_time_in_ticks: 420

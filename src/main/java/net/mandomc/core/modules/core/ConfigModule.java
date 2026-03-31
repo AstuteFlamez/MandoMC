@@ -3,24 +3,35 @@ package net.mandomc.core.modules.core;
 import java.io.File;
 
 import net.mandomc.MandoMC;
-import net.mandomc.content.vehicles.VehicleRegistry;
-import net.mandomc.content.vehicles.config.VehicleConfig;
+import net.mandomc.gameplay.vehicle.VehicleRegistry;
+import net.mandomc.gameplay.vehicle.config.VehicleConfig;
+import net.mandomc.gameplay.vehicle.config.VehicleDefinitionConfig;
 import net.mandomc.core.LangManager;
+import net.mandomc.core.config.MainConfig;
 import net.mandomc.core.module.Module;
-import net.mandomc.mechanics.gambling.lottery.LotteryConfig;
-import net.mandomc.mechanics.warps.WarpConfig;
-import net.mandomc.system.items.ItemLoader;
-import net.mandomc.system.items.ItemRegistry;
-import net.mandomc.system.items.config.ItemsConfig;
-import net.mandomc.system.planets.ilum.configs.ParkourConfig;
-import net.mandomc.system.shops.ShopLoader;
+import net.mandomc.core.services.ServiceRegistry;
+import net.mandomc.gameplay.bounty.config.BountyConfig;
+import net.mandomc.gameplay.lottery.config.LotteryConfig;
+import net.mandomc.gameplay.warp.config.WarpConfig;
+import net.mandomc.server.events.config.EventConfig;
+import net.mandomc.server.items.ItemLoader;
+import net.mandomc.server.items.ItemRegistry;
+import net.mandomc.server.items.config.ItemDefinitionConfig;
+import net.mandomc.server.items.config.ItemsConfig;
+import net.mandomc.world.ilum.config.ParkourConfig;
+import net.mandomc.server.shop.ShopLoader;
+import net.mandomc.server.shop.config.ShopConfig;
 
 /**
  * Handles loading and initialization of all plugin configuration files.
  *
- * Load order is critical: item configs must be loaded before item
- * registry population, and the item registry must be populated
- * before shops are loaded.
+ * Instantiates all typed {@link net.mandomc.core.config.BaseConfig} subclasses
+ * and registers them in the {@link ServiceRegistry} so other modules can
+ * inject them via constructor rather than accessing static config classes.
+ *
+ * Load order is critical: item configs and vehicle configs must be loaded
+ * before their respective registries are populated, and the item registry
+ * must be ready before shops are loaded.
  */
 public class ConfigModule implements Module {
 
@@ -36,30 +47,24 @@ public class ConfigModule implements Module {
     }
 
     /**
-     * Initializes and loads all configuration files in dependency order.
+     * Initializes and loads all configuration files in dependency order,
+     * then registers typed config objects in the service registry.
      */
     @Override
-    public void enable() {
+    public void enable(ServiceRegistry registry) {
         plugin.getDataFolder().mkdirs();
 
+        // ── Main plugin config ──────────────────────────────────────────
         plugin.getConfig().options().copyDefaults(true);
         plugin.saveDefaultConfig();
 
+        MainConfig mainConfig = new MainConfig(plugin);
+        registry.register(MainConfig.class, mainConfig);
+
         LangManager.load();
-
-        WarpConfig.setup();
-        WarpConfig.get().options().copyDefaults(true);
-        WarpConfig.save();
-
-        ParkourConfig.setup();
-        ParkourConfig.get().options().copyDefaults(true);
-        ParkourConfig.save();
-
-        LotteryConfig.load();
 
         ItemsConfig.setup();
         VehicleConfig.setup();
-
         ItemsConfig.reload();
         VehicleConfig.reload();
         VehicleRegistry.load();
@@ -75,6 +80,34 @@ public class ConfigModule implements Module {
             plugin.getLogger().warning("[Shops] Could not resolve plugin jar path — default configs may not be copied.");
         }
         ShopLoader.loadAll(shopsFolder, pluginJar);
+
+        // ── Typed config objects ────────────────────────────────────────
+        BountyConfig bountyConfig = new BountyConfig(plugin);
+        registry.register(BountyConfig.class, bountyConfig);
+
+        LotteryConfig lotteryConfig = new LotteryConfig(plugin);
+        registry.register(LotteryConfig.class, lotteryConfig);
+
+        WarpConfig warpConfig = new WarpConfig(plugin);
+        registry.register(WarpConfig.class, warpConfig);
+
+        EventConfig eventConfig = new EventConfig(plugin);
+        registry.register(EventConfig.class, eventConfig);
+
+        ParkourConfig parkourConfig = new ParkourConfig(plugin);
+        registry.register(ParkourConfig.class, parkourConfig);
+
+        VehicleDefinitionConfig vehicleDefinitionConfig = new VehicleDefinitionConfig(plugin);
+        vehicleDefinitionConfig.reload();
+        registry.register(VehicleDefinitionConfig.class, vehicleDefinitionConfig);
+
+        ItemDefinitionConfig itemDefinitionConfig = new ItemDefinitionConfig(plugin);
+        itemDefinitionConfig.reload();
+        registry.register(ItemDefinitionConfig.class, itemDefinitionConfig);
+
+        ShopConfig shopConfig = new ShopConfig(plugin);
+        shopConfig.reload();
+        registry.register(ShopConfig.class, shopConfig);
 
         plugin.getLogger().info("All configs loaded successfully.");
     }
