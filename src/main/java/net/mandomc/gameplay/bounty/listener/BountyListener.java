@@ -28,7 +28,7 @@ public class BountyListener implements Listener {
             double total = bounty.getTotal();
             EconomyModule.deposit(killer, total);
             repository.delete(victim.getUniqueId());
-            repository.flush();
+            repository.flushSoon(40L);
             BountyShowcaseManager.update();
         });
     }
@@ -39,7 +39,8 @@ public class BountyListener implements Listener {
 
         repository.findById(player.getUniqueId()).ifPresent(bounty -> {
             bounty.updateTracking(player.getLocation(), System.currentTimeMillis());
-            repository.flush();
+            repository.touch();
+            repository.flushSoon(40L);
             BountyShowcaseManager.update();
         });
     }

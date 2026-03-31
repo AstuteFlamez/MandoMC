@@ -1,6 +1,7 @@
 package net.mandomc.core.modules.world;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.config.MainConfig;
 import net.mandomc.core.lifecycle.ListenerRegistrar;
 import net.mandomc.core.module.Module;
 import net.mandomc.core.services.ServiceRegistry;
@@ -19,7 +20,12 @@ public class TatooineModule implements Module {
     @Override
     public void enable(ServiceRegistry registry) {
         listenerRegistrar = new ListenerRegistrar(plugin);
-        listener = new TatooinePotListener();
+        MainConfig mainConfig = registry.get(MainConfig.class);
+        if (mainConfig == null) {
+            plugin.getLogger().warning("Tatooine module disabled: MainConfig is unavailable.");
+            return;
+        }
+        listener = new TatooinePotListener(mainConfig);
         listenerRegistrar.register(listener);
         listener.enable();
     }

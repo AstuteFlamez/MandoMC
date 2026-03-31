@@ -14,6 +14,7 @@ import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,6 +31,7 @@ public class LotteryTopHologramManager {
 
     private static net.mandomc.gameplay.lottery.config.LotteryConfig lotteryConfig;
     private static String hologramId;
+    private static final Map<UUID, String> playerNameCache = new HashMap<>();
 
     public static void init(net.mandomc.gameplay.lottery.config.LotteryConfig cfg) {
         lotteryConfig = cfg;
@@ -40,7 +42,8 @@ public class LotteryTopHologramManager {
      * Pulls data from config and LotteryManager.
      */
     public static void update() {
-        if (!OptionalPluginSupport.hasFancyHolograms()) {
+        HologramManager manager = getHologramManager();
+        if (manager == null) {
             return;
         }
 
@@ -48,11 +51,13 @@ public class LotteryTopHologramManager {
         ConfigurationSection section = lotteryConfig.getTopHologramSection();
 
         if (section == null || !section.getBoolean("enabled")) {
+            remove();
             return;
         }
 
         World world = Bukkit.getWorld(section.getString("world"));
         if (world == null) {
+            remove();
             return;
         }
 
@@ -74,20 +79,15 @@ public class LotteryTopHologramManager {
 
         hologramId = section.getString("id", "lottery_top");
 
-        HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
-
-        // Remove existing hologram if present
-        manager.getHologram(hologramId).ifPresent(manager::removeHologram);
-
-        // Create new hologram
-        TextHologramData data = new TextHologramData(hologramId, location);
-        data.setText(formattedLines);
-        data.setBillboard(Display.Billboard.CENTER);
-        data.setTextShadow(true);
-        data.setBackground(Color.fromARGB(0, 0, 0, 10));
-
-        Hologram hologram = manager.create(data);
-        manager.addHologram(hologram);
+        manager.getHologram(hologramId).ifPresentOrElse(existing -> {
+            if (existing.getData() instanceof TextHologramData textData) {
+                textData.setLocation(location);
+                textData.setText(formattedLines);
+                return;
+            }
+            manager.removeHologram(existing);
+            createHologram(manager, location, formattedLines);
+        }, () -> createHologram(manager, location, formattedLines));
     }
 
     /**
@@ -145,9 +145,7 @@ public class LotteryTopHologramManager {
 
         Map.Entry<UUID, Integer> entry = sorted.get(index);
 
-        String name = Optional.ofNullable(
-                Bukkit.getOfflinePlayer(entry.getKey()).getName()
-        ).orElse("Unknown");
+        String name = resolvePlayerName(entry.getKey());
 
         int tickets = entry.getValue();
 
@@ -175,7 +173,46 @@ public class LotteryTopHologramManager {
         if (hologramId == null) {
             return;
         }
-        HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
+        HologramManager manager = getHologramManager();
+        if (manager == null) {
+            return;
+        }
         manager.getHologram(hologramId).ifPresent(manager::removeHologram);
+        playerNameCache.clear();
+    }
+
+    private static void createHologram(HologramManager manager, Location location, List<String> lines) {
+        TextHologramData data = new TextHologramData(hologramId, location);
+        data.setText(lines);
+        data.setBillboard(Display.Billboard.CENTER);
+        data.setTextShadow(true);
+        data.setBackground(Color.fromARGB(0, 0, 0, 10));
+
+        Hologram hologram = manager.create(data);
+        manager.addHologram(hologram);
+    }
+
+    private static String resolvePlayerName(UUID playerId) {
+        var online = Bukkit.getPlayer(playerId);
+        if (online != null) {
+            String liveName = online.getName();
+            playerNameCache.put(playerId, liveName);
+            return liveName;
+        }
+        return playerNameCache.computeIfAbsent(
+                playerId,
+                id -> Optional.ofNullable(Bukkit.getOfflinePlayer(id).getName()).orElse("Unknown")
+        );
+    }
+
+    private static HologramManager getHologramManager() {
+        if (!OptionalPluginSupport.hasFancyHolograms()) {
+            return null;
+        }
+        try {
+            return FancyHologramsPlugin.get().getHologramManager();
+        } catch (Throwable ignored) {
+            return null;
+        }
     }
 }

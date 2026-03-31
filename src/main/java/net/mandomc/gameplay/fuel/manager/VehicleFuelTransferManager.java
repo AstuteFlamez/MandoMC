@@ -22,6 +22,8 @@ import net.mandomc.core.LangManager;
 public class VehicleFuelTransferManager {
 
     private static final Map<UUID, BukkitTask> transfers = new HashMap<>();
+    private static final Map<UUID, Integer> displayTickCounters = new HashMap<>();
+    private static final int DISPLAY_UPDATE_INTERVAL_TICKS = 5;
 
     /**
      * Returns true if the given player currently has an active vehicle fuel transfer.
@@ -55,6 +57,7 @@ public class VehicleFuelTransferManager {
         );
 
         transfers.put(player.getUniqueId(), task);
+        displayTickCounters.put(player.getUniqueId(), 0);
     }
 
     /**
@@ -63,6 +66,7 @@ public class VehicleFuelTransferManager {
      * @param player the player whose transfer to stop
      */
     public static void stopTransfer(Player player) {
+        displayTickCounters.remove(player.getUniqueId());
         BukkitTask task = transfers.remove(player.getUniqueId());
 
         if (task != null) {
@@ -77,6 +81,7 @@ public class VehicleFuelTransferManager {
      * @param player the player whose transfer to cancel
      */
     private static void cancelTransfer(Player player) {
+        displayTickCounters.remove(player.getUniqueId());
         BukkitTask task = transfers.remove(player.getUniqueId());
 
         if (task != null) {
@@ -111,6 +116,8 @@ public class VehicleFuelTransferManager {
         }
 
         String mode = CanisterManager.getMode(canister);
+        UUID playerId = player.getUniqueId();
+        boolean refreshDisplay = shouldRefreshDisplay(playerId);
 
         int vehicleFuel = FuelManager.getCurrentFuel(vehicleTank);
         int vehicleMax = FuelManager.getMaxFuel(vehicleTank);
@@ -139,8 +146,8 @@ public class VehicleFuelTransferManager {
                 return;
             }
 
-            FuelManager.updateFuel(canister, canFuel - 1);
-            FuelManager.updateFuel(vehicleTank, vehicleFuel + 1);
+            FuelManager.updateFuel(canister, canFuel - 1, refreshDisplay);
+            FuelManager.updateFuel(vehicleTank, vehicleFuel + 1, refreshDisplay);
 
             int newCanFuel = FuelManager.getCurrentFuel(canister);
             int newVehicleFuel = FuelManager.getCurrentFuel(vehicleTank);
@@ -176,8 +183,8 @@ public class VehicleFuelTransferManager {
             return;
         }
 
-        FuelManager.updateFuel(canister, canFuel + 1);
-        FuelManager.updateFuel(vehicleTank, vehicleFuel - 1);
+        FuelManager.updateFuel(canister, canFuel + 1, refreshDisplay);
+        FuelManager.updateFuel(vehicleTank, vehicleFuel - 1, refreshDisplay);
 
         int newCanFuel = FuelManager.getCurrentFuel(canister);
         int newVehicleFuel = FuelManager.getCurrentFuel(vehicleTank);
@@ -189,5 +196,11 @@ public class VehicleFuelTransferManager {
                         "%vehicle%", String.valueOf(newVehicleFuel),
                         "%vehicle-max%", String.valueOf(vehicleMax))
         );
+    }
+
+    private static boolean shouldRefreshDisplay(UUID playerId) {
+        int next = displayTickCounters.getOrDefault(playerId, 0) + 1;
+        displayTickCounters.put(playerId, next);
+        return next % DISPLAY_UPDATE_INTERVAL_TICKS == 0;
     }
 }

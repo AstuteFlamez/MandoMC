@@ -71,17 +71,36 @@ public class FuelManager {
      * @param newFuel the new fuel value to write
      */
     public static void updateFuel(ItemStack item, int newFuel) {
+        updateFuel(item, newFuel, true);
+    }
+
+    /**
+     * Updates current fuel and optionally refreshes lore display.
+     *
+     * @param item          the item to update
+     * @param newFuel       the new fuel value
+     * @param refreshDisplay whether to update the lore line this call
+     */
+    public static void updateFuel(ItemStack item, int newFuel, boolean refreshDisplay) {
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return;
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        int maxFuel = getMaxFuel(item);
+        int maxFuel = container.getOrDefault(MAX_FUEL, PersistentDataType.INTEGER, 0);
+        int clampedFuel = maxFuel > 0 ? Math.max(0, Math.min(newFuel, maxFuel)) : Math.max(0, newFuel);
+        int currentFuel = container.getOrDefault(CURRENT_FUEL, PersistentDataType.INTEGER, 0);
 
-        container.set(CURRENT_FUEL, PersistentDataType.INTEGER, newFuel);
+        if (currentFuel == clampedFuel && !refreshDisplay) {
+            return;
+        }
+
+        container.set(CURRENT_FUEL, PersistentDataType.INTEGER, clampedFuel);
 
         item.setItemMeta(meta);
 
-        updateDisplay(item, newFuel, maxFuel);
+        if (refreshDisplay) {
+            updateDisplay(item, clampedFuel, maxFuel);
+        }
     }
 
     /**

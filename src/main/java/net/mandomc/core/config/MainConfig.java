@@ -1,6 +1,7 @@
 package net.mandomc.core.config;
 
 import org.bukkit.plugin.Plugin;
+import java.util.List;
 
 /**
  * Typed wrapper for {@code config.yml}.
@@ -57,5 +58,60 @@ public class MainConfig extends BaseConfig {
     /** HikariCP maximum pool size. */
     public int getPoolSize() {
         return getInt("database.pool-size", 10);
+    }
+
+    /** World where vehicle deployment is restricted. */
+    public String getVehicleSpawnRestrictionWorld() {
+        return getString("vehicle.spawn-restriction.world", "world");
+    }
+
+    /** Friendly world label shown in denial messages. */
+    public String getVehicleSpawnRestrictionDisplayWorld() {
+        return getString("vehicle.spawn-restriction.display-world", "Earth");
+    }
+
+    /** First X coordinate corner for spawn restriction bounds. */
+    public int getVehicleSpawnRestrictionX1() {
+        return getInt("vehicle.spawn-restriction.bounds.x1", 703);
+    }
+
+    /** First Z coordinate corner for spawn restriction bounds. */
+    public int getVehicleSpawnRestrictionZ1() {
+        return getInt("vehicle.spawn-restriction.bounds.z1", -176);
+    }
+
+    /** Second X coordinate corner for spawn restriction bounds. */
+    public int getVehicleSpawnRestrictionX2() {
+        return getInt("vehicle.spawn-restriction.bounds.x2", 672);
+    }
+
+    /** Second Z coordinate corner for spawn restriction bounds. */
+    public int getVehicleSpawnRestrictionZ2() {
+        return getInt("vehicle.spawn-restriction.bounds.z2", -145);
+    }
+
+    /** Tatooine pot world name. */
+    public String getTatooinePotWorld() {
+        return getString("tatooine.pots.world", "Tatooine");
+    }
+
+    /** Maximum number of active decorated pots. */
+    public int getTatooineMaxActivePots() {
+        return Math.max(1, getInt("tatooine.pots.max-active", 10));
+    }
+
+    /** Respawn delay in ticks after a pot is opened. */
+    public long getTatooineRespawnDelayTicks() {
+        return Math.max(20L, getInt("tatooine.pots.respawn-delay-ticks", 200));
+    }
+
+    /** Minimum distance in blocks from old location when selecting a new pot location. */
+    public int getTatooineMinRespawnDistanceBlocks() {
+        return Math.max(0, getInt("tatooine.pots.min-distance-blocks", 20));
+    }
+
+    /** Optional list of configured pot locations in format "x,y,z". */
+    public List<String> getTatooinePotLocationStrings() {
+        return getStringList("tatooine.pots.locations");
     }
 }

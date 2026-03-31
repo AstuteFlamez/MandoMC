@@ -8,6 +8,7 @@ import org.bukkit.NamespacedKey;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.config.MainConfig;
 import net.mandomc.core.integration.OptionalPluginSupport;
 import net.mandomc.core.guis.GUIManager;
 import net.mandomc.gameplay.vehicle.model.Vehicle;
@@ -41,6 +42,8 @@ public class VehicleModule implements Module {
 
     /** Maps owner UUID → their spawned vehicle. */
     private static final HashMap<UUID, Vehicle> activeVehicles = new HashMap<>();
+    /** Maps vehicle entity UUID → owner UUID for O(1) entity event lookups. */
+    private static final HashMap<UUID, UUID> entityIndex = new HashMap<>();
 
     /**
      * Maps any non-owner rider UUID → the owner UUID of the vehicle they're in.
@@ -81,11 +84,16 @@ public class VehicleModule implements Module {
         }
 
         GUIManager guiManager = registry.get(GUIManager.class);
+        MainConfig mainConfig = registry.get(MainConfig.class);
+        if (mainConfig == null) {
+            plugin.getLogger().warning("Vehicle module disabled: MainConfig is unavailable.");
+            return;
+        }
 
         ModelEngineAPI.getMountControllerTypeRegistry().register("aerial_controller", AerialMountController.AERIAL);
         ModelEngineAPI.getMountControllerTypeRegistry().register("surface_controller", SurfaceMountController.SURFACE);
 
-        listenerRegistrar.register(new SpawnListener());
+        listenerRegistrar.register(new SpawnListener(mainConfig));
         listenerRegistrar.register(new MountListener(guiManager));
         listenerRegistrar.register(new PickupListener());
         listenerRegistrar.register(new VehicleCanisterInteractListener());
@@ -103,6 +111,7 @@ public class VehicleModule implements Module {
         if (listenerRegistrar != null) listenerRegistrar.unregisterAll();
         activeVehicles.clear();
         occupantIndex.clear();
+        entityIndex.clear();
     }
 
     // -------------------------------------------------------------------------
@@ -134,6 +143,63 @@ public class VehicleModule implements Module {
         if (ownerUUID == null) return null;
 
         return activeVehicles.get(ownerUUID);
+    }
+
+    /**
+     * Returns the vehicle backing the given spawned entity UUID.
+     *
+     * @param entityUuid entity UUID from a Bukkit event
+     * @return matching vehicle, or null if the entity is not tracked as a vehicle
+     */
+    public static Vehicle getVehicleByEntity(UUID entityUuid) {
+        UUID ownerUuid = entityIndex.get(entityUuid);
+        if (ownerUuid == null) {
+            return null;
+        }
+        return activeVehicles.get(ownerUuid);
+    }
+
+    /**
+     * Registers a spawned vehicle and updates owner/entity indexes.
+     *
+     * @param ownerUuid owning player UUID
+     * @param vehicle vehicle instance
+     */
+    public static void registerVehicle(UUID ownerUuid, Vehicle vehicle) {
+        activeVehicles.put(ownerUuid, vehicle);
+        if (vehicle.getVehicleData() == null || vehicle.getVehicleData().getEntity() == null) {
+            return;
+        }
+        entityIndex.put(vehicle.getVehicleData().getEntity().getUniqueId(), ownerUuid);
+    }
+
+    /**
+     * Unregisters an owner's active vehicle and clears related indexes.
+     *
+     * @param ownerUuid owning player UUID
+     * @return removed vehicle, or null if none existed
+     */
+    public static Vehicle unregisterVehicle(UUID ownerUuid) {
+        Vehicle removed = activeVehicles.remove(ownerUuid);
+        if (removed == null || removed.getVehicleData() == null || removed.getVehicleData().getEntity() == null) {
+            return removed;
+        }
+        entityIndex.remove(removed.getVehicleData().getEntity().getUniqueId());
+        return removed;
+    }
+
+    /**
+     * Unregisters a vehicle by entity UUID and clears related indexes.
+     *
+     * @param entityUuid backing entity UUID
+     * @return removed vehicle, or null if none was mapped
+     */
+    public static Vehicle unregisterVehicleByEntity(UUID entityUuid) {
+        UUID ownerUuid = entityIndex.remove(entityUuid);
+        if (ownerUuid == null) {
+            return null;
+        }
+        return activeVehicles.remove(ownerUuid);
     }
 
     // -------------------------------------------------------------------------

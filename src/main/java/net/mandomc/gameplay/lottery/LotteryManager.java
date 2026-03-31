@@ -1,6 +1,7 @@
 package net.mandomc.gameplay.lottery;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import net.mandomc.core.LangManager;
 
@@ -96,14 +97,21 @@ public class LotteryManager {
         }
 
         Player winner = Bukkit.getPlayer(winnerId);
+        OfflinePlayer offlineWinner = winner != null ? winner : Bukkit.getOfflinePlayer(winnerId);
         double winnings = pot;
 
-        if (winner != null && winner.isOnline()) {
-            EconomyModule.deposit(winner, winnings);
+        if (offlineWinner != null) {
+            EconomyModule.deposit(offlineWinner, winnings);
         }
 
+        String winnerName = (winner != null && winner.isOnline())
+                ? winner.getName()
+                : (offlineWinner != null && offlineWinner.getName() != null
+                ? offlineWinner.getName()
+                : winnerId.toString().substring(0, 8));
+
         Bukkit.broadcastMessage(LangManager.get("lottery.winner",
-                "%winner%", (winner != null ? winner.getName() : "Offline Player"),
+                "%winner%", winnerName,
                 "%amount%", String.valueOf(winnings)));
 
         reset();

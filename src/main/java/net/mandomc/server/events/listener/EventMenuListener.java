@@ -16,8 +16,11 @@ public class EventMenuListener implements Listener {
     }
 
     private boolean isEventMenu(String title) {
-        String menuTitle = manager.color(manager.getConfig().getString("gui.title", "&8Server Events"));
-        return title != null && title.equals(menuTitle);
+        if (title == null || manager.getConfig() == null) {
+            return false;
+        }
+        String configuredTitle = manager.color(manager.getConfig().getString("gui.title", "&8Server Events"));
+        return title.equals(configuredTitle);
     }
 
     @EventHandler

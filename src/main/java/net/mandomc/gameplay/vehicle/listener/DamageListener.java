@@ -34,19 +34,13 @@ public class DamageListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEnvironmentalDamage(EntityDamageEvent event) {
         Entity damaged = event.getEntity();
-
-        for (Vehicle vehicle : VehicleModule.getActiveVehicles().values()) {
-            VehicleData vehicleData = vehicle.getVehicleData();
-            Entity vehicleEntity = vehicleData.getEntity();
-
-            if (vehicleEntity == null) continue;
-            if (!vehicleEntity.getUniqueId().equals(damaged.getUniqueId())) continue;
-
-            if (!(event instanceof EntityDamageByEntityEvent)) {
-                event.setCancelled(true);
-            }
-
+        Vehicle vehicle = VehicleModule.getVehicleByEntity(damaged.getUniqueId());
+        if (vehicle == null) {
             return;
+        }
+
+        if (!(event instanceof EntityDamageByEntityEvent)) {
+            event.setCancelled(true);
         }
     }
 
@@ -62,36 +56,29 @@ public class DamageListener implements Listener {
     public void onPlayerDamage(EntityDamageByEntityEvent event) {
         Entity damaged = event.getEntity();
         Entity damager = event.getDamager();
-
-        for (Vehicle vehicle : VehicleModule.getActiveVehicles().values()) {
-            VehicleData vehicleData = vehicle.getVehicleData();
-            Entity vehicleEntity = vehicleData.getEntity();
-
-            if (vehicleEntity == null) continue;
-            if (!vehicleEntity.getUniqueId().equals(damaged.getUniqueId())) continue;
-
-            Player owner = Bukkit.getPlayer(vehicle.getOwnerUUID());
-
-            if (owner != null && damager.getUniqueId().equals(owner.getUniqueId())) {
-                event.setCancelled(true);
-                return;
-            }
-
-            if (!(damager instanceof Player player)) return;
-
-            double damage = event.getFinalDamage();
-            ItemStack vehicleItem = vehicleData.getItem();
-
-            VehicleHealthManager.damage(vehicleItem, damage, player);
-
-            if (damaged instanceof LivingEntity entity) {
-                AttributeInstance maxHealth = entity.getAttribute(Attribute.MAX_HEALTH);
-                if (maxHealth != null) {
-                    entity.setHealth(maxHealth.getValue());
-                }
-            }
-
+        Vehicle vehicle = VehicleModule.getVehicleByEntity(damaged.getUniqueId());
+        if (vehicle == null) {
             return;
+        }
+        VehicleData vehicleData = vehicle.getVehicleData();
+
+        Player owner = Bukkit.getPlayer(vehicle.getOwnerUUID());
+        if (owner != null && damager.getUniqueId().equals(owner.getUniqueId())) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!(damager instanceof Player player)) return;
+
+        double damage = event.getFinalDamage();
+        ItemStack vehicleItem = vehicleData.getItem();
+        VehicleHealthManager.damage(vehicleItem, damage, player);
+
+        if (damaged instanceof LivingEntity entity) {
+            AttributeInstance maxHealth = entity.getAttribute(Attribute.MAX_HEALTH);
+            if (maxHealth != null) {
+                entity.setHealth(maxHealth.getValue());
+            }
         }
     }
 }

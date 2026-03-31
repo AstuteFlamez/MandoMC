@@ -107,6 +107,27 @@ events:
     started-title:   "&a&lEVENT STARTED"
     ended-title:     "&c&lEVENT ENDED"
 
+  menu:
+    current:
+      title:      "&aCurrent Event"
+      none-title: "&cNo Active Event"
+      none-lore:  "&7There is no event running."
+      state:      "&7State: &f%state%"
+    next:
+      title:        "&6Next Event"
+      queued:       "&7Queued: &f%event%"
+      not-selected: "Not selected"
+      starts-in:    "&7Starts in: &f%time%"
+    chances:
+      title: "&bEvent Chances"
+      entry: "&7%event% &f- %chance%%"
+      empty: "&7No eligible events."
+    state:
+      idle:          "Idle"
+      starting-soon: "Starting Soon"
+      running:       "Running"
+      ending-soon:   "Ending Soon"
+
 # ──────────────────────────────────────────
 # KOTH EVENT  (configured partly via events.yml)
 # ──────────────────────────────────────────
@@ -164,6 +185,7 @@ vehicles:
   wrong-world:      "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cVehicles can only be deployed in &f%world%&c."
   invalid-item:     "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cInvalid vehicle item."
   no-weapon-config: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cThis vehicle has no weapon system configured."
+  systems-unavailable: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cVehicle systems are currently unavailable."
   deployed:         "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aVehicle deployed."
   already-deployed: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou already have a vehicle deployed."
   picked-up:        "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aVehicle picked up."
@@ -269,6 +291,10 @@ parkour:
   left:              "&3&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aYou left the parkour."
   start-not-set:     "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cStart location not set."
   commands-disabled: "&3&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Commands are disabled while in parkour."
+  timer-actionbar:   "%time-color%Time: &f%current% &7| &6Best: &f%best%"
+  checkpoint:
+    title:    "&e&lCheckpoint &f#%number%"
+    subtitle: "&7Progress saved"
   server-only:       "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cThis command can only be run by the server."
   usage-finish:      "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /parkourfinish <player>"
   player-not-found:  "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Player not found."

@@ -3,6 +3,7 @@ package net.mandomc.gameplay.vehicle.config;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import net.mandomc.MandoMC;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.File;
 import java.util.HashMap;
@@ -41,6 +42,7 @@ public class VehicleConfig {
             FileConfiguration config = YamlConfiguration.loadConfiguration(file);
 
             configs.put(id, config);
+            validateVehicleConfig(id, config);
         }
 
         MandoMC.getInstance().getLogger()
@@ -57,5 +59,27 @@ public class VehicleConfig {
 
     public static void reload() {
         loadAll();
+    }
+
+    private static void validateVehicleConfig(String vehicleId, FileConfiguration config) {
+        validateSection(vehicleId, config, "vehicle");
+        validateSection(vehicleId, config, "vehicle.stats");
+        validateSection(vehicleId, config, "vehicle.systems");
+        validateSection(vehicleId, config, "vehicle.seats");
+        validateKey(vehicleId, config, "vehicle.display_name");
+        validateKey(vehicleId, config, "vehicle.gui_size");
+    }
+
+    private static void validateSection(String vehicleId, FileConfiguration config, String path) {
+        ConfigurationSection section = config.getConfigurationSection(path);
+        if (section == null && !config.isList(path)) {
+            MandoMC.getInstance().getLogger().warning("[Vehicles] " + vehicleId + ".yml missing section: " + path);
+        }
+    }
+
+    private static void validateKey(String vehicleId, FileConfiguration config, String path) {
+        if (!config.contains(path)) {
+            MandoMC.getInstance().getLogger().warning("[Vehicles] " + vehicleId + ".yml missing key: " + path);
+        }
     }
 }

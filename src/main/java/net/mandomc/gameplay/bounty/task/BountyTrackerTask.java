@@ -54,7 +54,8 @@ public class BountyTrackerTask {
             }
 
             if (updated) {
-                repository.flush();
+                repository.touch();
+                repository.flushSoon(40L);
                 BountyShowcaseManager.update();
             }
         }, 0L, intervalTicks);

@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import net.mandomc.core.LangManager;
 import net.mandomc.world.ilum.model.ParkourSession;
 import net.mandomc.world.ilum.manager.CheckpointManager;
 import net.mandomc.world.ilum.manager.ParkourManager;
@@ -58,8 +59,8 @@ public class ParkourCheckpointListener implements Listener {
         parkourManager.setCheckpoint(player, checkpoint);
 
         player.sendTitle(
-                "§e§lCheckpoint §l§f#" + number,
-                "§7Progress saved",
+                LangManager.get("parkour.checkpoint.title", "%number%", String.valueOf(number)),
+                LangManager.get("parkour.checkpoint.subtitle"),
                 5, 40, 10
         );
 

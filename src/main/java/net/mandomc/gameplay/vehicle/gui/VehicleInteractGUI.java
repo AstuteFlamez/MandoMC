@@ -3,6 +3,7 @@ package net.mandomc.gameplay.vehicle.gui;
 import net.mandomc.core.guis.GUIManager;
 import net.mandomc.core.guis.InventoryButton;
 import net.mandomc.core.guis.InventoryGUI;
+import net.mandomc.core.LangManager;
 import net.mandomc.gameplay.vehicle.manager.SeatManager;
 import net.mandomc.gameplay.vehicle.manager.VehicleManager;
 import net.mandomc.gameplay.vehicle.model.SeatConfig;
@@ -119,7 +120,7 @@ public class VehicleInteractGUI extends InventoryGUI {
                         String name = occupantId != null
                                 ? fetchPlayerName(occupantId)
                                 : "Unknown";
-                        clicker.sendMessage(ChatColor.RED + "That seat is occupied by " + ChatColor.YELLOW + name + ChatColor.RED + ".");
+                        clicker.sendMessage(LangManager.get("vehicles.seat-occupied", "%player%", name));
                         return;
                     }
 

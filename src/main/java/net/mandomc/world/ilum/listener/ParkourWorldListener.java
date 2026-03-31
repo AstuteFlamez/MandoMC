@@ -3,6 +3,7 @@ package net.mandomc.world.ilum.listener;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -24,8 +25,10 @@ public class ParkourWorldListener implements Listener {
     public void onWorldChange(PlayerChangedWorldEvent event) {
 
         Player player = event.getPlayer();
+        FileConfiguration config = ParkourConfig.get();
+        if (config == null) return;
 
-        String parkourWorldName = ParkourConfig.get().getString("parkour.world");
+        String parkourWorldName = config.getString("parkour.world");
 
         if (parkourWorldName == null) return;
 
@@ -41,22 +44,30 @@ public class ParkourWorldListener implements Listener {
 
         // Player entered the parkour world
         if (player.getWorld().equals(parkourWorld)) {
+            boolean autoEnter = config.getBoolean("parkour.settings.auto-enter-on-world-change", true);
+            if (!autoEnter || parkourManager.hasSession(player)) {
+                return;
+            }
 
             Location startLocation = getStartLocation(parkourWorld);
-
             parkourManager.enterParkour(player, startLocation);
         }
     }
 
     private Location getStartLocation(World world) {
+        FileConfiguration config = ParkourConfig.get();
+        if (config == null) {
+            return world.getSpawnLocation();
+        }
 
-        double x = ParkourConfig.get().getDouble("parkour.start.x");
-        double y = ParkourConfig.get().getDouble("parkour.start.y");
-        double z = ParkourConfig.get().getDouble("parkour.start.z");
+        double x = config.getDouble("parkour.start.x");
+        double y = config.getDouble("parkour.start.y");
+        double z = config.getDouble("parkour.start.z");
 
-        float yaw = (float) ParkourConfig.get().getDouble("parkour.start.yaw");
-        float pitch = (float) ParkourConfig.get().getDouble("parkour.start.pitch");
+        float yaw = (float) config.getDouble("parkour.start.yaw");
+        float pitch = (float) config.getDouble("parkour.start.pitch");
 
         return new Location(world, x, y, z, yaw, pitch);
     }
+
 }

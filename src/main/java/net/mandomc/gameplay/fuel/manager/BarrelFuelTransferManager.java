@@ -23,6 +23,8 @@ import net.mandomc.core.LangManager;
 public class BarrelFuelTransferManager {
 
     private static final Map<UUID, BukkitTask> transfers = new HashMap<>();
+    private static final Map<UUID, Integer> displayTickCounters = new HashMap<>();
+    private static final int DISPLAY_UPDATE_INTERVAL_TICKS = 5;
 
     /**
      * Returns true if the given player currently has an active barrel fuel transfer.
@@ -56,6 +58,7 @@ public class BarrelFuelTransferManager {
         );
 
         transfers.put(player.getUniqueId(), task);
+        displayTickCounters.put(player.getUniqueId(), 0);
     }
 
     /**
@@ -64,6 +67,7 @@ public class BarrelFuelTransferManager {
      * @param player the player whose transfer to stop
      */
     public static void stopTransfer(Player player) {
+        displayTickCounters.remove(player.getUniqueId());
         BukkitTask task = transfers.remove(player.getUniqueId());
 
         if (task != null) {
@@ -78,6 +82,7 @@ public class BarrelFuelTransferManager {
      * @param player the player whose transfer to cancel
      */
     private static void cancelTransfer(Player player) {
+        displayTickCounters.remove(player.getUniqueId());
         BukkitTask task = transfers.remove(player.getUniqueId());
 
         if (task != null) {
@@ -119,6 +124,8 @@ public class BarrelFuelTransferManager {
         }
 
         String mode = CanisterManager.getMode(canister);
+        UUID playerId = player.getUniqueId();
+        boolean refreshDisplay = shouldRefreshDisplay(playerId);
 
         int barrelFuel = FuelManager.getCurrentFuel(barrelItem);
         int barrelMax = FuelManager.getMaxFuel(barrelItem);
@@ -147,15 +154,19 @@ public class BarrelFuelTransferManager {
                 return;
             }
 
-            FuelManager.updateFuel(canister, canFuel - 1);
-            FuelManager.updateFuel(barrelItem, barrelFuel + 1);
+            FuelManager.updateFuel(canister, canFuel - 1, refreshDisplay);
+            FuelManager.updateFuel(barrelItem, barrelFuel + 1, refreshDisplay);
 
-            BarrelManager.updateModel(barrelItem);
+            if (refreshDisplay) {
+                BarrelManager.updateModel(barrelItem);
+            }
             barrel.getEquipment().setHelmet(barrelItem);
 
-            ArmorStand holo = BarrelManager.getHologram(barrel);
-            if (holo != null) {
-                BarrelManager.updateHologram(barrel, holo);
+            if (refreshDisplay) {
+                ArmorStand holo = BarrelManager.getHologram(barrel);
+                if (holo != null) {
+                    BarrelManager.updateHologram(barrel, holo);
+                }
             }
 
             int newCanFuel = FuelManager.getCurrentFuel(canister);
@@ -192,15 +203,19 @@ public class BarrelFuelTransferManager {
             return;
         }
 
-        FuelManager.updateFuel(canister, canFuel + 1);
-        FuelManager.updateFuel(barrelItem, barrelFuel - 1);
+        FuelManager.updateFuel(canister, canFuel + 1, refreshDisplay);
+        FuelManager.updateFuel(barrelItem, barrelFuel - 1, refreshDisplay);
 
-        BarrelManager.updateModel(barrelItem);
+        if (refreshDisplay) {
+            BarrelManager.updateModel(barrelItem);
+        }
         barrel.getEquipment().setHelmet(barrelItem);
 
-        ArmorStand holo = BarrelManager.getHologram(barrel);
-        if (holo != null) {
-            BarrelManager.updateHologram(barrel, holo);
+        if (refreshDisplay) {
+            ArmorStand holo = BarrelManager.getHologram(barrel);
+            if (holo != null) {
+                BarrelManager.updateHologram(barrel, holo);
+            }
         }
 
         int newCanFuel = FuelManager.getCurrentFuel(canister);
@@ -213,5 +228,11 @@ public class BarrelFuelTransferManager {
                         "%barrel%", String.valueOf(newBarrelFuel),
                         "%barrel-max%", String.valueOf(barrelMax))
         );
+    }
+
+    private static boolean shouldRefreshDisplay(UUID playerId) {
+        int next = displayTickCounters.getOrDefault(playerId, 0) + 1;
+        displayTickCounters.put(playerId, next);
+        return next % DISPLAY_UPDATE_INTERVAL_TICKS == 0;
     }
 }

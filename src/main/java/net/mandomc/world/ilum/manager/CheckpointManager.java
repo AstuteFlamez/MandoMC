@@ -1,7 +1,9 @@
 package net.mandomc.world.ilum.manager;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -20,6 +22,7 @@ public class CheckpointManager {
     private final Plugin plugin;
 
     private final Map<Location, Integer> checkpoints = new HashMap<>();
+    private final Set<TextDisplay> displays = new HashSet<>();
 
     public CheckpointManager(Plugin plugin) {
         this.plugin = plugin;
@@ -55,9 +58,17 @@ public class CheckpointManager {
         display.setBackgroundColor(Color.fromARGB(0,0,0,0));
         display.setBillboard(Display.Billboard.CENTER);
         display.setSeeThrough(false);
+        displays.add(display);
     }
 
     public void loadCheckpoints() {
+        clearDisplays();
+        checkpoints.clear();
+
+        if (ParkourConfig.get() == null) {
+            plugin.getLogger().warning("[Parkour] parkour.yml is not loaded; cannot load checkpoints.");
+            return;
+        }
 
         ConfigurationSection section =
                 ParkourConfig.get().getConfigurationSection("parkour.checkpoints");
@@ -77,7 +88,20 @@ public class CheckpointManager {
 
         for (String key : section.getKeys(false)) {
 
-            int number = Integer.parseInt(key);
+            int number;
+            try {
+                number = Integer.parseInt(key);
+            } catch (NumberFormatException ex) {
+                plugin.getLogger().warning("[Parkour] Invalid checkpoint key (must be numeric): " + key);
+                continue;
+            }
+
+            if (!section.contains(key + ".x")
+                    || !section.contains(key + ".y")
+                    || !section.contains(key + ".z")) {
+                plugin.getLogger().warning("[Parkour] Checkpoint #" + number + " missing x/y/z coordinates.");
+                continue;
+            }
 
             double x = section.getDouble(key + ".x");
             double y = section.getDouble(key + ".y");
@@ -96,5 +120,14 @@ public class CheckpointManager {
                     "§4§lᴍᴀɴᴅᴏᴍᴄ §r§8» §7Loaded checkpoint #" + number + " at " + plateLocation
             );
         }
+    }
+
+    public void clearDisplays() {
+        for (TextDisplay display : new HashSet<>(displays)) {
+            if (display != null && display.isValid()) {
+                display.remove();
+            }
+        }
+        displays.clear();
     }
 }

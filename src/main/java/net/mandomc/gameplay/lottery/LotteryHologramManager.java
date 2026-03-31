@@ -43,7 +43,8 @@ public class LotteryHologramManager {
      * with live lottery values.
      */
     public static void update() {
-        if (!OptionalPluginSupport.hasFancyHolograms()) {
+        HologramManager manager = getHologramManager();
+        if (manager == null) {
             return;
         }
 
@@ -51,11 +52,13 @@ public class LotteryHologramManager {
         ConfigurationSection section = lotteryConfig.getHologramSection();
 
         if (section == null || !section.getBoolean("enabled")) {
+            remove();
             return;
         }
 
         World world = Bukkit.getWorld(section.getString("world"));
         if (world == null) {
+            remove();
             return;
         }
 
@@ -70,20 +73,15 @@ public class LotteryHologramManager {
 
         hologramId = section.getString("id", "lottery_main");
 
-        HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
-
-        // Remove existing hologram if present
-        manager.getHologram(hologramId).ifPresent(manager::removeHologram);
-
-        // Create new hologram
-        TextHologramData data = new TextHologramData(hologramId, location);
-        data.setText(lines);
-        data.setBillboard(Display.Billboard.CENTER);
-        data.setTextShadow(true);
-        data.setBackground(Color.fromARGB(0, 0, 0, 10));
-
-        Hologram hologram = manager.create(data);
-        manager.addHologram(hologram);
+        manager.getHologram(hologramId).ifPresentOrElse(existing -> {
+            if (existing.getData() instanceof TextHologramData textData) {
+                textData.setLocation(location);
+                textData.setText(lines);
+                return;
+            }
+            manager.removeHologram(existing);
+            createHologram(manager, location, lines);
+        }, () -> createHologram(manager, location, lines));
     }
 
     /**
@@ -98,7 +96,10 @@ public class LotteryHologramManager {
             return;
         }
 
-        HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
+        HologramManager manager = getHologramManager();
+        if (manager == null) {
+            return;
+        }
         manager.getHologram(hologramId).ifPresent(manager::removeHologram);
     }
 
@@ -138,5 +139,27 @@ public class LotteryHologramManager {
      */
     private static String color(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
+    }
+
+    private static void createHologram(HologramManager manager, Location location, List<String> lines) {
+        TextHologramData data = new TextHologramData(hologramId, location);
+        data.setText(lines);
+        data.setBillboard(Display.Billboard.CENTER);
+        data.setTextShadow(true);
+        data.setBackground(Color.fromARGB(0, 0, 0, 10));
+
+        Hologram hologram = manager.create(data);
+        manager.addHologram(hologram);
+    }
+
+    private static HologramManager getHologramManager() {
+        if (!OptionalPluginSupport.hasFancyHolograms()) {
+            return null;
+        }
+        try {
+            return FancyHologramsPlugin.get().getHologramManager();
+        } catch (Throwable ignored) {
+            return null;
+        }
     }
 }

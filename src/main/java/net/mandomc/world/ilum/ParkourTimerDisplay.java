@@ -1,10 +1,13 @@
 package net.mandomc.world.ilum;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import net.mandomc.core.LangManager;
 import net.mandomc.world.ilum.manager.ParkourManager;
 import net.mandomc.world.ilum.manager.ParkourTimeManager;
 import net.md_5.bungee.api.ChatMessageType;
@@ -33,14 +36,12 @@ public class ParkourTimerDisplay {
         stop();
 
         timerTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
-
-            for (Player player : Bukkit.getOnlinePlayers()) {
-
-                if (player == null) continue;
-
-                if (!parkourManager.hasSession(player)) continue;
+            for (UUID playerId : parkourManager.getActiveSessionPlayers()) {
+                Player player = Bukkit.getPlayer(playerId);
+                if (player == null || !player.isOnline()) continue;
 
                 ParkourSession session = parkourManager.getSession(player);
+                if (session == null) continue;
 
                 double currentSeconds =
                         (System.currentTimeMillis() - session.getStartTime()) / 1000.0;
@@ -53,15 +54,13 @@ public class ParkourTimerDisplay {
                         ? "--"
                         : TimeFormatter.format(bestTime);
 
-                String timeColor = "§e"; // default yellow
-
-                if (bestTime != null && currentSeconds < bestTime) {
-                    timeColor = "§a"; // green if beating best
-                }
-
-                String message =
-                        timeColor + "Time: §f" + current +
-                        " §7| §6Best: §f" + best;
+                String timeColor = bestTime != null && currentSeconds < bestTime ? "&a" : "&e";
+                String message = LangManager.get(
+                        "parkour.timer-actionbar",
+                        "%time-color%", timeColor,
+                        "%current%", current,
+                        "%best%", best
+                );
 
                 player.spigot().sendMessage(
                         ChatMessageType.ACTION_BAR,

@@ -46,7 +46,12 @@ public class VehicleHUDManager {
 
         int fuel = FuelManager.getCurrentFuel(data.getItem());
         int maxFuel = FuelManager.getMaxFuel(data.getItem());
-        int fuelPercent = (int) ((double) fuel / maxFuel * 100);
+        int fuelPercent = maxFuel > 0
+                ? (int) ((double) fuel / maxFuel * 100)
+                : 0;
+        if (fuelPercent < 0) {
+            fuelPercent = 0;
+        }
 
         ChatColor fuelColor =
                 fuelPercent >= 75 ? ChatColor.GREEN :
@@ -58,7 +63,8 @@ public class VehicleHUDManager {
 
         double vehicleHealth = VehicleHealthManager.getCurrentHealth(data.getItem());
         double vehicleMaxHealth = VehicleHealthManager.getMaxHealth(data.getItem());
-        double vehiclePercent = vehicleHealth / vehicleMaxHealth;
+        double vehiclePercent = vehicleMaxHealth > 0 ? (vehicleHealth / vehicleMaxHealth) : 1.0;
+        vehiclePercent = Math.max(0.0, Math.min(1.0, vehiclePercent));
 
         AttributeInstance attr = entity.getAttribute(Attribute.MAX_HEALTH);
 

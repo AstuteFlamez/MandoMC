@@ -239,6 +239,7 @@ public class EventManager {
 
         if (broadcast) {
             broadcastTitle(LangManager.get("events.broadcast.started-title"), activeEvent.getDisplayName());
+            broadcastConfiguredMessage("scheduler.messages.event-start", activeEvent.getDisplayName());
         }
 
         return true;
@@ -328,6 +329,7 @@ public class EventManager {
 
         if (broadcast) {
             broadcastTitle(LangManager.get("events.broadcast.ended-title"), displayName);
+            broadcastConfiguredMessage("scheduler.messages.event-end", displayName);
         }
     }
 
@@ -349,6 +351,7 @@ public class EventManager {
 
         if (broadcast) {
             broadcastTitle(LangManager.get("events.broadcast.started-title"), activeEvent.getDisplayName());
+            broadcastConfiguredMessage("scheduler.messages.event-start", activeEvent.getDisplayName());
         }
     }
 

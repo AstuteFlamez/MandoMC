@@ -7,9 +7,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import net.mandomc.core.LangManager;
 import net.mandomc.server.events.model.EventDefinition;
 import net.mandomc.server.events.EventManager;
 import net.mandomc.server.events.model.GameEvent;
+import net.mandomc.server.events.model.EventState;
 
 import java.util.ArrayList;
 
@@ -56,14 +58,16 @@ public class EventMenu {
         ItemMeta meta = item.getItemMeta();
 
         if (meta != null) {
-            meta.setDisplayName(active == null ? "§cNo Active Event" : "§aCurrent Event");
+            meta.setDisplayName(active == null
+                    ? LangManager.get("events.menu.current.none-title")
+                    : LangManager.get("events.menu.current.title"));
             ArrayList<String> lore = new ArrayList<>();
 
             if (active == null) {
-                lore.add("§7There is no event running.");
+                lore.add(LangManager.get("events.menu.current.none-lore"));
             } else {
                 lore.add("§7" + active.getDisplayName());
-                lore.add("§7State: §f" + manager.getState());
+                lore.add(LangManager.get("events.menu.current.state", "%state%", formatState(manager.getState())));
             }
 
             meta.setLore(lore);
@@ -81,11 +85,15 @@ public class EventMenu {
         ItemMeta meta = item.getItemMeta();
 
         if (meta != null) {
-            meta.setDisplayName("§6Next Event");
+            meta.setDisplayName(LangManager.get("events.menu.next.title"));
             ArrayList<String> lore = new ArrayList<>();
 
-            lore.add("§7Queued: §f" + (queued == null ? "Not selected" : queued.getDisplayName()));
-            lore.add("§7Starts in: §f" + formatDuration(manager.getSecondsUntilNextHour()));
+            lore.add(LangManager.get(
+                    "events.menu.next.queued",
+                    "%event%",
+                    queued == null ? LangManager.get("events.menu.next.not-selected") : queued.getDisplayName()
+            ));
+            lore.add(LangManager.get("events.menu.next.starts-in", "%time%", formatDuration(manager.getSecondsUntilNextHour())));
 
             meta.setLore(lore);
             item.setItemMeta(meta);
@@ -99,17 +107,21 @@ public class EventMenu {
         ItemMeta meta = item.getItemMeta();
 
         if (meta != null) {
-            meta.setDisplayName("§bEvent Chances");
+            meta.setDisplayName(LangManager.get("events.menu.chances.title"));
             ArrayList<String> lore = new ArrayList<>();
 
             manager.getCurrentChances().forEach((id, pct) -> {
                 EventDefinition def = manager.getDefinition(id);
                 String name = def == null ? id : def.getDisplayName();
-                lore.add("§7" + name + " §f- " + String.format("%.1f", pct) + "%");
+                lore.add(LangManager.get(
+                        "events.menu.chances.entry",
+                        "%event%", name,
+                        "%chance%", String.format("%.1f", pct)
+                ));
             });
 
             if (lore.isEmpty()) {
-                lore.add("§7No eligible events.");
+                lore.add(LangManager.get("events.menu.chances.empty"));
             }
 
             meta.setLore(lore);
@@ -132,5 +144,17 @@ public class EventMenu {
         }
 
         return minutes + " Min " + seconds + " Sec";
+    }
+
+    private String formatState(EventState state) {
+        if (state == null) {
+            return LangManager.get("events.menu.state.idle");
+        }
+        return switch (state) {
+            case IDLE -> LangManager.get("events.menu.state.idle");
+            case STARTING_SOON -> LangManager.get("events.menu.state.starting-soon");
+            case RUNNING -> LangManager.get("events.menu.state.running");
+            case ENDING_SOON -> LangManager.get("events.menu.state.ending-soon");
+        };
     }
 }

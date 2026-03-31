@@ -1,6 +1,7 @@
 package net.mandomc.core.storage;
 
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +36,9 @@ public abstract class JsonRepository<T, ID> implements Repository<T, ID> {
 
     private final File file;
     private final Logger logger;
+    private final Plugin plugin;
+    private volatile boolean dirty;
+    private BukkitTask scheduledFlushTask;
 
     /**
      * Creates the repository and ensures the backing file's parent directories exist.
@@ -43,6 +47,7 @@ public abstract class JsonRepository<T, ID> implements Repository<T, ID> {
      * @param relativePath path relative to the plugin data folder (e.g. {@code "bounties/bounties.json"})
      */
     protected JsonRepository(Plugin plugin, String relativePath) {
+        this.plugin = plugin;
         this.file = new File(plugin.getDataFolder(), relativePath);
         this.logger = plugin.getLogger();
         this.file.getParentFile().mkdirs();
@@ -94,6 +99,7 @@ public abstract class JsonRepository<T, ID> implements Repository<T, ID> {
             if (json.isBlank()) return;
             cache.clear();
             populate(json, cache);
+            dirty = false;
         } catch (Exception e) {
             logger.severe("[" + getClass().getSimpleName() + "] Failed to load data: " + e.getMessage());
         } finally {
@@ -103,15 +109,70 @@ public abstract class JsonRepository<T, ID> implements Repository<T, ID> {
 
     @Override
     public final void flush() {
+        cancelScheduledFlush();
+        boolean wrote = false;
         lock.readLock().lock();
         try {
             String json = serialize(Collections.unmodifiableMap(cache));
             Files.writeString(file.toPath(), json);
+            wrote = true;
         } catch (IOException e) {
             logger.severe("[" + getClass().getSimpleName() + "] Failed to save data: " + e.getMessage());
         } finally {
             lock.readLock().unlock();
         }
+        if (wrote) {
+            dirty = false;
+        }
+    }
+
+    /**
+     * Schedules a debounced flush to reduce repeated disk writes in hot paths.
+     *
+     * If a flush task is already queued, this call is a no-op.
+     * On scheduler errors (e.g. tests without Bukkit), falls back to immediate flush.
+     *
+     * @param delayTicks delay before flush
+     */
+    public final void flushSoon(long delayTicks) {
+        if (!dirty) {
+            return;
+        }
+        if (delayTicks <= 0) {
+            flush();
+            return;
+        }
+        synchronized (this) {
+            if (scheduledFlushTask != null && !scheduledFlushTask.isCancelled()) {
+                return;
+            }
+            try {
+                scheduledFlushTask = org.bukkit.Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    synchronized (JsonRepository.this) {
+                        scheduledFlushTask = null;
+                    }
+                    flushIfDirty();
+                }, delayTicks);
+            } catch (Throwable ignored) {
+                flush();
+            }
+        }
+    }
+
+    /**
+     * Flushes only if local state is marked dirty.
+     */
+    public final void flushIfDirty() {
+        if (dirty) {
+            flush();
+        }
+    }
+
+    /**
+     * Marks the in-memory state as dirty when mutable entities are changed in place.
+     */
+    public final void touch() {
+        dirty = true;
     }
 
     @Override
@@ -139,6 +200,7 @@ public abstract class JsonRepository<T, ID> implements Repository<T, ID> {
         lock.writeLock().lock();
         try {
             cache.put(idOf(entity), entity);
+            dirty = true;
         } finally {
             lock.writeLock().unlock();
         }
@@ -148,7 +210,9 @@ public abstract class JsonRepository<T, ID> implements Repository<T, ID> {
     public void delete(ID id) {
         lock.writeLock().lock();
         try {
-            cache.remove(id);
+            if (cache.remove(id) != null) {
+                dirty = true;
+            }
         } finally {
             lock.writeLock().unlock();
         }
@@ -187,6 +251,15 @@ public abstract class JsonRepository<T, ID> implements Repository<T, ID> {
             return cache.containsKey(id);
         } finally {
             lock.readLock().unlock();
+        }
+    }
+
+    private void cancelScheduledFlush() {
+        synchronized (this) {
+            if (scheduledFlushTask != null && !scheduledFlushTask.isCancelled()) {
+                scheduledFlushTask.cancel();
+            }
+            scheduledFlushTask = null;
         }
     }
 }

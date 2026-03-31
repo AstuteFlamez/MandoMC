@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.ArrayList;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -44,6 +45,13 @@ public class ParkourManager {
      */
     public ParkourSession getSession(Player player) {
         return sessions.get(player.getUniqueId());
+    }
+
+    /**
+     * Returns a snapshot of all players currently in active parkour sessions.
+     */
+    public Set<UUID> getActiveSessionPlayers() {
+        return Set.copyOf(sessions.keySet());
     }
 
     /*

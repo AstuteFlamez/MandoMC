@@ -37,7 +37,7 @@ public class ParkourTimeManager {
     public void updateTime(Player player, double time) {
         boolean updated = repository.updateIfFaster(player.getUniqueId(), player.getName(), time);
         if (updated) {
-            repository.flush();
+            repository.flushSoon(40L);
         }
     }
 

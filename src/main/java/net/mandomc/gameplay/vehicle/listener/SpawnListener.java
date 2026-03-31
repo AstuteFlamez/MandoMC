@@ -21,6 +21,7 @@ import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 
+import net.mandomc.core.config.MainConfig;
 import net.mandomc.gameplay.vehicle.model.SeatConfig;
 import net.mandomc.gameplay.vehicle.model.Vehicle;
 import net.mandomc.gameplay.vehicle.model.VehicleData;
@@ -44,12 +45,11 @@ import net.mandomc.server.items.ItemUtils;
  */
 public class SpawnListener implements Listener {
 
-    private static final String SPAWN_WORLD = "world";
+    private final MainConfig mainConfig;
 
-    private static final int X1 = 703;
-    private static final int Z1 = -176;
-    private static final int X2 = 672;
-    private static final int Z2 = -145;
+    public SpawnListener(MainConfig mainConfig) {
+        this.mainConfig = mainConfig;
+    }
 
     /**
      * Handles right-click interactions to spawn a vehicle.
@@ -71,7 +71,11 @@ public class SpawnListener implements Listener {
         World world = player.getWorld();
 
         if (isInSpawnZone(location)) {
-            player.sendMessage(LangManager.get("vehicles.wrong-world", "%world%", "Earth"));
+            player.sendMessage(LangManager.get(
+                    "vehicles.wrong-world",
+                    "%world%",
+                    mainConfig.getVehicleSpawnRestrictionDisplayWorld()
+            ));
             return;
         }
 
@@ -118,7 +122,7 @@ public class SpawnListener implements Listener {
      */
     private boolean canSpawnVehicle(Player player, UUID uuid, ItemStack item) {
         if (!OptionalPluginSupport.hasModelEngine() || !OptionalPluginSupport.hasWeaponMechanics()) {
-            player.sendMessage("§cVehicle systems are currently unavailable.");
+            player.sendMessage(LangManager.get("vehicles.systems-unavailable"));
             return false;
         }
         if (item == null) return false;
@@ -136,15 +140,15 @@ public class SpawnListener implements Listener {
      * Returns true if the location is within the protected spawn zone.
      */
     private boolean isInSpawnZone(Location loc) {
-        if (!loc.getWorld().getName().equalsIgnoreCase(SPAWN_WORLD)) return false;
+        if (!loc.getWorld().getName().equalsIgnoreCase(mainConfig.getVehicleSpawnRestrictionWorld())) return false;
 
         double x = loc.getX();
         double z = loc.getZ();
 
-        double minX = Math.min(X1, X2);
-        double maxX = Math.max(X1, X2);
-        double minZ = Math.min(Z1, Z2);
-        double maxZ = Math.max(Z1, Z2);
+        double minX = Math.min(mainConfig.getVehicleSpawnRestrictionX1(), mainConfig.getVehicleSpawnRestrictionX2());
+        double maxX = Math.max(mainConfig.getVehicleSpawnRestrictionX1(), mainConfig.getVehicleSpawnRestrictionX2());
+        double minZ = Math.min(mainConfig.getVehicleSpawnRestrictionZ1(), mainConfig.getVehicleSpawnRestrictionZ2());
+        double maxZ = Math.max(mainConfig.getVehicleSpawnRestrictionZ1(), mainConfig.getVehicleSpawnRestrictionZ2());
 
         return x >= minX && x <= maxX && z >= minZ && z <= maxZ;
     }
@@ -225,7 +229,7 @@ public class SpawnListener implements Listener {
      * Registers the vehicle into the active vehicle map.
      */
     private void registerVehicle(UUID uuid, Vehicle vehicle) {
-        VehicleModule.getActiveVehicles().put(uuid, vehicle);
+        VehicleModule.registerVehicle(uuid, vehicle);
     }
 
     /**

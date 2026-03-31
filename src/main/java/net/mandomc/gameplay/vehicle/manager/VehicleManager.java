@@ -76,8 +76,7 @@ public class VehicleManager {
         UUID uuid = player.getUniqueId();
         Vehicle vehicle = VehicleModule.getActiveVehicles().get(uuid);
         if (vehicle == null) return;
-
-        VehicleModule.getActiveVehicles().remove(vehicle.getOwnerUUID());
+        VehicleModule.unregisterVehicle(vehicle.getOwnerUUID());
 
         VehicleData data = vehicle.getVehicleData();
         Entity entity = data.getEntity();
@@ -100,8 +99,7 @@ public class VehicleManager {
         UUID uuid = player.getUniqueId();
         Vehicle vehicle = VehicleModule.getActiveVehicles().get(uuid);
         if (vehicle == null) return;
-
-        VehicleModule.getActiveVehicles().remove(vehicle.getOwnerUUID());
+        VehicleModule.unregisterVehicle(vehicle.getOwnerUUID());
 
         VehicleData data = vehicle.getVehicleData();
         Entity entity = data.getEntity();

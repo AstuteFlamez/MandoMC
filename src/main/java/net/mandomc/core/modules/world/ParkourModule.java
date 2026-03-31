@@ -33,6 +33,7 @@ public class ParkourModule implements Module {
     private ListenerRegistrar listenerRegistrar;
     private ParkourTimeRepository timeRepository;
     private ParkourManager parkourManager;
+    private CheckpointManager checkpointManager;
 
     public ParkourModule(MandoMC plugin) {
         this.plugin = plugin;
@@ -62,7 +63,7 @@ public class ParkourModule implements Module {
         timerDisplay = new ParkourTimerDisplay(plugin, parkourManager, timeManager);
         timerDisplay.start();
 
-        CheckpointManager checkpointManager = new CheckpointManager(plugin);
+        checkpointManager = new CheckpointManager(plugin);
         checkpointManager.loadCheckpoints();
 
         listenerRegistrar.register(new ParkourWorldListener(parkourManager));
@@ -80,6 +81,7 @@ public class ParkourModule implements Module {
         if (timerDisplay       != null) timerDisplay.stop();
         if (leaderboardManager != null) leaderboardManager.stopAutoUpdate();
         if (leaderboardManager != null) leaderboardManager.removeAllDisplays();
+        if (checkpointManager  != null) checkpointManager.clearDisplays();
         if (timeRepository     != null) timeRepository.flush();
     }
 }

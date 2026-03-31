@@ -10,6 +10,7 @@ parkour:
     pitch: 0
   
   settings:
+    auto-enter-on-world-change: true
     allow-commands:
     - msg
     - r

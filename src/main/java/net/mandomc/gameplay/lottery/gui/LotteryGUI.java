@@ -77,20 +77,29 @@ public class LotteryGUI extends InventoryGUI {
         ConfigurationSection items = lotteryConfig.getSection("lottery.items");
         if (items == null) return;
 
-        addButton(items.getConfigurationSection("pot").getInt("slot"),
-                createStaticItem(items.getConfigurationSection("pot"),
-                        "%pot%", String.valueOf(LotteryManager.getPot())));
+        ConfigurationSection potSection = items.getConfigurationSection("pot");
+        if (potSection != null) {
+            addButton(potSection.getInt("slot"),
+                    createStaticItem(potSection, "%pot%", String.valueOf(LotteryManager.getPot())));
+        }
 
-        addButton(items.getConfigurationSection("info").getInt("slot"),
-                createStaticItem(items.getConfigurationSection("info"),
-                        "%tickets%", String.valueOf(LotteryManager.getTickets(player.getUniqueId()))));
+        ConfigurationSection infoSection = items.getConfigurationSection("info");
+        if (infoSection != null) {
+            addButton(infoSection.getInt("slot"),
+                    createStaticItem(infoSection, "%tickets%", String.valueOf(LotteryManager.getTickets(player.getUniqueId()))));
+        }
 
-        addButton(items.getConfigurationSection("time").getInt("slot"),
-                createStaticItem(items.getConfigurationSection("time"),
-                        "%time%", LotteryScheduler.getFormattedNextDraw()));
+        ConfigurationSection timeSection = items.getConfigurationSection("time");
+        if (timeSection != null) {
+            addButton(timeSection.getInt("slot"),
+                    createStaticItem(timeSection, "%time%", LotteryScheduler.getFormattedNextDraw()));
+        }
 
-        addButton(items.getConfigurationSection("buy").getInt("slot"),
-                createBuyButton(items.getConfigurationSection("buy"), player));
+        ConfigurationSection buySection = items.getConfigurationSection("buy");
+        if (buySection != null) {
+            addButton(buySection.getInt("slot"),
+                    createBuyButton(buySection, player));
+        }
 
         super.decorate(player);
     }
@@ -101,14 +110,19 @@ public class LotteryGUI extends InventoryGUI {
     private void fillBackground() {
 
         ConfigurationSection section = lotteryConfig.getSection("lottery.filler");
+        if (section == null) {
+            section = lotteryConfig.getSection("lottery.gui");
+        }
 
-        Material mat = Material.matchMaterial(section.getString("material", "BLACK_STAINED_GLASS_PANE"));
+        Material mat = Material.matchMaterial(
+                section != null ? section.getString("material", "BLACK_STAINED_GLASS_PANE") : "BLACK_STAINED_GLASS_PANE"
+        );
         ItemStack filler = new ItemStack(mat == null ? Material.BLACK_STAINED_GLASS_PANE : mat);
 
         ItemMeta meta = filler.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(color(section.getString("name", " ")));
-            meta.setLore(section.getStringList("lore"));
+            meta.setDisplayName(color(section != null ? section.getString("name", " ") : " "));
+            meta.setLore(section != null ? section.getStringList("lore") : List.of());
             filler.setItemMeta(meta);
         }
 
@@ -180,6 +194,9 @@ public class LotteryGUI extends InventoryGUI {
      * @return constructed item stack
      */
     private ItemStack buildItem(ConfigurationSection section, String placeholder, String value) {
+        if (section == null) {
+            return new ItemStack(Material.STONE);
+        }
 
         Material mat = Material.matchMaterial(section.getString("material"));
         ItemStack item = new ItemStack(mat == null ? Material.STONE : mat);
@@ -207,6 +224,9 @@ public class LotteryGUI extends InventoryGUI {
      * @return formatted string
      */
     private String color(String text) {
+        if (text == null) {
+            return "";
+        }
         return ChatColor.translateAlternateColorCodes('&', text);
     }
 }

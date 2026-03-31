@@ -13,9 +13,9 @@ public class KothChestListener implements Listener {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (event.getClickedBlock() == null) return;
 
-        if (!KothEvent.isRewardChest(event.getClickedBlock().getLocation())) return;
+        if (!KothEvent.isRewardChest(event.getClickedBlock())) return;
 
         event.setCancelled(true);
-        KothEvent.claimRewardChest(event.getPlayer());
+        KothEvent.claimRewardChest(event.getPlayer(), event.getClickedBlock());
     }
 }

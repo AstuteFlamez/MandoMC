@@ -1,5 +1,6 @@
 package net.mandomc.server.events.types.koth;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -13,19 +14,28 @@ import com.massivecraft.factions.FPlayer;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public class KothActiveTask extends BukkitRunnable {
 
     private static final int PERIOD_TICKS = 10;
 
     private final KothEvent event;
+    private final Set<UUID> bossBarPlayers = new HashSet<>();
 
     private String currentContestantKey;
     private int captureTicks;
     private boolean contestedLastTick;
     private int particlePhase;
+    private static final String[] VANISH_METADATA_KEYS = {
+            "vanished",
+            "essentials:vanished",
+            "PremiumVanish.IsVanished"
+    };
 
     public KothActiveTask(KothEvent event) {
         this.event = event;
@@ -107,13 +117,8 @@ public class KothActiveTask extends BukkitRunnable {
                 continue;
             }
 
-            String contestantKey = getContestantKey(player);
-            String displayName = getContestantDisplayName(player);
-
-            contestants.putIfAbsent(
-                    contestantKey,
-                    new Contestant(contestantKey, displayName, player)
-            );
+            Contestant contestant = resolveContestant(player);
+            contestants.putIfAbsent(contestant.key(), contestant);
         }
 
         return contestants;
@@ -132,62 +137,26 @@ public class KothActiveTask extends BukkitRunnable {
     }
 
     private boolean isVanished(Player player) {
-        if (player.hasMetadata("vanished")) {
-            for (MetadataValue value : player.getMetadata("vanished")) {
-                try {
-                    if (value.asBoolean()) return true;
-                } catch (Exception ignored) {
-                }
+        for (String metadataKey : VANISH_METADATA_KEYS) {
+            if (hasTrueMetadata(player, metadataKey)) {
+                return true;
             }
         }
-
-        if (player.hasMetadata("essentials:vanished")) {
-            for (MetadataValue value : player.getMetadata("essentials:vanished")) {
-                try {
-                    if (value.asBoolean()) return true;
-                } catch (Exception ignored) {
-                }
-            }
-        }
-
-        if (player.hasMetadata("PremiumVanish.IsVanished")) {
-            for (MetadataValue value : player.getMetadata("PremiumVanish.IsVanished")) {
-                try {
-                    if (value.asBoolean()) return true;
-                } catch (Exception ignored) {
-                }
-            }
-        }
-
         return false;
     }
 
-    private String getContestantKey(Player player) {
+    private Contestant resolveContestant(Player player) {
         FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
 
         if (fPlayer != null) {
             Faction faction = fPlayer.getFaction();
 
             if (faction != null && isRealFaction(faction)) {
-                return "faction:" + faction.getId();
+                return new Contestant("faction:" + faction.getId(), faction.getTag(), player);
             }
         }
 
-        return "player:" + player.getUniqueId();
-    }
-
-    private String getContestantDisplayName(Player player) {
-        FPlayer fPlayer = FPlayers.getInstance().getByPlayer(player);
-
-        if (fPlayer != null) {
-            Faction faction = fPlayer.getFaction();
-
-            if (faction != null && isRealFaction(faction)) {
-                return faction.getTag();
-            }
-        }
-
-        return player.getName();
+        return new Contestant("player:" + player.getUniqueId(), player.getName(), player);
     }
 
     private boolean isRealFaction(Faction faction) {
@@ -217,12 +186,27 @@ public class KothActiveTask extends BukkitRunnable {
 
     private void refreshBossBarPlayers(World world) {
         if (event.getBossBar() == null) return;
-
-        event.getBossBar().removeAll();
+        Set<UUID> desiredPlayers = new HashSet<>();
         for (Player player : world.getPlayers()) {
             if (isEligible(player)) {
-                event.getBossBar().addPlayer(player);
+                UUID playerId = player.getUniqueId();
+                desiredPlayers.add(playerId);
+                if (!bossBarPlayers.contains(playerId)) {
+                    event.getBossBar().addPlayer(player);
+                    bossBarPlayers.add(playerId);
+                }
             }
+        }
+
+        for (UUID tracked : new HashSet<>(bossBarPlayers)) {
+            if (desiredPlayers.contains(tracked)) {
+                continue;
+            }
+            Player player = Bukkit.getPlayer(tracked);
+            if (player != null) {
+                event.getBossBar().removePlayer(player);
+            }
+            bossBarPlayers.remove(tracked);
         }
     }
 
@@ -252,7 +236,7 @@ public class KothActiveTask extends BukkitRunnable {
     }
 
     private void spawnBoundaryParticles(World world, Location center, double radius, Particle particle) {
-        int points = 32;
+        int points = 20;
         double offset = particlePhase % 2 == 0 ? 0.0 : (Math.PI / points);
 
         for (int i = 0; i < points; i++) {
@@ -274,5 +258,20 @@ public class KothActiveTask extends BukkitRunnable {
     }
 
     private record Contestant(String key, String displayName, Player representative) {
+    }
+
+    private boolean hasTrueMetadata(Player player, String metadataKey) {
+        if (!player.hasMetadata(metadataKey)) {
+            return false;
+        }
+        for (MetadataValue value : player.getMetadata(metadataKey)) {
+            try {
+                if (value.asBoolean()) {
+                    return true;
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        return false;
     }
 }

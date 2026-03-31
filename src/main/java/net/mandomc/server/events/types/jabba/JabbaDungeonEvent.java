@@ -93,15 +93,18 @@ public class JabbaDungeonEvent extends AbstractGameEvent {
             String[] split = s.split(",");
             if (split.length < 5) continue;
 
-            World world = Bukkit.getWorld(split[0]);
+            World world = Bukkit.getWorld(split[0].trim());
             if (world == null) continue;
 
-            Location loc = new Location(
-                    world,
-                    Integer.parseInt(split[1]),
-                    Integer.parseInt(split[2]),
-                    Integer.parseInt(split[3])
-            );
+            Integer x = parseIntSafe(split[1]);
+            Integer y = parseIntSafe(split[2]);
+            Integer z = parseIntSafe(split[3]);
+            if (x == null || y == null || z == null) {
+                Bukkit.getLogger().warning("[MandoMC] Skipping invalid Jabba chest spawn point: " + s);
+                continue;
+            }
+
+            Location loc = new Location(world, x, y, z);
 
             Block block = loc.getBlock();
             block.setType(Material.CHEST, false);
@@ -110,7 +113,7 @@ public class JabbaDungeonEvent extends AbstractGameEvent {
 
             if (data instanceof Directional dir) {
                 try {
-                    BlockFace face = BlockFace.valueOf(split[4].toUpperCase());
+                    BlockFace face = BlockFace.valueOf(split[4].trim().toUpperCase());
                     if (dir.getFaces().contains(face)) {
                         dir.setFacing(face);
                         block.setBlockData(dir, false);
@@ -299,6 +302,14 @@ public class JabbaDungeonEvent extends AbstractGameEvent {
 
     private Location loc(String world, int x, int y, int z) {
         return new Location(Bukkit.getWorld(world), x, y, z);
+    }
+
+    private Integer parseIntSafe(String value) {
+        try {
+            return Integer.parseInt(value.trim());
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
     }
 
     /**

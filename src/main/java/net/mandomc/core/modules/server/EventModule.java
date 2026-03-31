@@ -6,12 +6,12 @@ import net.mandomc.core.module.Module;
 import net.mandomc.core.services.ServiceRegistry;
 import net.mandomc.server.events.EventManager;
 import net.mandomc.server.events.EventScheduler;
+import net.mandomc.server.events.config.EventConfig;
 import net.mandomc.server.events.listener.EventMenuListener;
 import net.mandomc.server.events.types.jabba.DoorListener;
 import net.mandomc.server.events.types.jabba.JabbaChestListener;
 import net.mandomc.server.events.types.jabba.JabbaDungeonMobListener;
 import net.mandomc.server.events.types.koth.KothChestListener;
-import net.mandomc.server.events.types.koth.KothEvent;
 import net.mandomc.server.events.types.beskar.BeskarMiningListener;
 
 /**
@@ -51,7 +51,8 @@ public class EventModule implements Module {
         eventManager.load();
         registry.register(EventManager.class, eventManager);
 
-        scheduler = new EventScheduler(plugin, eventManager);
+        EventConfig eventConfig = registry.get(EventConfig.class);
+        scheduler = new EventScheduler(plugin, eventManager, eventConfig);
         scheduler.start();
 
         listenerRegistrar.register(new EventMenuListener(eventManager));
@@ -72,6 +73,5 @@ public class EventModule implements Module {
         if (scheduler != null) scheduler.stop();
         if (eventManager != null) eventManager.forceEndActiveEvent(false);
         if (listenerRegistrar != null) listenerRegistrar.unregisterAll();
-        KothEvent.clearRewardChest();
     }
 }

@@ -3,6 +3,7 @@ package net.mandomc.world.ilum.config;
 import net.mandomc.core.config.BaseConfig;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class ParkourConfig extends BaseConfig {
     public ParkourConfig(Plugin plugin) {
         super(plugin, "parkour.yml");
         INSTANCE = this;
+        validate();
     }
 
     /**
@@ -28,7 +30,10 @@ public class ParkourConfig extends BaseConfig {
      * been migrated to the typed API.
      */
     public static FileConfiguration get() {
-        return INSTANCE != null ? INSTANCE.raw() : null;
+        if (INSTANCE == null) {
+            return new YamlConfiguration();
+        }
+        return INSTANCE.raw();
     }
 
     /** World name where the parkour course is located. */
@@ -67,6 +72,26 @@ public class ParkourConfig extends BaseConfig {
             config.save(file);
         } catch (IOException e) {
             logger.severe("Failed to save parkour.yml: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void reload() {
+        super.reload();
+        validate();
+    }
+
+    private void validate() {
+        warnMissingSection("parkour");
+        warnMissingSection("parkour.start");
+        warnMissingSection("parkour.spawn");
+        warnMissingSection("parkour.checkpoints");
+        warnMissingSection("parkour.rewards");
+    }
+
+    private void warnMissingSection(String path) {
+        if (getSection(path) == null) {
+            logger.warning("[parkour.yml] Missing section '" + path + "'.");
         }
     }
 }

@@ -6,6 +6,7 @@ import de.oliver.fancyholograms.api.data.ItemHologramData;
 import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
 import net.mandomc.MandoMC;
+import net.mandomc.core.integration.OptionalPluginSupport;
 import net.mandomc.gameplay.bounty.config.BountyConfig;
 import net.mandomc.core.modules.core.EconomyModule;
 import org.bukkit.Bukkit;
@@ -99,16 +100,17 @@ public final class BountyShowcaseManager {
         float yaw = base.getYaw();
         float pitch = base.getPitch();
 
-        if (Bukkit.getPluginManager().getPlugin("FancyHolograms") == null) {
+        HologramManager manager = getHologramManager();
+        if (manager == null) {
             remove();
             return;
         }
 
-        updateText(hologramId, base.clone().add(0, textOffset, 0), yaw, pitch, top, section);
-        updateText(hologramId + BACK_SUFFIX, base.clone().add(0, textOffset, 0), yaw + 180F, pitch, top, section);
+        updateText(manager, hologramId, base.clone().add(0, textOffset, 0), yaw, pitch, top, section);
+        updateText(manager, hologramId + BACK_SUFFIX, base.clone().add(0, textOffset, 0), yaw + 180F, pitch, top, section);
         // Item hologram heads render facing opposite our text direction, so offset by 180 degrees.
-        updateHead(hologramId + HEAD_SUFFIX, base.clone().add(0, npcOffset, 0), yaw + 180F, pitch, top);
-        updateHead(hologramId + HEAD_SUFFIX + BACK_SUFFIX, base.clone().add(0, npcOffset, 0), yaw + 360F, pitch, top);
+        updateHead(manager, hologramId + HEAD_SUFFIX, base.clone().add(0, npcOffset, 0), yaw + 180F, pitch, top);
+        updateHead(manager, hologramId + HEAD_SUFFIX + BACK_SUFFIX, base.clone().add(0, npcOffset, 0), yaw + 360F, pitch, top);
     }
 
     public static void remove() {
@@ -121,32 +123,29 @@ public final class BountyShowcaseManager {
         removeHead(hologramId + HEAD_SUFFIX + BACK_SUFFIX);
     }
 
-    private static void updateText(String hologramId, Location location, float yaw, float pitch, Bounty bounty, ConfigurationSection section) {
-        HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
-        manager.getHologram(hologramId).ifPresent(manager::removeHologram);
-
-        TextHologramData data = new TextHologramData(hologramId, location);
-        data.setText(buildLines(bounty, section));
-        data.setBillboard(Display.Billboard.FIXED);
-        data.setTextShadow(true);
-        data.setBackground(Color.fromARGB(0, 0, 0, 10));
-        data.setLocation(location.clone().setDirection(directionFromYawPitch(yaw, pitch)));
-
-        Hologram hologram = manager.create(data);
-        manager.addHologram(hologram);
+    private static void updateText(HologramManager manager, String hologramId, Location location, float yaw, float pitch, Bounty bounty, ConfigurationSection section) {
+        Location directedLocation = location.clone().setDirection(directionFromYawPitch(yaw, pitch));
+        List<String> lines = buildLines(bounty, section);
+        manager.getHologram(hologramId).ifPresentOrElse(existing -> {
+            if (existing.getData() instanceof TextHologramData textData) {
+                textData.setLocation(directedLocation);
+                textData.setText(lines);
+                return;
+            }
+            manager.removeHologram(existing);
+            createTextHologram(manager, hologramId, directedLocation, lines);
+        }, () -> createTextHologram(manager, hologramId, directedLocation, lines));
     }
 
     private static void removeText(String hologramId) {
-        if (Bukkit.getPluginManager().getPlugin("FancyHolograms") == null) {
+        HologramManager manager = getHologramManager();
+        if (manager == null) {
             return;
         }
-
-        HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
         manager.getHologram(hologramId).ifPresent(manager::removeHologram);
     }
 
-    private static void updateHead(String headId, Location location, float yaw, float pitch, Bounty bounty) {
-        HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
+    private static void updateHead(HologramManager manager, String headId, Location location, float yaw, float pitch, Bounty bounty) {
         UUID targetId = bounty.getTarget();
 
         if (Objects.equals(currentHeadTargetId, targetId)) {
@@ -169,11 +168,10 @@ public final class BountyShowcaseManager {
     }
 
     private static void removeHead(String headId) {
-        if (Bukkit.getPluginManager().getPlugin("FancyHolograms") == null) {
+        HologramManager manager = getHologramManager();
+        if (manager == null) {
             return;
         }
-
-        HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
         manager.getHologram(headId).ifPresent(manager::removeHologram);
         currentHeadTargetId = null;
     }
@@ -325,5 +323,28 @@ public final class BountyShowcaseManager {
 
     private static String color(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
+    }
+
+    private static void createTextHologram(HologramManager manager, String hologramId, Location location, List<String> lines) {
+        TextHologramData data = new TextHologramData(hologramId, location);
+        data.setText(lines);
+        data.setBillboard(Display.Billboard.FIXED);
+        data.setTextShadow(true);
+        data.setBackground(Color.fromARGB(0, 0, 0, 10));
+        data.setLocation(location);
+
+        Hologram hologram = manager.create(data);
+        manager.addHologram(hologram);
+    }
+
+    private static HologramManager getHologramManager() {
+        if (!OptionalPluginSupport.hasFancyHolograms()) {
+            return null;
+        }
+        try {
+            return FancyHologramsPlugin.get().getHologramManager();
+        } catch (Throwable ignored) {
+            return null;
+        }
     }
 }

@@ -5,10 +5,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
+import org.bukkit.block.TileState;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
 
 import net.mandomc.MandoMC;
 import net.mandomc.server.events.AbstractGameEvent;
@@ -45,12 +49,13 @@ public class KothEvent extends AbstractGameEvent {
 
     private boolean captured;
 
-    /*
-     * Reward chest state
-     */
-    private static Location rewardChestLocation;
-    private static List<String> rewardCommands = new ArrayList<>();
-    private static String rewardClaimedMessage = "&e%player% &7claimed the KOTH reward chest!";
+    private static final String REWARD_MARKER_KEY = "koth_reward_chest";
+    private static final String REWARD_COMMANDS_KEY = "koth_reward_commands";
+    private static final String REWARD_MESSAGE_KEY = "koth_reward_message";
+
+    private Location rewardChestLocation;
+    private List<String> rewardCommands = new ArrayList<>();
+    private String rewardClaimedMessage = "&e%player% &7claimed the KOTH reward chest!";
 
     public KothEvent(EventDefinition definition) {
         super(definition.getId(), definition.getDisplayName());
@@ -148,28 +153,37 @@ public class KothEvent extends AbstractGameEvent {
         if (center == null || center.getWorld() == null) return;
 
         Location chestLoc = center.getBlock().getLocation();
-        chestLoc.getBlock().setType(parseChestMaterial(stringSetting("chest-material", "CHEST")));
+        Block block = chestLoc.getBlock();
+        block.setType(parseChestMaterial(stringSetting("chest-material", "CHEST")));
 
         rewardChestLocation = chestLoc;
+        markRewardChest(block, rewardCommands, rewardClaimedMessage);
         broadcast(chestSpawnMessage);
     }
 
-    public static boolean isRewardChest(Location location) {
-        if (rewardChestLocation == null || location == null) return false;
-        if (rewardChestLocation.getWorld() == null || location.getWorld() == null) return false;
-
-        return rewardChestLocation.getWorld().equals(location.getWorld())
-                && rewardChestLocation.getBlockX() == location.getBlockX()
-                && rewardChestLocation.getBlockY() == location.getBlockY()
-                && rewardChestLocation.getBlockZ() == location.getBlockZ();
+    public static boolean isRewardChest(Block block) {
+        if (!(block.getState() instanceof TileState tileState)) {
+            return false;
+        }
+        return tileState.getPersistentDataContainer().has(markerKey(), PersistentDataType.BYTE);
     }
 
-    public static void claimRewardChest(Player player) {
-        if (rewardChestLocation == null) return;
+    public static void claimRewardChest(Player player, Block block) {
+        if (!(block.getState() instanceof TileState tileState)) {
+            return;
+        }
+        if (!tileState.getPersistentDataContainer().has(markerKey(), PersistentDataType.BYTE)) {
+            return;
+        }
 
-        rewardChestLocation.getBlock().setType(Material.AIR);
+        String encodedCommands = tileState.getPersistentDataContainer()
+                .get(commandsKey(), PersistentDataType.STRING);
+        String claimMessage = tileState.getPersistentDataContainer()
+                .get(messageKey(), PersistentDataType.STRING);
 
-        for (String command : rewardCommands) {
+        block.setType(Material.AIR);
+
+        for (String command : decodeCommands(encodedCommands)) {
             Bukkit.dispatchCommand(
                     Bukkit.getConsoleSender(),
                     command.replace("%player%", player.getName())
@@ -177,11 +191,11 @@ public class KothEvent extends AbstractGameEvent {
             );
         }
 
-        Bukkit.broadcastMessage(colorStatic(rewardClaimedMessage.replace("%player%", player.getName())));
-        rewardChestLocation = null;
+        String message = claimMessage != null ? claimMessage : "&e%player% &7claimed the KOTH reward chest!";
+        Bukkit.broadcastMessage(colorStatic(message.replace("%player%", player.getName())));
     }
 
-    public static void clearRewardChest() {
+    public void clearRewardChest() {
         if (rewardChestLocation != null && rewardChestLocation.getWorld() != null) {
             rewardChestLocation.getBlock().setType(Material.AIR);
             rewardChestLocation = null;
@@ -310,5 +324,40 @@ public class KothEvent extends AbstractGameEvent {
 
     private static String colorStatic(String input) {
         return input == null ? "" : input.replace("&", "§");
+    }
+
+    private static NamespacedKey markerKey() {
+        return new NamespacedKey(MandoMC.getInstance(), REWARD_MARKER_KEY);
+    }
+
+    private static NamespacedKey commandsKey() {
+        return new NamespacedKey(MandoMC.getInstance(), REWARD_COMMANDS_KEY);
+    }
+
+    private static NamespacedKey messageKey() {
+        return new NamespacedKey(MandoMC.getInstance(), REWARD_MESSAGE_KEY);
+    }
+
+    private static void markRewardChest(Block block, List<String> commands, String message) {
+        if (!(block.getState() instanceof TileState tileState)) {
+            return;
+        }
+        tileState.getPersistentDataContainer().set(markerKey(), PersistentDataType.BYTE, (byte) 1);
+        tileState.getPersistentDataContainer().set(commandsKey(), PersistentDataType.STRING, String.join("\n", commands));
+        tileState.getPersistentDataContainer().set(messageKey(), PersistentDataType.STRING, message == null ? "" : message);
+        tileState.update(true, false);
+    }
+
+    private static List<String> decodeCommands(String encoded) {
+        if (encoded == null || encoded.isBlank()) {
+            return List.of();
+        }
+        List<String> commands = new ArrayList<>();
+        for (String line : encoded.split("\n")) {
+            if (!line.isBlank()) {
+                commands.add(line);
+            }
+        }
+        return commands;
     }
 }

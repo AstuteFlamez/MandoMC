@@ -15,18 +15,18 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import net.mandomc.core.LangManager;
+import net.mandomc.core.config.MainConfig;
 
 import net.mandomc.MandoMC;
 import net.mandomc.server.items.ItemRegistry;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import org.bukkit.scheduler.BukkitTask;
 
 /**
  * Handles the Tatooine decorated-pot loot system.
@@ -38,17 +38,22 @@ import java.util.Set;
 public class TatooinePotListener implements Listener {
 
     private final Random random = new Random();
+    private final MainConfig mainConfig;
 
     private final List<Location> allLocations = new ArrayList<>();
     private final Set<Location> activePots = new HashSet<>();
-
-    private final int MAX_ACTIVE = 10;
+    private final List<String> lootItemIds = new ArrayList<>();
+    private final List<Double> cumulativeLootWeights = new ArrayList<>();
+    private double totalLootWeight;
+    private final Set<BukkitTask> pendingRespawns = new HashSet<>();
 
     /**
      * Constructs the listener and loads all pot locations.
      */
-    public TatooinePotListener() {
+    public TatooinePotListener(MainConfig mainConfig) {
+        this.mainConfig = mainConfig;
         loadLocations();
+        rebuildLootPool();
     }
 
     /**
@@ -62,6 +67,10 @@ public class TatooinePotListener implements Listener {
      * Removes all active pot blocks and clears the tracking set.
      */
     public void disable() {
+        for (BukkitTask task : new HashSet<>(pendingRespawns)) {
+            task.cancel();
+        }
+        pendingRespawns.clear();
         for (Location loc : activePots) {
             loc.getBlock().setType(Material.AIR);
         }
@@ -71,7 +80,8 @@ public class TatooinePotListener implements Listener {
     private void spawnInitialPots() {
         Collections.shuffle(allLocations);
 
-        for (int i = 0; i < Math.min(MAX_ACTIVE, allLocations.size()); i++) {
+        int maxActive = mainConfig.getTatooineMaxActivePots();
+        for (int i = 0; i < Math.min(maxActive, allLocations.size()); i++) {
             spawnPot(allLocations.get(i));
         }
     }
@@ -86,13 +96,19 @@ public class TatooinePotListener implements Listener {
 
         activePots.remove(oldLoc);
 
-        Bukkit.getScheduler().runTaskLater(MandoMC.getInstance(), () -> {
+        final BukkitTask[] scheduled = new BukkitTask[1];
+        BukkitTask task = Bukkit.getScheduler().runTaskLater(MandoMC.getInstance(), () -> {
+            pendingRespawns.remove(scheduled[0]);
+            if (!MandoMC.getInstance().isEnabled()) {
+                return;
+            }
 
             List<Location> available = new ArrayList<>(allLocations);
             available.removeAll(activePots);
 
-            // filter for distance (far away)
-            available.removeIf(loc -> loc.distanceSquared(oldLoc) < 400); // 400 = 20 blocks (20^2)
+            int minDistance = mainConfig.getTatooineMinRespawnDistanceBlocks();
+            int minDistanceSquared = minDistance * minDistance;
+            available.removeIf(loc -> loc.distanceSquared(oldLoc) < minDistanceSquared);
 
             // fallback if nothing far enough
             if (available.isEmpty()) {
@@ -105,7 +121,9 @@ public class TatooinePotListener implements Listener {
             Location newLoc = available.get(random.nextInt(available.size()));
             spawnPot(newLoc);
 
-        }, 200L); // 10 seconds
+        }, mainConfig.getTatooineRespawnDelayTicks());
+        scheduled[0] = task;
+        pendingRespawns.add(task);
     }
 
     /**
@@ -151,15 +169,14 @@ public class TatooinePotListener implements Listener {
         );
 
         // loot
-        List<String> items = ItemRegistry.getItemIds().stream()
-                .filter(id -> ItemRegistry.hasTag(id, "TATOOINEPOTS"))
-                .toList();
-
-        if (!items.isEmpty()) {
+        if (!lootItemIds.isEmpty()) {
             int amount = 1 + random.nextInt(2);
 
             for (int i = 0; i < amount; i++) {
-                String id = pickWeighted(items);
+                String id = pickWeighted();
+                if (id == null) {
+                    continue;
+                }
                 ItemStack item = ItemRegistry.get(id);
 
                 if (item != null) {
@@ -180,49 +197,70 @@ public class TatooinePotListener implements Listener {
      * @param items the list of candidate item IDs
      * @return the selected item ID
      */
-    private String pickWeighted(List<String> items) {
-
-        Map<String, Double> weights = new HashMap<>();
-
-        for (String id : items) {
-
-            String rarity = ItemRegistry.getRarity(id);
-
-            double weight = switch (rarity.toLowerCase()) {
-                case "common" -> 60;
-                case "uncommon" -> 25;
-                case "rare" -> 10;
-                case "epic" -> 4;
-                case "legendary" -> 1;
-                case "mythic" -> 0.2;
-                default -> 1;
-            };
-
-            weights.put(id, weight);
+    private String pickWeighted() {
+        if (lootItemIds.isEmpty() || totalLootWeight <= 0D) {
+            return null;
         }
 
-        double total = weights.values().stream()
-                .mapToDouble(Double::doubleValue)
-                .sum();
-
-        double roll = Math.random() * total;
-
-        double cumulative = 0;
-
-        for (Map.Entry<String, Double> entry : weights.entrySet()) {
-            cumulative += entry.getValue();
-            if (roll <= cumulative) {
-                return entry.getKey();
+        double roll = random.nextDouble(totalLootWeight);
+        for (int i = 0; i < cumulativeLootWeights.size(); i++) {
+            if (roll <= cumulativeLootWeights.get(i)) {
+                return lootItemIds.get(i);
             }
         }
 
-        return items.get(0);
+        return lootItemIds.get(lootItemIds.size() - 1);
+    }
+
+    private void rebuildLootPool() {
+        lootItemIds.clear();
+        cumulativeLootWeights.clear();
+        totalLootWeight = 0D;
+
+        for (String id : ItemRegistry.getItemIds()) {
+            if (!ItemRegistry.hasTag(id, "TATOOINEPOTS")) {
+                continue;
+            }
+            lootItemIds.add(id);
+            totalLootWeight += rarityWeight(ItemRegistry.getRarity(id));
+            cumulativeLootWeights.add(totalLootWeight);
+        }
+    }
+
+    private double rarityWeight(String rarity) {
+        if (rarity == null) {
+            return 1D;
+        }
+        return switch (rarity.toLowerCase()) {
+            case "common" -> 60D;
+            case "uncommon" -> 25D;
+            case "rare" -> 10D;
+            case "epic" -> 4D;
+            case "legendary" -> 1D;
+            case "mythic" -> 0.2D;
+            default -> 1D;
+        };
     }
 
     private void loadLocations() {
+        allLocations.clear();
 
-        World world = Bukkit.getWorld("Tatooine");
+        World world = Bukkit.getWorld(mainConfig.getTatooinePotWorld());
         if (world == null) return;
+
+        List<String> configured = mainConfig.getTatooinePotLocationStrings();
+        for (String encoded : configured) {
+            Location parsed = parseLocation(encoded, world);
+            if (parsed != null) {
+                allLocations.add(parsed);
+            } else {
+                MandoMC.getInstance().getLogger().warning("[Tatooine] Invalid pot location entry: " + encoded);
+            }
+        }
+
+        if (!allLocations.isEmpty()) {
+            return;
+        }
 
         allLocations.add(new Location(world, 1649, 20, 1598));
         allLocations.add(new Location(world, 1648, 20, 1598));
@@ -286,5 +324,23 @@ public class TatooinePotListener implements Listener {
         allLocations.add(new Location(world, 1676, 22, 1680));
 
         // (trimmed for readability --- continue same pattern)
+    }
+
+    private Location parseLocation(String encoded, World world) {
+        if (encoded == null || encoded.isBlank()) {
+            return null;
+        }
+        String[] split = encoded.split(",");
+        if (split.length != 3) {
+            return null;
+        }
+        try {
+            double x = Double.parseDouble(split[0].trim());
+            double y = Double.parseDouble(split[1].trim());
+            double z = Double.parseDouble(split[2].trim());
+            return new Location(world, x, y, z);
+        } catch (NumberFormatException ex) {
+            return null;
+        }
     }
 }

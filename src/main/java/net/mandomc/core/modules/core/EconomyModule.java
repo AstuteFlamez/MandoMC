@@ -3,6 +3,9 @@ package net.mandomc.core.modules.core;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -102,36 +105,48 @@ public class EconomyModule implements Module {
      * The task is tracked by {@link TaskRegistrar} and cancelled on {@link #disable()}.
      */
     private void startBalanceSync() {
-        taskRegistrar.runTimerAsync(() -> {
+        taskRegistrar.runTimer(() -> {
             if (!isReady()) return;
 
-            String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false";
-
-            try (Connection conn = DriverManager.getConnection(url, username, password)) {
-                PreparedStatement ps = conn.prepareStatement(
-                        "INSERT INTO balances (uuid, username, balance) VALUES (?, ?, ?) "
-                        + "ON DUPLICATE KEY UPDATE username = ?, balance = ?"
-                );
-
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    double balance = getBalance(player);
-
-                    ps.setString(1, player.getUniqueId().toString());
-                    ps.setString(2, player.getName());
-                    ps.setDouble(3, balance);
-                    ps.setString(4, player.getName());
-                    ps.setDouble(5, balance);
-
-                    ps.addBatch();
-                }
-
-                ps.executeBatch();
-
-            } catch (Exception e) {
-                plugin.getLogger().warning("Balance sync failed: " + e.getMessage());
+            List<BalanceSnapshot> snapshots = new ArrayList<>();
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                snapshots.add(new BalanceSnapshot(
+                        player.getUniqueId(),
+                        player.getName(),
+                        getBalance(player)
+                ));
             }
 
+            if (snapshots.isEmpty()) {
+                return;
+            }
+
+            taskRegistrar.runAsync(() -> persistBalances(snapshots));
         }, 20L * 60, 20L * 60);
+    }
+
+    private void persistBalances(List<BalanceSnapshot> snapshots) {
+        String url = "jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=false";
+
+        try (Connection conn = DriverManager.getConnection(url, username, password)) {
+            PreparedStatement ps = conn.prepareStatement(
+                    "INSERT INTO balances (uuid, username, balance) VALUES (?, ?, ?) "
+                    + "ON DUPLICATE KEY UPDATE username = ?, balance = ?"
+            );
+
+            for (BalanceSnapshot snapshot : snapshots) {
+                ps.setString(1, snapshot.uuid().toString());
+                ps.setString(2, snapshot.username());
+                ps.setDouble(3, snapshot.balance());
+                ps.setString(4, snapshot.username());
+                ps.setDouble(5, snapshot.balance());
+                ps.addBatch();
+            }
+
+            ps.executeBatch();
+        } catch (Exception e) {
+            plugin.getLogger().warning("Balance sync failed: " + e.getMessage());
+        }
     }
 
     /**
@@ -218,5 +233,8 @@ public class EconomyModule implements Module {
      */
     public static Economy get() {
         return economy;
+    }
+
+    private record BalanceSnapshot(UUID uuid, String username, double balance) {
     }
 }
