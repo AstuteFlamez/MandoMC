@@ -14,3 +14,10 @@ Paper plugin for the MandoMC server.
 
 - `mvn -q test`
 - `mvn package` -> `target/MandoMC.jar`
+- `mvn -q -DskipTests compile` (compile-only fallback when local package copy step is unavailable)
+
+## Refactor status notes
+
+- Command and permission consistency checks are now covered by automated tests.
+- Core reload safety has been improved for lottery and parkour repeating tasks.
+- Link/economy command flow now uses injectable service seams for better unit testing.

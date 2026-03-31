@@ -16,6 +16,13 @@ This means dependency order between modules is intentional and must be preserved
 - Shared dependencies are passed through `ServiceRegistry`.
 - Prefer registry injection over new static mutable singletons.
 
+## Current architecture highlights
+
+- Command wiring is centralized in `CommandModule`; missing command keys now log a severe startup error instead of failing silently.
+- Repeating schedulers in lottery/parkour have explicit stop methods and are invoked from module `disable()` to keep reload behavior symmetric.
+- `LinkCommand` now depends on injected service seams (`LinkService`, `EconomyService`) rather than direct JDBC construction and static economy calls.
+- `EconomyModule` reads DB settings from typed `MainConfig` and registers `EconomyService` for downstream consumers.
+
 ## Lifecycle safety
 
 Anything created in `enable()` should be cleaned in `disable()`:

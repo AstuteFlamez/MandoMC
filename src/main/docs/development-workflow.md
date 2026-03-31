@@ -24,6 +24,8 @@
 - permission key in `plugin.yml` == `hasPermission(...)` checks
 - resources defaults exist for new configs
 - reload safety maintained for listeners/tasks/services
+- command registration failures are logged (no silent misses in `CommandModule.safe(...)`)
+- repeating tasks provide explicit `start()` / `stop()` lifecycle hooks and are stopped in module `disable()`
 
 ## Deliverable checklist
 

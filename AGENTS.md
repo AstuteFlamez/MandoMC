@@ -15,6 +15,8 @@ Paper plugin (Java 17, Maven). Persistent AI guidance lives in **[`.cursor/rules
 - Main lifecycle + module order: [`src/main/java/net/mandomc/MandoMC.java`](src/main/java/net/mandomc/MandoMC.java)
 - Module contract: [`src/main/java/net/mandomc/core/module/Module.java`](src/main/java/net/mandomc/core/module/Module.java)
 - Service wiring: [`src/main/java/net/mandomc/core/services/ServiceRegistry.java`](src/main/java/net/mandomc/core/services/ServiceRegistry.java)
+- Economy seam: [`src/main/java/net/mandomc/core/services/EconomyService.java`](src/main/java/net/mandomc/core/services/EconomyService.java)
+- Link seam: [`src/main/java/net/mandomc/server/discord/service/LinkService.java`](src/main/java/net/mandomc/server/discord/service/LinkService.java)
 - Command registration hub: [`src/main/java/net/mandomc/core/modules/core/CommandModule.java`](src/main/java/net/mandomc/core/modules/core/CommandModule.java)
 - Config loading hub: [`src/main/java/net/mandomc/core/modules/core/ConfigModule.java`](src/main/java/net/mandomc/core/modules/core/ConfigModule.java)
 - Plugin metadata: [`src/main/resources/plugin.yml`](src/main/resources/plugin.yml)
@@ -33,6 +35,7 @@ Paper plugin (Java 17, Maven). Persistent AI guidance lives in **[`.cursor/rules
 4. For commands, keep `plugin.yml`, Java registration, and permission checks aligned.
 5. For config changes, add defaults in resources and wire typed config in `ConfigModule`.
 6. Validate with tests (`mvn -q test`) and include manual smoke-test notes for in-server behavior.
+7. Keep guardrail tests updated when touching command wiring or lifecycle (`PluginYmlConsistencyTest`, `SchedulerLifecycleStopTest`, `LinkCommandTest`).
 
 ## Bugfix protocol
 
@@ -56,3 +59,4 @@ Paper plugin (Java 17, Maven). Persistent AI guidance lives in **[`.cursor/rules
 
 - `mvn -q test`
 - `mvn package` -> `target/MandoMC.jar`
+- `mvn -q -DskipTests compile` (compile-only fallback when package copy target is environment-specific)

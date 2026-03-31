@@ -23,4 +23,5 @@ alwaysApply: true
 
 - Run `mvn -q test` after substantive changes.
 - If commands/configs changed, verify `plugin.yml` and registration wiring are still consistent.
+- Keep guardrail tests updated for refactors touching command metadata or lifecycle helpers.
 - Include a short risk note in the final summary: what was validated and what still needs in-server smoke testing.

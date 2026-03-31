@@ -27,7 +27,12 @@ alwaysApply: false
 ## Tasks and resources
 
 - Track every scheduled `BukkitTask` and cancel it on `disable()`.
+- Prefer explicit lifecycle methods (`start()` / `stop()`) for repeating schedulers and call `stop()` before restarting on reload.
 - If a module registers services in `ServiceRegistry`, ensure they are stopped/flushed/unregistered during disable.
+
+## Service seams
+
+- Prefer injected service seams for command/business logic (example patterns: `EconomyService`, `LinkService`) instead of direct static access or inline JDBC in command executors.
 
 ## Package map
 

@@ -4,6 +4,7 @@
 
 - Unit tests: `mvn -q test`
 - Build artifact: `mvn package` (jar at `target/MandoMC.jar`)
+- Compile-only fallback (avoids local copy-to-server step): `mvn -q -DskipTests compile`
 
 ## Change-type validation
 
@@ -15,6 +16,12 @@
   - Check for nearby regressions in same module
 - Feature:
   - Verify command paths, permissions, config defaults, and reload behavior
+
+## Automated guardrail tests
+
+- `PluginYmlConsistencyTest`: command key and permission node consistency, including reload permission contract.
+- `SchedulerLifecycleStopTest`: verifies new scheduler stop/cancel semantics for lottery and parkour helpers.
+- `LinkCommandTest`: validates link command behavior via injected seams without requiring plugin singleton wiring.
 
 ## Manual in-server smoke checks
 

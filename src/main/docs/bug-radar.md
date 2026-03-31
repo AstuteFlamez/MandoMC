@@ -4,16 +4,15 @@ This file tracks consistency issues and hotspots agents should verify first.
 
 ## Command and permission mismatches to verify
 
-- `ReloadCommand` checks `mmc.reload`, while `plugin.yml` defines `mandomc.admin.reload`.
-  - Likely permission mismatch causing denied access for intended admins.
-- `plugin.yml` currently has `Drop:` (capital D), while Java wiring uses `"drop"`.
-  - Command key lookup is case-sensitive; registration can silently fail.
-- `LotteryCommand` checks `mandomc.lottery.admin`; verify that permission exists in `plugin.yml`.
+- Keep command/permission consistency tests green (`PluginYmlConsistencyTest`) after any command changes.
+- If adding commands, ensure `plugin.yml` includes metadata and the `permissions:` node is explicitly declared.
+- `CommandModule.safe(...)` now logs severe for missing command keys; treat any such startup log as a release blocker.
 
 ## Reload safety hotspots
 
 - Modules/services with background tasks or registries should be checked for enable/disable symmetry.
 - Any listener registration outside `ListenerRegistrar` is a potential leak risk.
+- Continue reducing static mutable storage usage in lottery/bounty/parkour paths where repository/service seams already exist.
 
 ## Soft dependency hotspots
 

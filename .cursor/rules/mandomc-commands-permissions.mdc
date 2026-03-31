@@ -14,10 +14,11 @@ alwaysApply: false
 
 ## Wiring in Java
 
-- **Central pattern**: `CommandModule` uses `safe(name, executor)` / `safe(name, executor, tab)` — skips registration if the command is missing from `plugin.yml` (silent).
+- **Central pattern**: `CommandModule` uses `safe(name, executor)` / `safe(name, executor, tab)` and logs a **severe** error if the command key is missing from `plugin.yml`.
 - **Feature modules** sometimes register their own command with `plugin.getCommand("...")` and an explicit null check + log. Both patterns exist; for **new** commands, default to `CommandModule` + `safe()` unless the feature must own registration for lifecycle reasons — then mirror `BountyModule`-style explicit checks.
 
 ## Permissions in code
 
 - Use the same permission strings as in `plugin.yml` for `hasPermission` checks (fix mismatches if you find them).
 - When adding/changing a command, verify the permission string in three places: `plugin.yml`, command executor check, and any docs/help text.
+- Keep contract tests in sync: update `PluginYmlConsistencyTest` when intentionally changing command or permission metadata.
