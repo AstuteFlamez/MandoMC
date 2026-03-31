@@ -170,6 +170,8 @@ vehicles:
   no-fuel:          "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &c⚠ This vehicle has no fuel."
   out-of-fuel:      "&c⚠ Vehicle out of fuel!"
   fully-repaired:   "&aVehicle fully repaired."
+  seat-occupied:    "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cThat seat is already occupied by &f%player%&c."
+  ejected:          "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou have been ejected from the vehicle."
   weapon:
     recharging:  "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cWeapon recharging: &e%seconds%s"
     out-of-ammo: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cOut of &f%ammo%&c!"

@@ -8,6 +8,7 @@ import org.bukkit.NamespacedKey;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.guis.GUIManager;
 import net.mandomc.gameplay.vehicle.model.Vehicle;
 import net.mandomc.gameplay.vehicle.listener.DamageListener;
 import net.mandomc.gameplay.vehicle.listener.DeathListener;
@@ -27,7 +28,8 @@ import net.mandomc.core.services.ServiceRegistry;
  * Manages the lifecycle of the vehicle system.
  *
  * Registers ModelEngine mount controllers, all vehicle event listeners,
- * and tracks active vehicles keyed by player UUID.
+ * and tracks active vehicles keyed by owner player UUID, as well as an
+ * occupant index that maps any rider UUID to their vehicle owner UUID.
  */
 public class VehicleModule implements Module {
 
@@ -36,7 +38,14 @@ public class VehicleModule implements Module {
      */
     public static NamespacedKey VEHICLE_KEY;
 
+    /** Maps owner UUID → their spawned vehicle. */
     private static final HashMap<UUID, Vehicle> activeVehicles = new HashMap<>();
+
+    /**
+     * Maps any non-owner rider UUID → the owner UUID of the vehicle they're in.
+     * Used to resolve which vehicle a passenger or gunner belongs to.
+     */
+    private static final HashMap<UUID, UUID> occupantIndex = new HashMap<>();
 
     private final MandoMC plugin;
     private ListenerRegistrar listenerRegistrar;
@@ -61,11 +70,13 @@ public class VehicleModule implements Module {
         listenerRegistrar = new ListenerRegistrar(plugin);
         VEHICLE_KEY = new NamespacedKey(plugin, "vehicle_id");
 
+        GUIManager guiManager = registry.get(GUIManager.class);
+
         ModelEngineAPI.getMountControllerTypeRegistry().register("aerial_controller", AerialMountController.AERIAL);
         ModelEngineAPI.getMountControllerTypeRegistry().register("surface_controller", SurfaceMountController.SURFACE);
 
         listenerRegistrar.register(new SpawnListener());
-        listenerRegistrar.register(new MountListener());
+        listenerRegistrar.register(new MountListener(guiManager));
         listenerRegistrar.register(new PickupListener());
         listenerRegistrar.register(new VehicleCanisterInteractListener());
         listenerRegistrar.register(new DamageListener());
@@ -75,15 +86,66 @@ public class VehicleModule implements Module {
     }
 
     /**
-     * Disables the vehicle system, unregisters listeners, and clears active vehicles.
+     * Disables the vehicle system, unregisters listeners, and clears all tracking maps.
      */
     @Override
     public void disable() {
         if (listenerRegistrar != null) listenerRegistrar.unregisterAll();
         activeVehicles.clear();
+        occupantIndex.clear();
     }
 
+    // -------------------------------------------------------------------------
+    // Vehicle lookups
+    // -------------------------------------------------------------------------
+
+    /**
+     * Returns the active vehicle map keyed by owner UUID.
+     */
     public static HashMap<UUID, Vehicle> getActiveVehicles() {
         return activeVehicles;
+    }
+
+    /**
+     * Returns the vehicle for the given player, whether they are the owner,
+     * a passenger, or a gunner.
+     *
+     * Checks {@code activeVehicles} first (covers drivers/owners), then falls
+     * back to the {@code occupantIndex} for non-owner riders.
+     *
+     * @param playerUUID the UUID of any player currently in a vehicle
+     * @return the vehicle, or null if the player is not in any vehicle
+     */
+    public static Vehicle getVehicleForPlayer(UUID playerUUID) {
+        Vehicle direct = activeVehicles.get(playerUUID);
+        if (direct != null) return direct;
+
+        UUID ownerUUID = occupantIndex.get(playerUUID);
+        if (ownerUUID == null) return null;
+
+        return activeVehicles.get(ownerUUID);
+    }
+
+    // -------------------------------------------------------------------------
+    // Occupant tracking
+    // -------------------------------------------------------------------------
+
+    /**
+     * Registers a non-owner rider as an occupant of the given owner's vehicle.
+     *
+     * @param playerUUID UUID of the riding player
+     * @param ownerUUID  UUID of the vehicle owner
+     */
+    public static void registerOccupant(UUID playerUUID, UUID ownerUUID) {
+        occupantIndex.put(playerUUID, ownerUUID);
+    }
+
+    /**
+     * Removes a rider from the occupant index.
+     *
+     * @param playerUUID UUID of the player to unregister
+     */
+    public static void unregisterOccupant(UUID playerUUID) {
+        occupantIndex.remove(playerUUID);
     }
 }

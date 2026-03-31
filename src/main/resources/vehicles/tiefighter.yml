@@ -1,5 +1,7 @@
 vehicle:
   item_id: tiefighter
+  display_name: "&cTIE Fighter"
+  gui_size: 27
 
   fuel:
     max: 1000
@@ -25,3 +27,10 @@ vehicle:
 
     movement_sound: vehicles.tie_fighter_fly
     movement_sound_time_in_ticks: 420
+
+  seats:
+    - name: "Pilot Seat"
+      slot: 13
+      type: DRIVER
+      gunner: true
+      skull_url: "https://textures.minecraft.net/texture/5d9591c0d3262fe9d7056dd91c787a685915946739f15e349b3ddcf12a46cbb7"

@@ -21,9 +21,12 @@ import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 
+import net.mandomc.gameplay.vehicle.model.SeatConfig;
 import net.mandomc.gameplay.vehicle.model.Vehicle;
 import net.mandomc.gameplay.vehicle.model.VehicleData;
 import net.mandomc.gameplay.vehicle.config.VehicleConfigResolver;
+
+import java.util.List;
 import net.mandomc.gameplay.vehicle.weapon.SpeederBike;
 import net.mandomc.gameplay.vehicle.weapon.TieFighter;
 import net.mandomc.gameplay.vehicle.weapon.WeaponSystem;
@@ -85,7 +88,10 @@ public class SpawnListener implements Listener {
             return;
         }
 
+        List<SeatConfig> seats = VehicleConfigResolver.getSeats(item);
+
         Vehicle vehicle = new Vehicle(weaponSystem, vehicleData, uuid, itemId);
+        vehicle.setSeats(seats);
 
         spawnVehicleEntities(player, world, location, vehicleData);
         registerVehicle(uuid, vehicle);
@@ -147,10 +153,14 @@ public class SpawnListener implements Listener {
         String modelKey = VehicleConfigResolver.getModelKey(item);
         String movementSound = VehicleConfigResolver.getMovementSound(item);
         int movementSoundLength = VehicleConfigResolver.getMovementSoundLength(item);
+        String displayName = VehicleConfigResolver.getDisplayName(item);
+        int guiSize = VehicleConfigResolver.getGuiSize(item);
 
         VehicleData data = new VehicleData(item, speed, scale, modelKey);
         data.setMovementSound(movementSound);
         data.setMovementSoundLength(movementSoundLength);
+        data.setDisplayName(displayName);
+        data.setGuiSize(guiSize);
 
         return data;
     }

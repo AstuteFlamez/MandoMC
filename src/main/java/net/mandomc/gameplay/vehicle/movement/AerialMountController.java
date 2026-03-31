@@ -8,6 +8,7 @@ import com.ticxo.modelengine.api.nms.entity.wrapper.MoveController;
 
 import net.mandomc.gameplay.vehicle.model.Vehicle;
 import net.mandomc.gameplay.vehicle.model.VehicleData;
+import net.mandomc.gameplay.vehicle.manager.SeatManager;
 import net.mandomc.gameplay.vehicle.manager.VehicleFuelManager;
 import net.mandomc.gameplay.vehicle.manager.VehicleHUDManager;
 import net.mandomc.gameplay.vehicle.manager.VehicleManager;
@@ -72,7 +73,7 @@ public class AerialMountController extends AbstractMountController {
 
             if (controller.isOnGround()) {
 
-                VehicleManager.dismountVehicle(player, vehicle, model);
+                SeatManager.dismountSeat(player, vehicle);
                 return;
 
             } else {
@@ -116,6 +117,17 @@ public class AerialMountController extends AbstractMountController {
 
     @Override
     public void updatePassengerMovement(MoveController controller, ActiveModel model) {
+        Entity rider = getEntity();
+        if (!(rider instanceof Player player)) return;
 
+        UUID uuid = player.getUniqueId();
+        Vehicle vehicle = VehicleModule.getVehicleForPlayer(uuid);
+        if (vehicle == null) return;
+
+        MountInput input = getInput();
+
+        if (input.isSneak()) {
+            SeatManager.dismountSeat(player, vehicle);
+        }
     }
 }

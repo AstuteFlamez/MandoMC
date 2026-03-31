@@ -1,5 +1,7 @@
 vehicle:
   item_id: speederbike
+  display_name: "&6Speeder Bike"
+  gui_size: 27
 
   fuel:
     max: 500
@@ -22,3 +24,10 @@ vehicle:
 
     movement_sound: vehicles.speederbike_drive
     movement_sound_time_in_ticks: 300
+
+  seats:
+    - name: "Pilot Seat"
+      slot: 13
+      type: DRIVER
+      gunner: true
+      skull_url: "https://textures.minecraft.net/texture/5d9591c0d3262fe9d7056dd91c787a685915946739f15e349b3ddcf12a46cbb7"

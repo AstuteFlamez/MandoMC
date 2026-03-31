@@ -20,6 +20,12 @@ public class VehicleData {
     private String movementSound;
     private int movementSoundLength;
 
+    /** Human-readable name used as the title of the vehicle interact GUI. */
+    private String displayName = "";
+
+    /** Number of slots in the vehicle interact GUI (must be a multiple of 9). */
+    private int guiSize = 27;
+
     public VehicleData(ItemStack item, double speed, double scale, String modelKey) {
         this.item = item;
         this.speed = speed;
@@ -99,5 +105,21 @@ public class VehicleData {
 
     public void setMovementSoundLength(int movementSoundLength) {
         this.movementSoundLength = movementSoundLength;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName != null ? displayName : "";
+    }
+
+    public int getGuiSize() {
+        return guiSize;
+    }
+
+    public void setGuiSize(int guiSize) {
+        this.guiSize = guiSize;
     }
 }

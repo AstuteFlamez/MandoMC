@@ -1,5 +1,7 @@
 vehicle:
   item_id: xwing
+  display_name: "&9X-Wing Fighter"
+  gui_size: 27
 
   fuel:
     max: 1000
@@ -22,3 +24,10 @@ vehicle:
 
     movement_sound: vehicles.xwing_fly
     movement_sound_time_in_ticks: 460
+
+  seats:
+    - name: "Pilot Seat"
+      slot: 11
+      type: DRIVER
+      gunner: true
+      skull_url: "https://textures.minecraft.net/texture/5d9591c0d3262fe9d7056dd91c787a685915946739f15e349b3ddcf12a46cbb7"
