@@ -18,10 +18,13 @@ alwaysApply: true
 - Respect module lifecycle: anything started in `enable()` must be stopped in `disable()`.
 - Prefer `ServiceRegistry` dependency wiring over introducing new static mutable state.
 - Keep external-plugin integrations optional and null-guarded.
+- For softdepends, use centralized optional checks (`OptionalPluginSupport`) and fail closed when absent.
+- Keep runtime persistence single-source (facades may exist, but writes/reads must converge on repository state).
 
 ## Validation before finishing
 
 - Run `mvn -q test` after substantive changes.
 - If commands/configs changed, verify `plugin.yml` and registration wiring are still consistent.
 - Keep guardrail tests updated for refactors touching command metadata or lifecycle helpers.
+- Ensure scheduler/config edge paths are defensive (invalid config should not crash repeating tasks).
 - Include a short risk note in the final summary: what was validated and what still needs in-server smoke testing.

@@ -22,6 +22,9 @@
 - `PluginYmlConsistencyTest`: command key and permission node consistency, including reload permission contract.
 - `SchedulerLifecycleStopTest`: verifies new scheduler stop/cancel semantics for lottery and parkour helpers.
 - `LinkCommandTest`: validates link command behavior via injected seams without requiring plugin singleton wiring.
+- `OptionalPluginSupportTest`: validates optional plugin guard checks for FancyHolograms/ModelEngine/WeaponMechanics.
+- `BountyPersistenceConsistencyTest` and `LotteryPersistenceConsistencyTest`: verify repository-backed persistence facade behavior.
+- `LotterySchedulerDrawWindowTest` and `EventModuleLifecycleTest`: verify draw-window semantics and event disable force-end behavior.
 
 ## Manual in-server smoke checks
 
@@ -29,6 +32,7 @@
 - `/mmcreload` works without leaked tasks/listeners/state
 - Changed commands resolve and tab complete
 - Changed GUI/event flows still function
+- Softdepend features fail closed cleanly when optional plugins are absent.
 
 ## Paper-specific reminders
 

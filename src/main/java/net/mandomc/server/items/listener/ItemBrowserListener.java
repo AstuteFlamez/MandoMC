@@ -51,6 +51,7 @@ public class ItemBrowserListener implements Listener {
         if (!isValidItem(clicked)) return;
 
         String name = clicked.getItemMeta().getDisplayName();
+        if (name == null) return;
 
         Player target = getTarget(player);
         String category = getCategory(player);
@@ -94,6 +95,9 @@ public class ItemBrowserListener implements Listener {
      * @param name   the clicked display name
      */
     private void handleCategoryClick(Player player, Player target, String name) {
+        if (name == null) {
+            return;
+        }
 
         String category = ChatColor.stripColor(name);
         ItemBrowserGUI.open(player, target, 0, category);
@@ -110,6 +114,9 @@ public class ItemBrowserListener implements Listener {
      * @return true if navigation was handled
      */
     private boolean handleNavigation(Player player, Player target, String category, int page, String name) {
+        if (name == null) {
+            return false;
+        }
 
         if (name.equalsIgnoreCase("§aNext Page")) {
             ItemBrowserGUI.open(player, target, page + 1, category);

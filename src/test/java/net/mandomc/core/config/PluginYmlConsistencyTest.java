@@ -65,6 +65,23 @@ class PluginYmlConsistencyTest {
         assertEquals("mandomc.admin.reload", permission);
     }
 
+    @Test
+    void softDependenciesContainOptionalIntegrations() throws IOException {
+        Map<String, Object> root = loadPluginYml();
+        Object softdependNode = root.get("softdepend");
+        assertNotNull(softdependNode, "plugin.yml missing softdepend list");
+        @SuppressWarnings("unchecked")
+        Set<String> softdepends = Set.copyOf((java.util.List<String>) softdependNode);
+
+        Set<String> requiredSoftdepends = Set.of(
+                "FancyHolograms",
+                "ModelEngine",
+                "WeaponMechanics"
+        );
+        assertTrue(softdepends.containsAll(requiredSoftdepends),
+                "plugin.yml softdepend is missing optional integration entries");
+    }
+
     @SuppressWarnings("unchecked")
     private Map<String, Object> loadPluginYml() throws IOException {
         String content = Files.readString(PLUGIN_YML_PATH);

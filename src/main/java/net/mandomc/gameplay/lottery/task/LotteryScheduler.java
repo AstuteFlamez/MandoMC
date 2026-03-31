@@ -9,6 +9,7 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
+import net.mandomc.MandoMC;
 import net.mandomc.gameplay.lottery.LotteryHologramManager;
 import net.mandomc.gameplay.lottery.LotteryTopHologramManager;
 import net.mandomc.gameplay.lottery.LotteryManager;
@@ -26,6 +27,7 @@ public class LotteryScheduler {
     private static LocalDateTime lastRun = null;
     private static net.mandomc.gameplay.lottery.config.LotteryConfig lotteryConfig;
     private static BukkitTask drawTask;
+    private static boolean invalidDrawConfigLogged;
 
     /**
      * Starts the scheduler task.
@@ -37,6 +39,7 @@ public class LotteryScheduler {
     public static void start(net.mandomc.gameplay.lottery.config.LotteryConfig config, Plugin plugin) {
         stop();
         lotteryConfig = config;
+        invalidDrawConfigLogged = false;
 
         drawTask = new BukkitRunnable() {
             @Override
@@ -55,7 +58,7 @@ public class LotteryScheduler {
                     return;
                 }
 
-                if (alreadyRan(now, cfg)) {
+                if (alreadyRan(now)) {
                     return;
                 }
 
@@ -73,6 +76,9 @@ public class LotteryScheduler {
             drawTask.cancel();
         }
         drawTask = null;
+        lastRun = null;
+        lotteryConfig = null;
+        invalidDrawConfigLogged = false;
     }
 
     /**
@@ -109,8 +115,10 @@ public class LotteryScheduler {
      * Determines whether the current time matches the configured draw time.
      */
     private static boolean isDrawTime(LocalDateTime now, ConfigurationSection cfg) {
-
-        DayOfWeek day = DayOfWeek.valueOf(cfg.getString("day"));
+        DayOfWeek day = parseDrawDay(cfg);
+        if (day == null) {
+            return false;
+        }
         int hour = cfg.getInt("hour");
         int minute = cfg.getInt("minute");
 
@@ -122,17 +130,14 @@ public class LotteryScheduler {
     /**
      * Prevents the draw from executing multiple times within the same minute.
      */
-    private static boolean alreadyRan(LocalDateTime now, ConfigurationSection cfg) {
+    private static boolean alreadyRan(LocalDateTime now) {
 
         if (lastRun == null) return false;
 
-        DayOfWeek day = DayOfWeek.valueOf(cfg.getString("day"));
-        int hour = cfg.getInt("hour");
-        int minute = cfg.getInt("minute");
-
-        return lastRun.getDayOfWeek() == day &&
-               lastRun.getHour() == hour &&
-               lastRun.getMinute() == minute;
+        return lastRun.getYear() == now.getYear()
+                && lastRun.getDayOfYear() == now.getDayOfYear()
+                && lastRun.getHour() == now.getHour()
+                && lastRun.getMinute() == now.getMinute();
     }
 
     /**
@@ -143,7 +148,10 @@ public class LotteryScheduler {
         ConfigurationSection cfg = getDrawConfig();
         if (cfg == null) return LocalDateTime.now();
 
-        DayOfWeek day = DayOfWeek.valueOf(cfg.getString("day"));
+        DayOfWeek day = parseDrawDay(cfg);
+        if (day == null) {
+            return LocalDateTime.now();
+        }
         int hour = cfg.getInt("hour");
         int minute = cfg.getInt("minute");
 
@@ -167,5 +175,30 @@ public class LotteryScheduler {
      */
     private static ConfigurationSection getDrawConfig() {
         return lotteryConfig != null ? lotteryConfig.getSection("lottery.draw") : null;
+    }
+
+    private static DayOfWeek parseDrawDay(ConfigurationSection cfg) {
+        String dayValue = cfg.getString("day");
+        if (dayValue == null || dayValue.isBlank()) {
+            logInvalidDrawConfig();
+            return null;
+        }
+        try {
+            return DayOfWeek.valueOf(dayValue.trim().toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            logInvalidDrawConfig();
+            return null;
+        }
+    }
+
+    private static void logInvalidDrawConfig() {
+        if (invalidDrawConfigLogged) {
+            return;
+        }
+        invalidDrawConfigLogged = true;
+        Plugin plugin = MandoMC.getInstance();
+        if (plugin != null) {
+            plugin.getLogger().warning("Invalid lottery draw day configuration. Expected values: MONDAY..SUNDAY.");
+        }
     }
 }

@@ -57,6 +57,10 @@ public class ParkourRespawnListener implements Listener {
         if (checkpoint == null) {
             checkpoint = session.getStartLocation();
         }
+        if (checkpoint == null) {
+            parkourManager.exitParkour(player);
+            return;
+        }
 
         // Handle fire/lava damage instantly
         switch (event.getCause()) {
@@ -112,6 +116,10 @@ public class ParkourRespawnListener implements Listener {
 
         if (checkpoint == null) {
             checkpoint = session.getStartLocation();
+        }
+        if (checkpoint == null) {
+            parkourManager.exitParkour(player);
+            return;
         }
 
         player.teleport(checkpoint);

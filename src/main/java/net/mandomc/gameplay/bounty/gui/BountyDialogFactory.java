@@ -82,6 +82,7 @@ public class BountyDialogFactory {
 
                                     Bounty bounty = BountyStorage.getOrCreate(target.getUniqueId());
                                     bounty.addEntry(player.getUniqueId(), amount);
+                                    BountyStorage.save();
                                     BountyShowcaseManager.update();
 
                                     player.getServer().broadcastMessage(

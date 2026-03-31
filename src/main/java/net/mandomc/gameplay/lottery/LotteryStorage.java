@@ -1,19 +1,9 @@
 package net.mandomc.gameplay.lottery;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import net.mandomc.MandoMC;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
+import net.mandomc.gameplay.lottery.storage.LotteryRepository;
+import net.mandomc.gameplay.lottery.storage.LotteryState;
 
 /**
  * Handles persistence of lottery data.
@@ -23,28 +13,15 @@ import java.util.UUID;
  */
 public class LotteryStorage {
 
-    private static File file;
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static LotteryRepository repository;
 
     /**
      * Initializes the storage system.
      *
      * Creates the gambling folder and lottery.json file if they do not exist.
      */
-    public static void setup() {
-
-        File folder = new File(MandoMC.getInstance().getDataFolder(), "gambling");
-
-        if (!folder.exists() && !folder.mkdirs()) {
-            System.err.println("[LotteryStorage] Failed to create gambling folder.");
-            return;
-        }
-
-        file = new File(folder, "lottery.json");
-
-        if (!file.exists()) {
-            createDefaultFile();
-        }
+    public static void setup(LotteryRepository repo) {
+        repository = repo;
     }
 
     /**
@@ -53,24 +30,16 @@ public class LotteryStorage {
      * Includes total pot and all player tickets.
      */
     public static void save() {
-
-        if (file == null) {
-            System.err.println("[LotteryStorage] File not initialized. Did you call setup()?");
+        if (repository == null) {
             return;
         }
-
-        try (Writer writer = new FileWriter(file)) {
-
-            Map<String, Object> data = new HashMap<>();
-            data.put("pot", LotteryManager.getPot());
-            data.put("tickets", LotteryManager.getAllTickets());
-
-            GSON.toJson(data, writer);
-
-        } catch (IOException e) {
-            System.err.println("[LotteryStorage] Failed to save lottery data.");
-            e.printStackTrace();
-        }
+        LotteryState state = new LotteryState(
+                LotteryState.CURRENT_ID,
+                LotteryManager.getPot(),
+                new HashMap<>(LotteryManager.getAllTickets())
+        );
+        repository.saveState(state);
+        repository.flush();
     }
 
     /**
@@ -79,53 +48,10 @@ public class LotteryStorage {
      * Restores pot and ticket distribution.
      */
     public static void load() {
-
-        if (file == null || !file.exists()) {
+        if (repository == null) {
             return;
         }
-
-        try (Reader reader = new FileReader(file)) {
-
-            JsonObject json = GSON.fromJson(reader, JsonObject.class);
-            if (json == null) return;
-
-            double pot = json.has("pot") ? json.get("pot").getAsDouble() : 0;
-
-            Map<UUID, Integer> tickets = new HashMap<>();
-
-            if (json.has("tickets")) {
-                JsonObject ticketObject = json.getAsJsonObject("tickets");
-
-                for (String key : ticketObject.keySet()) {
-                    try {
-                        UUID uuid = UUID.fromString(key);
-                        int amount = ticketObject.get(key).getAsInt();
-                        tickets.put(uuid, amount);
-                    } catch (Exception ignored) {
-                        // Ignore invalid UUIDs or malformed entries
-                    }
-                }
-            }
-
-            LotteryManager.loadData(pot, tickets);
-
-        } catch (IOException e) {
-            System.err.println("[LotteryStorage] Failed to load lottery data.");
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Creates a default lottery file with empty data.
-     */
-    private static void createDefaultFile() {
-        try {
-            if (file.createNewFile()) {
-                save();
-            }
-        } catch (IOException e) {
-            System.err.println("[LotteryStorage] Failed to create lottery.json.");
-            e.printStackTrace();
-        }
+        LotteryState state = repository.getState();
+        LotteryManager.loadData(state.getPot(), new HashMap<UUID, Integer>(state.getTickets()));
     }
 }

@@ -42,8 +42,8 @@ public class BountyModule implements Module {
         repository.load();
         registry.register(BountyRepository.class, repository);
 
-        // Legacy static storage (kept until Phase 10 removes BountyStorage)
-        net.mandomc.gameplay.bounty.BountyStorage.setup(plugin.getDataFolder());
+        // Legacy facade now delegates to repository-backed storage.
+        net.mandomc.gameplay.bounty.BountyStorage.setup(plugin.getDataFolder(), repository);
         net.mandomc.gameplay.bounty.BountyStorage.load();
 
         // Tracker task and showcase

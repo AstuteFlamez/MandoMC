@@ -2,6 +2,7 @@ package net.mandomc.server.items.command;
 
 import net.mandomc.core.LangManager;
 import me.deecaad.weaponmechanics.WeaponMechanicsAPI;
+import net.mandomc.core.integration.OptionalPluginSupport;
 import net.mandomc.server.items.ItemRegistry;
 
 import org.bukkit.Bukkit;
@@ -152,6 +153,9 @@ public class DropCommand implements CommandExecutor, TabCompleter {
             return item;
         }
 
+        if (!OptionalPluginSupport.hasWeaponMechanics()) {
+            return null;
+        }
         return WeaponMechanicsAPI.generateAmmo(id, false);
     }
 

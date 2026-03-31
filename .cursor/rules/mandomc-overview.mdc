@@ -12,3 +12,5 @@ alwaysApply: true
 - **Do not** commit machine-specific paths in `pom.xml`. The `maven-antrun-plugin` copy-to-server target is developer-local; if you need deploy automation, use profiles or env-based paths, not hardcoded home directories.
 - **Resources**: `src/main/resources/plugin.yml` defines `api-version` and must stay consistent with the Paper API version you compile against.
 - **Command keys are exact**: names under `plugin.yml` are case-sensitive and must match `plugin.getCommand("...")` lookups exactly.
+- **Softdepend safety**: optional integrations (ModelEngine, WeaponMechanics, FancyHolograms, etc.) must remain guarded and fail-closed.
+- **Persistence direction**: bounty/lottery runtime state should flow through repository-backed storage, not split static + repository mutation paths.

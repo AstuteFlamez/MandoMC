@@ -1,8 +1,10 @@
 package net.mandomc.core.lifecycle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -19,10 +21,12 @@ class SchedulerLifecycleStopTest {
     void lotterySchedulerStopCancelsActiveTask() throws Exception {
         FakeTask task = new FakeTask(false);
         setStaticField(LotteryScheduler.class, "drawTask", task);
+        setStaticField(LotteryScheduler.class, "lastRun", LocalDateTime.now());
 
         LotteryScheduler.stop();
 
         assertEquals(1, task.cancelCount);
+        assertNull(getStaticField(LotteryScheduler.class, "lastRun"));
     }
 
     @Test
@@ -67,6 +71,12 @@ class SchedulerLifecycleStopTest {
         Field field = target.getDeclaredField(fieldName);
         field.setAccessible(true);
         field.set(null, value);
+    }
+
+    private Object getStaticField(Class<?> target, String fieldName) throws Exception {
+        Field field = target.getDeclaredField(fieldName);
+        field.setAccessible(true);
+        return field.get(null);
     }
 
     private static final class FakeTask implements BukkitTask {

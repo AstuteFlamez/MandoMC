@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -95,19 +96,24 @@ public class ParkourManager {
 
         player.setGameMode(session.getSavedGamemode());
 
-        String parkourWorldName = ParkourConfig.get().getString("parkour.spawn.world");
-        double x = ParkourConfig.get().getDouble("parkour.spawn.x");
-        double y = ParkourConfig.get().getDouble("parkour.spawn.y");
-        double z = ParkourConfig.get().getDouble("parkour.spawn.z");
-        float yaw = (float) ParkourConfig.get().getDouble("parkour.spawn.yaw");
-        float pitch = (float) ParkourConfig.get().getDouble("parkour.spawn.pitch");
-
-        Location returnLocation = new Location(Bukkit.getWorld(parkourWorldName), x, y, z, yaw, pitch);
+        Location returnLocation = session.getReturnLocation();
+        if (returnLocation == null || returnLocation.getWorld() == null) {
+            String parkourWorldName = ParkourConfig.get().getString("parkour.spawn.world");
+            double x = ParkourConfig.get().getDouble("parkour.spawn.x");
+            double y = ParkourConfig.get().getDouble("parkour.spawn.y");
+            double z = ParkourConfig.get().getDouble("parkour.spawn.z");
+            float yaw = (float) ParkourConfig.get().getDouble("parkour.spawn.yaw");
+            float pitch = (float) ParkourConfig.get().getDouble("parkour.spawn.pitch");
+            var world = Bukkit.getWorld(parkourWorldName);
+            if (world != null) {
+                returnLocation = new Location(world, x, y, z, yaw, pitch);
+            }
+        }
 
         // Remove session before teleport
         sessions.remove(player.getUniqueId());
 
-        if (returnLocation != null) {
+        if (returnLocation != null && returnLocation.getWorld() != null) {
             player.teleport(returnLocation);
         }
 
@@ -254,8 +260,9 @@ public class ParkourManager {
         player.sendMessage(LangManager.get("parkour.finish.time", "%time%", TimeFormatter.format(seconds)));
 
         Double best = timeManager.getBestTime(player.getUniqueId());
-            
-        player.sendMessage(LangManager.get("parkour.finish.best-time", "%time%", TimeFormatter.format(best)));
+
+        String bestText = best != null ? TimeFormatter.format(best) : "N/A";
+        player.sendMessage(LangManager.get("parkour.finish.best-time", "%time%", bestText));
 
         giveRewards(player);
 
@@ -269,5 +276,24 @@ public class ParkourManager {
         if (yaw < 0) yaw += 360;
 
         return Math.round(yaw / 90f) * 90f;
+    }
+
+    /**
+     * Called on module disable/reload to prevent leaked in-memory sessions.
+     * Restores online player state where possible, then clears all session state.
+     */
+    public void shutdownSessions() {
+        for (UUID playerId : new ArrayList<>(sessions.keySet())) {
+            try {
+                Player player = Bukkit.getPlayer(playerId);
+                if (player != null && player.isOnline()) {
+                    exitParkour(player);
+                    continue;
+                }
+            } catch (Throwable ignored) {
+                // Keep shutdown resilient even when server APIs are unavailable in tests.
+            }
+            sessions.remove(playerId);
+        }
     }
 }

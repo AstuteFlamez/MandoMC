@@ -61,12 +61,15 @@ public class KothEvent extends AbstractGameEvent {
     protected void onStart(EventManager manager) {
         this.manager = manager;
         this.captured = false;
+        this.timeoutMessage = color(stringSetting("timeout-message",
+                "&cKOTH expired with no winner."));
 
         clearRewardChest();
 
         World world = Bukkit.getWorld(stringSetting("world", "world"));
         if (world == null) {
             Bukkit.getLogger().warning("[MandoMC] KOTH world not found.");
+            manager.forceEndActiveEvent(false);
             return;
         }
 
@@ -89,8 +92,6 @@ public class KothEvent extends AbstractGameEvent {
                 "&cThe hill is contested!"));
         this.winnerMessage = color(stringSetting("winner-message",
                 "&a%player% &7captured the hill!"));
-        this.timeoutMessage = color(stringSetting("timeout-message",
-        "&cKOTH expired with no winner."));
         this.chestSpawnMessage = color(stringSetting("chest-spawn-message",
                 "&6A reward chest has appeared at the hill!"));
         this.chestClaimedMessage = color(stringSetting("chest-claimed-message",

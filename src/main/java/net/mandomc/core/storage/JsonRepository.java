@@ -94,7 +94,7 @@ public abstract class JsonRepository<T, ID> implements Repository<T, ID> {
             if (json.isBlank()) return;
             cache.clear();
             populate(json, cache);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.severe("[" + getClass().getSimpleName() + "] Failed to load data: " + e.getMessage());
         } finally {
             lock.writeLock().unlock();

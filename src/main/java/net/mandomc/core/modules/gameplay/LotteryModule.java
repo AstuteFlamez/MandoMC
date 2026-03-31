@@ -34,8 +34,8 @@ public class LotteryModule implements Module {
         lotteryRepository.load();
         registry.register(LotteryRepository.class, lotteryRepository);
 
-        // Legacy static storage (kept until Phase 10 migrates LotteryManager)
-        LotteryStorage.setup();
+        // Runtime manager now persists through repository-backed storage.
+        LotteryStorage.setup(lotteryRepository);
         LotteryStorage.load();
 
         // Wire typed config to all consumers

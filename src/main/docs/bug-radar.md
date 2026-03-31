@@ -12,12 +12,19 @@ This file tracks consistency issues and hotspots agents should verify first.
 
 - Modules/services with background tasks or registries should be checked for enable/disable symmetry.
 - Any listener registration outside `ListenerRegistrar` is a potential leak risk.
-- Continue reducing static mutable storage usage in lottery/bounty/parkour paths where repository/service seams already exist.
+- Preserve repository-backed single source of truth for lottery/bounty runtime state; avoid reintroducing split static + repository writes.
+- Parkour/event disable paths must clear active sessions/events so `/mmcreload` does not leave orphaned runtime state.
 
 ## Soft dependency hotspots
 
 - Integrations with PlaceholderAPI, Vault, ModelEngine, WeaponMechanics, FancyHolograms should stay optional.
+- Use `OptionalPluginSupport` for optional integration checks and fail closed when missing.
 - Fail closed and log once when plugin is missing; avoid repetitive runtime spam.
+
+## Config and parse safety hotspots
+
+- Lottery draw day parsing must never throw in scheduler ticks; invalid config should degrade safely and warn.
+- JSON repository loads should not crash module enable on malformed data.
 
 ## Usage
 

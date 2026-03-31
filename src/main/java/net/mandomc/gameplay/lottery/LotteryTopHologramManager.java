@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import net.mandomc.core.integration.OptionalPluginSupport;
 
 /**
  * Handles creation and updating of the lottery top players hologram.
@@ -39,6 +40,9 @@ public class LotteryTopHologramManager {
      * Pulls data from config and LotteryManager.
      */
     public static void update() {
+        if (!OptionalPluginSupport.hasFancyHolograms()) {
+            return;
+        }
 
         if (lotteryConfig == null) return;
         ConfigurationSection section = lotteryConfig.getTopHologramSection();
@@ -165,6 +169,9 @@ public class LotteryTopHologramManager {
     }
 
     public static void remove() {
+        if (!OptionalPluginSupport.hasFancyHolograms()) {
+            return;
+        }
         if (hologramId == null) {
             return;
         }

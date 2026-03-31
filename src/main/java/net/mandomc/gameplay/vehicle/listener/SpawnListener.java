@@ -32,6 +32,7 @@ import net.mandomc.gameplay.vehicle.weapon.TieFighter;
 import net.mandomc.gameplay.vehicle.weapon.WeaponSystem;
 import net.mandomc.gameplay.vehicle.weapon.XWing;
 import net.mandomc.core.LangManager;
+import net.mandomc.core.integration.OptionalPluginSupport;
 import net.mandomc.core.modules.server.VehicleModule;
 import net.mandomc.server.items.ItemUtils;
 
@@ -116,6 +117,10 @@ public class SpawnListener implements Listener {
      * has an active vehicle.
      */
     private boolean canSpawnVehicle(Player player, UUID uuid, ItemStack item) {
+        if (!OptionalPluginSupport.hasModelEngine() || !OptionalPluginSupport.hasWeaponMechanics()) {
+            player.sendMessage("§cVehicle systems are currently unavailable.");
+            return false;
+        }
         if (item == null) return false;
         if (!ItemUtils.hasTag(item, "VEHICLE")) return false;
 

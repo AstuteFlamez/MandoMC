@@ -15,6 +15,7 @@ import de.oliver.fancyholograms.api.hologram.Hologram;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.mandomc.core.integration.OptionalPluginSupport;
 import net.mandomc.gameplay.lottery.task.LotteryScheduler;
 
 /**
@@ -42,6 +43,9 @@ public class LotteryHologramManager {
      * with live lottery values.
      */
     public static void update() {
+        if (!OptionalPluginSupport.hasFancyHolograms()) {
+            return;
+        }
 
         if (lotteryConfig == null) return;
         ConfigurationSection section = lotteryConfig.getHologramSection();
@@ -86,6 +90,9 @@ public class LotteryHologramManager {
      * Removes the hologram if it exists.
      */
     public static void remove() {
+        if (!OptionalPluginSupport.hasFancyHolograms()) {
+            return;
+        }
 
         if (hologramId == null) {
             return;

@@ -25,5 +25,7 @@ This folder is the docs-first entrypoint for AI/code agents working in this repo
 ## Recent refactor anchors
 
 - Service seams: `src/main/java/net/mandomc/server/discord/service/` and `src/main/java/net/mandomc/core/services/EconomyService.java`
+- Optional plugin seam: `src/main/java/net/mandomc/core/integration/OptionalPluginSupport.java` (FancyHolograms/ModelEngine/WeaponMechanics checks)
+- Persistence unification: bounty and lottery legacy facades now route through repository-backed state
 - Lifecycle stop semantics: lottery and parkour scheduler helpers under `src/main/java/net/mandomc/gameplay/lottery/task/` and `src/main/java/net/mandomc/world/ilum/`
 - Guardrail tests: `src/test/java/net/mandomc/core/config/PluginYmlConsistencyTest.java`, `src/test/java/net/mandomc/core/lifecycle/SchedulerLifecycleStopTest.java`, `src/test/java/net/mandomc/core/commands/LinkCommandTest.java`

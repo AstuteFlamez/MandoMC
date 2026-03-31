@@ -32,6 +32,7 @@ public class ParkourModule implements Module {
     private ParkourTimerDisplay timerDisplay;
     private ListenerRegistrar listenerRegistrar;
     private ParkourTimeRepository timeRepository;
+    private ParkourManager parkourManager;
 
     public ParkourModule(MandoMC plugin) {
         this.plugin = plugin;
@@ -52,7 +53,7 @@ public class ParkourModule implements Module {
 
         leaderboardManager = new ParkourLeaderboardManager(plugin, timeManager, parkourConfig);
 
-        ParkourManager parkourManager = new ParkourManager(timeManager, leaderboardManager);
+        parkourManager = new ParkourManager(timeManager, leaderboardManager);
         registry.register(ParkourManager.class, parkourManager);
 
         leaderboardManager.updateLeaderboards();
@@ -75,6 +76,7 @@ public class ParkourModule implements Module {
     @Override
     public void disable() {
         if (listenerRegistrar  != null) listenerRegistrar.unregisterAll();
+        if (parkourManager    != null) parkourManager.shutdownSessions();
         if (timerDisplay       != null) timerDisplay.stop();
         if (leaderboardManager != null) leaderboardManager.stopAutoUpdate();
         if (leaderboardManager != null) leaderboardManager.removeAllDisplays();

@@ -33,6 +33,12 @@ public class ParkourWorldListener implements Listener {
 
         if (parkourWorld == null) return;
 
+        // Player left parkour world while session was active.
+        if (!player.getWorld().equals(parkourWorld) && parkourManager.hasSession(player)) {
+            parkourManager.exitParkour(player);
+            return;
+        }
+
         // Player entered the parkour world
         if (player.getWorld().equals(parkourWorld)) {
 

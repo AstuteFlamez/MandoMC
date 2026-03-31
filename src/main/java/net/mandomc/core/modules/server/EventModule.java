@@ -26,6 +26,7 @@ public class EventModule implements Module {
     private final MandoMC plugin;
     private EventScheduler scheduler;
     private ListenerRegistrar listenerRegistrar;
+    private EventManager eventManager;
 
     /**
      * Creates the event module.
@@ -46,7 +47,7 @@ public class EventModule implements Module {
     public void enable(ServiceRegistry registry) {
         listenerRegistrar = new ListenerRegistrar(plugin);
 
-        EventManager eventManager = new EventManager(plugin);
+        eventManager = new EventManager(plugin);
         eventManager.load();
         registry.register(EventManager.class, eventManager);
 
@@ -69,6 +70,7 @@ public class EventModule implements Module {
     @Override
     public void disable() {
         if (scheduler != null) scheduler.stop();
+        if (eventManager != null) eventManager.forceEndActiveEvent(false);
         if (listenerRegistrar != null) listenerRegistrar.unregisterAll();
         KothEvent.clearRewardChest();
     }

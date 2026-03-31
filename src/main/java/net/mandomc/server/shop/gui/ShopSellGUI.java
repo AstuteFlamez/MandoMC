@@ -1,6 +1,7 @@
 package net.mandomc.server.shop.gui;
 
 import me.deecaad.weaponmechanics.WeaponMechanicsAPI;
+import net.mandomc.core.integration.OptionalPluginSupport;
 import net.mandomc.core.guis.InventoryHandler;
 import net.mandomc.core.modules.core.EconomyModule;
 import net.mandomc.server.items.ItemKeys;
@@ -133,12 +134,18 @@ public class ShopSellGUI implements InventoryHandler {
             }
 
             case WEAPON_MECHANICS_AMMO -> {
+                if (!OptionalPluginSupport.hasWeaponMechanics()) {
+                    yield false;
+                }
                 // No public isAmmoItem() API — generate the template and compare via isSimilar()
                 ItemStack template = WeaponMechanicsAPI.generateAmmo(shopItem.getId(), false);
                 yield template != null && template.isSimilar(item);
             }
 
             case WEAPON_MECHANICS_WEAPON -> {
+                if (!OptionalPluginSupport.hasWeaponMechanics()) {
+                    yield false;
+                }
                 String title = WeaponMechanicsAPI.getWeaponTitle(item);
                 yield shopItem.getId().equals(title);
             }

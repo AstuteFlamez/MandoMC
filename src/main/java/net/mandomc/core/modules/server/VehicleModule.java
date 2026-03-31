@@ -8,6 +8,7 @@ import org.bukkit.NamespacedKey;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.integration.OptionalPluginSupport;
 import net.mandomc.core.guis.GUIManager;
 import net.mandomc.gameplay.vehicle.model.Vehicle;
 import net.mandomc.gameplay.vehicle.listener.DamageListener;
@@ -69,6 +70,15 @@ public class VehicleModule implements Module {
     public void enable(ServiceRegistry registry) {
         listenerRegistrar = new ListenerRegistrar(plugin);
         VEHICLE_KEY = new NamespacedKey(plugin, "vehicle_id");
+
+        if (!OptionalPluginSupport.hasModelEngine()) {
+            plugin.getLogger().warning("Vehicle module disabled: ModelEngine is unavailable.");
+            return;
+        }
+        if (!OptionalPluginSupport.hasWeaponMechanics()) {
+            plugin.getLogger().warning("Vehicle module disabled: WeaponMechanics is unavailable.");
+            return;
+        }
 
         GUIManager guiManager = registry.get(GUIManager.class);
 

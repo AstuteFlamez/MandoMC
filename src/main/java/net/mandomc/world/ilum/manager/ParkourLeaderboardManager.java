@@ -18,6 +18,7 @@ import de.oliver.fancyholograms.api.HologramManager;
 import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
 import net.mandomc.MandoMC;
+import net.mandomc.core.integration.OptionalPluginSupport;
 import net.mandomc.world.ilum.config.ParkourConfig;
 import net.mandomc.world.ilum.manager.ParkourTimeManager.PlayerTime;
 import net.mandomc.world.ilum.util.TimeFormatter;
@@ -40,6 +41,9 @@ public class ParkourLeaderboardManager {
     }
 
     public void updateLeaderboards() {
+        if (!OptionalPluginSupport.hasFancyHolograms()) {
+            return;
+        }
 
         clearBoards();
 
@@ -145,6 +149,10 @@ public class ParkourLeaderboardManager {
     }
 
     private void clearBoards() {
+        if (!OptionalPluginSupport.hasFancyHolograms()) {
+            hologramIds.clear();
+            return;
+        }
         HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
 
         for (String id : hologramIds) {
@@ -159,6 +167,9 @@ public class ParkourLeaderboardManager {
     }
 
     public void startAutoUpdate() {
+        if (!OptionalPluginSupport.hasFancyHolograms()) {
+            return;
+        }
         stopAutoUpdate();
         autoUpdateTask = Bukkit.getScheduler().runTaskTimer(
                 plugin,

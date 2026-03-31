@@ -1,6 +1,7 @@
 package net.mandomc.server.shop;
 
 import me.deecaad.weaponmechanics.WeaponMechanicsAPI;
+import net.mandomc.core.integration.OptionalPluginSupport;
 import net.mandomc.server.items.ItemRegistry;
 
 import org.bukkit.Bukkit;
@@ -30,6 +31,8 @@ import net.mandomc.server.shop.model.ShopItem;
  * without the extension.
  */
 public final class ShopLoader {
+
+    private static boolean warnedMissingWeaponMechanics;
 
     private ShopLoader() {}
 
@@ -163,6 +166,10 @@ public final class ShopLoader {
     public static ItemStack resolveItem(ShopItem.Type type, String itemId, String fileName, String key) {
         return switch (type) {
             case WEAPON_MECHANICS_AMMO -> {
+                if (!OptionalPluginSupport.hasWeaponMechanics()) {
+                    warnMissingWeaponMechanics();
+                    yield null;
+                }
                 ItemStack ammo = WeaponMechanicsAPI.generateAmmo(itemId, false);
                 if (ammo == null) {
                     Bukkit.getLogger().warning("[Shops] WeaponMechanics ammo not found: '" + itemId + "' (" + key + " in " + fileName + ")");
@@ -171,6 +178,10 @@ public final class ShopLoader {
                 yield ammo.clone();
             }
             case WEAPON_MECHANICS_WEAPON -> {
+                if (!OptionalPluginSupport.hasWeaponMechanics()) {
+                    warnMissingWeaponMechanics();
+                    yield null;
+                }
                 ItemStack weapon = WeaponMechanicsAPI.generateWeapon(itemId);
                 if (weapon == null) {
                     Bukkit.getLogger().warning("[Shops] WeaponMechanics weapon not found: '" + itemId + "' (" + key + " in " + fileName + ")");
@@ -240,5 +251,13 @@ public final class ShopLoader {
 
     private static String color(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
+    }
+
+    private static void warnMissingWeaponMechanics() {
+        if (warnedMissingWeaponMechanics) {
+            return;
+        }
+        warnedMissingWeaponMechanics = true;
+        Bukkit.getLogger().warning("[Shops] WeaponMechanics integration unavailable. WeaponMechanics shop items are skipped.");
     }
 }
