@@ -41,23 +41,26 @@ public class BountyCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player player)) {
-            sender.sendMessage(LangManager.get("bounties.players-only"));
-            return true;
-        }
-
         if (args.length == 0) {
-            sendHelp(player);
+            if (sender instanceof Player player) {
+                sendHelp(player);
+            } else {
+                sender.sendMessage("/" + label + " gui <player>");
+            }
             return true;
         }
 
         if (args[0].equalsIgnoreCase("gui")) {
-            if (!player.hasPermission("mandomc.bounty.gui")) {
-                player.sendMessage(LangManager.get("bounties.no-permission"));
+            if (!sender.hasPermission("mandomc.bounty.gui")) {
+                sender.sendMessage(LangManager.get("bounties.no-permission"));
                 return true;
             }
 
             if (args.length == 1) {
+                if (!(sender instanceof Player player)) {
+                    sender.sendMessage("/" + label + " gui <player>");
+                    return true;
+                }
                 guiManager.openGUI(new BountyGUI(guiManager), player);
                 return true;
             }
@@ -65,12 +68,20 @@ public class BountyCommand implements CommandExecutor, TabCompleter {
             if (args.length >= 2) {
                 Player target = Bukkit.getPlayer(args[1]);
                 if (target == null) {
-                    player.sendMessage(LangManager.get("bounties.player-not-found"));
+                    sender.sendMessage(LangManager.get("bounties.player-not-found"));
                     return true;
                 }
                 guiManager.openGUI(new BountyGUI(guiManager), target);
+                if (!(sender instanceof Player)) {
+                    sender.sendMessage("Opened bounty GUI for " + target.getName() + ".");
+                }
                 return true;
             }
+        }
+
+        if (!(sender instanceof Player player)) {
+            sender.sendMessage(LangManager.get("bounties.players-only"));
+            return true;
         }
 
         if (args[0].equalsIgnoreCase("place")) {
