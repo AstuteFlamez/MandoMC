@@ -28,6 +28,7 @@ import java.util.UUID;
 public class LotteryTopHologramManager {
 
     private static net.mandomc.gameplay.lottery.config.LotteryConfig lotteryConfig;
+    private static String hologramId;
 
     public static void init(net.mandomc.gameplay.lottery.config.LotteryConfig cfg) {
         lotteryConfig = cfg;
@@ -67,7 +68,7 @@ public class LotteryTopHologramManager {
 
         List<String> formattedLines = buildLines(section, sortedEntries, totalTickets);
 
-        String hologramId = section.getString("id", "lottery_top");
+        hologramId = section.getString("id", "lottery_top");
 
         HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
 
@@ -161,5 +162,13 @@ public class LotteryTopHologramManager {
      */
     private static String color(String text) {
         return ChatColor.translateAlternateColorCodes('&', text);
+    }
+
+    public static void remove() {
+        if (hologramId == null) {
+            return;
+        }
+        HologramManager manager = FancyHologramsPlugin.get().getHologramManager();
+        manager.getHologram(hologramId).ifPresent(manager::removeHologram);
     }
 }

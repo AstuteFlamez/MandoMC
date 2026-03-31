@@ -2,9 +2,9 @@ package net.mandomc.gameplay.lottery.task;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import net.mandomc.MandoMC;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -14,11 +14,13 @@ import net.mandomc.gameplay.lottery.LotteryManager;
  * Handles periodic lottery broadcast messages.
  */
 public class LotteryBroadcastTask {
+    private static BukkitTask broadcastTask;
 
     /**
      * Starts the broadcast scheduler.
      */
-    public static void start(net.mandomc.gameplay.lottery.config.LotteryConfig config) {
+    public static void start(net.mandomc.gameplay.lottery.config.LotteryConfig config, Plugin plugin) {
+        stop();
 
         ConfigurationSection cfg =
                 config != null ? config.getSection("lottery.broadcasts") : null;
@@ -28,7 +30,7 @@ public class LotteryBroadcastTask {
         int hours = cfg.getInt("interval-hours", 4);
         long interval = 20L * 60 * 60 * hours;
 
-        new BukkitRunnable() {
+        broadcastTask = new BukkitRunnable() {
             @Override
             public void run() {
 
@@ -47,7 +49,17 @@ public class LotteryBroadcastTask {
 
                 Bukkit.broadcastMessage(color(message));
             }
-        }.runTaskTimer(MandoMC.getInstance(), interval, interval);
+        }.runTaskTimer(plugin, interval, interval);
+    }
+
+    /**
+     * Stops the active broadcast task, if present.
+     */
+    public static void stop() {
+        if (broadcastTask != null && !broadcastTask.isCancelled()) {
+            broadcastTask.cancel();
+        }
+        broadcastTask = null;
     }
 
     /**

@@ -1,0 +1,26 @@
+---
+description: Refactor, bugfix, and feature delivery workflow
+alwaysApply: true
+---
+
+# MandoMC — change workflow
+
+- Before coding, read `src/main/docs/development-workflow.md` and `src/main/docs/bug-radar.md`.
+
+## Start with evidence
+
+- For bugfixes, identify exact trigger path, root cause, and smallest safe fix before editing.
+- For refactors, preserve behavior first; separate structural cleanup from behavior changes where possible.
+- For features, define module ownership (`core`, `gameplay`, `server`, `world`) before coding.
+
+## Implementation guardrails
+
+- Respect module lifecycle: anything started in `enable()` must be stopped in `disable()`.
+- Prefer `ServiceRegistry` dependency wiring over introducing new static mutable state.
+- Keep external-plugin integrations optional and null-guarded.
+
+## Validation before finishing
+
+- Run `mvn -q test` after substantive changes.
+- If commands/configs changed, verify `plugin.yml` and registration wiring are still consistent.
+- Include a short risk note in the final summary: what was validated and what still needs in-server smoke testing.

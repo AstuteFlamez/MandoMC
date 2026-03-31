@@ -10,8 +10,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.config.MainConfig;
 import net.mandomc.core.lifecycle.TaskRegistrar;
 import net.mandomc.core.module.Module;
+import net.mandomc.core.services.EconomyService;
 import net.mandomc.core.services.ServiceRegistry;
 import net.milkbowl.vault.economy.Economy;
 
@@ -59,12 +61,14 @@ public class EconomyModule implements Module {
             plugin.getServer().getPluginManager().disablePlugin(plugin);
             return;
         }
+        registry.register(EconomyService.class, EconomyModule::deposit);
 
-        host = plugin.getConfig().getString("database.host");
-        port = plugin.getConfig().getInt("database.port");
-        database = plugin.getConfig().getString("database.name");
-        username = plugin.getConfig().getString("database.username");
-        password = plugin.getConfig().getString("database.password");
+        MainConfig config = registry.get(MainConfig.class);
+        host = config.getDatabaseHost();
+        port = config.getDatabasePort();
+        database = config.getDatabaseName();
+        username = config.getDatabaseUser();
+        password = config.getDatabasePassword();
 
         plugin.getLogger().info("Economy hooked: " + economy.getName());
 

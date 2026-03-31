@@ -20,12 +20,16 @@ commands:
     permission: mandomc.shop.admin
 
   link:
+    description: Link your Minecraft account with Discord
 
   discord:
+    description: Show MandoMC Discord server invite
 
   bounty:
+    description: Open or manage bounty board
 
   lottery:
+    permission: mandomc.lottery.admin
 
   # -------------------------
   # Item Commands
@@ -34,11 +38,6 @@ commands:
   key:
     description: Give a dungeon key
     usage: /key <dungeon> <door>
-    permission: mandomc.admin
-
-  note:
-    description: Give money notes
-    usage: /note <amount>
     permission: mandomc.admin
 
   get:
@@ -51,7 +50,7 @@ commands:
     usage: /give <player> [item]
     permission: mandomc.items.give
   
-  Drop:
+  drop:
     description: Drop item at location
     usage: /drop <item> <x> <y> <z> <world>
     permission: mandomc.items.drop
@@ -112,6 +111,10 @@ permissions:
     description: Allows giving custom items to other players
     default: op
 
+  mandomc.items.drop:
+    description: Allows dropping custom items at a location
+    default: op
+
   mandomc.recipes.view:
     description: Allows viewing custom recipes
     default: true
@@ -141,6 +144,18 @@ permissions:
 
   mandomc.bounty.gui:
     description: Allows opening the bounty admin board
+    default: op
+
+  mandomc.shop.admin:
+    description: Allows managing shop commands
+    default: op
+
+  mandomc.lottery.admin:
+    description: Allows managing lottery commands
+    default: op
+
+  mmc.parkour.bypass-command-blocks:
+    description: Allows bypassing parkour command block restrictions
     default: op
 
   mandomc.event.admin:

@@ -11,34 +11,39 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Display;
+import org.bukkit.scheduler.BukkitTask;
 
 import de.oliver.fancyholograms.api.FancyHologramsPlugin;
 import de.oliver.fancyholograms.api.HologramManager;
 import de.oliver.fancyholograms.api.data.TextHologramData;
 import de.oliver.fancyholograms.api.hologram.Hologram;
 import net.mandomc.MandoMC;
-import net.mandomc.world.ilum.util.TimeFormatter;
 import net.mandomc.world.ilum.config.ParkourConfig;
 import net.mandomc.world.ilum.manager.ParkourTimeManager.PlayerTime;
+import net.mandomc.world.ilum.util.TimeFormatter;
 
 public class ParkourLeaderboardManager {
 
     private final MandoMC plugin;
     private final ParkourTimeManager timeManager;
+    private final ParkourConfig parkourConfig;
 
     private final List<String> hologramIds = new ArrayList<>();
+    private BukkitTask autoUpdateTask;
 
-    public ParkourLeaderboardManager(MandoMC plugin, ParkourTimeManager timeManager) {
+    public ParkourLeaderboardManager(MandoMC plugin,
+                                     ParkourTimeManager timeManager,
+                                     ParkourConfig parkourConfig) {
         this.plugin = plugin;
         this.timeManager = timeManager;
+        this.parkourConfig = parkourConfig;
     }
 
     public void updateLeaderboards() {
 
         clearBoards();
 
-        ConfigurationSection section =
-                ParkourConfig.get().getConfigurationSection("parkour.leaderboards");
+        ConfigurationSection section = parkourConfig.getLeaderboardsSection();
 
         if (section == null) return;
 
@@ -154,12 +159,20 @@ public class ParkourLeaderboardManager {
     }
 
     public void startAutoUpdate() {
-        Bukkit.getScheduler().runTaskTimer(
+        stopAutoUpdate();
+        autoUpdateTask = Bukkit.getScheduler().runTaskTimer(
                 plugin,
                 this::updateLeaderboards,
                 20L * 10,
                 20L * 60
         );
+    }
+
+    public void stopAutoUpdate() {
+        if (autoUpdateTask != null && !autoUpdateTask.isCancelled()) {
+            autoUpdateTask.cancel();
+        }
+        autoUpdateTask = null;
     }
 
     private String color(String s) {

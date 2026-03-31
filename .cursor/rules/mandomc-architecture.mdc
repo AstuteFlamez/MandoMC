@@ -1,0 +1,37 @@
+---
+description: Modules, ServiceRegistry, listeners, package layout
+globs: "**/*.java"
+alwaysApply: false
+---
+
+# MandoMC — architecture
+
+- Reference companion architecture notes in `src/main/docs/architecture.md` when planning refactors.
+
+## Modules
+
+- Subsystems implement `net.mandomc.core.module.Module`: `enable(ServiceRegistry)` then `disable()`.
+- **Order matters**: `MandoMC.buildModules()` runs enable **forward** and disable **reverse**. Adding a module that consumes `registry.get(SomeClass.class)` must run **after** the module that `register`s it.
+- On `/mmcreload`, the registry is cleared and modules re-enable — no stale services; clean up in `disable()`.
+- Treat reload safety as mandatory: listeners, tasks, holograms, GUIs, and registries created in `enable()` must be cleaned in `disable()`.
+
+## ServiceRegistry
+
+- Register services in `enable`, retrieve with `registry.get()`. Prefer injection via registry over new static singletons for shared state.
+- `MandoMC.getInstance()` exists for legacy entry points; **prefer** resolving dependencies through the registry when wiring new code.
+
+## Listeners
+
+- Per module, use `net.mandomc.core.lifecycle.ListenerRegistrar` so `HandlerList.unregisterAll` runs on disable/reload. Avoid untracked `Bukkit.getPluginManager().registerEvents(...)`.
+
+## Tasks and resources
+
+- Track every scheduled `BukkitTask` and cancel it on `disable()`.
+- If a module registers services in `ServiceRegistry`, ensure they are stopped/flushed/unregistered during disable.
+
+## Package map
+
+- `net.mandomc.core.*` — infrastructure (modules, config base, GUIs, services, lifecycle).
+- `net.mandomc.gameplay.*` — player-facing mechanics (bounty, lottery, warp, vehicles, lightsaber, etc.).
+- `net.mandomc.server.*` — server systems (shop, events, items, discord).
+- `net.mandomc.world.*` — world-specific content (e.g. Ilum parkour).

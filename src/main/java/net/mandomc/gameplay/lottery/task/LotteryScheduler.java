@@ -1,9 +1,9 @@
 package net.mandomc.gameplay.lottery.task;
 
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import net.mandomc.MandoMC;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.time.DayOfWeek;
 import java.time.Duration;
@@ -25,6 +25,7 @@ public class LotteryScheduler {
 
     private static LocalDateTime lastRun = null;
     private static net.mandomc.gameplay.lottery.config.LotteryConfig lotteryConfig;
+    private static BukkitTask drawTask;
 
     /**
      * Starts the scheduler task.
@@ -33,10 +34,11 @@ public class LotteryScheduler {
      * - Update holograms
      * - Check if it's time to execute the draw
      */
-    public static void start(net.mandomc.gameplay.lottery.config.LotteryConfig config) {
+    public static void start(net.mandomc.gameplay.lottery.config.LotteryConfig config, Plugin plugin) {
+        stop();
         lotteryConfig = config;
 
-        new BukkitRunnable() {
+        drawTask = new BukkitRunnable() {
             @Override
             public void run() {
 
@@ -60,7 +62,17 @@ public class LotteryScheduler {
                 lastRun = now;
                 LotteryManager.executeDraw();
             }
-        }.runTaskTimer(MandoMC.getInstance(), 0L, 20L * 60);
+        }.runTaskTimer(plugin, 0L, 20L * 60);
+    }
+
+    /**
+     * Stops the active scheduler task, if present.
+     */
+    public static void stop() {
+        if (drawTask != null && !drawTask.isCancelled()) {
+            drawTask.cancel();
+        }
+        drawTask = null;
     }
 
     /**

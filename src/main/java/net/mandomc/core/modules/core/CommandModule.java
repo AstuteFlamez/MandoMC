@@ -2,6 +2,7 @@ package net.mandomc.core.modules.core;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.command.PluginCommand;
 
 import net.mandomc.MandoMC;
 import net.mandomc.core.commands.LinkCommand;
@@ -9,10 +10,15 @@ import net.mandomc.core.commands.ReloadCommand;
 import net.mandomc.core.commands.TestCommand;
 import net.mandomc.core.guis.GUIManager;
 import net.mandomc.core.module.Module;
+import net.mandomc.core.services.EconomyService;
 import net.mandomc.core.services.ServiceRegistry;
+import net.mandomc.core.storage.DatabaseService;
 import net.mandomc.gameplay.lottery.command.LotteryCommand;
 import net.mandomc.gameplay.warp.command.WarpCommand;
 import net.mandomc.server.discord.command.DiscordCommand;
+import net.mandomc.server.discord.service.DatabaseLinkService;
+import net.mandomc.server.discord.service.LinkService;
+import net.mandomc.server.discord.service.UnavailableLinkService;
 import net.mandomc.server.events.EventManager;
 import net.mandomc.server.events.command.EventCommand;
 import net.mandomc.server.events.types.jabba.KeyCommand;
@@ -65,7 +71,11 @@ public class CommandModule implements Module {
         ShopCommand shopCmd = new ShopCommand(guiManager);
         safe("shop", shopCmd, shopCmd);
         safe("discord", new DiscordCommand());
-        safe("link", new LinkCommand(plugin));
+        LinkService linkService = registry.has(DatabaseService.class)
+                ? new DatabaseLinkService(registry.get(DatabaseService.class), plugin.getLogger())
+                : new UnavailableLinkService();
+        EconomyService economyService = registry.get(EconomyService.class);
+        safe("link", new LinkCommand(plugin, linkService, economyService));
 
         GetCommand getCmd = new GetCommand();
         GiveCommand giveCmd = new GiveCommand();
@@ -96,8 +106,11 @@ public class CommandModule implements Module {
      * @param exec the executor to assign
      */
     private void safe(String name, CommandExecutor exec) {
-        if (plugin.getCommand(name) != null) {
-            plugin.getCommand(name).setExecutor(exec);
+        PluginCommand command = plugin.getCommand(name);
+        if (command != null) {
+            command.setExecutor(exec);
+        } else {
+            plugin.getLogger().severe("Command '" + name + "' not found in plugin.yml");
         }
     }
 
@@ -109,9 +122,12 @@ public class CommandModule implements Module {
      * @param tab  the tab completer to assign
      */
     private void safe(String name, CommandExecutor exec, TabCompleter tab) {
-        if (plugin.getCommand(name) != null) {
-            plugin.getCommand(name).setExecutor(exec);
-            plugin.getCommand(name).setTabCompleter(tab);
+        PluginCommand command = plugin.getCommand(name);
+        if (command != null) {
+            command.setExecutor(exec);
+            command.setTabCompleter(tab);
+        } else {
+            plugin.getLogger().severe("Command '" + name + "' not found in plugin.yml");
         }
     }
 }

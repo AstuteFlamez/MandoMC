@@ -4,7 +4,6 @@ import net.mandomc.MandoMC;
 import net.mandomc.core.lifecycle.ListenerRegistrar;
 import net.mandomc.core.module.Module;
 import net.mandomc.core.services.ServiceRegistry;
-import net.mandomc.server.items.ItemLoader;
 import net.mandomc.server.items.listener.ItemBrowserListener;
 import net.mandomc.server.items.listener.RecipeListener;
 
@@ -36,7 +35,6 @@ public class ItemModule implements Module {
     @Override
     public void enable(ServiceRegistry registry) {
         listenerRegistrar = new ListenerRegistrar(plugin);
-        ItemLoader.loadItems();
         listenerRegistrar.register(new ItemBrowserListener());
         listenerRegistrar.register(new RecipeListener());
     }

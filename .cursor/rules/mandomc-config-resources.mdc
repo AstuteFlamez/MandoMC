@@ -1,0 +1,23 @@
+---
+description: YAML defaults, BaseConfig, reload via ConfigModule
+globs: "**/src/main/resources/**/*.yml"
+alwaysApply: false
+---
+
+# MandoMC — config and resources
+
+## Defaults
+
+- Ship defaults under `src/main/resources/` so `saveResource` / first-run copy works. Nested paths must match what `BaseConfig` (or loaders) expect under the plugin data folder.
+- Prefer additive config changes with safe defaults to avoid breaking existing live server files after update.
+
+## Typed configs
+
+- Prefer subclasses of `net.mandomc.core.config.BaseConfig` for typed getters, `reload()`, and consistent missing-key warnings.
+- Keep parsing/validation close to the config class and return sane fallback values on invalid entries.
+
+## Reload
+
+- Full plugin reload is `MandoMC.reload()` (e.g. `/mmcreload`): modules disable/re-enable; `ConfigModule` runs again and reconstructs typed configs registered in `ServiceRegistry`.
+- If you add a new config service, register it in `ConfigModule` in the correct **dependency order** (see comments there for items, vehicles, shops). Ensure any long-lived tasks or listeners read fresh config after reload if needed.
+- Document any config that cannot be hot-reloaded and require restart only if absolutely unavoidable.

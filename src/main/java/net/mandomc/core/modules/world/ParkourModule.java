@@ -5,6 +5,7 @@ import net.mandomc.core.lifecycle.ListenerRegistrar;
 import net.mandomc.core.module.Module;
 import net.mandomc.core.services.ServiceRegistry;
 import net.mandomc.world.ilum.ParkourTimerDisplay;
+import net.mandomc.world.ilum.config.ParkourConfig;
 import net.mandomc.world.ilum.listener.ParkourCheckpointListener;
 import net.mandomc.world.ilum.listener.ParkourDisconnectListener;
 import net.mandomc.world.ilum.listener.ParkourItemListener;
@@ -28,6 +29,7 @@ public class ParkourModule implements Module {
 
     private final MandoMC plugin;
     private ParkourLeaderboardManager leaderboardManager;
+    private ParkourTimerDisplay timerDisplay;
     private ListenerRegistrar listenerRegistrar;
     private ParkourTimeRepository timeRepository;
 
@@ -46,8 +48,9 @@ public class ParkourModule implements Module {
 
         // Manager delegates storage to repository
         ParkourTimeManager timeManager = new ParkourTimeManager(timeRepository);
+        ParkourConfig parkourConfig = registry.get(ParkourConfig.class);
 
-        leaderboardManager = new ParkourLeaderboardManager(plugin, timeManager);
+        leaderboardManager = new ParkourLeaderboardManager(plugin, timeManager, parkourConfig);
 
         ParkourManager parkourManager = new ParkourManager(timeManager, leaderboardManager);
         registry.register(ParkourManager.class, parkourManager);
@@ -55,7 +58,8 @@ public class ParkourModule implements Module {
         leaderboardManager.updateLeaderboards();
         leaderboardManager.startAutoUpdate();
 
-        new ParkourTimerDisplay(plugin, parkourManager, timeManager).start();
+        timerDisplay = new ParkourTimerDisplay(plugin, parkourManager, timeManager);
+        timerDisplay.start();
 
         CheckpointManager checkpointManager = new CheckpointManager(plugin);
         checkpointManager.loadCheckpoints();
@@ -71,6 +75,8 @@ public class ParkourModule implements Module {
     @Override
     public void disable() {
         if (listenerRegistrar  != null) listenerRegistrar.unregisterAll();
+        if (timerDisplay       != null) timerDisplay.stop();
+        if (leaderboardManager != null) leaderboardManager.stopAutoUpdate();
         if (leaderboardManager != null) leaderboardManager.removeAllDisplays();
         if (timeRepository     != null) timeRepository.flush();
     }

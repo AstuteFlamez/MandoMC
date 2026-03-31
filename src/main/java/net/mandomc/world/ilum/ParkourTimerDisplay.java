@@ -3,6 +3,7 @@ package net.mandomc.world.ilum;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import net.mandomc.world.ilum.manager.ParkourManager;
 import net.mandomc.world.ilum.manager.ParkourTimeManager;
@@ -16,6 +17,7 @@ public class ParkourTimerDisplay {
     private final Plugin plugin;
     private final ParkourManager parkourManager;
     private final ParkourTimeManager timeManager;
+    private BukkitTask timerTask;
 
     public ParkourTimerDisplay(
             Plugin plugin,
@@ -28,8 +30,9 @@ public class ParkourTimerDisplay {
     }
 
     public void start() {
+        stop();
 
-        Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+        timerTask = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
 
             for (Player player : Bukkit.getOnlinePlayers()) {
 
@@ -69,5 +72,12 @@ public class ParkourTimerDisplay {
 
         }, 20L, 2L);
 
+    }
+
+    public void stop() {
+        if (timerTask != null && !timerTask.isCancelled()) {
+            timerTask.cancel();
+        }
+        timerTask = null;
     }
 }

@@ -42,8 +42,8 @@ public class LotteryModule implements Module {
         LotteryConfig config = registry.get(LotteryConfig.class);
         LotteryHologramManager.init(config);
         LotteryTopHologramManager.init(config);
-        LotteryScheduler.start(config);
-        LotteryBroadcastTask.start(config);
+        LotteryScheduler.start(config, plugin);
+        LotteryBroadcastTask.start(config, plugin);
         LotteryHologramManager.update();
         LotteryTopHologramManager.update();
 
@@ -51,8 +51,11 @@ public class LotteryModule implements Module {
 
     @Override
     public void disable() {
+        LotteryScheduler.stop();
+        LotteryBroadcastTask.stop();
         if (lotteryRepository != null) lotteryRepository.flush();
         LotteryStorage.save();
         LotteryHologramManager.remove();
+        LotteryTopHologramManager.remove();
     }
 }

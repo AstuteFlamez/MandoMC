@@ -41,6 +41,11 @@ public class ParkourConfig extends BaseConfig {
         return getSection("parkour.start");
     }
 
+    /** Raw leaderboard configuration section. */
+    public ConfigurationSection getLeaderboardsSection() {
+        return getSection("parkour.leaderboards");
+    }
+
     /** Raw spawn-location section used when a player finishes or fails. */
     public ConfigurationSection getSpawnSection() {
         return getSection("parkour.spawn");

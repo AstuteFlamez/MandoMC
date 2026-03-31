@@ -1,0 +1,22 @@
+---
+description: Paper/Bukkit threading, api-version, soft dependencies
+globs: "**/*.java"
+alwaysApply: false
+---
+
+# MandoMC — Paper API usage
+
+## Threading
+
+- **Main thread**: world, blocks, entities, players, inventory, most Bukkit events. Do not touch these from async threads without `Bukkit.getScheduler().runTask(...)`.
+- **Async**: OK for I/O (e.g. JDBC/Hikari). Hop back to main thread before any server API calls on loaded results.
+- Keep async boundaries explicit in code reviews: annotate where work leaves/returns to main thread.
+
+## API version
+
+- Match behavior and deprecated APIs to `api-version` in `src/main/resources/plugin.yml` and the `paper-api` artifact in `pom.xml`.
+
+## Soft dependencies
+
+- Optional plugins are listed under `softdepend` in `plugin.yml`. Before using their API, guard with e.g. `Bukkit.getPluginManager().getPlugin("PluginName") != null` (or `isPluginEnabled`). Never assume PlaceholderAPI, Vault, ModelEngine, WeaponMechanics, FancyHolograms, etc. are present.
+- Degrade gracefully when absent (skip integration, log once at startup, avoid noisy per-tick warnings).

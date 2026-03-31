@@ -39,7 +39,7 @@ public class ReloadCommand implements CommandExecutor {
      */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission("mmc.reload")) {
+        if (!sender.hasPermission("mandomc.admin.reload")) {
             sender.sendMessage(LangManager.get("core.reload.no-permission"));
             return true;
         }

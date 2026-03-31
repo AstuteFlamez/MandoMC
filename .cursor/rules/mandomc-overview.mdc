@@ -1,0 +1,14 @@
+---
+description: MandoMC stack, build, and repo hygiene
+alwaysApply: true
+---
+
+# MandoMC — project overview
+
+- **Stack**: Paper plugin, **Java 17**, **Maven** single module. API: `paper-api` (see `pom.xml`; `provided` on server).
+- **Entry**: `net.mandomc.MandoMC` — module list and reload live there.
+- **Docs-first**: start with `src/main/docs/README.md` for architecture/workflow/testing context before large changes.
+- **Verify**: `mvn -q test` (JUnit 5 + Mockito), `mvn package` → `target/MandoMC.jar`.
+- **Do not** commit machine-specific paths in `pom.xml`. The `maven-antrun-plugin` copy-to-server target is developer-local; if you need deploy automation, use profiles or env-based paths, not hardcoded home directories.
+- **Resources**: `src/main/resources/plugin.yml` defines `api-version` and must stay consistent with the Paper API version you compile against.
+- **Command keys are exact**: names under `plugin.yml` are case-sensitive and must match `plugin.getCommand("...")` lookups exactly.
