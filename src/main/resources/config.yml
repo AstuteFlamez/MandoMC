@@ -4,14 +4,3 @@ database:
   name: mandomc
   username: user
   password: CHANGE_ME
-
-shops:
-  messages:
-    prefix: "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7"
-    not-enough-money: "&cYou don't have enough money. You need &6$%cost%&c."
-    purchased: "&aPurchased &f%amount%x %item% &afor &6$%cost%&a."
-    inventory-full: "&cYour inventory is full."
-    shop-not-found: "&cShop not found: &7%shop%"
-    player-not-found: "&cPlayer not found."
-    console-no-player: "&cConsole must specify a player: /shop buy <shop> <player>"
-    sold: "&aSold &f%amount% item(s) &afor &6$%profit%&a."

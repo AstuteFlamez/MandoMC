@@ -11,7 +11,6 @@ items:
 
     tags:
       - VEHICLE
-      - AERIAL
       - FUEL
 
     lore:
@@ -30,7 +29,6 @@ items:
       - '&7Consumes fuel while flying.'
       - '&7Refuel using &cRhydonium Canisters.'
 
-    # 🔥 NEW RECIPE
     recipe:
       - 'LWR'
       - 'LCR'
@@ -42,27 +40,6 @@ items:
       W: wiring_coil
       B: barrel_liner
 
-    fuel:
-      max: 1000
-      start: 1000
-
-    stats:
-      max_health: 200
-      speed: 2.1
-      scale: 1
-
-    systems:
-      movement: AERIAL
-
-      weapon:
-        gun: XWing_Proton_Torpedo
-        ammo: Proton_Torpedo
-        ammo_per_shot: 1
-        cooldown: 2000
-        sound: vehicles.xwing_shoot
-
-      movement_sound: vehicles.xwing_fly
-      movement_sound_time_in_ticks: 460
 
   tiefighter:
     material: ECHO_SHARD
@@ -75,7 +52,6 @@ items:
 
     tags:
       - VEHICLE
-      - AERIAL
       - FUEL
 
     lore:
@@ -94,7 +70,6 @@ items:
       - '&7Consumes fuel while flying.'
       - '&7Refuel using &cRhydonium Canisters.'
 
-    # 🔥 NEW RECIPE
     recipe:
       - '   '
       - 'WCW'
@@ -102,32 +77,6 @@ items:
     ingredients:
       C: tiefighter_cockpit
       W: tiefighter_wing
-
-    fuel:
-      max: 1000
-      start: 1000
-
-    stats:
-      max_health: 150
-      speed: 3
-      scale: 1
-
-    systems:
-      movement: AERIAL
-
-      weapon:
-        gun: TIEFighter_Lasers
-        ammo: Tibanna_Gas_Cells
-        ammo_per_shot: 1
-        burst: 3
-        burst_interval: 3
-        spread: 2
-        cooldown: 0
-        sound: vehicles.tie_fighter_shoot
-
-      movement_sound: vehicles.tie_fighter_fly
-      movement_sound_time_in_ticks: 420
-
 
 
   speederbike:
@@ -141,7 +90,6 @@ items:
 
     tags:
       - VEHICLE
-      - SURFACE
       - FUEL
 
     lore:
@@ -159,25 +107,3 @@ items:
       - '&6Fuel'
       - '&7Consumes fuel while driving.'
       - '&7Refuel using &cRhydonium Canisters.'
-
-    fuel:
-      max: 500
-      start: 500
-
-    stats:
-      max_health: 400
-      speed: 1
-      scale: 2.0
-
-    systems:
-      movement: SURFACE
-
-      weapon:
-        gun: Speederbike_Laser
-        ammo: Standard_Energy_Cell
-        ammo_per_shot: 1
-        cooldown: 0
-        sound: vehicles.speederbike_shoot
-
-      movement_sound: vehicles.speederbike_drive
-      movement_sound_time_in_ticks: 300

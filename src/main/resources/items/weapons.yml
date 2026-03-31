@@ -1,0 +1,13 @@
+items:
+
+  gamorrean_axe:
+    material: IRON_AXE
+    name: '&aGamorrean Axe'
+    custom_model_data: 1
+    rarity: Uncommon
+    category: Weapon
+    tags: []
+
+    lore:
+      - '&7Recovered from the halls of Jabba''s palace,'
+      - '&7once wielded by loyal Gamorrean Guards.'

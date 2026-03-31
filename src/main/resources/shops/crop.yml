@@ -1,0 +1,78 @@
+gui:
+  title: "&6ᴄʀᴏᴘ ѕʜᴏᴘ"
+  size: 27
+
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    name: " "
+
+items:
+  carrot:
+    slot: 10
+
+    type: VANILLA
+    id: "CARROT"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  wheat_seed:
+    slot: 11
+
+    type: VANILLA
+    id: "WHEAT_SEEDS"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  pumpkin_seed:
+    slot: 12
+
+    type: VANILLA
+    id: "PUMPKIN_SEEDS"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  melon_seed:
+    slot: 13
+    
+    type: VANILLA
+    id: "MELON_SEEDS"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  beetroot_seed:
+    slot: 14
+
+    type: VANILLA
+    id: "BEETROOT_SEEDS"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  sugar_cane:
+    slot: 15
+
+    type: VANILLA
+    id: "SUGAR_CANE"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  cactus:
+    slot: 16
+
+    type: VANILLA
+    id: "CACTUS"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2

@@ -1,0 +1,136 @@
+gui:
+  title: "&6ᴅʏᴇѕ ѕʜᴏᴘ"
+  size: 54
+
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    name: " "
+
+items:
+  white_dye:
+    slot: 10
+    type: VANILLA
+    id: "WHITE_DYE"
+    amount: 1
+    buy_price: 40
+    sell_price: 4
+
+  light_gray_dye:
+    slot: 12
+    type: VANILLA
+    id: "LIGHT_GRAY_DYE"
+    amount: 1
+    buy_price: 40
+    sell_price: 4
+
+  gray_dye:
+    slot: 14
+    type: VANILLA
+    id: "GRAY_DYE"
+    amount: 1
+    buy_price: 40
+    sell_price: 4
+
+  black_dye:
+    slot: 16
+    type: VANILLA
+    id: "BLACK_DYE"
+    amount: 1
+    buy_price: 40
+    sell_price: 4
+
+  brown_dye:
+    slot: 19
+    type: VANILLA
+    id: "BROWN_DYE"
+    amount: 1
+    buy_price: 40
+    sell_price: 4
+
+  red_dye:
+    slot: 21
+    type: VANILLA
+    id: "RED_DYE"
+    amount: 1
+    buy_price: 40
+    sell_price: 4
+
+  orange_dye:
+    slot: 23
+    type: VANILLA
+    id: "ORANGE_DYE"
+    amount: 1
+    buy_price: 45
+    sell_price: 4
+
+  yellow_dye:
+    slot: 25
+    type: VANILLA
+    id: "YELLOW_DYE"
+    amount: 1
+    buy_price: 40
+    sell_price: 4
+
+  lime_dye:
+    slot: 28
+    type: VANILLA
+    id: "LIME_DYE"
+    amount: 1
+    buy_price: 45
+    sell_price: 4
+
+  green_dye:
+    slot: 30
+    type: VANILLA
+    id: "GREEN_DYE"
+    amount: 1
+    buy_price: 40
+    sell_price: 4
+
+  cyan_dye:
+    slot: 32
+    type: VANILLA
+    id: "CYAN_DYE"
+    amount: 1
+    buy_price: 45
+    sell_price: 4
+
+  light_blue_dye:
+    slot: 34
+    type: VANILLA
+    id: "LIGHT_BLUE_DYE"
+    amount: 1
+    buy_price: 45
+    sell_price: 4
+
+  blue_dye:
+    slot: 37
+    type: VANILLA
+    id: "BLUE_DYE"
+    amount: 1
+    buy_price: 40
+    sell_price: 4
+
+  purple_dye:
+    slot: 39
+    type: VANILLA
+    id: "PURPLE_DYE"
+    amount: 1
+    buy_price: 45
+    sell_price: 4
+
+  magenta_dye:
+    slot: 41
+    type: VANILLA
+    id: "MAGENTA_DYE"
+    amount: 1
+    buy_price: 45
+    sell_price: 4
+
+  pink_dye:
+    slot: 43
+    type: VANILLA
+    id: "PINK_DYE"
+    amount: 1
+    buy_price: 45
+    sell_price: 4

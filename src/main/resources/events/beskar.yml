@@ -1,120 +1,120 @@
 id: beskar
 
 enabled: true
-display-name: "&6Beskar Rush"
+display-name: '&6Beskar Rush'
 weight: 10
 icon: NETHERITE_INGOT
 description:
-  - "&7Race across the map to mine"
-  - "&7rare deposits of &fBeskar&7."
+- '&7Race across the map to mine'
+- '&7rare deposits of &fBeskar&7.'
 cooldown-cycles: 3
 
 settings:
-
+  
   world: Geonosis
-
+  
   duration: 600
-
+  
   start-message:
-    - "&6&lBESKAR RUSH"
-    - "&7Ancient &fBeskar deposits &7have appeared across the planet!"
-    - "&7Mine them before other players do."
-
-  mined-message: "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7%player% &7mined a piece of &fBeskar&7!"
-
+  - '&6&lBESKAR RUSH'
+  - '&7Ancient &fBeskar deposits &7have appeared across the planet!'
+  - '&7Mine them before other players do.'
+  
+  mined-message: '&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7%player% &7mined a piece of &fBeskar&7!'
+  
   end-message:
-    - "&6&lBESKAR RUSH"
-    - "&7The &fBeskar deposits &7have been exhausted."
-
+  - '&6&lBESKAR RUSH'
+  - '&7The &fBeskar deposits &7have been exhausted.'
+  
   ores:
     start-spawn: 18
     max-active: 18
     respawn-delay: 45
     hits-to-break: 5
     lifetime: 300
-
+  
   drops:
     min: 1
     max: 3
-
+  
   spawn-points:
-    - Geonosis,-32,88,-47
-    - Geonosis,-31,93,-56
-    - Geonosis,-26,101,-70
-    - Geonosis,-21,105,-75
-    - Geonosis,-15,101,-73
-    - Geonosis,-9,104,-65
-    - Geonosis,-12,98,-53
-    - Geonosis,-14,93,-52
-    - Geonosis,-16,86,-51
-    - Geonosis,-13,89,-59
-    - Geonosis,-13,87,-64
-    - Geonosis,-24,85,-66
-    - Geonosis,-28,89,-58
-    - Geonosis,-33,95,-49
-    - Geonosis,-34,91,-44
-    - Geonosis,-38,94,-39
-    - Geonosis,-44,96,-35
-    - Geonosis,-48,96,-32
-    - Geonosis,-51,92,-27
-    - Geonosis,-53,90,-18
-    - Geonosis,-47,93,-12
-    - Geonosis,-41,96,-9
-    - Geonosis,-38,92,-7
-    - Geonosis,-35,86,-3
-    - Geonosis,-34,82,-6
-    - Geonosis,-21,81,-18
-    - Geonosis,-23,83,-24
-    - Geonosis,-19,89,-21
-    - Geonosis,-11,93,-18
-    - Geonosis,-7,94,-13
-    - Geonosis,-8,90,-10
-    - Geonosis,-1,92,-5
-    - Geonosis,0,90,2
-    - Geonosis,-3,86,-3
-    - Geonosis,-3,82,3
-    - Geonosis,-2,88,8
-    - Geonosis,1,92,7
-    - Geonosis,4,98,9
-    - Geonosis,6,104,9
-    - Geonosis,4,104,15
-    - Geonosis,-2,97,17
-    - Geonosis,-3,92,14
-    - Geonosis,-6,86,16
-    - Geonosis,-6,87,21
-    - Geonosis,-3,87,26
-    - Geonosis,-2,87,31
-    - Geonosis,-2,95,23
-    - Geonosis,1,99,27
-    - Geonosis,4,102,31
-    - Geonosis,3,101,36
-    - Geonosis,1,93,39
-    - Geonosis,0,91,44
-    - Geonosis,2,96,50
-    - Geonosis,4,102,49
-    - Geonosis,5,107,47
-    - Geonosis,5,109,56
-    - Geonosis,1,104,59
-    - Geonosis,-3,97,65
-    - Geonosis,-2,94,61
-    - Geonosis,-5,91,65
-    - Geonosis,-7,97,72
-    - Geonosis,-8,100,73
-    - Geonosis,-12,93,76
-    - Geonosis,-12,100,84
-    - Geonosis,-9,106,83
-    - Geonosis,-15,92,83
-    - Geonosis,-21,83,88
-    - Geonosis,-23,85,93
-    - Geonosis,-28,79,97
-    - Geonosis,-24,87,99
-    - Geonosis,-22,92,96
-    - Geonosis,-21,98,99
-    - Geonosis,-20,104,102
-    - Geonosis,-20,108,107
-    - Geonosis,-20,102,110
-    - Geonosis,-19,106,113
-    - Geonosis,-20,97,115
-    - Geonosis,-22,93,112
-    - Geonosis,-21,91,116
-    - Geonosis,-20,94,120
+  - Geonosis,-32,88,-47
+  - Geonosis,-31,93,-56
+  - Geonosis,-26,101,-70
+  - Geonosis,-21,105,-75
+  - Geonosis,-15,101,-73
+  - Geonosis,-9,104,-65
+  - Geonosis,-12,98,-53
+  - Geonosis,-14,93,-52
+  - Geonosis,-16,86,-51
+  - Geonosis,-13,89,-59
+  - Geonosis,-13,87,-64
+  - Geonosis,-24,85,-66
+  - Geonosis,-28,89,-58
+  - Geonosis,-33,95,-49
+  - Geonosis,-34,91,-44
+  - Geonosis,-38,94,-39
+  - Geonosis,-44,96,-35
+  - Geonosis,-48,96,-32
+  - Geonosis,-51,92,-27
+  - Geonosis,-53,90,-18
+  - Geonosis,-47,93,-12
+  - Geonosis,-41,96,-9
+  - Geonosis,-38,92,-7
+  - Geonosis,-35,86,-3
+  - Geonosis,-34,82,-6
+  - Geonosis,-21,81,-18
+  - Geonosis,-23,83,-24
+  - Geonosis,-19,89,-21
+  - Geonosis,-11,93,-18
+  - Geonosis,-7,94,-13
+  - Geonosis,-8,90,-10
+  - Geonosis,-1,92,-5
+  - Geonosis,0,90,2
+  - Geonosis,-3,86,-3
+  - Geonosis,-3,82,3
+  - Geonosis,-2,88,8
+  - Geonosis,1,92,7
+  - Geonosis,4,98,9
+  - Geonosis,6,104,9
+  - Geonosis,4,104,15
+  - Geonosis,-2,97,17
+  - Geonosis,-3,92,14
+  - Geonosis,-6,86,16
+  - Geonosis,-6,87,21
+  - Geonosis,-3,87,26
+  - Geonosis,-2,87,31
+  - Geonosis,-2,95,23
+  - Geonosis,1,99,27
+  - Geonosis,4,102,31
+  - Geonosis,3,101,36
+  - Geonosis,1,93,39
+  - Geonosis,0,91,44
+  - Geonosis,2,96,50
+  - Geonosis,4,102,49
+  - Geonosis,5,107,47
+  - Geonosis,5,109,56
+  - Geonosis,1,104,59
+  - Geonosis,-3,97,65
+  - Geonosis,-2,94,61
+  - Geonosis,-5,91,65
+  - Geonosis,-7,97,72
+  - Geonosis,-8,100,73
+  - Geonosis,-12,93,76
+  - Geonosis,-12,100,84
+  - Geonosis,-9,106,83
+  - Geonosis,-15,92,83
+  - Geonosis,-21,83,88
+  - Geonosis,-23,85,93
+  - Geonosis,-28,79,97
+  - Geonosis,-24,87,99
+  - Geonosis,-22,92,96
+  - Geonosis,-21,98,99
+  - Geonosis,-20,104,102
+  - Geonosis,-20,108,107
+  - Geonosis,-20,102,110
+  - Geonosis,-19,106,113
+  - Geonosis,-20,97,115
+  - Geonosis,-22,93,112
+  - Geonosis,-21,91,116
+  - Geonosis,-20,94,120

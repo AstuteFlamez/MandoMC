@@ -1,0 +1,232 @@
+gui:
+  title: "&6ʙʟᴏᴄᴋѕ ѕʜᴏᴘ"
+  size: 54
+
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    name: " "
+
+items:
+  cobblestone:
+    slot: 10
+    type: VANILLA
+    id: "COBBLESTONE"
+    amount: 1
+    buy_price: 40
+    sell_price: 5
+
+  stone:
+    slot: 11
+    type: VANILLA
+    id: "STONE"
+    amount: 1
+    buy_price: 60
+    sell_price: 6
+
+  andesite:
+    slot: 12
+    type: VANILLA
+    id: "ANDESITE"
+    amount: 1
+    buy_price: 65
+    sell_price: 6
+
+  diorite:
+    slot: 13
+    type: VANILLA
+    id: "DIORITE"
+    amount: 1
+    buy_price: 65
+    sell_price: 6
+
+  granite:
+    slot: 14
+    type: VANILLA
+    id: "GRANITE"
+    amount: 1
+    buy_price: 65
+    sell_price: 6
+
+  tuff:
+    slot: 15
+    type: VANILLA
+    id: "TUFF"
+    amount: 1
+    buy_price: 70
+    sell_price: 7
+
+  calcite:
+    slot: 16
+    type: VANILLA
+    id: "CALCITE"
+    amount: 1
+    buy_price: 75
+    sell_price: 7
+
+  dripstone:
+    slot: 19
+    type: VANILLA
+    id: "DRIPSTONE_BLOCK"
+    amount: 1
+    buy_price: 70
+    sell_price: 7
+
+  deepslate:
+    slot: 20
+    type: VANILLA
+    id: "COBBLED_DEEPSLATE"
+    amount: 1
+    buy_price: 70
+    sell_price: 7
+
+  blackstone:
+    slot: 21
+    type: VANILLA
+    id: "BLACKSTONE"
+    amount: 1
+    buy_price: 75
+    sell_price: 7
+
+  basalt:
+    slot: 22
+    type: VANILLA
+    id: "BASALT"
+    amount: 1
+    buy_price: 80
+    sell_price: 8
+
+  smooth_basalt:
+    slot: 23
+    type: VANILLA
+    id: "SMOOTH_BASALT"
+    amount: 1
+    buy_price: 85
+    sell_price: 8
+
+  netherrack:
+    slot: 24
+    type: VANILLA
+    id: "NETHERRACK"
+    amount: 1
+    buy_price: 30
+    sell_price: 3
+
+  end_stone:
+    slot: 25
+    type: VANILLA
+    id: "END_STONE"
+    amount: 1
+    buy_price: 120
+    sell_price: 12
+
+  sand:
+    slot: 28
+    type: VANILLA
+    id: "SAND"
+    amount: 1
+    buy_price: 40
+    sell_price: 4
+
+  red_sand:
+    slot: 29
+    type: VANILLA
+    id: "RED_SAND"
+    amount: 1
+    buy_price: 45
+    sell_price: 4
+
+  gravel:
+    slot: 30
+    type: VANILLA
+    id: "GRAVEL"
+    amount: 1
+    buy_price: 50
+    sell_price: 5
+
+  clay:
+    slot: 31
+    type: VANILLA
+    id: "CLAY"
+    amount: 1
+    buy_price: 80
+    sell_price: 8
+
+  terracotta:
+    slot: 32
+    type: VANILLA
+    id: "TERRACOTTA"
+    amount: 1
+    buy_price: 100
+    sell_price: 10
+
+  glass:
+    slot: 33
+    type: VANILLA
+    id: "GLASS"
+    amount: 1
+    buy_price: 90
+    sell_price: 9
+
+  sandstone:
+    slot: 34
+    type: VANILLA
+    id: "SANDSTONE"
+    amount: 1
+    buy_price: 60
+    sell_price: 6
+
+  red_sandstone:
+    slot: 37
+    type: VANILLA
+    id: "RED_SANDSTONE"
+    amount: 1
+    buy_price: 65
+    sell_price: 6
+
+  bricks:
+    slot: 38
+    type: VANILLA
+    id: "BRICKS"
+    amount: 1
+    buy_price: 120
+    sell_price: 12
+
+  moss_block:
+    slot: 39
+    type: VANILLA
+    id: "MOSS_BLOCK"
+    amount: 1
+    buy_price: 90
+    sell_price: 9
+
+  mud:
+    slot: 40
+    type: VANILLA
+    id: "MUD"
+    amount: 1
+    buy_price: 70
+    sell_price: 7
+
+  packed_mud:
+    slot: 41
+    type: VANILLA
+    id: "PACKED_MUD"
+    amount: 1
+    buy_price: 90
+    sell_price: 9
+
+  obsidian:
+    slot: 42
+    type: VANILLA
+    id: "OBSIDIAN"
+    amount: 1
+    buy_price: 200
+    sell_price: 20
+
+  prismarine:
+    slot: 43
+    type: VANILLA
+    id: "PRISMARINE"
+    amount: 1
+    buy_price: 200
+    sell_price: 20

@@ -1,31 +1,130 @@
 lottery:
-  ticket-price: 100
+
+  # -------------------------
+  # Core Settings
+  # -------------------------
+  ticket-price: 1000
   max-tickets-per-player: 10
 
+  # -------------------------
+  # Draw Schedule (Server Time)
+  # -------------------------
+  draw:
+    day: SUNDAY
+    hour: 12
+    minute: 0
+
+  # -------------------------
+  # Hologram Display
+  # -------------------------
+  hologram:
+    enabled: true
+    id: "lottery_main"
+    world: "BlackSpireOutpost"
+    x: -20
+    y: 93
+    z: 30.5
+
+    lines: 
+      - "&6◎ &lɢᴀʟᴀᴄᴛɪᴄ ʟᴏᴛᴛᴇʀʏ &r&6◎"
+      - "&6ᴘᴏᴛ: &e$%pot%"
+      - "&6ᴅʀᴀᴡ ɪɴ:"
+      - "&e%time%"
+
+  # -------------------------
+  # Top Players Hologram
+  # -------------------------
+  top-hologram:
+    enabled: true
+    id: "lottery_top"
+    world: "BlackSpireOutpost"
+    x: -26.5
+    y: 92.5
+    z: 27
+
+    lines:
+      - "&e🎟 &lᴛɪᴄᴋᴇᴛ ʟᴇᴀᴅᴇʀʙᴏᴀʀᴅ &r&e🎟"
+      - "&eᴛᴏᴘ ᴛʜʀᴇᴇ ᴘʟᴀʏᴇʀѕ"
+      - " "
+      - "&e1. %p1%: %t1% (&6%c1%%&e)"
+      - "&e2. %p2%: %t2% (&6%c2%%&e)"
+      - "&e3. %p3%: %t3% (&6%c3%%&e)"
+
+  # -------------------------
+  # Broadcasts
+  # -------------------------
+  broadcasts:
+    enabled: true
+    interval-hours: 4
+
+    messages:
+      - "&6&lLottery &8» &eCurrent Pot: &a$%pot%"
+      - "&6&lLottery &8» &eTotal Tickets: &a%tickets%"
+      - "&6&lLottery &8» &eNext Draw In: &a%time%"
+      
+  # -------------------------
+  # GUI Settings
+  # -------------------------
   gui:
-    title: "&6&lGalactic Lottery"
+    title: "&6&lɢᴀʟᴀᴄᴛɪᴄ ʟᴏᴛᴛᴇʀʏ"
     size: 27
 
+  # -------------------------
+  # GUI Items
+  # -------------------------
   items:
 
     pot:
       material: GOLD_INGOT
-      name: "&6&lTotal Pot"
-      slot: 13
+      name: "&6&lᴛᴏᴛᴀʟ ᴘᴏᴛ"
+      slot: 12
       lore:
-        - "&7Current Pot: &a$%pot%"
+        - "&7Current Pot:"
+        - "&a$%pot%"
 
     buy:
       material: EMERALD
-      name: "&a&lBuy Ticket"
-      slot: 15
+      name: "&a&lʙᴜʏ ᴛɪᴄᴋᴇᴛ"
+      slot: 14
       lore:
         - "&7Price: &a$%price%"
-        - "&7Click to buy a ticket"
+        - "&7Click to enter the lottery"
 
     info:
       material: PAPER
-      name: "&e&lYour Tickets"
-      slot: 11
+      name: "&e&lʏᴏᴜʀ ᴛɪᴄᴋᴇᴛѕ"
+      slot: 10
       lore:
-        - "&7You have: &a%tickets%"
+        - "&7Tickets Owned:"
+        - "&a%tickets%"
+
+    time:
+      material: CLOCK
+      name: "&e&lɴᴇхᴛ ᴅʀᴀᴡ"
+      slot: 16
+      lore:
+        - "&7Draw Time:"
+        - "&a%time%pm UTC-1"
+
+  # -------------------------
+  # Background Fill
+  # -------------------------
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    name: " "
+    lore: []
+
+  # -------------------------
+  # Messages
+  # -------------------------
+  messages:
+
+    prefix: "&6&lᴍᴀɴᴅᴏᴍᴄ &8» "
+
+    no-money: "&cYou do not have enough money."
+    max-tickets: "&cYou have reached the max number of tickets."
+
+    bought-ticket: "&aYou purchased a lottery ticket!"
+
+    winner: "&6&lLottery &8» &a%player% won &6$%amount%!"
+    no-players: "&cLottery rolled but no players entered."

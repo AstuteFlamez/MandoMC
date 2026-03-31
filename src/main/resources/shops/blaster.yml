@@ -1,0 +1,48 @@
+gui:
+  title: "&6ʙʟᴀѕᴛᴇʀ ѕʜᴏᴘ"
+  size: 27
+
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    name: " "
+
+items:
+  dc15s:
+    slot: 10
+
+    type: WEAPON_MECHANICS_WEAPON
+    id: "DC15S"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  dc17:
+    slot: 12
+
+    type: WEAPON_MECHANICS_WEAPON
+    id: "DC17"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  dc15a:
+    slot: 14
+
+    type: WEAPON_MECHANICS_WEAPON
+    id: "DC15A"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  dc17m:
+    slot: 16
+
+    type: WEAPON_MECHANICS_WEAPON
+    id: "DC17M"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
