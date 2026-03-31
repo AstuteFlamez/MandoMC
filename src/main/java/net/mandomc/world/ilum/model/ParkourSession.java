@@ -16,6 +16,9 @@ public class ParkourSession {
     private ItemStack[] savedArmor;
 
     private GameMode savedGamemode;
+    private double savedHealth;
+    private int savedFoodLevel;
+    private float savedSaturation;
 
     private Location returnLocation;
     private Location startLocation;
@@ -64,6 +67,30 @@ public class ParkourSession {
 
     public void setSavedGamemode(GameMode savedGamemode) {
         this.savedGamemode = savedGamemode;
+    }
+
+    public double getSavedHealth() {
+        return savedHealth;
+    }
+
+    public void setSavedHealth(double savedHealth) {
+        this.savedHealth = savedHealth;
+    }
+
+    public int getSavedFoodLevel() {
+        return savedFoodLevel;
+    }
+
+    public void setSavedFoodLevel(int savedFoodLevel) {
+        this.savedFoodLevel = savedFoodLevel;
+    }
+
+    public float getSavedSaturation() {
+        return savedSaturation;
+    }
+
+    public void setSavedSaturation(float savedSaturation) {
+        this.savedSaturation = savedSaturation;
     }
 
     public Location getReturnLocation() {

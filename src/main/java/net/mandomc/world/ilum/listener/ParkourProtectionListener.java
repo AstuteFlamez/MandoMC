@@ -15,10 +15,17 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 
 import net.mandomc.core.LangManager;
 import net.mandomc.world.ilum.config.ParkourConfig;
+import net.mandomc.world.ilum.manager.ParkourManager;
 
 import org.bukkit.entity.Player;
 
 public class ParkourProtectionListener implements Listener {
+
+    private final ParkourManager parkourManager;
+
+    public ParkourProtectionListener(ParkourManager parkourManager) {
+        this.parkourManager = parkourManager;
+    }
 
     private boolean isParkourWorld(Player player) {
 
@@ -124,8 +131,10 @@ public class ParkourProtectionListener implements Listener {
 
         if (!(event.getEntity() instanceof Player player)) return;
 
-        if (!isParkourWorld(player)) return;
+        if (!parkourManager.hasSession(player)) return;
 
         event.setCancelled(true);
+        player.setFoodLevel(20);
+        player.setSaturation(20f);
     }
 }

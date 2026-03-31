@@ -31,83 +31,29 @@ public class ParkourRespawnListener implements Listener {
 
         // If player falls into void
         if (player.getLocation().getY() < -100) {
-
             teleportToCheckpoint(player, session);
             return;
         }
 
         // If player is on fire
         if (player.getFireTicks() > 0) {
-
             player.setFireTicks(0);
             teleportToCheckpoint(player, session);
         }
     }
 
-        @EventHandler
-    public void onDeathPrevent(EntityDamageEvent event) {
+    @EventHandler
+    public void onDamage(EntityDamageEvent event) {
 
         if (!(event.getEntity() instanceof Player player)) return;
 
         if (!parkourManager.hasSession(player)) return;
-
-        ParkourSession session = parkourManager.getSession(player);
-
-        Location checkpoint = session.getCheckpoint();
-        if (checkpoint == null) {
-            checkpoint = session.getStartLocation();
-        }
-        if (checkpoint == null) {
-            parkourManager.exitParkour(player);
-            return;
-        }
-
-        // Handle fire/lava damage instantly
-        switch (event.getCause()) {
-            case FIRE:
-            case FIRE_TICK:
-            case LAVA:
-            case HOT_FLOOR:
-
-                event.setCancelled(true);
-
-                player.setFireTicks(0);
-
-                player.teleport(checkpoint);
-
-                player.playSound(
-                    player.getLocation(),
-                    Sound.ENTITY_ENDERMAN_TELEPORT,
-                    1f,
-                    1f
-                );
-
-                return;
-            default:
-                break;
-        }
-
-        double finalHealth = player.getHealth() - event.getFinalDamage();
-
-        if (finalHealth > 0) return;
-
-        // Prevent death
         event.setCancelled(true);
-
-        // Restore player stats
+        player.setFireTicks(0);
         player.setHealth(player.getMaxHealth());
         player.setFoodLevel(20);
         player.setSaturation(20);
-
-        // Teleport to checkpoint
-        player.teleport(checkpoint);
-
-        player.playSound(
-            player.getLocation(),
-            Sound.ENTITY_ENDERMAN_TELEPORT,
-            1f,
-            1f
-        );
+        teleportToCheckpoint(player, parkourManager.getSession(player));
     }
 
     private void teleportToCheckpoint(Player player, ParkourSession session) {
@@ -123,6 +69,7 @@ public class ParkourRespawnListener implements Listener {
         }
 
         player.teleport(checkpoint);
+        player.setFallDistance(0);
 
         player.playSound(
             player.getLocation(),

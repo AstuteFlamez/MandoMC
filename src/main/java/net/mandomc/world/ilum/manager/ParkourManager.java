@@ -67,6 +67,9 @@ public class ParkourManager {
         session.setSavedInventory(player.getInventory().getContents());
         session.setSavedArmor(player.getInventory().getArmorContents());
         session.setSavedGamemode(player.getGameMode());
+        session.setSavedHealth(player.getHealth());
+        session.setSavedFoodLevel(player.getFoodLevel());
+        session.setSavedSaturation(player.getSaturation());
         session.setReturnLocation(player.getLocation());
 
         session.setStartLocation(startLocation);
@@ -80,6 +83,10 @@ public class ParkourManager {
         player.getInventory().setArmorContents(null);
 
         player.setGameMode(GameMode.ADVENTURE);
+        player.setHealth(player.getMaxHealth());
+        player.setFoodLevel(20);
+        player.setSaturation(20f);
+        player.setFireTicks(0);
 
         giveParkourItems(player);
 
@@ -103,6 +110,10 @@ public class ParkourManager {
         player.getInventory().setArmorContents(session.getSavedArmor());
 
         player.setGameMode(session.getSavedGamemode());
+        player.setHealth(Math.max(0.5, Math.min(player.getMaxHealth(), session.getSavedHealth())));
+        player.setFoodLevel(Math.max(0, Math.min(20, session.getSavedFoodLevel())));
+        player.setSaturation(Math.max(0f, Math.min(20f, session.getSavedSaturation())));
+        player.setFireTicks(0);
 
         // Always prefer configured server return spawn for parkour exits.
         Location returnLocation = getConfiguredSpawnLocation();

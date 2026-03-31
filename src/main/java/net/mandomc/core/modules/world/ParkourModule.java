@@ -69,7 +69,7 @@ public class ParkourModule implements Module {
         listenerRegistrar.register(new ParkourWorldListener(parkourManager));
         listenerRegistrar.register(new ParkourItemListener(parkourManager));
         listenerRegistrar.register(new ParkourCheckpointListener(parkourManager, checkpointManager));
-        listenerRegistrar.register(new ParkourProtectionListener());
+        listenerRegistrar.register(new ParkourProtectionListener(parkourManager));
         listenerRegistrar.register(new ParkourDisconnectListener(parkourManager));
         listenerRegistrar.register(new ParkourRespawnListener(parkourManager));
     }

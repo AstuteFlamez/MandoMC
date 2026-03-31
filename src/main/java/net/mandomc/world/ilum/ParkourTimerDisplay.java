@@ -60,6 +60,7 @@ public class ParkourTimerDisplay {
                         "%current%", timeColor + currentRaw,
                         "%best%", bestColor + bestRaw
                 );
+                message = LangManager.colorize(message);
 
                 player.sendActionBar(message);
 
