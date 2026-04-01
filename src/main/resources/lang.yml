@@ -213,6 +213,8 @@ vehicles:
 # ──────────────────────────────────────────
 lightsabers:
   throw-cooldown: "&3&lᴍᴀɴᴅᴏᴍᴄ &r&8» &6Saber cooldown: &c%seconds%&6s"
+  stamina-overheat: "&3&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cLightsaber overheated. Stamina restored."
+  stamina-disabled: "&3&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cLightsaber disabled. Wait for recharge."
 
 # ──────────────────────────────────────────
 # FUEL  (action-bar messages — no plugin-prefix)

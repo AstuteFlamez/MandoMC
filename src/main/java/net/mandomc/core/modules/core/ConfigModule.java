@@ -11,6 +11,7 @@ import net.mandomc.core.config.MainConfig;
 import net.mandomc.core.module.Module;
 import net.mandomc.core.services.ServiceRegistry;
 import net.mandomc.gameplay.bounty.config.BountyConfig;
+import net.mandomc.gameplay.lightsaber.config.LightsaberConfig;
 import net.mandomc.gameplay.lottery.config.LotteryConfig;
 import net.mandomc.gameplay.warp.config.WarpConfig;
 import net.mandomc.server.events.config.EventConfig;
@@ -60,6 +61,9 @@ public class ConfigModule implements Module {
 
         MainConfig mainConfig = new MainConfig(plugin);
         registry.register(MainConfig.class, mainConfig);
+
+        LightsaberConfig lightsaberConfig = new LightsaberConfig(plugin);
+        registry.register(LightsaberConfig.class, lightsaberConfig);
 
         LangManager.load();
 

@@ -24,3 +24,43 @@ tatooine:
     min-distance-blocks: 20
     # Optional custom locations; format: "x,y,z"
     locations: []
+
+lightsabers:
+  # Prevent vanilla axe hits from applying shield-disable cooldown to SABER shields.
+  prevent-axe-disable: true
+
+  stamina:
+    enabled: true
+    # Durability consumed per successful projectile deflect.
+    durability-per-deflect: 4
+    # "Low durability" boundary, in points remaining before overheat triggers.
+    low-durability-threshold: 8
+    # Shield cooldown applied on overheat before blocking is available again.
+    overheat-disable-ticks: 80
+    overheat-debuff:
+      enabled: true
+      slowness-ticks: 60
+      slowness-amplifier: 1
+      weakness-ticks: 60
+      weakness-amplifier: 0
+
+  throw:
+    # Throw path math:
+    # progress = ticks / maxTicks
+    # targetOffset = side * cos(progress * pi) * radius + forward * sin(progress * pi) * radius
+    # targetOffset.y = sin(progress * pi) * arcHeight
+    # nextPosition = currentPosition + (arcCenter + targetOffset - currentPosition) * moveMultiplier
+    radius: 2.5
+    arc-height: 0.5
+    move-multiplier: 0.45
+    max-ticks: 20
+    max-hits-before-return: 3
+    return-distance: 1.5
+    forward-center-distance: 2.5
+    collision-ray-step: 0.2
+    collision-lookahead: 0.7
+    max-throw-lifetime-ticks: 120
+    max-return-lifetime-ticks: 120
+    max-solid-recovery-ticks: 8
+    trail-sound-interval-ticks: 8
+    entity-collision-range: 1.2

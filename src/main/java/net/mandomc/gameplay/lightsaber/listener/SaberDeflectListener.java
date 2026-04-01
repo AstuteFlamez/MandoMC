@@ -2,9 +2,9 @@ package net.mandomc.gameplay.lightsaber.listener;
 
 import me.deecaad.weaponmechanics.weapon.projectile.weaponprojectile.WeaponProjectile;
 import me.deecaad.weaponmechanics.weapon.weaponevents.ProjectileHitEntityEvent;
-import net.mandomc.server.items.ItemUtils;
+import net.mandomc.gameplay.lightsaber.SaberItemUtil;
+import net.mandomc.gameplay.lightsaber.SaberStaminaManager;
 
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
@@ -26,6 +26,11 @@ public class SaberDeflectListener implements Listener {
 
     private static final double WM_REFLECT_SPEED = 3.0;
     private static final double VANILLA_REFLECT_SPEED = 1.6;
+    private final SaberStaminaManager staminaManager;
+
+    public SaberDeflectListener(SaberStaminaManager staminaManager) {
+        this.staminaManager = staminaManager;
+    }
 
     /**
      * Handles WeaponMechanics projectile hits.
@@ -46,6 +51,7 @@ public class SaberDeflectListener implements Listener {
         WeaponProjectile projectile = event.getProjectile();
         projectile.setMotion(getReflectVector(player, WM_REFLECT_SPEED));
 
+        staminaManager.consumeOnDeflect(player, player.getInventory().getItemInMainHand());
         playEffects(player);
     }
 
@@ -68,6 +74,7 @@ public class SaberDeflectListener implements Listener {
         projectile.setVelocity(getReflectVector(player, VANILLA_REFLECT_SPEED));
         projectile.setShooter(player);
 
+        staminaManager.consumeOnDeflect(player, player.getInventory().getItemInMainHand());
         playEffects(player);
     }
 
@@ -81,10 +88,7 @@ public class SaberDeflectListener implements Listener {
 
         ItemStack item = player.getInventory().getItemInMainHand();
 
-        return item != null
-                && item.getType() == Material.SHIELD
-                && ItemUtils.hasTag(item, "SABER")
-                && player.isBlocking();
+        return SaberItemUtil.isSaberShield(item) && player.isBlocking();
     }
 
     /**

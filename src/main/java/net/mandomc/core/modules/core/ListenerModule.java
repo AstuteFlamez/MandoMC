@@ -1,8 +1,13 @@
 package net.mandomc.core.modules.core;
 
 import net.mandomc.MandoMC;
+import net.mandomc.gameplay.lightsaber.SaberStaminaManager;
+import net.mandomc.gameplay.lightsaber.config.LightsaberConfig;
 import net.mandomc.gameplay.lightsaber.listener.SaberDeflectListener;
+import net.mandomc.gameplay.lightsaber.listener.SaberDisabledStateListener;
+import net.mandomc.gameplay.lightsaber.listener.SaberDurabilityGuardListener;
 import net.mandomc.gameplay.lightsaber.listener.SaberHitListener;
+import net.mandomc.gameplay.lightsaber.listener.SaberShieldDisableListener;
 import net.mandomc.gameplay.lightsaber.listener.SaberThrowListener;
 import net.mandomc.gameplay.lightsaber.listener.SaberToggleListener;
 import net.mandomc.core.guis.GUIListener;
@@ -22,6 +27,7 @@ public class ListenerModule implements Module {
 
     private final MandoMC plugin;
     private ListenerRegistrar listenerRegistrar;
+    private SaberThrowListener saberThrowListener;
 
     /**
      * Creates the listener module.
@@ -40,16 +46,26 @@ public class ListenerModule implements Module {
         listenerRegistrar = new ListenerRegistrar(plugin);
 
         GUIManager guiManager = registry.get(GUIManager.class);
+        LightsaberConfig lightsaberConfig = registry.get(LightsaberConfig.class);
+        SaberStaminaManager staminaManager = new SaberStaminaManager(lightsaberConfig);
+        saberThrowListener = new SaberThrowListener(lightsaberConfig);
 
         listenerRegistrar.register(new GUIListener(guiManager));
         listenerRegistrar.register(new SaberHitListener());
-        listenerRegistrar.register(new SaberThrowListener());
+        listenerRegistrar.register(saberThrowListener);
         listenerRegistrar.register(new SaberToggleListener());
-        listenerRegistrar.register(new SaberDeflectListener());
+        listenerRegistrar.register(new SaberDeflectListener(staminaManager));
+        listenerRegistrar.register(new SaberDisabledStateListener());
+        listenerRegistrar.register(new SaberShieldDisableListener(lightsaberConfig));
+        listenerRegistrar.register(new SaberDurabilityGuardListener(staminaManager));
     }
 
     @Override
     public void disable() {
+        if (saberThrowListener != null) {
+            saberThrowListener.shutdown();
+            saberThrowListener = null;
+        }
         if (listenerRegistrar != null) {
             listenerRegistrar.unregisterAll();
         }

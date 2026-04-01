@@ -34,6 +34,10 @@ public class SaberHitListener implements Listener {
 
         ItemStack item = player.getInventory().getItemInMainHand();
         if (!isValidSaber(item)) return;
+        if (player.hasCooldown(Material.SHIELD)) {
+            event.setCancelled(true);
+            return;
+        }
 
         double damage = SaberManager.getMeleeDamage(item);
         event.setDamage(damage);

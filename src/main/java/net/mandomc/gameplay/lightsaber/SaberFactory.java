@@ -45,11 +45,11 @@ public class SaberFactory {
 
         double meleeDamage = stats.getDouble("melee_damage", 1);
         double throwDamage = stats.getDouble("throw_damage", 0);
-        int throwCooldown = stats.getInt("throw_cooldown", 0);
+        int throwCooldownTicks = stats.getInt("throw_cooldown", 0);
         double swingSpeed = stats.getDouble("swing_speed", 1);
 
         applyDamageModifier(meta, itemId, meleeDamage);
-        applyLore(meta, meleeDamage, throwDamage, throwCooldown, swingSpeed);
+        applyLore(meta, meleeDamage, throwDamage, throwCooldownTicks, swingSpeed);
 
         item.setItemMeta(meta);
         return item;
@@ -99,24 +99,26 @@ public class SaberFactory {
      * @param meta the item meta
      * @param meleeDamage melee damage value
      * @param throwDamage throw damage value
-     * @param cooldown throw cooldown in seconds
+     * @param cooldownTicks throw cooldown in ticks
      * @param swingSpeed swing speed value
      */
     private static void applyLore(ItemMeta meta,
                                  double meleeDamage,
                                  double throwDamage,
-                                 int cooldown,
+                                 int cooldownTicks,
                                  double swingSpeed) {
 
         List<String> lore = meta.hasLore()
                 ? new ArrayList<>(meta.getLore())
                 : new ArrayList<>();
 
+        double cooldownSeconds = cooldownTicks / 20.0;
+
         lore.add("");
         lore.add(color("&6Combat Stats"));
         lore.add(color("&7Melee Damage: &c" + meleeDamage));
         lore.add(color("&7Throw Damage: &c" + throwDamage));
-        lore.add(color("&7Throw Cooldown: &e" + cooldown + "s"));
+        lore.add(color("&7Throw Cooldown: &e" + cooldownSeconds + "s"));
         lore.add(color("&7Swing Speed: &b" + swingSpeed));
 
         meta.setLore(lore);
