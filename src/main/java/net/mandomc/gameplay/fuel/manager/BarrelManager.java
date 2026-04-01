@@ -1,10 +1,27 @@
 package net.mandomc.gameplay.fuel.manager;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Display;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import de.oliver.fancyholograms.api.FancyHologramsPlugin;
+import de.oliver.fancyholograms.api.HologramManager;
+import de.oliver.fancyholograms.api.data.TextHologramData;
+import de.oliver.fancyholograms.api.hologram.Hologram;
+import net.mandomc.MandoMC;
+import net.mandomc.core.integration.OptionalPluginSupport;
 
 import net.mandomc.gameplay.fuel.FuelManager;
 
@@ -17,7 +34,11 @@ import net.mandomc.gameplay.fuel.FuelManager;
  */
 public class BarrelManager {
 
-    private static final String HOLOGRAM_TAG = "rhydonium_barrel_hologram";
+    public static final String BARREL_TAG = "rhydonium_barrel";
+    private static final String HOLOGRAM_ID_PREFIX = "fuel_barrel_";
+    private static final String ANCHOR_X = "fuel_barrel_anchor_x";
+    private static final String ANCHOR_Y = "fuel_barrel_anchor_y";
+    private static final String ANCHOR_Z = "fuel_barrel_anchor_z";
 
     /**
      * Updates the custom model data of an inventory barrel item based on fuel percentage.
@@ -105,77 +126,82 @@ public class BarrelManager {
     }
 
     /**
-     * Creates and attaches a fuel level hologram armor stand above the given barrel.
-     *
-     * The hologram displays a 10-segment color-coded fuel bar.
-     *
-     * @param barrel the barrel armor stand to attach the hologram to
-     * @return the created hologram armor stand
+     * Records the placed block used as this barrel's collision anchor.
      */
-    public static ArmorStand createHologram(ArmorStand barrel) {
-        Location loc = barrel.getLocation().clone().add(0, 1.4, 0);
+    public static void setAnchorBlock(ArmorStand barrel, Block block) {
+        if (barrel == null || block == null) return;
 
-        ArmorStand holo = barrel.getWorld().spawn(loc, ArmorStand.class);
-
-        holo.setInvisible(true);
-        holo.setMarker(true);
-        holo.setGravity(false);
-        holo.setCustomNameVisible(true);
-        holo.addScoreboardTag(HOLOGRAM_TAG);
-
-        updateHologram(barrel, holo);
-
-        return holo;
+        PersistentDataContainer data = barrel.getPersistentDataContainer();
+        data.set(key(ANCHOR_X), PersistentDataType.INTEGER, block.getX());
+        data.set(key(ANCHOR_Y), PersistentDataType.INTEGER, block.getY());
+        data.set(key(ANCHOR_Z), PersistentDataType.INTEGER, block.getZ());
     }
 
     /**
-     * Updates the name/display of the hologram to reflect the barrel's current fuel level.
-     *
-     * Uses a 10-segment bar with color-coded segments based on percentage.
-     *
-     * @param barrel the barrel armor stand
-     * @param holo   the hologram armor stand to update
+     * Returns the barrel's collision anchor block if recorded.
      */
-    public static void updateHologram(ArmorStand barrel, ArmorStand holo) {
-        ItemStack item = barrel.getEquipment().getHelmet();
-        if (item == null) return;
+    public static Block getAnchorBlock(ArmorStand barrel) {
+        if (barrel == null) return null;
 
-        int fuel = FuelManager.getCurrentFuel(item);
-        int max = FuelManager.getMaxFuel(item);
+        PersistentDataContainer data = barrel.getPersistentDataContainer();
+        Integer x = data.get(key(ANCHOR_X), PersistentDataType.INTEGER);
+        Integer y = data.get(key(ANCHOR_Y), PersistentDataType.INTEGER);
+        Integer z = data.get(key(ANCHOR_Z), PersistentDataType.INTEGER);
 
-        if (max <= 0) return;
+        if (x == null || y == null || z == null) return null;
+        World world = barrel.getWorld();
+        return world.getBlockAt(x, y, z);
+    }
 
-        double percent = (double) fuel / max;
-        int filled = (int) Math.round(percent * 10);
+    /**
+     * Places a barrier at the anchor block for collision and stores its location.
+     */
+    public static boolean placeBarrier(ArmorStand barrel, Block block) {
+        if (barrel == null || block == null) return false;
+        Block upper = block.getRelative(0, 1, 0);
+        if (block.getType() != Material.AIR) return false;
+        if (upper.getType() != Material.AIR) return false;
 
-        ChatColor color;
+        block.setType(Material.BARRIER, false);
+        upper.setType(Material.BARRIER, false);
+        setAnchorBlock(barrel, block);
+        return true;
+    }
 
-        if (percent >= 0.75) color = ChatColor.GREEN;
-        else if (percent >= 0.40) color = ChatColor.YELLOW;
-        else if (percent > 0) color = ChatColor.GOLD;
-        else color = ChatColor.RED;
+    /**
+     * Removes the barrier at the barrel's anchor location, if present.
+     */
+    public static void removeBarrier(ArmorStand barrel) {
+        Block anchor = getAnchorBlock(barrel);
+        if (anchor == null) return;
+        Block upper = anchor.getRelative(0, 1, 0);
 
-        StringBuilder bar = new StringBuilder();
-
-        for (int i = 0; i < 10; i++) {
-            if (i < filled) bar.append(color).append("■");
-            else bar.append(ChatColor.DARK_GRAY).append("■");
+        if (anchor.getType() == Material.BARRIER) {
+            anchor.setType(Material.AIR, false);
         }
-
-        holo.setCustomName(bar.toString());
+        if (upper.getType() == Material.BARRIER) {
+            upper.setType(Material.AIR, false);
+        }
     }
 
     /**
-     * Returns the hologram armor stand attached to the given barrel, or null if none.
-     *
-     * @param barrel the barrel armor stand
-     * @return the hologram, or null
+     * Resolves a placed barrel stand for a given barrier block.
      */
-    public static ArmorStand getHologram(ArmorStand barrel) {
-        for (var entity : barrel.getPassengers()) {
-            if (entity instanceof ArmorStand stand &&
-                stand.getScoreboardTags().contains(HOLOGRAM_TAG)) {
-                return stand;
+    public static ArmorStand findBarrelAt(Block block) {
+        if (block == null) return null;
+
+        Location center = block.getLocation().add(0.5, 0.5, 0.5);
+        for (var entity : block.getWorld().getNearbyEntities(center, 0.8, 1.8, 0.8)) {
+            if (!(entity instanceof ArmorStand stand)) continue;
+            if (!stand.getScoreboardTags().contains(BARREL_TAG)) continue;
+
+            Block anchor = getAnchorBlock(stand);
+            if (anchor != null && anchor.getX() == block.getX() && anchor.getZ() == block.getZ()) {
+                int baseY = anchor.getY();
+                int clickedY = block.getY();
+                if (clickedY == baseY || clickedY == baseY + 1) {
+                    return stand;
+                }
             }
         }
 
@@ -183,16 +209,130 @@ public class BarrelManager {
     }
 
     /**
-     * Removes the hologram arm stand attached to the given barrel, if present.
-     *
-     * @param barrel the barrel armor stand
+     * Creates (or refreshes) the FancyHolograms display for this barrel.
+     */
+    public static void createHologram(ArmorStand barrel) {
+        updateHologram(barrel);
+    }
+
+    /**
+     * Updates the FancyHolograms display for this barrel.
+     */
+    public static void updateHologram(ArmorStand barrel) {
+        HologramManager manager = getHologramManager();
+        if (manager == null || barrel == null || !barrel.isValid()) {
+            return;
+        }
+
+        Location location = barrel.getLocation().clone().add(0, 2.00, 0);
+        List<String> lines = List.of(buildFuelBar(barrel));
+        String hologramId = hologramId(barrel);
+
+        manager.getHologram(hologramId).ifPresentOrElse(existing -> {
+            if (existing.getData() instanceof TextHologramData textData) {
+                textData.setLocation(location);
+                textData.setText(lines);
+                textData.setVisibilityDistance(5);
+                return;
+            }
+            manager.removeHologram(existing);
+            createHologramData(manager, hologramId, location, lines);
+        }, () -> createHologramData(manager, hologramId, location, lines));
+    }
+
+    /**
+     * Removes this barrel's FancyHolograms display, if present.
      */
     public static void removeHologram(ArmorStand barrel) {
-        for (var entity : barrel.getPassengers()) {
-            if (entity instanceof ArmorStand stand &&
-                stand.getScoreboardTags().contains(HOLOGRAM_TAG)) {
-                stand.remove();
+        HologramManager manager = getHologramManager();
+        if (manager == null || barrel == null) return;
+        manager.getHologram(hologramId(barrel)).ifPresent(manager::removeHologram);
+    }
+
+    /**
+     * Rebuilds all barrel holograms from currently loaded barrel entities.
+     */
+    public static void refreshAllHolograms() {
+        if (!OptionalPluginSupport.hasFancyHolograms()) return;
+
+        for (World world : MandoMC.getInstance().getServer().getWorlds()) {
+            for (ArmorStand stand : world.getEntitiesByClass(ArmorStand.class)) {
+                if (stand.getScoreboardTags().contains(BARREL_TAG)) {
+                    updateHologram(stand);
+                }
             }
+        }
+    }
+
+    /**
+     * Removes all barrel holograms during module disable/reload.
+     */
+    public static void removeAllHolograms() {
+        if (!OptionalPluginSupport.hasFancyHolograms()) return;
+
+        for (World world : MandoMC.getInstance().getServer().getWorlds()) {
+            for (ArmorStand stand : world.getEntitiesByClass(ArmorStand.class)) {
+                if (stand.getScoreboardTags().contains(BARREL_TAG)) {
+                    removeHologram(stand);
+                }
+            }
+        }
+    }
+
+    private static void createHologramData(HologramManager manager, String id, Location location, List<String> lines) {
+        TextHologramData data = new TextHologramData(id, location);
+        data.setText(lines);
+        data.setBillboard(Display.Billboard.CENTER);
+        data.setTextShadow(true);
+        data.setVisibilityDistance(5);
+        data.setBackground(Color.fromARGB(0, 0, 0, 0));
+
+        Hologram hologram = manager.create(data);
+        manager.addHologram(hologram);
+    }
+
+    private static String buildFuelBar(ArmorStand barrel) {
+        ItemStack item = barrel.getEquipment().getHelmet();
+        if (item == null) return ChatColor.DARK_GRAY + "■■■■■■■■■■";
+
+        int fuel = FuelManager.getCurrentFuel(item);
+        int max = FuelManager.getMaxFuel(item);
+        if (max <= 0) return ChatColor.DARK_GRAY + "■■■■■■■■■■";
+
+        double percent = (double) fuel / max;
+        int filled = (int) Math.round(percent * 10);
+        filled = Math.max(0, Math.min(10, filled));
+
+        ChatColor color;
+        if (percent >= 0.75) color = ChatColor.GREEN;
+        else if (percent >= 0.40) color = ChatColor.YELLOW;
+        else if (percent > 0) color = ChatColor.GOLD;
+        else color = ChatColor.RED;
+
+        StringBuilder bar = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            if (i < filled) bar.append(color).append("■");
+            else bar.append(ChatColor.DARK_GRAY).append("■");
+        }
+        return bar.toString();
+    }
+
+    private static String hologramId(ArmorStand barrel) {
+        return HOLOGRAM_ID_PREFIX + barrel.getUniqueId().toString().replace("-", "");
+    }
+
+    private static NamespacedKey key(String suffix) {
+        return new NamespacedKey(MandoMC.getInstance(), suffix);
+    }
+
+    private static HologramManager getHologramManager() {
+        if (!OptionalPluginSupport.hasFancyHolograms()) {
+            return null;
+        }
+        try {
+            return FancyHologramsPlugin.get().getHologramManager();
+        } catch (Throwable ignored) {
+            return null;
         }
     }
 }

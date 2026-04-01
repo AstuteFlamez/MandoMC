@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import net.mandomc.core.LangManager;
+import net.mandomc.core.guis.GUIManager;
 import net.mandomc.server.items.ItemRegistry;
 import net.mandomc.server.items.gui.ItemBrowserGUI;
 
@@ -22,6 +23,11 @@ import java.util.List;
 public class GetCommand implements CommandExecutor, TabCompleter {
 
     private static final String PERMISSION = "mandomc.items.get";
+    private final GUIManager guiManager;
+
+    public GetCommand(GUIManager guiManager) {
+        this.guiManager = guiManager;
+    }
 
     /**
      * Executes the get command.
@@ -50,7 +56,7 @@ public class GetCommand implements CommandExecutor, TabCompleter {
 
         // Open GUI
         if (args.length == 0) {
-            ItemBrowserGUI.open(player);
+            guiManager.openGUI(ItemBrowserGUI.categories(guiManager, player), player);
             return true;
         }
 

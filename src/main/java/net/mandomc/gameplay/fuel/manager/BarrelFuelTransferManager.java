@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -77,6 +78,19 @@ public class BarrelFuelTransferManager {
     }
 
     /**
+     * Stops all active barrel transfer tasks silently.
+     */
+    public static void stopAll() {
+        for (BukkitTask task : transfers.values()) {
+            if (task != null) {
+                task.cancel();
+            }
+        }
+        transfers.clear();
+        displayTickCounters.clear();
+    }
+
+    /**
      * Cancels the transfer for the given player silently.
      *
      * @param player the player whose transfer to cancel
@@ -112,7 +126,7 @@ public class BarrelFuelTransferManager {
             return;
         }
 
-        if (canister == null || barrel == null) {
+        if (canister == null || barrel == null || !barrel.isValid()) {
             cancelTransfer(player);
             return;
         }
@@ -159,14 +173,12 @@ public class BarrelFuelTransferManager {
 
             if (refreshDisplay) {
                 BarrelManager.updateModel(barrelItem);
+                player.playSound(player.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, 0.45f, 1.15f);
             }
             barrel.getEquipment().setHelmet(barrelItem);
 
             if (refreshDisplay) {
-                ArmorStand holo = BarrelManager.getHologram(barrel);
-                if (holo != null) {
-                    BarrelManager.updateHologram(barrel, holo);
-                }
+                BarrelManager.updateHologram(barrel);
             }
 
             int newCanFuel = FuelManager.getCurrentFuel(canister);
@@ -208,14 +220,12 @@ public class BarrelFuelTransferManager {
 
         if (refreshDisplay) {
             BarrelManager.updateModel(barrelItem);
+            player.playSound(player.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, 0.45f, 1.15f);
         }
         barrel.getEquipment().setHelmet(barrelItem);
 
         if (refreshDisplay) {
-            ArmorStand holo = BarrelManager.getHologram(barrel);
-            if (holo != null) {
-                BarrelManager.updateHologram(barrel, holo);
-            }
+            BarrelManager.updateHologram(barrel);
         }
 
         int newCanFuel = FuelManager.getCurrentFuel(canister);

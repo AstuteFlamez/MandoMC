@@ -15,9 +15,14 @@ softdepend:
 commands:
 
   shop:
-    description: Open a buy or sell shop GUI
-    usage: /shop <buy|sell> ...
-    permission: mandomc.shop.admin
+    description: Open a shop category for yourself or another player
+    usage: /shop <category> [player]
+    permission: mandomc.shop.use
+
+  sell:
+    description: Open pawn shop GUI or quick-sell items
+    usage: /sell <player>
+    permission: mandomc.sell.use
 
   link:
     description: Link your Minecraft account with Discord
@@ -82,10 +87,10 @@ commands:
   # Warp Commands
   # -------------------------
 
-  warps:
+  warp:
     description: Opens the warp menu
     usage: /warp
-    aliases: [warp, w]
+    aliases: [warps, w]
     permission: mandomc.warp.use
 
   # -------------------------
@@ -146,8 +151,20 @@ permissions:
     description: Allows opening the bounty admin board
     default: op
 
-  mandomc.shop.admin:
-    description: Allows managing shop commands
+  mandomc.shop.use:
+    description: Allows opening shop categories for yourself
+    default: true
+
+  mandomc.shop.others:
+    description: Allows opening shop categories for other players
+    default: op
+
+  mandomc.sell.use:
+    description: Allows opening the pawn shop GUI with /sell <player>
+    default: true
+
+  mandomc.sell.advanced:
+    description: Allows /sell, /sell hand, and /sell all
     default: op
 
   mandomc.lottery.admin:

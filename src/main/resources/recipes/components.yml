@@ -1,0 +1,10 @@
+name: "§6§lComponents"
+icon: "tiefighter_cockpit"
+slot: 15
+gui-size: 27
+items:
+  tiefighter_cockpit: 10
+  tiefighter_wing: 11
+  x_wing_cockpit: 12
+  x_wing_left_wing: 13
+  x_wing_right_wing: 14

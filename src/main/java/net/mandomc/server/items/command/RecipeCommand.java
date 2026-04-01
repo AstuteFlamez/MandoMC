@@ -1,6 +1,7 @@
 package net.mandomc.server.items.command;
 
 import net.mandomc.core.LangManager;
+import net.mandomc.core.guis.GUIManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -11,6 +12,8 @@ import net.mandomc.server.items.ItemRegistry;
 import net.mandomc.server.items.RecipeRegistry;
 import net.mandomc.server.items.gui.RecipeBrowserGUI;
 import net.mandomc.server.items.gui.RecipeViewerGUI;
+import net.mandomc.server.items.config.RecipeCategoryConfig;
+import net.mandomc.server.items.config.RecipeCategoryConfig.RecipeCategoryDefinition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +27,11 @@ import java.util.stream.Collectors;
  */
 public class RecipeCommand implements CommandExecutor, TabCompleter {
 
-    private static final List<String> CATEGORIES = List.of(
-            "metals",
-            "armor",
-            "hilts",
-            "sabers",
-            "components",
-            "fuel",
-            "vehicles"
-    );
+    private final GUIManager guiManager;
+
+    public RecipeCommand(GUIManager guiManager) {
+        this.guiManager = guiManager;
+    }
 
     /**
      * Executes the recipes command.
@@ -54,14 +53,18 @@ public class RecipeCommand implements CommandExecutor, TabCompleter {
 
         // Open root GUI
         if (args.length == 0) {
-            RecipeBrowserGUI.openRoot(player);
+            guiManager.openGUI(RecipeBrowserGUI.root(guiManager), player);
             return true;
         }
 
         String input = args[0].toLowerCase();
 
         // Category handling
-        if (handleCategory(player, input)) return true;
+        RecipeCategoryDefinition category = RecipeCategoryConfig.getCategory(input);
+        if (category != null) {
+            guiManager.openGUI(RecipeBrowserGUI.category(guiManager, category.id()), player);
+            return true;
+        }
 
         // Item recipe
         if (!RecipeRegistry.hasRecipe(input)) {
@@ -69,30 +72,10 @@ public class RecipeCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        RecipeViewerGUI.open(player, input);
-        return true;
-    }
-
-    /**
-     * Handles category shortcuts.
-     *
-     * @return true if a category was handled
-     */
-    private boolean handleCategory(Player player, String input) {
-
-        switch (input) {
-            case "metals" -> RecipeBrowserGUI.openMetals(player);
-            case "armor" -> RecipeBrowserGUI.openArmor(player);
-            case "hilts" -> RecipeBrowserGUI.openHilts(player);
-            case "sabers" -> RecipeBrowserGUI.openSabers(player);
-            case "components" -> RecipeBrowserGUI.openComponents(player);
-            case "fuel" -> RecipeBrowserGUI.openFuel(player);
-            case "vehicles" -> RecipeBrowserGUI.openVehicles(player);
-            default -> {
-                return false;
-            }
-        }
-
+        guiManager.openGUI(
+                RecipeViewerGUI.of(guiManager, input, () -> RecipeBrowserGUI.root(guiManager)),
+                player
+        );
         return true;
     }
 
@@ -111,9 +94,9 @@ public class RecipeCommand implements CommandExecutor, TabCompleter {
         List<String> completions = new ArrayList<>();
 
         // Categories
-        for (String category : CATEGORIES) {
-            if (category.startsWith(input)) {
-                completions.add(category);
+        for (String categoryId : RecipeCategoryConfig.getCategoryIds()) {
+            if (categoryId.startsWith(input)) {
+                completions.add(categoryId);
             }
         }
 

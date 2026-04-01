@@ -28,6 +28,7 @@ import net.mandomc.server.items.command.GiveCommand;
 import net.mandomc.server.items.command.RecipeCommand;
 import net.mandomc.world.ilum.command.ParkourFinishCommand;
 import net.mandomc.world.ilum.manager.ParkourManager;
+import net.mandomc.server.shop.command.SellCommand;
 import net.mandomc.server.shop.command.ShopCommand;
 import net.mandomc.gameplay.warp.config.WarpConfig;
 import net.mandomc.gameplay.lottery.config.LotteryConfig;
@@ -63,13 +64,15 @@ public class CommandModule implements Module {
         ParkourManager parkourManager = registry.get(ParkourManager.class);
 
         WarpConfig warpConfig = registry.get(WarpConfig.class);
-        safe("warps", new WarpCommand(guiManager, warpConfig));
+        safe("warp", new WarpCommand(guiManager, warpConfig));
         safe("test", new TestCommand());
         safe("mmcreload", new ReloadCommand(plugin));
         LotteryConfig lotteryConfig = registry.get(LotteryConfig.class);
         safe("lottery", new LotteryCommand(guiManager, lotteryConfig));
         ShopCommand shopCmd = new ShopCommand(guiManager);
+        SellCommand sellCmd = new SellCommand(guiManager);
         safe("shop", shopCmd, shopCmd);
+        safe("sell", sellCmd, sellCmd);
         safe("discord", new DiscordCommand());
         LinkService linkService = registry.has(DatabaseService.class)
                 ? new DatabaseLinkService(registry.get(DatabaseService.class), plugin.getLogger())
@@ -77,10 +80,10 @@ public class CommandModule implements Module {
         EconomyService economyService = registry.get(EconomyService.class);
         safe("link", new LinkCommand(plugin, linkService, economyService));
 
-        GetCommand getCmd = new GetCommand();
-        GiveCommand giveCmd = new GiveCommand();
+        GetCommand getCmd = new GetCommand(guiManager);
+        GiveCommand giveCmd = new GiveCommand(guiManager);
         DropCommand dropCmd = new DropCommand();
-        RecipeCommand recipeCmd = new RecipeCommand();
+        RecipeCommand recipeCmd = new RecipeCommand(guiManager);
 
         safe("get", getCmd, getCmd);
         safe("give", giveCmd, giveCmd);

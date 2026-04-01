@@ -1,0 +1,7 @@
+name: "§6§lVehicles"
+icon: "tiefighter"
+slot: 16
+gui-size: 27
+items:
+  tiefighter: 10
+  xwing: 11

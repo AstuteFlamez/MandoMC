@@ -5,9 +5,13 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import net.mandomc.core.LangManager;
 import net.mandomc.gameplay.fuel.FuelManager;
 import net.mandomc.gameplay.fuel.manager.BarrelManager;
 import net.mandomc.server.items.ItemRegistry;
@@ -34,9 +38,25 @@ public class BarrelPickupListener implements Listener {
         Entity entity = event.getRightClicked();
 
         if (!(entity instanceof ArmorStand stand)) return;
-        if (!stand.getScoreboardTags().contains("rhydonium_barrel")) return;
+        if (!stand.getScoreboardTags().contains(BarrelManager.BARREL_TAG)) return;
 
-        Player player = event.getPlayer();
+        tryPickup(event.getPlayer(), stand, event);
+    }
+
+    @EventHandler
+    public void onPickupBarrelBlock(PlayerInteractEvent event) {
+        if (event.getHand() != EquipmentSlot.HAND) return;
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (event.getClickedBlock() == null) return;
+
+        ArmorStand stand = BarrelManager.findBarrelAt(event.getClickedBlock());
+        if (stand == null) return;
+
+        tryPickup(event.getPlayer(), stand, event);
+    }
+
+    private void tryPickup(Player player, ArmorStand stand, org.bukkit.event.Cancellable event) {
+        if (stand == null || !stand.isValid()) return;
 
         if (!player.isSneaking()) return;
 
@@ -46,17 +66,26 @@ public class BarrelPickupListener implements Listener {
 
         event.setCancelled(true);
 
+        pickupBarrel(player, stand);
+    }
+
+    public static void pickupBarrel(Player player, ArmorStand stand) {
         ItemStack barrelModel = stand.getEquipment().getHelmet();
         ItemStack barrelItem = ItemRegistry.get("rhydonium_barrel");
-        int currentFuel = FuelManager.getCurrentFuel(barrelModel);
-        FuelManager.updateFuel(barrelItem, currentFuel);
-        barrelItem = BarrelManager.updateItem(barrelItem);
-
         if (barrelItem != null) {
+            int currentFuel = FuelManager.getCurrentFuel(barrelModel);
+            FuelManager.updateFuel(barrelItem, currentFuel);
+            barrelItem = BarrelManager.updateItem(barrelItem);
             player.getInventory().addItem(barrelItem);
+            player.sendMessage(LangManager.get(
+                    "fuel.barrel.picked-up",
+                    "%current%", String.valueOf(currentFuel),
+                    "%max%", String.valueOf(FuelManager.getMaxFuel(barrelItem))
+            ));
         }
 
         BarrelManager.removeHologram(stand);
+        BarrelManager.removeBarrier(stand);
         stand.remove();
     }
 }

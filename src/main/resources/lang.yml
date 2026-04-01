@@ -224,6 +224,8 @@ fuel:
 
   # Barrel ↔ Canister
   barrel:
+    placed:         "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &a⛽ Barrel placed &8(%current%/%max%)"
+    picked-up:      "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &e⛽ Barrel picked up &8(%current%/%max%)"
     canister-empty: "&c⚠ Canister empty &8(%current%/%max%)"
     barrel-full:    "&c⚠ Barrel full &8(%current%/%max%)"
     depositing:     "&6⛽ Depositing &e%can%/%can-max% &8→ &bBarrel &e%barrel%/%barrel-max%"
@@ -324,15 +326,17 @@ parkour:
 # ──────────────────────────────────────────
 shops:
   no-permission:     "@shared.no-permission.command"
-  usage:             "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /shop <buy|sell>"
-  usage-buy:         "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /shop buy <shop> [player]"
-  usage-sell:        "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /shop sell [player]"
+  players-only:      "@shared.players-only.blue"
+  usage-shop:        "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /shop <category> [player]"
+  usage-sell:        "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Usage: /sell <player> | /sell | /sell hand | /sell all"
   player-not-found:  "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cPlayer not found."
-  console-no-player: "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cConsole must specify a player: /shop buy <shop> <player>"
+  console-no-player-shop: "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cConsole must specify a player: /shop <category> <player>"
+  console-no-player-sell: "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cConsole must specify a player: /sell <player>"
   not-found:         "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cShop not found: &7%shop%"
   item-unavailable:  "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cThis item is currently unavailable."
   not-enough-money:  "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cNot enough money. You need &6$%cost%&c."
   inventory-full:    "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYour inventory is full."
+  sell-gui-title:    "&6Pawn Shop"
   # %amount% = quantity, %item% = display name, %cost% = formatted price
   purchased:         "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aPurchased &f%amount%x %item% &afor &6$%cost%&a."
   no-sellable:       "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7No sellable items found in your inventory."
@@ -360,6 +364,15 @@ items:
   invalid-world:       "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cInvalid world."
   dropped:             "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Dropped &f%id% &7×&f%amount%&7."
   invalid-amount:      "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cInvalid amount: &7%value%"
+  browser:
+    title-categories:  "&8Item Browser - Categories"
+    title-items:       "&8Item Browser - Items"
+    select-category:   "&eSelect a category"
+    all-name:          "All Items"
+    back-categories:   "&cBack to Categories"
+    current-filter:    "&eCategory: &f%category%"
+    next-page:         "&aNext Page"
+    prev-page:         "&cPrevious Page"
   # /recipe
   no-recipe:           "&6&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7That item has no recipe."
 

@@ -19,6 +19,7 @@ import net.mandomc.server.items.ItemLoader;
 import net.mandomc.server.items.ItemRegistry;
 import net.mandomc.server.items.config.ItemDefinitionConfig;
 import net.mandomc.server.items.config.ItemsConfig;
+import net.mandomc.server.items.config.RecipeCategoryConfig;
 import net.mandomc.world.ilum.config.ParkourConfig;
 import net.mandomc.server.shop.ShopLoader;
 import net.mandomc.server.shop.config.ShopConfig;
@@ -68,8 +69,10 @@ public class ConfigModule implements Module {
         LangManager.load();
 
         ItemsConfig.setup();
+        RecipeCategoryConfig.setup();
         VehicleConfig.setup();
         ItemsConfig.reload();
+        RecipeCategoryConfig.reload();
         VehicleConfig.reload();
         VehicleRegistry.load();
 

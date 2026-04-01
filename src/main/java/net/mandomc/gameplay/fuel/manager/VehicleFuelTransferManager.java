@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
@@ -73,6 +74,19 @@ public class VehicleFuelTransferManager {
             task.cancel();
             player.sendActionBar(LangManager.get("fuel.transfer-halted"));
         }
+    }
+
+    /**
+     * Stops all active vehicle transfer tasks silently.
+     */
+    public static void stopAll() {
+        for (BukkitTask task : transfers.values()) {
+            if (task != null) {
+                task.cancel();
+            }
+        }
+        transfers.clear();
+        displayTickCounters.clear();
     }
 
     /**
@@ -148,6 +162,9 @@ public class VehicleFuelTransferManager {
 
             FuelManager.updateFuel(canister, canFuel - 1, refreshDisplay);
             FuelManager.updateFuel(vehicleTank, vehicleFuel + 1, refreshDisplay);
+            if (refreshDisplay) {
+                player.playSound(player.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, 0.45f, 1.15f);
+            }
 
             int newCanFuel = FuelManager.getCurrentFuel(canister);
             int newVehicleFuel = FuelManager.getCurrentFuel(vehicleTank);
@@ -185,6 +202,9 @@ public class VehicleFuelTransferManager {
 
         FuelManager.updateFuel(canister, canFuel + 1, refreshDisplay);
         FuelManager.updateFuel(vehicleTank, vehicleFuel - 1, refreshDisplay);
+        if (refreshDisplay) {
+            player.playSound(player.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, 0.45f, 1.15f);
+        }
 
         int newCanFuel = FuelManager.getCurrentFuel(canister);
         int newVehicleFuel = FuelManager.getCurrentFuel(vehicleTank);

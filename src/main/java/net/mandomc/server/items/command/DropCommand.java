@@ -17,6 +17,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BooleanSupplier;
+import java.util.function.Function;
 
 /**
  * Handles the /drop command.
@@ -27,6 +29,9 @@ import java.util.List;
 public class DropCommand implements CommandExecutor, TabCompleter {
 
     private static final String PERMISSION = "mandomc.items.drop";
+    private static BooleanSupplier weaponMechanicsChecker = OptionalPluginSupport::hasWeaponMechanics;
+    private static Function<String, ItemStack> weaponMechanicsAmmoGenerator =
+            id -> WeaponMechanicsAPI.generateAmmo(id, false);
 
     /**
      * Executes the drop command.
@@ -50,22 +55,22 @@ public class DropCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        String id = args[0].toLowerCase();
+        String rawId = args[0];
 
         Location location = parseLocation(sender, args);
         if (location == null) return true;
 
         int amount = parseAmount(args, sender);
 
-        ItemStack item = resolveItem(id, amount);
+        ItemStack item = resolveItem(rawId, amount);
         if (item == null) {
-            sender.sendMessage(LangManager.get("items.unknown-item", "%id%", id));
+            sender.sendMessage(LangManager.get("items.unknown-item", "%id%", rawId));
             return true;
         }
 
         location.getWorld().dropItemNaturally(location, item);
 
-        sender.sendMessage(LangManager.get("items.dropped", "%id%", id, "%amount%", String.valueOf(amount)));
+        sender.sendMessage(LangManager.get("items.dropped", "%id%", rawId, "%amount%", String.valueOf(amount)));
         return true;
     }
 
@@ -78,7 +83,7 @@ public class DropCommand implements CommandExecutor, TabCompleter {
         if (!(sender instanceof Player player)) {
 
             if (args.length < 5) {
-                sender.sendMessage("&cConsole must specify: /drop <item> <x> <y> <z> <world> [amount]");
+                sender.sendMessage(LangManager.get("items.console-drop-full"));
                 return null;
             }
 
@@ -136,7 +141,7 @@ public class DropCommand implements CommandExecutor, TabCompleter {
         try {
             return Math.max(1, Integer.parseInt(args[5]));
         } catch (NumberFormatException e) {
-            sender.sendMessage(LangManager.get("items.invalid-amount", "%amount%", args[5]));
+            sender.sendMessage(LangManager.get("items.invalid-amount", "%value%", args[5]));
             return 1;
         }
     }
@@ -144,19 +149,47 @@ public class DropCommand implements CommandExecutor, TabCompleter {
     /**
      * Resolves item from registry or WeaponMechanics ammo.
      */
-    private ItemStack resolveItem(String id, int amount) {
+    ItemStack resolveItem(String rawId, int amount) {
 
-        ItemStack item = ItemRegistry.get(id);
+        ItemStack item = ItemRegistry.get(rawId);
 
         if (item != null) {
             item.setAmount(amount);
             return item;
         }
 
-        if (!OptionalPluginSupport.hasWeaponMechanics()) {
+        if (!weaponMechanicsChecker.getAsBoolean()) {
             return null;
         }
-        return WeaponMechanicsAPI.generateAmmo(id, false);
+        for (String candidateId : weaponMechanicsLookupOrder(rawId)) {
+            ItemStack generated = weaponMechanicsAmmoGenerator.apply(candidateId);
+            if (generated != null) {
+                generated.setAmount(amount);
+                return generated;
+            }
+        }
+        return null;
+    }
+
+    static List<String> weaponMechanicsLookupOrder(String rawId) {
+        List<String> ids = new ArrayList<>();
+        ids.add(rawId);
+
+        String lowerCaseId = rawId.toLowerCase();
+        if (!rawId.equals(lowerCaseId)) {
+            ids.add(lowerCaseId);
+        }
+        return ids;
+    }
+
+    static void useTestWeaponMechanicsResolvers(BooleanSupplier checker, Function<String, ItemStack> generator) {
+        weaponMechanicsChecker = checker;
+        weaponMechanicsAmmoGenerator = generator;
+    }
+
+    static void resetTestWeaponMechanicsResolvers() {
+        weaponMechanicsChecker = OptionalPluginSupport::hasWeaponMechanics;
+        weaponMechanicsAmmoGenerator = id -> WeaponMechanicsAPI.generateAmmo(id, false);
     }
 
     /**
@@ -220,7 +253,7 @@ public class DropCommand implements CommandExecutor, TabCompleter {
         try {
             return Double.parseDouble(input);
         } catch (NumberFormatException e) {
-            sender.sendMessage(LangManager.get("items.invalid-amount", "%amount%", input));
+            sender.sendMessage(LangManager.get("items.invalid-amount", "%value%", input));
             return null;
         }
     }

@@ -1,6 +1,8 @@
 package net.mandomc.gameplay.fuel.listener;
 
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,6 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+import net.mandomc.core.LangManager;
 import net.mandomc.gameplay.fuel.FuelManager;
 import net.mandomc.gameplay.fuel.manager.BarrelManager;
 import net.mandomc.server.items.ItemRegistry;
@@ -36,6 +39,7 @@ public class BarrelPlaceListener implements Listener {
     public void onPlaceBarrel(PlayerInteractEvent event) {
         if (event.getHand() != EquipmentSlot.HAND) return;
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
+        if (event.getClickedBlock() == null) return;
 
         Player player = event.getPlayer();
         ItemStack item = player.getInventory().getItemInMainHand();
@@ -51,9 +55,8 @@ public class BarrelPlaceListener implements Listener {
         int currentFuel = FuelManager.getCurrentFuel(item);
         FuelManager.updateFuel(model, currentFuel);
 
-        Location placeLoc = event.getClickedBlock()
-                .getLocation()
-                .add(0.5, 1, 0.5);
+        Block anchorBlock = event.getClickedBlock().getRelative(BlockFace.UP);
+        Location placeLoc = anchorBlock.getLocation().add(0.5, 0, 0.5);
 
         ArmorStand stand = placeLoc.getWorld().spawn(placeLoc, ArmorStand.class);
 
@@ -62,16 +65,19 @@ public class BarrelPlaceListener implements Listener {
         stand.setMarker(false);
         stand.setSmall(false);
         stand.setInvulnerable(true);
-        stand.addScoreboardTag("rhydonium_barrel");
+        stand.addScoreboardTag(BarrelManager.BARREL_TAG);
+
+        if (!BarrelManager.placeBarrier(stand, anchorBlock)) {
+            stand.remove();
+            return;
+        }
 
         ItemStack placed = model.clone();
         placed = BarrelManager.applyPlacementOffset(placed);
         placed = BarrelManager.updateModel(placed);
 
         stand.getEquipment().setHelmet(placed);
-
-        ArmorStand holo = BarrelManager.createHologram(stand);
-        stand.addPassenger(holo);
+        BarrelManager.createHologram(stand);
 
         int amount = item.getAmount();
 
@@ -80,5 +86,11 @@ public class BarrelPlaceListener implements Listener {
         } else {
             item.setAmount(amount - 1);
         }
+
+        player.sendMessage(LangManager.get(
+                "fuel.barrel.placed",
+                "%current%", String.valueOf(currentFuel),
+                "%max%", String.valueOf(FuelManager.getMaxFuel(placed))
+        ));
     }
 }

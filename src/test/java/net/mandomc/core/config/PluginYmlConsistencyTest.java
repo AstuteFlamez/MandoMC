@@ -23,9 +23,9 @@ class PluginYmlConsistencyTest {
         Map<String, Object> commands = getMap(root, "commands");
 
         Set<String> expected = Set.of(
-                "shop", "link", "discord", "bounty", "lottery",
+                "shop", "sell", "link", "discord", "bounty", "lottery",
                 "key", "get", "give", "drop", "recipes",
-                "mmcreload", "test", "event", "warps", "parkourfinish"
+                "mmcreload", "test", "event", "warp", "parkourfinish"
         );
 
         assertEquals(expected, commands.keySet(), "plugin.yml command keys drifted from Java wiring");
@@ -47,7 +47,10 @@ class PluginYmlConsistencyTest {
                 "mandomc.items.give",
                 "mandomc.lottery.admin",
                 "mandomc.recipes.view",
-                "mandomc.shop.admin",
+                "mandomc.sell.advanced",
+                "mandomc.sell.use",
+                "mandomc.shop.others",
+                "mandomc.shop.use",
                 "mandomc.warp.use",
                 "mmc.parkour.bypass-command-blocks"
         );

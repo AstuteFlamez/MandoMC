@@ -4,8 +4,6 @@ import net.mandomc.MandoMC;
 import net.mandomc.core.lifecycle.ListenerRegistrar;
 import net.mandomc.core.module.Module;
 import net.mandomc.core.services.ServiceRegistry;
-import net.mandomc.server.items.listener.ItemBrowserListener;
-import net.mandomc.server.items.listener.RecipeListener;
 
 /**
  * Manages the lifecycle of the custom item system.
@@ -35,8 +33,6 @@ public class ItemModule implements Module {
     @Override
     public void enable(ServiceRegistry registry) {
         listenerRegistrar = new ListenerRegistrar(plugin);
-        listenerRegistrar.register(new ItemBrowserListener());
-        listenerRegistrar.register(new RecipeListener());
     }
 
     /**

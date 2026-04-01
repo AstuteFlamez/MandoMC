@@ -8,6 +8,9 @@ import net.mandomc.gameplay.fuel.listener.BarrelCanisterInteractListener;
 import net.mandomc.gameplay.fuel.listener.BarrelPickupListener;
 import net.mandomc.gameplay.fuel.listener.BarrelPlaceListener;
 import net.mandomc.gameplay.fuel.listener.CanisterModeSwitchListener;
+import net.mandomc.gameplay.fuel.manager.BarrelFuelTransferManager;
+import net.mandomc.gameplay.fuel.manager.BarrelManager;
+import net.mandomc.gameplay.fuel.manager.VehicleFuelTransferManager;
 
 /**
  * Manages the lifecycle of the fuel system.
@@ -39,6 +42,7 @@ public class FuelModule implements Module {
         listenerRegistrar.register(new BarrelPickupListener());
         listenerRegistrar.register(new BarrelCanisterInteractListener());
         listenerRegistrar.register(new CanisterModeSwitchListener());
+        BarrelManager.refreshAllHolograms();
     }
 
     /**
@@ -46,6 +50,9 @@ public class FuelModule implements Module {
      */
     @Override
     public void disable() {
+        BarrelFuelTransferManager.stopAll();
+        VehicleFuelTransferManager.stopAll();
+        BarrelManager.removeAllHolograms();
         if (listenerRegistrar != null) listenerRegistrar.unregisterAll();
     }
 }

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import net.mandomc.core.LangManager;
+import net.mandomc.core.guis.GUIManager;
 import net.mandomc.server.items.ItemRegistry;
 import net.mandomc.server.items.gui.ItemBrowserGUI;
 
@@ -24,6 +25,11 @@ import java.util.stream.Collectors;
 public class GiveCommand implements CommandExecutor, TabCompleter {
 
     private static final String PERMISSION = "mandomc.items.give";
+    private final GUIManager guiManager;
+
+    public GiveCommand(GUIManager guiManager) {
+        this.guiManager = guiManager;
+    }
 
     /**
      * Executes the give command.
@@ -64,7 +70,7 @@ public class GiveCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
 
-            ItemBrowserGUI.open(player, target);
+            guiManager.openGUI(ItemBrowserGUI.categories(guiManager, target), player);
             return true;
         }
 

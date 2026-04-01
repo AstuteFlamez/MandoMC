@@ -2,7 +2,6 @@ package net.mandomc.server.shop.command;
 
 import net.mandomc.core.LangManager;
 import net.mandomc.core.guis.GUIManager;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,29 +11,30 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import net.mandomc.server.shop.model.Shop;
 import net.mandomc.server.shop.ShopManager;
 import net.mandomc.server.shop.gui.ShopGUI;
-import net.mandomc.server.shop.gui.ShopSellGUI;
 
 /**
  * Handles the /shop command.
  *
  * Usage:
- *   /shop buy <shop>          — opens the buy GUI for the executing player
- *   /shop buy <shop> <player> — opens the buy GUI for another player (console-safe)
- *   /shop sell <player>       — opens the sell GUI for a player
+ *   /shop <category>          — opens a shop category for self
+ *   /shop <category> <player> — opens a shop category for another player
  *
- * Permission: mandomc.shop.admin
+ * Permissions:
+ *   mandomc.shop.use    — /shop <category> for self
+ *   mandomc.shop.others — /shop <category> <player>
  *
  * Tab completion:
- *   arg 0 → "buy" | "sell"
- *   buy arg 1 → shop IDs, buy arg 2 → player names
- *   sell arg 1 → player names
+ *   arg 0 → shop IDs
+ *   arg 1 → player names (with others permission)
  */
 public class ShopCommand implements CommandExecutor, TabCompleter {
 
-    private static final String PERMISSION = "mandomc.shop.admin";
+    private static final String USE_PERMISSION = "mandomc.shop.use";
+    private static final String OTHERS_PERMISSION = "mandomc.shop.others";
 
     private final GUIManager guiManager;
 
@@ -44,52 +44,17 @@ public class ShopCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-        if (!sender.hasPermission(PERMISSION)) {
-            sender.sendMessage(LangManager.get("shops.no-permission"));
+        if (args.length < 1 || args.length > 2) {
+            sender.sendMessage(LangManager.get("shops.usage-shop"));
             return true;
         }
 
-        if (args.length < 1) {
-            sender.sendMessage(LangManager.get("shops.usage"));
-            return true;
-        }
-
-        switch (args[0].toLowerCase()) {
-            case "buy"  -> handleBuy(sender, label, args);
-            case "sell" -> handleSell(sender, label, args);
-            default     -> sender.sendMessage(LangManager.get("shops.usage"));
-        }
-
+        handleOpenShop(sender, args);
         return true;
     }
 
-    // /shop buy <shop> [player]
-    private void handleBuy(CommandSender sender, String label, String[] args) {
-
-        if (args.length < 2) {
-            sender.sendMessage(LangManager.get("shops.usage-buy"));
-            return;
-        }
-
-        String shopId = args[1].toLowerCase();
-
-        Player target;
-
-        if (args.length >= 3) {
-            target = Bukkit.getPlayer(args[2]);
-            if (target == null) {
-                sender.sendMessage(LangManager.get("shops.player-not-found"));
-                return;
-            }
-        } else {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(LangManager.get("shops.console-no-player"));
-                return;
-            }
-            target = (Player) sender;
-        }
-
+    private void handleOpenShop(CommandSender sender, String[] args) {
+        String shopId = args[0].toLowerCase();
         Shop shop = ShopManager.get(shopId);
 
         if (shop == null) {
@@ -97,45 +62,48 @@ public class ShopCommand implements CommandExecutor, TabCompleter {
             return;
         }
 
-        guiManager.openGUI(new ShopGUI(shop), target);
-    }
+        Player target;
 
-    // /shop sell <player>
-    private void handleSell(CommandSender sender, String label, String[] args) {
+        if (args.length >= 2) {
+            if (!sender.hasPermission(OTHERS_PERMISSION)) {
+                sender.sendMessage(LangManager.get("shops.no-permission"));
+                return;
+            }
 
-        if (args.length < 2) {
-            sender.sendMessage(LangManager.get("shops.usage-sell"));
-            return;
+            target = resolveOnlinePlayer(args[1]);
+            if (target == null) {
+                sender.sendMessage(LangManager.get("shops.player-not-found"));
+                return;
+            }
+        } else {
+            if (!sender.hasPermission(USE_PERMISSION)) {
+                sender.sendMessage(LangManager.get("shops.no-permission"));
+                return;
+            }
+
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(LangManager.get("shops.console-no-player-shop"));
+                return;
+            }
+            target = (Player) sender;
         }
 
-        Player target = Bukkit.getPlayer(args[1]);
-
-        if (target == null) {
-            sender.sendMessage(LangManager.get("shops.player-not-found"));
-            return;
-        }
-
-        ShopSellGUI sellGUI = new ShopSellGUI(target);
-        guiManager.registerHandledInventory(sellGUI.getInventory(), sellGUI);
-        target.openInventory(sellGUI.getInventory());
+        guiManager.openGUI(new ShopGUI(shop, guiManager), target);
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-
-        if (!sender.hasPermission(PERMISSION)) return List.of();
-
         if (args.length == 1) {
-            return filter(List.of("buy", "sell"), args[0]);
+            if (sender.hasPermission(USE_PERMISSION) || sender.hasPermission(OTHERS_PERMISSION)) {
+                return filter(new ArrayList<>(ShopManager.getShopIds()), args[0]);
+            }
+            return List.of();
         }
 
         if (args.length == 2) {
-            if (args[0].equalsIgnoreCase("buy")) return filter(new ArrayList<>(ShopManager.getShopIds()), args[1]);
-            if (args[0].equalsIgnoreCase("sell")) return filter(onlinePlayerNames(), args[1]);
-        }
-
-        if (args.length == 3 && args[0].equalsIgnoreCase("buy")) {
-            return filter(onlinePlayerNames(), args[2]);
+            if (sender.hasPermission(OTHERS_PERMISSION)) {
+                return filter(onlinePlayerNames(), args[1]);
+            }
         }
 
         return List.of();
@@ -154,5 +122,23 @@ public class ShopCommand implements CommandExecutor, TabCompleter {
             if (opt.toLowerCase().startsWith(lower)) result.add(opt);
         }
         return result;
+    }
+
+    private static Player resolveOnlinePlayer(String input) {
+        Player exact = Bukkit.getPlayerExact(input);
+        if (exact != null) {
+            return exact;
+        }
+
+        Player byName = Bukkit.getPlayer(input);
+        if (byName != null) {
+            return byName;
+        }
+
+        try {
+            return Bukkit.getPlayer(UUID.fromString(input));
+        } catch (IllegalArgumentException ignored) {
+            return null;
+        }
     }
 }

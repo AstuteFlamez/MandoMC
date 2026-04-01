@@ -1,11 +1,11 @@
 package net.mandomc.server.shop.gui;
 
 import net.mandomc.core.LangManager;
+import net.mandomc.core.guis.GUIManager;
 import net.mandomc.core.guis.InventoryButton;
 import net.mandomc.core.guis.InventoryGUI;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -24,16 +24,15 @@ import net.mandomc.server.shop.ShopPurchaseHandler;
  *
  * Fills all slots with the configured filler, then places each {@link ShopItem}
  * button into its configured slot.
- *
- * Left-click → opens a Paper dialog for choosing purchase amount.
- * Shift-left-click → instantly buys one stack (respects item max stack size).
  */
 public class ShopGUI extends InventoryGUI {
 
     private final Shop shop;
+    private final GUIManager guiManager;
 
-    public ShopGUI(Shop shop) {
+    public ShopGUI(Shop shop, GUIManager guiManager) {
         this.shop = shop;
+        this.guiManager = guiManager;
     }
 
     @Override
@@ -69,16 +68,16 @@ public class ShopGUI extends InventoryGUI {
         return new InventoryButton()
                 .creator(p -> icon)
                 .consumer(event -> {
-
                     if (!(event.getWhoClicked() instanceof Player player)) return;
-
                     if (event.isShiftClick() && event.isLeftClick()) {
-                        // Resolve to get accurate max stack size for shift-click
                         ItemStack base = ShopLoader.resolveItem(item.getType(), item.getId(), shop.getId(), item.getId());
                         int stackSize = base != null ? base.getMaxStackSize() : 1;
                         ShopPurchaseHandler.purchase(player, item, stackSize, shop);
-                    } else if (event.isLeftClick()) {
-                        player.showDialog(ShopDialogFactory.create(player, item, shop));
+                        return;
+                    }
+
+                    if (event.isLeftClick()) {
+                        guiManager.openGUI(new ShopQuantityGUI(shop, item, guiManager), player);
                     }
                 });
     }
@@ -131,8 +130,7 @@ public class ShopGUI extends InventoryGUI {
             lore.add(color("&7Sell: &a$" + item.getSellPrice() + " &7each"));
         }
         lore.add("");
-        lore.add(color("&eClick &7to choose amount"));
-        lore.add(color("&eShift-Click &7to buy a stack"));
+        lore.add(color("&eClick &7to open quantity selector"));
 
         meta.setLore(lore);
         display.setItemMeta(meta);

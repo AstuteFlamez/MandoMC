@@ -1,0 +1,10 @@
+name: "§6§lSabers"
+icon: "windu"
+slot: 13
+gui-size: 27
+items:
+  obiwan: 10
+  cal_survivor_crossguard: 11
+  windu: 12
+  quigon: 13
+  ventress_yellow: 14
