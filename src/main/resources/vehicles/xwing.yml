@@ -21,12 +21,25 @@ vehicle:
       ammo_per_shot: 1
       cooldown: 2000
       sound: vehicles.xwing_shoot
-      spawn_bones:
-        - barrelLeft
-        - barrelRight
 
     movement_sound: vehicles.xwing_fly
     movement_sound_time_in_ticks: 460
+
+  skins:
+    default: default
+    options:
+      default:
+        model_key: xwing
+        permission: ""
+        item:
+          name: "&c&lX-Wing Starfighter"
+          custom_model_data: 1
+      purple:
+        model_key: purple_xwing
+        permission: "mandomc.vehicle.skin.xwing.purple"
+        item:
+          name: "&5&lX-Wing Starfighter"
+          custom_model_data: 4
 
   seats:
     - name: "Pilot Seat"

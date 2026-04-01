@@ -21,12 +21,19 @@ vehicle:
       ammo_per_shot: 1
       cooldown: 0
       sound: vehicles.speederbike_shoot
-      spawn_bones:
-        - barrelLeft
-        - barrelRight
 
     movement_sound: vehicles.speederbike_drive
     movement_sound_time_in_ticks: 300
+
+  skins:
+    default: default
+    options:
+      default:
+        model_key: speederbike
+        permission: ""
+        item:
+          name: "&6&l74-Z Speeder Bike"
+          custom_model_data: 3
 
   seats:
     - name: "Pilot Seat"

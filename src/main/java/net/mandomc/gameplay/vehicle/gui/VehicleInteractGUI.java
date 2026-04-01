@@ -38,12 +38,13 @@ import java.util.UUID;
  * Layout (27-slot default):
  *  - All unused slots are filled with gray glass panes.
  *  - Each seat defined in the vehicle YAML occupies its configured slot.
- *  - The pick-up button is always placed at slot (guiSize - 5).
+ *  - The pick-up button is always placed at slot (guiSize - 4).
+ *  - The skin button is always placed at slot (guiSize - 6).
  */
 public class VehicleInteractGUI extends InventoryGUI {
 
     private static final Material FILLER_MATERIAL  = Material.GRAY_STAINED_GLASS_PANE;
-    private static final Material NO_ACCESS_MATERIAL = Material.BARRIER;
+    private static final Material PICKUP_MATERIAL = Material.BARRIER;
 
     private final Vehicle vehicle;
     private final Player viewer;
@@ -76,6 +77,7 @@ public class VehicleInteractGUI extends InventoryGUI {
     public void decorate(Player player) {
         fillWithGlass();
         addSeatButtons();
+        addSkinButton();
         addPickupButton();
         super.decorate(player);
     }
@@ -169,9 +171,9 @@ public class VehicleInteractGUI extends InventoryGUI {
         }
     }
 
-    /** Adds the pick-up button at the fixed slot (guiSize - 5). */
+    /** Adds the pick-up button at the fixed slot (guiSize - 4). */
     private void addPickupButton() {
-        int pickupSlot           = vehicle.getVehicleData().getGuiSize() - 5;
+        int pickupSlot           = vehicle.getVehicleData().getGuiSize() - 4;
         boolean isOwner          = viewer.getUniqueId().equals(vehicle.getOwnerUUID());
         boolean hasOtherRiders   = hasNonOwnerRiders();
 
@@ -193,8 +195,7 @@ public class VehicleInteractGUI extends InventoryGUI {
     }
 
     private ItemStack buildOwnerPickupItem(boolean hasOtherRiders) {
-        ItemStack base = vehicle.getVehicleData().getItem();
-        ItemStack item = base != null ? base.clone() : new ItemStack(Material.MINECART);
+        ItemStack item = new ItemStack(PICKUP_MATERIAL);
         ItemMeta meta  = item.getItemMeta();
         if (meta == null) return item;
 
@@ -209,12 +210,50 @@ public class VehicleInteractGUI extends InventoryGUI {
     }
 
     private ItemStack buildDisabledPickupItem() {
-        ItemStack item = new ItemStack(NO_ACCESS_MATERIAL);
+        ItemStack item = new ItemStack(PICKUP_MATERIAL);
         ItemMeta meta  = item.getItemMeta();
         if (meta == null) return item;
 
         meta.setDisplayName(ChatColor.GRAY + "You don't own this vehicle.");
         item.setItemMeta(meta);
+        return item;
+    }
+
+    private void addSkinButton() {
+        int skinSlot = vehicle.getVehicleData().getGuiSize() - 6;
+        boolean isOwner = viewer.getUniqueId().equals(vehicle.getOwnerUUID());
+
+        addButton(skinSlot, new InventoryButton()
+                .creator(p -> buildSkinItem())
+                .consumer(event -> {
+                    Player clicker = (Player) event.getWhoClicked();
+                    if (!isOwner) {
+                        clicker.sendMessage(LangManager.get("vehicles.owner-only-action"));
+                        return;
+                    }
+                    guiManager.openGUI(new VehicleSkinGUI(vehicle, clicker, guiManager), clicker);
+                }));
+    }
+
+    private ItemStack buildSkinItem() {
+        ItemStack item = vehicle.getVehicleData().getItem();
+        if (item == null) {
+            item = new ItemStack(Material.MINECART);
+        } else {
+            item = item.clone();
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            List<String> lore = new ArrayList<>();
+            lore.add(ChatColor.GRAY + "Click to change vehicle skin.");
+            String activeSkin = vehicle.getSelectedSkinId();
+            if (activeSkin != null && !activeSkin.isBlank()) {
+                lore.add(ChatColor.DARK_GRAY + "Active: " + ChatColor.LIGHT_PURPLE + activeSkin);
+            }
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
         return item;
     }
 

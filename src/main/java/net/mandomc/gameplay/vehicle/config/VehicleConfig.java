@@ -66,8 +66,11 @@ public class VehicleConfig {
         validateSection(vehicleId, config, "vehicle.stats");
         validateSection(vehicleId, config, "vehicle.systems");
         validateSection(vehicleId, config, "vehicle.seats");
+        validateSection(vehicleId, config, "vehicle.skins");
+        validateSection(vehicleId, config, "vehicle.skins.options");
         validateKey(vehicleId, config, "vehicle.display_name");
         validateKey(vehicleId, config, "vehicle.gui_size");
+        validateKey(vehicleId, config, "vehicle.skins.default");
     }
 
     private static void validateSection(String vehicleId, FileConfiguration config, String path) {

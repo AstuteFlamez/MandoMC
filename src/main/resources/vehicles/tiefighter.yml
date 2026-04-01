@@ -22,14 +22,20 @@ vehicle:
       burst: 3
       burst_interval: 3
       spread: 2
-      cooldown: 0
       sound: vehicles.tie_fighter_shoot
-      spawn_bones:
-        - barrelLeft
-        - barrelRight
 
     movement_sound: vehicles.tie_fighter_fly
     movement_sound_time_in_ticks: 420
+
+  skins:
+    default: default
+    options:
+      default:
+        model_key: tiefighter
+        permission: ""
+        item:
+          name: "&8&lTie Fighter"
+          custom_model_data: 2
 
   seats:
     - name: "Pilot Seat"

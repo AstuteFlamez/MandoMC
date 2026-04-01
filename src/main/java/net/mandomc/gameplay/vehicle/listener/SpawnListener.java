@@ -25,7 +25,9 @@ import net.mandomc.core.config.MainConfig;
 import net.mandomc.gameplay.vehicle.model.SeatConfig;
 import net.mandomc.gameplay.vehicle.model.Vehicle;
 import net.mandomc.gameplay.vehicle.model.VehicleData;
+import net.mandomc.gameplay.vehicle.model.VehicleSkinOption;
 import net.mandomc.gameplay.vehicle.config.VehicleConfigResolver;
+import net.mandomc.gameplay.vehicle.manager.VehicleSkinManager;
 
 import java.util.List;
 import net.mandomc.gameplay.vehicle.weapon.SpeederBike;
@@ -86,6 +88,7 @@ public class SpawnListener implements Listener {
         }
 
         VehicleData vehicleData = createVehicleData(item);
+        VehicleSkinOption activeSkin = VehicleSkinManager.resolveActiveSkin(item);
         WeaponSystem weaponSystem = createWeaponSystem(item);
 
         if (weaponSystem == null) {
@@ -96,6 +99,9 @@ public class SpawnListener implements Listener {
         List<SeatConfig> seats = VehicleConfigResolver.getSeats(item);
 
         Vehicle vehicle = new Vehicle(weaponSystem, vehicleData, uuid, itemId);
+        if (activeSkin != null) {
+            vehicle.setSelectedSkinId(activeSkin.id());
+        }
         vehicle.setSeats(seats);
 
         spawnVehicleEntities(player, world, location, vehicleData);
@@ -159,13 +165,19 @@ public class SpawnListener implements Listener {
     private VehicleData createVehicleData(ItemStack item) {
         double speed = VehicleConfigResolver.getSpeed(item);
         double scale = VehicleConfigResolver.getScale(item);
-        String modelKey = VehicleConfigResolver.getModelKey(item);
+        VehicleSkinOption activeSkin = VehicleSkinManager.resolveActiveSkin(item);
+        String modelKey = activeSkin != null
+                ? activeSkin.modelKey()
+                : VehicleConfigResolver.getModelKey(item);
         String movementSound = VehicleConfigResolver.getMovementSound(item);
         int movementSoundLength = VehicleConfigResolver.getMovementSoundLength(item);
         String displayName = VehicleConfigResolver.getDisplayName(item);
         int guiSize = VehicleConfigResolver.getGuiSize(item);
+        ItemStack vehicleItem = activeSkin != null
+                ? VehicleSkinManager.applySkinToItem(item, activeSkin)
+                : item.clone();
 
-        VehicleData data = new VehicleData(item, speed, scale, modelKey);
+        VehicleData data = new VehicleData(vehicleItem, speed, scale, modelKey);
         data.setMovementSound(movementSound);
         data.setMovementSoundLength(movementSoundLength);
         data.setDisplayName(displayName);
@@ -180,9 +192,10 @@ public class SpawnListener implements Listener {
      * @return the weapon system, or null if the model key is unrecognized
      */
     private WeaponSystem createWeaponSystem(ItemStack item) {
-        String modelKey = VehicleConfigResolver.getModelKey(item);
+        String vehicleId = VehicleConfigResolver.getVehicleId(item);
+        if (vehicleId == null) return null;
 
-        return switch (modelKey.toLowerCase()) {
+        return switch (vehicleId.toLowerCase()) {
             case "xwing" -> new XWing();
             case "tiefighter" -> new TieFighter();
             case "speederbike" -> new SpeederBike();

@@ -171,6 +171,10 @@ permissions:
     description: Allows managing lottery commands
     default: op
 
+  mandomc.vehicle.skin.*:
+    description: Grants access to all configured vehicle skins
+    default: op
+
   mmc.parkour.bypass-command-blocks:
     description: Allows bypassing parkour command block restrictions
     default: op

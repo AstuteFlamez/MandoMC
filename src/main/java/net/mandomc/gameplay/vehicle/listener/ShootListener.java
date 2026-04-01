@@ -37,7 +37,7 @@ public class ShootListener implements Listener {
                 .getMountManager()
                 .ifPresent(mountManager -> {
                     if (!mountManager.hasRiders()) return;
-                    vehicle.getWeaponSystem().shoot(vehicle);
+                    vehicle.getWeaponSystem().shoot(vehicle, player);
                 });
     }
 }

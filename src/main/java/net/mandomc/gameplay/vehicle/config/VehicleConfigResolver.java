@@ -3,6 +3,7 @@ package net.mandomc.gameplay.vehicle.config;
 import net.mandomc.gameplay.vehicle.VehicleRegistry;
 import net.mandomc.gameplay.vehicle.model.SeatConfig;
 import net.mandomc.gameplay.vehicle.model.SeatType;
+import net.mandomc.gameplay.vehicle.model.VehicleSkinOption;
 import net.mandomc.server.items.ItemUtils;
 import net.mandomc.server.items.config.ItemsConfig;
 
@@ -11,7 +12,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Resolves vehicle configuration values for a given item stack.
@@ -25,13 +28,19 @@ public class VehicleConfigResolver {
      * Returns the vehicle config for the given item, or null if unavailable.
      */
     private static FileConfiguration getVehicleConfig(ItemStack item) {
-        String itemId = ItemUtils.getItemId(item);
-        if (itemId == null) return null;
-
-        String vehicleId = VehicleRegistry.getVehicleId(itemId);
+        String vehicleId = getVehicleId(item);
         if (vehicleId == null) return null;
 
         return VehicleConfig.get(vehicleId);
+    }
+
+    /**
+     * Returns the resolved vehicle id for a vehicle item.
+     */
+    public static String getVehicleId(ItemStack item) {
+        String itemId = ItemUtils.getItemId(item);
+        if (itemId == null) return null;
+        return VehicleRegistry.getVehicleId(itemId);
     }
 
     /**
@@ -167,7 +176,7 @@ public class VehicleConfigResolver {
             int    slot     = getInt(map, "slot", 0);
             String skullUrl = getString(map, "skull_url", "");
             String typeRaw  = getString(map, "type", "PASSENGER");
-                String mountBone = getString(map, "mount_bone", "seat");
+            String mountBone = getString(map, "mount_bone", "seat");
             boolean gunner  = getBoolean(map, "gunner", false)
                     || getBoolean(map, "can_shoot", false);
 
@@ -189,6 +198,79 @@ public class VehicleConfigResolver {
         }
 
         return seats;
+    }
+
+    /**
+     * Returns the configured default skin id for this vehicle item.
+     */
+    public static String getDefaultSkinId(ItemStack item) {
+        FileConfiguration config = getVehicleConfig(item);
+        if (config == null) return "";
+        return config.getString("vehicle.skins.default", "");
+    }
+
+    /**
+     * Returns all configured skin options for this vehicle item, preserving order.
+     */
+    public static Map<String, VehicleSkinOption> getSkinOptions(ItemStack item) {
+        FileConfiguration config = getVehicleConfig(item);
+        if (config == null) return Map.of();
+
+        ConfigurationSection optionsSection = config.getConfigurationSection("vehicle.skins.options");
+        if (optionsSection == null) return Map.of();
+
+        Map<String, VehicleSkinOption> options = new LinkedHashMap<>();
+        for (String skinId : optionsSection.getKeys(false)) {
+            ConfigurationSection skinSection = optionsSection.getConfigurationSection(skinId);
+            if (skinSection == null) continue;
+
+            String modelKey = skinSection.getString("model_key", "");
+            if (modelKey.isBlank()) continue;
+
+            String permission = skinSection.getString("permission", "");
+            String itemName = skinSection.getString("item.name", "");
+            int customModelData = skinSection.getInt("item.custom_model_data", -1);
+
+            options.put(skinId, new VehicleSkinOption(
+                    skinId,
+                    modelKey,
+                    permission,
+                    itemName,
+                    customModelData
+            ));
+        }
+
+        return options;
+    }
+
+    /**
+     * Resolves a skin option by id for this vehicle item.
+     */
+    public static VehicleSkinOption getSkinOption(ItemStack item, String skinId) {
+        if (skinId == null || skinId.isBlank()) return null;
+        return getSkinOptions(item).get(skinId);
+    }
+
+    /**
+     * Resolves a valid skin for this vehicle item, falling back to default
+     * and then the first valid configured skin option.
+     */
+    public static VehicleSkinOption resolveSkinOption(ItemStack item, String preferredSkinId) {
+        Map<String, VehicleSkinOption> options = getSkinOptions(item);
+        if (options.isEmpty()) return null;
+
+        if (preferredSkinId != null && !preferredSkinId.isBlank()) {
+            VehicleSkinOption preferred = options.get(preferredSkinId);
+            if (preferred != null) return preferred;
+        }
+
+        String defaultId = getDefaultSkinId(item);
+        if (!defaultId.isBlank()) {
+            VehicleSkinOption defaultSkin = options.get(defaultId);
+            if (defaultSkin != null) return defaultSkin;
+        }
+
+        return options.values().iterator().next();
     }
 
     private static String getString(java.util.Map<?, ?> map, String key, String fallback) {

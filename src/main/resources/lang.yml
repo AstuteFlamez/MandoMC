@@ -201,8 +201,16 @@ vehicles:
   no-fuel:          "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &c⚠ This vehicle has no fuel."
   out-of-fuel:      "&c⚠ Vehicle out of fuel!"
   fully-repaired:   "&aVehicle fully repaired."
+  owner-only-action: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cOnly the vehicle owner can do that."
+  driver-owner-only: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cOnly the owner can drive this vehicle."
   seat-occupied:    "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cThat seat is already occupied by &f%player%&c."
   ejected:          "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou have been ejected from the vehicle."
+  skin:
+    no-permission: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou don't have permission for skin &f%skin%&c."
+    no-ride-permission: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou can't ride this skinned vehicle (&f%skin%&c)."
+    changed: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &aVehicle skin changed to &f%skin%&a."
+    cannot-change-occupied: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cCannot change skin while passengers are seated."
+    invalid: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cUnable to apply that vehicle skin."
   weapon:
     recharging:  "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cWeapon recharging: &e%seconds%s"
     out-of-ammo: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cOut of &f%ammo%&c!"

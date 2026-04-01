@@ -12,6 +12,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.entity.Projectile;
+
+import java.util.UUID;
 
 import net.mandomc.gameplay.vehicle.model.Vehicle;
 import net.mandomc.gameplay.vehicle.model.VehicleData;
@@ -45,34 +49,37 @@ public class DamageListener implements Listener {
     }
 
     /**
-     * Applies custom vehicle damage when a player attacks a vehicle.
+     * Applies custom vehicle damage for any entity-on-vehicle hit source.
      *
-     * Prevents the vehicle owner from damaging their own vehicle.
-     * Delegates damage calculation to VehicleHealthManager.
+     * Prevents owner self-damage and always routes damage into persistent
+     * vehicle item health so despawn/respawn cannot reset damage progress.
      *
      * @param event the entity damage by entity event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerDamage(EntityDamageByEntityEvent event) {
+    public void onVehicleDamage(EntityDamageByEntityEvent event) {
         Entity damaged = event.getEntity();
-        Entity damager = event.getDamager();
         Vehicle vehicle = VehicleModule.getVehicleByEntity(damaged.getUniqueId());
         if (vehicle == null) {
             return;
         }
-        VehicleData vehicleData = vehicle.getVehicleData();
+
+        event.setCancelled(true);
 
         Player owner = Bukkit.getPlayer(vehicle.getOwnerUUID());
-        if (owner != null && damager.getUniqueId().equals(owner.getUniqueId())) {
-            event.setCancelled(true);
+        if (owner == null) {
             return;
         }
 
-        if (!(damager instanceof Player player)) return;
+        UUID attackerUUID = resolveAttackerUUID(event.getDamager());
+        if (attackerUUID != null && attackerUUID.equals(owner.getUniqueId())) {
+            return;
+        }
 
         double damage = event.getFinalDamage();
+        VehicleData vehicleData = vehicle.getVehicleData();
         ItemStack vehicleItem = vehicleData.getItem();
-        VehicleHealthManager.damage(vehicleItem, damage, player);
+        VehicleHealthManager.damage(vehicleItem, damage, owner);
 
         if (damaged instanceof LivingEntity entity) {
             AttributeInstance maxHealth = entity.getAttribute(Attribute.MAX_HEALTH);
@@ -80,5 +87,18 @@ public class DamageListener implements Listener {
                 entity.setHealth(maxHealth.getValue());
             }
         }
+    }
+
+    private static UUID resolveAttackerUUID(Entity damager) {
+        if (damager instanceof Player player) {
+            return player.getUniqueId();
+        }
+        if (damager instanceof Projectile projectile) {
+            ProjectileSource shooter = projectile.getShooter();
+            if (shooter instanceof Entity shooterEntity) {
+                return shooterEntity.getUniqueId();
+            }
+        }
+        return damager != null ? damager.getUniqueId() : null;
     }
 }

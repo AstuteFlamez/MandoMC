@@ -15,6 +15,7 @@ public class Vehicle {
     private VehicleData vehicleData;
     private UUID owner;
     private String itemId;
+    private String selectedSkinId = "";
 
     /** Seat definitions loaded from YAML. */
     private List<SeatConfig> seats = new ArrayList<>();
@@ -117,6 +118,10 @@ public class Vehicle {
         return itemId;
     }
 
+    public String getSelectedSkinId() {
+        return selectedSkinId;
+    }
+
     public List<SeatConfig> getSeats() {
         return seats;
     }
@@ -135,6 +140,10 @@ public class Vehicle {
 
     public void setItemId(String itemId) {
         this.itemId = itemId.toLowerCase();
+    }
+
+    public void setSelectedSkinId(String selectedSkinId) {
+        this.selectedSkinId = selectedSkinId != null ? selectedSkinId : "";
     }
 
     public void setSeats(List<SeatConfig> seats) {

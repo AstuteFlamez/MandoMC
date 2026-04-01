@@ -6,10 +6,12 @@ import com.ticxo.modelengine.api.mount.controller.MountControllerTypes;
 import net.mandomc.core.LangManager;
 import net.mandomc.core.modules.server.VehicleModule;
 import net.mandomc.gameplay.fuel.FuelManager;
+import net.mandomc.gameplay.vehicle.config.VehicleConfigResolver;
 import net.mandomc.gameplay.vehicle.model.SeatConfig;
 import net.mandomc.gameplay.vehicle.model.SeatType;
 import net.mandomc.gameplay.vehicle.model.Vehicle;
 import net.mandomc.gameplay.vehicle.model.VehicleData;
+import net.mandomc.gameplay.vehicle.model.VehicleSkinOption;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -48,6 +50,19 @@ public class SeatManager {
      */
     public static void mountSeat(Player player, Vehicle vehicle, SeatConfig seat) {
         VehicleData data = vehicle.getVehicleData();
+        VehicleSkinOption activeSkin =
+                VehicleConfigResolver.resolveSkinOption(data.getItem(), vehicle.getSelectedSkinId());
+
+        if (!VehicleSkinManager.playerHasSkinPermission(player, activeSkin)) {
+            String skinName = activeSkin != null ? activeSkin.id() : "default";
+            player.sendMessage(LangManager.get("vehicles.skin.no-ride-permission", "%skin%", skinName));
+            return;
+        }
+
+        if (seat.type() == SeatType.DRIVER && !player.getUniqueId().equals(vehicle.getOwnerUUID())) {
+            player.sendMessage(LangManager.get("vehicles.driver-owner-only"));
+            return;
+        }
 
         // Fuel check
         int fuel = FuelManager.getCurrentFuel(data.getItem());
