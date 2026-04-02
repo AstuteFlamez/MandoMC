@@ -28,6 +28,8 @@ import java.util.List;
  */
 public class WarpsGUI extends InventoryGUI {
 
+    private static final String WARPS_TITLE = "&fĳ";
+
     private final GUIManager guiManager;
     private final WarpConfig warpConfig;
 
@@ -50,7 +52,7 @@ public class WarpsGUI extends InventoryGUI {
         return Bukkit.createInventory(
                 null,
                 warpConfig.getGuiSize(),
-                color(warpConfig.getGuiTitle())
+                color(WARPS_TITLE)
         );
     }
 
@@ -61,8 +63,6 @@ public class WarpsGUI extends InventoryGUI {
      */
     @Override
     public void decorate(Player player) {
-        fillBackground();
-
         ConfigurationSection warps = getWarpSection();
         if (warps == null) return;
 
@@ -81,40 +81,6 @@ public class WarpsGUI extends InventoryGUI {
 
         super.decorate(player);
     }
-
-    /**
-     * Fills every slot with a configured non-interactive background item.
-     */
-    private void fillBackground() {
-        ConfigurationSection section = warpConfig.getGuiFillerSection();
-
-        Material material = Material.matchMaterial(
-                section != null ? section.getString("material", "BLACK_STAINED_GLASS_PANE") : "BLACK_STAINED_GLASS_PANE"
-        );
-        ItemStack filler = new ItemStack(material == null ? Material.BLACK_STAINED_GLASS_PANE : material);
-
-        ItemMeta meta = filler.getItemMeta();
-        if (meta != null) {
-            meta.setDisplayName(color(section != null ? section.getString("name", " ") : " "));
-
-            List<String> lore = new ArrayList<>();
-            if (section != null) {
-                for (String line : section.getStringList("lore")) {
-                    lore.add(color(line));
-                }
-            }
-
-            meta.setLore(lore);
-            filler.setItemMeta(meta);
-        }
-
-        for (int i = 0; i < getInventory().getSize(); i++) {
-            addButton(i, new InventoryButton()
-                    .creator(p -> filler.clone())
-                    .consumer(event -> {}));
-        }
-    }
-
     /**
      * Builds the display item for a warp.
      */

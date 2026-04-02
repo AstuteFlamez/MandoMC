@@ -7,20 +7,6 @@ scheduler:
     start-warning-minute: 55
     start-minute: 0
 
-  messages:
-    current-event-ending:
-      - "&c&lEVENT ENDING SOON"
-      - "&7%event% ends in &c5 minutes&7."
-    next-event-warning:
-      - "&6&lEVENT STARTING SOON"
-      - "&7%event% starts in &65 minutes&7."
-    event-start:
-      - "&a&lEVENT STARTED"
-      - "&7%event% has begun!"
-    event-end:
-      - "&c&lEVENT ENDED"
-      - "&7%event% has ended."
-
 gui:
   title: "&8Server Events"
   size: 27

@@ -116,7 +116,7 @@ public final class ShopSellService {
 
     private static int findSellPrice(ItemStack item) {
         for (Shop shop : ShopManager.getAll().values()) {
-            for (ShopItem shopItem : shop.getItems().values()) {
+            for (ShopItem shopItem : shop.getItems()) {
                 if (shopItem.getSellPrice() <= 0) {
                     continue;
                 }

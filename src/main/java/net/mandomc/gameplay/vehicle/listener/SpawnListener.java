@@ -27,6 +27,7 @@ import net.mandomc.gameplay.vehicle.model.Vehicle;
 import net.mandomc.gameplay.vehicle.model.VehicleData;
 import net.mandomc.gameplay.vehicle.model.VehicleSkinOption;
 import net.mandomc.gameplay.vehicle.config.VehicleConfigResolver;
+import net.mandomc.gameplay.vehicle.manager.VehicleManager;
 import net.mandomc.gameplay.vehicle.manager.VehicleSkinManager;
 
 import java.util.List;
@@ -212,6 +213,7 @@ public class SpawnListener implements Listener {
         Pig entity = world.spawn(location, Pig.class);
         entity.setAI(false);
         entity.setGravity(true);
+        VehicleManager.applyFallingVelocity(entity);
         entity.setInvisible(true);
         entity.setInvulnerable(false);
         entity.setPersistent(true);

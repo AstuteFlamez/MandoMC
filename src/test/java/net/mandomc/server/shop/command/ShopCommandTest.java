@@ -52,7 +52,7 @@ class ShopCommandTest {
 
     @Test
     void selfOpenRequiresUsePermission() {
-        ShopManager.register("metals", new Shop("metals", "Metals", 27, null, Map.of()));
+        ShopManager.register("metals", new Shop("metals", List.of()));
         CapturingSender sender = new CapturingSender(true, Map.of());
         ShopCommand command = new ShopCommand(new GUIManager());
 
@@ -63,7 +63,7 @@ class ShopCommandTest {
 
     @Test
     void otherTargetRequiresOthersPermission() {
-        ShopManager.register("metals", new Shop("metals", "Metals", 27, null, Map.of()));
+        ShopManager.register("metals", new Shop("metals", List.of()));
         CapturingSender sender = new CapturingSender(true, Map.of("mandomc.shop.use", true));
         ShopCommand command = new ShopCommand(new GUIManager());
 
@@ -74,8 +74,8 @@ class ShopCommandTest {
 
     @Test
     void tabCompleteSuggestsShopIdsWhenPermitted() {
-        ShopManager.register("metals", new Shop("metals", "Metals", 27, null, Map.of()));
-        ShopManager.register("vehicles", new Shop("vehicles", "Vehicles", 27, null, Map.of()));
+        ShopManager.register("metals", new Shop("metals", List.of()));
+        ShopManager.register("vehicles", new Shop("vehicles", List.of()));
 
         CapturingSender sender = new CapturingSender(true, Map.of("mandomc.shop.use", true));
         ShopCommand command = new ShopCommand(new GUIManager());
@@ -87,7 +87,7 @@ class ShopCommandTest {
 
     @Test
     void tabCompleteReturnsEmptyWithoutPermissions() {
-        ShopManager.register("metals", new Shop("metals", "Metals", 27, null, Map.of()));
+        ShopManager.register("metals", new Shop("metals", List.of()));
 
         CapturingSender sender = new CapturingSender(true, Map.of());
         ShopCommand command = new ShopCommand(new GUIManager());

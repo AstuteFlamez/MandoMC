@@ -9,6 +9,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -79,7 +80,7 @@ public class VehicleManager {
         VehicleModule.unregisterVehicle(vehicle.getOwnerUUID());
 
         VehicleData data = vehicle.getVehicleData();
-        Entity entity = data.getEntity();
+        LivingEntity entity = data.getEntity();
 
         ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(entity);
         if (modeledEntity != null) modeledEntity.destroy();
@@ -102,7 +103,7 @@ public class VehicleManager {
         VehicleModule.unregisterVehicle(vehicle.getOwnerUUID());
 
         VehicleData data = vehicle.getVehicleData();
-        Entity entity = data.getEntity();
+        LivingEntity entity = data.getEntity();
         Location loc = entity.getLocation();
         World world = entity.getWorld();
 
@@ -177,18 +178,31 @@ public class VehicleManager {
     public static void dismountVehicle(Player player, Vehicle vehicle, ActiveModel model) {
         UUID uuid = player.getUniqueId();
         VehicleData data = vehicle.getVehicleData();
+        LivingEntity entity = data.getEntity();
 
         model.getMountManager().ifPresent(m -> m.dismountDriver());
 
         sound.remove(uuid);
         player.stopSound(data.getMovementSound());
 
-        data.getEntity().setAI(false);
-        data.getEntity().setGravity(true);
+        entity.setAI(false);
+        entity.setGravity(true);
+        applyFallingVelocity(entity);
 
         AnimationHandler handler = model.getAnimationHandler();
         handler.stopAnimation("mount");
         handler.playAnimation("dismount", 0.2, 0.2, 1, false);
+    }
+
+    /**
+     * Ensures an unoccupied vehicle starts falling immediately when airborne.
+     */
+    public static void applyFallingVelocity(Entity entity) {
+        if (entity == null || entity.isOnGround()) return;
+
+        Vector current = entity.getVelocity();
+        double downwardY = Math.min(current.getY(), -0.12D);
+        entity.setVelocity(new Vector(current.getX(), downwardY, current.getZ()));
     }
 
     /**

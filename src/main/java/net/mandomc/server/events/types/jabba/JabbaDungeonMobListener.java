@@ -2,6 +2,7 @@ package net.mandomc.server.events.types.jabba;
 
 import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
 import io.lumine.mythic.core.mobs.ActiveMob;
+import net.mandomc.MandoMC;
 import net.mandomc.server.events.EventManager;
 import net.mandomc.server.events.model.GameEvent;
 import net.mandomc.core.LangManager;
@@ -50,8 +51,21 @@ public class JabbaDungeonMobListener implements Listener {
         }
 
         if (mobName.equalsIgnoreCase("Rancor")) {
+            if (!dungeon.markCompletionPending()) return;
+
             Bukkit.broadcastMessage(LangManager.get("jabba.dungeon-complete"));
-            dungeon.cleanupDungeon();
+            GameEvent completedEvent = dungeon;
+            Bukkit.getScheduler().runTaskLater(
+                    MandoMC.getInstance(),
+                    () -> {
+                        GameEvent activeEvent = eventManager.getActiveEvent();
+                        if (activeEvent != completedEvent || !completedEvent.isRunning()) {
+                            return;
+                        }
+                        eventManager.forceEndActiveEvent(true);
+                    },
+                    100L
+            );
             return;
         }
 

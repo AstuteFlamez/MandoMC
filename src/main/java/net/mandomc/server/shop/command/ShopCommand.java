@@ -88,7 +88,7 @@ public class ShopCommand implements CommandExecutor, TabCompleter {
             target = (Player) sender;
         }
 
-        guiManager.openGUI(new ShopGUI(shop, guiManager), target);
+        guiManager.openGUI(new ShopGUI(shop, guiManager, 0), target);
     }
 
     @Override

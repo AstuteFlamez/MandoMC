@@ -23,52 +23,51 @@ public class ShopQuantityGUI extends InventoryGUI {
 
     private static final int SIZE = 54;
     private static final int MIN_AMOUNT = 1;
-    private static final int MAX_AMOUNT = 64;
+    private static final int SLOT_PREVIEW = 22;
+    private static final int SLOT_CONFIRM = 39;
+    private static final int SLOT_CANCEL = 41;
+    private static final int SLOT_BACK = SLOT_CANCEL + 8;
+    private static final int MODEL_ADD = 3;
+    private static final int MODEL_SUBTRACT = 4;
+    private static final int MODEL_ACTION = 5;
 
     private final Shop shop;
     private final ShopItem item;
     private final GUIManager guiManager;
+    private final int returnPage;
     private int amount = 1;
 
-    public ShopQuantityGUI(Shop shop, ShopItem item, GUIManager guiManager) {
+    public ShopQuantityGUI(Shop shop, ShopItem item, GUIManager guiManager, int returnPage) {
         this.shop = shop;
         this.item = item;
         this.guiManager = guiManager;
+        this.returnPage = returnPage;
     }
 
     @Override
     protected Inventory createInventory() {
-        return Bukkit.createInventory(null, SIZE, color("&8Purchase Selector"));
+        return Bukkit.createInventory(null, SIZE, color(quantityTitle(ShopGUI.SHOP_TITLE)));
     }
 
     @Override
     public void decorate(Player player) {
-        addFiller();
         addButtons(player);
         super.decorate(player);
     }
 
-    private void addFiller() {
-        InventoryButton filler = new InventoryButton()
-                .creator(p -> simpleItem(Material.GRAY_STAINED_GLASS_PANE, "&8 "))
-                .consumer(event -> event.setCancelled(true));
-
-        for (int i = 0; i < SIZE; i++) {
-            addButton(i, filler);
-        }
-    }
-
     private void addButtons(Player player) {
-        addButton(22, new InventoryButton()
+        addButton(SLOT_PREVIEW, new InventoryButton()
                 .creator(p -> buildPreviewItem())
                 .consumer(event -> event.setCancelled(true)));
 
-        addButton(20, deltaButton("-16", -16));
-        addButton(21, deltaButton("-1", -1));
-        addButton(23, deltaButton("+1", 1));
-        addButton(24, deltaButton("+16", 16));
+        addButton(18, deltaButton("-32", -32, MODEL_SUBTRACT));
+        addButton(19, deltaButton("-16", -16, MODEL_SUBTRACT));
+        addButton(20, deltaButton("-1", -1, MODEL_SUBTRACT));
+        addButton(24, deltaButton("+1", 1, MODEL_ADD));
+        addButton(25, deltaButton("+16", 16, MODEL_ADD));
+        addButton(26, deltaButton("+32", 32, MODEL_ADD));
 
-        addButton(39, new InventoryButton()
+        addButton(SLOT_CONFIRM, new InventoryButton()
                 .creator(p -> confirmButton())
                 .consumer(event -> {
                     if (!(event.getWhoClicked() instanceof Player clicker)) {
@@ -78,27 +77,34 @@ public class ShopQuantityGUI extends InventoryGUI {
                     clicker.closeInventory();
                 }));
 
-        addButton(41, new InventoryButton()
-                .creator(p -> simpleItem(Material.BARRIER, "&cCancel"))
+        addButton(SLOT_CANCEL, new InventoryButton()
+                .creator(p -> actionButton("&cCancel"))
                 .consumer(event -> {
                     if (!(event.getWhoClicked() instanceof Player clicker)) {
                         return;
                     }
-                    guiManager.openGUI(new ShopGUI(shop, guiManager), clicker);
+                    clicker.closeInventory();
+                }));
+
+        addButton(SLOT_BACK, new InventoryButton()
+                .creator(p -> actionButton("&cBack Button"))
+                .consumer(event -> {
+                    if (!(event.getWhoClicked() instanceof Player clicker)) {
+                        return;
+                    }
+                    guiManager.openGUI(new ShopGUI(shop, guiManager, returnPage), clicker);
                 }));
     }
 
-    private InventoryButton deltaButton(String text, int delta) {
-        boolean positive = delta > 0;
-        Material material = positive ? Material.LIME_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE;
-        String colorPrefix = positive ? "&a" : "&c";
+    private InventoryButton deltaButton(String text, int delta, int customModelData) {
+        String coloredText = delta > 0 ? "&a" + text : "&c" + text;
         return new InventoryButton()
-                .creator(p -> simpleItem(material, colorPrefix + text))
+                .creator(p -> modelButton(customModelData, coloredText, List.of(), Math.abs(delta)))
                 .consumer(event -> {
                     if (!(event.getWhoClicked() instanceof Player player)) {
                         return;
                     }
-                    amount = clamp(amount + delta);
+                    amount = clamp(amount + delta, maxSelectableAmount());
                     decorate(player);
                     player.updateInventory();
                 });
@@ -107,7 +113,7 @@ public class ShopQuantityGUI extends InventoryGUI {
     private ItemStack buildPreviewItem() {
         ItemStack base = ShopLoader.resolveItem(item.getType(), item.getId(), shop.getId(), item.getId());
         if (base == null) {
-            return simpleItem(Material.BARRIER, "&cUnavailable");
+            return modelButton(MODEL_ACTION, "&cUnavailable", List.of(), 1);
         }
 
         ItemStack preview = base.clone();
@@ -125,34 +131,51 @@ public class ShopQuantityGUI extends InventoryGUI {
     }
 
     private ItemStack confirmButton() {
-        ItemStack stack = new ItemStack(Material.GREEN_CONCRETE);
-        ItemMeta meta = stack.getItemMeta();
-        if (meta != null) {
-            meta.setDisplayName(color("&aConfirm Purchase"));
-            meta.setLore(List.of(
-                    color("&7Buy &f" + amount + "x &7item(s)"),
-                    color("&7Cost: &a$" + EconomyModule.format(amount * (double) item.getBuyPrice()))
-            ));
-            stack.setItemMeta(meta);
-        }
-        return stack;
+        return modelButton(MODEL_ACTION, "&aConfirm Purchase", List.of(
+                color("&7Buy &f" + amount + "x &7item(s)"),
+                color("&7Cost: &a$" + EconomyModule.format(amount * (double) item.getBuyPrice()))
+        ), 1);
     }
 
-    private static ItemStack simpleItem(Material material, String name) {
-        ItemStack stack = new ItemStack(material);
+    private static ItemStack actionButton(String name) {
+        return modelButton(MODEL_ACTION, name, List.of(), 1);
+    }
+
+    private static ItemStack modelButton(int customModelData, String name, List<String> lore, int amount) {
+        ItemStack stack = new ItemStack(Material.FLINT);
+        stack.setAmount(Math.max(1, Math.min(64, amount)));
         ItemMeta meta = stack.getItemMeta();
         if (meta != null) {
             meta.setDisplayName(color(name));
+            meta.setCustomModelData(customModelData);
+            if (!lore.isEmpty()) {
+                meta.setLore(lore);
+            }
             stack.setItemMeta(meta);
         }
         return stack;
     }
 
-    private static int clamp(int value) {
-        return Math.max(MIN_AMOUNT, Math.min(MAX_AMOUNT, value));
+    private int maxSelectableAmount() {
+        ItemStack base = ShopLoader.resolveItem(item.getType(), item.getId(), shop.getId(), item.getId());
+        if (base == null) {
+            return MIN_AMOUNT;
+        }
+        return Math.max(MIN_AMOUNT, base.getMaxStackSize());
+    }
+
+    private static int clamp(int value, int max) {
+        return Math.max(MIN_AMOUNT, Math.min(max, value));
     }
 
     private static String color(String text) {
         return LangManager.colorize(text);
+    }
+
+    private static String quantityTitle(String shopTitle) {
+        if (shopTitle == null || shopTitle.isEmpty()) {
+            return "ĭ";
+        }
+        return shopTitle.substring(0, shopTitle.length() - 1) + "ĭ";
     }
 }

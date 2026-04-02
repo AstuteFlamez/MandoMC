@@ -115,6 +115,19 @@ events:
   broadcast:
     started-title:   "&a&lEVENT STARTED"
     ended-title:     "&c&lEVENT ENDED"
+    scheduler:
+      current-event-ending:
+        - "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &c&lEVENT ENDING SOON"
+        - "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7%event% ends in &c5 minutes&7."
+      next-event-warning:
+        - "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &6&lEVENT STARTING SOON"
+        - "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7%event% starts in &65 minutes&7."
+      event-start:
+        - "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &a&lEVENT STARTED"
+        - "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7%event% has begun!"
+      event-end:
+        - "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &c&lEVENT ENDED"
+        - "&e&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7%event% has ended."
 
   menu:
     current:

@@ -93,6 +93,26 @@ commands:
     aliases: [warps, w]
     permission: mandomc.warp.use
 
+  class:
+    description: Select your combat class
+    usage: /class <jedi|sith|mandalorian>
+    permission: mandomc.abilities.class
+
+  ability:
+    description: Open ability tree and manage ability levels
+    usage: /ability <tree|bindgui|unlock|level|info|settokens>
+    permission: mandomc.abilities.use
+
+  bind:
+    description: Bind abilities to hotbar slots
+    usage: /bind <slot|clear> ...
+    permission: mandomc.abilities.bind
+
+  skilltoken:
+    description: Admin skill token testing command
+    usage: /skilltoken <get|give|drop> ...
+    permission: mandomc.abilities.tokens.admin
+
   # -------------------------
   # Internal Commands
   # -------------------------
@@ -170,6 +190,30 @@ permissions:
   mandomc.lottery.admin:
     description: Allows managing lottery commands
     default: op
+
+  mandomc.abilities.use:
+    description: Allows using base ability commands and GUIs
+    default: true
+
+  mandomc.abilities.class:
+    description: Allows switching combat classes
+    default: true
+
+  mandomc.abilities.bind:
+    description: Allows command-based ability binding
+    default: true
+
+  mandomc.abilities.admin:
+    description: Allows ability admin shortcuts
+    default: op
+
+  mandomc.abilities.tokens.admin:
+    description: Allows skill token get/give/drop admin commands
+    default: op
+
+  mandomc.abilities.cooldown.bypass:
+    description: Bypasses ability cooldown restrictions
+    default: false
 
   mandomc.vehicle.skin.*:
     description: Grants access to all configured vehicle skins

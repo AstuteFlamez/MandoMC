@@ -14,6 +14,11 @@ import net.mandomc.core.services.EconomyService;
 import net.mandomc.core.services.ServiceRegistry;
 import net.mandomc.core.storage.DatabaseService;
 import net.mandomc.gameplay.lottery.command.LotteryCommand;
+import net.mandomc.gameplay.abilities.command.AbilityCommand;
+import net.mandomc.gameplay.abilities.command.BindCommand;
+import net.mandomc.gameplay.abilities.command.ClassCommand;
+import net.mandomc.gameplay.abilities.command.SkillTokenCommand;
+import net.mandomc.gameplay.abilities.service.AbilityService;
 import net.mandomc.gameplay.warp.command.WarpCommand;
 import net.mandomc.server.discord.command.DiscordCommand;
 import net.mandomc.server.discord.service.DatabaseLinkService;
@@ -62,6 +67,7 @@ public class CommandModule implements Module {
         GUIManager guiManager = registry.get(GUIManager.class);
         EventManager eventManager = registry.get(EventManager.class);
         ParkourManager parkourManager = registry.get(ParkourManager.class);
+        AbilityService abilityService = registry.get(AbilityService.class);
 
         WarpConfig warpConfig = registry.get(WarpConfig.class);
         safe("warp", new WarpCommand(guiManager, warpConfig));
@@ -97,6 +103,16 @@ public class CommandModule implements Module {
 
         KeyCommand keyCmd = new KeyCommand(plugin);
         safe("key", keyCmd, keyCmd);
+
+        ClassCommand classCommand = new ClassCommand(abilityService);
+        AbilityCommand abilityCommand = new AbilityCommand(guiManager, abilityService);
+        BindCommand bindCommand = new BindCommand(abilityService);
+        SkillTokenCommand skillTokenCommand = new SkillTokenCommand(abilityService);
+
+        safe("class", classCommand, classCommand);
+        safe("ability", abilityCommand, abilityCommand);
+        safe("bind", bindCommand, bindCommand);
+        safe("skilltoken", skillTokenCommand, skillTokenCommand);
     }
 
     @Override

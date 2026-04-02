@@ -185,7 +185,7 @@ public class EventManager {
             case END_WARNING -> {
                 if (activeEvent != null && activeEvent.isRunning()) {
                     state = EventState.ENDING_SOON;
-                    broadcastConfiguredMessage("scheduler.messages.current-event-ending", activeEvent.getDisplayName());
+                    broadcastLangMessage("events.broadcast.scheduler.current-event-ending", activeEvent.getDisplayName());
                 }
             }
             case FORCE_END -> {
@@ -195,7 +195,7 @@ public class EventManager {
                 queueNextRandomEventIfNeeded();
                 if (queuedEvent != null) {
                     state = EventState.STARTING_SOON;
-                    broadcastConfiguredMessage("scheduler.messages.next-event-warning", queuedEvent.getDisplayName());
+                    broadcastLangMessage("events.broadcast.scheduler.next-event-warning", queuedEvent.getDisplayName());
                 } else {
                     state = EventState.IDLE;
                 }
@@ -206,7 +206,7 @@ public class EventManager {
                 }
                 if (queuedEvent != null) {
                     state = EventState.STARTING_SOON;
-                    broadcastConfiguredMessage("scheduler.messages.next-event-warning", queuedEvent.getDisplayName());
+                    broadcastLangMessage("events.broadcast.scheduler.next-event-warning", queuedEvent.getDisplayName());
                 }
             }
             case START -> {
@@ -239,7 +239,7 @@ public class EventManager {
 
         if (broadcast) {
             broadcastTitle(LangManager.get("events.broadcast.started-title"), activeEvent.getDisplayName());
-            broadcastConfiguredMessage("scheduler.messages.event-start", activeEvent.getDisplayName());
+            broadcastLangMessage("events.broadcast.scheduler.event-start", activeEvent.getDisplayName());
         }
 
         return true;
@@ -329,7 +329,7 @@ public class EventManager {
 
         if (broadcast) {
             broadcastTitle(LangManager.get("events.broadcast.ended-title"), displayName);
-            broadcastConfiguredMessage("scheduler.messages.event-end", displayName);
+            broadcastLangMessage("events.broadcast.scheduler.event-end", displayName);
         }
     }
 
@@ -351,7 +351,7 @@ public class EventManager {
 
         if (broadcast) {
             broadcastTitle(LangManager.get("events.broadcast.started-title"), activeEvent.getDisplayName());
-            broadcastConfiguredMessage("scheduler.messages.event-start", activeEvent.getDisplayName());
+            broadcastLangMessage("events.broadcast.scheduler.event-start", activeEvent.getDisplayName());
         }
     }
 
@@ -383,10 +383,10 @@ public class EventManager {
         return ChronoUnit.SECONDS.between(now, nextHour);
     }
 
-    public void broadcastConfiguredMessage(String path, String eventName) {
-        List<String> lines = color(config.getStringList(path));
+    public void broadcastLangMessage(String path, String eventName) {
+        List<String> lines = LangManager.getList(path, "%event%", eventName);
         for (String line : lines) {
-            Bukkit.broadcastMessage(line.replace("%event%", eventName));
+            Bukkit.broadcastMessage(line);
         }
     }
 

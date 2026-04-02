@@ -1,17 +1,7 @@
 permission: ''
 
-gui:
-  title: "&6ѕᴀᴘʟɪɴɢ ѕʜᴏᴘ"
-  size: 36
-
-  filler:
-    material: GRAY_STAINED_GLASS_PANE
-    name: " "
-
 items:
   carrot:
-    slot: 10
-
     type: VANILLA
     id: "SPRUCE_SAPLING"
     amount: 1
@@ -20,8 +10,6 @@ items:
     sell_price: 2
 
   wheat_seed:
-    slot: 12
-
     type: VANILLA
     id: "BIRCH_SAPLING"
     amount: 1
@@ -30,8 +18,6 @@ items:
     sell_price: 2
 
   pumpkin_seed:
-    slot: 14
-
     type: VANILLA
     id: "JUNGLE_SAPLING"
     amount: 1
@@ -40,8 +26,7 @@ items:
     sell_price: 2
 
   melon_seed:
-    slot: 16
-    
+
     type: VANILLA
     id: "ACACIA_SAPLING"
     amount: 1
@@ -50,8 +35,6 @@ items:
     sell_price: 2
 
   beetroot_seed:
-    slot: 19
-
     type: VANILLA
     id: "DARK_OAK_SAPLING"
     amount: 1
@@ -60,8 +43,6 @@ items:
     sell_price: 2
 
   sugar_cane:
-    slot: 21
-
     type: VANILLA
     id: "OAK_SAPLING"
     amount: 1
@@ -70,8 +51,6 @@ items:
     sell_price: 2
 
   cactus:
-    slot: 23
-
     type: VANILLA
     id: "CHERRY_SAPLING"
     amount: 1
@@ -80,8 +59,6 @@ items:
     sell_price: 2
 
   pale_sapling:
-    slot: 25
-
     type: VANILLA
     id: "PALE_OAK_SAPLING"
     amount: 1

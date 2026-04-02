@@ -14,18 +14,10 @@ import java.util.Set;
  * Wraps {@code warps.yml}. Warp entries live under the {@code warps:} root key.
  */
 public class WarpConfig extends BaseConfig {
-    private static final String DEFAULT_GUI_TITLE = "&4&lMandoMC Warps";
     private static final int DEFAULT_GUI_SIZE = 54;
 
     public WarpConfig(Plugin plugin) {
         super(plugin, "warps.yml");
-    }
-
-    /**
-     * Returns the configured GUI title for /warp menus.
-     */
-    public String getGuiTitle() {
-        return getString("gui.title", DEFAULT_GUI_TITLE);
     }
 
     /**
@@ -38,13 +30,6 @@ public class WarpConfig extends BaseConfig {
             return DEFAULT_GUI_SIZE;
         }
         return configured;
-    }
-
-    /**
-     * Returns the optional filler section for the warp GUI.
-     */
-    public ConfigurationSection getGuiFillerSection() {
-        return getSection("gui.filler");
     }
 
     /**

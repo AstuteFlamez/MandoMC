@@ -25,7 +25,8 @@ class PluginYmlConsistencyTest {
         Set<String> expected = Set.of(
                 "shop", "sell", "link", "discord", "bounty", "lottery",
                 "key", "get", "give", "drop", "recipes",
-                "mmcreload", "test", "event", "warp", "parkourfinish"
+                "mmcreload", "test", "event", "warp", "parkourfinish",
+                "class", "ability", "bind", "skilltoken"
         );
 
         assertEquals(expected, commands.keySet(), "plugin.yml command keys drifted from Java wiring");
@@ -40,6 +41,12 @@ class PluginYmlConsistencyTest {
                 "mandomc.admin",
                 "mandomc.admin.reload",
                 "mandomc.admin.test",
+                "mandomc.abilities.admin",
+                "mandomc.abilities.bind",
+                "mandomc.abilities.class",
+                "mandomc.abilities.cooldown.bypass",
+                "mandomc.abilities.tokens.admin",
+                "mandomc.abilities.use",
                 "mandomc.bounty.gui",
                 "mandomc.event.admin",
                 "mandomc.items.drop",

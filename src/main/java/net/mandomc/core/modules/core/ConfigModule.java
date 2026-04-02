@@ -11,6 +11,7 @@ import net.mandomc.core.config.MainConfig;
 import net.mandomc.core.module.Module;
 import net.mandomc.core.services.ServiceRegistry;
 import net.mandomc.gameplay.bounty.config.BountyConfig;
+import net.mandomc.gameplay.abilities.config.AbilityDefinitionConfig;
 import net.mandomc.gameplay.lightsaber.config.LightsaberConfig;
 import net.mandomc.gameplay.lottery.config.LotteryConfig;
 import net.mandomc.gameplay.warp.config.WarpConfig;
@@ -115,6 +116,10 @@ public class ConfigModule implements Module {
         ShopConfig shopConfig = new ShopConfig(plugin);
         shopConfig.reload();
         registry.register(ShopConfig.class, shopConfig);
+
+        AbilityDefinitionConfig abilityDefinitionConfig = new AbilityDefinitionConfig(plugin);
+        abilityDefinitionConfig.reload();
+        registry.register(AbilityDefinitionConfig.class, abilityDefinitionConfig);
 
         plugin.getLogger().info("All configs loaded successfully.");
     }

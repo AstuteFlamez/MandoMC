@@ -1,17 +1,7 @@
 permission: ''
 
-gui:
-  title: "&6ᴀᴍᴍᴏ ѕʜᴏᴘ"
-  size: 27
-
-  filler:
-    material: GRAY_STAINED_GLASS_PANE
-    name: " "
-
 items:
   plasma_cells:
-    slot: 11
-
     type: WEAPON_MECHANICS_AMMO
     id: "Standard_Plasma_Cells"
     amount: 1
@@ -20,8 +10,6 @@ items:
     sell_price: 2
   
   ion_cells:
-    slot: 12
-
     type: WEAPON_MECHANICS_AMMO
     id: "Ionized_Energy_Cells"
     amount: 1
@@ -30,8 +18,6 @@ items:
     sell_price: 10
 
   tibanna_cells:
-    slot: 13
-
     type: WEAPON_MECHANICS_AMMO
     id: "Tibanna_Gas_Cells"
     amount: 1
@@ -40,8 +26,6 @@ items:
     sell_price: 10
 
   power_cells:
-    slot: 14
-
     type: WEAPON_MECHANICS_AMMO
     id: "Precision_Power_Cells"
     amount: 1
@@ -50,8 +34,6 @@ items:
     sell_price: -1
 
   proton_torpedos:
-    slot: 15
-
     type: WEAPON_MECHANICS_AMMO
     id: "Proton_Torpedo"
     amount: 1

@@ -4,6 +4,7 @@ import net.mandomc.core.LangManager;
 import net.mandomc.core.guis.GUIManager;
 import net.mandomc.core.guis.InventoryButton;
 import net.mandomc.core.guis.InventoryGUI;
+import net.mandomc.core.modules.core.EconomyModule;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -22,45 +23,77 @@ import net.mandomc.server.shop.ShopPurchaseHandler;
 /**
  * Inventory GUI for a single shop.
  *
- * Fills all slots with the configured filler, then places each {@link ShopItem}
- * button into its configured slot.
+ * Uses a fixed title and paginated content slots to place each {@link ShopItem}
+ * in config order.
  */
 public class ShopGUI extends InventoryGUI {
 
+    public static final String SHOP_TITLE = "&fĬ";
+
+    private static final int[] CONTENT_SLOTS = {
+            10, 11, 12, 13, 14, 15, 16,
+            19, 20, 21, 22, 23, 24, 25,
+            28, 29, 30, 31, 32, 33, 34
+    };
+    private static final int SLOT_BACK = 18;
+    private static final int SLOT_NEXT = 26;
+    private static final int SLOT_BALANCE = 49;
+    private static final int NEXT_MODEL_DATA = 1;
+    private static final int BACK_MODEL_DATA = 2;
+    private static final int BALANCE_MODEL_DATA = 5;
+
     private final Shop shop;
     private final GUIManager guiManager;
+    private final int page;
 
     public ShopGUI(Shop shop, GUIManager guiManager) {
+        this(shop, guiManager, 0);
+    }
+
+    public ShopGUI(Shop shop, GUIManager guiManager, int page) {
         this.shop = shop;
         this.guiManager = guiManager;
+        this.page = page;
     }
 
     @Override
     protected Inventory createInventory() {
-        return Bukkit.createInventory(null, shop.getSize(), color(shop.getTitle()));
+        return Bukkit.createInventory(null, shop.getSize(), color(SHOP_TITLE));
     }
 
     @Override
     public void decorate(Player player) {
 
-        // Fill all slots with the filler button (non-interactive)
-        if (shop.getFiller() != null) {
-            InventoryButton fillerButton = new InventoryButton()
-                    .creator(p -> shop.getFiller().clone())
-                    .consumer(event -> event.setCancelled(true));
+        int[] usableSlots = usableContentSlots();
+        int pageSize = usableSlots.length;
+        int totalItems = shop.getItems().size();
+        int currentPage = clampPage(page, totalItems, pageSize);
+        int start = currentPage * pageSize;
+        int end = Math.min(start + pageSize, totalItems);
 
-            for (int i = 0; i < shop.getSize(); i++) {
-                addButton(i, fillerButton);
-            }
+        int contentIndex = 0;
+        for (int i = start; i < end; i++) {
+            int slot = usableSlots[contentIndex++];
+            ShopItem item = shop.getItems().get(i);
+            addButton(slot, createItemButton(item, currentPage));
         }
 
-        // Place each shop item button
-        shop.getItems().forEach((slot, item) -> addButton(slot, createItemButton(item)));
+        if (SLOT_BACK < shop.getSize() && currentPage > 0) {
+            addButton(SLOT_BACK, createPageButton(currentPage - 1, BACK_MODEL_DATA));
+        }
+
+        if (SLOT_NEXT < shop.getSize() && end < totalItems) {
+            addButton(SLOT_NEXT, createPageButton(currentPage + 1, NEXT_MODEL_DATA));
+        }
+
+        if (SLOT_BALANCE < shop.getSize()) {
+            addButton(SLOT_BALANCE, createBalanceButton());
+        }
 
         super.decorate(player);
     }
 
-    private InventoryButton createItemButton(ShopItem item) {
+    private InventoryButton createItemButton(ShopItem item, int currentPage) {
 
         // Resolved at GUI-open time — WM is guaranteed loaded by then
         ItemStack icon = buildDisplayItem(item);
@@ -77,9 +110,74 @@ public class ShopGUI extends InventoryGUI {
                     }
 
                     if (event.isLeftClick()) {
-                        guiManager.openGUI(new ShopQuantityGUI(shop, item, guiManager), player);
+                        guiManager.openGUI(new ShopQuantityGUI(shop, item, guiManager, currentPage), player);
                     }
                 });
+    }
+
+    private InventoryButton createPageButton(int targetPage, int customModelData) {
+        return new InventoryButton()
+                .creator(p -> {
+                    ItemStack button = new ItemStack(Material.FLINT);
+                    ItemMeta meta = button.getItemMeta();
+                    if (meta != null) {
+                        String name = customModelData == NEXT_MODEL_DATA ? "&9Next Page" : "&9Previous Page";
+                        meta.setDisplayName(color(name));
+                        meta.setCustomModelData(customModelData);
+                        button.setItemMeta(meta);
+                    }
+                    return button;
+                })
+                .consumer(event -> {
+                    if (!(event.getWhoClicked() instanceof Player player)) {
+                        return;
+                    }
+                    guiManager.openGUI(new ShopGUI(shop, guiManager, targetPage), player);
+                });
+    }
+
+    private InventoryButton createBalanceButton() {
+        return new InventoryButton()
+                .creator(p -> {
+                    ItemStack button = new ItemStack(Material.FLINT);
+                    ItemMeta meta = button.getItemMeta();
+                    if (meta != null) {
+                        meta.setCustomModelData(BALANCE_MODEL_DATA);
+                        meta.setDisplayName(color("&aBalance: &f$" + EconomyModule.format(EconomyModule.getBalance(p))));
+                        button.setItemMeta(meta);
+                    }
+                    return button;
+                })
+                .consumer(event -> event.setCancelled(true));
+    }
+
+    private int[] usableContentSlots() {
+        List<Integer> slots = new ArrayList<>();
+        for (int slot : CONTENT_SLOTS) {
+            if (slot < shop.getSize()) {
+                slots.add(slot);
+            }
+        }
+        if (slots.isEmpty()) {
+            return new int[0];
+        }
+
+        int[] result = new int[slots.size()];
+        for (int i = 0; i < slots.size(); i++) {
+            result[i] = slots.get(i);
+        }
+        return result;
+    }
+
+    private static int clampPage(int requestedPage, int totalItems, int pageSize) {
+        if (pageSize <= 0) {
+            return 0;
+        }
+        int maxPage = totalItems == 0 ? 0 : (totalItems - 1) / pageSize;
+        if (requestedPage < 0) {
+            return 0;
+        }
+        return Math.min(requestedPage, maxPage);
     }
 
     /**

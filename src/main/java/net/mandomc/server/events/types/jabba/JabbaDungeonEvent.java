@@ -44,6 +44,7 @@ public class JabbaDungeonEvent extends AbstractGameEvent {
     private final Map<Integer, List<UUID>> aliveMobs = new HashMap<>();
 
     private JabbaDungeonState state;
+    private boolean completionPending;
 
     /**
      * Creates the Jabba dungeon event.
@@ -62,6 +63,7 @@ public class JabbaDungeonEvent extends AbstractGameEvent {
 
         state = new JabbaDungeonState();
         state.setCurrentRoom(1);
+        completionPending = false;
 
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "opendoor 15");
 
@@ -73,6 +75,7 @@ public class JabbaDungeonEvent extends AbstractGameEvent {
     protected void onEnd(EventManager manager) {
         Bukkit.broadcastMessage(LangManager.get("jabba.dungeon-closed"));
         cleanupDungeon();
+        completionPending = false;
     }
 
     /**
@@ -319,5 +322,16 @@ public class JabbaDungeonEvent extends AbstractGameEvent {
      */
     public JabbaDungeonState getState() {
         return state;
+    }
+
+    /**
+     * Marks this dungeon run as waiting for delayed completion.
+     *
+     * @return true when this call marked pending for the first time
+     */
+    public boolean markCompletionPending() {
+        if (completionPending) return false;
+        completionPending = true;
+        return true;
     }
 }

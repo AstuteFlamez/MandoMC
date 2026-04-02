@@ -3,6 +3,7 @@ package net.mandomc.core.guis;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 
@@ -74,6 +75,18 @@ public class GUIManager {
         InventoryHandler handler = this.activeInventories.get(event.getInventory());
         if (handler != null) {
             handler.onOpen(event);
+        }
+    }
+
+    /**
+     * Handles inventory drag events and delegates to the appropriate handler.
+     *
+     * @param event the inventory drag event
+     */
+    public void handleDrag(InventoryDragEvent event) {
+        InventoryHandler handler = this.activeInventories.get(event.getInventory());
+        if (handler != null) {
+            handler.onDrag(event);
         }
     }
 

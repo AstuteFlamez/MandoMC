@@ -1,0 +1,65 @@
+abilities:
+  mando_jetpack:
+    class: mandalorian
+    display: "&6Jetpack (Scaffold)"
+    kind: none
+    slot: 0
+    activationSlot: 1
+    bindable: false
+    requires: []
+    levels:
+      1:
+        tokenCost: 1
+        cooldownSeconds: 0.0
+        jumpMultiplier: 0.0
+        pushPower: 0.0
+        pushRange: 0.0
+        pushRadius: 0.0
+      2:
+        tokenCost: 2
+        cooldownSeconds: 0.0
+        jumpMultiplier: 0.0
+        pushPower: 0.0
+        pushRange: 0.0
+        pushRadius: 0.0
+
+  mando_wrist_rocket:
+    class: mandalorian
+    display: "&6Wrist Rocket (Scaffold)"
+    kind: none
+    slot: 1
+    activationSlot: -1
+    bindable: true
+    requires: [mando_jetpack]
+    levels:
+      1:
+        tokenCost: 1
+        cooldownSeconds: 0.0
+        jumpMultiplier: 0.0
+        pushPower: 0.0
+        pushRange: 0.0
+        pushRadius: 0.0
+      2:
+        tokenCost: 2
+        cooldownSeconds: 0.0
+        jumpMultiplier: 0.0
+        pushPower: 0.0
+        pushRange: 0.0
+        pushRadius: 0.0
+
+  mando_grapple:
+    class: mandalorian
+    display: "&6Grapple (Scaffold)"
+    kind: none
+    slot: 9
+    activationSlot: -1
+    bindable: true
+    requires: [mando_jetpack]
+    levels:
+      1:
+        tokenCost: 1
+        cooldownSeconds: 0.0
+        jumpMultiplier: 0.0
+        pushPower: 0.0
+        pushRange: 0.0
+        pushRadius: 0.0

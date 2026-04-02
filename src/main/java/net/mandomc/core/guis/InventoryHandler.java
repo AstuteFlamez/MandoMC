@@ -2,6 +2,7 @@ package net.mandomc.core.guis;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
 /**
@@ -25,6 +26,14 @@ public interface InventoryHandler {
      * @param event the inventory open event
      */
     void onOpen(InventoryOpenEvent event);
+
+    /**
+     * Called when an inventory drag occurs.
+     *
+     * @param event the inventory drag event
+     */
+    default void onDrag(InventoryDragEvent event) {
+    }
 
     /**
      * Called when an inventory is closed.

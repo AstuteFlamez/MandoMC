@@ -96,6 +96,41 @@ public final class LangManager {
         return value;
     }
 
+    /**
+     * Returns a translated list of messages for the given key.
+     * Supports {@code @other.key} list references and colors each line.
+     *
+     * @param key dot-separated lang key pointing to a string list
+     * @return coloured list; missing keys return a single fallback line
+     */
+    public static List<String> getList(String key) {
+        List<String> lines = resolveList(key, new ArrayDeque<>());
+        if (lines == null) {
+            MandoMC.getInstance().getLogger().warning("[LangManager] Missing lang list key: " + key);
+            return List.of(colorize("&cMissing lang list key: " + key));
+        }
+        return colorize(lines);
+    }
+
+    /**
+     * Returns a translated list with placeholder substitution applied to each line.
+     *
+     * @param key dot-separated lang key pointing to a string list
+     * @param replacements alternating placeholder / value pairs
+     * @return coloured list with placeholders substituted
+     */
+    public static List<String> getList(String key, String... replacements) {
+        List<String> lines = getList(key);
+        for (int i = 0; i + 1 < replacements.length; i += 2) {
+            String placeholder = replacements[i];
+            String value = replacements[i + 1];
+            lines = lines.stream()
+                    .map(line -> line.replace(placeholder, value))
+                    .toList();
+        }
+        return lines;
+    }
+
     public static String colorize(String text) {
         if (text == null) {
             return "";
@@ -132,6 +167,37 @@ public final class LangManager {
 
         stack.addLast(key);
         String resolved = resolveRaw(targetKey, stack);
+        stack.removeLast();
+        return resolved;
+    }
+
+    private static List<String> resolveList(String key, Deque<String> stack) {
+        List<String> direct = lang.getStringList(key);
+        if (!direct.isEmpty()) {
+            return direct;
+        }
+
+        String raw = lang.getString(key);
+        if (raw == null) {
+            return null;
+        }
+        if (!raw.startsWith("@")) {
+            return List.of(raw);
+        }
+
+        String targetKey = raw.substring(1).trim();
+        if (targetKey.isEmpty()) {
+            MandoMC.getInstance().getLogger().warning("[LangManager] Invalid lang list reference in key: " + key);
+            return null;
+        }
+
+        if (stack.contains(key)) {
+            MandoMC.getInstance().getLogger().warning("[LangManager] Circular lang list reference detected: " + String.join(" -> ", stack) + " -> " + key);
+            return null;
+        }
+
+        stack.addLast(key);
+        List<String> resolved = resolveList(targetKey, stack);
         stack.removeLast();
         return resolved;
     }
