@@ -136,12 +136,12 @@ events:
       none-lore:  "&7There is no event running."
       state:      "&7State: &f%state%"
     next:
-      title:        "&6Next Event"
+      title:        "&9Next Event"
       queued:       "&7Queued: &f%event%"
       not-selected: "Not selected"
       starts-in:    "&7Starts in: &f%time%"
     chances:
-      title: "&bEvent Chances"
+      title: "&6Event Chances"
       entry: "&7%event% &f- %chance%%"
       empty: "&7No eligible events."
     state:
@@ -386,8 +386,8 @@ items:
   dropped:             "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &7Dropped &f%id% &7×&f%amount%&7."
   invalid-amount:      "&4&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cInvalid amount: &7%value%"
   browser:
-    title-categories:  "&8Item Browser - Categories"
-    title-items:       "&8Item Browser - Items"
+    title-categories:  "&fItem Browser - Categories"
+    title-items:       "&fItem Browser - Items"
     select-category:   "&eSelect a category"
     all-name:          "All Items"
     back-categories:   "&cBack to Categories"

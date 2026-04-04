@@ -38,7 +38,7 @@ public class AbilityBindSlotSelectGUI extends InventoryGUI {
 
     @Override
     protected Inventory createInventory() {
-        return Bukkit.createInventory(null, SIZE, ChatColor.DARK_GREEN + "Select Ability - Slot " + (hotbarSlot + 1));
+        return Bukkit.createInventory(null, SIZE, ChatColor.WHITE + "Select Ability - Slot " + (hotbarSlot + 1));
     }
 
     @Override

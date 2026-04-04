@@ -6,6 +6,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 
 import net.mandomc.server.events.EventManager;
+import net.mandomc.server.events.gui.EventMenu;
 
 public class EventMenuListener implements Listener {
 
@@ -16,11 +17,12 @@ public class EventMenuListener implements Listener {
     }
 
     private boolean isEventMenu(String title) {
-        if (title == null || manager.getConfig() == null) {
+        if (title == null) {
             return false;
         }
-        String configuredTitle = manager.color(manager.getConfig().getString("gui.title", "&8Server Events"));
-        return title.equals(configuredTitle);
+        String idleTitle = manager.color(EventMenu.eventMenuTitle(false));
+        String activeTitle = manager.color(EventMenu.eventMenuTitle(true));
+        return title.equals(idleTitle) || title.equals(activeTitle);
     }
 
     @EventHandler

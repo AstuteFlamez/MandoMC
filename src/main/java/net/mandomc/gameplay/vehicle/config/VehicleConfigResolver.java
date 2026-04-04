@@ -23,6 +23,7 @@ import java.util.Map;
  * then exposes typed accessors for stats, system properties, and seats.
  */
 public class VehicleConfigResolver {
+    private static final int VEHICLE_GUI_SIZE = 54;
 
     /**
      * Returns the vehicle config for the given item, or null if unavailable.
@@ -141,12 +142,10 @@ public class VehicleConfigResolver {
      * Returns the inventory size for the vehicle interact GUI.
      *
      * @param item the vehicle item
-     * @return slot count (multiple of 9), defaulting to 27
+     * @return slot count (always 54)
      */
     public static int getGuiSize(ItemStack item) {
-        FileConfiguration config = getVehicleConfig(item);
-        if (config == null) return 27;
-        return config.getInt("vehicle.gui_size", 27);
+        return VEHICLE_GUI_SIZE;
     }
 
     /**

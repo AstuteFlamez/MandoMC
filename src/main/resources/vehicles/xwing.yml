@@ -43,7 +43,7 @@ vehicle:
 
   seats:
     - name: "Pilot Seat"
-      slot: 11
+      slot: 13
       type: DRIVER
       gunner: true
       mount_bone: seat

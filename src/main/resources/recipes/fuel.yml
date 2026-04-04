@@ -1,7 +1,0 @@
-name: "§6§lFuel"
-icon: "rhydonium_canister"
-slot: 14
-gui-size: 27
-items:
-  rhydonium_canister: 10
-  rhydonium_barrel: 11

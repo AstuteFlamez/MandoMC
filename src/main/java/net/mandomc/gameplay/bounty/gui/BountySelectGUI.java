@@ -55,7 +55,7 @@ public class BountySelectGUI extends InventoryGUI {
 
     @Override
     protected Inventory createInventory() {
-        return Bukkit.createInventory(null, 54, color("&c&lSelect Target"));
+        return Bukkit.createInventory(null, 54, color("&f&lSelect Target"));
     }
 
     @Override

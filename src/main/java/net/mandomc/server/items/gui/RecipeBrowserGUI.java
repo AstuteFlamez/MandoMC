@@ -12,104 +12,69 @@ import net.mandomc.core.guis.InventoryButton;
 import net.mandomc.core.guis.InventoryGUI;
 import net.mandomc.server.items.ItemRegistry;
 import net.mandomc.server.items.config.RecipeCategoryConfig;
-import net.mandomc.server.items.config.RecipeCategoryConfig.RecipeCategoryDefinition;
 import net.mandomc.server.items.RecipeRegistry;
+import net.mandomc.server.shop.gui.ShopGUI;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Recipe browser root/category GUI using core GUI system.
+ * Recipe browser GUI using ordered entries from recipes.yml.
  */
 public class RecipeBrowserGUI extends InventoryGUI {
-
-    private static final String ROOT_TITLE = "§8Recipes";
-    private static final int ROOT_SIZE = 27;
+    private static final int SIZE = 54;
+    private static final int SLOT_INFO = 49;
+    private static final int SLOT_PREVIOUS = 48;
+    private static final int SLOT_NEXT = 50;
+    private static final int MODEL_BLANK = 5;
+    private static final int MODEL_PREVIOUS = 2;
+    private static final int MODEL_NEXT = 1;
+    private static final int[] CONTENT_SLOTS = {
+            10, 11, 12, 13, 14, 15, 16,
+            19, 20, 21, 22, 23, 24, 25,
+            28, 29, 30, 31, 32, 33, 34
+    };
 
     private final GUIManager guiManager;
-    private final String categoryId;
+    private final int page;
 
-    private RecipeBrowserGUI(GUIManager guiManager, String categoryId) {
+    private RecipeBrowserGUI(GUIManager guiManager, int page) {
         this.guiManager = guiManager;
-        this.categoryId = categoryId;
+        this.page = Math.max(0, page);
     }
 
     public static RecipeBrowserGUI root(GUIManager guiManager) {
-        return new RecipeBrowserGUI(guiManager, null);
+        return new RecipeBrowserGUI(guiManager, 0);
     }
 
-    public static RecipeBrowserGUI category(GUIManager guiManager, String categoryId) {
-        return new RecipeBrowserGUI(guiManager, categoryId);
+    public static RecipeBrowserGUI page(GUIManager guiManager, int page) {
+        return new RecipeBrowserGUI(guiManager, page);
     }
 
     @Override
     protected Inventory createInventory() {
-        String title = ROOT_TITLE;
-        int size = ROOT_SIZE;
-        RecipeCategoryDefinition category = getCategory();
-        if (category != null) {
-            title = "§8Recipes » " + category.name();
-            size = normalizeSize(category.guiSize());
-        }
-        return Bukkit.createInventory(null, size, title);
+        return Bukkit.createInventory(null, SIZE, title());
     }
 
     @Override
     public void decorate(Player player) {
-        fillBackground();
-
-        RecipeCategoryDefinition category = getCategory();
-        if (category == null) {
-            decorateRoot();
-        } else {
-            decorateCategory(category);
+        List<String> orderedIds = new ArrayList<>();
+        for (String id : RecipeCategoryConfig.getOrderedRecipeIds()) {
+            if (RecipeRegistry.hasRecipe(id)) {
+                orderedIds.add(id);
+            }
         }
 
-        super.decorate(player);
-    }
+        int pageSize = CONTENT_SLOTS.length;
+        int maxPage = orderedIds.isEmpty() ? 0 : (orderedIds.size() - 1) / pageSize;
+        int currentPage = Math.min(page, maxPage);
+        int start = currentPage * pageSize;
+        int end = Math.min(start + pageSize, orderedIds.size());
 
-    private void decorateRoot() {
-        List<RecipeCategoryDefinition> categories = RecipeCategoryConfig.getSortedCategories();
-        for (RecipeCategoryDefinition category : categories) {
-            int slot = category.slot();
-            if (slot < 0 || slot >= getInventory().getSize()) {
-                continue;
-            }
-
-            addButton(slot, new InventoryButton()
-                    .creator(p -> categoryIcon(category))
-                    .consumer(event -> {
-                        Player clicker = (Player) event.getWhoClicked();
-                        guiManager.openGUI(category(guiManager, category.id()), clicker);
-                    }));
-        }
-
-    }
-
-    private void decorateCategory(RecipeCategoryDefinition category) {
-        int backSlot = getInventory().getSize() - 1;
-        addButton(backSlot, new InventoryButton()
-                .creator(p -> createItem(Material.ARROW, "§cBack"))
-                .consumer(event -> {
-                    Player clicker = (Player) event.getWhoClicked();
-                    guiManager.openGUI(root(guiManager), clicker);
-                }));
-
-        List<Map.Entry<String, Integer>> items = new ArrayList<>(category.itemSlots().entrySet());
-        items.sort(Map.Entry.comparingByValue());
-
-        for (Map.Entry<String, Integer> entry : items) {
-            String itemId = entry.getKey();
-            int slot = entry.getValue();
-
-            if (!RecipeRegistry.hasRecipe(itemId)) {
-                continue;
-            }
-            if (slot < 0 || slot >= getInventory().getSize()) {
-                continue;
-            }
-
+        int slotIndex = 0;
+        for (int i = start; i < end; i++) {
+            int slot = CONTENT_SLOTS[slotIndex++];
+            String itemId = orderedIds.get(i);
             ItemStack item = ItemRegistry.get(itemId);
 
             addButton(slot, new InventoryButton()
@@ -117,54 +82,74 @@ public class RecipeBrowserGUI extends InventoryGUI {
                     .consumer(event -> {
                         Player clicker = (Player) event.getWhoClicked();
                         guiManager.openGUI(
-                                RecipeViewerGUI.of(guiManager, itemId, () -> category(guiManager, category.id())),
+                                RecipeViewerGUI.of(guiManager, itemId, () -> page(guiManager, currentPage)),
                                 clicker
                         );
                     }));
         }
-    }
 
-    private RecipeCategoryDefinition getCategory() {
-        if (categoryId == null) {
-            return null;
-        }
-        return RecipeCategoryConfig.getCategory(categoryId);
-    }
+        addButton(SLOT_INFO, new InventoryButton()
+                .creator(p -> createInfoItem())
+                .consumer(event -> {}));
 
-    private void fillBackground() {
-        ItemStack pane = createItem(Material.GRAY_STAINED_GLASS_PANE, " ");
-        for (int i = 0; i < getInventory().getSize(); i++) {
-            addButton(i, new InventoryButton()
-                    .creator(player -> pane)
-                    .consumer(event -> {}));
-        }
-    }
-
-    private static int normalizeSize(int value) {
-        if (value < 9) return 9;
-        if (value > 54) return 54;
-        return (value / 9) * 9;
-    }
-
-    private static ItemStack categoryIcon(RecipeCategoryDefinition category) {
-        ItemStack base = ItemRegistry.get(category.icon());
-
-        if (base == null) {
-            Material material = Material.matchMaterial(category.icon());
-            if (material != null) {
-                base = new ItemStack(material);
-            } else {
-                base = new ItemStack(Material.BARRIER);
-            }
+        if (currentPage > 0) {
+            addButton(SLOT_PREVIOUS, new InventoryButton()
+                    .creator(p -> createNavItem("§9Previous Page", MODEL_PREVIOUS))
+                    .consumer(event -> guiManager.openGUI(page(guiManager, currentPage - 1), player)));
         }
 
-        ItemStack display = base.clone();
-        ItemMeta meta = display.getItemMeta();
+        if (end < orderedIds.size()) {
+            addButton(SLOT_NEXT, new InventoryButton()
+                    .creator(p -> createNavItem("§9Next Page", MODEL_NEXT))
+                    .consumer(event -> guiManager.openGUI(page(guiManager, currentPage + 1), player)));
+        }
+
+        super.decorate(player);
+    }
+
+    private static String title() {
+        String base = removeGlyphOccurrences(ShopGUI.SHOP_TITLE.substring(0, ShopGUI.SHOP_TITLE.length() - 1), '', 11);
+        return base + "§fį";
+    }
+
+    private static ItemStack createInfoItem() {
+        ItemStack item = new ItemStack(Material.FLINT);
+        ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            meta.setDisplayName(category.name());
-            display.setItemMeta(meta);
+            meta.setCustomModelData(MODEL_BLANK);
+            meta.setDisplayName("§b§lRecipe Guide");
+            meta.setLore(List.of(
+                    "§7Not sure how to find an item?",
+                    "§fRead the item's lore §7for clues."
+            ));
+            item.setItemMeta(meta);
         }
-        return display;
+        return item;
+    }
+
+    private static ItemStack createNavItem(String name, int modelData) {
+        ItemStack item = new ItemStack(Material.FLINT);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(name);
+            meta.setCustomModelData(modelData);
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+
+    private static String removeGlyphOccurrences(String text, char glyph, int removeCount) {
+        StringBuilder sb = new StringBuilder(text.length());
+        int removed = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (c == glyph && removed < removeCount) {
+                removed++;
+                continue;
+            }
+            sb.append(c);
+        }
+        return sb.toString();
     }
 
     private static ItemStack createItem(Material material, String name) {

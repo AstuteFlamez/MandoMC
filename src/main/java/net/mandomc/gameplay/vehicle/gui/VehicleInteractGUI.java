@@ -9,6 +9,7 @@ import net.mandomc.gameplay.vehicle.manager.VehicleManager;
 import net.mandomc.gameplay.vehicle.model.SeatConfig;
 import net.mandomc.gameplay.vehicle.model.Vehicle;
 import net.mandomc.gameplay.vehicle.model.VehicleData;
+import net.mandomc.server.shop.gui.ShopGUI;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -43,8 +44,10 @@ import java.util.UUID;
  */
 public class VehicleInteractGUI extends InventoryGUI {
 
-    private static final Material FILLER_MATERIAL  = Material.GRAY_STAINED_GLASS_PANE;
-    private static final Material PICKUP_MATERIAL = Material.BARRIER;
+    private static final int GUI_SIZE = 54;
+    private static final String VEHICLE_TITLE = ShopGUI.SHOP_TITLE.substring(0, ShopGUI.SHOP_TITLE.length() - 1) + "Ķ";
+    private static final Material PICKUP_MATERIAL = Material.FLINT;
+    private static final int PICKUP_MODEL_DATA = 5;
 
     private final Vehicle vehicle;
     private final Player viewer;
@@ -65,17 +68,11 @@ public class VehicleInteractGUI extends InventoryGUI {
 
     @Override
     protected Inventory createInventory() {
-        VehicleData data  = vehicle.getVehicleData();
-        String rawTitle   = data.getDisplayName();
-        String title      = LangManager.colorize(rawTitle.isBlank() ? "&fVehicle" : rawTitle);
-        int size          = data.getGuiSize();
-
-        return Bukkit.createInventory(null, size, title);
+        return Bukkit.createInventory(null, GUI_SIZE, LangManager.colorize(VEHICLE_TITLE));
     }
 
     @Override
     public void decorate(Player player) {
-        fillWithGlass();
         addSeatButtons();
         addSkinButton();
         addPickupButton();
@@ -85,23 +82,6 @@ public class VehicleInteractGUI extends InventoryGUI {
     // -------------------------------------------------------------------------
     // Building blocks
     // -------------------------------------------------------------------------
-
-    /** Fills every slot with a silent gray glass pane. */
-    private void fillWithGlass() {
-        ItemStack filler = new ItemStack(FILLER_MATERIAL);
-        ItemMeta meta    = filler.getItemMeta();
-        if (meta != null) {
-            meta.setDisplayName(" ");
-            filler.setItemMeta(meta);
-        }
-
-        int size = vehicle.getVehicleData().getGuiSize();
-        for (int i = 0; i < size; i++) {
-            addButton(i, new InventoryButton()
-                    .creator(p -> filler)
-                    .consumer(event -> {}));
-        }
-    }
 
     /** Adds one button per seat defined in the vehicle config. */
     private void addSeatButtons() {
@@ -173,7 +153,7 @@ public class VehicleInteractGUI extends InventoryGUI {
 
     /** Adds the pick-up button at the fixed slot (guiSize - 4). */
     private void addPickupButton() {
-        int pickupSlot           = vehicle.getVehicleData().getGuiSize() - 4;
+        int pickupSlot           = GUI_SIZE - 4;
         boolean isOwner          = viewer.getUniqueId().equals(vehicle.getOwnerUUID());
         boolean hasOtherRiders   = hasNonOwnerRiders();
 
@@ -199,6 +179,7 @@ public class VehicleInteractGUI extends InventoryGUI {
         ItemMeta meta  = item.getItemMeta();
         if (meta == null) return item;
 
+        meta.setCustomModelData(PICKUP_MODEL_DATA);
         meta.setDisplayName(ChatColor.RED + "Pick Up Vehicle");
         List<String> lore = new ArrayList<>();
         if (hasOtherRiders) {
@@ -214,13 +195,14 @@ public class VehicleInteractGUI extends InventoryGUI {
         ItemMeta meta  = item.getItemMeta();
         if (meta == null) return item;
 
+        meta.setCustomModelData(PICKUP_MODEL_DATA);
         meta.setDisplayName(ChatColor.GRAY + "You don't own this vehicle.");
         item.setItemMeta(meta);
         return item;
     }
 
     private void addSkinButton() {
-        int skinSlot = vehicle.getVehicleData().getGuiSize() - 6;
+        int skinSlot = GUI_SIZE - 6;
         boolean isOwner = viewer.getUniqueId().equals(vehicle.getOwnerUUID());
 
         addButton(skinSlot, new InventoryButton()

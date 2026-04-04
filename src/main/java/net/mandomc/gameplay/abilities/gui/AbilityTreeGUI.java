@@ -38,7 +38,7 @@ public class AbilityTreeGUI extends InventoryGUI {
 
     @Override
     protected Inventory createInventory() {
-        return Bukkit.createInventory(null, SIZE, ChatColor.DARK_AQUA + "Abilities Tree");
+        return Bukkit.createInventory(null, SIZE, ChatColor.WHITE + "Abilities Tree");
     }
 
     @Override

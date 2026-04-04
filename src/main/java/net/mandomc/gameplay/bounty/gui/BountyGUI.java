@@ -11,7 +11,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Sound;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -24,10 +23,8 @@ import net.mandomc.core.guis.InventoryButton;
 import net.mandomc.core.guis.InventoryGUI;
 import net.mandomc.core.modules.core.EconomyModule;
 import net.mandomc.gameplay.bounty.model.Bounty;
-import net.mandomc.gameplay.bounty.config.BountyConfig;
 import net.mandomc.gameplay.bounty.BountyStorage;
-import net.mandomc.gameplay.bounty.BountyShowcaseManager;
-import net.mandomc.gameplay.bounty.model.BountyEntry;
+import net.mandomc.server.shop.gui.ShopGUI;
 
 /**
  * GUI displaying all active bounties.
@@ -37,15 +34,21 @@ import net.mandomc.gameplay.bounty.model.BountyEntry;
  */
 public class BountyGUI extends InventoryGUI {
 
+    private static final String BOUNTY_TITLE = ShopGUI.SHOP_TITLE.substring(0, ShopGUI.SHOP_TITLE.length() - 1) + "Ĳ";
+    private static final int SLOT_INFO = 49;
+    private static final int SLOT_PREVIOUS = 48;
+    private static final int SLOT_NEXT = 50;
+    private static final int MODEL_NEXT = 1;
+    private static final int MODEL_PREVIOUS = 2;
+    private static final int MODEL_BLANK = 5;
+
     private final GUIManager guiManager;
     private final int page;
 
     private static final int[] CONTENT_SLOTS = {
-            0, 1, 2, 3, 4, 5, 6, 7, 8,
-            9, 10, 11, 12, 13, 14, 15, 16, 17,
-            18, 19, 20, 21, 22, 23, 24, 25, 26,
-            27, 28, 29, 30, 31, 32, 33, 34, 35,
-            36, 37, 38, 39, 40, 41, 42, 43, 44
+            10, 11, 12, 13, 14, 15, 16,
+            19, 20, 21, 22, 23, 24, 25,
+            28, 29, 30, 31, 32, 33, 34
     };
 
     /**
@@ -70,34 +73,14 @@ public class BountyGUI extends InventoryGUI {
 
     @Override
     protected Inventory createInventory() {
-        ConfigurationSection cfg = BountyConfig.get().getConfigurationSection("bounty.gui");
-
-        if (cfg == null) {
-            return Bukkit.createInventory(null, 54, "Bounties");
-        }
-
-        return Bukkit.createInventory(
-                null,
-                cfg.getInt("size", 54),
-                color(cfg.getString("title", "&c&lBounties"))
-        );
+        return Bukkit.createInventory(null, 54, color(BOUNTY_TITLE));
     }
 
     @Override
     public void decorate(Player player) {
-        fillBackground();
-
         List<Bounty> sorted = BountyStorage.getAll().stream()
                 .sorted(Comparator.comparingDouble(Bounty::getTotal).reversed())
                 .collect(Collectors.toList());
-
-        if (sorted.isEmpty()) {
-            addButton(22, new InventoryButton()
-                    .creator(p -> createStatusItem(Material.BARRIER, "&cNo Active Bounties", "&7There are no active bounty targets."))
-                    .consumer(event -> {}));
-            super.decorate(player);
-            return;
-        }
 
         int pageSize = CONTENT_SLOTS.length;
         int maxPage = (sorted.size() - 1) / pageSize;
@@ -112,21 +95,19 @@ public class BountyGUI extends InventoryGUI {
             addButton(slot, createBountyButton(sorted.get(i), currentPage));
         }
 
-        addButton(49, new InventoryButton()
-                .creator(p -> createStatusItem(Material.PAPER,
-                        "&ePage " + (currentPage + 1) + "&7/&e" + (maxPage + 1),
-                        "&7Showing " + (start + 1) + "-&f" + end + "&7 of &f" + sorted.size()))
+        addButton(SLOT_INFO, new InventoryButton()
+                .creator(p -> createInfoItem())
                 .consumer(event -> {}));
 
         if (currentPage > 0) {
-            addButton(45, new InventoryButton()
-                    .creator(p -> createStatusItem(Material.ARROW, "&e&l<< Previous", "&7Go to page " + currentPage))
+            addButton(SLOT_PREVIOUS, new InventoryButton()
+                    .creator(p -> createNavItem("&9Previous Page", MODEL_PREVIOUS))
                     .consumer(event -> guiManager.openGUI(new BountyGUI(guiManager, currentPage - 1), player)));
         }
 
         if (end < sorted.size()) {
-            addButton(53, new InventoryButton()
-                    .creator(p -> createStatusItem(Material.ARROW, "&e&lNext >>", "&7Go to page " + (currentPage + 2)))
+            addButton(SLOT_NEXT, new InventoryButton()
+                    .creator(p -> createNavItem("&9Next Page", MODEL_NEXT))
                     .consumer(event -> guiManager.openGUI(new BountyGUI(guiManager, currentPage + 1), player)));
         }
 
@@ -147,25 +128,6 @@ public class BountyGUI extends InventoryGUI {
                 .creator(player -> buildBountyItem(bounty))
                 .consumer(event -> {
                     Player clicker = (Player) event.getWhoClicked();
-
-                    if (bounty.hasEntry(clicker.getUniqueId())) {
-                        BountyEntry entry = bounty.getEntries().get(clicker.getUniqueId());
-                        EconomyModule.deposit(clicker, entry.getAmount());
-                        bounty.removeEntry(clicker.getUniqueId());
-
-                        if (bounty.isEmpty()) {
-                            BountyStorage.remove(bounty.getTarget());
-                        }
-
-                        BountyStorage.save();
-                        BountyShowcaseManager.update();
-
-                        clicker.sendMessage(LangManager.get("bounties.refunded"));
-                        clicker.playSound(clicker.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1.2f);
-                        guiManager.openGUI(new BountyGUI(guiManager, currentPage), clicker);
-                        return;
-                    }
-
                     Location loc = bounty.getLastKnownLocation();
 
                     if (loc == null) {
@@ -221,31 +183,6 @@ public class BountyGUI extends InventoryGUI {
     }
 
     /**
-     * Fills all GUI slots with a filler item from config.
-     */
-    private void fillBackground() {
-        ConfigurationSection section = BountyConfig.get().getConfigurationSection("bounty.filler");
-
-        String materialName = section == null ? "BLACK_STAINED_GLASS_PANE" : section.getString("material", "BLACK_STAINED_GLASS_PANE");
-        Material mat = Material.matchMaterial(materialName);
-        ItemStack filler = new ItemStack(mat == null ? Material.BLACK_STAINED_GLASS_PANE : mat);
-
-        ItemMeta meta = filler.getItemMeta();
-        if (meta != null) {
-            String name = section == null ? " " : section.getString("name", " ");
-            meta.setDisplayName(color(name));
-            meta.setLore(section == null ? new ArrayList<>() : section.getStringList("lore"));
-            filler.setItemMeta(meta);
-        }
-
-        for (int i = 0; i < getInventory().getSize(); i++) {
-            addButton(i, new InventoryButton()
-                    .creator(player -> filler)
-                    .consumer(event -> {}));
-        }
-    }
-
-    /**
      * Creates a generic status/navigation item.
      *
      * @param material icon material
@@ -261,6 +198,33 @@ public class BountyGUI extends InventoryGUI {
             List<String> lore = new ArrayList<>();
             lore.add(color(loreLine));
             meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+
+    private ItemStack createInfoItem() {
+        ItemStack item = new ItemStack(Material.FLINT);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setCustomModelData(MODEL_BLANK);
+            meta.setDisplayName(color("&eBounty Info"));
+            List<String> lore = new ArrayList<>();
+            lore.add(color("&7Use &f/bounty place <player>"));
+            lore.add(color("&7to place a bounty target."));
+            lore.add(color("&7Click a head to view last known location."));
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+
+    private ItemStack createNavItem(String name, int modelData) {
+        ItemStack item = new ItemStack(Material.FLINT);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setCustomModelData(modelData);
+            meta.setDisplayName(color(name));
             item.setItemMeta(meta);
         }
         return item;

@@ -23,8 +23,8 @@ public class VehicleData {
     /** Human-readable name used as the title of the vehicle interact GUI. */
     private String displayName = "";
 
-    /** Number of slots in the vehicle interact GUI (must be a multiple of 9). */
-    private int guiSize = 27;
+    /** Number of slots in the vehicle interact GUI (hardcoded to 54). */
+    private int guiSize = 54;
 
     public VehicleData(ItemStack item, double speed, double scale, String modelKey) {
         this.item = item;

@@ -37,7 +37,7 @@ public class AbilityBindGUI extends InventoryGUI {
 
     @Override
     protected Inventory createInventory() {
-        return Bukkit.createInventory(null, SIZE, ChatColor.DARK_PURPLE + "Ability Binds");
+        return Bukkit.createInventory(null, SIZE, ChatColor.WHITE + "Ability Binds");
     }
 
     @Override

@@ -1,6 +1,7 @@
 package net.mandomc.server.items.gui;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -76,9 +77,10 @@ public class ItemBrowserGUI extends InventoryGUI {
 
     @Override
     protected Inventory createInventory() {
-        String title = mode == Mode.CATEGORIES
+        String rawTitle = mode == Mode.CATEGORIES
                 ? LangManager.get("items.browser.title-categories")
                 : LangManager.get("items.browser.title-items");
+        String title = ChatColor.WHITE + ChatColor.stripColor(rawTitle);
         return Bukkit.createInventory(null, SIZE, title);
     }
 

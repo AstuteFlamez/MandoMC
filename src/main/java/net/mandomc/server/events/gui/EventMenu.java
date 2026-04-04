@@ -12,10 +12,13 @@ import net.mandomc.server.events.model.EventDefinition;
 import net.mandomc.server.events.EventManager;
 import net.mandomc.server.events.model.GameEvent;
 import net.mandomc.server.events.model.EventState;
+import net.mandomc.server.shop.gui.ShopGUI;
 
 import java.util.ArrayList;
 
 public class EventMenu {
+
+    private static final int BLANK_MODEL_DATA = 5;
 
     private final EventManager manager;
 
@@ -24,17 +27,15 @@ public class EventMenu {
     }
 
     public void open(Player player) {
-        String title = manager.color(manager.getConfig().getString("gui.title", "&8Server Events"));
+        String title = manager.color(eventMenuTitle(manager.getActiveEvent() != null));
         int size = manager.getConfig().getInt("gui.size", 27);
 
         Inventory inv = Bukkit.createInventory(null, size, title);
 
-        Material filler = Material.matchMaterial(manager.getConfig().getString("gui.filler", "GRAY_STAINED_GLASS_PANE"));
-        if (filler == null) filler = Material.GRAY_STAINED_GLASS_PANE;
-
-        ItemStack fillerItem = new ItemStack(filler);
+        ItemStack fillerItem = new ItemStack(Material.FLINT);
         ItemMeta fillerMeta = fillerItem.getItemMeta();
         if (fillerMeta != null) {
+            fillerMeta.setCustomModelData(BLANK_MODEL_DATA);
             fillerMeta.setDisplayName(" ");
             fillerItem.setItemMeta(fillerMeta);
         }
@@ -50,14 +51,19 @@ public class EventMenu {
         player.openInventory(inv);
     }
 
+    public static String eventMenuTitle(boolean hasActiveEvent) {
+        String base = ShopGUI.SHOP_TITLE;
+        return base.substring(0, base.length() - 1) + (hasActiveEvent ? "ĵ" : "Ĵ");
+    }
+
     private ItemStack buildCurrentEventItem() {
         GameEvent active = manager.getActiveEvent();
 
-        Material mat = active == null ? Material.BARRIER : Material.EMERALD_BLOCK;
-        ItemStack item = new ItemStack(mat);
+        ItemStack item = new ItemStack(Material.FLINT);
         ItemMeta meta = item.getItemMeta();
 
         if (meta != null) {
+            meta.setCustomModelData(BLANK_MODEL_DATA);
             meta.setDisplayName(active == null
                     ? LangManager.get("events.menu.current.none-title")
                     : LangManager.get("events.menu.current.title"));
@@ -80,11 +86,11 @@ public class EventMenu {
     private ItemStack buildNextEventItem() {
         GameEvent queued = manager.getQueuedEvent();
 
-        Material mat = queued == null ? Material.CLOCK : Material.NETHER_STAR;
-        ItemStack item = new ItemStack(mat);
+        ItemStack item = new ItemStack(Material.FLINT);
         ItemMeta meta = item.getItemMeta();
 
         if (meta != null) {
+            meta.setCustomModelData(BLANK_MODEL_DATA);
             meta.setDisplayName(LangManager.get("events.menu.next.title"));
             ArrayList<String> lore = new ArrayList<>();
 
@@ -103,10 +109,11 @@ public class EventMenu {
     }
 
     private ItemStack buildChanceItem() {
-        ItemStack item = new ItemStack(Material.PAPER);
+        ItemStack item = new ItemStack(Material.FLINT);
         ItemMeta meta = item.getItemMeta();
 
         if (meta != null) {
+            meta.setCustomModelData(BLANK_MODEL_DATA);
             meta.setDisplayName(LangManager.get("events.menu.chances.title"));
             ArrayList<String> lore = new ArrayList<>();
 

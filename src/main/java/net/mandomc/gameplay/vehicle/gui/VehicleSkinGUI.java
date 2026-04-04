@@ -8,6 +8,7 @@ import net.mandomc.gameplay.vehicle.config.VehicleConfigResolver;
 import net.mandomc.gameplay.vehicle.manager.VehicleSkinManager;
 import net.mandomc.gameplay.vehicle.model.Vehicle;
 import net.mandomc.gameplay.vehicle.model.VehicleSkinOption;
+import net.mandomc.server.shop.gui.ShopGUI;
 import net.mandomc.server.items.ItemRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -27,10 +28,11 @@ import java.util.UUID;
  */
 public class VehicleSkinGUI extends InventoryGUI {
 
-    private static final int GUI_SIZE = 27;
-    private static final Material FILLER_MATERIAL = Material.GRAY_STAINED_GLASS_PANE;
-    private static final int[] SKIN_SLOTS = {10, 11, 12, 13, 14, 15, 16};
-    private static final int BACK_SLOT = 22;
+    private static final int GUI_SIZE = 9;
+    private static final int[] SKIN_SLOTS = {0, 1, 2, 3, 4, 5, 6, 7};
+    private static final int BACK_SLOT = 8;
+    private static final int BLANK_MODEL_DATA = 5;
+    private static final String SKIN_TITLE = ShopGUI.SHOP_TITLE.substring(0, ShopGUI.SHOP_TITLE.length() - 1) + "ķ";
 
     private final Vehicle vehicle;
     private final Player viewer;
@@ -44,30 +46,14 @@ public class VehicleSkinGUI extends InventoryGUI {
 
     @Override
     protected Inventory createInventory() {
-        return Bukkit.createInventory(null, GUI_SIZE, LangManager.colorize("&5Vehicle Skins"));
+        return Bukkit.createInventory(null, GUI_SIZE, LangManager.colorize(SKIN_TITLE));
     }
 
     @Override
     public void decorate(Player player) {
-        fill();
         addSkinOptions();
         addBackButton();
         super.decorate(player);
-    }
-
-    private void fill() {
-        ItemStack filler = new ItemStack(FILLER_MATERIAL);
-        ItemMeta meta = filler.getItemMeta();
-        if (meta != null) {
-            meta.setDisplayName(" ");
-            filler.setItemMeta(meta);
-        }
-
-        for (int i = 0; i < GUI_SIZE; i++) {
-            addButton(i, new InventoryButton()
-                    .creator(p -> filler)
-                    .consumer(event -> {}));
-        }
     }
 
     private void addSkinOptions() {
@@ -151,13 +137,14 @@ public class VehicleSkinGUI extends InventoryGUI {
     private void addBackButton() {
         addButton(BACK_SLOT, new InventoryButton()
                 .creator(p -> {
-                    ItemStack arrow = new ItemStack(Material.ARROW);
-                    ItemMeta meta = arrow.getItemMeta();
+                    ItemStack blank = new ItemStack(Material.FLINT);
+                    ItemMeta meta = blank.getItemMeta();
                     if (meta != null) {
-                        meta.setDisplayName(ChatColor.YELLOW + "Back");
-                        arrow.setItemMeta(meta);
+                        meta.setDisplayName(ChatColor.RED + "Back");
+                        meta.setCustomModelData(BLANK_MODEL_DATA);
+                        blank.setItemMeta(meta);
                     }
-                    return arrow;
+                    return blank;
                 })
                 .consumer(event -> {
                     Player clicker = (Player) event.getWhoClicked();

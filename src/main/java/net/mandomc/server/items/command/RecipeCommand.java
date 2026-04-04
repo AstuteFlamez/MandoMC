@@ -13,7 +13,6 @@ import net.mandomc.server.items.RecipeRegistry;
 import net.mandomc.server.items.gui.RecipeBrowserGUI;
 import net.mandomc.server.items.gui.RecipeViewerGUI;
 import net.mandomc.server.items.config.RecipeCategoryConfig;
-import net.mandomc.server.items.config.RecipeCategoryConfig.RecipeCategoryDefinition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
  * Handles the /recipes command.
  *
  * Opens recipe GUIs or displays specific item recipes.
- * Supports category shortcuts and tab completion.
  */
 public class RecipeCommand implements CommandExecutor, TabCompleter {
 
@@ -37,7 +35,6 @@ public class RecipeCommand implements CommandExecutor, TabCompleter {
      * Executes the recipes command.
      *
      * /recipes → opens main GUI
-     * /recipes <category> → opens category
      * /recipes <item> → opens recipe viewer
      *
      * @param sender the command sender
@@ -58,13 +55,6 @@ public class RecipeCommand implements CommandExecutor, TabCompleter {
         }
 
         String input = args[0].toLowerCase();
-
-        // Category handling
-        RecipeCategoryDefinition category = RecipeCategoryConfig.getCategory(input);
-        if (category != null) {
-            guiManager.openGUI(RecipeBrowserGUI.category(guiManager, category.id()), player);
-            return true;
-        }
 
         // Item recipe
         if (!RecipeRegistry.hasRecipe(input)) {
@@ -93,19 +83,17 @@ public class RecipeCommand implements CommandExecutor, TabCompleter {
         String input = args[0].toLowerCase();
         List<String> completions = new ArrayList<>();
 
-        // Categories
-        for (String categoryId : RecipeCategoryConfig.getCategoryIds()) {
-            if (categoryId.startsWith(input)) {
-                completions.add(categoryId);
+        for (String itemId : RecipeCategoryConfig.getOrderedRecipeIds()) {
+            if (itemId.startsWith(input) && RecipeRegistry.hasRecipe(itemId)) {
+                completions.add(itemId);
             }
         }
 
-        // Items with recipes
         completions.addAll(
-                ItemRegistry.getItemIds()
-                        .stream()
+                ItemRegistry.getItemIds().stream()
                         .filter(RecipeRegistry::hasRecipe)
                         .filter(id -> id.startsWith(input))
+                        .filter(id -> !completions.contains(id))
                         .collect(Collectors.toList())
         );
 

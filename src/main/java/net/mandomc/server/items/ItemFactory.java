@@ -54,7 +54,8 @@ public class ItemFactory {
             Map.entry("Valuable", "\u010E"),
             Map.entry("Vehicle", "\u010F"),
             Map.entry("Weapon", "\u0110"),
-            Map.entry("Fuel", "\u0122")
+            Map.entry("Fuel", "\u0122"),
+            Map.entry("Tool", "\u0138")
     );
 
     /*
@@ -165,7 +166,7 @@ public class ItemFactory {
             String rarityIcon = RARITY_ICONS.getOrDefault(rarity, "");
             String categoryIcon = CATEGORY_ICONS.getOrDefault(category, "");
 
-            lore.add(color("&f" + rarityIcon + "  " + categoryIcon));
+            lore.add(color("&f" + rarityIcon + categoryIcon));
         }
 
         for (String line : section.getStringList("lore")) {

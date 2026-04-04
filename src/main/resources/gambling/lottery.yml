@@ -73,7 +73,7 @@ lottery:
   # GUI Settings
   # -------------------------
   gui:
-    title: "&6&lɢᴀʟᴀᴄᴛɪᴄ ʟᴏᴛᴛᴇʀʏ"
+    title: "&fĹ"
     size: 27
 
   # -------------------------
@@ -82,7 +82,6 @@ lottery:
   items:
 
     pot:
-      material: GOLD_INGOT
       name: "&6&lᴛᴏᴛᴀʟ ᴘᴏᴛ"
       slot: 12
       lore:
@@ -90,7 +89,6 @@ lottery:
         - "&a$%pot%"
 
     buy:
-      material: EMERALD
       name: "&a&lʙᴜʏ ᴛɪᴄᴋᴇᴛ"
       slot: 14
       lore:
@@ -98,7 +96,6 @@ lottery:
         - "&7Click to enter the lottery"
 
     info:
-      material: PAPER
       name: "&e&lʏᴏᴜʀ ᴛɪᴄᴋᴇᴛѕ"
       slot: 10
       lore:
@@ -106,20 +103,11 @@ lottery:
         - "&a%tickets%"
 
     time:
-      material: CLOCK
       name: "&e&lɴᴇхᴛ ᴅʀᴀᴡ"
       slot: 16
       lore:
         - "&7Draw Time:"
         - "&a%time%pm UTC-1"
-
-  # -------------------------
-  # Background Fill
-  # -------------------------
-  filler:
-    material: GRAY_STAINED_GLASS_PANE
-    name: " "
-    lore: []
 
   # -------------------------
   # Messages

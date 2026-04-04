@@ -15,6 +15,7 @@ import net.mandomc.core.guis.InventoryButton;
 import net.mandomc.core.guis.InventoryGUI;
 import net.mandomc.core.modules.core.EconomyModule;
 import net.mandomc.core.LangManager;
+import net.mandomc.server.shop.gui.ShopGUI;
 import net.milkbowl.vault.economy.Economy;
 
 import java.util.ArrayList;
@@ -28,6 +29,9 @@ import net.mandomc.gameplay.lottery.task.LotteryScheduler;
  * Displays pot, tickets, next draw time, and allows ticket purchase.
  */
 public class LotteryGUI extends InventoryGUI {
+
+    private static final String LOTTERY_TITLE = ShopGUI.SHOP_TITLE.substring(0, ShopGUI.SHOP_TITLE.length() - 1) + "Ĺ";
+    private static final int BLANK_MODEL_DATA = 5;
 
     private final GUIManager guiManager;
     private final LotteryConfig lotteryConfig;
@@ -51,16 +55,13 @@ public class LotteryGUI extends InventoryGUI {
      */
     @Override
     protected Inventory createInventory() {
-
         ConfigurationSection cfg = lotteryConfig.getSection("lottery.gui");
-        if (cfg == null) {
-            return Bukkit.createInventory(null, 27, "Lottery");
-        }
-
+        int size = cfg == null ? 27 : cfg.getInt("size", 27);
+        String whiteTitle = ChatColor.WHITE + ChatColor.stripColor(color(LOTTERY_TITLE));
         return Bukkit.createInventory(
                 null,
-                cfg.getInt("size", 27),
-                color(cfg.getString("title", "&6Lottery"))
+                size,
+                whiteTitle
         );
     }
 
@@ -71,9 +72,6 @@ public class LotteryGUI extends InventoryGUI {
      */
     @Override
     public void decorate(Player player) {
-
-        fillBackground();
-
         ConfigurationSection items = lotteryConfig.getSection("lottery.items");
         if (items == null) return;
 
@@ -102,35 +100,6 @@ public class LotteryGUI extends InventoryGUI {
         }
 
         super.decorate(player);
-    }
-
-    /**
-     * Fills empty GUI slots with a background item.
-     */
-    private void fillBackground() {
-
-        ConfigurationSection section = lotteryConfig.getSection("lottery.filler");
-        if (section == null) {
-            section = lotteryConfig.getSection("lottery.gui");
-        }
-
-        Material mat = Material.matchMaterial(
-                section != null ? section.getString("material", "BLACK_STAINED_GLASS_PANE") : "BLACK_STAINED_GLASS_PANE"
-        );
-        ItemStack filler = new ItemStack(mat == null ? Material.BLACK_STAINED_GLASS_PANE : mat);
-
-        ItemMeta meta = filler.getItemMeta();
-        if (meta != null) {
-            meta.setDisplayName(color(section != null ? section.getString("name", " ") : " "));
-            meta.setLore(section != null ? section.getStringList("lore") : List.of());
-            filler.setItemMeta(meta);
-        }
-
-        for (int i = 0; i < getInventory().getSize(); i++) {
-            addButton(i, new InventoryButton()
-                    .creator(p -> filler)
-                    .consumer(eventvent -> {}));
-        }
     }
 
     /**
@@ -195,11 +164,10 @@ public class LotteryGUI extends InventoryGUI {
      */
     private ItemStack buildItem(ConfigurationSection section, String placeholder, String value) {
         if (section == null) {
-            return new ItemStack(Material.STONE);
+            return createBlankItem();
         }
 
-        Material mat = Material.matchMaterial(section.getString("material"));
-        ItemStack item = new ItemStack(mat == null ? Material.STONE : mat);
+        ItemStack item = createBlankItem();
 
         ItemMeta meta = item.getItemMeta();
         if (meta == null) return item;
@@ -214,6 +182,16 @@ public class LotteryGUI extends InventoryGUI {
         meta.setLore(lore);
         item.setItemMeta(meta);
 
+        return item;
+    }
+
+    private static ItemStack createBlankItem() {
+        ItemStack item = new ItemStack(Material.FLINT);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setCustomModelData(BLANK_MODEL_DATA);
+            item.setItemMeta(meta);
+        }
         return item;
     }
 
