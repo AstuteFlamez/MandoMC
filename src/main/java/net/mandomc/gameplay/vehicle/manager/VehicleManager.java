@@ -148,9 +148,11 @@ public class VehicleManager {
         UUID uuid = player.getUniqueId();
         VehicleData data = vehicle.getVehicleData();
         ActiveModel model = data.getActiveModel();
+        LivingEntity entity = data.getEntity();
 
-        data.getEntity().setAI(true);
-        data.getEntity().setGravity(false);
+        // MoveController requires a ticking mob with AI enabled.
+        entity.setAI(true);
+        entity.setGravity(false);
 
         MountControllerType controller = resolveController(vehicle);
 
@@ -166,7 +168,12 @@ public class VehicleManager {
         }
 
         AnimationHandler handler = model.getAnimationHandler();
-        handler.playAnimation("mount", 0.3, 0.3, 1, true);
+        if (controller != AerialMountController.AERIAL) {
+            handler.playAnimation("mount", 0.3, 0.3, 1, true);
+        } else {
+            handler.stopAnimation("mount");
+            handler.stopAnimation("dismount");
+        }
 
         sound.put(uuid, data.getMovementSoundLength());
 
@@ -201,11 +208,21 @@ public class VehicleManager {
 
         entity.setAI(false);
         entity.setGravity(true);
-        applyFallingVelocity(entity);
+        if (entity.isOnGround()) {
+            Vector current = entity.getVelocity();
+            entity.setVelocity(new Vector(current.getX(), 0.0D, current.getZ()));
+        } else {
+            applyFallingVelocity(entity);
+        }
 
         AnimationHandler handler = model.getAnimationHandler();
+        MountControllerType controller = resolveController(vehicle);
         handler.stopAnimation("mount");
-        handler.playAnimation("dismount", 0.2, 0.2, 1, false);
+        if (controller != AerialMountController.AERIAL) {
+            handler.playAnimation("dismount", 0.2, 0.2, 1, false);
+        } else {
+            handler.stopAnimation("dismount");
+        }
     }
 
     /**

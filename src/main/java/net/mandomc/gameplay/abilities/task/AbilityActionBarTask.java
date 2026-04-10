@@ -26,7 +26,9 @@ public class AbilityActionBarTask {
         task = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
             for (Player player : plugin.getServer().getOnlinePlayers()) {
                 String line = abilityService.actionBarLine(player);
-                player.sendActionBar(line == null ? " " : line);
+                if (line != null && !line.isBlank()) {
+                    player.sendActionBar(line);
+                }
             }
         }, 20L, 4L);
     }

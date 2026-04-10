@@ -6,6 +6,7 @@ import com.ticxo.modelengine.api.model.bone.manager.MountManager;
 import com.ticxo.modelengine.api.model.bone.type.Mount;
 import com.ticxo.modelengine.api.mount.controller.MountControllerTypes;
 
+import net.mandomc.MandoMC;
 import net.mandomc.core.LangManager;
 import net.mandomc.core.modules.server.VehicleModule;
 import net.mandomc.gameplay.fuel.FuelManager;
@@ -93,6 +94,16 @@ public class SeatManager {
         // Seat switching: move from current seat to requested seat on same vehicle.
         if (currentSeat != null && currentSeat.slot() != seat.slot()) {
             dismountSeat(player, vehicle);
+            // Defer remount by one tick so ModelEngine finishes detach state.
+            Bukkit.getScheduler().runTask(MandoMC.getInstance(), () -> {
+                if (!player.isOnline()) return;
+                if (seat.type() == SeatType.DRIVER) {
+                    mountDriver(player, vehicle);
+                } else {
+                    mountPassenger(player, vehicle, seat);
+                }
+            });
+            return;
         }
 
         if (seat.type() == SeatType.DRIVER) {

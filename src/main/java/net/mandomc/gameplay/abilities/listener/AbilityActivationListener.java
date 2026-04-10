@@ -43,7 +43,9 @@ public class AbilityActivationListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onSlotChange(PlayerItemHeldEvent event) {
         String line = abilityService.actionBarLine(event.getPlayer());
-        event.getPlayer().sendActionBar(line == null ? " " : line);
+        if (line != null && !line.isBlank()) {
+            event.getPlayer().sendActionBar(line);
+        }
     }
 
     @EventHandler(ignoreCancelled = true)

@@ -114,4 +114,9 @@ public class MainConfig extends BaseConfig {
     public List<String> getTatooinePotLocationStrings() {
         return getStringList("tatooine.pots.locations");
     }
+
+    /** Whether gameplay abilities should be enabled. */
+    public boolean isAbilitiesEnabled() {
+        return getBoolean("abilities.enabled", false);
+    }
 }

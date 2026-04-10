@@ -24,6 +24,9 @@ import net.mandomc.gameplay.fuel.FuelManager;
 public class VehicleHUDManager {
 
     private static final Map<UUID, Long> lastUpdate = new HashMap<>();
+    private static final Map<UUID, TransientActionBar> transientActionBars = new HashMap<>();
+
+    private record TransientActionBar(String message, long untilTick) {}
 
     /**
      * Updates the HUD for a mounted player.
@@ -37,6 +40,16 @@ public class VehicleHUDManager {
     public static void updateHUD(Player player, Vehicle vehicle) {
         UUID uuid = player.getUniqueId();
         long tick = Bukkit.getCurrentTick();
+
+        TransientActionBar transientActionBar = transientActionBars.get(uuid);
+        if (transientActionBar != null) {
+            if (tick <= transientActionBar.untilTick()) {
+                player.sendActionBar(transientActionBar.message());
+                return;
+            }
+            transientActionBars.remove(uuid);
+        }
+
         long last = lastUpdate.getOrDefault(uuid, 0L);
 
         if (tick - last < 20) return;
@@ -77,5 +90,13 @@ public class VehicleHUDManager {
         player.sendActionBar(
                 ChatColor.GRAY + "⛽ Fuel: " + fuelColor + fuelPercent + "%"
         );
+    }
+
+    public static void pushTransientActionBar(Player player, String message, int durationTicks) {
+        if (player == null || message == null || message.isBlank()) return;
+        long now = Bukkit.getCurrentTick();
+        long untilTick = now + Math.max(1, durationTicks);
+        transientActionBars.put(player.getUniqueId(), new TransientActionBar(message, untilTick));
+        player.sendActionBar(message);
     }
 }

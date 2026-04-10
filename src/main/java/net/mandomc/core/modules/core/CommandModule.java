@@ -67,7 +67,9 @@ public class CommandModule implements Module {
         GUIManager guiManager = registry.get(GUIManager.class);
         EventManager eventManager = registry.get(EventManager.class);
         ParkourManager parkourManager = registry.get(ParkourManager.class);
-        AbilityService abilityService = registry.get(AbilityService.class);
+        AbilityService abilityService = registry.has(AbilityService.class)
+                ? registry.get(AbilityService.class)
+                : null;
 
         WarpConfig warpConfig = registry.get(WarpConfig.class);
         safe("warp", new WarpCommand(guiManager, warpConfig));
@@ -104,15 +106,19 @@ public class CommandModule implements Module {
         KeyCommand keyCmd = new KeyCommand(plugin);
         safe("key", keyCmd, keyCmd);
 
-        ClassCommand classCommand = new ClassCommand(abilityService);
-        AbilityCommand abilityCommand = new AbilityCommand(guiManager, abilityService);
-        BindCommand bindCommand = new BindCommand(abilityService);
-        SkillTokenCommand skillTokenCommand = new SkillTokenCommand(abilityService);
+        if (abilityService != null) {
+            ClassCommand classCommand = new ClassCommand(abilityService);
+            AbilityCommand abilityCommand = new AbilityCommand(guiManager, abilityService);
+            BindCommand bindCommand = new BindCommand(abilityService);
+            SkillTokenCommand skillTokenCommand = new SkillTokenCommand(abilityService);
 
-        safe("class", classCommand, classCommand);
-        safe("ability", abilityCommand, abilityCommand);
-        safe("bind", bindCommand, bindCommand);
-        safe("skilltoken", skillTokenCommand, skillTokenCommand);
+            safe("class", classCommand, classCommand);
+            safe("ability", abilityCommand, abilityCommand);
+            safe("bind", bindCommand, bindCommand);
+            safe("skilltoken", skillTokenCommand, skillTokenCommand);
+        } else {
+            plugin.getLogger().info("Ability commands not registered: abilities module is disabled.");
+        }
     }
 
     @Override

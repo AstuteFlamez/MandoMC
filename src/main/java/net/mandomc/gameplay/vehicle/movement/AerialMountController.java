@@ -17,6 +17,7 @@ import net.mandomc.gameplay.vehicle.rotation.RotationLimits;
 import net.mandomc.core.LangManager;
 import net.mandomc.core.modules.server.VehicleModule;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -45,9 +46,10 @@ public class AerialMountController extends AbstractMountController {
     private boolean forwardPressedLastTick = false;
     private float currentRoll = 0f;
     private float lastFlightPitch = 0f;
+    private static final float PITCH_RESET_PER_TICK = 1.2f;
     private double currentSpeed = 0.0;
     private FlightState lastFlightState = FlightState.IDLE;
-    private long lastStatusTick = Long.MIN_VALUE;
+    private long lastStatusTick = -1L;
 
     private int boostTicksRemaining = 0;
     private int boostCooldownRemaining = 0;
@@ -112,6 +114,8 @@ public class AerialMountController extends AbstractMountController {
         float clampedPitch = clamp(eye.getPitch(), -maxPitch, maxPitch);
         if (thrusting) {
             lastFlightPitch = clampedPitch;
+        } else {
+            lastFlightPitch = moveTowards(lastFlightPitch, 0f, PITCH_RESET_PER_TICK);
         }
         float flightPitch = lastFlightPitch;
 
@@ -226,6 +230,12 @@ public class AerialMountController extends AbstractMountController {
         return current;
     }
 
+    private static float moveTowards(float current, float target, float maxDelta) {
+        if (current < target) return Math.min(current + maxDelta, target);
+        if (current > target) return Math.max(current - maxDelta, target);
+        return current;
+    }
+
     private FlightState classifyFlightState(double targetSpeed) {
         if (currentSpeed <= 0.0001 && targetSpeed <= 0.0001) return FlightState.IDLE;
         if (currentSpeed + 0.0001 < targetSpeed) return FlightState.ACCELERATING;
@@ -265,10 +275,14 @@ public class AerialMountController extends AbstractMountController {
     }
 
     private void sendFlightStatus(Player player, String key, int cooldownTicks) {
-        long now = player.getWorld().getFullTime();
-        if (now - lastStatusTick < Math.max(0, cooldownTicks)) return;
+        long now = Bukkit.getCurrentTick();
+        if (lastStatusTick >= 0 && now - lastStatusTick < Math.max(0, cooldownTicks)) return;
         lastStatusTick = now;
-        player.sendActionBar(LangManager.get(key));
+        VehicleHUDManager.pushTransientActionBar(
+                player,
+                LangManager.get(key),
+                Math.max(20, cooldownTicks)
+        );
     }
 
     private static float randomShake(float maxDegrees) {

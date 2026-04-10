@@ -4,6 +4,7 @@ import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.bone.ModelBone;
 import com.ticxo.modelengine.api.model.bone.SimpleManualAnimator;
 import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 /**
  * Wraps a ModelEngine bone with a {@link SimpleManualAnimator} and sets
@@ -29,6 +30,11 @@ public class BoneRotator {
         ModelBone resolved = model.getBone(boneName).orElse(null);
         if (resolved != null) {
             SimpleManualAnimator anim = new SimpleManualAnimator(resolved);
+            // SimpleManualAnimator copies the bone's local transform on construction,
+            // including its position offset. We only use this animator for rotation
+            // (pitch/roll), so zero out the position to prevent the model from
+            // visually shifting away from the backing entity's actual location.
+            anim.getPosition().set(new Vector3f());
             resolved.setManualAnimator(anim);
             this.bone = resolved;
             this.animator = anim;

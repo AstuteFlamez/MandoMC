@@ -1,6 +1,7 @@
 package net.mandomc.core.modules.gameplay;
 
 import net.mandomc.MandoMC;
+import net.mandomc.core.config.MainConfig;
 import net.mandomc.core.lifecycle.ListenerRegistrar;
 import net.mandomc.core.module.Module;
 import net.mandomc.core.services.ServiceRegistry;
@@ -27,6 +28,12 @@ public class AbilitiesModule implements Module {
 
     @Override
     public void enable(ServiceRegistry registry) {
+        MainConfig mainConfig = registry.get(MainConfig.class);
+        if (mainConfig == null || !mainConfig.isAbilitiesEnabled()) {
+            plugin.getLogger().info("Abilities module disabled by config (abilities.enabled=false).");
+            return;
+        }
+
         AbilityDefinitionConfig definitionConfig = registry.get(AbilityDefinitionConfig.class);
         listenerRegistrar = new ListenerRegistrar(plugin);
 

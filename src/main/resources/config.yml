@@ -6,6 +6,9 @@ database:
   password: CHANGE_ME
   pool-size: 10
 
+abilities:
+  enabled: false
+
 vehicle:
   spawn-restriction:
     world: world
