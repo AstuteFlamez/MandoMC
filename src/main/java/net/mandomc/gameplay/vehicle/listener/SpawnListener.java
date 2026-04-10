@@ -31,10 +31,9 @@ import net.mandomc.gameplay.vehicle.manager.VehicleManager;
 import net.mandomc.gameplay.vehicle.manager.VehicleSkinManager;
 
 import java.util.List;
-import net.mandomc.gameplay.vehicle.weapon.SpeederBike;
-import net.mandomc.gameplay.vehicle.weapon.TieFighter;
+import net.mandomc.gameplay.vehicle.weapon.ConfigurableWeapon;
+import net.mandomc.gameplay.vehicle.weapon.WeaponConfig;
 import net.mandomc.gameplay.vehicle.weapon.WeaponSystem;
-import net.mandomc.gameplay.vehicle.weapon.XWing;
 import net.mandomc.core.LangManager;
 import net.mandomc.core.integration.OptionalPluginSupport;
 import net.mandomc.core.modules.server.VehicleModule;
@@ -184,24 +183,28 @@ public class SpawnListener implements Listener {
         data.setDisplayName(displayName);
         data.setGuiSize(guiSize);
 
+        data.setRollSmoothing(VehicleConfigResolver.getRollSmoothing(item));
+        data.setRotatorBone(VehicleConfigResolver.getRotatorBone(item));
+        data.setRotationLimits(VehicleConfigResolver.getRotationLimits(item));
+        data.setAccelerationPerTick(VehicleConfigResolver.getAccelerationPerTick(item));
+        data.setDecelerationPerTick(VehicleConfigResolver.getDecelerationPerTick(item));
+        data.setBoostMultiplier(VehicleConfigResolver.getBoostMultiplier(item));
+        data.setBoostDurationTicks(VehicleConfigResolver.getBoostDurationTicks(item));
+        data.setBoostCooldownTicks(VehicleConfigResolver.getBoostCooldownTicks(item));
+        data.setBoostShakeDegrees(VehicleConfigResolver.getBoostShakeDegrees(item));
+        data.setStatusCooldownTicks(VehicleConfigResolver.getStatusCooldownTicks(item));
+
         return data;
     }
 
     /**
-     * Selects the weapon system for the vehicle based on its model key.
+     * Builds a config-driven weapon system from the vehicle's YAML.
      *
-     * @return the weapon system, or null if the model key is unrecognized
+     * @return the weapon system, or null if no weapon section is configured
      */
     private WeaponSystem createWeaponSystem(ItemStack item) {
-        String vehicleId = VehicleConfigResolver.getVehicleId(item);
-        if (vehicleId == null) return null;
-
-        return switch (vehicleId.toLowerCase()) {
-            case "xwing" -> new XWing();
-            case "tiefighter" -> new TieFighter();
-            case "speederbike" -> new SpeederBike();
-            default -> null;
-        };
+        WeaponConfig config = WeaponConfig.fromItem(item);
+        return config != null ? new ConfigurableWeapon(config) : null;
     }
 
     /**

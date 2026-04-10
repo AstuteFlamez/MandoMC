@@ -26,6 +26,7 @@ import net.mandomc.gameplay.vehicle.VehicleRegistry;
 import net.mandomc.gameplay.vehicle.config.VehicleConfig;
 import net.mandomc.gameplay.vehicle.movement.AerialMountController;
 import net.mandomc.gameplay.vehicle.movement.SurfaceMountController;
+import net.mandomc.gameplay.vehicle.rotation.BoneRotator;
 import net.mandomc.core.modules.server.VehicleModule;
 import net.mandomc.core.LangManager;
 
@@ -158,6 +159,12 @@ public class VehicleManager {
             mountManager.mountDriver(player, controller);
         });
 
+        // Create BoneRotator for aerial vehicles
+        if (controller == AerialMountController.AERIAL) {
+            BoneRotator rotator = new BoneRotator(model, data.getRotatorBone());
+            data.setBoneRotator(rotator);
+        }
+
         AnimationHandler handler = model.getAnimationHandler();
         handler.playAnimation("mount", 0.3, 0.3, 1, true);
 
@@ -181,6 +188,13 @@ public class VehicleManager {
         LivingEntity entity = data.getEntity();
 
         model.getMountManager().ifPresent(m -> m.dismountDriver());
+
+        // Clean up BoneRotator
+        BoneRotator rotator = data.getBoneRotator();
+        if (rotator != null) {
+            rotator.reset();
+            data.setBoneRotator(null);
+        }
 
         sound.remove(uuid);
         player.stopSound(data.getMovementSound());

@@ -217,7 +217,15 @@ vehicles:
   owner-only-action: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cOnly the vehicle owner can do that."
   driver-owner-only: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cOnly the owner can drive this vehicle."
   seat-occupied:    "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cThat seat is already occupied by &f%player%&c."
+  mount-failed:     "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cUnable to mount that seat right now."
   ejected:          "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou have been ejected from the vehicle."
+  flight:
+    thrust-on:      "&a✈ Thrust engaged"
+    thrust-off:     "&c✈ Thrust disengaged"
+    accelerating:   "&b▲ Accelerating"
+    decelerating:   "&e▼ Decelerating"
+    boost-on:       "&d⚡ Boost active"
+    boost-ready:    "&a⚡ Boost ready"
   skin:
     no-permission: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou don't have permission for skin &f%skin%&c."
     no-ride-permission: "&9&lᴍᴀɴᴅᴏᴍᴄ &r&8» &cYou can't ride this skinned vehicle (&f%skin%&c)."

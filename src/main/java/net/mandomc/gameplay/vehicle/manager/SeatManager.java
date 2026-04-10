@@ -1,6 +1,9 @@
 package net.mandomc.gameplay.vehicle.manager;
 
 import com.ticxo.modelengine.api.model.ActiveModel;
+import com.ticxo.modelengine.api.model.bone.BoneBehaviorTypes;
+import com.ticxo.modelengine.api.model.bone.manager.MountManager;
+import com.ticxo.modelengine.api.model.bone.type.Mount;
 import com.ticxo.modelengine.api.mount.controller.MountControllerTypes;
 
 import net.mandomc.core.LangManager;
@@ -16,7 +19,9 @@ import net.mandomc.gameplay.vehicle.model.VehicleSkinOption;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -28,7 +33,6 @@ import java.util.UUID;
  *  - Shooting is controlled by seat tags (see {@link SeatConfig#canShoot()}).
  */
 public class SeatManager {
-
     private SeatManager() {}
 
     // -------------------------------------------------------------------------
@@ -49,6 +53,8 @@ public class SeatManager {
      * @param seat    the seat they clicked
      */
     public static void mountSeat(Player player, Vehicle vehicle, SeatConfig seat) {
+        UUID playerId = player.getUniqueId();
+        SeatConfig currentSeat = vehicle.getOccupantSeat(playerId);
         VehicleData data = vehicle.getVehicleData();
         VehicleSkinOption activeSkin =
                 VehicleConfigResolver.resolveSkinOption(data.getItem(), vehicle.getSelectedSkinId());
@@ -59,7 +65,7 @@ public class SeatManager {
             return;
         }
 
-        if (seat.type() == SeatType.DRIVER && !player.getUniqueId().equals(vehicle.getOwnerUUID())) {
+        if (seat.type() == SeatType.DRIVER && !playerId.equals(vehicle.getOwnerUUID())) {
             player.sendMessage(LangManager.get("vehicles.driver-owner-only"));
             return;
         }
@@ -74,10 +80,19 @@ public class SeatManager {
         // Seat occupancy check
         if (vehicle.isOccupied(seat.slot())) {
             UUID occupantId = vehicle.getOccupantAt(seat.slot());
+            if (playerId.equals(occupantId)) {
+                // Player clicked the seat they are already in.
+                return;
+            }
             String name = occupantId != null ? fetchPlayerName(occupantId) : "Unknown";
             player.sendMessage(LangManager.get("vehicles.seat-occupied",
                     "%player%", name));
             return;
+        }
+
+        // Seat switching: move from current seat to requested seat on same vehicle.
+        if (currentSeat != null && currentSeat.slot() != seat.slot()) {
+            dismountSeat(player, vehicle);
         }
 
         if (seat.type() == SeatType.DRIVER) {
@@ -172,17 +187,71 @@ public class SeatManager {
     }
 
     /**
+     * Re-mounts a rider into a known seat without running GUI-time checks.
+     *
+     * Used when rebuilding the active model (e.g. skin swap) to preserve
+     * current rider positions across model replacement.
+     */
+    public static void remountSeat(Player player, Vehicle vehicle, SeatConfig seat) {
+        if (seat == null) return;
+        if (seat.type() == SeatType.DRIVER) {
+            mountDriver(player, vehicle);
+        } else {
+            mountPassenger(player, vehicle, seat);
+        }
+    }
+
+    /**
      * Mounts the player as a passenger using ModelEngine's
      * passenger API and registers them in the tracking maps.
      */
     private static void mountPassenger(Player player, Vehicle vehicle, SeatConfig seat) {
         ActiveModel model = vehicle.getVehicleData().getActiveModel();
+        var mountManagerOpt = model.getMountManager();
+        String boneId = seat.mountBone();
 
-        model.getMountManager().ifPresent(mountManager ->
-                mountManager.mountPassenger(seat.mountBone(), player, MountControllerTypes.WALKING));
+        if (mountManagerOpt.isEmpty()) {
+            player.sendMessage(LangManager.get("vehicles.mount-failed"));
+            return;
+        }
+
+        MountManager mountManager = mountManagerOpt.get();
+        mountManager.setCanRide(true);
+
+        boolean seatPresentBefore = mountManager.getSeat(boneId).isPresent();
+        if (!seatPresentBefore) {
+            tryRegisterSeatFromBone(model, mountManager, boneId);
+        }
+
+        boolean mounted = mountManager.mountPassenger(boneId, player, MountControllerTypes.WALKING);
+        if (!mounted) {
+            player.sendMessage(LangManager.get("vehicles.mount-failed"));
+            return;
+        }
 
         vehicle.occupy(player.getUniqueId(), seat.slot());
         VehicleModule.registerOccupant(player.getUniqueId(), vehicle.getOwnerUUID());
+    }
+
+    private static boolean tryRegisterSeatFromBone(ActiveModel model, MountManager mountManager, String boneId) {
+        Optional<?> mountBehavior = model.getBone(boneId)
+                .flatMap(bone -> bone.getBoneBehavior(BoneBehaviorTypes.MOUNT));
+        if (mountBehavior.isEmpty()) {
+            return false;
+        }
+
+        Object behavior = mountBehavior.get();
+        if (!(behavior instanceof Mount)) {
+            return false;
+        }
+
+        try {
+            Method registerSeat = mountManager.getClass().getMethod("registerSeat", Mount.class);
+            registerSeat.invoke(mountManager, behavior);
+            return true;
+        } catch (ReflectiveOperationException e) {
+            return false;
+        }
     }
 
     /** Dismounts a passenger from the ModelEngine model. */

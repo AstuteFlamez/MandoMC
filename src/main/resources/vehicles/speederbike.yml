@@ -16,11 +16,18 @@ vehicle:
     movement: SURFACE
 
     weapon:
-      gun: Speederbike_Laser
+      projectile_type: ARROW
+      damage: 5.0
+      speed: 2.5
+      gravity: false
+      cooldown: 0
+      burst: 1
+      spread: 0
       ammo: Standard_Plasma_Cells
       ammo_per_shot: 1
-      cooldown: 0
       sound: vehicles.speederbike_shoot
+      sound_volume: 1.0
+      sound_pitch: 1.0
 
     movement_sound: vehicles.speederbike_drive
     movement_sound_time_in_ticks: 300

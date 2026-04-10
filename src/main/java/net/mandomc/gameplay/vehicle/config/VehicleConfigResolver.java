@@ -4,6 +4,7 @@ import net.mandomc.gameplay.vehicle.VehicleRegistry;
 import net.mandomc.gameplay.vehicle.model.SeatConfig;
 import net.mandomc.gameplay.vehicle.model.SeatType;
 import net.mandomc.gameplay.vehicle.model.VehicleSkinOption;
+import net.mandomc.gameplay.vehicle.rotation.RotationLimits;
 import net.mandomc.server.items.ItemUtils;
 import net.mandomc.server.items.config.ItemsConfig;
 
@@ -197,6 +198,65 @@ public class VehicleConfigResolver {
         }
 
         return seats;
+    }
+
+    // -------------------------------------------------------------------------
+    // Rotation config (A/D roll + model orientation)
+    // -------------------------------------------------------------------------
+
+    private static ConfigurationSection getRotationSection(ItemStack item) {
+        FileConfiguration config = getVehicleConfig(item);
+        if (config == null) return null;
+        return config.getConfigurationSection("vehicle.systems.rotation");
+    }
+
+    public static float getRollSmoothing(ItemStack item) {
+        ConfigurationSection s = getRotationSection(item);
+        return s != null ? (float) s.getDouble("roll_smoothing", 0.15) : 0.15f;
+    }
+
+    public static String getRotatorBone(ItemStack item) {
+        ConfigurationSection s = getRotationSection(item);
+        return s != null ? s.getString("rotator_bone", "body") : "body";
+    }
+
+    public static RotationLimits getRotationLimits(ItemStack item) {
+        return RotationLimits.fromConfig(getRotationSection(item));
+    }
+
+    public static double getAccelerationPerTick(ItemStack item) {
+        ConfigurationSection s = getRotationSection(item);
+        return s != null ? s.getDouble("acceleration_per_tick", 0.08) : 0.08;
+    }
+
+    public static double getDecelerationPerTick(ItemStack item) {
+        ConfigurationSection s = getRotationSection(item);
+        return s != null ? s.getDouble("deceleration_per_tick", 0.10) : 0.10;
+    }
+
+    public static double getBoostMultiplier(ItemStack item) {
+        ConfigurationSection s = getRotationSection(item);
+        return s != null ? s.getDouble("boost_multiplier", 1.30) : 1.30;
+    }
+
+    public static int getBoostDurationTicks(ItemStack item) {
+        ConfigurationSection s = getRotationSection(item);
+        return s != null ? s.getInt("boost_duration_ticks", 14) : 14;
+    }
+
+    public static int getBoostCooldownTicks(ItemStack item) {
+        ConfigurationSection s = getRotationSection(item);
+        return s != null ? s.getInt("boost_cooldown_ticks", 80) : 80;
+    }
+
+    public static float getBoostShakeDegrees(ItemStack item) {
+        ConfigurationSection s = getRotationSection(item);
+        return s != null ? (float) s.getDouble("boost_shake_degrees", 0.8) : 0.8f;
+    }
+
+    public static int getStatusCooldownTicks(ItemStack item) {
+        ConfigurationSection s = getRotationSection(item);
+        return s != null ? s.getInt("status_cooldown_ticks", 20) : 20;
     }
 
     /**

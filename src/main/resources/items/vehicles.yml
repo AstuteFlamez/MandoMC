@@ -79,6 +79,36 @@ items:
       W: tiefighter_wing
 
 
+  uwing:
+    material: ECHO_SHARD
+    name: '&9&lU-Wing Starfighter'
+    custom_model_data: 5
+    model_key: uwing.bbmodel
+
+    rarity: Rare
+    category: Vehicle
+
+    tags:
+      - VEHICLE
+      - FUEL
+
+    lore:
+      - '&7A Rebel gunship and troop'
+      - '&7transport with forward cannons.'
+      - ''
+      - '&6Controls'
+      - '&7Right Click &8» &fDeploy Vehicle'
+      - '&7Right Click Vehicle &8» &fMount'
+      - '&7Shift + Right Click &8» &fPickup Vehicle'
+      - ''
+      - '&6Weapons'
+      - '&7Swing &8» &fBlaster Burst'
+      - ''
+      - '&6Fuel'
+      - '&7Consumes fuel while flying.'
+      - '&7Refuel using &cRhydonium Canisters.'
+
+
   speederbike:
     material: ECHO_SHARD
     name: '&6&l74-Z Speeder Bike'

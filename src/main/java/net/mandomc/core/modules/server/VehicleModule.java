@@ -15,7 +15,9 @@ import net.mandomc.gameplay.vehicle.model.Vehicle;
 import net.mandomc.gameplay.vehicle.listener.DamageListener;
 import net.mandomc.gameplay.vehicle.listener.DeathListener;
 import net.mandomc.gameplay.vehicle.listener.MountListener;
+import net.mandomc.gameplay.vehicle.listener.PassengerSneakDismountListener;
 import net.mandomc.gameplay.vehicle.listener.PickupListener;
+import net.mandomc.gameplay.vehicle.listener.ProjectileDamageListener;
 import net.mandomc.gameplay.vehicle.listener.RepairListener;
 import net.mandomc.gameplay.vehicle.listener.ShootListener;
 import net.mandomc.gameplay.vehicle.listener.SpawnListener;
@@ -95,12 +97,14 @@ public class VehicleModule implements Module {
 
         listenerRegistrar.register(new SpawnListener(mainConfig));
         listenerRegistrar.register(new MountListener(guiManager));
+        listenerRegistrar.register(new PassengerSneakDismountListener());
         listenerRegistrar.register(new PickupListener());
         listenerRegistrar.register(new VehicleCanisterInteractListener());
         listenerRegistrar.register(new DamageListener());
         listenerRegistrar.register(new DeathListener());
         listenerRegistrar.register(new RepairListener());
         listenerRegistrar.register(new ShootListener());
+        listenerRegistrar.register(new ProjectileDamageListener());
     }
 
     /**

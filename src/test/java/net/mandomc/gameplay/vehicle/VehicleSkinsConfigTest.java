@@ -39,7 +39,7 @@ class VehicleSkinsConfigTest {
 
     @Test
     void allVehicleConfigsDeclareSkinsAndNoSpawnBones() throws IOException {
-        Set<String> ids = Set.of("xwing", "tiefighter", "speederbike");
+        Set<String> ids = Set.of("xwing", "tiefighter", "uwing", "speederbike");
         for (String id : ids) {
             Map<String, Object> root = loadYaml(VEHICLES_DIR.resolve(id + ".yml"));
             Map<String, Object> vehicle = getMap(root, "vehicle");

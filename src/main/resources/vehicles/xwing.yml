@@ -15,12 +15,37 @@ vehicle:
   systems:
     movement: AERIAL
 
+    rotation:
+      roll_smoothing: 0.15
+      max_pitch: 30
+      max_roll: 15
+      acceleration_per_tick: 0.08
+      deceleration_per_tick: 0.10
+      boost_multiplier: 1.30
+      boost_duration_ticks: 14
+      boost_cooldown_ticks: 80
+      boost_shake_degrees: 0.8
+      status_cooldown_ticks: 20
+      rotator_bone: "body"
+
     weapon:
-      gun: XWing_Proton_Torpedo
+      projectile_type: ARROW
+      damage: 10.0
+      speed: 3.0
+      gravity: false
+      cooldown: 2000
+      burst: 1
+      spread: 0
       ammo: Proton_Torpedo
       ammo_per_shot: 1
-      cooldown: 2000
       sound: vehicles.xwing_shoot
+      sound_volume: 1.0
+      sound_pitch: 1.0
+      particles:
+        - type: FLAME
+          count: 15
+          spread: 0.1
+          speed: 0.5
 
     movement_sound: vehicles.xwing_fly
     movement_sound_time_in_ticks: 460

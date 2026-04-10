@@ -1,6 +1,6 @@
 vehicle:
-  item_id: tiefighter
-  display_name: "&cTIE Fighter"
+  item_id: uwing
+  display_name: "&9U-Wing Starfighter"
   gui_size: 27
 
   fuel:
@@ -8,30 +8,30 @@ vehicle:
     start: 1000
 
   stats:
-    max_health: 150
-    speed: 3
+    max_health: 180
+    speed: 2.5
     scale: 1
 
   systems:
     movement: AERIAL
 
     rotation:
-      roll_smoothing: 0.18
-      max_pitch: 30
+      roll_smoothing: 0.12
+      max_pitch: 20
       max_roll: 15
-      acceleration_per_tick: 0.10
-      deceleration_per_tick: 0.12
-      boost_multiplier: 1.35
-      boost_duration_ticks: 16
+      acceleration_per_tick: 0.07
+      deceleration_per_tick: 0.09
+      boost_multiplier: 1.25
+      boost_duration_ticks: 12
       boost_cooldown_ticks: 80
-      boost_shake_degrees: 0.9
+      boost_shake_degrees: 0.7
       status_cooldown_ticks: 20
       rotator_bone: "body"
 
     weapon:
       projectile_type: SNOWBALL
-      damage: 6.0
-      speed: 4.0
+      damage: 7.0
+      speed: 3.5
       gravity: false
       cooldown: 0
       burst: 3
@@ -55,11 +55,11 @@ vehicle:
     default: default
     options:
       default:
-        model_key: tiefighter
+        model_key: uwing
         permission: ""
         item:
-          name: "&8&lTie Fighter"
-          custom_model_data: 2
+          name: "&9&lU-Wing Starfighter"
+          custom_model_data: 5
 
   seats:
     - name: "Pilot Seat"
@@ -67,4 +67,10 @@ vehicle:
       type: DRIVER
       gunner: true
       mount_bone: seat
+      skull_url: "https://textures.minecraft.net/texture/e9110433357ba068492f95c812098f9bcb3667d324fbc4c32d6ea8a18382ae1c"
+    - name: "Gunner Seat"
+      slot: 11
+      type: PASSENGER
+      gunner: true
+      mount_bone: seatone
       skull_url: "https://textures.minecraft.net/texture/e9110433357ba068492f95c812098f9bcb3667d324fbc4c32d6ea8a18382ae1c"

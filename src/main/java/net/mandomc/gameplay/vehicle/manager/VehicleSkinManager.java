@@ -5,15 +5,27 @@ import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import net.mandomc.MandoMC;
 import net.mandomc.core.LangManager;
+import net.mandomc.core.modules.server.VehicleModule;
 import net.mandomc.gameplay.vehicle.config.VehicleConfigResolver;
+import net.mandomc.gameplay.vehicle.model.SeatConfig;
+import net.mandomc.gameplay.vehicle.model.SeatType;
 import net.mandomc.gameplay.vehicle.model.Vehicle;
 import net.mandomc.gameplay.vehicle.model.VehicleData;
 import net.mandomc.gameplay.vehicle.model.VehicleSkinOption;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Handles skin selection persistence and runtime model swapping.
@@ -85,15 +97,19 @@ public final class VehicleSkinManager {
         VehicleData data = vehicle.getVehicleData();
         if (data == null || data.getEntity() == null) return false;
 
+        // Build the target model first; if unavailable, keep current model untouched.
+        ActiveModel activeModel = ModelEngineAPI.createActiveModel(skin.modelKey());
+        if (activeModel == null) return false;
+
+        Map<UUID, Integer> occupantSnapshot = new HashMap<>(vehicle.getOccupants());
+        clearOccupants(vehicle, occupantSnapshot);
+
         ModeledEntity oldModeled = data.getModeledEntity();
         if (oldModeled != null) {
             oldModeled.destroy();
         }
 
         ModeledEntity remodeled = ModelEngineAPI.createModeledEntity(data.getEntity());
-        ActiveModel activeModel = ModelEngineAPI.createActiveModel(skin.modelKey());
-        if (activeModel == null) return false;
-
         activeModel.setScale(data.getScale());
         activeModel.setHitboxScale(data.getScale());
         remodeled.addModel(activeModel, true);
@@ -106,6 +122,34 @@ public final class VehicleSkinManager {
         ItemStack updatedItem = applySkinToItem(data.getItem(), skin);
         data.setItem(updatedItem);
         vehicle.setSelectedSkinId(skin.id());
+        restoreOccupants(vehicle, occupantSnapshot);
         return true;
+    }
+
+    private static void clearOccupants(Vehicle vehicle, Map<UUID, Integer> occupantSnapshot) {
+        for (UUID riderId : occupantSnapshot.keySet()) {
+            vehicle.vacate(riderId);
+            VehicleModule.unregisterOccupant(riderId);
+        }
+    }
+
+    private static void restoreOccupants(Vehicle vehicle, Map<UUID, Integer> occupantSnapshot) {
+        if (occupantSnapshot.isEmpty()) return;
+
+        List<Map.Entry<UUID, Integer>> ordered = new ArrayList<>(occupantSnapshot.entrySet());
+        ordered.sort(Comparator.comparingInt(entry -> {
+            SeatConfig seat = vehicle.getSeatAt(entry.getValue());
+            return seat != null && seat.type() == SeatType.DRIVER ? 0 : 1;
+        }));
+
+        for (Map.Entry<UUID, Integer> entry : ordered) {
+            SeatConfig seat = vehicle.getSeatAt(entry.getValue());
+            if (seat == null) continue;
+
+            Player player = Bukkit.getPlayer(entry.getKey());
+            if (player == null || !player.isOnline()) continue;
+
+            SeatManager.remountSeat(player, vehicle, seat);
+        }
     }
 }
