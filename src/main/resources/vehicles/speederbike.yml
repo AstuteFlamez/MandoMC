@@ -16,15 +16,27 @@ vehicle:
     movement: SURFACE
 
     weapon:
-      projectile_type: ARROW
+      wm_projectile: redlaser
       damage: 5.0
       speed: 2.5
       gravity: false
       cooldown: 0
-      burst: 1
-      spread: 0
       ammo: Standard_Plasma_Cells
       ammo_per_shot: 1
+      weapon_bones:
+        - weapon_one
+        - weapon_two
+      max_range: 100
+      damage_radius: 8.0
+      impact_particles:
+        - type: EXPLOSION
+          count: 8
+          spread: 0.2
+          speed: 0.02
+        - type: SMOKE
+          count: 6
+          spread: 0.1
+          speed: 0.01
       sound: vehicles.speederbike_shoot
       sound_volume: 1.0
       sound_pitch: 1.0

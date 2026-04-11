@@ -48,13 +48,21 @@ public class WeaponConfig {
     private final float soundVolume;
     private final float soundPitch;
     private final List<ParticleEffect> particles;
+    private final List<String> weaponBones;
+    private final double damageRadius;
+    private final List<ParticleEffect> impactParticles;
+    private final double maxRange;
+    private final String wmProjectile;
 
     private WeaponConfig(ProjectileType projectileType, double damage,
                          double projectileSpeed, boolean gravity,
                          long cooldownMs, int burst, int burstIntervalTicks,
                          double spreadDegrees, String ammo, int ammoPerShot,
                          String sound, float soundVolume, float soundPitch,
-                         List<ParticleEffect> particles) {
+                         List<ParticleEffect> particles,
+                         List<String> weaponBones, double damageRadius,
+                         List<ParticleEffect> impactParticles, double maxRange,
+                         String wmProjectile) {
         this.projectileType = projectileType;
         this.damage = damage;
         this.projectileSpeed = projectileSpeed;
@@ -69,6 +77,11 @@ public class WeaponConfig {
         this.soundVolume = soundVolume;
         this.soundPitch = soundPitch;
         this.particles = Collections.unmodifiableList(particles);
+        this.weaponBones = Collections.unmodifiableList(weaponBones);
+        this.damageRadius = damageRadius;
+        this.impactParticles = Collections.unmodifiableList(impactParticles);
+        this.maxRange = maxRange;
+        this.wmProjectile = wmProjectile;
     }
 
     /**
@@ -111,12 +124,19 @@ public class WeaponConfig {
         float soundVolume = (float) section.getDouble("sound_volume", 1.0);
         float soundPitch = (float) section.getDouble("sound_pitch", 1.0);
 
-        List<ParticleEffect> particles = parseParticles(section);
+        List<ParticleEffect> particles = parseParticleList(section, "particles");
+
+        List<String> weaponBones = section.getStringList("weapon_bones");
+        double damageRadius = section.getDouble("damage_radius", 0.0);
+        List<ParticleEffect> impactParticles = parseParticleList(section, "impact_particles");
+        double maxRange = section.getDouble("max_range", 100.0);
+        String wmProjectile = section.getString("wm_projectile");
 
         return new WeaponConfig(type, damage, speed, gravity,
                 cooldown, burst, burstInterval, spread,
                 ammo, ammoPerShot, sound, soundVolume, soundPitch,
-                particles);
+                particles, weaponBones, damageRadius, impactParticles, maxRange,
+                wmProjectile);
     }
 
     private static ProjectileType parseProjectileType(String value) {
@@ -128,8 +148,8 @@ public class WeaponConfig {
         }
     }
 
-    private static List<ParticleEffect> parseParticles(ConfigurationSection weaponSection) {
-        List<?> rawList = weaponSection.getList("particles");
+    private static List<ParticleEffect> parseParticleList(ConfigurationSection weaponSection, String key) {
+        List<?> rawList = weaponSection.getList(key);
         if (rawList == null) return List.of();
 
         List<ParticleEffect> effects = new ArrayList<>();
@@ -170,4 +190,9 @@ public class WeaponConfig {
     public float getSoundVolume() { return soundVolume; }
     public float getSoundPitch() { return soundPitch; }
     public List<ParticleEffect> getParticles() { return particles; }
+    public List<String> getWeaponBones() { return weaponBones; }
+    public double getDamageRadius() { return damageRadius; }
+    public List<ParticleEffect> getImpactParticles() { return impactParticles; }
+    public double getMaxRange() { return maxRange; }
+    public String getWmProjectile() { return wmProjectile; }
 }

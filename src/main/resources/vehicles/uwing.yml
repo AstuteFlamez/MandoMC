@@ -29,24 +29,30 @@ vehicle:
       rotator_bone: "body"
 
     weapon:
-      projectile_type: SNOWBALL
+      wm_projectile: redlaser
       damage: 7.0
       speed: 3.5
       gravity: false
       cooldown: 0
-      burst: 3
-      burst_interval: 3
-      spread: 2
       ammo: Tibanna_Gas_Cells
       ammo_per_shot: 1
+      weapon_bones:
+        - weapon_one
+        - weapon_two
+      max_range: 100
+      damage_radius: 8.0
+      impact_particles:
+        - type: EXPLOSION
+          count: 8
+          spread: 0.2
+          speed: 0.02
+        - type: SMOKE
+          count: 6
+          spread: 0.1
+          speed: 0.01
       sound: vehicles.tie_fighter_shoot
       sound_volume: 1.0
       sound_pitch: 1.0
-      particles:
-        - type: FLAME
-          count: 10
-          spread: 0.1
-          speed: 0.3
 
     movement_sound: vehicles.tie_fighter_fly
     movement_sound_time_in_ticks: 420

@@ -93,8 +93,10 @@ public class AerialMountController extends AbstractMountController {
         boolean forwardPressed = front > 0;
         boolean forwardPressEdge = forwardPressed && !forwardPressedLastTick;
         if (front < 0) {
-            thrusting = false;
-            sendFlightStatus(player, "vehicles.flight.thrust-off", data.getStatusCooldownTicks());
+            if (thrusting) {
+                thrusting = false;
+                sendFlightStatus(player, "vehicles.flight.thrust-off", data.getStatusCooldownTicks());
+            }
         } else if (forwardPressEdge) {
             if (!thrusting) {
                 thrusting = true;
@@ -244,12 +246,6 @@ public class AerialMountController extends AbstractMountController {
     }
 
     private void maybeSendFlightState(Player player, VehicleData data, FlightState state) {
-        if (state == lastFlightState) return;
-        if (state == FlightState.ACCELERATING) {
-            sendFlightStatus(player, "vehicles.flight.accelerating", data.getStatusCooldownTicks());
-        } else if (state == FlightState.DECELERATING) {
-            sendFlightStatus(player, "vehicles.flight.decelerating", data.getStatusCooldownTicks());
-        }
     }
 
     private void tryActivateBoost(Player player, VehicleData data) {
@@ -257,7 +253,6 @@ public class AerialMountController extends AbstractMountController {
         boostTicksRemaining = data.getBoostDurationTicks();
         boostCooldownRemaining = data.getBoostCooldownTicks();
         boostReadyAnnounced = false;
-        sendFlightStatus(player, "vehicles.flight.boost-on", data.getStatusCooldownTicks());
     }
 
     private void tickBoost(Player player, VehicleData data) {
@@ -268,7 +263,6 @@ public class AerialMountController extends AbstractMountController {
         if (boostCooldownRemaining > 0) {
             boostCooldownRemaining--;
             if (boostCooldownRemaining == 0 && !boostReadyAnnounced) {
-                sendFlightStatus(player, "vehicles.flight.boost-ready", data.getStatusCooldownTicks());
                 boostReadyAnnounced = true;
             }
         }

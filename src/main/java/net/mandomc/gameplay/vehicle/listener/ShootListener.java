@@ -25,11 +25,9 @@ public class ShootListener implements Listener {
 
         Player player = event.getPlayer();
 
-        // Resolves the vehicle for any seated player (owner or passenger)
         Vehicle vehicle = VehicleModule.getVehicleForPlayer(player.getUniqueId());
         if (vehicle == null) return;
 
-        // Only seats tagged to permit shooting can fire
         if (!SeatManager.canShootFromSeat(player, vehicle)) return;
 
         vehicle.getVehicleData()
