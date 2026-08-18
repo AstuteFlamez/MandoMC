@@ -1,0 +1,16 @@
+name: MandoMC
+version: '1.0-SNAPSHOT'
+main: mandomc.Main
+api-version: '1.21'
+author: Bilal
+description: Baseline plugin structure for MandoMC
+
+commands:
+  mandomc:
+    description: Main plugin command
+    permission: mandomc.admin
+    usage: /<command> [reload]
+permissions:
+  mandomc.admin:
+    description: Gives access to administrative MandoMC commands
+    default: op
