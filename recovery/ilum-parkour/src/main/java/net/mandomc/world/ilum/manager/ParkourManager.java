@@ -1,0 +1,329 @@
+package net.mandomc.world.ilum.manager;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.ArrayList;
+import java.util.Set;
+
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
+
+import net.mandomc.core.LangManager;
+
+import net.mandomc.world.ilum.util.ParkourItemFactory;
+import net.mandomc.world.ilum.model.ParkourSession;
+import net.mandomc.world.ilum.model.ParkourState;
+import net.mandomc.world.ilum.util.TimeFormatter;
+import net.mandomc.world.ilum.config.ParkourConfig;
+
+public class ParkourManager {
+
+    private final Map<UUID, ParkourSession> sessions = new HashMap<>();
+    private final ParkourTimeManager timeManager;
+    private final ParkourLeaderboardManager leaderboardManager;
+
+
+    public ParkourManager(ParkourTimeManager timeManager, ParkourLeaderboardManager leaderboardManager) {
+        this.timeManager = timeManager;
+        this.leaderboardManager = leaderboardManager;
+    }
+
+    /*
+     * Check if player currently has a parkour session
+     */
+    public boolean hasSession(Player player) {
+        return sessions.containsKey(player.getUniqueId());
+    }
+
+    /*
+     * Get a player's session
+     */
+    public ParkourSession getSession(Player player) {
+        return sessions.get(player.getUniqueId());
+    }
+
+    /**
+     * Returns a snapshot of all players currently in active parkour sessions.
+     */
+    public Set<UUID> getActiveSessionPlayers() {
+        return Set.copyOf(sessions.keySet());
+    }
+
+    /*
+     * Start a parkour session
+     */
+    public void enterParkour(Player player, Location startLocation) {
+
+        if (hasSession(player)) return;
+
+        ParkourSession session = new ParkourSession(player.getUniqueId());
+
+        // Save player state
+        session.setSavedInventory(player.getInventory().getContents());
+        session.setSavedArmor(player.getInventory().getArmorContents());
+        session.setSavedGamemode(player.getGameMode());
+        session.setSavedHealth(player.getHealth());
+        session.setSavedFoodLevel(player.getFoodLevel());
+        session.setSavedSaturation(player.getSaturation());
+        session.setReturnLocation(player.getLocation());
+
+        session.setStartLocation(startLocation);
+
+        session.setStartTime(System.currentTimeMillis());
+
+        sessions.put(player.getUniqueId(), session);
+
+        // Prepare player for parkour
+        player.getInventory().clear();
+        player.getInventory().setArmorContents(null);
+
+        player.setGameMode(GameMode.ADVENTURE);
+        player.setHealth(player.getMaxHealth());
+        player.setFoodLevel(20);
+        player.setSaturation(20f);
+        player.setFireTicks(0);
+
+        giveParkourItems(player);
+
+        player.teleport(startLocation);
+    }
+
+    /*
+     * End a parkour session
+     */
+    public void exitParkour(Player player) {
+
+        if (!hasSession(player)) return;
+
+        ParkourSession session = getSession(player);
+
+        session.setState(ParkourState.EXITING);
+
+        // Restore player state
+        player.setGameMode(GameMode.ADVENTURE);
+        player.getInventory().setContents(session.getSavedInventory());
+        player.getInventory().setArmorContents(session.getSavedArmor());
+
+        player.setGameMode(session.getSavedGamemode());
+        player.setHealth(Math.max(0.5, Math.min(player.getMaxHealth(), session.getSavedHealth())));
+        player.setFoodLevel(Math.max(0, Math.min(20, session.getSavedFoodLevel())));
+        player.setSaturation(Math.max(0f, Math.min(20f, session.getSavedSaturation())));
+        player.setFireTicks(0);
+
+        // Always prefer configured server return spawn for parkour exits.
+        Location returnLocation = getConfiguredSpawnLocation();
+        if (returnLocation == null || returnLocation.getWorld() == null) {
+            returnLocation = session.getReturnLocation();
+        }
+
+        // Remove session before teleport
+        sessions.remove(player.getUniqueId());
+
+        if (returnLocation != null && returnLocation.getWorld() != null) {
+            player.teleport(returnLocation);
+        }
+
+        player.sendMessage(LangManager.get("parkour.left"));
+
+        player.playSound(
+            player.getLocation(),
+            Sound.BLOCK_BEACON_ACTIVATE,
+            1f,
+            1f
+        );
+    }
+
+    /*
+    * Save checkpoint
+    */
+    public void setCheckpoint(Player player, Location location) {
+
+        if (!hasSession(player)) return;
+
+        ParkourSession session = getSession(player);
+
+        Location checkpoint = location.clone();
+
+        float yaw = normalizeYaw(player.getLocation().getYaw());
+        float pitch = player.getLocation().getPitch();
+
+        checkpoint.setYaw(yaw);
+        checkpoint.setPitch(pitch);
+
+        session.setCheckpoint(checkpoint);
+    }
+
+    /*
+    * Teleport player to checkpoint
+    */
+    public void teleportCheckpoint(Player player) {
+
+        if (!hasSession(player)) return;
+
+        ParkourSession session = getSession(player);
+
+        Location checkpoint = session.getCheckpoint();
+        Location target;
+
+        if (checkpoint != null) {
+            target = checkpoint.clone();
+        } else {
+            target = session.getStartLocation().clone();
+
+            target.setYaw((float) ParkourConfig.get().getDouble("parkour.start.yaw"));
+            target.setPitch((float) ParkourConfig.get().getDouble("parkour.start.pitch"));
+        }
+
+        player.teleport(target);
+        player.setFallDistance(0);
+
+        player.playSound(
+            player.getLocation(),
+            Sound.ENTITY_ENDERMAN_TELEPORT,
+            1f,
+            1f
+        );
+    }
+
+    /*
+     * Restart parkour
+     */
+    public void restart(Player player) {
+
+        if (!hasSession(player)) return;
+
+        ParkourSession session = getSession(player);
+
+        Location startLocation = session.getStartLocation();
+
+        if (startLocation == null) {
+            player.sendMessage(LangManager.get("parkour.start-not-set"));
+            return;
+        }
+
+        // Reset checkpoint progress
+        session.setCheckpoint(null);
+        session.setLastCheckpointPlate(null);
+
+        // Reset timer
+        session.setStartTime(System.currentTimeMillis());
+
+        // Clone location so we don't modify the stored session value
+        Location tp = startLocation.clone();
+
+        player.teleport(tp);
+
+        player.playSound(
+            player.getLocation(),
+            Sound.ENTITY_ENDERMAN_TELEPORT,
+            1f,
+            1f
+        );
+    }
+
+    private void giveParkourItems(Player player) {
+
+        player.getInventory().setItem(0, ParkourItemFactory.createLeaveItem());
+        player.getInventory().setItem(1, ParkourItemFactory.createCheckpointItem());
+        player.getInventory().setItem(2, ParkourItemFactory.createRestartItem());
+    }
+
+    public void giveRewards(Player player) {
+
+        List<String> commands =
+                ParkourConfig.get().getStringList("parkour.rewards.commands");
+
+        for (String cmd : commands) {
+
+            cmd = cmd.replace("%player%", player.getName());
+
+            Bukkit.dispatchCommand(
+                    Bukkit.getConsoleSender(),
+                    cmd
+            );
+        }
+    }
+
+    public void finishParkour(Player player) {
+
+        if (!hasSession(player)) return;
+
+        ParkourSession session = getSession(player);
+
+        long endTime = System.currentTimeMillis();
+
+        double seconds = (endTime - session.getStartTime()) / 1000.0;
+
+        timeManager.updateTime(player, seconds);
+        leaderboardManager.updateLeaderboards();
+
+        player.sendTitle(
+                LangManager.get("parkour.finish.title"),
+                LangManager.get("parkour.finish.subtitle"),
+                10, 60, 20
+        );
+
+        player.sendMessage(LangManager.get("parkour.finish.time", "%time%", TimeFormatter.format(seconds)));
+
+        Double best = timeManager.getBestTime(player.getUniqueId());
+
+        String bestText = best != null ? TimeFormatter.format(best) : "N/A";
+        player.sendMessage(LangManager.get("parkour.finish.best-time", "%time%", bestText));
+
+        giveRewards(player);
+
+        exitParkour(player);
+    }
+
+    private float normalizeYaw(float yaw) {
+
+        yaw = yaw % 360;
+
+        if (yaw < 0) yaw += 360;
+
+        return Math.round(yaw / 90f) * 90f;
+    }
+
+    private Location getConfiguredSpawnLocation() {
+        String worldName = ParkourConfig.get().getString("parkour.spawn.world");
+        if (worldName == null || worldName.isBlank()) {
+            return null;
+        }
+
+        var world = Bukkit.getWorld(worldName);
+        if (world == null) {
+            return null;
+        }
+
+        double x = ParkourConfig.get().getDouble("parkour.spawn.x");
+        double y = ParkourConfig.get().getDouble("parkour.spawn.y");
+        double z = ParkourConfig.get().getDouble("parkour.spawn.z");
+        float yaw = (float) ParkourConfig.get().getDouble("parkour.spawn.yaw");
+        float pitch = (float) ParkourConfig.get().getDouble("parkour.spawn.pitch");
+        return new Location(world, x, y, z, yaw, pitch);
+    }
+
+    /**
+     * Called on module disable/reload to prevent leaked in-memory sessions.
+     * Restores online player state where possible, then clears all session state.
+     */
+    public void shutdownSessions() {
+        for (UUID playerId : new ArrayList<>(sessions.keySet())) {
+            try {
+                Player player = Bukkit.getPlayer(playerId);
+                if (player != null && player.isOnline()) {
+                    exitParkour(player);
+                    continue;
+                }
+            } catch (Throwable ignored) {
+                // Keep shutdown resilient even when server APIs are unavailable in tests.
+            }
+            sessions.remove(playerId);
+        }
+    }
+}
