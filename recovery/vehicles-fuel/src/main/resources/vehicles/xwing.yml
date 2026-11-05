@@ -1,0 +1,84 @@
+vehicle:
+  item_id: xwing
+  display_name: "&9X-Wing Fighter"
+  gui_size: 27
+
+  fuel:
+    max: 1000
+    start: 1000
+
+  stats:
+    max_health: 200
+    speed: 2.1
+    scale: 1
+
+  systems:
+    movement: AERIAL
+
+    rotation:
+      roll_smoothing: 0.15
+      max_pitch: 30
+      max_roll: 15
+      acceleration_per_tick: 0.08
+      deceleration_per_tick: 0.10
+      boost_multiplier: 1.30
+      boost_duration_ticks: 14
+      boost_cooldown_ticks: 80
+      boost_shake_degrees: 0.8
+      status_cooldown_ticks: 20
+      rotator_bone: "body"
+
+    weapon:
+      wm_projectile: redlaser
+      damage: 10.0
+      speed: 4.0
+      gravity: false
+      cooldown: 2000
+      ammo: Proton_Torpedo
+      ammo_per_shot: 1
+      weapon_bones:
+        - weapon_one
+        - weapon_two
+        - weapon_three
+        - weapon_four
+      max_range: 100
+      damage_radius: 8.0
+      impact_particles:
+        - type: EXPLOSION
+          count: 8
+          spread: 0.2
+          speed: 0.02
+        - type: SMOKE
+          count: 6
+          spread: 0.1
+          speed: 0.01
+      sound: vehicles.xwing_shoot
+      sound_volume: 1.0
+      sound_pitch: 1.0
+
+    movement_sound: vehicles.xwing_fly
+    movement_sound_time_in_ticks: 460
+
+  skins:
+    default: default
+    options:
+      default:
+        model_key: xwing
+        permission: ""
+        item:
+          name: "&c&lX-Wing Starfighter"
+          custom_model_data: 1
+      purple:
+        model_key: purple_xwing
+        permission: "mandomc.vehicle.skin.xwing.purple"
+        item:
+          name: "&5&lX-Wing Starfighter"
+          custom_model_data: 4
+
+  seats:
+    - name: "Pilot Seat"
+      slot: 13
+      type: DRIVER
+      gunner: true
+      mount_bone: seat
+      skull_url: "https://textures.minecraft.net/texture/5d9591c0d3262fe9d7056dd91c787a685915946739f15e349b3ddcf12a46cbb7"

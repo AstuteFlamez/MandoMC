@@ -1,0 +1,76 @@
+vehicle:
+  item_id: tiefighter
+  display_name: "&cTIE Fighter"
+  gui_size: 27
+
+  fuel:
+    max: 1000
+    start: 1000
+
+  stats:
+    max_health: 150
+    speed: 3
+    scale: 1
+
+  systems:
+    movement: AERIAL
+
+    rotation:
+      roll_smoothing: 0.18
+      max_pitch: 30
+      max_roll: 15
+      acceleration_per_tick: 0.10
+      deceleration_per_tick: 0.12
+      boost_multiplier: 1.35
+      boost_duration_ticks: 16
+      boost_cooldown_ticks: 80
+      boost_shake_degrees: 0.9
+      status_cooldown_ticks: 20
+      rotator_bone: "body"
+
+    weapon:
+      wm_projectile: redlaser
+      damage: 6.0
+      speed: 4.0
+      gravity: false
+      cooldown: 0
+      ammo: Tibanna_Gas_Cells
+      ammo_per_shot: 1
+      weapon_bones:
+        - weapon_one
+        - weapon_two
+      max_range: 100
+      damage_radius: 8.0
+      impact_particles:
+        - type: EXPLOSION
+          count: 8
+          spread: 0.2
+          speed: 0.02
+        - type: SMOKE
+          count: 6
+          spread: 0.1
+          speed: 0.01
+      sound: vehicles.tie_fighter_shoot
+      sound_volume: 1.0
+      sound_pitch: 1.0
+
+    movement_sound: vehicles.tie_fighter_fly
+    movement_sound_time_in_ticks: 420
+
+  skins:
+    default: default
+    options:
+      default:
+        model_key: tiefighter
+        permission: ""
+        item:
+          name: "&8&lTie Fighter"
+          custom_model_data: 2
+
+  seats:
+    - name: "Pilot Seat"
+      slot: 13
+      type: DRIVER
+      gunner: true
+      mount_bone: seat
+      skull_url: "https://textures.minecraft.net/texture/e9110433357ba068492f95c812098f9bcb3667d324fbc4c32d6ea8a18382ae1c"

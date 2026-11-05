@@ -1,0 +1,63 @@
+vehicle:
+  item_id: speederbike
+  display_name: "&6Speeder Bike"
+  gui_size: 27
+
+  fuel:
+    max: 500
+    start: 500
+
+  stats:
+    max_health: 400
+    speed: 1
+    scale: 2.0
+
+  systems:
+    movement: SURFACE
+
+    weapon:
+      wm_projectile: redlaser
+      damage: 5.0
+      speed: 2.5
+      gravity: false
+      cooldown: 0
+      ammo: Standard_Plasma_Cells
+      ammo_per_shot: 1
+      weapon_bones:
+        - weapon_one
+        - weapon_two
+      max_range: 100
+      damage_radius: 8.0
+      impact_particles:
+        - type: EXPLOSION
+          count: 8
+          spread: 0.2
+          speed: 0.02
+        - type: SMOKE
+          count: 6
+          spread: 0.1
+          speed: 0.01
+      sound: vehicles.speederbike_shoot
+      sound_volume: 1.0
+      sound_pitch: 1.0
+
+    movement_sound: vehicles.speederbike_drive
+    movement_sound_time_in_ticks: 300
+
+  skins:
+    default: default
+    options:
+      default:
+        model_key: speederbike
+        permission: ""
+        item:
+          name: "&6&l74-Z Speeder Bike"
+          custom_model_data: 3
+
+  seats:
+    - name: "Pilot Seat"
+      slot: 13
+      type: DRIVER
+      gunner: true
+      mount_bone: seat
+      skull_url: "https://textures.minecraft.net/texture/8cfe05d41adafc75640e7cbb1d93200475c212de29d52e691323e710cf0f014d"
