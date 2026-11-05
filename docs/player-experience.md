@@ -9,7 +9,11 @@ New players arrive in SpawnWorld, an existing map file the user already has. The
 
 A solo player can create a faction and claim a starter base on eligible land outside the spawn safe zone, without a credit requirement. A faction creation cooldown of around three hours was suggested tentatively; neither the cooldown nor its duration is decided. Claim capacity and other later territory rules remain open.
 
-Death loses only what the player carries. Respawn priority is faction home, then a valid bed, then SpawnWorld. If no valid faction home or bed is available, use SpawnWorld. A player with stored faction supplies can re-equip from that stockpile. Voluntary return travel, initial equipment and how a player without supplies recovers still need decisions.
+Death loses only what the player carries. Respawn priority is faction home, then a valid bed, then SpawnWorld. If no valid faction home or bed is available, use SpawnWorld. A player with stored faction supplies can re-equip from that stockpile. Voluntary return travel and how a player without supplies recovers still need decisions.
+
+Combat blocks voluntary teleporting. Logging out while in combat causes death, with the normal carried-item loss. Combat tag duration, triggering actions and server-initiated disconnect handling still need definition.
+
+The first join grants a basic blaster, vanilla tools and food. Equipment is granted only once, not on subsequent joins or deaths. Exact items, quantities and ammunition remain to be configured. Starting credits are possible but neither their inclusion nor amount is decided.
 
 The first friends playtest should bring the discussed gameplay systems together in a rough, integrated version. The development slices below are incremental building and checking steps toward that target. The precise content depth for each system still needs agreement; force powers remain deferred.
 
@@ -40,9 +44,24 @@ Use [the feature brief](templates/feature.md). Record unresolved gameplay choice
 This is a starting sequence for discussion. Resource planets, travel details, dungeon contention and warpoint balancing still need decisions.
 
 ## Next player decisions
-- Voluntary travel between SpawnWorld, the survival landing zone and faction homes: commands/menu, physical transport points, or a combination.
-- Combat restrictions on travel and the result of disconnecting during combat.
-- Initial equipment and whether any starter grant is restricted to first join.
+- Review the travel recommendation below; it is not yet accepted.
+- Define how players acquire basic replacements after their one-time starting equipment is lost.
+- Define combat tagging details and the initial equipment quantities when their feature briefs are written.
+
+## Travel recommendation — awaiting user acceptance
+Use free commands and a destination menu for routine travel, with optional themed transport terminals that open the same menu. The proposed first version has:
+
+- `/spawn`: return to SpawnWorld.
+- `/travel`: select a public destination; survival always arrives at its fixed protected landing zone. Future planets use their own public arrival points, rather than teleports directly onto objectives.
+- `/f home`: return to the faction home, set inside the faction's own eligible claims.
+- A five-second stationary warmup, cancelled by movement or damage. All entry points enforce the same combat restrictions. Five seconds is a suggested initial tuning value, not an accepted rule.
+- No death-return `/back` and no network of arbitrary personal homes initially. Exploration, journeys from landing zones to activities, and reaching other bases provide routes for walking, speeders and aircraft. Teleporting to other players remains a separate open choice.
+
+A shuttle terminal in SpawnWorld can teach first-time travel while returning players use commands. Routine travel should be free initially; vehicle fuel and other economy costs are separate decisions. Combat tag duration remains open; a 30-second PvP tag is a candidate for playtesting, not an established requirement.
+
+Research checked 2026-11-05: [Minecadia's published faction guide](https://wiki.minecadia.com/index.php?title=Faction_Commands) documents `/f home` and menu-based faction warps (page last edited March 2023). [Complex's October 2026 guide](https://www.mc-complex.com/forums/vanilla/wiki-page/56/factions-commands-full-f-command-list-2026/) documents faction-home travel with a warmup and restricted activity areas. [PirateCraft's getting-started guide](https://piratemc.com/guides/getting-started/) combines ships with free public warps, portals and home teleports; the guide contains older version references. These are examples of published designs, not live-server tests or a player-preference survey.
+
+Advisor prediction: this audience will probably favor convenient routine travel with Star Wars presentation over mandatory walks to transport points for every trip. Limited destinations preserve reasons to explore and use vehicles, though easy home travel reduces transport risk. Validate that tradeoff in playtests instead of claiming a measured majority preference.
 
 ## Configuration-driven systems
 Use explicit schemas and stable IDs. YAML declares content and tuning; Java implements behavior, validation, lifecycle and integration.

@@ -21,16 +21,34 @@
     "firstSession": "New players arrive in the existing SpawnWorld map, receive a short tutorial (format undecided), then enter survival at a fixed protected landing zone to establish a base.",
     "starterFaction": "Solo players can create a faction and claim a starter base on eligible land outside the spawn safe zone without a credit requirement. A possible three-hour faction creation cooldown is tentative, not accepted.",
     "deathRecovery": "Death loses carried equipment. Respawn priority is faction home, then a valid bed, then SpawnWorld. Players can re-equip from stored faction supplies. Voluntary travel remains undecided.",
+    "combatEscape": "Combat blocks voluntary teleporting. Logging out in combat causes death and normal carried-item loss. Tag duration, triggers and server-initiated disconnect handling remain undecided.",
+    "starterEquipment": "A basic blaster, vanilla tools and food are granted only on first join. Exact items, quantities and ammo are undecided. Starting credits and their amount remain tentative.",
     "firstFriendsPlaytest": "The discussed gameplay systems should work together in a rough integrated version. Small development slices lead toward this target; content depth remains undecided. Force powers remain deferred."
   },
   "architecture": "docs/architecture.md",
   "playerDesign": "docs/player-experience.md",
   "legacyInventory": "planning/legacy-features.json",
-  "nextAction": "Decide voluntary travel, combat teleport/disconnect rules, and first-join equipment.",
+  "travelProposal": {
+    "status": "awaiting-user-acceptance",
+    "recommendation": "Free spawn and faction-home commands plus a public-destination travel menu, also accessible through optional themed terminals. Survival uses the fixed protected landing zone.",
+    "suggestedWarmupSeconds": 5,
+    "warmupCancellation": "Movement or damage; all entry points enforce combat restrictions.",
+    "suggestedPvpTagSeconds": 30,
+    "limits": "No death-return back command or arbitrary personal-home network initially; other-player teleports undecided. Vehicles serve exploration and routes beyond fixed destinations.",
+    "evidenceChecked": "2026-11-05",
+    "evidenceLimit": "Published server guides show comparable designs, not measured player preference or verified live settings. Minecadia's page was last edited in 2023; PirateCraft's guide includes older version references.",
+    "sources": [
+      "https://wiki.minecadia.com/index.php?title=Faction_Commands",
+      "https://www.mc-complex.com/forums/vanilla/wiki-page/56/factions-commands-full-f-command-list-2026/",
+      "https://piratemc.com/guides/getting-started/"
+    ]
+  },
+  "nextAction": "Review the researched travel recommendation, then define basic gear acquisition and replacement.",
   "openDecisions": [
     "Voluntary travel between SpawnWorld, survival and faction homes",
-    "Combat teleport restrictions and disconnect consequences",
-    "First-join equipment and repeat-grant rules",
+    "Combat tag duration, triggers and server-initiated disconnect handling",
+    "Starter equipment quantities and ammunition; whether to grant starting credits and how much",
+    "Player-to-player teleport requests",
     "Whether faction creation needs a cooldown; three hours was only a tentative suggestion",
     "Claim capacity and later territory rules",
     "Short tutorial format",
