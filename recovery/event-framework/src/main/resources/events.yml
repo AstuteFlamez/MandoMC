@@ -1,0 +1,13 @@
+scheduler:
+  enabled: true
+
+  announcements:
+    end-warning-minute: 50
+    end-minute: 55
+    start-warning-minute: 55
+    start-minute: 0
+
+gui:
+  title: "&8Server Events"
+  size: 27
+  filler: GRAY_STAINED_GLASS_PANE
