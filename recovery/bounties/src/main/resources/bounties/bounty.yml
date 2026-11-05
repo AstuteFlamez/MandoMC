@@ -1,0 +1,65 @@
+bounty:
+
+  # =========================
+  # 💰 BOUNTY SETTINGS
+  # =========================
+  min: 100
+  max: 100000
+
+  # how often locations update (seconds)
+  tracking-interval: 600
+
+  # =========================
+  # ✅ VALIDATION
+  # =========================
+  validation:
+    min-amount: 100
+    max-amount: 100000
+    max-per-player: 1
+
+  # =========================
+  # 🛰 SHOWCASE HOLOGRAM
+  # =========================
+  showcase:
+    enabled: true
+    id: "bounty_showcase"
+    world: "BlackSpireOutpost"
+    x: 40
+    y: 94
+    z: 87.9
+    yaw: 180.0
+    pitch: 0.0
+    text-y-offset: 0.50
+    npc-y-offset: 0.0
+    lines:
+      - "&c&lBounty Terminal"
+      - "&7Target &8• &f%target%"
+      - "&7Value  &8• &6$%amount%"
+      - "&7Sector &8• &f%location%"
+      - "&7Status &8• %status%"
+
+  # =========================
+  # 🖥 GUI SETTINGS
+  # =========================
+  gui:
+    title: "&c&lActive Bounties"
+    size: 54
+
+  # =========================
+  # 🧱 FILLER ITEM
+  # =========================
+  filler:
+    material: GRAY_STAINED_GLASS_PANE
+    name: " "
+    lore: []
+
+  # =========================
+  # 💬 MESSAGES
+  # =========================
+  messages:
+    placed: "&aYou placed a bounty on &e%target% &afor &6$%amount%"
+    broadcast: "&c⚠ &e%target% &chas a bounty of &6$%amount%"
+    removed: "&cYou removed your bounty on &e%target% &cand were refunded."
+    already-has: "&cYou already placed a bounty."
+    self: "&cYou cannot place a bounty on yourself."
+    not-enough: "&cNot enough money."
