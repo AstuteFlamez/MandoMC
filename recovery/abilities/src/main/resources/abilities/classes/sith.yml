@@ -1,0 +1,82 @@
+abilities:
+  sith_force_jump:
+    class: sith
+    display: "&cForce Jump"
+    kind: force_jump
+    slot: 0
+    activationSlot: 1
+    bindable: false
+    requires: []
+    levels:
+      1:
+        tokenCost: 1
+        cooldownSeconds: 4.0
+        jumpMultiplier: 1.0
+        pushPower: 0.0
+        pushRange: 0.0
+        pushRadius: 0.0
+      2:
+        tokenCost: 2
+        cooldownSeconds: 3.5
+        jumpMultiplier: 1.3
+        pushPower: 0.0
+        pushRange: 0.0
+        pushRadius: 0.0
+
+  sith_force_push:
+    class: sith
+    display: "&cForce Push"
+    kind: force_push
+    slot: 1
+    activationSlot: -1
+    bindable: true
+    requires: [sith_force_jump]
+    levels:
+      1:
+        tokenCost: 1
+        cooldownSeconds: 4.0
+        jumpMultiplier: 0.0
+        pushPower: 1.2
+        pushRange: 7.0
+        pushRadius: 0.0
+      2:
+        tokenCost: 2
+        cooldownSeconds: 5.0
+        jumpMultiplier: 0.0
+        pushPower: 1.1
+        pushRange: 5.0
+        pushRadius: 3.5
+
+  sith_saber_rage:
+    class: sith
+    display: "&cSaber Rage (Scaffold)"
+    kind: none
+    slot: 9
+    activationSlot: 2
+    bindable: false
+    requires: [sith_force_push]
+    levels:
+      1:
+        tokenCost: 1
+        cooldownSeconds: 0.0
+        jumpMultiplier: 0.0
+        pushPower: 0.0
+        pushRange: 0.0
+        pushRadius: 0.0
+
+  sith_force_choke:
+    class: sith
+    display: "&cForce Choke (Scaffold)"
+    kind: none
+    slot: 10
+    activationSlot: 3
+    bindable: false
+    requires: [sith_force_push]
+    levels:
+      1:
+        tokenCost: 1
+        cooldownSeconds: 0.0
+        jumpMultiplier: 0.0
+        pushPower: 0.0
+        pushRange: 0.0
+        pushRadius: 0.0
