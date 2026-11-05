@@ -1,0 +1,78 @@
+items:
+
+  keycard:
+    material: ECHO_SHARD
+    name: '&bKeycard'
+    custom_model_data: 404
+
+    rarity: Uncommon
+    category: Key
+
+    tags:
+      - KEY
+
+    lore:
+      - '&7A security keycard used'
+      - '&7to unlock restricted doors.'
+
+    items:
+
+  vote_crate_key:
+    material: ECHO_SHARD
+    name: '&aVote Crate Key'
+    custom_model_data: 403
+
+    rarity: Common
+    category: Key
+
+    tags:
+      - KEY
+
+    lore:
+      - '&7A reward for supporting the server.'
+      - '&7Used to unlock the Vote Crate.'
+
+  pathfinder_crate_key:
+    material: ECHO_SHARD
+    name: '&6Pathfinder Crate Key'
+    custom_model_data: 408
+
+    rarity: Rare
+    category: Key
+
+    tags:
+      - KEY
+
+    lore:
+      - '&7Recovered from distant routes'
+      - '&7and unexplored territories.'
+
+  voyager_crate_key:
+    material: ECHO_SHARD
+    name: '&cVoyager Crate Key'
+    custom_model_data: 407
+
+    rarity: Epic
+    category: Key
+
+    tags:
+      - KEY
+
+    lore:
+      - '&7Carried across hyperspace lanes,'
+      - '&7holding valuable cargo access.'
+
+  wayfarer_crate_key:
+    material: ECHO_SHARD
+    name: '&9Wayfarer Crate Key'
+    custom_model_data: 401
+
+    rarity: Legendary
+    category: Key
+
+    tags:
+      - KEY
+
+    lore:
+      - '&7Belonging to seasoned travelers'
+      - '&7who traverse the galaxy’s edges.'
