@@ -12,7 +12,9 @@
     "core": "Factions, blasters, KOTH and Jabba dungeon were successful previously. Lightsabers and armor are core. Force powers are deferred.",
     "worldRules": "Only main survival world is buildable. Other planets can be dungeon destinations. Resource planets are deferred. Remove selected vanilla features including villages, potions and elytra; exact disable list pending.",
     "pvp": "Enabled broadly outside safe areas such as spawnpoints. Death drops all carried items including armor and weapons.",
-    "raids": "Only a rival group with the required pairwise net-kill lead can breach a base, including offline, using approved explosives and looting accessible chests. Defenders retain ownership; no takeover, unclaiming or unrestricted hand-breaking. No TNT cannons. Threshold, explosive/block limits, raid-window policy and third-party chest access remain open.",
+    "raids": "Only a rival group that earns the required pairwise net-kill lead can initiate a breach, including offline, using approved explosives and looting accessible chests. A configured continuation window covers a score drop during an active raid. Defenders retain ownership; no takeover, unclaiming or unrestricted hand-breaking. No TNT cannons. Threshold, explosive/block limits and raid lifecycle details remain open.",
+    "raidContinuation": "The configurable continuation window starts when the attacker's score drops below threshold during an active raid, not at the initial breach. It preserves that pair's existing raid permissions until expiry; afterward further raid actions require a qualifying current score. Duration, active-raid detection and refresh/retrigger behavior remain undecided.",
+    "thirdPartyRaidAccess": "An unrelated group can enter an existing breach and collect ground items, but cannot break blocks or open the defender's chests.",
     "warpoints": "Each pair of groups starts at zero. An opposing-group kill is +1 against the victim group and -1 in the reverse view, with unrelated pairs unchanged. A configurable net-kill lead unlocks raids for only the leading group against that rival. Recover by kills against the same rival; no passive time-based recovery in the selected model. Five was only an example threshold.",
     "maps": "Original Jabba/KOTH maps and mob/plugin configurations remain on a server the user can pull up.",
     "assets": "User has models, sounds, menus, armor, mobs and item assets; repository archive inspected.",
@@ -103,7 +105,7 @@
       "https://piratemc.com/guides/getting-started/"
     ]
   },
-  "nextAction": "Decide raid permission after the lead falls below threshold and third-party access to exposed chests.",
+  "nextAction": "Define aircraft's first-playtest role, vehicle acquisition, and theft/destruction rules outside protected areas.",
   "openDecisions": [
     "Player-facing group name and command root",
     "Saber guard tuning, incoming direction and reflection timing",
@@ -118,11 +120,12 @@
     "Short tutorial format",
     "Content depth per system for the integrated friends playtest",
     "Pairwise raid threshold and handling of unaffiliated or non-attributed deaths",
-    "Raid-window policy after score reversal",
-    "Third-party chest access through an existing breach",
+    "Raid-window duration/refresh and active-raid detection",
     "Approved explosives and block-damage limits",
     "Planetary travel",
     "KOTH reward delivery and ownership",
-    "Event schedules and time limits"
+    "Event schedules and time limits",
+    "Aircraft's first-playtest role",
+    "Vehicle acquisition and theft/destruction rules"
   ]
 }

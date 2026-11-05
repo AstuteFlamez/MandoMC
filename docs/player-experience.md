@@ -56,9 +56,9 @@ Use [the feature brief](templates/feature.md). Record unresolved gameplay choice
 This is a starting sequence for discussion. Travel details, event schedules/rewards and warpoint balancing still need decisions. Resource planets are outside the current scope.
 
 ## Next player decisions
-- Decide whether raid permission ends immediately when the net-kill lead falls below the threshold, or an already-started raid gets a timed window.
-- Decide whether unrelated groups can loot chests exposed by an eligible attacker's breach.
-- Then settle KOTH reward delivery and remaining event configuration details.
+- Define the role of aircraft in the first integrated playtest: transport, simple weapons, or full aerial combat.
+- Define how players obtain speeders and aircraft.
+- Define whether enemies can steal or destroy parked vehicles outside protected areas.
 
 Group naming and the travel recommendation remain open. Combat tagging details and initial equipment quantities can be settled when their feature briefs are written.
 
@@ -104,7 +104,11 @@ Event PvP kills/deaths at KOTH and Jabba count toward the corresponding rivalry.
 
 Eligible attackers may breach using approved explosives and loot accessible chests. Defenders retain land ownership. This does not permit takeover, unclaiming or unrestricted hand-breaking. Approved explosive types and block-damage limits remain configurable design work. Safe spawn/adventure regions remain protected.
 
-Still open: whether an active raid survives a score reversal for a timed window, chest access for unrelated groups entering through an existing breach, and attribution/handling for unaffiliated players or deaths without an opposing group. These choices must not be inferred from the old generic faction-power behavior.
+If the attacker's score drops below the threshold during an active raid, a configurable continuation window begins at that score drop. The existing attacker retains raid permissions during the window; the timer does not start at the initial breach. After it expires, the attacker needs a qualifying current score to continue. The window remains specific to the attacker/defender pair.
+
+An unrelated group may enter through an existing breach and pick up dropped items, but cannot break blocks or open the defender's chests. An eligible raider's permissions do not transfer to other groups. This base protection rule is distinct from Jabba's open chest/boss loot.
+
+Still open for the raid feature brief: the threshold and continuation duration, active-raid detection, timer refresh/retrigger behavior, explosive/block limits, and attribution/handling for unaffiliated players or deaths without an opposing group. These choices must not be inferred from the old generic faction-power behavior.
 
 ## Travel recommendation — awaiting user acceptance
 Use free commands and a destination menu for routine travel, with optional themed transport terminals that open the same menu. The proposed first version has:
