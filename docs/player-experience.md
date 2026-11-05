@@ -4,8 +4,15 @@ Status: working design, not a finalized feature order.
 ## Confirmed foundation
 Players use Java Minecraft and a required resource pack. They form factions, build on the main survival world, and encounter PvP outside designated safe areas. Death drops carried items, weapons and armor. KOTH and Jabba are proven activities. Offline bases may become vulnerable after warpoints are depleted. Force powers are deferred.
 
+## Confirmed first session and recovery
+New players arrive in SpawnWorld, an existing map file the user already has. They receive a short tutorial, with its presentation still undecided. Their first goal is to travel to survival and establish a base.
+
+Death loses only what the player carries. A player with a faction home and stored equipment can return and re-equip from that stockpile. Respawn location, return travel, initial equipment and how a player without supplies recovers still need decisions.
+
+The first friends playtest should bring the discussed gameplay systems together in a rough, integrated version. The development slices below are incremental building and checking steps toward that target. The precise content depth for each system still needs agreement; force powers remain deferred.
+
 ## Proposed everyday loop
-Establish a base with friends, gather supplies, prepare equipment, venture out, fight or complete an activity, return with loot, and fund the next expedition. Building gives the faction a home and stockpile. Gear replacement needs a deliberate cost because death is full-loot.
+Establish a base, gather supplies, prepare equipment, venture out, fight or complete an activity, return with loot, and fund the next expedition. Building gives the faction a home and stockpile. Acquisition and replacement costs still need decisions.
 
 ## Design order
 1. Describe the experience: what the player sees, chooses, risks, earns and does next.
@@ -17,7 +24,7 @@ Establish a base with friends, gather supplies, prepare equipment, venture out, 
 
 Use [the feature brief](templates/feature.md). Record unresolved gameplay choices as unresolved; infrastructure work must not silently decide them.
 
-## Proposed playable milestones
+## Proposed development slices
 | Slice | Player can… | Why it comes here |
 | --- | --- | --- |
 | Arrival and protection | Join, accept the pack, understand the safe starting area | Establishes a place to test everything |
@@ -29,6 +36,11 @@ Use [the feature brief](templates/feature.md). Record unresolved gameplay choice
 | Raiding | Understand vulnerability and perform a limited explosive breach | Requires stable combat, claims and recovery rules |
 
 This is a starting sequence for discussion. Resource planets, travel details, dungeon contention and warpoint balancing still need decisions.
+
+## Next player decisions
+- Where first-time travelers arrive in survival: random safe terrain, a fixed protected landing zone, or a choice.
+- Whether a solo player can immediately create a faction and claim a starter base, and any requirements.
+- Respawn destination and the fallback when the player has no valid home or bed.
 
 ## Configuration-driven systems
 Use explicit schemas and stable IDs. YAML declares content and tuning; Java implements behavior, validation, lifecycle and integration.
