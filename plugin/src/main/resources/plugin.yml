@@ -1,0 +1,14 @@
+name: MandoMC
+version: '${project.version}'
+main: net.mandomc.bootstrap.MandoPlugin
+api-version: '26.3'
+author: AstuteFlamez
+description: MandoMC gameplay foundation
+commands:
+  mandomc:
+    description: Show the MandoMC foundation status
+    usage: /mandomc
+    permission: mandomc.admin.status
+permissions:
+  mandomc.admin.status:
+    default: op

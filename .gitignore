@@ -1,4 +1,24 @@
+# Runtime, local tools, downloaded assets, credentials and old snapshots
+.runtime/
+.local/
+reference/
+.env
+.env.*
+!.env.example
+# Builds and editor state
+**/target/
+**/build/
+**/.gradle/
+.idea/
+*.iml
 .DS_Store
-target/
-.vscode/
+# Binary artifacts are managed outside source control
+*.jar
+*.zip
 *.log
+*.db
+*.db-shm
+*.db-wal
+
+# Per-machine editor/JDK settings
+.vscode/settings.json

@@ -1,0 +1,16 @@
+sequenceDiagram
+  title PROPOSAL - Allowed blaster hit, integration hooks unverified
+  participant Player
+  participant WeaponMechanics
+  participant MandoMC
+  participant WorldGuard
+  participant FactionsUUID
+  participant Target
+  Player->>WeaponMechanics: Fire configured blaster
+  WeaponMechanics->>MandoMC: Evaluate hit via adapter
+  MandoMC->>WorldGuard: Query protected region
+  WorldGuard-->>MandoMC: PvP allowed here
+  MandoMC->>FactionsUUID: Query attacker target relation
+  FactionsUUID-->>MandoMC: Relation permits combat
+  MandoMC-->>WeaponMechanics: Permit adjusted damage
+  WeaponMechanics->>Target: Apply damage once

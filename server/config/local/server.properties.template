@@ -1,0 +1,14 @@
+# Template for a laptop-only development server. Not installed or launched yet.
+server-ip=127.0.0.1
+server-port=25565
+online-mode=true
+max-players=20
+motd=MandoMC Development
+pvp=true
+enable-rcon=false
+enable-query=false
+view-distance=8
+simulation-distance=6
+# Keep ordinary survival generation until the exact structure-disable policy is defined.
+generate-structures=true
+# Add the validated resource-pack URL, hash and required-pack setting during bootstrap.

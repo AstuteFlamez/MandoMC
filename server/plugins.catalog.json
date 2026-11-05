@@ -1,0 +1,149 @@
+{
+  "schemaVersion": 1,
+  "status": "selected-roles-runtime-validation-pending",
+  "verifiedOn": "2026-11-05",
+  "server": {
+    "platform": "Paper",
+    "releasePolicy": "latest stable, exact build pinned after verification",
+    "minecraftVersion": "26.3",
+    "paperBuild": 242,
+    "javaMajor": 25
+  },
+  "installPolicy": "User accepted these ownership choices on 2026-11-05. Lock exact versions after compatibility tests. Add only the current feature slice dependencies; paid binaries are local.",
+  "plugins": [
+    {
+      "id": "weaponmechanics",
+      "name": "WeaponMechanics",
+      "status": "selected-pending-runtime-validation",
+      "owns": "Blaster firing, reload and projectile engine",
+      "source": "https://cjcrafter.gitbook.io/weaponmechanics/developer-api",
+      "version": null,
+      "sha256": null,
+      "knownDependencies": [
+        "mechanicscore"
+      ],
+      "dependencyListComplete": false,
+      "admissionCheck": "Supported direct/AoE hit hooks, attribution and protection cancellation",
+      "installed": false
+    },
+    {
+      "id": "mechanicscore",
+      "name": "MechanicsCore",
+      "status": "selected-pending-runtime-validation",
+      "owns": "WeaponMechanics dependency",
+      "source": "https://cjcrafter.gitbook.io/weaponmechanics/",
+      "version": null,
+      "sha256": null,
+      "knownDependencies": [],
+      "dependencyListComplete": false,
+      "admissionCheck": "Version required by selected WeaponMechanics build",
+      "installed": false
+    },
+    {
+      "id": "modelengine",
+      "name": "ModelEngine",
+      "status": "selected-pending-runtime-validation",
+      "owns": "Animated model engine and mounting API",
+      "source": "https://wiki.mythiccraft.io/modelengine/API",
+      "version": null,
+      "sha256": null,
+      "knownDependencies": [],
+      "dependencyListComplete": false,
+      "admissionCheck": "Latest server compatibility and recovered blueprints",
+      "installed": false
+    },
+    {
+      "id": "mythicmobs",
+      "name": "MythicMobs",
+      "status": "selected-pending-runtime-validation",
+      "owns": "Mob definitions, AI and boss skills",
+      "source": "https://wiki.mythiccraft.io/mythicmobs/API",
+      "version": null,
+      "sha256": null,
+      "knownDependencies": [],
+      "dependencyListComplete": false,
+      "admissionCheck": "Run-owned spawn/death/cleanup and restart behavior",
+      "installed": false
+    },
+    {
+      "id": "factionsuuid",
+      "name": "FactionsUUID",
+      "status": "selected-pending-runtime-validation",
+      "owns": "Membership, relations and claims",
+      "source": "https://factions.support/developers/",
+      "version": null,
+      "sha256": null,
+      "knownDependencies": [],
+      "dependencyListComplete": false,
+      "admissionCheck": "Narrow custom breach hook and disabled conflicting raid/power mechanics",
+      "installed": false
+    },
+    {
+      "id": "worldguard",
+      "name": "WorldGuard",
+      "status": "selected-pending-runtime-validation",
+      "owns": "Static region protection",
+      "source": "https://worldguard.enginehub.org/en/latest/developer/regions/",
+      "version": null,
+      "sha256": null,
+      "knownDependencies": [
+        "worldedit"
+      ],
+      "dependencyListComplete": false,
+      "admissionCheck": "Custom damage and block edits respect protected regions",
+      "installed": false
+    },
+    {
+      "id": "worldedit",
+      "name": "WorldEdit",
+      "status": "selected-pending-runtime-validation",
+      "owns": "WorldGuard dependency and map editing utility",
+      "source": "https://worldedit.enginehub.org/",
+      "version": null,
+      "sha256": null,
+      "knownDependencies": [],
+      "dependencyListComplete": false,
+      "admissionCheck": "Compatible build required by selected WorldGuard version",
+      "installed": false
+    },
+    {
+      "id": "multiverse",
+      "name": "Multiverse-Core",
+      "status": "selected-pending-runtime-validation",
+      "owns": "World imports, loading and settings",
+      "source": "https://mvplugins.org/core/reference/configuration-file/",
+      "version": null,
+      "sha256": null,
+      "knownDependencies": [],
+      "dependencyListComplete": false,
+      "admissionCheck": "Shared inventory, respawn and travel restrictions",
+      "installed": false
+    },
+    {
+      "id": "vault",
+      "name": "Vault",
+      "status": "selected-pending-runtime-validation",
+      "owns": "Economy API bridge",
+      "source": "https://github.com/MilkBowl/Vault",
+      "version": null,
+      "sha256": null,
+      "knownDependencies": [],
+      "dependencyListComplete": false,
+      "admissionCheck": "Discover exactly one compatible economy provider",
+      "installed": false
+    },
+    {
+      "id": "essentialsx",
+      "name": "EssentialsX Core",
+      "status": "selected-pending-runtime-validation",
+      "owns": "Initial candidate economy provider",
+      "source": "https://essentialsx.net/wiki/modules",
+      "version": null,
+      "sha256": null,
+      "knownDependencies": [],
+      "dependencyListComplete": false,
+      "admissionCheck": "One persistent credit balance and no unintended travel/kit/command behavior",
+      "installed": false
+    }
+  ]
+}

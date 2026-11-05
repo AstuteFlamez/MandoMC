@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "minecraftVersion": "26.3",
+  "paperBuild": 242,
+  "paperApiVersion": "26.3.build.242-stable",
+  "javaMajor": 25,
+  "server": {
+    "name": "paper-26.3-242.jar",
+    "checksums": {
+      "sha256": "fc704a4510a2744bab90a6770336b202038e60333e37f24af8027ee948935d20"
+    },
+    "size": 55279626,
+    "url": "https://fill-data.papermc.io/v1/objects/fc704a4510a2744bab90a6770336b202038e60333e37f24af8027ee948935d20/paper-26.3-242.jar"
+  },
+  "runtimeTested": false
+}

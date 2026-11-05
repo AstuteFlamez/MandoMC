@@ -1,0 +1,34 @@
+{
+  "project": "MandoMC",
+  "updated": "2026-11-05",
+  "figjam": {
+    "fileKey": "oCcBlAvyGEoYnQzK1pMYM6",
+    "url": "https://www.figma.com/board/oCcBlAvyGEoYnQzK1pMYM6",
+    "sessionId": "d8b4b4c4-3fd7-4d72-ad75-d8a10408a256"
+  },
+  "accepted": {
+    "development": "Solo side project in small chunks, with long pauses; programming and configuration are comfortable; avoid art/model/map creation.",
+    "audience": "Java vanilla client with required resource pack; aim to stay on latest versions; about 15 concurrent players at release.",
+    "core": "Factions, blasters, KOTH and Jabba dungeon were successful previously. Lightsabers and armor are core. Force powers are deferred.",
+    "worldRules": "Only main survival world is buildable. Other planets can be resource or dungeon destinations. Remove selected vanilla features including villages, potions and elytra; exact disable list pending.",
+    "pvp": "Enabled broadly outside safe areas such as spawnpoints. Death drops all carried items including armor and weapons.",
+    "raids": "Offline bases may be vulnerable if warpoints are depleted. No TNT cannons. Grenade/explosive breach rules and warpoint mechanics undecided.",
+    "maps": "Original Jabba/KOTH maps and mob/plugin configurations remain on a server the user can pull up.",
+    "assets": "User has models, sounds, menus, armor, mobs and item assets; repository archive inspected.",
+    "developmentApproach": "Clean laptop-hosted development server, selective recovery from older attempts, feature branches integrated into main after satisfaction. Gameplay plugin boundaries first; voting and chat presentation deferred.",
+    "pluginOwnership": "Accepted the proposed public/custom division; plugins may be replaced later when beneficial.",
+    "designMethod": "Player experience first, feature ordering second, then parameterized Java systems and configured content."
+  },
+  "architecture": "docs/architecture.md",
+  "playerDesign": "docs/player-experience.md",
+  "legacyInventory": "planning/legacy-features.json",
+  "nextAction": "Design the first playable session and choose its feature brief.",
+  "openDecisions": [
+    "Warpoint gain/loss/recovery",
+    "Raid damage limits",
+    "Basic gear replacement cost",
+    "Planetary travel",
+    "Resource planet roles",
+    "Dungeon contention"
+  ]
+}

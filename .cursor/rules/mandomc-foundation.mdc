@@ -1,0 +1,11 @@
+---
+description: MandoMC project-wide development workflow and source-of-truth documents
+alwaysApply: true
+---
+
+# MandoMC foundation
+Read AGENTS.md and docs/status.md at session start.
+Use docs/architecture.md for gameplay ownership and vendor boundaries.
+Follow docs/style-guide.md for Java, configuration and player messages.
+Keep branches small and update docs/status.md before a pause.
+Example: a blaster change includes its WeaponMechanics config, protection check and play-test result.
