@@ -1,5 +1,5 @@
 flowchart LR
-  start["Log in at base"] --> goal{"Choose session goal"}
+  start["Returning player session"] --> goal{"Choose session goal"}
   goal -->|"Build"| build["Expand base + stockpile"]
   goal -->|"Supply"| gather["Gather materials + credits"]
   goal -->|"Event active"| event["KOTH or Jabba"]
@@ -10,8 +10,12 @@ flowchart LR
   outcome -->|"Yes"| bank["Return with loot"]
   bank --> build
   outcome -->|"No: confirmed rule"| death["Drop all carried items"]
-  death --> recover["Equip replacement loadout"]
+  death --> stockpile{"Stored equipment available?"}
+  stockpile -->|"Yes"| recover["Re-equip from base supplies"]
+  stockpile -->|"No"| gather
   recover --> goal
+  death -.->|"Group member killed in event PvP"| warpoints["Group warpoints decrease"]
+  warpoints --> vulnerable["Depletion can expose the base, including offline"]
   build --> next["Choose next goal"]
   next -.-> start
   style gather fill:#FFECBD,stroke:#FFC943

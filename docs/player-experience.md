@@ -53,13 +53,12 @@ Use [the feature brief](templates/feature.md). Record unresolved gameplay choice
 | Mobility | Use a speeder, then test aerial transport | Builds on meaningful destinations |
 | Raiding | Understand vulnerability and perform a limited explosive breach | Requires stable combat, claims and recovery rules |
 
-This is a starting sequence for discussion. Travel details, dungeon contention and warpoint balancing still need decisions. Resource planets are outside the current scope.
+This is a starting sequence for discussion. Travel details, event schedules/rewards and warpoint balancing still need decisions. Resource planets are outside the current scope.
 
 ## Next player decisions
-- Decide whether to retain a guard/overheat limit for repeated saber deflections.
-- Decide which vanilla weapons and shields remain usable in PvP.
-- Decide how vanilla enchantments and repair fit custom equipment progression.
-- Then specify the first small set of equipment and rewards that connects the loop.
+- Define how a group recovers warpoints after losses.
+- Define what attackers can do to a vulnerable base and what remains protected.
+- Then settle KOTH reward delivery and remaining event configuration details.
 
 Group naming and the travel recommendation remain open. Combat tagging details and initial equipment quantities can be settled when their feature briefs are written.
 
@@ -73,13 +72,29 @@ The user uses shield-based models for lightsabers, taking advantage of shield bl
 
 The intended progression has a large power difference between basic and top-tier gear. Exact damage, protection, availability and time-to-kill targets are undecided. This is a deliberate power progression, not a mostly-sidegrade equipment model.
 
+Keep a configurable guard/overheat limit so sustained fire can temporarily overwhelm saber defense. Ordinary Minecraft swords, bows, crossbows and shields are removed from the intended gameplay. Recognized custom sabers remain allowed despite using the shield material. Star Wars-themed swords and bows may be added later; they are not in the current scope.
+
+Vanilla enchantments remain part of progression. Applicable enchantments on each custom item, wear, and repair behavior still need verification and explicit configuration. The user has not chosen a separate repair system. Avoid accidentally making the guard limit disappear through an item's enchantment or repair behavior; separating guard state from permanent item wear is a recommendation to evaluate during implementation.
+
 Source inspection of `bilal/legacy-lightsabers` confirms:
 - Saber recognition requires `SHIELD` material and a saber tag; saber definitions include models, recipes and combat values.
 - [The deflection listener](https://github.com/AstuteFlamez/MandoMC/blob/bilal/legacy-lightsabers/recovery/lightsabers/src/main/java/net/mandomc/gameplay/lightsaber/listener/SaberDeflectListener.java) redirects projectiles toward the blocking player's facing direction. The listener itself has no timed-parry or incoming-angle check.
 - [The throw listener](https://github.com/AstuteFlamez/MandoMC/blob/bilal/legacy-lightsabers/recovery/lightsabers/src/main/java/net/mandomc/gameplay/lightsaber/listener/SaberThrowListener.java) launches on sneak plus left-click, removes the held saber, and implements a returning throw with configurable damage/cooldown and cleanup paths. Some old item lore describes different controls, so choose one control scheme when porting.
-- [The stamina manager](https://github.com/AstuteFlamez/MandoMC/blob/bilal/legacy-lightsabers/recovery/lightsabers/src/main/java/net/mandomc/gameplay/lightsaber/SaberStaminaManager.java) consumes shield durability on deflection, then resets it and temporarily disables shielding on overheat. Keeping this limit is awaiting the user's answer.
+- [The stamina manager](https://github.com/AstuteFlamez/MandoMC/blob/bilal/legacy-lightsabers/recovery/lightsabers/src/main/java/net/mandomc/gameplay/lightsaber/SaberStaminaManager.java) consumes shield durability on deflection, then resets it and temporarily disables shielding on overheat. The user has accepted retaining a configurable guard limit; the old values and durability implementation are reference material.
 
 These are source observations, not new-server runtime verification. Porting must validate current weapon hooks, reflected-hit attribution, directional blocking, region/group protection, and item ownership across death or disconnect. Legacy values are reference material, not accepted balance settings.
+
+## Accepted event structure
+Jabba is one shared dungeon with PvP competition, opened through a server-wide schedule. Chest and boss loot can be taken or stolen by anyone; it is not reserved to a contributing player or group. The legacy source contains a room/keycard progression, bosses and randomized loot chests to recover selectively. Current maps and MythicMobs definitions still need restoration; this inspection does not establish runtime compatibility.
+
+KOTH capture progress and victory belong to a player group; an unaffiliated solo player can compete as their own contestant. Players who die during either event may re-equip and return as often as they can while it remains active. Normal full-loot death and respawn priority apply.
+
+The user delegated the KOTH rules to a conventional model. Selected baseline: continuous capture, adapted to groups. The first eligible contestant to take control owns the timer. It continues while at least one member remains alive and eligible inside; it resets when that contestant is entirely cleared out. Enemy presence alone does not pause or reset the timer: opponents must kill or push the holders out. Each fresh capture starts from zero, with no accumulated score. Start with a configurable three-minute timer. KOTH reward delivery and ownership are still open; group victory does not by itself decide who receives physical loot.
+
+This differs from the recovered `KothActiveTask`, which resets immediately when multiple contestants occupy the zone. Change that rule deliberately during porting. Published precedents checked 2026-11-05: [AxKoth capture mode](https://docs.artillex-studios.com/axkoth-capture.html) uses uninterrupted occupancy and a three-minute default; [Netherite's KOTH guide](https://netherite.gg/wiki/lifesteal/combat/koth) describes losing capture on leaving, death or disconnect. The group adaptation and starting duration are advisor-selected under the user's delegation; these examples do not establish a measured majority of servers.
+
+## Event losses and base vulnerability
+The user confirmed that group members' PvP deaths at KOTH and Jabba lower the group's warpoints. Event losses therefore affect both carried equipment and the survival base's vulnerability, including after the group logs off. The earlier rule allowing offline raiding when warpoints are depleted still applies. Loss amounts, recovery, other death causes and the exact breach permissions remain undecided.
 
 ## Travel recommendation — awaiting user acceptance
 Use free commands and a destination menu for routine travel, with optional themed transport terminals that open the same menu. The proposed first version has:

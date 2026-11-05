@@ -45,6 +45,14 @@ The catalog in server/plugins.catalog.json records admission status. Role select
 - MandoMC stores only its own state. Select file or transactional local storage when a feature needs it.
 - Disabled features must not load missing vendor classes. Missing dependencies for enabled features fail clearly. Protection failures never open an unprotected gameplay path.
 - Stable MandoMC IDs survive vendor replacement through explicit mapping and saved-data migration.
+- Identify custom items before applying ordinary-weapon restrictions. Removing vanilla shields must not disable registered shield-based lightsabers. Keep the custom guard limit explicit when integrating allowed vanilla enchantments and repair behavior.
+
+## Events and warpoints
+Jabba uses one scheduled shared dungeon with PvP and open loot. Private copies per group are outside the current design. MandoMC owns event state, progression and cleanup; MythicMobs owns mob definitions and AI.
+
+KOTH owns a continuous capture timer keyed to the capturing group's stable ID, or a player UUID for an unaffiliated contestant. The selected group model resets when the last eligible holder leaves, dies or disconnects; enemy presence alone does not reset it. Players can re-equip and re-enter both events after death.
+
+Event PvP deaths debit the victim group's warpoints through one attributed death path, with combat-logout death handled consistently and without double deductions. Death also retains normal full-loot behavior. Depleted warpoints can expose an offline base. Recovery, amounts, non-PvP deaths and breach permissions remain open. The source event implementations are recovery material, not the authoritative specification.
 
 ## Custom damage
 A weapon adapter receives an attributed hit, asks combat policy about regions, factions and defenses, then cancels or modifies a supported vendor event. Exactly one path applies damage. Vehicles and area damage follow the same policy and preserve attacker attribution.

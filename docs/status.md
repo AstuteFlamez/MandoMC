@@ -19,7 +19,11 @@ Lost equipment is reacquired through its original acquisition route if no stockp
 
 Accepted acquisition loop: sell survival resources to buy basic blasters/ammo; craft basic armor from survival materials; earn credits and rare components through KOTH/Jabba; craft lightsabers and advanced equipment with those components. Prices, recipes and quantities are still open.
 
-The user wants a large power gap between basic and top-tier equipment. Their existing saber approach uses shield models/blocking, reflection and a returning throw; the recovered source confirms implementations to inspect during porting. Guard/overheat policy, vanilla weapon access and enchantment/repair rules remain open.
+The user wants a large power gap between basic and top-tier equipment. Their existing saber approach uses shield models/blocking, reflection and a returning throw. Keep configurable guard/overheat limits and vanilla enchantments. Remove ordinary swords, bows, crossbows and shields; recognized custom sabers remain exempt. Enchantment compatibility and repair behavior need verification.
+
+Jabba is a scheduled shared PvP dungeon with open loot. KOTH victory/capture belongs to groups, with solo participation allowed. Both events allow players to re-equip and return after death. Under the user's delegation to conventional KOTH rules, use continuous group capture, reset when all holders are cleared out, and a configurable three-minute initial timer. Enemy presence alone does not reset it; this differs from the recovered implementation.
+
+Group members' event PvP deaths lower warpoints and can make their survival base vulnerable even after logout. Warpoint recovery and breach permissions are the next decisions.
 
 Research-backed travel recommendation is recorded in docs/player-experience.md as a proposal, not accepted policy: free commands/menu plus optional themed terminals, fixed public arrivals, group home, and a proposed five-second warmup. Published server guides support this as a comparable design; player preference remains a prediction to test.
 
@@ -28,13 +32,13 @@ Minimal bootstrap, config schema check and /mandomc status command. Maven reacto
 
 See docs/recovery.md for the old source. Maps/configs and editable ModelEngine blueprints still need recovery.
 
-Local world-diagram source marks resource planets as deferred. The linked FigJam board still shows an earlier proposal and has not been refreshed in this design step.
+Local diagram sources mark resource planets as deferred and event PvP deaths as a warpoint risk. The linked FigJam board still shows an earlier proposal and has not been refreshed in this design step.
 
 ## Verification
-Maven verify passed and produced MandoMC.jar. Verified packaged descriptor/config and Java 25 bytecode. Documentation links and JSON/XML parsed successfully. All 294 legacy feature files match their original Git blobs exactly across the 16 recovery branches; 13 obsolete documentation/rule files remain in the full snapshot. Source inspection confirms legacy saber recognition, reflection, throwing and overheat implementations. No automated gameplay tests exist yet; no in-server test has run. Current work changes design documentation only.
+Maven verify passed and produced MandoMC.jar. Verified packaged descriptor/config and Java 25 bytecode. Documentation links and JSON/XML parsed successfully. All 294 legacy feature files match their original Git blobs exactly across the 16 recovery branches; 13 obsolete documentation/rule files remain in the full snapshot. Source inspection confirms legacy saber, Jabba and group/solo KOTH implementations. Published KOTH references support the continuous-capture model; the new group rule is not runtime-tested. No automated gameplay tests exist yet; no in-server test has run. Current work changes design documentation only.
 
 ## Next action
-Decide saber guard/overheat limits, allowed vanilla weapons, and enchantment/repair progression. These three questions are awaiting the user's answers.
+Define how warpoints recover and what attackers can do to a vulnerable base. These two questions are awaiting the user's answers.
 
 ## Open
-Group name/command, tutorial format, kit quantities/ammo, starting credits, travel, combat tag details, saber guard/direction rules, vanilla weapons/enchantments, group creation cooldown, claim capacity, warpoints, raid limits, recipes/prices, and content depth for the integrated playtest. Resource planets are deferred, not an active open design question. Continue design through concrete player scenarios; no gameplay code changed in this step.
+Group name/command, tutorial format, kit quantities/ammo, starting credits, travel, combat tag details, saber direction/tuning, enchantment compatibility/repair, group creation cooldown, claim capacity, warpoint amounts/recovery, raid limits, KOTH reward delivery, event schedules, recipes/prices, and content depth for the integrated playtest. Resource planets and themed replacement swords/bows are deferred. Continue design through concrete player scenarios; no gameplay code changed in this step.

@@ -26,6 +26,13 @@
     "equipmentAcquisition": "Sell ordinary survival resources to buy basic blasters and ammo; craft basic armor from survival materials; earn credits and rare components from KOTH/Jabba to craft lightsabers and advanced equipment.",
     "equipmentPower": "A large power difference between basic and top-tier equipment; exact values and time-to-kill targets remain undecided.",
     "saberBaseline": "User's existing approach uses shield models/blocking and included reflection and saber throwing. Recover this as the starting point. A new timed-parry requirement is not accepted, and separate Force powers remain deferred.",
+    "saberGuard": "Keep a configurable guard/overheat limit so sustained blaster fire can temporarily overwhelm blocking.",
+    "vanillaWeapons": "Remove ordinary swords, bows, crossbows and shields. Recognized custom items such as shield-based sabers remain allowed. Themed Star Wars swords and bows are possible future work.",
+    "enchantments": "Keep vanilla enchantments. Custom-item compatibility and repair details still need decisions and verification.",
+    "jabbaEvent": "One shared PvP dungeon, opened as a server-wide scheduled event. Chest and boss loot is open to anyone who grabs it, including rival groups.",
+    "kothOwnership": "Group capture and victory, with unaffiliated solo players able to compete as individual contestants.",
+    "eventReentry": "Players may re-equip and return to the same KOTH or Jabba event after death as often as they can while it remains active.",
+    "eventWarpointLoss": "Group members' PvP deaths in events lower warpoints and can expose their survival base to raids, including after logout.",
     "resourcePlanets": "Deferred for now; the initial loop uses ordinary survival resources and in-scope activities.",
     "combatEscape": "Combat blocks voluntary teleporting. Logging out in combat causes death and normal carried-item loss. Tag duration, triggers and server-initiated disconnect handling remain undecided.",
     "starterEquipment": "A basic blaster, vanilla tools and food are granted only on first join. Exact items, quantities and ammo are undecided. Starting credits and their amount remain tentative.",
@@ -34,6 +41,21 @@
   "architecture": "docs/architecture.md",
   "playerDesign": "docs/player-experience.md",
   "legacyInventory": "planning/legacy-features.json",
+  "kothBaseline": {
+    "status": "selected-under-user-delegation-to-conventional-rules",
+    "mode": "continuous-capture",
+    "ownership": "Stable group ID or unaffiliated player UUID",
+    "rule": "First eligible contestant to take control owns the timer. It continues while at least one eligible capturing member stays alive inside; resets when all holders are cleared out. Enemy presence alone does not pause or reset it. No accumulated score.",
+    "initialCaptureSeconds": 180,
+    "durationConfigurable": true,
+    "legacyDifference": "Recovered code resets when multiple contestants are inside; the selected rule requires clearing the capturing contestant instead.",
+    "sources": [
+      "https://docs.artillex-studios.com/axkoth-capture.html",
+      "https://netherite.gg/wiki/lifesteal/combat/koth"
+    ],
+    "evidenceLimit": "Published precedents support continuous capture, not a measured majority. Group adaptation and initial duration are advisor choices under delegation.",
+    "runtimeVerified": false
+  },
   "legacySaberEvidence": {
     "branch": "bilal/legacy-lightsabers",
     "sourceCommit": "03daf999caf6d8cec6773a6924d2a7b66257a934",
@@ -80,12 +102,11 @@
       "https://piratemc.com/guides/getting-started/"
     ]
   },
-  "nextAction": "Decide saber guard/overheat limits, allowed vanilla weapons, and enchantment/repair progression.",
+  "nextAction": "Define warpoint recovery and permitted actions against vulnerable bases.",
   "openDecisions": [
     "Player-facing group name and command root",
-    "Saber guard limits, incoming direction and reflection timing",
-    "Allowed vanilla weapons and shields",
-    "Vanilla enchantment and equipment repair rules",
+    "Saber guard tuning, incoming direction and reflection timing",
+    "Custom-item enchantment compatibility and equipment repair rules",
     "Specific equipment variants, recipes, prices and reward rates",
     "Voluntary travel between SpawnWorld, survival and faction homes",
     "Combat tag duration, triggers and server-initiated disconnect handling",
@@ -95,9 +116,10 @@
     "Claim capacity and later territory rules",
     "Short tutorial format",
     "Content depth per system for the integrated friends playtest",
-    "Warpoint gain/loss/recovery",
+    "Warpoint loss amounts, recovery and handling of other death causes",
     "Raid damage limits",
     "Planetary travel",
-    "Dungeon contention"
+    "KOTH reward delivery and ownership",
+    "Event schedules and time limits"
   ]
 }
