@@ -24,6 +24,8 @@
     "deathRecovery": "Death loses carried equipment. Respawn priority is group home, then a valid bed, then SpawnWorld. Players can re-equip from stored supplies; otherwise they repeat the original acquisition route for the gear. No separate replacement mechanic. Voluntary travel remains undecided.",
     "creditIncome": "A mixture of selling resources and activity rewards.",
     "equipmentAcquisition": "Sell ordinary survival resources to buy basic blasters and ammo; craft basic armor from survival materials; earn credits and rare components from KOTH/Jabba to craft lightsabers and advanced equipment.",
+    "equipmentPower": "A large power difference between basic and top-tier equipment; exact values and time-to-kill targets remain undecided.",
+    "saberBaseline": "User's existing approach uses shield models/blocking and included reflection and saber throwing. Recover this as the starting point. A new timed-parry requirement is not accepted, and separate Force powers remain deferred.",
     "resourcePlanets": "Deferred for now; the initial loop uses ordinary survival resources and in-scope activities.",
     "combatEscape": "Combat blocks voluntary teleporting. Logging out in combat causes death and normal carried-item loss. Tag duration, triggers and server-initiated disconnect handling remain undecided.",
     "starterEquipment": "A basic blaster, vanilla tools and food are granted only on first join. Exact items, quantities and ammo are undecided. Starting credits and their amount remain tentative.",
@@ -32,6 +34,18 @@
   "architecture": "docs/architecture.md",
   "playerDesign": "docs/player-experience.md",
   "legacyInventory": "planning/legacy-features.json",
+  "legacySaberEvidence": {
+    "branch": "bilal/legacy-lightsabers",
+    "sourceCommit": "03daf999caf6d8cec6773a6924d2a7b66257a934",
+    "observed": [
+      "Shield material and saber tag identify saber items.",
+      "Reflection redirects projectiles toward the blocking player's facing direction; the listener itself has no parry window or incoming-angle check.",
+      "A sneak-left-click returning throw includes damage/cooldown configuration and cleanup paths; some old lore lists inconsistent controls.",
+      "Deflections consume shield durability until overheat resets durability and temporarily disables shielding."
+    ],
+    "runtimeVerifiedOnNewServer": false,
+    "balanceValuesAccepted": false
+  },
   "acquisition": {
     "status": "accepted",
     "loop": "Sell ordinary survival resources to buy basic blasters and ammo; craft basic armor from survival materials; earn credits and rare components from KOTH/Jabba to craft lightsabers and advanced equipment.",
@@ -66,11 +80,12 @@
       "https://piratemc.com/guides/getting-started/"
     ]
   },
-  "nextAction": "Define lightsaber defenses against blasters and the intended power gap between basic and advanced equipment.",
+  "nextAction": "Decide saber guard/overheat limits, allowed vanilla weapons, and enchantment/repair progression.",
   "openDecisions": [
     "Player-facing group name and command root",
-    "Lightsaber defenses against blaster fire",
-    "Equipment power gap and specialization",
+    "Saber guard limits, incoming direction and reflection timing",
+    "Allowed vanilla weapons and shields",
+    "Vanilla enchantment and equipment repair rules",
     "Specific equipment variants, recipes, prices and reward rates",
     "Voluntary travel between SpawnWorld, survival and faction homes",
     "Combat tag duration, triggers and server-initiated disconnect handling",

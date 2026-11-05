@@ -56,8 +56,9 @@ Use [the feature brief](templates/feature.md). Record unresolved gameplay choice
 This is a starting sequence for discussion. Travel details, dungeon contention and warpoint balancing still need decisions. Resource planets are outside the current scope.
 
 ## Next player decisions
-- Define how lightsabers defend against blaster fire, including whether reflection is supported.
-- Define how much raw power separates basic and advanced equipment versus differences in playstyle.
+- Decide whether to retain a guard/overheat limit for repeated saber deflections.
+- Decide which vanilla weapons and shields remain usable in PvP.
+- Decide how vanilla enchantments and repair fit custom equipment progression.
 - Then specify the first small set of equipment and rewards that connects the loop.
 
 Group naming and the travel recommendation remain open. Combat tagging details and initial equipment quantities can be settled when their feature briefs are written.
@@ -66,6 +67,19 @@ Group naming and the travel recommendation remain open. Combat tagging details a
 Sell ordinary survival resources to buy basic blasters and ammunition; craft basic armor from survival materials; earn credits and rare components from KOTH/Jabba; use those components to craft lightsabers and advanced equipment.
 
 The user accepted this loop on 2026-11-05. It also supplies the normal route for replacing lost equipment. Specific recipes, equipment variants, prices, drop rates and grind duration remain open. Resource planets are not required.
+
+## Saber baseline and equipment power
+The user uses shield-based models for lightsabers, taking advantage of shield blocking. Their earlier implementation included reflection and saber throwing. Recover that approach as the starting point; a new timed-parry requirement has not been accepted. Separate Force powers remain deferred.
+
+The intended progression has a large power difference between basic and top-tier gear. Exact damage, protection, availability and time-to-kill targets are undecided. This is a deliberate power progression, not a mostly-sidegrade equipment model.
+
+Source inspection of `bilal/legacy-lightsabers` confirms:
+- Saber recognition requires `SHIELD` material and a saber tag; saber definitions include models, recipes and combat values.
+- [The deflection listener](https://github.com/AstuteFlamez/MandoMC/blob/bilal/legacy-lightsabers/recovery/lightsabers/src/main/java/net/mandomc/gameplay/lightsaber/listener/SaberDeflectListener.java) redirects projectiles toward the blocking player's facing direction. The listener itself has no timed-parry or incoming-angle check.
+- [The throw listener](https://github.com/AstuteFlamez/MandoMC/blob/bilal/legacy-lightsabers/recovery/lightsabers/src/main/java/net/mandomc/gameplay/lightsaber/listener/SaberThrowListener.java) launches on sneak plus left-click, removes the held saber, and implements a returning throw with configurable damage/cooldown and cleanup paths. Some old item lore describes different controls, so choose one control scheme when porting.
+- [The stamina manager](https://github.com/AstuteFlamez/MandoMC/blob/bilal/legacy-lightsabers/recovery/lightsabers/src/main/java/net/mandomc/gameplay/lightsaber/SaberStaminaManager.java) consumes shield durability on deflection, then resets it and temporarily disables shielding on overheat. Keeping this limit is awaiting the user's answer.
+
+These are source observations, not new-server runtime verification. Porting must validate current weapon hooks, reflected-hit attribution, directional blocking, region/group protection, and item ownership across death or disconnect. Legacy values are reference material, not accepted balance settings.
 
 ## Travel recommendation — awaiting user acceptance
 Use free commands and a destination menu for routine travel, with optional themed transport terminals that open the same menu. The proposed first version has:
