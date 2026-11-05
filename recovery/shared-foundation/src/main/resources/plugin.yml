@@ -1,0 +1,227 @@
+name: MandoMC
+version: 1.0
+main: net.mandomc.MandoMC
+api-version: 1.21
+
+author: AstuteFlamez
+description: Core plugin for the MandoMC server
+
+softdepend:
+  - PlaceholderAPI
+  - WeaponMechanics
+  - ModelEngine
+  - FancyHolograms
+
+commands:
+
+  shop:
+    description: Open a shop category for yourself or another player
+    usage: /shop <category> [player]
+    permission: mandomc.shop.use
+
+  sell:
+    description: Open pawn shop GUI or quick-sell items
+    usage: /sell <player>
+    permission: mandomc.sell.use
+
+  link:
+    description: Link your Minecraft account with Discord
+
+  discord:
+    description: Show MandoMC Discord server invite
+
+  bounty:
+    description: Open or manage bounty board
+
+  lottery:
+    permission: mandomc.lottery.admin
+
+  # -------------------------
+  # Item Commands
+  # -------------------------
+
+  key:
+    description: Give a dungeon key
+    usage: /key <dungeon> <door>
+    permission: mandomc.admin
+
+  get:
+    description: Opens the item browser or gives yourself a custom item
+    usage: /get [item]
+    permission: mandomc.items.get
+
+  give:
+    description: Give a custom item to a player
+    usage: /give <player> [item]
+    permission: mandomc.items.give
+  
+  drop:
+    description: Drop item at location
+    usage: /drop <item> <x> <y> <z> <world>
+    permission: mandomc.items.drop
+
+  recipes:
+    description: View custom item recipes
+    usage: /recipes [item]
+    permission: mandomc.recipes.view
+
+  # -------------------------
+  # Server Commands
+  # -------------------------
+
+  mmcreload:
+    description: Reload all plugin configurations
+    usage: /mmcreload
+    permission: mandomc.admin.reload
+
+  test:
+    description: Debug command for testing features
+    permission: mandomc.admin.test
+
+  event:
+    description: Event admin command
+    usage: /event
+    aliases: [events]
+
+  # -------------------------
+  # Warp Commands
+  # -------------------------
+
+  warp:
+    description: Opens the warp menu
+    usage: /warp
+    aliases: [warps, w]
+    permission: mandomc.warp.use
+
+  class:
+    description: Select your combat class
+    usage: /class <jedi|sith|mandalorian>
+    permission: mandomc.abilities.class
+
+  ability:
+    description: Open ability tree and manage ability levels
+    usage: /ability <tree|bindgui|unlock|level|info|settokens>
+    permission: mandomc.abilities.use
+
+  bind:
+    description: Bind abilities to hotbar slots
+    usage: /bind <slot|clear> ...
+    permission: mandomc.abilities.bind
+
+  skilltoken:
+    description: Admin skill token testing command
+    usage: /skilltoken <get|give|drop> ...
+    permission: mandomc.abilities.tokens.admin
+
+  # -------------------------
+  # Internal Commands
+  # -------------------------
+
+  parkourfinish:
+    description: Internal parkour system command
+    usage: /parkourfinish <player>
+
+
+permissions:
+
+  # -------------------------
+  # Item Permissions
+  # -------------------------
+
+  mandomc.items.get:
+    description: Allows a player to obtain custom items
+    default: op
+
+  mandomc.items.give:
+    description: Allows giving custom items to other players
+    default: op
+
+  mandomc.items.drop:
+    description: Allows dropping custom items at a location
+    default: op
+
+  mandomc.recipes.view:
+    description: Allows viewing custom recipes
+    default: true
+
+  # -------------------------
+  # Admin Permissions
+  # -------------------------
+
+  mandomc.admin:
+    default: op
+
+  mandomc.admin.reload:
+    description: Allows reloading the plugin configs
+    default: op
+
+  mandomc.admin.test:
+    description: Allows running debug commands
+    default: op
+
+  # -------------------------
+  # Gameplay Permissions
+  # -------------------------
+
+  mandomc.warp.use:
+    description: Allows using warp menu
+    default: true
+
+  mandomc.bounty.gui:
+    description: Allows opening the bounty admin board
+    default: op
+
+  mandomc.shop.use:
+    description: Allows opening shop categories for yourself
+    default: true
+
+  mandomc.shop.others:
+    description: Allows opening shop categories for other players
+    default: op
+
+  mandomc.sell.use:
+    description: Allows opening the pawn shop GUI with /sell <player>
+    default: true
+
+  mandomc.sell.advanced:
+    description: Allows /sell, /sell hand, and /sell all
+    default: op
+
+  mandomc.lottery.admin:
+    description: Allows managing lottery commands
+    default: op
+
+  mandomc.abilities.use:
+    description: Allows using base ability commands and GUIs
+    default: true
+
+  mandomc.abilities.class:
+    description: Allows switching combat classes
+    default: true
+
+  mandomc.abilities.bind:
+    description: Allows command-based ability binding
+    default: true
+
+  mandomc.abilities.admin:
+    description: Allows ability admin shortcuts
+    default: op
+
+  mandomc.abilities.tokens.admin:
+    description: Allows skill token get/give/drop admin commands
+    default: op
+
+  mandomc.abilities.cooldown.bypass:
+    description: Bypasses ability cooldown restrictions
+    default: false
+
+  mandomc.vehicle.skin.*:
+    description: Grants access to all configured vehicle skins
+    default: op
+
+  mmc.parkour.bypass-command-blocks:
+    description: Allows bypassing parkour command block restrictions
+    default: op
+
+  mandomc.event.admin:
+    default: op
