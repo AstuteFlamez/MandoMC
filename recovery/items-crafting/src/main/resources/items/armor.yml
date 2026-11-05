@@ -1,0 +1,182 @@
+items:
+
+  plastoid_helmet:
+    material: CHAINMAIL_HELMET
+    name: '&bStormtrooper Helmet'
+    custom_model_data: 1
+    rarity: Common
+    category: Armor
+    tags: [ARMOR, HELMET]
+
+    lore:
+      - '&7Standard plastoid helmet worn by'
+      - '&7Imperial Stormtroopers.'
+      - ''
+      - '&7Integrated optics and comms'
+      - '&7provide battlefield awareness.'
+
+    recipe:
+      - 'PPP'
+      - 'P P'
+      - '   '
+    ingredients:
+      P: plastoid
+
+  plastoid_chestplate:
+    material: CHAINMAIL_CHESTPLATE
+    name: '&bStormtrooper Chestplate'
+    custom_model_data: 1
+    rarity: Common
+    category: Armor
+    tags: [ARMOR, CHESTPLATE]
+
+    lore:
+      - '&7Standard plastoid armor worn by'
+      - '&7Imperial Stormtroopers.'
+      - ''
+      - '&7Provides balanced protection'
+      - '&7against blaster fire.'
+
+    recipe:
+      - 'P P'
+      - 'PPP'
+      - 'PPP'
+    ingredients:
+      P: plastoid
+
+
+  plastoid_leggings:
+    material: CHAINMAIL_LEGGINGS
+    name: '&bStormtrooper Leggings'
+    custom_model_data: 1
+    rarity: Common
+    category: Armor
+    tags: [ARMOR, LEGGINGS]
+
+    lore:
+      - '&7Reinforced plastoid leg armor'
+      - '&7used across Imperial forces.'
+      - ''
+      - '&7Designed for mobility while'
+      - '&7maintaining protection.'
+
+    recipe:
+      - 'PPP'
+      - 'P P'
+      - 'P P'
+    ingredients:
+      P: plastoid
+
+
+  plastoid_boots:
+    material: CHAINMAIL_BOOTS
+    name: '&bStormtrooper Boots'
+    custom_model_data: 1
+    rarity: Common
+    category: Armor
+    tags: [ARMOR, BOOTS]
+
+    lore:
+      - '&7Standard-issue combat boots'
+      - '&7paired with plastoid armor.'
+      - ''
+      - '&7Offers stability across harsh'
+      - '&7terrain conditions.'
+
+    recipe:
+      - '   '
+      - 'P P'
+      - 'P P'
+    ingredients:
+      P: plastoid
+
+  # ========================
+  # 🛡️ BESKAR ARMOR SET
+  # ========================
+
+  beskar_helmet:
+    material: NETHERITE_HELMET
+    name: '&6Beskar Helmet'
+    custom_model_data: 0
+    rarity: Legendary
+    category: Armor
+    tags: [ARMOR, HELMET]
+
+    lore:
+      - '&7Forged from pure beskar steel,'
+      - '&7capable of withstanding blaster fire.'
+      - ''
+      - '&7Worn by Mandalorian warriors.'
+
+    recipe:
+      - 'BBB'
+      - 'B B'
+      - '   '
+    ingredients:
+      B: beskar_sheet
+
+
+  beskar_chestplate:
+    material: NETHERITE_CHESTPLATE
+    name: '&6Beskar Chestplate'
+    custom_model_data: 0
+    rarity: Legendary
+    category: Armor
+    tags: [ARMOR, CHESTPLATE]
+
+    lore:
+      - '&7Nearly indestructible plating forged'
+      - '&7from refined beskar alloy.'
+      - ''
+      - '&7Provides unmatched protection.'
+
+    recipe:
+      - 'B B'
+      - 'BBB'
+      - 'BBB'
+    ingredients:
+      B: beskar_sheet
+
+
+  beskar_leggings:
+    material: NETHERITE_LEGGINGS
+    name: '&6Beskar Leggings'
+    custom_model_data: 0
+    rarity: Legendary
+    category: Armor
+    tags: [ARMOR, LEGGINGS]
+
+    lore:
+      - '&7Reinforced beskar plates designed'
+      - '&7for both durability and mobility.'
+      - ''
+      - '&7Built for Mandalorian combat.'
+
+    recipe:
+      - 'BBB'
+      - 'B B'
+      - 'B B'
+    ingredients:
+      B: beskar_sheet
+
+
+  beskar_boots:
+    material: NETHERITE_BOOTS
+    name: '&6Beskar Boots'
+    custom_model_data: 0
+    rarity: Legendary
+    category: Armor
+    tags: [ARMOR, BOOTS]
+
+    lore:
+      - '&7Heavy-duty beskar footwear offering'
+      - '&7stability and battlefield resilience.'
+      - ''
+      - '&7Forged to endure any terrain.'
+
+    recipe:
+      - '   '
+      - 'B B'
+      - 'B B'
+    ingredients:
+      B: beskar_sheet

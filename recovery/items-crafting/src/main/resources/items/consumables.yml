@@ -1,0 +1,21 @@
+items:
+
+  bantha_wrap:
+    material: COOKED_BEEF
+    name: '&aBantha Wrap'
+    custom_model_data: 1
+    rarity: Uncommon
+    category: Consumable
+    lore:
+      - '&7A hearty wrap made from seasoned'
+      - '&7bantha meat and fresh ingredients.'
+
+  massiff_ribs:
+    material: COOKED_Mutton
+    name: '&aMassiff Ribs'
+    custom_model_data: 1
+    rarity: Uncommon
+    category: Consumable
+    lore:
+      - '&7Still warm from the hunt,'
+      - '&7these ribs reek of blood and sand.'

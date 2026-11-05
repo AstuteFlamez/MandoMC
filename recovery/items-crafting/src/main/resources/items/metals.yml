@@ -1,0 +1,506 @@
+items:
+
+  # ========================
+  # AGRINIUM
+  # ========================
+
+  agrinium_scrap:
+    material: ECHO_SHARD
+    name: '&7Agrinium Scrap'
+    custom_model_data: 250
+    rarity: Common
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7Fragments of agrinium awaiting refinement.'
+
+  agrinium:
+    material: ECHO_SHARD
+    name: '&7Agrinium'
+    custom_model_data: 200
+    rarity: Common
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7A lightweight industrial metal.'
+    recipe:
+      - 'DDD'
+      - 'DDD'
+      - 'DDD'
+    ingredients:
+      D: agrinium_scrap
+
+  agrinium_sheet:
+    material: ECHO_SHARD
+    name: '&7Agrinium Sheet'
+    custom_model_data: 300
+    rarity: Common
+    category: Metal
+    tags: [METAL, MATERIAL, COMPONENT]
+    lore:
+      - '&7Refined sheet of agrinium.'
+    smelting:
+      input: agrinium
+      furnace: blast
+      experience: 0.6
+      cook_time: 180
+
+
+  # ========================
+  # AURODIUM
+  # ========================
+
+  aurodium_scrap:
+    material: ECHO_SHARD
+    name: '&6Aurodium Scrap'
+    custom_model_data: 251
+    rarity: Uncommon
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7Fragments of a precious golden alloy.'
+
+  aurodium:
+    material: ECHO_SHARD
+    name: '&6Aurodium'
+    custom_model_data: 201
+    rarity: Uncommon
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7A valuable golden alloy.'
+    recipe:
+      - 'DDD'
+      - 'DDD'
+      - 'DDD'
+    ingredients:
+      D: aurodium_scrap
+
+  aurodium_sheet:
+    material: ECHO_SHARD
+    name: '&6Aurodium Sheet'
+    custom_model_data: 301
+    rarity: Uncommon
+    category: Metal
+    tags: [METAL, MATERIAL, COMPONENT]
+    lore:
+      - '&7A refined golden metal sheet.'
+    smelting:
+      input: aurodium
+      furnace: blast
+      experience: 0.9
+      cook_time: 220
+
+
+  # ========================
+  # BESKAR
+  # ========================
+
+  beskar_scrap:
+    material: ECHO_SHARD
+    name: '&7Beskar Scrap'
+    custom_model_data: 252
+    rarity: Legendary
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7Fragments of legendary Beskar.'
+
+  beskar:
+    material: ECHO_SHARD
+    name: '&7Raw Beskar'
+    custom_model_data: 202
+    rarity: Legendary
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7The legendary Mandalorian metal.'
+    recipe:
+      - 'DDD'
+      - 'DDD'
+      - 'DDD'
+    ingredients:
+      D: beskar_scrap
+
+  beskar_sheet:
+    material: ECHO_SHARD
+    name: '&7Beskar Sheet'
+    custom_model_data: 302
+    rarity: Legendary
+    category: Metal
+    tags: [METAL, MATERIAL, COMPONENT]
+    lore:
+      - '&7A refined sheet of Beskar.'
+    smelting:
+      input: beskar
+      furnace: blast
+      experience: 2.0
+      cook_time: 400
+
+
+  # ========================
+  # CORTOSIS
+  # ========================
+
+  cortosis_scrap:
+    material: ECHO_SHARD
+    name: '&7Cortosis Scrap'
+    custom_model_data: 253
+    rarity: Rare
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7Fragments of cortosis.'
+
+  cortosis:
+    material: ECHO_SHARD
+    name: '&7Cortosis'
+    custom_model_data: 203
+    rarity: Rare
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7Disrupts energy weapons.'
+    recipe:
+      - 'DDD'
+      - 'DDD'
+      - 'DDD'
+    ingredients:
+      D: cortosis_scrap
+
+  cortosis_sheet:
+    material: ECHO_SHARD
+    name: '&7Cortosis Sheet'
+    custom_model_data: 303
+    rarity: Rare
+    category: Metal
+    tags: [METAL, MATERIAL, COMPONENT]
+    lore:
+      - '&7Refined cortosis sheet.'
+    smelting:
+      input: cortosis
+      furnace: blast
+      experience: 1.2
+      cook_time: 260
+
+
+  # ========================
+  # DURASTEEL
+  # ========================
+
+  durasteel_scrap:
+    material: ECHO_SHARD
+    name: '&7Durasteel Scrap'
+    custom_model_data: 254
+    rarity: Common
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7Scraps of durasteel.'
+
+  durasteel:
+    material: ECHO_SHARD
+    name: '&7Durasteel'
+    custom_model_data: 204
+    rarity: Common
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7A strong industrial alloy.'
+    recipe:
+      - 'DDD'
+      - 'DDD'
+      - 'DDD'
+    ingredients:
+      D: durasteel_scrap
+
+  durasteel_sheet:
+    material: ECHO_SHARD
+    name: '&7Durasteel Sheet'
+    custom_model_data: 304
+    rarity: Common
+    category: Metal
+    tags: [METAL, MATERIAL, COMPONENT]
+    lore:
+      - '&7A tough, durable metal sheet.'
+    smelting:
+      input: durasteel
+      furnace: blast
+      experience: 0.8
+      cook_time: 200
+
+
+  # ========================
+  # ELECTRUM
+  # ========================
+
+  electrum_scrap:
+    material: ECHO_SHARD
+    name: '&6Electrum Scrap'
+    custom_model_data: 255
+    rarity: Uncommon
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7Fragments of electrum.'
+
+  electrum:
+    material: ECHO_SHARD
+    name: '&6Electrum'
+    custom_model_data: 205
+    rarity: Uncommon
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7A conductive golden alloy.'
+    recipe:
+      - 'DDD'
+      - 'DDD'
+      - 'DDD'
+    ingredients:
+      D: electrum_scrap
+
+  electrum_sheet:
+    material: ECHO_SHARD
+    name: '&6Electrum Sheet'
+    custom_model_data: 305
+    rarity: Uncommon
+    category: Metal
+    tags: [METAL, MATERIAL, COMPONENT]
+    lore:
+      - '&7Thin sheet for precision parts.'
+    smelting:
+      input: electrum
+      furnace: blast
+      experience: 0.8
+      cook_time: 200
+
+
+  # ========================
+  # LOMMITE
+  # ========================
+
+  lommite_scrap:
+    material: ECHO_SHARD
+    name: '&7Lommite Scrap'
+    custom_model_data: 256
+    rarity: Common
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7Basic refining material.'
+
+  lommite:
+    material: ECHO_SHARD
+    name: '&7Lommite'
+    custom_model_data: 206
+    rarity: Common
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7A common refining metal.'
+    recipe:
+      - 'DDD'
+      - 'DDD'
+      - 'DDD'
+    ingredients:
+      D: lommite_scrap
+
+  lommite_sheet:
+    material: ECHO_SHARD
+    name: '&7Lommite Sheet'
+    custom_model_data: 306
+    rarity: Common
+    category: Metal
+    tags: [METAL, MATERIAL, COMPONENT]
+    lore:
+      - '&7Basic metal sheet.'
+    smelting:
+      input: lommite
+      furnace: blast
+      experience: 0.5
+      cook_time: 160
+
+
+  # ========================
+  # MANDALORIAN IRON
+  # ========================
+
+  mandalorian_iron_scrap:
+    material: ECHO_SHARD
+    name: '&7Mandalorian Iron Scrap'
+    custom_model_data: 257
+    rarity: Epic
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7Fragments of Mandalorian iron.'
+
+  mandalorian_iron:
+    material: ECHO_SHARD
+    name: '&7Mandalorian Iron'
+    custom_model_data: 207
+    rarity: Epic
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7An extremely durable metal.'
+    recipe:
+      - 'DDD'
+      - 'DDD'
+      - 'DDD'
+    ingredients:
+      D: mandalorian_iron_scrap
+
+  mandalorian_sheet:
+    material: ECHO_SHARD
+    name: '&7Mandalorian Sheet'
+    custom_model_data: 307
+    rarity: Epic
+    category: Metal
+    tags: [METAL, MATERIAL, COMPONENT]
+    lore:
+      - '&7Highly durable forged sheet.'
+    smelting:
+      input: mandalorian_iron
+      furnace: blast
+      experience: 1.8
+      cook_time: 340
+
+
+  # ========================
+  # NEURANIUM
+  # ========================
+
+  neuranium_scrap:
+    material: ECHO_SHARD
+    name: '&8Neuranium Scrap'
+    custom_model_data: 258
+    rarity: Rare
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7Dense reactor-grade fragments.'
+
+  neuranium:
+    material: ECHO_SHARD
+    name: '&8Neuranium'
+    custom_model_data: 208
+    rarity: Rare
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7A dense reactor metal.'
+    recipe:
+      - 'DDD'
+      - 'DDD'
+      - 'DDD'
+    ingredients:
+      D: neuranium_scrap
+
+  neuranium_sheet:
+    material: ECHO_SHARD
+    name: '&8Neuranium Sheet'
+    custom_model_data: 308
+    rarity: Rare
+    category: Metal
+    tags: [METAL, MATERIAL, COMPONENT]
+    lore:
+      - '&7Used in high-energy systems.'
+    smelting:
+      input: neuranium
+      furnace: blast
+      experience: 1.5
+      cook_time: 300
+
+
+  # ========================
+  # PHRIK
+  # ========================
+
+  phrik_scrap:
+    material: ECHO_SHARD
+    name: '&7Phrik Scrap'
+    custom_model_data: 259
+    rarity: Rare
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7Lightsaber-resistant fragments.'
+
+  phrik:
+    material: ECHO_SHARD
+    name: '&7Phrik'
+    custom_model_data: 209
+    rarity: Rare
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7Resistant to lightsabers.'
+    recipe:
+      - 'DDD'
+      - 'DDD'
+      - 'DDD'
+    ingredients:
+      D: phrik_scrap
+
+  phrik_sheet:
+    material: ECHO_SHARD
+    name: '&7Phrik Sheet'
+    custom_model_data: 309
+    rarity: Rare
+    category: Metal
+    tags: [METAL, MATERIAL, COMPONENT]
+    lore:
+      - '&7Advanced resistant alloy.'
+    smelting:
+      input: phrik
+      furnace: blast
+      experience: 1.2
+      cook_time: 300
+
+
+  # ========================
+  # SONGSTEEL
+  # ========================
+
+  songsteel_scrap:
+    material: ECHO_SHARD
+    name: '&dSongsteel Scrap'
+    custom_model_data: 260
+    rarity: Epic
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7Rare refined fragments.'
+
+  songsteel:
+    material: ECHO_SHARD
+    name: '&dSongsteel'
+    custom_model_data: 210
+    rarity: Epic
+    category: Metal
+    tags: [METAL, MATERIAL]
+    lore:
+      - '&7A rare elegant alloy.'
+    recipe:
+      - 'DDD'
+      - 'DDD'
+      - 'DDD'
+    ingredients:
+      D: songsteel_scrap
+
+  songsteel_sheet:
+    material: ECHO_SHARD
+    name: '&dSongsteel Sheet'
+    custom_model_data: 310
+    rarity: Epic
+    category: Metal
+    tags: [METAL, MATERIAL, COMPONENT]
+    lore:
+      - '&7Refined songsteel sheet.'
+    smelting:
+      input: songsteel
+      furnace: blast
+      experience: 1.6
+      cook_time: 320
