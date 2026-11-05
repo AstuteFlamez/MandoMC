@@ -19,7 +19,7 @@ New players arrive in SpawnWorld, an existing map file the user already has. The
 
 A solo player can create a group and claim a starter base on eligible land outside the spawn safe zone, without a credit requirement. A group creation cooldown of around three hours was suggested tentatively; neither the cooldown nor its duration is decided. Claim capacity and other later territory rules remain open.
 
-Death loses only what the player carries. Respawn priority is group home, then a valid bed, then SpawnWorld. If no valid group home or bed is available, use SpawnWorld. A player with stored group supplies can re-equip from that stockpile. Otherwise they repeat the same acquisition process used to obtain the gear originally; there is no separate replacement mechanic. Voluntary return travel and the original acquisition routes remain open.
+Death loses only what the player carries. Respawn priority is group home, then a valid bed, then SpawnWorld. If no valid group home or bed is available, use SpawnWorld. A player with stored group supplies can re-equip from that stockpile. Otherwise they repeat the same acquisition process used to obtain the gear originally; there is no separate replacement mechanic. Voluntary return travel and specific recipes/prices remain open.
 
 Combat blocks voluntary teleporting. Logging out while in combat causes death, with the normal carried-item loss. Combat tag duration, triggering actions and server-initiated disconnect handling still need definition.
 
@@ -28,7 +28,7 @@ The first join grants a basic blaster, vanilla tools and food. Equipment is gran
 The first friends playtest should bring the in-scope gameplay systems together in a rough, integrated version. The development slices below are incremental building and checking steps toward that target. The precise content depth for each system still needs agreement; force powers and resource planets are excluded for now.
 
 ## Proposed everyday loop
-Establish a base, gather supplies, prepare equipment, venture out, fight or complete an activity, return with loot, and fund the next expedition. Building gives the group a home and stockpile. Credits come from a mixture of resource selling and activity rewards. Exact acquisition routes and prices still need decisions.
+Establish a base, gather supplies, prepare equipment, venture out, fight or complete an activity, return with loot, and fund the next expedition. Building gives the group a home and stockpile. Credits come from a mixture of resource selling and activity rewards. Specific equipment variants, recipes and prices still need decisions.
 
 Resource planets are deferred. The initial supply loop must work with ordinary survival resources and in-scope activities. Revisit special resource planets only when the user brings them back into scope.
 
@@ -56,15 +56,16 @@ Use [the feature brief](templates/feature.md). Record unresolved gameplay choice
 This is a starting sequence for discussion. Travel details, dungeon contention and warpoint balancing still need decisions. Resource planets are outside the current scope.
 
 ## Next player decisions
-- Review the concrete acquisition proposal below and change routes as needed.
-- Then define the first small set of equipment and rewards that connects the loop.
+- Define how lightsabers defend against blaster fire, including whether reflection is supported.
+- Define how much raw power separates basic and advanced equipment versus differences in playstyle.
+- Then specify the first small set of equipment and rewards that connects the loop.
 
 Group naming and the travel recommendation remain open. Combat tagging details and initial equipment quantities can be settled when their feature briefs are written.
 
-## Acquisition recommendation — awaiting user feedback
-Suggested initial loop: sell ordinary survival resources to buy basic blasters and ammunition; craft basic armor from survival materials; earn credits and rare components from KOTH/Jabba; use those components to craft lightsabers and advanced equipment.
+## Accepted acquisition loop
+Sell ordinary survival resources to buy basic blasters and ammunition; craft basic armor from survival materials; earn credits and rare components from KOTH/Jabba; use those components to craft lightsabers and advanced equipment.
 
-This is an advisor proposal, not accepted ownership of every item category. The user has confirmed mixed credit income and normal reacquisition after loss, but has not chosen the original routes for each equipment type. No recipe, item tier, price, drop rate or grind duration is fixed by this proposal.
+The user accepted this loop on 2026-11-05. It also supplies the normal route for replacing lost equipment. Specific recipes, equipment variants, prices, drop rates and grind duration remain open. Resource planets are not required.
 
 ## Travel recommendation — awaiting user acceptance
 Use free commands and a destination menu for routine travel, with optional themed transport terminals that open the same menu. The proposed first version has:

@@ -17,6 +17,8 @@ Combat blocks voluntary teleports; logging out in combat causes death. First joi
 
 Lost equipment is reacquired through its original acquisition route if no stockpile is available. Credits come from both resource selling and activity rewards. Resource planets are deferred, alongside force powers.
 
+Accepted acquisition loop: sell survival resources to buy basic blasters/ammo; craft basic armor from survival materials; earn credits and rare components through KOTH/Jabba; craft lightsabers and advanced equipment with those components. Prices, recipes and quantities are still open.
+
 Research-backed travel recommendation is recorded in docs/player-experience.md as a proposal, not accepted policy: free commands/menu plus optional themed terminals, fixed public arrivals, group home, and a proposed five-second warmup. Published server guides support this as a comparable design; player preference remains a prediction to test.
 
 ## Implementation
@@ -30,7 +32,7 @@ Local world-diagram source marks resource planets as deferred. The linked FigJam
 Maven verify passed and produced MandoMC.jar. Verified packaged descriptor/config and Java 25 bytecode. Documentation links and JSON/XML parsed successfully. All 294 legacy feature files match their original Git blobs exactly across the 16 recovery branches; 13 obsolete documentation/rule files remain in the full snapshot. The split leaves the main working tree clean. No automated gameplay tests exist yet; no in-server test has run.
 
 ## Next action
-Review the proposed original acquisition routes: survival resource sales fund basic blasters/ammo, survival materials make basic armor, and KOTH/Jabba supply credits and components for sabers/advanced equipment. This proposal awaits the user's feedback.
+Define saber defenses against blasters and the intended power gap between basic and advanced equipment. These two questions are awaiting the user's answers.
 
 ## Open
-Group name/command, tutorial format, kit quantities/ammo, starting credits, travel, combat tag details, group creation cooldown, claim capacity, warpoints, raid limits, equipment acquisition/prices, and content depth for the integrated playtest. Resource planets are deferred, not an active open design question. Continue design through concrete player scenarios; no gameplay code changed in this step.
+Group name/command, tutorial format, kit quantities/ammo, starting credits, travel, combat tag details, saber defense, equipment power gap, group creation cooldown, claim capacity, warpoints, raid limits, recipes/prices, and content depth for the integrated playtest. Resource planets are deferred, not an active open design question. Continue design through concrete player scenarios; no gameplay code changed in this step.

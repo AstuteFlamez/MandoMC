@@ -23,6 +23,7 @@
     "starterFaction": "Solo players can create a faction and claim a starter base on eligible land outside the spawn safe zone without a credit requirement. A possible three-hour faction creation cooldown is tentative, not accepted.",
     "deathRecovery": "Death loses carried equipment. Respawn priority is group home, then a valid bed, then SpawnWorld. Players can re-equip from stored supplies; otherwise they repeat the original acquisition route for the gear. No separate replacement mechanic. Voluntary travel remains undecided.",
     "creditIncome": "A mixture of selling resources and activity rewards.",
+    "equipmentAcquisition": "Sell ordinary survival resources to buy basic blasters and ammo; craft basic armor from survival materials; earn credits and rare components from KOTH/Jabba to craft lightsabers and advanced equipment.",
     "resourcePlanets": "Deferred for now; the initial loop uses ordinary survival resources and in-scope activities.",
     "combatEscape": "Combat blocks voluntary teleporting. Logging out in combat causes death and normal carried-item loss. Tag duration, triggers and server-initiated disconnect handling remain undecided.",
     "starterEquipment": "A basic blaster, vanilla tools and food are granted only on first join. Exact items, quantities and ammo are undecided. Starting credits and their amount remain tentative.",
@@ -31,10 +32,10 @@
   "architecture": "docs/architecture.md",
   "playerDesign": "docs/player-experience.md",
   "legacyInventory": "planning/legacy-features.json",
-  "acquisitionProposal": {
-    "status": "awaiting-user-feedback",
+  "acquisition": {
+    "status": "accepted",
     "loop": "Sell ordinary survival resources to buy basic blasters and ammo; craft basic armor from survival materials; earn credits and rare components from KOTH/Jabba to craft lightsabers and advanced equipment.",
-    "unresolved": "Original routes by equipment category, recipes, prices, tiers, drop rates and grind duration."
+    "unresolved": "Specific equipment variants, recipes, prices, tiers, drop rates and grind duration."
   },
   "groupNamingProposal": {
     "status": "awaiting-user-choice",
@@ -65,10 +66,12 @@
       "https://piratemc.com/guides/getting-started/"
     ]
   },
-  "nextAction": "Review the concrete original equipment acquisition proposal, then define the first equipment and reward set.",
+  "nextAction": "Define lightsaber defenses against blasters and the intended power gap between basic and advanced equipment.",
   "openDecisions": [
     "Player-facing group name and command root",
-    "Original equipment acquisition routes and prices by category",
+    "Lightsaber defenses against blaster fire",
+    "Equipment power gap and specialization",
+    "Specific equipment variants, recipes, prices and reward rates",
     "Voluntary travel between SpawnWorld, survival and faction homes",
     "Combat tag duration, triggers and server-initiated disconnect handling",
     "Starter equipment quantities and ammunition; whether to grant starting credits and how much",
