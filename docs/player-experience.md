@@ -5,9 +5,11 @@ Status: working design, not a finalized feature order.
 Players use Java Minecraft and a required resource pack. They form factions, build on the main survival world, and encounter PvP outside designated safe areas. Death drops carried items, weapons and armor. KOTH and Jabba are proven activities. Offline bases may become vulnerable after warpoints are depleted. Force powers are deferred.
 
 ## Confirmed first session and recovery
-New players arrive in SpawnWorld, an existing map file the user already has. They receive a short tutorial, with its presentation still undecided. Their first goal is to travel to survival and establish a base.
+New players arrive in SpawnWorld, an existing map file the user already has. They receive a short tutorial, with its presentation still undecided. Their first goal is to travel to survival and establish a base. Survival arrivals use a fixed protected landing zone.
 
-Death loses only what the player carries. A player with a faction home and stored equipment can return and re-equip from that stockpile. Respawn location, return travel, initial equipment and how a player without supplies recovers still need decisions.
+A solo player can create a faction and claim a starter base on eligible land outside the spawn safe zone, without a credit requirement. A faction creation cooldown of around three hours was suggested tentatively; neither the cooldown nor its duration is decided. Claim capacity and other later territory rules remain open.
+
+Death loses only what the player carries. Respawn priority is faction home, then a valid bed, then SpawnWorld. If no valid faction home or bed is available, use SpawnWorld. A player with stored faction supplies can re-equip from that stockpile. Voluntary return travel, initial equipment and how a player without supplies recovers still need decisions.
 
 The first friends playtest should bring the discussed gameplay systems together in a rough, integrated version. The development slices below are incremental building and checking steps toward that target. The precise content depth for each system still needs agreement; force powers remain deferred.
 
@@ -38,9 +40,9 @@ Use [the feature brief](templates/feature.md). Record unresolved gameplay choice
 This is a starting sequence for discussion. Resource planets, travel details, dungeon contention and warpoint balancing still need decisions.
 
 ## Next player decisions
-- Where first-time travelers arrive in survival: random safe terrain, a fixed protected landing zone, or a choice.
-- Whether a solo player can immediately create a faction and claim a starter base, and any requirements.
-- Respawn destination and the fallback when the player has no valid home or bed.
+- Voluntary travel between SpawnWorld, the survival landing zone and faction homes: commands/menu, physical transport points, or a combination.
+- Combat restrictions on travel and the result of disconnecting during combat.
+- Initial equipment and whether any starter grant is restricted to first join.
 
 ## Configuration-driven systems
 Use explicit schemas and stable IDs. YAML declares content and tuning; Java implements behavior, validation, lifecycle and integration.

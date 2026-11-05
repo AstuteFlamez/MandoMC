@@ -9,6 +9,8 @@ Laptop development, selective recovery, and the public/custom division in archit
 
 New arrivals start in the existing SpawnWorld map, receive a short tutorial, and go to survival to establish a base. Death loses carried equipment; faction stockpiles support re-equipping. The first friends playtest should combine the discussed systems in a rough integrated version; individual development slices build toward it.
 
+Survival has a fixed protected landing zone. Solo players can create a faction and claim a starter base outside protected spawn without a credit requirement. Respawn priority: faction home, valid bed, SpawnWorld. A possible three-hour faction creation cooldown remains tentative.
+
 ## Implementation
 Minimal bootstrap, config schema check and /mandomc status command. Maven reactor/wrapper, Java 25, pinned Paper 26.3 build 242 API. No gameplay modules or third-party plugins enabled. Server templates and lockfile exist; Minecraft is not running.
 
@@ -18,7 +20,7 @@ See docs/recovery.md for the old source. Maps/configs and editable ModelEngine b
 Maven verify passed and produced MandoMC.jar. Verified packaged descriptor/config and Java 25 bytecode. Documentation links and JSON/XML parsed successfully. All 294 legacy feature files match their original Git blobs exactly across the 16 recovery branches; 13 obsolete documentation/rule files remain in the full snapshot. The split leaves the main working tree clean. No automated gameplay tests exist yet; no in-server test has run.
 
 ## Next action
-Resolve survival arrival, solo faction/claiming requirements, and respawn behavior in docs/player-experience.md. These questions are awaiting the user's answers.
+Resolve voluntary travel, combat teleport/disconnect rules, and first-join equipment in docs/player-experience.md. These questions are awaiting the user's answers.
 
 ## Open
-Tutorial format, initial gear, claiming requirements, respawn, warpoints, raid limits, recovery costs, travel, resource roles, and content depth for the integrated playtest. Continue design through concrete player scenarios; no gameplay code changed in this step.
+Tutorial format, initial gear, voluntary travel, combat disconnect rules, faction creation cooldown, claim capacity, warpoints, raid limits, recovery costs, resource roles, and content depth for the integrated playtest. Continue design through concrete player scenarios; no gameplay code changed in this step.
