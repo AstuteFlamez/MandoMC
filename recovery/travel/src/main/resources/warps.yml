@@ -1,0 +1,86 @@
+gui:
+  title: "&fĳ"
+  size: 54
+
+warps:
+  Alderaan:
+    slot: 15
+    name: '&a&lAlderaan'
+    material: STICK
+    custommodeldata: 1
+    world: Endor
+    permission: ''
+    description:
+    - '&b&r&fđġ'
+    - '&c→ Claimable'
+    x: 2048
+    y: 263
+    z: 2048
+    yaw: 90
+    pitch: 0
+  
+  Tatooine:
+    slot: 34
+    name: '&6&lTatooine'
+    material: STICK
+    custommodeldata: 7
+    world: Tatooine
+    permission: ''
+    description:
+    - '&b&r&fđġ'
+    - '&2→ Jabba''s Palace'
+    x: 2451.4824043935305
+    y: 32.0
+    z: 1539.567076607729
+    yaw: -113.55322
+    pitch: -1.8000033
+  
+  Spawn:
+    slot: 41
+    name: '&b&lSpawn'
+    material: STICK
+    custommodeldata: 2
+    world: BlackSpireOutpost
+    permission: ''
+    description:
+    - '&b&r&fđġ'
+    - '&a→ Spawn'
+    x: -0.25469257621634944
+    y: 93.0
+    z: -16.29781739902013
+    yaw: -9.002167
+    pitch: -0.90001816
+  
+  Ilum:
+    slot: 20
+    name: '&b&lIlum'
+    material: stick
+    custommodeldata: 3
+    world: Ilum
+    permission: ''
+    description:
+    - '&b&r&fĕġ'
+    - '&3→ Kyber Crystals'
+    x: 11
+    y: -60
+    z: -56
+    yaw: 1.8
+    pitch: 4.5
+  
+  Hoth:
+    slot: 49
+    name: '&f&lHoth'
+    material: STICK
+    custommodeldata: 4
+    world: Hoth
+    permission: ''
+    description:
+    - '&b&r&fĕġ'
+    - '&c→ KOTH'
+    x: -47
+    y: 80
+    z: -153
+    yaw: -18.75
+    pitch: -1.65
+
+
