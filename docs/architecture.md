@@ -3,6 +3,10 @@ The user accepted this division on 2026-11-05. Exact versions and integration ho
 
 Design the [player experience](player-experience.md) first, choose the playable order, implement parameterized systems, then configure content.
 
+Player-facing group naming and commands must replace Factions and `/f`; the final identity is pending. FactionsUUID remains the selected state owner. Verify its supported command and language customization or an adapter when implementing the group interface, including help and menu output. A display-name change alone does not complete the requirement.
+
+Resource planets are deferred. Initial gathering and credit income use ordinary survival resources plus activity rewards. Keep future resource-planet support outside the current milestone; the ownership table below records responsibilities, not a requirement to build every capability now.
+
 ## Runtime and code
 One local Paper process with multiple worlds; one modular MandoMC JAR. Main currently contains bootstrap and a status command. Paper 26.3 build 242 and its API are pinned; Java 25 is required.
 

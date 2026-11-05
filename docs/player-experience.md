@@ -2,23 +2,35 @@
 Status: working design, not a finalized feature order.
 
 ## Confirmed foundation
-Players use Java Minecraft and a required resource pack. They form factions, build on the main survival world, and encounter PvP outside designated safe areas. Death drops carried items, weapons and armor. KOTH and Jabba are proven activities. Offline bases may become vulnerable after warpoints are depleted. Force powers are deferred.
+Players use Java Minecraft and a required resource pack. They form player groups, build on the main survival world, and encounter PvP outside designated safe areas. Death drops carried items, weapons and armor. KOTH and Jabba are proven activities. Offline bases may become vulnerable after warpoints are depleted. Force powers and resource planets are deferred.
+
+## Player-facing group identity
+The user wants a name other than Factions and a replacement for the `/f` player command. The final name and command are undecided. Use "player group" as a neutral planning placeholder. Commands, help, menus, messages and tutorial language must use the chosen identity consistently. FactionsUUID remains the selected underlying integration; its technical name is not the server's player-facing identity.
+
+Advisor shortlist, not accepted names:
+- Clans: `/clan`, with `/cl` as a proposed short alias. Recommended for the MandoMC identity and territorial groups; [Clan Wren](https://www.starwars.com/databank/clan-wren) provides a direct Mandalorian precedent.
+- Crews: `/crew`. A more informal group identity that also fits Star Wars adventurers, such as the [Ghost crew](https://www.starwars.com/databank/Hera-Syndulla).
+- Syndicates: `/syndicate`, with `/syn` as a proposed short alias. Strong underworld flavor, exemplified by the [Pyke Syndicate](https://www.starwars.com/news/who-are-the-pykes), but implies a criminal identity for every group.
+
+These are naming recommendations, not evidence of current Minecraft player preferences. Verify command ownership and aliases when implementing the selected integration.
 
 ## Confirmed first session and recovery
 New players arrive in SpawnWorld, an existing map file the user already has. They receive a short tutorial, with its presentation still undecided. Their first goal is to travel to survival and establish a base. Survival arrivals use a fixed protected landing zone.
 
-A solo player can create a faction and claim a starter base on eligible land outside the spawn safe zone, without a credit requirement. A faction creation cooldown of around three hours was suggested tentatively; neither the cooldown nor its duration is decided. Claim capacity and other later territory rules remain open.
+A solo player can create a group and claim a starter base on eligible land outside the spawn safe zone, without a credit requirement. A group creation cooldown of around three hours was suggested tentatively; neither the cooldown nor its duration is decided. Claim capacity and other later territory rules remain open.
 
-Death loses only what the player carries. Respawn priority is faction home, then a valid bed, then SpawnWorld. If no valid faction home or bed is available, use SpawnWorld. A player with stored faction supplies can re-equip from that stockpile. Voluntary return travel and how a player without supplies recovers still need decisions.
+Death loses only what the player carries. Respawn priority is group home, then a valid bed, then SpawnWorld. If no valid group home or bed is available, use SpawnWorld. A player with stored group supplies can re-equip from that stockpile. Otherwise they repeat the same acquisition process used to obtain the gear originally; there is no separate replacement mechanic. Voluntary return travel and the original acquisition routes remain open.
 
 Combat blocks voluntary teleporting. Logging out while in combat causes death, with the normal carried-item loss. Combat tag duration, triggering actions and server-initiated disconnect handling still need definition.
 
 The first join grants a basic blaster, vanilla tools and food. Equipment is granted only once, not on subsequent joins or deaths. Exact items, quantities and ammunition remain to be configured. Starting credits are possible but neither their inclusion nor amount is decided.
 
-The first friends playtest should bring the discussed gameplay systems together in a rough, integrated version. The development slices below are incremental building and checking steps toward that target. The precise content depth for each system still needs agreement; force powers remain deferred.
+The first friends playtest should bring the in-scope gameplay systems together in a rough, integrated version. The development slices below are incremental building and checking steps toward that target. The precise content depth for each system still needs agreement; force powers and resource planets are excluded for now.
 
 ## Proposed everyday loop
-Establish a base, gather supplies, prepare equipment, venture out, fight or complete an activity, return with loot, and fund the next expedition. Building gives the faction a home and stockpile. Acquisition and replacement costs still need decisions.
+Establish a base, gather supplies, prepare equipment, venture out, fight or complete an activity, return with loot, and fund the next expedition. Building gives the group a home and stockpile. Credits come from a mixture of resource selling and activity rewards. Exact acquisition routes and prices still need decisions.
+
+Resource planets are deferred. The initial supply loop must work with ordinary survival resources and in-scope activities. Revisit special resource planets only when the user brings them back into scope.
 
 ## Design order
 1. Describe the experience: what the player sees, chooses, risks, earns and does next.
@@ -35,25 +47,31 @@ Use [the feature brief](templates/feature.md). Record unresolved gameplay choice
 | --- | --- | --- |
 | Arrival and protection | Join, accept the pack, understand the safe starting area | Establishes a place to test everything |
 | Basic combat | Obtain one blaster and armor set, fight, die and re-equip | Tests the smallest full-loot loop |
-| Faction home | Join a faction, claim a base and cooperate without friendly damage | Gives combat and gathering a shared purpose |
+| Group home | Join a group, claim a base and cooperate without friendly damage | Gives combat and gathering a shared purpose |
 | Supplies and progression | Gather, craft and buy a useful replacement loadout | Makes loss and recovery sustainable |
 | One event | Compete in KOTH or run Jabba for useful rewards | Adds a repeatable social objective |
 | Mobility | Use a speeder, then test aerial transport | Builds on meaningful destinations |
 | Raiding | Understand vulnerability and perform a limited explosive breach | Requires stable combat, claims and recovery rules |
 
-This is a starting sequence for discussion. Resource planets, travel details, dungeon contention and warpoint balancing still need decisions.
+This is a starting sequence for discussion. Travel details, dungeon contention and warpoint balancing still need decisions. Resource planets are outside the current scope.
 
 ## Next player decisions
-- Review the travel recommendation below; it is not yet accepted.
-- Define how players acquire basic replacements after their one-time starting equipment is lost.
-- Define combat tagging details and the initial equipment quantities when their feature briefs are written.
+- Review the concrete acquisition proposal below and change routes as needed.
+- Then define the first small set of equipment and rewards that connects the loop.
+
+Group naming and the travel recommendation remain open. Combat tagging details and initial equipment quantities can be settled when their feature briefs are written.
+
+## Acquisition recommendation — awaiting user feedback
+Suggested initial loop: sell ordinary survival resources to buy basic blasters and ammunition; craft basic armor from survival materials; earn credits and rare components from KOTH/Jabba; use those components to craft lightsabers and advanced equipment.
+
+This is an advisor proposal, not accepted ownership of every item category. The user has confirmed mixed credit income and normal reacquisition after loss, but has not chosen the original routes for each equipment type. No recipe, item tier, price, drop rate or grind duration is fixed by this proposal.
 
 ## Travel recommendation — awaiting user acceptance
 Use free commands and a destination menu for routine travel, with optional themed transport terminals that open the same menu. The proposed first version has:
 
 - `/spawn`: return to SpawnWorld.
 - `/travel`: select a public destination; survival always arrives at its fixed protected landing zone. Future planets use their own public arrival points, rather than teleports directly onto objectives.
-- `/f home`: return to the faction home, set inside the faction's own eligible claims.
+- Group-home command: return to the home set inside the group's own eligible claims. The command root follows the naming decision above; `/f` is not the proposed player-facing root.
 - A five-second stationary warmup, cancelled by movement or damage. All entry points enforce the same combat restrictions. Five seconds is a suggested initial tuning value, not an accepted rule.
 - No death-return `/back` and no network of arbitrary personal homes initially. Exploration, journeys from landing zones to activities, and reaching other bases provide routes for walking, speeders and aircraft. Teleporting to other players remains a separate open choice.
 

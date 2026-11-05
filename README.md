@@ -1,5 +1,5 @@
 # MandoMC
-Minecraft Star Wars factions server, developed locally in small playable slices.
+Minecraft Star Wars survival PvP server with player groups and claimed bases, developed locally in small playable slices. The group name and commands are being redesigned; see the player-experience document.
 
 Main contains a minimal Paper plugin foundation. Legacy gameplay is preserved in separate recovery branches and is not enabled.
 

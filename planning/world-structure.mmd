@@ -2,25 +2,24 @@ flowchart LR
   player["Java player + resource pack"] --> spawn
   subgraph worlds ["PROPOSAL: one Paper server, several worlds"]
     spawn["Safe spawn + travel"]
-    survival["Survival: factions + building"]
-    resources["Resource planet: gathering"]
+    survival["Survival: player groups + building"]
+    resources["DEFERRED: resource planets"]
     hoth["Hoth: KOTH"]
     tatooine["Tatooine: Jabba dungeon"]
-    base["Claimed faction base"]
+    base["Claimed group base"]
     spawn -->|"Travel: undecided"| survival
-    spawn -->|"Travel: undecided"| resources
+    spawn -.->|"Future scope"| resources
     spawn -->|"Scheduled event"| hoth
     spawn -->|"Scheduled event"| tatooine
     survival -->|"Only buildable world"| base
   end
   survival -->|"Gather"| supplies["Materials + supplies"]
-  resources -->|"Gather"| supplies
   hoth -->|"Compete for"| rewards["Rewards: design pending"]
   tatooine -->|"Fight for"| rewards
   base -.->|"If warpoints depleted"| breach["Explosive raiding: proposed"]
   breach --> offline["Offline vulnerability: confirmed"]
   style worlds fill:#F5F5F5,stroke:#B3B3B3
-  style resources fill:#FFECBD,stroke:#FFC943
+  style resources fill:#EEEEEE,stroke:#999999
   style rewards fill:#FFECBD,stroke:#FFC943
   style breach fill:#FFECBD,stroke:#FFC943
   style offline fill:#C2E5FF,stroke:#3DADFF

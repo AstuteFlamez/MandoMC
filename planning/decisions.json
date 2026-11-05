@@ -10,24 +10,46 @@
     "development": "Solo side project in small chunks, with long pauses; programming and configuration are comfortable; avoid art/model/map creation.",
     "audience": "Java vanilla client with required resource pack; aim to stay on latest versions; about 15 concurrent players at release.",
     "core": "Factions, blasters, KOTH and Jabba dungeon were successful previously. Lightsabers and armor are core. Force powers are deferred.",
-    "worldRules": "Only main survival world is buildable. Other planets can be resource or dungeon destinations. Remove selected vanilla features including villages, potions and elytra; exact disable list pending.",
+    "worldRules": "Only main survival world is buildable. Other planets can be dungeon destinations. Resource planets are deferred. Remove selected vanilla features including villages, potions and elytra; exact disable list pending.",
     "pvp": "Enabled broadly outside safe areas such as spawnpoints. Death drops all carried items including armor and weapons.",
     "raids": "Offline bases may be vulnerable if warpoints are depleted. No TNT cannons. Grenade/explosive breach rules and warpoint mechanics undecided.",
     "maps": "Original Jabba/KOTH maps and mob/plugin configurations remain on a server the user can pull up.",
     "assets": "User has models, sounds, menus, armor, mobs and item assets; repository archive inspected.",
     "developmentApproach": "Clean laptop-hosted development server, selective recovery from older attempts, feature branches integrated into main after satisfaction. Gameplay plugin boundaries first; voting and chat presentation deferred.",
     "pluginOwnership": "Accepted the proposed public/custom division; plugins may be replaced later when beneficial.",
+    "groupIdentity": "Player-facing naming must replace Factions and the /f command root across commands, help, menus, messages and tutorial text. Final name and command are undecided. FactionsUUID remains the selected underlying integration.",
     "designMethod": "Player experience first, feature ordering second, then parameterized Java systems and configured content.",
     "firstSession": "New players arrive in the existing SpawnWorld map, receive a short tutorial (format undecided), then enter survival at a fixed protected landing zone to establish a base.",
     "starterFaction": "Solo players can create a faction and claim a starter base on eligible land outside the spawn safe zone without a credit requirement. A possible three-hour faction creation cooldown is tentative, not accepted.",
-    "deathRecovery": "Death loses carried equipment. Respawn priority is faction home, then a valid bed, then SpawnWorld. Players can re-equip from stored faction supplies. Voluntary travel remains undecided.",
+    "deathRecovery": "Death loses carried equipment. Respawn priority is group home, then a valid bed, then SpawnWorld. Players can re-equip from stored supplies; otherwise they repeat the original acquisition route for the gear. No separate replacement mechanic. Voluntary travel remains undecided.",
+    "creditIncome": "A mixture of selling resources and activity rewards.",
+    "resourcePlanets": "Deferred for now; the initial loop uses ordinary survival resources and in-scope activities.",
     "combatEscape": "Combat blocks voluntary teleporting. Logging out in combat causes death and normal carried-item loss. Tag duration, triggers and server-initiated disconnect handling remain undecided.",
     "starterEquipment": "A basic blaster, vanilla tools and food are granted only on first join. Exact items, quantities and ammo are undecided. Starting credits and their amount remain tentative.",
-    "firstFriendsPlaytest": "The discussed gameplay systems should work together in a rough integrated version. Small development slices lead toward this target; content depth remains undecided. Force powers remain deferred."
+    "firstFriendsPlaytest": "The in-scope gameplay systems should work together in a rough integrated version. Small development slices lead toward this target; content depth remains undecided. Force powers and resource planets are deferred."
   },
   "architecture": "docs/architecture.md",
   "playerDesign": "docs/player-experience.md",
   "legacyInventory": "planning/legacy-features.json",
+  "acquisitionProposal": {
+    "status": "awaiting-user-feedback",
+    "loop": "Sell ordinary survival resources to buy basic blasters and ammo; craft basic armor from survival materials; earn credits and rare components from KOTH/Jabba to craft lightsabers and advanced equipment.",
+    "unresolved": "Original routes by equipment category, recipes, prices, tiers, drop rates and grind duration."
+  },
+  "groupNamingProposal": {
+    "status": "awaiting-user-choice",
+    "recommended": {"name": "Clans", "command": "/clan", "shortAlias": "/cl"},
+    "alternatives": [
+      {"name": "Crews", "command": "/crew"},
+      {"name": "Syndicates", "command": "/syndicate", "shortAlias": "/syn"}
+    ],
+    "sources": [
+      "https://www.starwars.com/databank/clan-wren",
+      "https://www.starwars.com/databank/Hera-Syndulla",
+      "https://www.starwars.com/news/who-are-the-pykes"
+    ],
+    "implementationStatus": "Not implemented; verify command ownership and language customization during integration."
+  },
   "travelProposal": {
     "status": "awaiting-user-acceptance",
     "recommendation": "Free spawn and faction-home commands plus a public-destination travel menu, also accessible through optional themed terminals. Survival uses the fixed protected landing zone.",
@@ -43,8 +65,10 @@
       "https://piratemc.com/guides/getting-started/"
     ]
   },
-  "nextAction": "Review the researched travel recommendation, then define basic gear acquisition and replacement.",
+  "nextAction": "Review the concrete original equipment acquisition proposal, then define the first equipment and reward set.",
   "openDecisions": [
+    "Player-facing group name and command root",
+    "Original equipment acquisition routes and prices by category",
     "Voluntary travel between SpawnWorld, survival and faction homes",
     "Combat tag duration, triggers and server-initiated disconnect handling",
     "Starter equipment quantities and ammunition; whether to grant starting credits and how much",
@@ -55,9 +79,7 @@
     "Content depth per system for the integrated friends playtest",
     "Warpoint gain/loss/recovery",
     "Raid damage limits",
-    "Basic gear replacement cost",
     "Planetary travel",
-    "Resource planet roles",
     "Dungeon contention"
   ]
 }

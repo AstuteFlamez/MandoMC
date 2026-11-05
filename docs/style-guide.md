@@ -39,7 +39,7 @@ Scope: the new MandoMC project. This guide is the baseline and applies to newly 
 
 ## Player-facing language
 - Use short, concrete messages: what happened and what the player can do next.
-- Keep terminology consistent. "Faction" is the working term until intentionally renamed; do not alternate team/town/clan.
+- Player-facing group identity must replace "Faction" and the `/f` command root. The final name/root is pending; use "player group" in planning until selected. Apply the chosen name consistently to commands, help, menus, messages and tutorial text. Preserve accurate vendor/API names and historical source references in technical documentation.
 - Use Adventure components and MiniMessage for newly authored player messages where supported. Fixed developer-only bootstrap diagnostics may stay in code.
 - Put messages in a language file. Do not scatter formatting codes through Java.
 - Treat the existing resource pack as the visual source. Reuse its assets before requesting new art.
