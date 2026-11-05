@@ -2,7 +2,7 @@
 Status: working design, not a finalized feature order.
 
 ## Confirmed foundation
-Players use Java Minecraft and a required resource pack. They form player groups, build on the main survival world, and encounter PvP outside designated safe areas. Death drops carried items, weapons and armor. KOTH and Jabba are proven activities. Offline bases may become vulnerable after warpoints are depleted. Force powers and resource planets are deferred.
+Players use Java Minecraft and a required resource pack. They form player groups, build on the main survival world, and encounter PvP outside designated safe areas. Death drops carried items, weapons and armor. KOTH and Jabba are proven activities. A base can be vulnerable, including offline, to a rival group that has earned the required pairwise net-kill lead. Force powers and resource planets are deferred.
 
 ## Player-facing group identity
 The user wants a name other than Factions and a replacement for the `/f` player command. The final name and command are undecided. Use "player group" as a neutral planning placeholder. Commands, help, menus, messages and tutorial language must use the chosen identity consistently. FactionsUUID remains the selected underlying integration; its technical name is not the server's player-facing identity.
@@ -56,8 +56,8 @@ Use [the feature brief](templates/feature.md). Record unresolved gameplay choice
 This is a starting sequence for discussion. Travel details, event schedules/rewards and warpoint balancing still need decisions. Resource planets are outside the current scope.
 
 ## Next player decisions
-- Define how a group recovers warpoints after losses.
-- Define what attackers can do to a vulnerable base and what remains protected.
+- Decide whether raid permission ends immediately when the net-kill lead falls below the threshold, or an already-started raid gets a timed window.
+- Decide whether unrelated groups can loot chests exposed by an eligible attacker's breach.
 - Then settle KOTH reward delivery and remaining event configuration details.
 
 Group naming and the travel recommendation remain open. Combat tagging details and initial equipment quantities can be settled when their feature briefs are written.
@@ -93,8 +93,18 @@ The user delegated the KOTH rules to a conventional model. Selected baseline: co
 
 This differs from the recovered `KothActiveTask`, which resets immediately when multiple contestants occupy the zone. Change that rule deliberately during porting. Published precedents checked 2026-11-05: [AxKoth capture mode](https://docs.artillex-studios.com/axkoth-capture.html) uses uninterrupted occupancy and a three-minute default; [Netherite's KOTH guide](https://netherite.gg/wiki/lifesteal/combat/koth) describes losing capture on leaving, death or disconnect. The group adaptation and starting duration are advisor-selected under the user's delegation; these examples do not establish a measured majority of servers.
 
-## Event losses and base vulnerability
-The user confirmed that group members' PvP deaths at KOTH and Jabba lower the group's warpoints. Event losses therefore affect both carried equipment and the survival base's vulnerability, including after the group logs off. The earlier rule allowing offline raiding when warpoints are depleted still applies. Loss amounts, recovery, other death causes and the exact breach permissions remain undecided.
+## Warpoints and base vulnerability
+Warpoints are specific to each pair of opposing groups, not a global group power pool. Each pair starts at zero. A kill gives the killer's group +1 against the victim's group and the victim's group -1 against the killer's group. Those are two views of one kill, not a two-point change. No score against an unrelated group changes.
+
+`score(A, B) = kills by A against B - kills by B against A`; `score(B, A) = -score(A, B)`.
+
+A configurable positive net-kill threshold unlocks A's permission to raid B. Only the group that earned that advantage may breach the rival's base; it does not make the base globally vulnerable. Killing that same rival's members recovers the losing side's score. Passive time-based recovery is not part of the selected model. The numeric threshold is undecided; five was only an explanatory example.
+
+Event PvP kills/deaths at KOTH and Jabba count toward the corresponding rivalry. Losses therefore risk both carried equipment and the survival base. Raid eligibility can persist while the defending group is offline.
+
+Eligible attackers may breach using approved explosives and loot accessible chests. Defenders retain land ownership. This does not permit takeover, unclaiming or unrestricted hand-breaking. Approved explosive types and block-damage limits remain configurable design work. Safe spawn/adventure regions remain protected.
+
+Still open: whether an active raid survives a score reversal for a timed window, chest access for unrelated groups entering through an existing breach, and attribution/handling for unaffiliated players or deaths without an opposing group. These choices must not be inferred from the old generic faction-power behavior.
 
 ## Travel recommendation — awaiting user acceptance
 Use free commands and a destination menu for routine travel, with optional themed transport terminals that open the same menu. The proposed first version has:

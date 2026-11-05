@@ -23,7 +23,7 @@ The user wants a large power gap between basic and top-tier equipment. Their exi
 
 Jabba is a scheduled shared PvP dungeon with open loot. KOTH victory/capture belongs to groups, with solo participation allowed. Both events allow players to re-equip and return after death. Under the user's delegation to conventional KOTH rules, use continuous group capture, reset when all holders are cleared out, and a configurable three-minute initial timer. Enemy presence alone does not reset it; this differs from the recovered implementation.
 
-Group members' event PvP deaths lower warpoints and can make their survival base vulnerable even after logout. Warpoint recovery and breach permissions are the next decisions.
+Warpoints are pairwise net-kill scores, starting at zero. One opposing-group kill is +1 for the killer's side and -1 in the reverse view; unrelated pairs are unchanged. KOTH/Jabba PvP counts. A configurable net-kill lead gives only the leading group breach rights against that rival, including while defenders are offline. The numeric threshold is undecided. Approved explosive breaches and accessible chest looting are allowed; defenders retain ownership. Passive time-based regeneration is not part of this model.
 
 Research-backed travel recommendation is recorded in docs/player-experience.md as a proposal, not accepted policy: free commands/menu plus optional themed terminals, fixed public arrivals, group home, and a proposed five-second warmup. Published server guides support this as a comparable design; player preference remains a prediction to test.
 
@@ -32,13 +32,13 @@ Minimal bootstrap, config schema check and /mandomc status command. Maven reacto
 
 See docs/recovery.md for the old source. Maps/configs and editable ModelEngine blueprints still need recovery.
 
-Local diagram sources mark resource planets as deferred and event PvP deaths as a warpoint risk. The linked FigJam board still shows an earlier proposal and has not been refreshed in this design step.
+Local diagram sources mark resource planets as deferred and event PvP deaths as a pairwise warpoint risk. The linked FigJam board still shows an earlier proposal and has not been refreshed in this design step.
 
 ## Verification
 Maven verify passed and produced MandoMC.jar. Verified packaged descriptor/config and Java 25 bytecode. Documentation links and JSON/XML parsed successfully. All 294 legacy feature files match their original Git blobs exactly across the 16 recovery branches; 13 obsolete documentation/rule files remain in the full snapshot. Source inspection confirms legacy saber, Jabba and group/solo KOTH implementations. Published KOTH references support the continuous-capture model; the new group rule is not runtime-tested. No automated gameplay tests exist yet; no in-server test has run. Current work changes design documentation only.
 
 ## Next action
-Define how warpoints recover and what attackers can do to a vulnerable base. These two questions are awaiting the user's answers.
+Decide whether an active raid continues for a timed window after its score drops below the threshold, and whether unrelated groups can loot chests through an existing breach. These two questions are awaiting the user's answers.
 
 ## Open
-Group name/command, tutorial format, kit quantities/ammo, starting credits, travel, combat tag details, saber direction/tuning, enchantment compatibility/repair, group creation cooldown, claim capacity, warpoint amounts/recovery, raid limits, KOTH reward delivery, event schedules, recipes/prices, and content depth for the integrated playtest. Resource planets and themed replacement swords/bows are deferred. Continue design through concrete player scenarios; no gameplay code changed in this step.
+Group name/command, tutorial format, kit quantities/ammo, starting credits, travel, combat tag details, saber direction/tuning, enchantment compatibility/repair, group creation cooldown, claim capacity, warpoint threshold/edge cases, raid-window policy, third-party chest access, explosive/block limits, KOTH reward delivery, event schedules, recipes/prices, and content depth for the integrated playtest. Resource planets and themed replacement swords/bows are deferred. Continue design through concrete player scenarios; no gameplay code changed in this step.

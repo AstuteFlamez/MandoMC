@@ -36,7 +36,7 @@ Use small injected interfaces at vendor boundaries. Keep vendor classes inside i
 The catalog in server/plugins.catalog.json records admission status. Role selection does not imply installation or tested compatibility. Audit and restrict unrelated EssentialsX kits, travel, selling and item commands. Its separate chat/spawn/protection modules are excluded. Voting and global chat presentation remain deferred.
 
 ## Contracts
-- FactionsUUID owns membership, relations and claims. Warpoints use stable faction IDs. Do not mirror claims into WorldGuard.
+- FactionsUUID owns membership, relations and claims. MandoMC owns pairwise warpoints keyed by stable group IDs; vendor faction power is not the raid authority. Do not mirror claims into WorldGuard.
 - WorldGuard owns static regions. Raids never override spawn/adventure-map protection.
 - The economy provider owns balances; Vault is the bridge. Do not restore the old SQL balance mirror.
 - WeaponMechanics generates its weapons and handles projectiles. MandoMC references vendor IDs instead of duplicating weapon definitions.
@@ -52,13 +52,15 @@ Jabba uses one scheduled shared dungeon with PvP and open loot. Private copies p
 
 KOTH owns a continuous capture timer keyed to the capturing group's stable ID, or a player UUID for an unaffiliated contestant. The selected group model resets when the last eligible holder leaves, dies or disconnects; enemy presence alone does not reset it. Players can re-equip and re-enter both events after death.
 
-Event PvP deaths debit the victim group's warpoints through one attributed death path, with combat-logout death handled consistently and without double deductions. Death also retains normal full-loot behavior. Depleted warpoints can expose an offline base. Recovery, amounts, non-PvP deaths and breach permissions remain open. The source event implementations are recovery material, not the authoritative specification.
+Warpoints start at zero per pair of groups. An attributed opposing-group PvP kill adds one to the killer group's net score against the victim group; the reverse view decreases by one. Store one consistent rivalry result and apply each death once, including combat-logout deaths. Event PvP counts; unrelated group relationships do not change. Death retains normal full-loot behavior. Unaffiliated and non-attributed deaths need explicit handling.
+
+Raid eligibility is directional: `score(attackerGroup, defenderGroup) >= configuredThreshold`, with a positive threshold whose numeric value is not yet chosen. This can authorize an attack while defenders are offline. It does not grant third-party breach rights. Score changes can be evaluated from the same pairwise record; whether an active raid receives a timed window after eligibility falls is still open. The source event implementations are recovery material, not the authoritative specification.
 
 ## Custom damage
 A weapon adapter receives an attributed hit, asks combat policy about regions, factions and defenses, then cancels or modifies a supported vendor event. Exactly one path applies damage. Vehicles and area damage follow the same policy and preserve attacker attribution.
 
 ## Explosive raiding
-Check world/static protection, claim ownership/attacker relation, then warpoints, breach state and explosive type. A valid raid may affect an offline faction. Change only approved blocks; decide entity damage separately.
+Check world/static protection, claim owner, attributed attacking group, the pairwise score, any accepted raid-window policy, and explosive type. Only approved explosions may breach an eligible rival's base, including offline. Claims retain their owners. Hand-breaking and takeover remain denied; looting accessible chests is allowed for eligible attackers. Access by unrelated groups entering an existing hole is undecided. Change only approved blocks; decide entity damage separately.
 
 Do not unclaim a base, grant broad bypass, or indiscriminately uncancel another plugin's event. Prove the selected hooks and ordering in an integration spike before implementing raids.
 

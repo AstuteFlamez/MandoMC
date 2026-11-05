@@ -14,8 +14,8 @@ flowchart LR
   stockpile -->|"Yes"| recover["Re-equip from base supplies"]
   stockpile -->|"No"| gather
   recover --> goal
-  death -.->|"Group member killed in event PvP"| warpoints["Group warpoints decrease"]
-  warpoints --> vulnerable["Depletion can expose the base, including offline"]
+  death -.->|"Killed by an opposing group in event PvP"| warpoints["Rivalry score: victim -1, killer +1"]
+  warpoints --> vulnerable["A sufficient net-kill lead permits that rival to breach, including offline"]
   build --> next["Choose next goal"]
   next -.-> start
   style gather fill:#FFECBD,stroke:#FFC943

@@ -12,7 +12,8 @@
     "core": "Factions, blasters, KOTH and Jabba dungeon were successful previously. Lightsabers and armor are core. Force powers are deferred.",
     "worldRules": "Only main survival world is buildable. Other planets can be dungeon destinations. Resource planets are deferred. Remove selected vanilla features including villages, potions and elytra; exact disable list pending.",
     "pvp": "Enabled broadly outside safe areas such as spawnpoints. Death drops all carried items including armor and weapons.",
-    "raids": "Offline bases may be vulnerable if warpoints are depleted. No TNT cannons. Grenade/explosive breach rules and warpoint mechanics undecided.",
+    "raids": "Only a rival group with the required pairwise net-kill lead can breach a base, including offline, using approved explosives and looting accessible chests. Defenders retain ownership; no takeover, unclaiming or unrestricted hand-breaking. No TNT cannons. Threshold, explosive/block limits, raid-window policy and third-party chest access remain open.",
+    "warpoints": "Each pair of groups starts at zero. An opposing-group kill is +1 against the victim group and -1 in the reverse view, with unrelated pairs unchanged. A configurable net-kill lead unlocks raids for only the leading group against that rival. Recover by kills against the same rival; no passive time-based recovery in the selected model. Five was only an example threshold.",
     "maps": "Original Jabba/KOTH maps and mob/plugin configurations remain on a server the user can pull up.",
     "assets": "User has models, sounds, menus, armor, mobs and item assets; repository archive inspected.",
     "developmentApproach": "Clean laptop-hosted development server, selective recovery from older attempts, feature branches integrated into main after satisfaction. Gameplay plugin boundaries first; voting and chat presentation deferred.",
@@ -32,7 +33,7 @@
     "jabbaEvent": "One shared PvP dungeon, opened as a server-wide scheduled event. Chest and boss loot is open to anyone who grabs it, including rival groups.",
     "kothOwnership": "Group capture and victory, with unaffiliated solo players able to compete as individual contestants.",
     "eventReentry": "Players may re-equip and return to the same KOTH or Jabba event after death as often as they can while it remains active.",
-    "eventWarpointLoss": "Group members' PvP deaths in events lower warpoints and can expose their survival base to raids, including after logout.",
+    "eventWarpointLoss": "Opposing-group PvP kills/deaths in events update their pairwise warpoints and can expose the losing group's base to that rival, including after logout.",
     "resourcePlanets": "Deferred for now; the initial loop uses ordinary survival resources and in-scope activities.",
     "combatEscape": "Combat blocks voluntary teleporting. Logging out in combat causes death and normal carried-item loss. Tag duration, triggers and server-initiated disconnect handling remain undecided.",
     "starterEquipment": "A basic blaster, vanilla tools and food are granted only on first join. Exact items, quantities and ammo are undecided. Starting credits and their amount remain tentative.",
@@ -102,7 +103,7 @@
       "https://piratemc.com/guides/getting-started/"
     ]
   },
-  "nextAction": "Define warpoint recovery and permitted actions against vulnerable bases.",
+  "nextAction": "Decide raid permission after the lead falls below threshold and third-party access to exposed chests.",
   "openDecisions": [
     "Player-facing group name and command root",
     "Saber guard tuning, incoming direction and reflection timing",
@@ -116,8 +117,10 @@
     "Claim capacity and later territory rules",
     "Short tutorial format",
     "Content depth per system for the integrated friends playtest",
-    "Warpoint loss amounts, recovery and handling of other death causes",
-    "Raid damage limits",
+    "Pairwise raid threshold and handling of unaffiliated or non-attributed deaths",
+    "Raid-window policy after score reversal",
+    "Third-party chest access through an existing breach",
+    "Approved explosives and block-damage limits",
     "Planetary travel",
     "KOTH reward delivery and ownership",
     "Event schedules and time limits"
