@@ -1,0 +1,59 @@
+permission: ''
+
+items:
+  carrot:
+    type: VANILLA
+    id: "CARROT"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  wheat_seed:
+    type: VANILLA
+    id: "WHEAT_SEEDS"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  pumpkin_seed:
+    type: VANILLA
+    id: "PUMPKIN_SEEDS"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  melon_seed:
+
+    type: VANILLA
+    id: "MELON_SEEDS"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  beetroot_seed:
+    type: VANILLA
+    id: "BEETROOT_SEEDS"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  sugar_cane:
+    type: VANILLA
+    id: "SUGAR_CANE"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  cactus:
+    type: VANILLA
+    id: "CACTUS"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2

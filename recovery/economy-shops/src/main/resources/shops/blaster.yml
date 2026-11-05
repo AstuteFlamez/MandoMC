@@ -1,0 +1,34 @@
+permission: ''
+
+items:
+  dc15s:
+    type: WEAPON_MECHANICS_WEAPON
+    id: "DC15S"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  dc17:
+    type: WEAPON_MECHANICS_WEAPON
+    id: "DC17"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  dc15a:
+    type: WEAPON_MECHANICS_WEAPON
+    id: "DC15A"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
+
+  dc17m:
+    type: WEAPON_MECHANICS_WEAPON
+    id: "DC17M"
+    amount: 1
+
+    buy_price: 50
+    sell_price: 2
