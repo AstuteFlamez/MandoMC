@@ -43,29 +43,29 @@ Resource planets are deferred. The initial supply loop must work with ordinary s
 Use [the feature brief](templates/feature.md). Record unresolved gameplay choices as unresolved; infrastructure work must not silently decide them.
 
 ## Proposed development slices
-| Slice | Player can… | Why it comes here |
-| --- | --- | --- |
-| Arrival and protection | Join, accept the pack, understand the safe starting area | Establishes a place to test everything |
-| Basic combat | Obtain one blaster and armor set, fight, die and re-equip | Tests the smallest full-loot loop |
-| Group home | Join a group, claim a base and cooperate without friendly damage | Gives combat and gathering a shared purpose |
-| Supplies and progression | Gather, craft and buy a useful replacement loadout | Makes loss and recovery sustainable |
-| One event | Compete in KOTH or run Jabba for useful rewards | Adds a repeatable social objective |
-| Mobility | Use a speeder, then test aerial transport | Builds on meaningful destinations |
-| Raiding | Understand vulnerability and perform a limited explosive breach | Requires stable combat, claims and recovery rules |
+The [build order](build-order.md) proposes: arrival/protection → group base/travel → combat → supplies/progression → KOTH → Jabba → vehicles → raids. These are small internal checkpoints toward the integrated friends playtest, not separate launch promises. Both KOTH and Jabba remain in scope.
 
-This is a starting sequence for discussion. Travel details, event schedules/rewards and warpoint balancing still need decisions. Resource planets are outside the current scope.
+Record pairwise kills when combat lands; enable explosive raiding only after claim and damage permissions have been verified. Begin with the [arrival/protection brief](features/arrival-and-protection.md). The order is an advisor recommendation awaiting review, not a new accepted gameplay decision.
 
 ## Next player decisions
-- Define the role of aircraft in the first integrated playtest: transport, simple weapons, or full aerial combat.
-- Define how players obtain speeders and aircraft.
-- Define whether enemies can steal or destroy parked vehicles outside protected areas.
+- Review the consolidated gameplay loop and proposed implementation order.
+- Settle the public group name and travel proposal before implementing those interfaces.
 
 Group naming and the travel recommendation remain open. Combat tagging details and initial equipment quantities can be settled when their feature briefs are written.
+
+## Vehicle baseline
+Aircraft carry players in the first integrated playtest; aerial combat is deferred. Speeders and aircraft are initially bought with credits. The long-term direction is crafting for all equipment, including blasters and vehicles. The accepted initial shop/crafting mix remains the first playable version; the later transition must preserve item identities and existing ownership.
+
+Only the player who placed a vehicle can pilot it. Membership in the same group does not grant pilot access. Anyone, including an opposing player, may use an available passenger seat. The same open-access rule applies to gunner seats when vehicle weapons are introduced; gunner permission does not add aerial weapons to the first transport-only version.
+
+Outside protected areas, enemies may destroy vehicles but cannot steal them by taking the pilot seat. Destruction permanently removes the vehicle; the player must obtain another. The placing player can pack a vehicle back into an inventory item only when it is stationary, empty and out of combat. Packing must not repair, refuel or duplicate it for free. Damage permission, piloting and other seat access are separate rules; do not infer one from another.
 
 ## Accepted acquisition loop
 Sell ordinary survival resources to buy basic blasters and ammunition; craft basic armor from survival materials; earn credits and rare components from KOTH/Jabba; use those components to craft lightsabers and advanced equipment.
 
 The user accepted this loop on 2026-11-05. It also supplies the normal route for replacing lost equipment. Specific recipes, equipment variants, prices, drop rates and grind duration remain open. Resource planets are not required.
+
+Longer term, all equipment acquisition shifts toward crafting, including blasters and vehicles. This is a later progression change, not a prerequisite for the initial integrated playtest.
 
 ## Saber baseline and equipment power
 The user uses shield-based models for lightsabers, taking advantage of shield blocking. Their earlier implementation included reflection and saber throwing. Recover that approach as the starting point; a new timed-parry requirement has not been accepted. Separate Force powers remain deferred.

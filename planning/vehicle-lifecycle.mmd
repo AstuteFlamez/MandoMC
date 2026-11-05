@@ -1,0 +1,12 @@
+flowchart LR
+  purchase["Buy with credits"] --> packed["Packed vehicle item"]
+  crafting["LATER: craft equipment"] -.-> packed
+  packed -->|"Place"| deployed["Deployed vehicle"]
+  deployed --> pilot["Placer alone pilots"]
+  deployed --> passengers["Anyone may ride"]
+  deployed -->|"Destroyed"| lost["Permanently lost"]
+  deployed --> packCheck{"Stationary, empty, out of combat?"}
+  packCheck -->|"Yes: placer packs"| packed
+  packCheck -->|"No"| stays["Remains deployed"]
+  style crafting fill:#D9D9D9,stroke:#B3B3B3
+  style lost fill:#FFCDC2,stroke:#FF7556

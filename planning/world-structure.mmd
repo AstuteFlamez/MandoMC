@@ -1,7 +1,7 @@
 flowchart LR
   player["Java player + resource pack"] --> spawn
   subgraph worlds ["PROPOSAL: one Paper server, several worlds"]
-    spawn["Safe spawn + travel"]
+    spawn["SpawnWorld: safe arrival"]
     survival["Survival: player groups + building"]
     resources["DEFERRED: resource planets"]
     hoth["Hoth: KOTH"]
@@ -14,7 +14,7 @@ flowchart LR
     survival -->|"Only buildable world"| base
   end
   survival -->|"Gather"| supplies["Materials + supplies"]
-  hoth -->|"Compete for"| rewards["Rewards: design pending"]
+  hoth -->|"Compete for"| rewards["Credits + rare components"]
   tatooine -->|"Fight for"| rewards
   base -.->|"Rival earns the required net-kill lead"| breach["Approved explosive breaches; ownership retained"]
   breach --> offline["Offline vulnerability: confirmed"]

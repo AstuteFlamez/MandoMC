@@ -27,6 +27,8 @@ Warpoints are pairwise net-kill scores, starting at zero. One opposing-group kil
 
 When an active attacker's lead drops below the threshold, that score drop starts a configurable continuation window for the same pair. Unrelated groups can enter a breach and pick up dropped items, but cannot break blocks or open the owner's chests. Timer duration, active-raid detection and retrigger behavior remain feature-brief details.
 
+Aircraft are transport-only initially; aerial combat is deferred. Vehicles start as credit purchases; all equipment, including blasters and vehicles, eventually moves toward crafting. Only the placing player may pilot; anyone may occupy passenger seats, with the same permission intended for future gunner seats. Enemies may destroy vehicles outside protected areas but cannot pilot them. Destruction permanently loses the vehicle. The placer can pack it into an inventory item only while stationary, empty and out of combat.
+
 Research-backed travel recommendation is recorded in docs/player-experience.md as a proposal, not accepted policy: free commands/menu plus optional themed terminals, fixed public arrivals, group home, and a proposed five-second warmup. Published server guides support this as a comparable design; player preference remains a prediction to test.
 
 ## Implementation
@@ -34,13 +36,15 @@ Minimal bootstrap, config schema check and /mandomc status command. Maven reacto
 
 See docs/recovery.md for the old source. Maps/configs and editable ModelEngine blueprints still need recovery.
 
-Local diagram sources mark resource planets as deferred and event PvP deaths as a pairwise warpoint risk. The linked FigJam board still shows an earlier proposal and has not been refreshed in this design step.
+The FigJam world/session diagrams were updated for deferred resource planets, player-group terminology, accepted rewards, rival-specific breaches and normal equipment recovery. New diagrams show the proposed build order and accepted vehicle lifecycle. The board is a compact overview; player-experience.md carries the complete rules, including pairwise event kills and raid continuation.
+
+The proposed order is recorded in build-order.md: arrival/protection, group base/travel, combat, supplies/progression, KOTH, Jabba, vehicles, raids. Pairwise kill recording lands with combat; explosive permissions come later. The arrival/protection feature brief is ready for review in docs/features/arrival-and-protection.md. The order and tutorial/travel presentation remain proposals.
 
 ## Verification
-Maven verify passed and produced MandoMC.jar. Verified packaged descriptor/config and Java 25 bytecode. Documentation links and JSON/XML parsed successfully. All 294 legacy feature files match their original Git blobs exactly across the 16 recovery branches; 13 obsolete documentation/rule files remain in the full snapshot. Source inspection confirms legacy saber, Jabba and group/solo KOTH implementations. Published KOTH references support the continuous-capture model; the new group rule is not runtime-tested. No automated gameplay tests exist yet; no in-server test has run. Current work changes design documentation only.
+Maven verify previously passed and produced MandoMC.jar. Verified packaged descriptor/config and Java 25 bytecode. All 294 legacy feature files match their original Git blobs exactly across the 16 recovery branches; 13 obsolete documentation/rule files remain in the full snapshot. Source inspection confirms legacy saber, Jabba and group/solo KOTH implementations. Published KOTH references support the continuous-capture model; the new group rule is not runtime-tested. No automated gameplay tests exist yet; no in-server test has run. Current work changes design documentation only; JSON, local Markdown links and whitespace were checked, and refreshed world/build-order/vehicle diagrams were visually reviewed. No rebuild was needed for this documentation-only checkpoint.
 
 ## Next action
-Define aircraft's first-playtest role, vehicle acquisition, and theft/destruction rules outside protected areas. These three questions are awaiting the user's answers.
+Locate copies of SpawnWorld and the usable MandoPack artifact, inventory their versions, and restore them into ignored local runtime storage for the arrival/protection slice. The recovery location is not yet known. Public group naming and travel remain open choices before their player interfaces are implemented.
 
 ## Open
-Vehicle role/acquisition/theft, group name/command, tutorial format, kit quantities/ammo, starting credits, travel, combat tag details, saber direction/tuning, enchantment compatibility/repair, group creation cooldown, claim capacity, warpoint threshold/edge cases, raid-window duration/refresh and active-raid detection, explosive/block limits, KOTH reward delivery, event schedules, recipes/prices, and content depth for the integrated playtest. Resource planets and themed replacement swords/bows are deferred. Continue design through concrete player scenarios; no gameplay code changed in this step.
+Group name/command, tutorial format, kit quantities/ammo, starting credits, travel, combat tag details, saber direction/tuning, enchantment compatibility/repair, group creation cooldown, claim capacity, warpoint threshold/edge cases, raid-window duration/refresh and active-raid detection, explosive/block limits, KOTH reward delivery, event schedules, recipes/prices, vehicle redeployment details and content depth for the integrated playtest. Resource planets, aerial combat and themed replacement swords/bows are deferred. Continue design through concrete player scenarios; no gameplay code changed in this step.

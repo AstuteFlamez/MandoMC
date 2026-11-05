@@ -1,0 +1,16 @@
+flowchart LR
+  subgraph foundation ["PROPOSED ORDER: establish the player loop"]
+    arrival["1. Arrival + protection"] --> groups["2. Group base + travel"]
+    groups --> combat["3. Combat + loss"]
+    combat --> supplies["4. Supplies + progression"]
+  end
+  subgraph activities ["Add reasons to venture out"]
+    koth["5. KOTH"] --> jabba["6. Jabba"]
+    jabba --> vehicles["7. Speeder + aircraft"]
+    vehicles --> raids["8. Rival-only raids"]
+  end
+  supplies --> koth
+  raids --> playtest(["Integrated friends playtest"])
+  style foundation fill:#C2E5FF,stroke:#3DADFF
+  style activities fill:#FFECBD,stroke:#FFC943
+  style playtest fill:#CDF4D3,stroke:#66D575

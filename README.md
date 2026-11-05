@@ -13,6 +13,8 @@ Output: plugin/target/MandoMC.jar. The wrapper pins Maven. Paper/API versions ar
 ## Start here
 - [Current state](docs/status.md)
 - [Player experience and feature order](docs/player-experience.md)
+- [Proposed build order](docs/build-order.md)
+- [First feature: arrival and protection](docs/features/arrival-and-protection.md)
 - [Gameplay architecture](docs/architecture.md)
 - [Development workflow](docs/development.md)
 - [Style guide](docs/style-guide.md)

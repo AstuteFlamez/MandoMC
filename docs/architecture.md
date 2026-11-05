@@ -47,6 +47,11 @@ The catalog in server/plugins.catalog.json records admission status. Role select
 - Stable MandoMC IDs survive vendor replacement through explicit mapping and saved-data migration.
 - Identify custom items before applying ordinary-weapon restrictions. Removing vanilla shields must not disable registered shield-based lightsabers. Keep the custom guard limit explicit when integrating allowed vanilla enchantments and repair behavior.
 
+## Vehicles
+The initial aircraft scope is player transport; aerial combat is deferred. MandoMC owns vehicle state and seat access, while ModelEngine owns visuals. Persist the placing player's UUID as the pilot authority for a deployed vehicle. Group membership and passenger access do not grant piloting rights.
+
+Passenger seats are available to any player. Future gunner seats follow the same access rule when weapons are introduced. Evaluate mounting, pilot-seat switching and vehicle damage separately: enemies can destroy vehicles outside protected areas, but cannot take over piloting. Destruction is permanent loss. The placer may pack a vehicle into an item only while stationary, unoccupied and out of combat. Use one authoritative identity across deployed/packed/destroyed states; preserve applicable health/fuel and prevent simultaneous item/entity copies. Acquisition starts with credit purchases and later moves to crafting for all equipment; do not encode the purchase route into runtime item or vehicle identity. Redeployment/transfer details belong in the vehicle feature brief.
+
 ## Events and warpoints
 Jabba uses one scheduled shared dungeon with PvP and open loot. Private copies per group are outside the current design. MandoMC owns event state, progression and cleanup; MythicMobs owns mob definitions and AI.
 
