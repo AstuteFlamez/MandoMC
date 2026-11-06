@@ -2,7 +2,7 @@
 Updated: 2026-11-05
 
 ## Milestone
-Current: GitHub-hosted resource-pack delivery on bilal/resource-pack-hosting, ready for first live workflow verification. Complete: clean plugin foundation, all selected public gameplay dependencies installed, and the first recovered E-11 visual slice. Legacy gameplay remains preserved on 16 recovery branches plus the old-main snapshot.
+Current: GitHub-hosted resource-pack delivery, integrated into main from bilal/resource-pack-hosting and verified on the running local server. Complete: clean plugin foundation, all selected public gameplay dependencies installed, and the first recovered E-11 visual slice. Legacy gameplay remains preserved on 16 recovery branches plus the old-main snapshot.
 
 ## Accepted direction
 Laptop development, selective recovery, and the public/custom division in architecture.md. Design player experience, choose playable feature order, build parameterized systems, then configure content. Merge features after validation and satisfaction.
@@ -47,12 +47,12 @@ The player experience, FigJam diagrams and proposed feature order remain recorde
 ## Verification
 Maven verify passed with the pinned 26.1.2 API and produced the deployed MandoMC.jar. All 12 plugins enabled together; the plugin list, `/mandomc`, FactionsUUID list and Vault's EssentialsX economy bridge were checked. A Minecraft status handshake returned Paper 26.1.2 at 127.0.0.1:25565. Clean stop/restart and loading the existing test world were verified. This establishes boot compatibility, not gameplay correctness. No authenticated client join has been tested.
 
-The pack builds without downloads, has root pack.mcmeta, and validates JSON plus local item-model/model/texture references. Two builds produced the same ZIP hash; missing referenced assets fail the build. Six deployment tests pass: compatible release selection, property preservation, checksum rejection, network failure cache fallback, incompatible cache rejection and running-server protection. First live publication and restart verification remain pending in this checkpoint. Resource-pack rendering and gameplay integration await a client test. Generated packs, downloaded JARs, worlds and local tools are ignored by Git. Documentation, JSON and shell syntax were checked.
+The pack builds without downloads, has root pack.mcmeta, and validates JSON plus local item-model/model/texture references. Two builds produced the same ZIP hash; missing referenced assets fail the build. Six deployment tests pass: compatible release selection, property preservation, checksum rejection, network failure cache fallback, incompatible cache rejection and running-server protection. The first GitHub Actions run succeeded (42136788904); the public release ZIP downloaded without authentication and matched both hashes. Paper stopped cleanly, synchronized the release settings, restarted with all 12 plugins, and is listening on localhost:25565. Runtime server.properties contains the versioned URL, SHA-1, stable UUID and require-resource-pack=true. Resource-pack rendering and gameplay integration await a client test. Generated packs, downloaded JARs, worlds and local tools are ignored by Git. Documentation, JSON and shell syntax were checked.
 
 Earlier recovery verification remains valid: all 294 legacy feature files matched their original Git blobs across 16 recovery branches; the full snapshot preserves obsolete docs and old main. FigJam diagrams were reviewed during the design checkpoint.
 
 ## Next action
-Join localhost with Minecraft Java 26.1.2, then recover SpawnWorld for the arrival/protection slice. Accept the hosted pack on join to inspect the E-11 preview. Public group naming and travel remain open before their interfaces are implemented.
+Join localhost with Minecraft Java 26.1.2, then recover SpawnWorld for the arrival/protection slice. Accept the hosted pack on join to confirm the client download and inspect the E-11 preview. Public group naming and travel remain open before their interfaces are implemented.
 
 ## Open
 Group name/command, tutorial format, kit quantities/ammo, starting credits, travel, combat tag details, saber direction/tuning, enchantment compatibility/repair, group creation cooldown, claim capacity, warpoint threshold/edge cases, raid-window duration/refresh and active-raid detection, explosive/block limits, KOTH reward delivery, event schedules, recipes/prices, vehicle redeployment details and content depth for the integrated playtest. Resource planets, aerial combat and themed replacement swords/bows are deferred. Continue through concrete player scenarios and the proposed playable slices. This checkpoint sets up the runtime and pack; custom gameplay remains unimplemented.
