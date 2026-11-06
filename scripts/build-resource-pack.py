@@ -80,7 +80,11 @@ def main():
     temporary.replace(output)
     data = output.read_bytes()
     hashes = {name: hashlib.new(name, data).hexdigest() for name in ('sha1', 'sha256')}
-    report = {'minecraftVersion': manifest['minecraftVersion'], 'files': len(files), **hashes}
+    report = {
+        'schemaVersion': 1, 'minecraftVersion': manifest['minecraftVersion'],
+        'resourceFormat': manifest['resourceFormat'], 'files': len(files),
+        'bytes': len(data), **hashes,
+    }
     output.with_suffix('.json').write_text(json.dumps(report, indent=2) + '\n')
     print(f'Built {output.relative_to(ROOT)} ({len(files)} files, {len(data)} bytes)')
     print(f'SHA-1: {hashes["sha1"]}\nSHA-256: {hashes["sha256"]}')

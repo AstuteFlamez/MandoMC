@@ -1,0 +1,71 @@
+name: Publish resource pack
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'resource-pack/src/**'
+      - 'resource-pack/sources.json'
+      - 'resource-pack/hosting.json'
+      - 'scripts/build-resource-pack.py'
+      - 'scripts/sync-resource-pack.py'
+      - 'scripts/tests/**'
+      - 'server/paper.lock.json'
+      - '.github/workflows/resource-pack.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-resource-pack
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - name: Test pack deployment
+        run: python3 -m unittest discover -s scripts/tests -v
+      - name: Build and describe pack
+        run: |
+          python3 scripts/build-resource-pack.py
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          path = Path('resource-pack/build/MandoMC.json')
+          report = json.loads(path.read_text())
+          report['sourceCommit'] = os.environ['GITHUB_SHA']
+          path.write_text(json.dumps(report, indent=2) + '\n')
+          tag = f"resource-pack-{report['minecraftVersion']}-{report['sourceCommit'][:12]}"
+          with open(os.environ['GITHUB_ENV'], 'a') as environment:
+              environment.write(f'PACK_TAG={tag}\n')
+          Path('resource-pack/build/release-notes.md').write_text(
+              f"Resource pack for Minecraft Java {report['minecraftVersion']}.\n\n"
+              f"Source: {report['sourceCommit']}\n\nSHA-1: `{report['sha1']}`\n\n"
+              'Generated from resource-pack/src. Use MandoMC.zip, not the source-code archive.\n'
+          )
+          PY
+      - name: Publish versioned downloads
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if gh release view "$PACK_TAG" --json isDraft > resource-pack/build/release-state.json 2>/dev/null; then
+            if python3 -c 'import json,sys; sys.exit(0 if json.load(open("resource-pack/build/release-state.json"))["isDraft"] else 1)'; then
+              gh release upload "$PACK_TAG" resource-pack/build/MandoMC.zip resource-pack/build/MandoMC.json --clobber
+            else
+              echo "Already published; preserving the existing download and hash."
+              exit 0
+            fi
+          else
+            gh release create "$PACK_TAG" resource-pack/build/MandoMC.zip resource-pack/build/MandoMC.json \
+              --target "$GITHUB_SHA" --draft --prerelease --latest=false \
+              --title "$PACK_TAG" --notes-file resource-pack/build/release-notes.md
+          fi
+          gh release edit "$PACK_TAG" --draft=false

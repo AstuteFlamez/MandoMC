@@ -6,7 +6,7 @@ From the repository root:
 ```bash
 ./scripts/start-server.sh
 ```
-On macOS, double-click `server/start.command` for a Terminal console. Join `localhost` using **Minecraft Java 26.1.2**. The server binds to `127.0.0.1:25565` with online-mode enabled. It has a fresh `dev_world`, 20 slots, and a 4 GiB maximum heap. Override the heap with `MANDOMC_MAX_MEMORY=6G` if needed. Java 25 is selected by `scripts/java-env.sh`.
+On macOS, double-click `server/start.command` for a Terminal console. Join `localhost` using **Minecraft Java 26.1.2**. The server binds to `127.0.0.1:25565` with online-mode enabled. It has a fresh `dev_world`, 20 slots, and a 4 GiB maximum heap. Override the heap with `MANDOMC_MAX_MEMORY=6G` if needed. Java 25 is selected by `scripts/java-env.sh`. Python 3 is also required: startup synchronizes the hosted resource pack before launching Paper.
 
 Type `stop` in the server console to save and exit. Use full restarts for plugin changes. Do not run two copies against the same runtime.
 
@@ -38,7 +38,7 @@ This is a development boot with fresh vendor defaults, not the designed MandoMC 
 
 EssentialsX is the credit balance provider. No EssentialsChat/Spawn/Protect modules were installed. Other plugins' kits, travel, selling and raid defaults must be restricted when their feature slices are implemented.
 
-WeaponMechanics' `Resource_Pack_Download.Automatically_Send_To_Player` is set to false in its generated runtime config. Keep this intentional override when restoring configs; the new MandoMC pack will own presentation. No pack is automatically served yet. Build and inspect the [pack](../resource-pack/README.md) locally first.
+WeaponMechanics' `Resource_Pack_Download.Automatically_Send_To_Player` is set to false in its generated runtime config. Keep this intentional override when restoring configs; the new MandoMC pack will own presentation. The [MandoMC pack](../resource-pack/README.md) is published through GitHub Releases and applied through server.properties. Startup synchronizes its URL, SHA-1, stable UUID and required-pack prompt. Minecraft downloads the pack directly from GitHub when a player accepts it. Wait for the publishing workflow, then restart Paper to adopt updated assets; reconnect to apply them.
 
 ## Change or restore content
 Stop the server, back up `server/runtime/`, then restore one plugin config or map at a time. Never copy old JARs over the pinned stack. Check migrations and restart logs after each restoration. World upgrades cannot be undone by merely swapping server JARs.

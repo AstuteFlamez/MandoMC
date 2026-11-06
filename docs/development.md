@@ -15,7 +15,7 @@ Run ./scripts/build.sh to verify the Maven reactor and produce plugin/target/Man
 
 No automatic copy-to-server step exists. Runtime files live in `server/runtime/`, separately from `plugin/` and `resource-pack/`. See [server instructions](../server/README.md). Bind the laptop server to loopback until access is intentionally changed. Stop it before switching deployed code/configs; branches do not preserve runtime world/player state. Use restarts for code/vendor changes, not Bukkit /reload.
 
-Build pack sources with `./scripts/build-resource-pack.py`; output stays in ignored `resource-pack/build/`. Source models, textures and provenance live on main alongside code. Validate model appearance in a matching Minecraft client before calling an asset complete.
+Build pack sources with `./scripts/build-resource-pack.py`; output stays in ignored `resource-pack/build/`. Source models, textures and provenance live on main alongside code. Pack/tooling changes on main publish via GitHub Actions. Wait for publication, then restart Paper to synchronize the hosted URL/hash; reconnect to apply the pack. See resource-pack/README.md for caching and preview behavior. Validate model appearance in a matching Minecraft client before calling an asset complete.
 
 ## Done means
 Build and meaningful tests pass; the player behavior and failure cases work; runtime-dependent integrations are checked in Paper; configs/migrations/docs are included; no generated data, paid binaries, secrets or local paths are committed. Incorporate play feedback before finishing a gameplay feature.

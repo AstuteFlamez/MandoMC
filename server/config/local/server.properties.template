@@ -11,10 +11,10 @@ view-distance=8
 simulation-distance=6
 # Keep ordinary survival generation until the exact structure-disable policy is defined.
 generate-structures=true
-# Add the validated resource-pack URL, hash and required-pack setting during bootstrap.
+# scripts/sync-resource-pack.py fills the hosted pack URL, hash, UUID and prompt before Paper starts.
 
 level-name=dev_world
 gamemode=survival
 difficulty=normal
 white-list=false
-require-resource-pack=false
+require-resource-pack=true

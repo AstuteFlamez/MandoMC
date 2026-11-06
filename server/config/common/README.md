@@ -5,4 +5,4 @@ Preserve vendor schemas and stable content IDs. Keep worlds, user/player data, g
 
 Public plugins are installed and boot-verified; gameplay integration is pending. Do not copy the old plugins directory wholesale.
 
-The only initial vendor override is WeaponMechanics `Resource_Pack_Download.Automatically_Send_To_Player: false`. Apply that key within its generated config, preserving other vendor defaults. The new MandoMC pack will be served separately once validated.
+The only initial vendor override is WeaponMechanics `Resource_Pack_Download.Automatically_Send_To_Player: false`. Apply that key within its generated config, preserving other vendor defaults. The new MandoMC pack is delivered through server.properties from GitHub Releases. Startup synchronizes its pinned download URL and hash.

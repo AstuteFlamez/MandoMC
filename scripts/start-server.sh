@@ -6,4 +6,5 @@ if [[ ! -f paper.jar ]]; then
     echo "Missing server/runtime/paper.jar; install the artifact in server/paper.lock.json." >&2
     exit 1
 fi
+python3 "$MANDOMC_ROOT/scripts/sync-resource-pack.py"
 exec "$JAVA_HOME/bin/java" -Xms1G -Xmx"${MANDOMC_MAX_MEMORY:-4G}" -jar paper.jar --nogui "$@"

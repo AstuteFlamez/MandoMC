@@ -2,7 +2,7 @@
 Updated: 2026-11-05
 
 ## Milestone
-Current: local Paper boot and initial resource-pack source, integrated into main from bilal/local-paper-server after validation. Complete: clean plugin foundation, all selected public gameplay dependencies installed, and the first recovered E-11 visual slice. Legacy gameplay remains preserved on 16 recovery branches plus the old-main snapshot.
+Current: GitHub-hosted resource-pack delivery on bilal/resource-pack-hosting, ready for first live workflow verification. Complete: clean plugin foundation, all selected public gameplay dependencies installed, and the first recovered E-11 visual slice. Legacy gameplay remains preserved on 16 recovery branches plus the old-main snapshot.
 
 ## Accepted direction
 Laptop development, selective recovery, and the public/custom division in architecture.md. Design player experience, choose playable feature order, build parameterized systems, then configure content. Merge features after validation and satisfaction.
@@ -38,7 +38,7 @@ All selected public vendors are installed fresh: WeaponMechanics, MechanicsCore,
 
 MandoMC itself still only provides bootstrap, config schema checking and `/mandomc`. The runtime has a fresh survival test world and vendor defaults; it does not implement the accepted MandoMC rules. No safe regions, starter kit, custom combat, raids, events or vehicles exist yet. Brand replacement for FactionsUUID and restrictions on unrelated vendor behavior remain feature work.
 
-The server binds to localhost:25565. Launch with `./scripts/start-server.sh` or `server/start.command`; type `stop` to save and exit. See server/README.md for exact setup and restoration instructions. WeaponMechanics automatic pack sending is disabled. No pack is automatically hosted yet.
+The server binds to localhost:25565. Launch with `./scripts/start-server.sh` or `server/start.command`; type `stop` to save and exit. See server/README.md for exact setup and restoration instructions. WeaponMechanics automatic pack sending is disabled. Pack changes on main publish a versioned GitHub release through Actions. Startup verifies the newest release matching the pinned Minecraft version and applies the URL/hash/UUID/required prompt together, with a verified local cache for temporary network failures.
 
 The new pack builds from `resource-pack/src/` with `./scripts/build-resource-pack.py`, targeting resource format 84.0. It includes the E-11 model, aim/sprint variants and texture recovered from the pinned MandoPack commit. Its item_model keys are cosmetic previews only; firing behavior and pose switching are not wired. Remaining assets and ModelEngine blueprints must be recovered feature by feature. Client visual verification is pending.
 
@@ -47,12 +47,12 @@ The player experience, FigJam diagrams and proposed feature order remain recorde
 ## Verification
 Maven verify passed with the pinned 26.1.2 API and produced the deployed MandoMC.jar. All 12 plugins enabled together; the plugin list, `/mandomc`, FactionsUUID list and Vault's EssentialsX economy bridge were checked. A Minecraft status handshake returned Paper 26.1.2 at 127.0.0.1:25565. Clean stop/restart and loading the existing test world were verified. This establishes boot compatibility, not gameplay correctness. No authenticated client join has been tested.
 
-The pack builds without downloads, has root pack.mcmeta, and validates JSON plus local item-model/model/texture references. Two builds produced the same ZIP hash; missing referenced assets fail the build. Resource-pack rendering and gameplay integration await a client test. Generated packs, downloaded JARs, worlds and local tools are ignored by Git. Documentation, JSON and shell syntax were checked.
+The pack builds without downloads, has root pack.mcmeta, and validates JSON plus local item-model/model/texture references. Two builds produced the same ZIP hash; missing referenced assets fail the build. Six deployment tests pass: compatible release selection, property preservation, checksum rejection, network failure cache fallback, incompatible cache rejection and running-server protection. First live publication and restart verification remain pending in this checkpoint. Resource-pack rendering and gameplay integration await a client test. Generated packs, downloaded JARs, worlds and local tools are ignored by Git. Documentation, JSON and shell syntax were checked.
 
 Earlier recovery verification remains valid: all 294 legacy feature files matched their original Git blobs across 16 recovery branches; the full snapshot preserves obsolete docs and old main. FigJam diagrams were reviewed during the design checkpoint.
 
 ## Next action
-Join localhost with Minecraft Java 26.1.2, then recover SpawnWorld for the arrival/protection slice. The new pack's E-11 preview can be enabled locally for visual inspection. Public group naming and travel remain open before their interfaces are implemented.
+Join localhost with Minecraft Java 26.1.2, then recover SpawnWorld for the arrival/protection slice. Accept the hosted pack on join to inspect the E-11 preview. Public group naming and travel remain open before their interfaces are implemented.
 
 ## Open
 Group name/command, tutorial format, kit quantities/ammo, starting credits, travel, combat tag details, saber direction/tuning, enchantment compatibility/repair, group creation cooldown, claim capacity, warpoint threshold/edge cases, raid-window duration/refresh and active-raid detection, explosive/block limits, KOTH reward delivery, event schedules, recipes/prices, vehicle redeployment details and content depth for the integrated playtest. Resource planets, aerial combat and themed replacement swords/bows are deferred. Continue through concrete player scenarios and the proposed playable slices. This checkpoint sets up the runtime and pack; custom gameplay remains unimplemented.

@@ -13,7 +13,7 @@ Output: plugin/target/MandoMC.jar. The wrapper pins Maven. Paper/API versions ar
 ## Run locally
 Paper 26.1.2 build 74, Java 25. With the local runtime installed, run `./scripts/start-server.sh` or double-click `server/start.command`. Join `localhost` with Minecraft Java **26.1.2**. Type `stop` in the server console to save and shut down. See [local server setup](server/README.md).
 
-Build the pack with `./scripts/build-resource-pack.py` (Python 3). See [pack sources and recovery](resource-pack/README.md).
+Build the pack with `./scripts/build-resource-pack.py` (Python 3). Pack changes on main publish to GitHub Releases automatically; server startup synchronizes the newest compatible hosted build. See [pack sources and recovery](resource-pack/README.md).
 
 ## Start here
 - [Current state](docs/status.md)

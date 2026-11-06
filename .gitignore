@@ -25,3 +25,7 @@ reference/
 
 # Runnable local server: worlds, plugins, generated settings and EULA
 server/runtime/
+
+# Python tool caches
+__pycache__/
+*.py[cod]
