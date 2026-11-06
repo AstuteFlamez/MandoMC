@@ -120,7 +120,7 @@
       "https://piratemc.com/guides/getting-started/"
     ]
   },
-  "nextAction": "Locate copies of SpawnWorld and the usable MandoPack artifact, inventory their versions, and restore them into ignored local runtime storage for the arrival/protection slice.",
+  "nextAction": "Join the local Paper 26.1.2 server, then recover SpawnWorld for the arrival/protection slice. New pack sources live in resource-pack/; the first E-11 visual slice needs client validation.",
   "openDecisions": [
     "Player-facing group name and command root",
     "Saber guard tuning, incoming direction and reflection timing",

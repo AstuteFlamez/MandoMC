@@ -13,7 +13,9 @@ Recovery branches hold reference material, not ready-to-merge implementations; s
 ## Local build
 Run ./scripts/build.sh to verify the Maven reactor and produce plugin/target/MandoMC.jar. Select Java 25 using MANDOMC_JAVA_HOME, the local JDK, or JAVA_HOME. Wrapper and dependency downloads stay under ignored .local.
 
-No automatic copy-to-server step exists. Runtime setup is separate. Bind the laptop server to loopback until access is intentionally changed. Stop it before switching deployed code/configs; branches do not preserve runtime world/player state. Use restarts for code/vendor changes, not Bukkit /reload.
+No automatic copy-to-server step exists. Runtime files live in `server/runtime/`, separately from `plugin/` and `resource-pack/`. See [server instructions](../server/README.md). Bind the laptop server to loopback until access is intentionally changed. Stop it before switching deployed code/configs; branches do not preserve runtime world/player state. Use restarts for code/vendor changes, not Bukkit /reload.
+
+Build pack sources with `./scripts/build-resource-pack.py`; output stays in ignored `resource-pack/build/`. Source models, textures and provenance live on main alongside code. Validate model appearance in a matching Minecraft client before calling an asset complete.
 
 ## Done means
 Build and meaningful tests pass; the player behavior and failure cases work; runtime-dependent integrations are checked in Paper; configs/migrations/docs are included; no generated data, paid binaries, secrets or local paths are committed. Incorporate play feedback before finishing a gameplay feature.

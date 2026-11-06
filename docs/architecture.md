@@ -1,5 +1,5 @@
 # Gameplay architecture
-The user accepted this division on 2026-11-05. Exact versions and integration hooks still need runtime verification. Components may be replaced while preserving player behavior and content contracts.
+The user accepted this division on 2026-11-05. The pinned versions boot together; gameplay integration hooks still need runtime verification. Components may be replaced while preserving player behavior and content contracts.
 
 Design the [player experience](player-experience.md) first, choose the playable order, implement parameterized systems, then configure content.
 
@@ -8,7 +8,7 @@ Player-facing group naming and commands must replace Factions and `/f`; the fina
 Resource planets are deferred. Initial gathering and credit income use ordinary survival resources plus activity rewards. Keep future resource-planet support outside the current milestone; the ownership table below records responsibilities, not a requirement to build every capability now.
 
 ## Runtime and code
-One local Paper process with multiple worlds; one modular MandoMC JAR. Main currently contains bootstrap and a status command. Paper 26.3 build 242 and its API are pinned; Java 25 is required.
+One local Paper process with multiple worlds; one modular MandoMC JAR. Main currently contains bootstrap and a status command. Paper 26.1.2 build 74 and its API are pinned; Java 25 is required.
 
 Introduce packages as their implementation lands:
 ```text
@@ -20,6 +20,8 @@ net.mandomc
 ```
 Use small injected interfaces at vendor boundaries. Keep vendor classes inside integrations and pass stable IDs, UUIDs and immutable facts to gameplay. Avoid speculative framework classes.
 
+The new pack lives in `resource-pack/` in this repository. Its build targets the pinned server version, uses namespaced item models, and recovers assets from a recorded MandoPack commit. Runtime-generated ModelEngine output will be integrated when the corresponding models and blueprints are recovered.
+
 ## Ownership
 | Capability | Selected public component | MandoMC owns |
 | --- | --- | --- |
@@ -30,10 +32,10 @@ Use small injected interfaces at vendor boundaries. Keep vendor classes inside i
 | Protected regions | WorldGuard with WorldEdit | Enforcement for every custom action |
 | Worlds | Multiverse-Core | Planet meaning, destinations, travel |
 | Credits | EssentialsX Core through Vault | Shops, prices, sinks, reward transactions |
-| Items, armor, crafting | Paper APIs and MandoPack | Stable IDs, recipes, custom behavior |
+| Items, armor, crafting | Paper APIs and resource-pack/ | Stable IDs, recipes, custom behavior |
 | KOTH and resource regeneration | Paper APIs | Event rules, bounded regeneration |
 
-The catalog in server/plugins.catalog.json records admission status. Role selection does not imply installation or tested compatibility. Audit and restrict unrelated EssentialsX kits, travel, selling and item commands. Its separate chat/spawn/protection modules are excluded. Voting and global chat presentation remain deferred.
+The catalog in server/plugins.catalog.json records admission status. Installed versions and artifact hashes are in server/plugins.lock.json. Boot validation does not establish gameplay compatibility. Audit and restrict unrelated EssentialsX kits, travel, selling and item commands. Its separate chat/spawn/protection modules are excluded. Voting and global chat presentation remain deferred.
 
 ## Contracts
 - FactionsUUID owns membership, relations and claims. MandoMC owns pairwise warpoints keyed by stable group IDs; vendor faction power is not the raid authority. Do not mirror claims into WorldGuard.

@@ -1,7 +1,7 @@
 # MandoMC
 Minecraft Star Wars survival PvP server with player groups and claimed bases, developed locally in small playable slices. The group name and commands are being redesigned; see the player-experience document.
 
-Main contains a minimal Paper plugin foundation. Legacy gameplay is preserved in separate recovery branches and is not enabled.
+Main contains the minimal Paper plugin, a pinned local server setup, and the new resource-pack source. Legacy gameplay is preserved in recovery branches and is not enabled.
 
 ## Build
 Requires Java 25. The script uses MANDOMC_JAVA_HOME, the project-local JDK when present, or JAVA_HOME.
@@ -9,6 +9,11 @@ Requires Java 25. The script uses MANDOMC_JAVA_HOME, the project-local JDK when 
 ./scripts/build.sh
 ```
 Output: plugin/target/MandoMC.jar. The wrapper pins Maven. Paper/API versions are pinned in pom.xml and server/paper.lock.json. Building does not copy files to another server or start Minecraft.
+
+## Run locally
+Paper 26.1.2 build 74, Java 25. With the local runtime installed, run `./scripts/start-server.sh` or double-click `server/start.command`. Join `localhost` with Minecraft Java **26.1.2**. Type `stop` in the server console to save and shut down. See [local server setup](server/README.md).
+
+Build the pack with `./scripts/build-resource-pack.py` (Python 3). See [pack sources and recovery](resource-pack/README.md).
 
 ## Start here
 - [Current state](docs/status.md)
@@ -25,14 +30,15 @@ Output: plugin/target/MandoMC.jar. The wrapper pins Maven. Paper/API versions ar
 ## Layout
 ```text
 plugin/          Maven module producing MandoMC.jar
-server/          Selected plugin roles, pinned Paper build, config templates
+server/          Version locks, config templates and start.command
+server/runtime/  Ignored runnable server, plugin JARs, worlds and player data
+resource-pack/   New pack source, recovery manifest and ignored build output
 scripts/         Local development tools
 docs/            Player design, architecture, style and resume notes
 planning/        Diagram sources and legacy file inventory
-.runtime/        Ignored server, worlds, logs and player data
 .local/          Ignored tools, dependencies, paid binaries and secrets
 ```
 
-[MandoPack](https://github.com/AstuteFlamez/MandoPack) remains separate. Future server releases pin its version. Maps and purchased binaries stay outside Git.
+The new pack is maintained in this repository. [MandoPack](https://github.com/AstuteFlamez/MandoPack) is the pinned legacy asset source; recover only the assets needed by each feature. Pack source textures are versioned; generated ZIPs, maps and plugin JARs stay outside Git.
 
 The original history is preserved. The full previous main is available at bilal/legacy-main-2026-11-05 and tag legacy/pre-rebuild-2026-11-05.

@@ -1,7 +1,7 @@
 name: MandoMC
 version: '${project.version}'
 main: net.mandomc.bootstrap.MandoPlugin
-api-version: '26.3'
+api-version: '26.1.2'
 author: AstuteFlamez
 description: MandoMC gameplay foundation
 commands:

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "minecraftVersion": "26.1.2",
+  "resourceFormat": [
+    84,
+    0
+  ],
+  "legacySource": {
+    "repository": "https://github.com/AstuteFlamez/MandoPack",
+    "commit": "2731b9e4ae5d8d142cd4a1aaa14f3f1b7c0e56c7",
+    "archive": "MandoPack.zip",
+    "archiveSha256": "32a578caac7c4c8976868abf0aa20f545c9926eb8d6382b94ccf5e986c95cce5"
+  },
+  "recoveredAssets": [
+    {
+      "sourcePath": "assets/minecraft/models/item/blasters/e11/e11.json",
+      "sourceSha256": "7b806bc785e79306ee3dd714bb4cf594a81f55281ae3e8119d70533935ab0aaa",
+      "destination": "assets/mandomc/models/item/blasters/e11.json",
+      "changes": "Namespaced texture references; shared base geometry through parent models; new item-model definitions."
+    },
+    {
+      "sourcePath": "assets/minecraft/models/item/blasters/e11/e11scope.json",
+      "sourceSha256": "d6bc08de059092a1e45e02668f3f60d6bbebb2474e086092a11e418f04cb34de",
+      "destination": "assets/mandomc/models/item/blasters/e11_scope.json",
+      "changes": "Namespaced texture references; shared base geometry through parent models; new item-model definitions."
+    },
+    {
+      "sourcePath": "assets/minecraft/models/item/blasters/e11/e11sprint.json",
+      "sourceSha256": "00afe449cf08cf19c7e1e64ee2d00a15df5236b9d4757b68b71f36c45831f32f",
+      "destination": "assets/mandomc/models/item/blasters/e11_sprint.json",
+      "changes": "Namespaced texture references; shared base geometry through parent models; new item-model definitions."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/custom/blasters/e11.png",
+      "sourceSha256": "d2f91fef359919dc30c7d895a5c29b1eea21a15add81a3f4b59b23503f002bb4",
+      "destination": "assets/mandomc/textures/item/blasters/e11.png",
+      "changes": "Moved unchanged into the mandomc namespace and item texture atlas path."
+    }
+  ],
+  "status": "First cosmetic E-11 slice; client visual check and WeaponMechanics integration pending."
+}

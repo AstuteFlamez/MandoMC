@@ -2,7 +2,7 @@
 Updated: 2026-11-05
 
 ## Milestone
-Current: first-session gameplay design on bilal/player-session-design. Complete: clean buildable foundation and 16 legacy feature recovery branches, plus the full old-main snapshot.
+Current: local Paper boot and initial resource-pack source, integrated into main from bilal/local-paper-server after validation. Complete: clean plugin foundation, all selected public gameplay dependencies installed, and the first recovered E-11 visual slice. Legacy gameplay remains preserved on 16 recovery branches plus the old-main snapshot.
 
 ## Accepted direction
 Laptop development, selective recovery, and the public/custom division in architecture.md. Design player experience, choose playable feature order, build parameterized systems, then configure content. Merge features after validation and satisfaction.
@@ -32,19 +32,27 @@ Aircraft are transport-only initially; aerial combat is deferred. Vehicles start
 Research-backed travel recommendation is recorded in docs/player-experience.md as a proposal, not accepted policy: free commands/menu plus optional themed terminals, fixed public arrivals, group home, and a proposed five-second warmup. Published server guides support this as a comparable design; player preference remains a prediction to test.
 
 ## Implementation
-Minimal bootstrap, config schema check and /mandomc status command. Maven reactor/wrapper, Java 25, pinned Paper 26.3 build 242 API. No gameplay modules or third-party plugins enabled. Server templates and lockfile exist; Minecraft is not running.
+Repository layout is `plugin/` for Java source, `server/runtime/` for the ignored runnable server, and `resource-pack/` for the new pack source. Paper 26.1.2 build 74 / Java 25 is the newest documented common baseline verified for the selected plugin stack; 26.3 is newer but is not the validated dependency target. Exact artifacts are pinned in server/paper.lock.json and server/plugins.lock.json.
 
-See docs/recovery.md for the old source. Maps/configs and editable ModelEngine blueprints still need recovery.
+All selected public vendors are installed fresh: WeaponMechanics, MechanicsCore, PacketEvents, ModelEngine free edition, MythicMobs, FactionsUUID, WorldEdit, WorldGuard, Multiverse-Core, EssentialsX Core and Vault. With MandoMC, all 12 plugins enable together. FactionsUUID uses the complete official Maven 4.6.0 artifact. MythicMobs is the official 5.14.0 release whose descriptor reports 5.14.0-SNAPSHOT-local.
 
-The FigJam world/session diagrams were updated for deferred resource planets, player-group terminology, accepted rewards, rival-specific breaches and normal equipment recovery. New diagrams show the proposed build order and accepted vehicle lifecycle. The board is a compact overview; player-experience.md carries the complete rules, including pairwise event kills and raid continuation.
+MandoMC itself still only provides bootstrap, config schema checking and `/mandomc`. The runtime has a fresh survival test world and vendor defaults; it does not implement the accepted MandoMC rules. No safe regions, starter kit, custom combat, raids, events or vehicles exist yet. Brand replacement for FactionsUUID and restrictions on unrelated vendor behavior remain feature work.
 
-The proposed order is recorded in build-order.md: arrival/protection, group base/travel, combat, supplies/progression, KOTH, Jabba, vehicles, raids. Pairwise kill recording lands with combat; explosive permissions come later. The arrival/protection feature brief is ready for review in docs/features/arrival-and-protection.md. The order and tutorial/travel presentation remain proposals.
+The server binds to localhost:25565. Launch with `./scripts/start-server.sh` or `server/start.command`; type `stop` to save and exit. See server/README.md for exact setup and restoration instructions. WeaponMechanics automatic pack sending is disabled. No pack is automatically hosted yet.
+
+The new pack builds from `resource-pack/src/` with `./scripts/build-resource-pack.py`, targeting resource format 84.0. It includes the E-11 model, aim/sprint variants and texture recovered from the pinned MandoPack commit. Its item_model keys are cosmetic previews only; firing behavior and pose switching are not wired. Remaining assets and ModelEngine blueprints must be recovered feature by feature. Client visual verification is pending.
+
+The player experience, FigJam diagrams and proposed feature order remain recorded: arrival/protection, group base/travel, combat, supplies/progression, KOTH, Jabba, vehicles, raids. Pairwise kill recording lands with combat. See docs/features/arrival-and-protection.md for the first slice and docs/recovery.md for legacy code.
 
 ## Verification
-Maven verify previously passed and produced MandoMC.jar. Verified packaged descriptor/config and Java 25 bytecode. All 294 legacy feature files match their original Git blobs exactly across the 16 recovery branches; 13 obsolete documentation/rule files remain in the full snapshot. Source inspection confirms legacy saber, Jabba and group/solo KOTH implementations. Published KOTH references support the continuous-capture model; the new group rule is not runtime-tested. No automated gameplay tests exist yet; no in-server test has run. Current work changes design documentation only; JSON, local Markdown links and whitespace were checked, and refreshed world/build-order/vehicle diagrams were visually reviewed. No rebuild was needed for this documentation-only checkpoint.
+Maven verify passed with the pinned 26.1.2 API and produced the deployed MandoMC.jar. All 12 plugins enabled together; the plugin list, `/mandomc`, FactionsUUID list and Vault's EssentialsX economy bridge were checked. A Minecraft status handshake returned Paper 26.1.2 at 127.0.0.1:25565. Clean stop/restart and loading the existing test world were verified. This establishes boot compatibility, not gameplay correctness. No authenticated client join has been tested.
+
+The pack builds without downloads, has root pack.mcmeta, and validates JSON plus local item-model/model/texture references. Two builds produced the same ZIP hash; missing referenced assets fail the build. Resource-pack rendering and gameplay integration await a client test. Generated packs, downloaded JARs, worlds and local tools are ignored by Git. Documentation, JSON and shell syntax were checked.
+
+Earlier recovery verification remains valid: all 294 legacy feature files matched their original Git blobs across 16 recovery branches; the full snapshot preserves obsolete docs and old main. FigJam diagrams were reviewed during the design checkpoint.
 
 ## Next action
-Locate copies of SpawnWorld and the usable MandoPack artifact, inventory their versions, and restore them into ignored local runtime storage for the arrival/protection slice. The recovery location is not yet known. Public group naming and travel remain open choices before their player interfaces are implemented.
+Join localhost with Minecraft Java 26.1.2, then recover SpawnWorld for the arrival/protection slice. The new pack's E-11 preview can be enabled locally for visual inspection. Public group naming and travel remain open before their interfaces are implemented.
 
 ## Open
-Group name/command, tutorial format, kit quantities/ammo, starting credits, travel, combat tag details, saber direction/tuning, enchantment compatibility/repair, group creation cooldown, claim capacity, warpoint threshold/edge cases, raid-window duration/refresh and active-raid detection, explosive/block limits, KOTH reward delivery, event schedules, recipes/prices, vehicle redeployment details and content depth for the integrated playtest. Resource planets, aerial combat and themed replacement swords/bows are deferred. Continue design through concrete player scenarios; no gameplay code changed in this step.
+Group name/command, tutorial format, kit quantities/ammo, starting credits, travel, combat tag details, saber direction/tuning, enchantment compatibility/repair, group creation cooldown, claim capacity, warpoint threshold/edge cases, raid-window duration/refresh and active-raid detection, explosive/block limits, KOTH reward delivery, event schedules, recipes/prices, vehicle redeployment details and content depth for the integrated playtest. Resource planets, aerial combat and themed replacement swords/bows are deferred. Continue through concrete player scenarios and the proposed playable slices. This checkpoint sets up the runtime and pack; custom gameplay remains unimplemented.

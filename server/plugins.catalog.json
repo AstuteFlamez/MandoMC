@@ -1,149 +1,164 @@
 {
   "schemaVersion": 1,
-  "status": "selected-roles-runtime-validation-pending",
+  "status": "installed-boot-verified-gameplay-pending",
   "verifiedOn": "2026-11-05",
   "server": {
     "platform": "Paper",
-    "releasePolicy": "latest stable, exact build pinned after verification",
-    "minecraftVersion": "26.3",
-    "paperBuild": 242,
+    "releasePolicy": "Newest common supported Minecraft version; pin after joint runtime checks.",
+    "minecraftVersion": "26.1.2",
+    "paperBuild": 74,
     "javaMajor": 25
   },
-  "installPolicy": "User accepted these ownership choices on 2026-11-05. Lock exact versions after compatibility tests. Add only the current feature slice dependencies; paid binaries are local.",
+  "installPolicy": "Selected gameplay vendors installed fresh from official distribution sources. Boot compatibility is verified; gameplay admission checks remain pending. JARs and runtime data stay ignored.",
   "plugins": [
     {
       "id": "weaponmechanics",
       "name": "WeaponMechanics",
-      "status": "selected-pending-runtime-validation",
+      "status": "boot-verified-gameplay-pending",
       "owns": "Blaster firing, reload and projectile engine",
       "source": "https://cjcrafter.gitbook.io/weaponmechanics/developer-api",
-      "version": null,
-      "sha256": null,
+      "version": "4.3.1",
+      "sha256": "09b7a56c654d6cb597a205d0bfe4c41f7853240ca26dfed0489396b0243c5b23",
       "knownDependencies": [
-        "mechanicscore"
+        "mechanicscore",
+        "packetevents"
       ],
-      "dependencyListComplete": false,
+      "dependencyListComplete": true,
       "admissionCheck": "Supported direct/AoE hit hooks, attribution and protection cancellation",
-      "installed": false
+      "installed": true
     },
     {
       "id": "mechanicscore",
       "name": "MechanicsCore",
-      "status": "selected-pending-runtime-validation",
+      "status": "boot-verified-gameplay-pending",
       "owns": "WeaponMechanics dependency",
       "source": "https://cjcrafter.gitbook.io/weaponmechanics/",
-      "version": null,
-      "sha256": null,
+      "version": "4.3.1",
+      "sha256": "1dcddcbb6bb7982bf74a07e224868d1921a48d43a545b886e36f16cbce3092f8",
       "knownDependencies": [],
-      "dependencyListComplete": false,
+      "dependencyListComplete": true,
       "admissionCheck": "Version required by selected WeaponMechanics build",
-      "installed": false
+      "installed": true
     },
     {
       "id": "modelengine",
       "name": "ModelEngine",
-      "status": "selected-pending-runtime-validation",
+      "status": "boot-verified-gameplay-pending",
       "owns": "Animated model engine and mounting API",
       "source": "https://wiki.mythiccraft.io/modelengine/API",
-      "version": null,
-      "sha256": null,
+      "version": "R4.1.1",
+      "sha256": "020ef9361c2ab3805933a78994aac529e5e624b0746755044609caf5a6e5df09",
       "knownDependencies": [],
-      "dependencyListComplete": false,
+      "dependencyListComplete": true,
       "admissionCheck": "Latest server compatibility and recovered blueprints",
-      "installed": false
+      "installed": true,
+      "edition": "official-free"
     },
     {
       "id": "mythicmobs",
       "name": "MythicMobs",
-      "status": "selected-pending-runtime-validation",
+      "status": "boot-verified-gameplay-pending",
       "owns": "Mob definitions, AI and boss skills",
       "source": "https://wiki.mythiccraft.io/mythicmobs/API",
-      "version": null,
-      "sha256": null,
+      "version": "5.14.0",
+      "sha256": "664ae11591ed8d78638a711eeb95af18ecd776d032c8da6eb24888704f9efefc",
       "knownDependencies": [],
-      "dependencyListComplete": false,
+      "dependencyListComplete": true,
       "admissionCheck": "Run-owned spawn/death/cleanup and restart behavior",
-      "installed": false
+      "installed": true
     },
     {
       "id": "factionsuuid",
       "name": "FactionsUUID",
-      "status": "selected-pending-runtime-validation",
+      "status": "boot-verified-gameplay-pending",
       "owns": "Membership, relations and claims",
       "source": "https://factions.support/developers/",
-      "version": null,
-      "sha256": null,
+      "version": "4.6.0",
+      "sha256": "907ce30a607342e178a905669bb859f481626347fc7379ddf35a00dbecd14091",
       "knownDependencies": [],
-      "dependencyListComplete": false,
+      "dependencyListComplete": true,
       "admissionCheck": "Narrow custom breach hook and disabled conflicting raid/power mechanics",
-      "installed": false
+      "installed": true
     },
     {
       "id": "worldguard",
       "name": "WorldGuard",
-      "status": "selected-pending-runtime-validation",
+      "status": "boot-verified-gameplay-pending",
       "owns": "Static region protection",
       "source": "https://worldguard.enginehub.org/en/latest/developer/regions/",
-      "version": null,
-      "sha256": null,
+      "version": "7.0.18",
+      "sha256": "08f3ef58bc521c635d8c78aedaca96f151d2d397e7cd8018584955dd7468eb05",
       "knownDependencies": [
         "worldedit"
       ],
-      "dependencyListComplete": false,
+      "dependencyListComplete": true,
       "admissionCheck": "Custom damage and block edits respect protected regions",
-      "installed": false
+      "installed": true
     },
     {
       "id": "worldedit",
       "name": "WorldEdit",
-      "status": "selected-pending-runtime-validation",
+      "status": "boot-verified-gameplay-pending",
       "owns": "WorldGuard dependency and map editing utility",
       "source": "https://worldedit.enginehub.org/",
-      "version": null,
-      "sha256": null,
+      "version": "7.4.6",
+      "sha256": "e0ce67d870ad1fef8a40dd9d7926360caf3bb44722438545d6b20b55f82a0c91",
       "knownDependencies": [],
-      "dependencyListComplete": false,
+      "dependencyListComplete": true,
       "admissionCheck": "Compatible build required by selected WorldGuard version",
-      "installed": false
+      "installed": true
     },
     {
-      "id": "multiverse",
+      "id": "multiverse-core",
       "name": "Multiverse-Core",
-      "status": "selected-pending-runtime-validation",
+      "status": "boot-verified-gameplay-pending",
       "owns": "World imports, loading and settings",
       "source": "https://mvplugins.org/core/reference/configuration-file/",
-      "version": null,
-      "sha256": null,
+      "version": "5.8.2",
+      "sha256": "792252b6bbcf17c94ab8385e595281c830d7a40c946aea1832d8a010702bb630",
       "knownDependencies": [],
-      "dependencyListComplete": false,
+      "dependencyListComplete": true,
       "admissionCheck": "Shared inventory, respawn and travel restrictions",
-      "installed": false
+      "installed": true
     },
     {
       "id": "vault",
       "name": "Vault",
-      "status": "selected-pending-runtime-validation",
+      "status": "boot-verified-gameplay-pending",
       "owns": "Economy API bridge",
       "source": "https://github.com/MilkBowl/Vault",
-      "version": null,
-      "sha256": null,
+      "version": "1.7.3-b131",
+      "sha256": "a6b5ed97f43a5cf5bbaf00a7c8cd23c5afc9bd003f849875af8b36e6cf77d01d",
       "knownDependencies": [],
-      "dependencyListComplete": false,
+      "dependencyListComplete": true,
       "admissionCheck": "Discover exactly one compatible economy provider",
-      "installed": false
+      "installed": true
     },
     {
       "id": "essentialsx",
       "name": "EssentialsX Core",
-      "status": "selected-pending-runtime-validation",
-      "owns": "Initial candidate economy provider",
+      "status": "boot-verified-gameplay-pending",
+      "owns": "Initial economy provider through Vault",
       "source": "https://essentialsx.net/wiki/modules",
-      "version": null,
-      "sha256": null,
+      "version": "2.22.0",
+      "sha256": "bda4685105977fca2e209820a9f0ad24275bd103390a03236f38e59bfdac58e6",
       "knownDependencies": [],
-      "dependencyListComplete": false,
+      "dependencyListComplete": true,
       "admissionCheck": "One persistent credit balance and no unintended travel/kit/command behavior",
-      "installed": false
+      "installed": true
+    },
+    {
+      "id": "packetevents",
+      "name": "PacketEvents",
+      "owns": "Packet API required by WeaponMechanics",
+      "source": "https://github.com/retrooper/packetevents",
+      "knownDependencies": [],
+      "admissionCheck": "Compatible packet handling with WeaponMechanics and player clients",
+      "version": "2.14.0",
+      "sha256": "060087c58ec268eae7dd0eb1f17ac3bea1eaadda1693414141ff64e506091bd7",
+      "installed": true,
+      "status": "boot-verified-gameplay-pending",
+      "dependencyListComplete": true
     }
   ]
 }

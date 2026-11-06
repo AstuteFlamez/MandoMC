@@ -22,3 +22,6 @@ reference/
 
 # Per-machine editor/JDK settings
 .vscode/settings.json
+
+# Runnable local server: worlds, plugins, generated settings and EULA
+server/runtime/

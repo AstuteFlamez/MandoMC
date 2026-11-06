@@ -11,7 +11,7 @@
         <maven.compiler.release>25</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.outputTimestamp>2026-11-05T00:00:00Z</project.build.outputTimestamp>
-        <paper.version>26.3.build.242-stable</paper.version>
+        <paper.version>26.1.2.build.74-stable</paper.version>
     </properties>
     <repositories>
         <repository>

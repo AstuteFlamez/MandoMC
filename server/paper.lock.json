@@ -1,16 +1,18 @@
 {
   "schemaVersion": 1,
-  "minecraftVersion": "26.3",
-  "paperBuild": 242,
-  "paperApiVersion": "26.3.build.242-stable",
+  "minecraftVersion": "26.1.2",
+  "paperBuild": 74,
+  "paperApiVersion": "26.1.2.build.74-stable",
   "javaMajor": 25,
   "server": {
-    "name": "paper-26.3-242.jar",
+    "name": "paper-26.1.2-74.jar",
     "checksums": {
-      "sha256": "fc704a4510a2744bab90a6770336b202038e60333e37f24af8027ee948935d20"
+      "sha256": "1d70b1dab9cf4a6de615209a536f3a45a2186240253c428213ce2188ab95e5f7"
     },
-    "size": 55279626,
-    "url": "https://fill-data.papermc.io/v1/objects/fc704a4510a2744bab90a6770336b202038e60333e37f24af8027ee948935d20/paper-26.3-242.jar"
+    "size": 52893229,
+    "url": "https://fill-data.papermc.io/v1/objects/1d70b1dab9cf4a6de615209a536f3a45a2186240253c428213ce2188ab95e5f7/paper-26.1.2-74.jar"
   },
-  "runtimeTested": false
+  "runtimeTested": true,
+  "selectionReason": "Newest documented common baseline verified for the selected stack, including WeaponMechanics 4.3.1 and EssentialsX 2.22.0. Paper 26.3 is newer but is not the tested dependency baseline.",
+  "checkedOn": "2026-11-05"
 }

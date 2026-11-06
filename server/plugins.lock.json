@@ -1,0 +1,132 @@
+{
+  "schemaVersion": 1,
+  "checkedOn": "2026-11-05",
+  "minecraftVersion": "26.1.2",
+  "artifacts": [
+    {
+      "id": "worldedit",
+      "name": "worldedit-bukkit-7.4.6.jar",
+      "url": "https://cdn.modrinth.com/data/1u6JkXh5/versions/YFnqiUlL/worldedit-bukkit-7.4.6.jar",
+      "sha256": "e0ce67d870ad1fef8a40dd9d7926360caf3bb44722438545d6b20b55f82a0c91",
+      "verifiedPublishedHashes": [
+        "sha1",
+        "sha512"
+      ],
+      "bytes": 7870216,
+      "version": "7.4.6"
+    },
+    {
+      "id": "worldguard",
+      "name": "worldguard-bukkit-7.0.18.jar",
+      "url": "https://cdn.modrinth.com/data/DKY9btbd/versions/btHBavWa/worldguard-bukkit-7.0.18.jar",
+      "sha256": "08f3ef58bc521c635d8c78aedaca96f151d2d397e7cd8018584955dd7468eb05",
+      "verifiedPublishedHashes": [
+        "sha1",
+        "sha512"
+      ],
+      "bytes": 1198472,
+      "version": "7.0.18"
+    },
+    {
+      "id": "multiverse-core",
+      "name": "multiverse-core-5.8.2.jar",
+      "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/de7TbcZG/multiverse-core-5.8.2.jar",
+      "sha256": "792252b6bbcf17c94ab8385e595281c830d7a40c946aea1832d8a010702bb630",
+      "verifiedPublishedHashes": [
+        "sha512",
+        "sha1"
+      ],
+      "bytes": 4631727,
+      "version": "5.8.2"
+    },
+    {
+      "id": "mythicmobs",
+      "name": "MythicMobs-5.14.0.jar",
+      "url": "https://cdn.modrinth.com/data/NLuc7Jjh/versions/ionz4v5c/MythicMobs-5.14.0.jar",
+      "sha256": "664ae11591ed8d78638a711eeb95af18ecd776d032c8da6eb24888704f9efefc",
+      "verifiedPublishedHashes": [
+        "sha512",
+        "sha1"
+      ],
+      "bytes": 21836163,
+      "version": "5.14.0",
+      "descriptorVersion": "5.14.0-SNAPSHOT-local"
+    },
+    {
+      "id": "essentialsx",
+      "name": "EssentialsX-2.22.0.jar",
+      "url": "https://github.com/EssentialsX/Essentials/releases/download/2.22.0/EssentialsX-2.22.0.jar",
+      "sha256": "bda4685105977fca2e209820a9f0ad24275bd103390a03236f38e59bfdac58e6",
+      "verifiedPublishedHashes": [
+        "sha256"
+      ],
+      "bytes": 4861125,
+      "version": "2.22.0"
+    },
+    {
+      "id": "packetevents",
+      "name": "packetevents-spigot-2.14.0.jar",
+      "url": "https://github.com/retrooper/packetevents/releases/download/v2.14.0/packetevents-spigot-2.14.0.jar",
+      "sha256": "060087c58ec268eae7dd0eb1f17ac3bea1eaadda1693414141ff64e506091bd7",
+      "verifiedPublishedHashes": [
+        "sha256"
+      ],
+      "bytes": 5723413,
+      "version": "2.14.0"
+    },
+    {
+      "id": "vault",
+      "name": "Vault.jar",
+      "url": "https://github.com/MilkBowl/Vault/releases/download/1.7.3/Vault.jar",
+      "sha256": "a6b5ed97f43a5cf5bbaf00a7c8cd23c5afc9bd003f849875af8b36e6cf77d01d",
+      "verifiedPublishedHashes": [],
+      "bytes": 272259,
+      "version": "1.7.3-b131"
+    },
+    {
+      "id": "weaponmechanics",
+      "name": "WeaponMechanics-4.3.1.jar",
+      "url": "https://github.com/WeaponMechanics/WeaponMechanics/releases/download/v4.3.1/WeaponMechanics-4.3.1.jar",
+      "sha256": "09b7a56c654d6cb597a205d0bfe4c41f7853240ca26dfed0489396b0243c5b23",
+      "verifiedPublishedHashes": [
+        "sha256"
+      ],
+      "bytes": 667547,
+      "version": "4.3.1"
+    },
+    {
+      "id": "mechanicscore",
+      "name": "MechanicsCore-4.3.1.jar",
+      "url": "https://github.com/WeaponMechanics/MechanicsCore/releases/download/v4.3.1/MechanicsCore-4.3.1.jar",
+      "sha256": "1dcddcbb6bb7982bf74a07e224868d1921a48d43a545b886e36f16cbce3092f8",
+      "verifiedPublishedHashes": [
+        "sha256"
+      ],
+      "bytes": 4693725,
+      "version": "4.3.1"
+    },
+    {
+      "id": "modelengine",
+      "name": "ModelEngine-4.1.1.jar",
+      "url": "https://mythiccraft.io/downloads/modelengine4/free/ModelEngine-4.1.1.jar",
+      "sha256": "020ef9361c2ab3805933a78994aac529e5e624b0746755044609caf5a6e5df09",
+      "edition": "official-free",
+      "bytes": 4749683,
+      "version": "R4.1.1",
+      "verifiedPublishedHashes": []
+    },
+    {
+      "id": "factionsuuid",
+      "name": "FactionsUUID-4.6.0.jar",
+      "version": "4.6.0",
+      "url": "https://dependency.download/releases/dev/kitteh/factions/4.6.0/factions-4.6.0.jar",
+      "sha256": "907ce30a607342e178a905669bb859f481626347fc7379ddf35a00dbecd14091",
+      "bytes": 3467403,
+      "verifiedPublishedHashes": [],
+      "distribution": "Official public Maven shadowJar; latest artifact listed in this repository at setup time."
+    }
+  ],
+  "pending": [],
+  "runtimeTested": true,
+  "verificationScope": "All 11 vendor plugins and MandoMC enabled together; console commands, economy bridge, clean restart and loopback status checked. Gameplay and client rendering remain untested."
+}

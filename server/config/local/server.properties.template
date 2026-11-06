@@ -1,4 +1,4 @@
-# Template for a laptop-only development server. Not installed or launched yet.
+# Laptop-only development settings; copied on first local setup.
 server-ip=127.0.0.1
 server-port=25565
 online-mode=true
@@ -12,3 +12,9 @@ simulation-distance=6
 # Keep ordinary survival generation until the exact structure-disable policy is defined.
 generate-structures=true
 # Add the validated resource-pack URL, hash and required-pack setting during bootstrap.
+
+level-name=dev_world
+gamemode=survival
+difficulty=normal
+white-list=false
+require-resource-pack=false
