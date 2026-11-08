@@ -1,0 +1,18 @@
+{
+  "packs": [
+    {
+      "id": "justtimm-lightsabers",
+      "version": "3.2.2",
+      "project": "https://modrinth.com/resourcepack/justtimms-lightsaber-workshop",
+      "url": "https://cdn.modrinth.com/data/HVjHFmDU/versions/heHnARk2/JustTimm%27s%20Lightsaber%20Workshop%203.2.2.zip",
+      "sha1": "0f1a11ab321d5d4ac39ed2659ddbdf207a82f5dc",
+      "sha512": "ac3d64b87dd7102ff4bbc3ce9988bd5b6550522be55e1f93a843e4412476bbbd4abfdd57b2e629a2e36b43d5712b58ea31c46b0d592294db4a4abb36e24ce828",
+      "models": [
+        "workshop:item/darth_vader_lightsaber",
+        "workshop:item/darth_vader_lightsaber_hilt",
+        "workshop:item/darth_vader_lightsaber_blocking"
+      ],
+      "delivery": "Original unmodified ZIP sent from official CDN via addResourcePack; models are not redistributed."
+    }
+  ]
+}

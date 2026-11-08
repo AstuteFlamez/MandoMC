@@ -44,6 +44,15 @@
       "chars": [
         "Ė"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/rare.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "ĕ"
+      ]
     }
   ]
 }

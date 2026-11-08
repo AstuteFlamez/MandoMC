@@ -26,6 +26,9 @@ def check_reference(reference, folder, extension):
         namespace, name = 'minecraft', namespace
     if namespace == 'minecraft':
         return  # Vanilla assets come from the client.
+    dependencies = read_json(PACK / 'dependencies.json') if (PACK / 'dependencies.json').is_file() else {'packs': []}
+    if folder == 'models' and any(reference in pack['models'] for pack in dependencies['packs']):
+        return  # Exact dependency model allowlist; official pack is separately delivered.
     path = SOURCE / 'assets' / namespace / folder / (name + extension)
     if not path.is_file():
         raise SystemExit(f'Missing {folder} resource: {reference}')

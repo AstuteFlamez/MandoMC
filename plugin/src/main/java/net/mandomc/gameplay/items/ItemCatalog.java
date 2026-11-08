@@ -123,6 +123,12 @@ public final class ItemCatalog {
         meta.setCustomModelDataComponent(modelData);
         meta.setItemModel(definition.itemModel());
         meta.getPersistentDataContainer().set(ITEM_ID, PersistentDataType.STRING, definition.id());
+        if (definition.attackDamage() != null) meta.addAttributeModifier(org.bukkit.attribute.Attribute.ATTACK_DAMAGE,
+                new org.bukkit.attribute.AttributeModifier(new NamespacedKey("mandomc", "item_damage"), definition.attackDamage() - 1,
+                        org.bukkit.attribute.AttributeModifier.Operation.ADD_NUMBER, org.bukkit.inventory.EquipmentSlotGroup.MAINHAND));
+        if (definition.attackSpeed() != null) meta.addAttributeModifier(org.bukkit.attribute.Attribute.ATTACK_SPEED,
+                new org.bukkit.attribute.AttributeModifier(new NamespacedKey("mandomc", "item_speed"), definition.attackSpeed() - 4,
+                        org.bukkit.attribute.AttributeModifier.Operation.ADD_NUMBER, org.bukkit.inventory.EquipmentSlotGroup.MAINHAND));
         item.setItemMeta(meta);
         if (definition.equipmentModel() != null) {
             EquipmentSlot slot = definition.material().getEquipmentSlot();

@@ -169,5 +169,52 @@
       "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
     }
   ],
-  "status": "E-11 and Desert Robes. Robe inventory icons use original pre-colored art, white default dye tint and no vanilla overlays. Worn armor confirmed by user; revised icon rendering awaits client check."
+  "status": "E-11 and Desert Robes. Robe inventory icons use original pre-colored art, white default dye tint and no vanilla overlays. Worn armor confirmed by user; revised icon rendering awaits client check.",
+  "saberAssets": {
+    "legacyArchiveSha256": "32a578caac7c4c8976868abf0aa20f545c9926eb8d6382b94ccf5e986c95cce5",
+    "files": [
+      {
+        "sourcePath": "assets/minecraft/sounds/melee/lightsaber/on.ogg",
+        "sourceSha256": "3dbe411ed78d438d8d9d1c3d8a6d096cedbff6de061d246ce29b4b4ee39f9d10",
+        "destination": "assets/mandomc/sounds/melee/lightsaber/on.ogg",
+        "changes": "Unchanged audio bytes, namespaced sound event."
+      },
+      {
+        "sourcePath": "assets/minecraft/sounds/melee/lightsaber/off.ogg",
+        "sourceSha256": "bbf662c6cd95ada646978f58e9490d01b0bebe21b3537de78cb2213a83049381",
+        "destination": "assets/mandomc/sounds/melee/lightsaber/off.ogg",
+        "changes": "Unchanged audio bytes, namespaced sound event."
+      },
+      {
+        "sourcePath": "assets/minecraft/sounds/melee/lightsaber/hit.ogg",
+        "sourceSha256": "3be5239715dafe16a9954f8c397f51445b9fd9f2e8c25e6c6a37cb87f3be6724",
+        "destination": "assets/mandomc/sounds/melee/lightsaber/hit.ogg",
+        "changes": "Unchanged audio bytes, namespaced sound event."
+      },
+      {
+        "sourcePath": "assets/minecraft/sounds/melee/lightsaber/throw.ogg",
+        "sourceSha256": "33293436eb38d5afb018daf7cbbd498eaf471ec65d3269482f48f8f090610043",
+        "destination": "assets/mandomc/sounds/melee/lightsaber/throw.ogg",
+        "changes": "Unchanged audio bytes, namespaced sound event."
+      },
+      {
+        "sourcePath": "assets/minecraft/sounds/melee/lightsaber/swing-1.ogg",
+        "sourceSha256": "e3f4ce327e2a2450ea17e4f2eb483ab265c62f6a6d63be7a9298355c83605654",
+        "destination": "assets/mandomc/sounds/melee/lightsaber/swing-1.ogg",
+        "changes": "Unchanged audio bytes, namespaced sound event."
+      },
+      {
+        "sourcePath": "assets/minecraft/textures/default/rare.png",
+        "sourceSha256": "65720fca2272e73ab5c0b66723b25243d32009e103caecf0d0583b77ebdd3273",
+        "destination": "assets/mandomc/textures/font/item_labels/rare.png",
+        "changes": "Unchanged legacy badge."
+      }
+    ]
+  },
+  "saberModels": {
+    "author": "JustTimm",
+    "project": "https://modrinth.com/resourcepack/justtimms-lightsaber-workshop",
+    "delivery": "Official unmodified upstream pack; see dependencies.json. No extracted artwork in MandoMC ZIP.",
+    "credits": "credits.txt"
+  }
 }

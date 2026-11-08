@@ -18,6 +18,10 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     private ArrivalListener arrival;
     private ArrivalDestinations destinations;
     private boolean failed;
+    private net.mandomc.gameplay.saber.SaberService sabers;
+    private net.mandomc.integrations.weapons.SaberProjectiles saberProjectiles;
+    public net.mandomc.integrations.weapons.SaberProjectiles saberProjectiles() { return saberProjectiles; }
+    public net.mandomc.gameplay.saber.SaberService sabers() { return sabers; }
     private net.mandomc.gameplay.items.ItemCatalog items;
     private net.mandomc.commands.ItemCommand itemCommands;
 
@@ -67,9 +71,23 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 }
             }, sender -> sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage()
                     .deserialize(Objects.requireNonNull(language.getString("items.denied")))));
-            for (var resource : new String[] {"items.yml", "items/robes.yml"}) {
+            for (var resource : new String[] {"items.yml", "items/robes.yml", "items/sabers.yml", "sabers.yml"}) {
                 if (!new File(getDataFolder(), resource).isFile()) saveResource(resource, false);
             }
+            // Add only missing presentation badges when new bundled item families arrive.
+            var presentation = new YamlConfiguration();
+            var presentationFile = new File(getDataFolder(), "items.yml");
+            presentation.load(presentationFile);
+            try (var reader = new java.io.InputStreamReader(Objects.requireNonNull(getResource("items.yml")), java.nio.charset.StandardCharsets.UTF_8)) {
+                var defaults = YamlConfiguration.loadConfiguration(reader);
+                for (String group : new String[] {"rarities", "categories"}) {
+                    for (String key : Objects.requireNonNull(defaults.getConfigurationSection(group)).getKeys(false)) {
+                        String path = group + "." + key;
+                        if (!presentation.contains(path)) presentation.set(path, defaults.getString(path));
+                    }
+                }
+            }
+            presentation.save(presentationFile);
             items = new net.mandomc.gameplay.items.ItemCatalog(getDataFolder().toPath(),
                     new net.mandomc.integrations.weapons.WeaponMechanicsItems()::generate);
             itemCommands = new net.mandomc.commands.ItemCommand(this, items, language, root);
@@ -79,6 +97,13 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             } catch (Exception error) {
                 getLogger().severe("Custom items unavailable; repair config and /mandomc items reload: " + error.getMessage());
             }
+            var saberConfig = new YamlConfiguration();
+            saberConfig.load(new File(getDataFolder(), "sabers.yml"));
+            sabers = new net.mandomc.gameplay.saber.SaberService(this, items,
+                    net.mandomc.gameplay.saber.SaberSettings.read(saberConfig), language.getConfigurationSection("sabers"));
+            saberProjectiles = new net.mandomc.integrations.weapons.SaberProjectiles(this, sabers);
+            new net.mandomc.integrations.packs.SaberPack(this, saberConfig.getConfigurationSection("upstream-pack"));
+            getLogger().info("Vader saber enabled: native melee, guard, reflection and bounded throws.");
             if (!getConfig().getBoolean("arrival.enabled", false)) {
                 getLogger().info("Foundation enabled; arrival is disabled.");
                 return;
@@ -115,6 +140,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (sabers != null) sabers.close();
         if (travel != null) travel.close();
         if (itemCommands != null) itemCommands.close();
     }

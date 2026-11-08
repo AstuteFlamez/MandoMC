@@ -1,0 +1,18 @@
+schema-version: 1
+items:
+  vader:
+    material: SHIELD
+    name: "<red><bold>Darth Vader's Lightsaber"
+    custom-model-data: 11
+    item-model: mandomc:sabers/vader
+    rarity: rare
+    category: weapons
+    attack-damage: 10.5
+    attack-speed: 1.0
+    lore:
+      - '<gray>The crimson blade of the Dark Lord.'
+      - '<gray>A weapon feared across the galaxy.'
+      - ''
+      - '<yellow>[<key:key.attack>] Attack'
+      - '<yellow>[<key:key.use>] Block / Reflect'
+      - '<yellow>[<key:key.sneak> + <key:key.attack>] Throw'

@@ -49,3 +49,10 @@ items:
   gui-next: '<yellow>Next page'
   gui-page: '<gray>Page <value> · Giving to <player>'
   gui-close: '<red>Close'
+
+sabers:
+  overheated: '<red>Saber overheated — let it cool!'
+  in-flight: '<yellow>Your saber is returning.'
+  throw-cooldown: '<yellow>Your saber throw is recharging.'
+  safe-zone: '<red>You cannot attack with a lightsaber in a safe zone.'
+  heat: '<yellow>Saber heat: <heat>%'

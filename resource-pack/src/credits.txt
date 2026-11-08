@@ -1,0 +1,19 @@
+MANDOMC RESOURCE PACK — CREDITS
+
+A special thank-you to JustTimm for the excellent lightsaber models and textures
+in JustTimm's Lightsaber Workshop, including Darth Vader's lightsaber.
+Your work helps bring MandoMC's Star Wars world to life.
+
+Lightsaber Workshop:
+https://modrinth.com/resourcepack/justtimms-lightsaber-workshop
+Creator profile and more projects:
+https://modrinth.com/user/JustTimm
+https://linktr.ee/JustTimm
+
+JustTimm retains ownership of his artwork. MandoMC references these models from
+his original, unmodified resource pack, delivered separately from its official
+Modrinth CDN. His models and textures are not copied into this ZIP.
+
+MandoMC gameplay integration, item configuration and pack assembly: MandoMC.
+Other recovered assets and their provenance are listed in resource-pack/sources.json
+in the MandoMC repository: https://github.com/AstuteFlamez/MandoMC

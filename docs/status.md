@@ -2,6 +2,8 @@
 Updated: 2026-11-08
 
 ## Milestone
+Vader’s Lightsaber is implemented on bilal/vader-lightsaber: `/mmc give vader`, native melee attributes, original JustTimm blade/hilt/blocking models, directional E11/arrow reflection, player-owned guard heat and a bounded returning throw that retains inventory ownership. JustTimm credits/thanks/links are inside credits.txt in the pack. The unchanged upstream pack is sent from the official CDN; no JustTimm artwork is rehosted. Details: docs/features/vader-lightsaber.md. The user confirmed robe icons now work.
+
 Desert Robes and `/mandomc give` are implemented on `bilal/desert-robes`. `/mmc` is the root alias. The admin browser groups all six current custom items into categories with 45 entries per page; click gives one and shift-click gives native maximum stack. `mandomc.items.give` and `mandomc.items.reload` default to operators. Four legacy robe names/descriptions, Uncommon/Armor badges and the accepted blank line are preserved. Native leather behavior remains intact; item/equipment assets are namespaced. See docs/features/desert-robes.md. Crafting is deferred.
 
 Accepted item-tooltip standard is recorded in docs/style-guide.md: rarity/category badges, blank line, gray description, compact yellow keybind controls only where applicable. Ammo now has matching spacing. Unused drop/reload bitmap providers and textures are removed; common/weapon/ammo badges remain.
@@ -63,6 +65,8 @@ The new pack builds from `resource-pack/src/` with `./scripts/build-resource-pac
 The player experience, FigJam diagrams and proposed feature order remain recorded: arrival/protection, group base/travel, combat, supplies/progression, KOTH, Jabba, vehicles, raids. Pairwise kill recording lands with combat. See docs/features/arrival-and-protection.md for the first slice and docs/recovery.md for legacy code.
 
 ## Verification
+Vader: 14 Java tests and nine pack tests pass. Final live Paper probe passed 33 assertions for native item attributes, reflection ownership/aim/speed, safe-zone policy, inventory reservation, automatic return without duplication, logout cleanup and overheat. Required upstream-pack delivery, no pack resend loop and denied offhand use also pass. Original upstream archive checksum and all five referenced/parent models plus textures resolve. Client visuals and authenticated multiplayer combat remain unverified.
+
 Robe-only GUI invisibility diagnosed in the 26.1.2 client code: RGB-only dye defaults retained zero alpha. Corrected all four inventory defaults to opaque white (-1), added pack-builder validation and regression tests. Prior overlay/tint correction was incomplete. Worn armor is unchanged. Nine pack tests pass. Published and anonymously verified resource-pack-26.1.2-b243d773864e, SHA-1 63d3024a6e2f81bf2badf86ec7695114d76ae18a. Requested a clean restart through the verified existing console launcher; startup selected the corrected URL/hash. Client confirmation remains pending.
 
 User confirmed worn robe textures look good, but reported funky inventory icons. Corrected their extra brown tint and removed mismatched icon overlays; worn equipment remains unchanged. Published and anonymously verified pack resource-pack-26.1.2-7bb73aa1974e (42 files; SHA-1 f1fff0814dac1137a467be18cf5a44f9aecf5ff5). The user authorized a new Terminal tab; startup selected the corrected pack URL and hash through the reusable launcher. Client icon check remains pending.
@@ -94,7 +98,7 @@ The pack builds without downloads, has root pack.mcmeta, and validates JSON plus
 Earlier recovery verification remains valid: all 294 legacy feature files matched their original Git blobs across 16 recovery branches; the full snapshot preserves obsolete docs and old main. FigJam diagrams were reviewed during the design checkpoint.
 
 ## Next action
-Client-playtest `/mmc give`: inspect Desert Robes names/lore, inventory icons and all worn layers. Then proceed to the first shield-based saber; clan/FactionsUUID work remains deferred.
+Client-playtest `/mmc give vader`: hilt/blade/blocking pose, sneak-attack throw and E11 reflection/heat outside the safe zone. Then equipment enchantments/repair, death/loss and starter kit; clans stay deferred.
 
 ## Open
 Clan command aliases, kit quantities/ammo, starting credits, travel, combat tag details, saber direction/tuning, enchantment compatibility/repair, group creation cooldown, claim capacity, warpoint threshold/edge cases, raid-window duration/refresh and active-raid detection, explosive/block limits, KOTH reward delivery, event schedules, recipes/prices, vehicle redeployment details and content depth for the integrated playtest. Resource planets, aerial combat and themed replacement swords/bows are deferred. Continue through concrete player scenarios and the proposed playable slices. The arrival slice is deployed; the remaining gameplay systems are unimplemented.

@@ -1,0 +1,25 @@
+schema-version: 1
+# Provisional tuning; all durations are server ticks (20 = one second).
+item-id: vader
+item-model: mandomc:sabers/vader
+hilt-model: mandomc:sabers/vader_hilt
+throw-damage: 8.0
+throw-cooldown-ticks: 40
+throw-range: 12.0
+throw-speed: 1.0
+throw-return-speed: 1.5
+throw-hit-radius: 0.45
+guard-capacity: 100.0
+guard-cost-per-hit: 20.0
+guard-cooling-per-tick: 0.5
+guard-recovery-delay-ticks: 30
+overheat-ticks: 80
+block-half-angle-degrees: 80.0
+reflection-limit: 4
+# Official upstream delivery: do not copy/rehost JustTimm's artwork.
+upstream-pack:
+  main-pack-id: a3feb494-6a5c-5495-8f33-efdd5783633f
+  id: 20a340e6-9abc-481d-8878-312e26ca08e8
+  version: 3.2.2
+  url: "https://cdn.modrinth.com/data/HVjHFmDU/versions/heHnARk2/JustTimm%27s%20Lightsaber%20Workshop%203.2.2.zip"
+  sha1: 0f1a11ab321d5d4ac39ed2659ddbdf207a82f5dc

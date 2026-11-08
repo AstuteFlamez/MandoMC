@@ -26,5 +26,30 @@
         "name": "mandomc:misc/zoomrifle"
       }
     ]
+  },
+  "saber.on": {
+    "sounds": [
+      "mandomc:melee/lightsaber/on"
+    ]
+  },
+  "saber.off": {
+    "sounds": [
+      "mandomc:melee/lightsaber/off"
+    ]
+  },
+  "saber.hit": {
+    "sounds": [
+      "mandomc:melee/lightsaber/hit"
+    ]
+  },
+  "saber.throw": {
+    "sounds": [
+      "mandomc:melee/lightsaber/throw"
+    ]
+  },
+  "saber.swing-1": {
+    "sounds": [
+      "mandomc:melee/lightsaber/swing-1"
+    ]
   }
 }
