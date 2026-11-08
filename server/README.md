@@ -80,3 +80,6 @@ See [runtime configuration policy](runtime/README.md) and [world sources](../WOR
 `/spawn` now goes to SpawnWorld; temporary `/survival` goes to SurvivalWorld (the existing dev_world under that Multiverse alias). Both use the shared three-second countdown in `teleport.yml`, replacing the earlier five-second, one-way-only departure. Looking around is allowed; changing position cancels. See [command documentation](../docs/commands.md).
 
 Future tutorial direction: `/tutorial` will show short text and take the player to a library building in SpawnWorld with takeable, feature-specific guidebooks. This is deferred; current tutorial text is temporary.
+
+### Reuse the console tab
+Run `server/start.command` once in the existing Terminal tab. After `stop`, press Enter to launch again in that same tab, or type `q` to exit. Do not open a fresh Terminal tab for each restart. The loop also supports a managed restart: only after verifying that the running Java process is a child of this launcher, create `.local/server-restart-request`, then cleanly stop that Java child. The launcher consumes the request after shutdown and restarts in place. Without a request, crashes/stops wait for input instead of looping automatically. Older already-running launchers need to be started once with this updated script before this behavior applies.
