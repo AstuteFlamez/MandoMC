@@ -55,23 +55,25 @@ public final class ArrivalProbe extends JavaPlugin {
                 "public /survival resolves to MandoMC, not a vendor alias");
         var spawn = destinations.spawn();
         var landing = destinations.survival();
+        check(landing.getX() == -135.5 && landing.getZ() == -135.5 && landing.getY() == 73,
+                "survival destination centered on middle block of chunk (-9,-9), with safe footing");
         var nonop = new TestPlayer(spawn);
         var actor = WorldGuardPlugin.inst().wrapPlayer(nonop.player);
         var query = WorldGuard.getInstance().getPlatform().getRegionContainer().createQuery();
         for (var location : List.of(spawn, landing,
-                new Location(landing.getWorld(), -176, 73, -144),
-                new Location(landing.getWorld(), -112, 73, -144),
-                new Location(landing.getWorld(), -144, 73, -176),
-                new Location(landing.getWorld(), -144, 73, -112))) {
+                new Location(landing.getWorld(), -144, 73, -136),
+                new Location(landing.getWorld(), -129, 73, -136),
+                new Location(landing.getWorld(), -136, 73, -144),
+                new Location(landing.getWorld(), -136, 73, -129))) {
             var point = BukkitAdapter.adapt(location);
             check(!query.testBuild(point, actor, Flags.BLOCK_BREAK), "non-op cannot break inside protected boundary");
             check(!query.testBuild(point, actor, Flags.BLOCK_PLACE), "non-op cannot place inside protected boundary");
             check(query.queryState(point, actor, Flags.PVP) == StateFlag.State.DENY, "PvP denied inside protected boundary");
         }
-        for (var location : List.of(new Location(landing.getWorld(), -177, 73, -144),
-                new Location(landing.getWorld(), -111, 73, -144),
-                new Location(landing.getWorld(), -144, 73, -177),
-                new Location(landing.getWorld(), -144, 73, -111))) {
+        for (var location : List.of(new Location(landing.getWorld(), -145, 73, -136),
+                new Location(landing.getWorld(), -128, 73, -136),
+                new Location(landing.getWorld(), -136, 73, -145),
+                new Location(landing.getWorld(), -136, 73, -128))) {
             var point = BukkitAdapter.adapt(location);
             check(query.testBuild(point, actor, Flags.BLOCK_BREAK), "WorldGuard allows building outside boundary");
             check(query.queryState(point, actor, Flags.PVP) != StateFlag.State.DENY, "WorldGuard does not deny PvP outside boundary");

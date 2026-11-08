@@ -55,7 +55,7 @@ The runtime itself is not a Git backup. A clean clone needs Java 25, the Paper a
 ## Arrival and protection
 The supplied BlackSpireOutpost map is imported as SpawnWorld (`minecraft:spawnworld`). Its whole world is protected. New players arrive there; existing players retain their saved login location. As an operator, use `/mv tp SpawnWorld` to visit, `/tutorial` for the introduction, then `/survival` and stand still for three seconds. `/spawn` returns to SpawnWorld. Looking around is allowed; walking/jumping cancels. Group home travel remains future work.
 
-The survival landing is in `dev_world`, around (-143.5, 73, -143.5). Protection covers x/z -176 through -112 inclusive and the full build height. You see a message when leaving protection; the terrain is still a disposable development world. Operator accounts normally bypass WorldGuard: test with a non-op account, or use `/rg bypass` deliberately for your own test. `/mandomc` checks both destinations and their protection.
+The survival landing is in `dev_world`, around (-135.5, 73, -135.5). Protection covers x/z -144 through -129 inclusive (one 16×16 chunk) and the full build height. You see a message when leaving protection; the terrain is still a disposable development world. Operator accounts normally bypass WorldGuard: test with a non-op account, or use `/rg bypass` deliberately for your own test. `/mandomc` checks both destinations and their protection.
 
 For a clean local restore:
 1. Stop Paper and back up the whole runtime. Copy the supplied map into `server/runtime/SpawnWorld`; omit old playerdata, stats, advancements, session.lock, uid.dat and old Paper overrides. Preserve the original backup.

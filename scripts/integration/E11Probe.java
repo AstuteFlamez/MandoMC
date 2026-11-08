@@ -37,6 +37,10 @@ public final class E11Probe extends JavaPlugin {
         var config = wm.getWeaponConfigurations();
         var weapon = WeaponMechanicsAPI.generateWeapon("E11");
         check("E11".equals(WeaponMechanicsAPI.getWeaponTitle(weapon)), "vendor weapon identity");
+        check(net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
+                .serialize(weapon.getItemMeta().displayName()).equals("E-11 Blaster Rifle"), "legacy E11 name");
+        check(net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
+                .serialize(weapon.getItemMeta().lore().getFirst()).equals("đĐ"), "legacy image-glyph lore");
         model(weapon, "blasters/e11", 2);
         var skins = config.getObject("E11.Skin", SkinSelector.class);
         skins.apply(weapon, "default", SkinSelector.SkinAction.SCOPE, new String[0]);
@@ -62,33 +66,37 @@ public final class E11Probe extends JavaPlugin {
         var spawn = Bukkit.getWorld(NamespacedKey.minecraft("spawnworld"));
         var guard = CompatibilityAPI.getWorldGuardCompatibility();
         check(guard.isInstalled(), "vendor WorldGuard integration installed");
+        for (var point : List.of(spawn.getSpawnLocation(), survival.getSpawnLocation())) {
+            check("&cYou can’t shoot in a safe zone.".equals(guard.getValue(point, "weapon-shoot-message")),
+                    "safe-zone shooting denial message configured");
+        }
         for (var point : List.of(spawn.getSpawnLocation(), survival.getSpawnLocation(),
-                new Location(survival, -176, 300, -144), new Location(survival, -112, 300, -144),
-                new Location(survival, -144, 300, -176), new Location(survival, -144, 300, -112))) {
+                new Location(survival, -144, 300, -136), new Location(survival, -129, 300, -136),
+                new Location(survival, -136, 300, -144), new Location(survival, -136, 300, -129))) {
             check(!guard.testFlag(point, null, "weapon-shoot"), "shoot denied in protected area");
             check(!guard.testFlag(point, null, "weapon-damage"), "incoming damage denied in protected area");
         }
-        for (var point : List.of(new Location(survival, -177, 300, -144),
-                new Location(survival, -111, 300, -144), new Location(survival, -144, 300, -177),
-                new Location(survival, -144, 300, -111))) {
+        for (var point : List.of(new Location(survival, -145, 300, -136),
+                new Location(survival, -128, 300, -136), new Location(survival, -136, 300, -145),
+                new Location(survival, -136, 300, -128))) {
             check(guard.testFlag(point, null, "weapon-shoot"), "shoot permitted beyond boundary");
             check(guard.testFlag(point, null, "weapon-damage"), "damage permitted beyond boundary");
         }
-        hit(projectile, weapon, new Location(survival, -174, 300, -144), false);
-        hit(projectile, weapon, new Location(survival, -180, 300, -144), true);
+        hit(projectile, weapon, new Location(survival, -142, 300, -136), false);
+        hit(projectile, weapon, new Location(survival, -148, 300, -136), true);
     }
 
     private void hit(Projectile definition, ItemStack weapon, Location targetLocation, boolean shouldDamage) {
         var world = targetLocation.getWorld();
-        var shooterChunk = world.getChunkAt(-182 >> 4, -144 >> 4);
+        var shooterChunk = world.getChunkAt(-150 >> 4, -136 >> 4);
         var targetChunk = targetLocation.getChunk();
         shooterChunk.addPluginChunkTicket(this);
         targetChunk.addPluginChunkTicket(this);
-        var shooter = world.spawn(new Location(world, -182, 300, -144), ArmorStand.class, entity -> {
+        var shooter = world.spawn(new Location(world, -150, 300, -136), ArmorStand.class, entity -> {
             entity.setPersistent(false);
             entity.setGravity(false);
         });
-        var target = world.spawn(new Location(world, -180, 300, -144), Cow.class, entity -> {
+        var target = world.spawn(new Location(world, -148, 300, -136), Cow.class, entity -> {
             entity.setPersistent(false);
             entity.setAI(false);
             entity.setGravity(false);

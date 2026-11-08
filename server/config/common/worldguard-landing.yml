@@ -2,8 +2,8 @@ regions:
   survival_landing:
     type: cuboid
     priority: 100
-    min: {x: -176, y: -64, z: -176}
-    max: {x: -112, y: 319, z: -112}
+    min: {x: -144, y: -64, z: -144}
+    max: {x: -129, y: 319, z: -129}
     members: {}
     owners: {}
     flags:
@@ -12,6 +12,7 @@ regions:
       block-place: deny
       pvp: deny
       weapon-shoot: deny
+      weapon-shoot-message: "&cYou can’t shoot in a safe zone."
       weapon-damage: deny
       invincible: allow
       chest-access: deny

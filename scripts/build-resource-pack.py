@@ -64,6 +64,13 @@ def main():
                     check_reference(data['parent'], 'models', '.json')
                 for texture in data.get('textures', {}).values():
                     check_reference(texture, 'textures', '.png')
+            if '/font/' in name:
+                for provider in data.get('providers', []):
+                    if provider.get('type') in ('bitmap', 'minecraft:bitmap'):
+                        reference = provider['file']
+                        if not reference.endswith('.png'):
+                            raise SystemExit(f'Bitmap font texture must be PNG: {reference}')
+                        check_reference(reference[:-4], 'textures', '.png')
             if path.name == 'sounds.json':
                 namespace = path.parent.name
                 for event in data.values():

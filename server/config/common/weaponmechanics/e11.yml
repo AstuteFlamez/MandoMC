@@ -7,9 +7,11 @@ E11:
       Item_Model: "mandomc:blasters/e11"
       Name: "<gray>E-11 Blaster Rifle"
       Lore:
+        - "<white>đĐ"
         - "<gray>Standard-issue Imperial blaster rifle."
         - "<gray>Compact and fast, but not as accurate."
         - ""
+        - "<white>ğ <yellow><bold>➣ <reset><white><!italic>Ġ"
         - ""
         - "<gray>Takes <red>Standard Plasma Cells<gray>."
       Unbreakable: true

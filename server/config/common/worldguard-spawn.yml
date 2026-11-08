@@ -10,6 +10,7 @@ regions:
       block-place: deny
       pvp: deny
       weapon-shoot: deny
+      weapon-shoot-message: "&cYou can’t shoot in a safe zone."
       weapon-damage: deny
       invincible: allow
       chest-access: deny

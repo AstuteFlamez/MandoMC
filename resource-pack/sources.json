@@ -83,7 +83,43 @@
       "sourceSha256": "f3564798d52c1f8ce6506e8026b8007396c862dd4d49d5dd4b9af96f04512068",
       "destination": "assets/mandomc/sounds/misc/zoomrifle.ogg",
       "changes": "Copied unchanged."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/weapon.png",
+      "sourceSha256": "ac1829dd89cd25b2edbdef43051f75952fb69e7fc8f323248563da07b0a50dc4",
+      "destination": "assets/mandomc/textures/font/item_labels/weapon.png",
+      "changes": "Moved unchanged; original bitmap glyph metrics retained."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/common.png",
+      "sourceSha256": "3987670be8e96dd4d952291c2e7a8542e6305feee82124f1c329a6952102ace2",
+      "destination": "assets/mandomc/textures/font/item_labels/common.png",
+      "changes": "Moved unchanged; original bitmap glyph metrics retained."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/drop.png",
+      "sourceSha256": "9be7af9b713f664e86e8dbbd3b4c400f478fd1d3730050513d12a695c8c22c42",
+      "destination": "assets/mandomc/textures/font/item_labels/drop.png",
+      "changes": "Moved unchanged; original bitmap glyph metrics retained."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/reload.png",
+      "sourceSha256": "b031fd0acc29690cfc6c3b2fb0b97a6b47bbb3f9aad7322a7586000219f3ace6",
+      "destination": "assets/mandomc/textures/font/item_labels/reload.png",
+      "changes": "Moved unchanged; original bitmap glyph metrics retained."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ammo.png",
+      "sourceSha256": "27827a43f6b0b279ff629af4710c29e8331b943857bc842843de684e7d7c3b59",
+      "destination": "assets/mandomc/textures/font/item_labels/ammo.png",
+      "changes": "Moved unchanged; original bitmap glyph metrics retained."
+    },
+    {
+      "sourcePath": "assets/minecraft/font/default.json",
+      "sourceSha256": "abb393f43ed18434bc4da70eff1733346427f541ed4b6fe08f3fec915ab58cc4",
+      "destination": "assets/minecraft/font/default.json",
+      "changes": "Retained only five E11/ammo bitmap providers with original glyphs and metrics; redirected texture paths to mandomc namespace."
     }
   ],
-  "status": "E-11 WeaponMechanics integration, Standard Plasma Cells, red bolt and four legacy sounds; client visual/audio check pending."
+  "status": "E-11 with original bitmap lore restored; client visual check pending."
 }

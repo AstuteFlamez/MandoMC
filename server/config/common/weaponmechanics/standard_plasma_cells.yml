@@ -7,5 +7,6 @@ Standard_Plasma_Cells:
       Custom_Model_Data: 25
       Item_Model: "mandomc:ammo/standard_plasma_cells"
       Lore:
+        - "<white>đģ"
         - "<gray>Reliable mid-tier energy cell designed"
         - "<gray>for consistent performance in the field."
