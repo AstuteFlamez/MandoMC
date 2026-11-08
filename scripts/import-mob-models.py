@@ -27,6 +27,10 @@ if entry not in data['sources']:
 atlas.write_text(json.dumps(data, indent=2) + '\n')
 manifest = ROOT / 'resource-pack/mob-models.json'
 files = sorted(p for p in destination.rglob('*') if p.is_file())
+# Keep generated JSON byte-identical to the LF-normalized files stored by Git.
+for path in files:
+    if path.suffix == '.json':
+        path.write_bytes(path.read_bytes().replace(b'\r\n', b'\n'))
 manifest.write_text(json.dumps({'generator': 'ModelEngine R4.1.1', 'models': sorted(expected),
     'files': [{'path': str(p.relative_to(ROOT / 'resource-pack/src')), 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()} for p in files]}, indent=2) + '\n')
 print(f'Imported {len(files)} model files for {len(expected)} mob models.')
