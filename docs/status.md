@@ -2,7 +2,7 @@
 Updated: 2026-11-08
 
 ## Milestone
-Presentation repair: consolidated accepted robe artwork, ribs texture/consumable glyph and recovered material badge into one pack. Menus use blank light-gray panes, with real air in unused recipe-grid cells. Existing owned hides/ribs refresh presentation on login/open while retaining quantity and other metadata. 51 Java tests, nine pack tests and 350 live assertions pass. Pack publication/final normal startup pending. Next: reconnect and confirm all four client presentation fixes. See docs/features/presentation-repair.md.
+Presentation repair: consolidated accepted robe artwork, ribs texture/consumable glyph and recovered material badge into one pack. Menus use blank light-gray panes, with real air in unused recipe-grid cells. Existing owned hides/ribs refresh presentation on login/open while retaining quantity and other metadata. 51 Java tests, nine pack tests and 350 live assertions pass. Published `resource-pack-26.1.2-2eadee3b660d`; normal server restarted at 17:28:58 with verified SHA-1 `429bc11cc30658120c6c5ef4fc2379b113554b7f`, no startup errors and the temporary probe removed. Next: reconnect and confirm all four client presentation fixes. See docs/features/presentation-repair.md.
 
 Bantha Hide texture follow-up: recover the legacy CMD-155 ronto_hide texture unchanged, rename it to bantha_hide, and use the namespaced model on the existing Bantha Hide catalog definition. Preserve its item ID, echo-shard base, drops and recipes. Pack validation passed (205 files); published `resource-pack-26.1.2-319b83a00799`. Startup verified SHA-1 `04826f64b6a8b9704fd3a99988b8488cec184c3d`; normal server restarted at 17:19:19. Client texture check remains.
 
