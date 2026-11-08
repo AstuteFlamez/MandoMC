@@ -85,3 +85,6 @@ Current FactionsUUID changed names, packages and coordinates from the old source
 - [Multiverse configuration](https://mvplugins.org/core/reference/configuration-file/)
 - [EssentialsX modules](https://essentialsx.net/wiki/modules) and [Vault API](https://github.com/MilkBowl/VaultAPI)
 - [Paper requirements](https://docs.papermc.io/paper/getting-started/) and [project setup](https://docs.papermc.io/paper/dev/project-setup/)
+
+## Custom items
+`ItemCatalog` owns one validated snapshot of native item templates and explicit vendor factories. Native IDs use mandomc:item_id; vendor generation remains behind integrations/weapons. Definitions/presentation are configuration; item delivery and the paginated inventory browser are Java behavior. `RootCommand` dispatches registered feature handlers, keeping bootstrap and command parsing independent of catalog internals. No recipe or economy state is stored in item presentation.

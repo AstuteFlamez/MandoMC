@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "mandomc:item/armor/robes_chestplate",
+    "layer1": "minecraft:item/leather_chestplate_overlay"
+  }
+}

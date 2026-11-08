@@ -4,12 +4,12 @@ main: net.mandomc.bootstrap.MandoPlugin
 api-version: '26.1.2'
 author: AstuteFlamez
 description: MandoMC gameplay
-softdepend: [Multiverse-Core, WorldGuard]
+softdepend: [Multiverse-Core, WorldGuard, WeaponMechanics]
 commands:
   mandomc:
-    description: Check MandoMC and arrival destinations
-    usage: /mandomc
-    permission: mandomc.admin.status
+    description: MandoMC administration and custom items
+    usage: /mandomc [give [player] [item] | items reload]
+    aliases: [mmc]
   spawn:
     description: Return to SpawnWorld after standing still
     usage: /spawn
@@ -23,6 +23,12 @@ commands:
     usage: /survival
     permission: mandomc.travel.survival
 permissions:
+  mandomc.items.give:
+    description: Give custom items and use the item browser
+    default: op
+  mandomc.items.reload:
+    description: Reload custom item definitions
+    default: op
   mandomc.travel.spawn:
     default: true
   mandomc.travel.survival:

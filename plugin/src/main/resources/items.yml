@@ -1,0 +1,16 @@
+schema-version: 1
+# Only badge images shipped in the current pack may be referenced here.
+rarities:
+  uncommon: 'Ė'
+categories:
+  armor: 'ĉ'
+# Explicitly list shipped vendor content; WeaponMechanics demo weapons stay out of the browser.
+external-items:
+  e11:
+    kind: weapon
+    vendor-id: E11
+    category: weapons
+  standard_plasma_cells:
+    kind: ammo
+    vendor-id: Standard_Plasma_Cells
+    category: ammo

@@ -1,0 +1,26 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "mandomc:desert_robes",
+        "dyeable": {
+          "color_when_undyed": 10511680
+        }
+      },
+      {
+        "texture": "mandomc:desert_robes_overlay"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "mandomc:desert_robes",
+        "dyeable": {
+          "color_when_undyed": 10511680
+        }
+      },
+      {
+        "texture": "mandomc:desert_robes_overlay"
+      }
+    ]
+  }
+}

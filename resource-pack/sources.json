@@ -106,8 +106,86 @@
       "sourcePath": "assets/minecraft/font/default.json",
       "sourceSha256": "abb393f43ed18434bc4da70eff1733346427f541ed4b6fe08f3fec915ab58cc4",
       "destination": "assets/minecraft/font/default.json",
-      "changes": "Retained only common/weapon/ammo badge providers with original glyph metrics; namespaced textures. Drop/reload icons replaced with text controls."
+      "changes": "Common/weapon/ammo and uncommon/armor bitmap providers, original metrics, namespaced texture paths; control hints are text."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/item/leather_helmet.png",
+      "sourceSha256": "4b23c0e74dadde193d99a9bfb4886d13e6466d706e65083e6e56d6b8173acfa1",
+      "destination": "assets/mandomc/textures/item/armor/robes_helmet.png",
+      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/item/leather_helmet_overlay.png",
+      "sourceSha256": "e2b64322d624895c9fa5b608739efd63d5bf264d65f44c78a127286a050bc3ec",
+      "destination": "assets/mandomc/textures/item/armor/robes_helmet_overlay.png",
+      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/item/leather_chestplate.png",
+      "sourceSha256": "5071dd4e73dd0758cc3a0ffd348f15371bdcad40956cf4da694ec9ff72bc1881",
+      "destination": "assets/mandomc/textures/item/armor/robes_chestplate.png",
+      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/item/leather_leggings.png",
+      "sourceSha256": "6421636005c7a1d28889e88f32e1b1b22eb2564d40fac35e00046e4aa0ca556b",
+      "destination": "assets/mandomc/textures/item/armor/robes_leggings.png",
+      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/item/leather_leggings_overlay.png",
+      "sourceSha256": "8403e5eabda00d1c2268870877805781f260941db52b8289fddce8cbc7184fcd",
+      "destination": "assets/mandomc/textures/item/armor/robes_leggings_overlay.png",
+      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/item/leather_boots.png",
+      "sourceSha256": "25d58925ff553f70b029c3c4caa5ff736d5de0438cee0bbe2416409a0b28ce6e",
+      "destination": "assets/mandomc/textures/item/armor/robes_boots.png",
+      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/item/leather_boots_overlay.png",
+      "sourceSha256": "8403e5eabda00d1c2268870877805781f260941db52b8289fddce8cbc7184fcd",
+      "destination": "assets/mandomc/textures/item/armor/robes_boots_overlay.png",
+      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/entity/equipment/humanoid/leather.png",
+      "sourceSha256": "84dee2d86dd928dbc092be395efd674a1c24366d58eb12bdeae6de39bdc4cac3",
+      "destination": "assets/mandomc/textures/entity/equipment/humanoid/desert_robes.png",
+      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/entity/equipment/humanoid/leather_overlay.png",
+      "sourceSha256": "cef496da03645ba0cb5ceba79be98701a6afd1905521feec10e93fe3156f69c6",
+      "destination": "assets/mandomc/textures/entity/equipment/humanoid/desert_robes_overlay.png",
+      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/entity/equipment/humanoid_leggings/leather.png",
+      "sourceSha256": "65797099692b7d9e25aefd1092d1b14704e3ffc8d50caca9f1756028f8b4654c",
+      "destination": "assets/mandomc/textures/entity/equipment/humanoid_leggings/desert_robes.png",
+      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/entity/equipment/humanoid_leggings/leather_overlay.png",
+      "sourceSha256": "9014c65d31555081c42a4e2af6b1987640c3ace714676822b36292a317131269",
+      "destination": "assets/mandomc/textures/entity/equipment/humanoid_leggings/desert_robes_overlay.png",
+      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/armor.png",
+      "sourceSha256": "cb4d5efefcb384aa5803ed1fb98bd3125ae4e0cca04e856bc8e36ad7a765f132",
+      "destination": "assets/mandomc/textures/font/item_labels/armor.png",
+      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/uncommon.png",
+      "sourceSha256": "1d0d5e054783bc52c0e3dc979956783268245acadaa8143e291291ea22047083",
+      "destination": "assets/mandomc/textures/font/item_labels/uncommon.png",
+      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
     }
   ],
-  "status": "E-11 and ammo use accepted item-lore standard: badges, blank line, description, compact yellow keybind hints where applicable."
+  "status": "E-11 and four Desert Robes pieces; original badges, lore spacing, item icons and namespaced worn equipment layers. Client robe visual check pending."
 }

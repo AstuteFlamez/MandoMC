@@ -26,6 +26,24 @@
       "chars": [
         "ģ"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/armor.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "ĉ"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/uncommon.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "Ė"
+      ]
     }
   ]
 }

@@ -2,6 +2,8 @@
 Updated: 2026-11-08
 
 ## Milestone
+Desert Robes and `/mandomc give` are implemented on `bilal/desert-robes`. `/mmc` is the root alias. The admin browser groups all six current custom items into categories with 45 entries per page; click gives one and shift-click gives native maximum stack. `mandomc.items.give` and `mandomc.items.reload` default to operators. Four legacy robe names/descriptions, Uncommon/Armor badges and the accepted blank line are preserved. Native leather behavior remains intact; item/equipment assets are namespaced. See docs/features/desert-robes.md. Crafting is deferred.
+
 Accepted item-tooltip standard is recorded in docs/style-guide.md: rarity/category badges, blank line, gray description, compact yellow keybind controls only where applicable. Ammo now has matching spacing. Unused drop/reload bitmap providers and textures are removed; common/weapon/ammo badges remain.
 
 Console preference: start development servers in a visible Terminal window via server/start.command so the user can operate the console.
@@ -61,6 +63,8 @@ The new pack builds from `resource-pack/src/` with `./scripts/build-resource-pac
 The player experience, FigJam diagrams and proposed feature order remain recorded: arrival/protection, group base/travel, combat, supplies/progression, KOTH, Jabba, vehicles, raids. Pairwise kill recording lands with combat. See docs/features/arrival-and-protection.md for the first slice and docs/recovery.md for legacy code.
 
 ## Verification
+Desert Robes: ten Maven tests and six pack deployment tests pass. The live Paper item probe passed 80 assertions using isolated simulated-player inventories: native armor slots/equip sounds/durability, model/PDC identity, dye/enchantment serialization, pristine templates, vendor generation, rejected reload preservation, duplicate IDs, 47-item pagination, permissions, recipient delivery, max stacks, blocked menu transfers and full/offline recipients. Pack build: 45 files, SHA-1 f4b7de9b26576e97f3dd8923e800f8deca293613. Client rendering and real mouse interactions remain unverified. The probe is temporary and must be removed before ordinary play.
+
 Item-standard deployment: pack `resource-pack-26.1.2-59e8bdb76485` is published; startup selected SHA-1 `ce4dba773808913f13d0a32b2b3a2020128f5392`. The previous agent-console process was stopped cleanly and server/start.command was opened in Terminal for the user’s console access. New ammo items show the accepted blank-line spacing; existing item lore is not rewritten.
 
 Item-standard cleanup: the pack builds with 23 files, all remaining font texture references resolve, and no active config references the removed drop/reload glyphs. Ammo spacing is deployed; WeaponMechanics reload succeeded. The next gameplay slice in docs/build-order.md is one basic armor set, then the first shield-based saber; remaining E-11 client checks stay on the combat checklist.
@@ -86,7 +90,7 @@ The pack builds without downloads, has root pack.mcmeta, and validates JSON plus
 Earlier recovery verification remains valid: all 294 legacy feature files matched their original Git blobs across 16 recovery branches; the full snapshot preserves obsolete docs and old main. FigJam diagrams were reviewed during the design checkpoint.
 
 ## Next action
-Client-playtest the recovered E-11: models/poses, sound volume, complete reload consumption, non-op safe zones and PvP travel tags. Clan/FactionsUUID work remains deferred.
+Client-playtest `/mmc give`: inspect Desert Robes names/lore, inventory icons and all worn layers. Then proceed to the first shield-based saber; clan/FactionsUUID work remains deferred.
 
 ## Open
 Clan command aliases, kit quantities/ammo, starting credits, travel, combat tag details, saber direction/tuning, enchantment compatibility/repair, group creation cooldown, claim capacity, warpoint threshold/edge cases, raid-window duration/refresh and active-raid detection, explosive/block limits, KOTH reward delivery, event schedules, recipes/prices, vehicle redeployment details and content depth for the integrated playtest. Resource planets, aerial combat and themed replacement swords/bows are deferred. Continue through concrete player scenarios and the proposed playable slices. The arrival slice is deployed; the remaining gameplay systems are unimplemented.

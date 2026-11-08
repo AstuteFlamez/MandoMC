@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "mandomc:item/armor/robes_leggings",
+    "layer1": "mandomc:item/armor/robes_leggings_overlay"
+  }
+}

@@ -1,0 +1,30 @@
+# Feature: Desert Robes and custom item administration
+Status: implementation; client appearance check pending
+Branch: bilal/desert-robes
+
+## Player experience
+Admins can browse custom items by category and issue them to themselves or another online player. The first armor set is the recovered Desert Robes: Hood, Tunic, Pants and Boots. Yellow names, Uncommon/Armor glyph badges and legacy gray descriptions are preserved, with the accepted blank line between badges and description.
+
+## Rules
+Robes retain ordinary leather armor protection, durability, dyeing, enchantment and stacking behavior. Stable IDs are robes_helmet, robes_chestplate, robes_leggings and robes_boots, stored as mandomc:item_id. Names/lore are presentation, never identity. Native equipment data is copied with only its rendering asset changed; ordinary leather textures are unaffected.
+
+The admin permission mandomc.items.give defaults to operators. Click grants one; shift-click grants native maximum stack. Online recipients only, no inventory overflow drops, no preview transfers. Permissions are checked at command dispatch and each delivery. Disconnects invalidate the recipient. GUI navigation checks the still-open inventory before executing next tick. Reload rejects malformed content without replacing the working catalog.
+
+## Smallest playable version
+Four robes, E11 and Standard Plasma Cells in a paginated category browser. Legacy bantha-hide recipes and acquisition are deferred to supplies/progression. No unrelated legacy item families or WeaponMechanics demo guns are included.
+
+## Ownership and integrations
+MandoMC owns native item definitions, immutable catalog snapshots, PDC identity, presentation and administration. WeaponMechanics owns weapon/ammo generation; the public API adapter is isolated in integrations/weapons. Its allowlist in items.yml references E11 and Standard_Plasma_Cells. Missing vendor support affects those entries only.
+
+Legacy review: the old factory already cloned cached stacks, but silently substituted stone for invalid materials, overwrote duplicate IDs, cleared the live registry before loading, split metadata across maps and coupled recipes to item creation. The replacement keeps cloned templates and stable IDs, validates content first, swaps one catalog snapshot, and leaves acquisition separate. The old give command also ignored full-inventory leftovers; delivery now checks capacity first.
+
+## Parameters
+Defaults live in plugin/src/main/resources/items.yml and items/robes.yml; deployed copies live under plugins/MandoMC. Files use schema-version: 1. Every items/*.yml file supplies an items mapping. Definitions require material, name, rarity, category, lore, custom-model-data and item-model; equipment-model is optional for wearable armor. Unknown fields, invalid materials/keys and duplicate IDs fail reload. Rarity/category badge names resolve through items.yml. Messages and GUI labels use messages.yml. `/mmc items reload` applies item changes; messages/code changes require restart. Existing inventory stacks are not rewritten.
+
+Add a new native item by adding its definition, badge mappings if needed, and namespaced pack models/textures; it appears in its category automatically. External weapons/ammo go in the explicit external-items allowlist and retain vendor-generated metadata. Commands and permissions are documented in ../commands.md.
+
+## Verification
+The live Paper probe passed 80 assertions. Ten unit tests pass, including strict item-definition parsing and pagination boundaries. The pack builds with 45 files and validates equipment texture references. scripts/build-items-probe.sh builds a temporary probe for live Paper APIs, isolated simulated-player inventories and temporary config files. Never leave its JAR installed for ordinary play. Client texture, worn appearance and actual mouse interactions still require an in-game check.
+
+## Pause note
+Robes and admin browser implemented. Crafting remains deferred. Next action: use `/mmc give` in the client and inspect all four robes, worn textures and item spacing.

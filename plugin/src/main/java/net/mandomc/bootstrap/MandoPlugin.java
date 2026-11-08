@@ -18,29 +18,18 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     private ArrivalListener arrival;
     private ArrivalDestinations destinations;
     private boolean failed;
+    private net.mandomc.gameplay.items.ItemCatalog items;
+    private net.mandomc.commands.ItemCommand itemCommands;
+
+    public net.mandomc.gameplay.items.ItemCatalog items() {
+        return items;
+    }
     private net.mandomc.gameplay.travel.TeleportService travel;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(this, this);
-        Objects.requireNonNull(getCommand("mandomc")).setExecutor((sender, command, label, arguments) -> {
-            try {
-                if (failed) {
-                    throw new IllegalStateException("Arrival setup failed; see the server log and restart after repair.");
-                }
-                if (destinations != null) {
-                    destinations.validate();
-                    sender.sendMessage(Component.text("MandoMC arrival ready: " + destinations.spawn()
-                            + " -> " + destinations.survival()));
-                } else {
-                    sender.sendMessage(Component.text("MandoMC foundation enabled; arrival is disabled."));
-                }
-            } catch (IllegalStateException error) {
-                sender.sendMessage(Component.text(error.getMessage()));
-            }
-            return true;
-        });
         for (var name : new String[] {"tutorial", "survival", "spawn"}) {
             Objects.requireNonNull(getCommand(name)).setExecutor((sender, command, label, arguments) -> {
                 sender.sendMessage(Component.text("Travel is unavailable. Please contact a server administrator."));
@@ -50,6 +39,45 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
         try {
             if (getConfig().getInt("schema-version", -1) != 1) {
                 throw new IllegalArgumentException("config.yml: unsupported schema-version; expected 1");
+            }
+            if (!new File(getDataFolder(), "messages.yml").isFile()) {
+                saveResource("messages.yml", false);
+            }
+            var language = new YamlConfiguration();
+            language.load(new File(getDataFolder(), "messages.yml"));
+            // New message keys fall back to bundled defaults without overwriting operator translations.
+            try (var reader = new java.io.InputStreamReader(Objects.requireNonNull(getResource("messages.yml")),
+                    java.nio.charset.StandardCharsets.UTF_8)) {
+                language.setDefaults(YamlConfiguration.loadConfiguration(reader));
+            }
+            var root = new net.mandomc.commands.RootCommand(this, sender -> {
+                try {
+                    if (failed) {
+                        throw new IllegalStateException("Arrival setup failed; see the server log and restart after repair.");
+                    }
+                    if (destinations != null) {
+                        destinations.validate();
+                        sender.sendMessage(Component.text("MandoMC arrival ready: " + destinations.spawn()
+                                + " -> " + destinations.survival()));
+                    } else {
+                        sender.sendMessage(Component.text("MandoMC foundation enabled; arrival is disabled."));
+                    }
+                } catch (IllegalStateException error) {
+                    sender.sendMessage(Component.text(error.getMessage()));
+                }
+            }, sender -> sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage()
+                    .deserialize(Objects.requireNonNull(language.getString("items.denied")))));
+            for (var resource : new String[] {"items.yml", "items/robes.yml"}) {
+                if (!new File(getDataFolder(), resource).isFile()) saveResource(resource, false);
+            }
+            items = new net.mandomc.gameplay.items.ItemCatalog(getDataFolder().toPath(),
+                    new net.mandomc.integrations.weapons.WeaponMechanicsItems()::generate);
+            itemCommands = new net.mandomc.commands.ItemCommand(this, items, language, root);
+            try {
+                items.reload();
+                getLogger().info("Loaded " + items.ids().size() + " custom items.");
+            } catch (Exception error) {
+                getLogger().severe("Custom items unavailable; repair config and /mandomc items reload: " + error.getMessage());
             }
             if (!getConfig().getBoolean("arrival.enabled", false)) {
                 getLogger().info("Foundation enabled; arrival is disabled.");
@@ -62,16 +90,6 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                     getConfig().getString("arrival.survival-world"));
             destinations = new ArrivalDestinations(settings, new WorldGuardArrivalProtection());
             destinations.validate();
-            if (!new File(getDataFolder(), "messages.yml").isFile()) {
-                saveResource("messages.yml", false);
-            }
-            var language = new YamlConfiguration();
-            language.load(new File(getDataFolder(), "messages.yml"));
-            // New message keys fall back to bundled defaults without overwriting operator translations.
-            try (var reader = new java.io.InputStreamReader(Objects.requireNonNull(getResource("messages.yml")),
-                    java.nio.charset.StandardCharsets.UTF_8)) {
-                language.setDefaults(YamlConfiguration.loadConfiguration(reader));
-            }
             arrival = new ArrivalListener(this, settings, destinations, language);
             getServer().getPluginManager().registerEvents(arrival, this);
             if (!new File(getDataFolder(), "teleport.yml").isFile()) saveResource("teleport.yml", false);
@@ -98,5 +116,6 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         if (travel != null) travel.close();
+        if (itemCommands != null) itemCommands.close();
     }
 }

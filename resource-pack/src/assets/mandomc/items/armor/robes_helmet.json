@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "mandomc:item/armor/robes_helmet",
+    "tints": [
+      {
+        "type": "minecraft:dye",
+        "default": 10511680
+      }
+    ]
+  }
+}

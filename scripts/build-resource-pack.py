@@ -64,6 +64,10 @@ def main():
                     check_reference(data['parent'], 'models', '.json')
                 for texture in data.get('textures', {}).values():
                     check_reference(texture, 'textures', '.png')
+            if '/equipment/' in name:
+                for layer_type, layers in data.get('layers', {}).items():
+                    for layer in layers:
+                        check_reference(layer['texture'], 'textures/entity/equipment/' + layer_type, '.png')
             if '/font/' in name:
                 for provider in data.get('providers', []):
                     if provider.get('type') in ('bitmap', 'minecraft:bitmap'):
