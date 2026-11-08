@@ -1,0 +1,23 @@
+# Laptop-only development settings; copied on first local setup.
+server-ip=127.0.0.1
+server-port=25565
+online-mode=true
+max-players=20
+motd=MandoMC Development
+pvp=true
+enable-rcon=false
+enable-query=false
+view-distance=8
+simulation-distance=6
+# Keep ordinary survival generation until the exact structure-disable policy is defined.
+generate-structures=true
+# scripts/sync-resource-pack.py fills the hosted pack URL, hash, UUID and prompt before Paper starts.
+
+level-name=dev_world
+gamemode=survival
+difficulty=normal
+white-list=false
+require-resource-pack=true
+
+# WorldGuard owns the configured safe zones.
+spawn-protection=0

@@ -1,0 +1,148 @@
+MANDOMC WORLD SOURCES
+Updated: 2026-11-07
+
+World files are deliberately excluded from Git. Keep licensed originals/backups separately.
+Purchase/download links are operator placeholders, not verified sellers. Do not redistribute commissioned maps.
+Install copies while Paper is stopped. Paper 26.1.2 migrates imported dimensions into the dev_world container.
+Back up the full runtime, including Multiverse and WorldGuard settings; see server/README.md.
+
+ACTIVE WORLDS
+
+SpawnWorld (BlackSpireOutpost)
+  Source: Supplied legacy BlackSpireOutpost backup. Purchase/download: [ADD ORIGINAL CREATOR / STORE URL].
+  Installation: server/runtime/dev_world/dimensions/minecraft/spawnworld/
+  Initial import: server/runtime/SpawnWorld/ then mv import SpawnWorld normal
+  Replacement: Build a small original outpost or use a permitted free lobby; update spawn coordinates and protection.
+
+dev_world
+  Source: Generated locally by Paper; no map purchase needed. Permanent survival terrain is not selected.
+  Installation: server/runtime/dev_world/dimensions/minecraft/overworld/
+  Initial import: generated under server/runtime/dev_world/
+  Replacement: Generate a disposable vanilla survival world; for permanent terrain first decide structure exclusions.
+
+dev_world_nether
+  Source: Generated locally by Paper; no map purchase needed.
+  Installation: server/runtime/dev_world/dimensions/minecraft/the_nether/
+  Initial import: generated under server/runtime/dev_world/
+  Replacement: Generate a new vanilla Nether in a fresh test container; do not overwrite active player terrain.
+
+dev_world_the_end
+  Source: Generated locally by Paper; no map purchase needed.
+  Installation: server/runtime/dev_world/dimensions/minecraft/the_end/
+  Initial import: generated under server/runtime/dev_world/
+  Replacement: Generate a new vanilla End in a fresh test container; do not overwrite active player terrain.
+
+LEGACY MAP INVENTORY — NOT INSTALLED / NOT A COMMITMENT TO RESTORE
+Source for each: operator-supplied legacy server backup. Confirm licensing and intended role before import.
+Import locations below are staging destinations; Paper migrates imported data into its dimension container.
+
+Admin
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/Admin/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+DeathStar
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/DeathStar/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+Dev
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/Dev/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+Earth
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/Earth/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+Endor
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/Endor/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+Geonosis
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/Geonosis/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+Hoth
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/Hoth/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+Hoth4kx4k
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/Hoth4kx4k/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+Ilum
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/Ilum/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+Ilum4kx4k
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/Ilum4kx4k/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+JabbasPalace
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/JabbasPalace/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+Jakku
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/Jakku/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+Mustafar
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/Mustafar/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+Naboo
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/Naboo/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+StarPort
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/StarPort/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+Tatooine
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/Tatooine/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+outpost
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/outpost/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+tatooine2
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/tatooine2/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+world
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/world/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+world_nether
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/world_nether/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+world_the_end
+  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
+  Installation if restored: server/runtime/world_the_end/ (import with Multiverse after checking name/environment).
+  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
+
+UNIDENTIFIED LEGACY ROOT WORLD
+  Source: legacy backup also contains a root-level level.dat; identity and completeness need operator confirmation.
+  Buy/download: [IDENTIFY WORLD AND ADD SOURCE].
+  Installation: not selected; do not import until identified.
+  Replacement: omit until its purpose is known.

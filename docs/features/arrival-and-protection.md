@@ -28,3 +28,5 @@ Still requires a real client: map/pack appearance, first-ever join placement, pe
 
 ## Next action
 Join localhost, visit SpawnWorld, and play through `/tutorial` and `/survival`; inspect the commissioned map and test the safe-zone boundary without operator bypass.
+
+Temporary interface note (2026-11-07): `/tutorial` and `/survival` are development-only commands. Their behavior is available for testing; the final onboarding/travel interface is undecided.

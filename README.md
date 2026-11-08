@@ -33,7 +33,7 @@ Build the pack with `./scripts/build-resource-pack.py` (Python 3). Pack changes 
 ```text
 plugin/          Maven module producing MandoMC.jar
 server/          Version locks, config templates and start.command
-server/runtime/  Ignored runnable server, plugin JARs, worlds and player data
+server/runtime/  Shared config; ignored plugin JARs, worlds and private/generated data
 resource-pack/   New pack source, recovery manifest and ignored build output
 scripts/         Local development tools
 docs/            Player design, architecture, style and resume notes
@@ -44,3 +44,5 @@ planning/        Diagram sources and legacy file inventory
 The new pack is maintained in this repository. [MandoPack](https://github.com/AstuteFlamez/MandoPack) is the pinned legacy asset source; recover only the assets needed by each feature. Pack source textures are versioned; generated ZIPs, maps and plugin JARs stay outside Git.
 
 The original history is preserved. The full previous main is available at bilal/legacy-main-2026-11-05 and tag legacy/pre-rebuild-2026-11-05.
+
+Map acquisition, installation and replacement notes: [WORLD_SOURCES.txt](WORLD_SOURCES.txt).

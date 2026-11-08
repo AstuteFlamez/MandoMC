@@ -1,5 +1,5 @@
 # Local Paper server
-The installed development server runs from `server/runtime/`, outside Git. Plugin source is in `plugin/`; pack source is in `resource-pack/`.
+The installed development server runs from `server/runtime/`; reviewed shareable configuration is tracked, while worlds, installed plugins and private/generated state are ignored. Plugin source is in `plugin/`; pack source is in `resource-pack/`.
 
 ## Start and join
 From the repository root:
@@ -65,9 +65,13 @@ For a clean local restore:
 5. Stop Paper. Apply the two [WorldGuard templates](config/common/README.md) to their respective world's regions files and the MandoMC override to its config. Set `spawn-protection=0` so WorldGuard owns static protection. Preserve unrelated existing regions/configs.
 6. Build/deploy MandoMC and restart. `/mandomc` must report both arrivals ready. A bad enabled arrival configuration blocks logins until repaired.
 
-Paper 26.1.2 migrates the imported region data into `server/runtime/dev_world/dimensions/minecraft/spawnworld/`. Back up the entire runtime/world container and Multiverse/WorldGuard configuration, not just the leftover top-level SpawnWorld folder. Maps, generated configuration, installed plugins and player state are intentionally excluded from Git. The original logo is versioned at `docs/assets/server-icon.png` and copied into the runtime on startup.
+Paper 26.1.2 migrates the imported region data into `server/runtime/dev_world/dimensions/minecraft/spawnworld/`. Back up the entire runtime/world container and Multiverse/WorldGuard configuration, not just the leftover top-level SpawnWorld folder. Maps, generated/private configuration, installed plugins and player state are excluded from Git; reviewed shared configuration is tracked. The original logo is versioned at `docs/assets/server-icon.png` and copied into the runtime on startup.
 
 ## Repeatable arrival checks
 Run `./scripts/build.sh`, then `./scripts/build-arrival-probe.sh`. With the server stopped, temporarily copy `.local/arrival-probe/ArrivalProbe.jar` to `server/runtime/plugins/ArrivalProbe.jar`. Start the local server and look for `ARRIVAL PROBE PASSED` in the log. The probe uses real WorldGuard/world data and non-op player proxies; it is not a Minecraft client or complete gameplay test. Stop Paper, remove that test JAR, and restart before ordinary play. Do not deploy the probe to a shared server.
 
 The paid/commissioned assets are not a Git backup. Keep their originals and runtime backups separately. The tracked top-level `plugin/` directory is MandoMC source, distinct from ignored server-side `plugins/` installations.
+
+Temporary interface note (2026-11-07): `/tutorial` and `/survival` are development-only commands. Their behavior is available for testing; the final onboarding/travel interface is undecided.
+
+See [runtime configuration policy](runtime/README.md) and [world sources](../WORLD_SOURCES.txt).

@@ -23,8 +23,6 @@ reference/
 # Per-machine editor/JDK settings
 .vscode/settings.json
 
-# Runnable local server: worlds, plugins, generated settings and EULA
-server/runtime/
 
 # Python tool caches
 __pycache__/
@@ -55,3 +53,19 @@ __pycache__/
 /server/**/session.lock
 /server/**/*.mca
 /server/**/*.mcc
+
+# Share only reviewed runtime configuration; unknown files/directories stay private.
+!/server/runtime/
+/server/runtime/*
+!/server/runtime/README.md
+!/server/runtime/bukkit.yml
+!/server/runtime/commands.yml
+!/server/runtime/spigot.yml
+!/server/runtime/permissions.yml
+!/server/runtime/server.properties.template
+!/server/runtime/config/
+/server/runtime/config/*
+!/server/runtime/config/paper-world-defaults.yml
+!/server/runtime/config/paper-global.yml.template
+# Real server.properties and paper-global.yml can contain RCON/proxy secrets.
+# Their sanitized templates are tracked; live machine-specific copies stay ignored.
