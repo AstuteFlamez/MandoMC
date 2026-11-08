@@ -4,7 +4,24 @@
     "firstperson_righthand": {
       "rotation": [
         20,
-        145,
+        -35,
+        15
+      ],
+      "translation": [
+        2,
+        1,
+        -1
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        20,
+        -35,
         15
       ],
       "translation": [

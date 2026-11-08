@@ -33,3 +33,5 @@ Five unit tests cover 10,000 patrol rolls, all level bands, no mixed wildlife, g
 
 ## Pause note
 The verified pack is published and deployed (`resource-pack-26.1.2-8e3136fd1d49`, SHA-1 `37aa12d9942fb1569742a3f60946227582c87fde`); the temporary probe is removed and the normal server is running. Next: playtest density, appearance and combat before designing drops.
+
+Cycler display follow-up (2026-11-08): user reported reversed first-person views. Normal, scoped and sprinting display yaw are corrected for both hands. Ground presentation lies on its side at 0.85 scale (approximately 1.38 blocks long). The user will correct the ranged Tusken animation externally; preserve the current rig/animation data until their edited blueprint returns.
