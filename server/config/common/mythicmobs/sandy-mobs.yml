@@ -35,8 +35,8 @@ TuskenRaiderSniper:
   Modules:
     ThreatTable: true
   Skills:
-    - model{mid=ranged_raider} @self ~onSpawn
-    - model{mid=ranged_raider} @self ~onLoad
+    - model{mid=ranged_raider;h=false} @self ~onSpawn
+    - model{mid=ranged_raider;h=false} @self ~onLoad
     - skill{s=MandoTuskenCycler} @target ~onTimer:80
     - sound{s=mandomc:mobs.tuskenraider;v=1.5;p=1} @self ~onTimer:160 0.25
 

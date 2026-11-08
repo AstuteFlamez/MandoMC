@@ -5,7 +5,7 @@
       "source": "ModelEngine/blueprints/ranged_raider.bbmodel",
       "sha256": "7410f2f2da1bf13261d504d5c973e19981ab5fda58e8b50cd631915396fc5058",
       "destination": "server/config/common/modelengine/blueprints/ranged_raider.bbmodel",
-      "changes": "Normalize model ID; remove local texture path metadata; preserve embedded textures, geometry and animation. Add missing 0.6 x 1.95-block hitbox and 1.7-block eye height; original visible geometry unchanged."
+      "changes": "Normalize model ID; remove local texture path metadata. Restore the original rig, geometry and embedded texture with no added hitbox cube. Enable attack animation Override; preserve every keyframe and other animation property. MythicMobs retains the native zombie hitbox (h=false)."
     },
     {
       "source": "ModelEngine/blueprints/melee_raider.bbmodel",
