@@ -9,3 +9,5 @@ Side conversation scope: source/assets prepared locally. No server restart, runt
 Next action: deploy the new plugin, item/drop configs and pack in the main conversation, then verify hunger restoration and a Dewback death in-game.
 
 Main integration: rebuilt the combined workspace after the robe/icon/gray-pane fixes. All 52 Java tests and 1,921 focused live assertions pass: actual native consumption restores 8/4 hunger points and removes one item, old rib nutrition updates without losing quantity, 400 vendor death events per species retain the intended distribution, and one actual Dewback death creates exactly one collectible leg. The current 211-file pack already contains the verified Dewback texture alongside restored robe icons (SHA-1 47e92a5e8b5642a0dca25e6d234fb6d202e4c2a2); no replacement pack is needed.
+
+Deployment completed at 17:37:52 on 2026-11-08. The normal server starts without errors, its JAR hash matches the verified combined build, and FoodProbe is removed. Robe inventory icons, worn textures and gray one-space menu panes are retained.
