@@ -115,12 +115,6 @@
       "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
     },
     {
-      "sourcePath": "assets/minecraft/textures/item/leather_helmet_overlay.png",
-      "sourceSha256": "e2b64322d624895c9fa5b608739efd63d5bf264d65f44c78a127286a050bc3ec",
-      "destination": "assets/mandomc/textures/item/armor/robes_helmet_overlay.png",
-      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
-    },
-    {
       "sourcePath": "assets/minecraft/textures/item/leather_chestplate.png",
       "sourceSha256": "5071dd4e73dd0758cc3a0ffd348f15371bdcad40956cf4da694ec9ff72bc1881",
       "destination": "assets/mandomc/textures/item/armor/robes_chestplate.png",
@@ -133,21 +127,9 @@
       "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
     },
     {
-      "sourcePath": "assets/minecraft/textures/item/leather_leggings_overlay.png",
-      "sourceSha256": "8403e5eabda00d1c2268870877805781f260941db52b8289fddce8cbc7184fcd",
-      "destination": "assets/mandomc/textures/item/armor/robes_leggings_overlay.png",
-      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
-    },
-    {
       "sourcePath": "assets/minecraft/textures/item/leather_boots.png",
       "sourceSha256": "25d58925ff553f70b029c3c4caa5ff736d5de0438cee0bbe2416409a0b28ce6e",
       "destination": "assets/mandomc/textures/item/armor/robes_boots.png",
-      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
-    },
-    {
-      "sourcePath": "assets/minecraft/textures/item/leather_boots_overlay.png",
-      "sourceSha256": "8403e5eabda00d1c2268870877805781f260941db52b8289fddce8cbc7184fcd",
-      "destination": "assets/mandomc/textures/item/armor/robes_boots_overlay.png",
       "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
     },
     {
@@ -187,5 +169,5 @@
       "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
     }
   ],
-  "status": "E-11 and four Desert Robes pieces; original badges, lore spacing, item icons and namespaced worn equipment layers. Client robe visual check pending."
+  "status": "E-11 and Desert Robes. Robe inventory icons use original pre-colored art, white default dye tint and no vanilla overlays. Worn armor confirmed by user; revised icon rendering awaits client check."
 }

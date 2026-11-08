@@ -1,7 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "mandomc:item/armor/robes_boots",
-    "layer1": "mandomc:item/armor/robes_boots_overlay"
+    "layer0": "mandomc:item/armor/robes_boots"
   }
 }

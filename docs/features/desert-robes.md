@@ -28,3 +28,6 @@ The live Paper probe passed 80 assertions. Ten unit tests pass, including strict
 
 ## Pause note
 Robes and admin browser implemented. Crafting remains deferred. Next action: use `/mmc give` in the client and inspect all four robes, worn textures and item spacing.
+
+## Icon correction
+The recovered 32px inventory icons are already colored. They use a white default dye tint and a single model layer; explicit leather dye colors still tint them. Removed the unrelated 16px leather icon overlays and vanilla chestplate overlay, which obscured the custom silhouettes. Worn equipment layers are unchanged and were confirmed good by the user. Revised inventory appearance needs a client check.
