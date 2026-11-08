@@ -1,0 +1,38 @@
+regions:
+  survival_landing:
+    type: cuboid
+    priority: 100
+    min: {x: -176, y: -64, z: -176}
+    max: {x: -112, y: 319, z: -112}
+    members: {}
+    owners: {}
+    flags:
+      passthrough: deny
+      block-break: deny
+      block-place: deny
+      pvp: deny
+      invincible: allow
+      chest-access: deny
+      use: allow
+      damage-animals: deny
+      vehicle-place: deny
+      vehicle-destroy: deny
+      tnt: deny
+      creeper-explosion: deny
+      other-explosion: deny
+      ghast-fireball: deny
+      wither-damage: deny
+      enderdragon-block-damage: deny
+      enderman-grief: deny
+      ravager-grief: deny
+      entity-painting-destroy: deny
+      entity-item-frame-destroy: deny
+      mob-spawning: deny
+      mob-damage: deny
+      fire-spread: deny
+      lava-fire: deny
+      lighter: deny
+      pistons: deny
+      crop-trampling: deny
+      greeting: '&aProtected survival landing. Walk beyond this area to build.'
+      farewell: '&cLeaving the safe zone. PvP and building are enabled beyond this point.'

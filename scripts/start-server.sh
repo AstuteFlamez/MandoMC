@@ -7,4 +7,5 @@ if [[ ! -f paper.jar ]]; then
     exit 1
 fi
 python3 "$MANDOMC_ROOT/scripts/sync-resource-pack.py"
+cp "$MANDOMC_ROOT/docs/assets/server-icon.png" server-icon.png
 exec "$JAVA_HOME/bin/java" -Xms1G -Xmx"${MANDOMC_MAX_MEMORY:-4G}" -jar paper.jar --nogui "$@"

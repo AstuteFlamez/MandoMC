@@ -8,7 +8,7 @@ Player-facing group naming and commands must replace Factions and `/f`; the fina
 Resource planets are deferred. Initial gathering and credit income use ordinary survival resources plus activity rewards. Keep future resource-planet support outside the current milestone; the ownership table below records responsibilities, not a requirement to build every capability now.
 
 ## Runtime and code
-One local Paper process with multiple worlds; one modular MandoMC JAR. Main currently contains bootstrap and a status command. Paper 26.1.2 build 74 and its API are pinned; Java 25 is required.
+One local Paper process with multiple worlds; one modular MandoMC JAR. The arrival branch adds a protected one-way survival departure and persistent tutorial alongside bootstrap/status. Multiverse owns world spawn coordinates; MandoMC resolves and validates those before travel. Paper 26.1.2 build 74 and its API are pinned; Java 25 is required.
 
 Introduce packages as their implementation lands:
 ```text

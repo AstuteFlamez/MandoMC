@@ -3,7 +3,7 @@
 # MandoMC
 Minecraft Star Wars survival PvP server with player groups and claimed bases, developed locally in small playable slices. The group name and commands are being redesigned; see the player-experience document.
 
-Main contains the minimal Paper plugin, a pinned local server setup, and the new resource-pack source. Legacy gameplay is preserved in recovery branches and is not enabled.
+This branch contains the Paper plugin with arrival/tutorial behavior, a pinned local server setup, and the new resource-pack source. Legacy gameplay is preserved in recovery branches and is not enabled.
 
 ## Build
 Requires Java 25. The script uses MANDOMC_JAVA_HOME, the project-local JDK when present, or JAVA_HOME.

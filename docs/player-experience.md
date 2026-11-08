@@ -15,7 +15,7 @@ Advisor shortlist, not accepted names:
 These are naming recommendations, not evidence of current Minecraft player preferences. Verify command ownership and aliases when implementing the selected integration.
 
 ## Confirmed first session and recovery
-New players arrive in SpawnWorld, an existing map file the user already has. They receive a short tutorial, with its presentation still undecided. Their first goal is to travel to survival and establish a base. Survival arrivals use a fixed protected landing zone.
+New players arrive in SpawnWorld, an existing map file the user already has. The arrival slice uses a short replayable chat tutorial, shown after the required pack loads. Their first goal is to travel to survival and establish a base. Survival arrivals use a fixed protected landing zone.
 
 A solo player can create a group and claim a starter base on eligible land outside the spawn safe zone, without a credit requirement. A group creation cooldown of around three hours was suggested tentatively; neither the cooldown nor its duration is decided. Claim capacity and other later territory rules remain open.
 

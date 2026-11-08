@@ -3,12 +3,23 @@ version: '${project.version}'
 main: net.mandomc.bootstrap.MandoPlugin
 api-version: '26.1.2'
 author: AstuteFlamez
-description: MandoMC gameplay foundation
+description: MandoMC gameplay
+softdepend: [Multiverse-Core, WorldGuard]
 commands:
   mandomc:
-    description: Show the MandoMC foundation status
+    description: Check MandoMC and arrival destinations
     usage: /mandomc
     permission: mandomc.admin.status
+  tutorial:
+    description: Read the MandoMC introduction
+    usage: /tutorial
+    permission: mandomc.arrival
+  survival:
+    description: Depart from Black Spire Outpost for survival
+    usage: /survival
+    permission: mandomc.arrival
 permissions:
   mandomc.admin.status:
     default: op
+  mandomc.arrival:
+    default: true

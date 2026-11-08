@@ -1,2 +1,7 @@
-# Only implemented settings belong here. Add feature definitions with each playable slice.
 schema-version: 1
+# Enable only after importing SpawnWorld and installing the WorldGuard regions.
+arrival:
+  enabled: false
+  spawn-world: minecraft:spawnworld
+  survival-world: minecraft:overworld
+  warmup-seconds: 5

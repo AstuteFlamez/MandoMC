@@ -1,8 +1,13 @@
 # Shared gameplay configuration
-Place sanitized, intentional server-specific configuration here as each plugin is admitted.
+Keep only intentional, sanitized overrides here. Installed server `plugins/` directories and all worlds remain ignored; MandoMC Java source under `plugin/` stays tracked.
 
-Preserve vendor schemas and stable content IDs. Keep worlds, user/player data, generated caches, logs, database files and secrets out of this directory. Custom plugin defaults belong in plugin/src/main/resources; overrides here describe the development server's intended gameplay.
+## Arrival and protection
+- `mandomc.yml`: copy to the runtime MandoMC config while stopped, after importing and protecting both destinations.
+- `worldguard-spawn.yml`: WorldGuard regions for SpawnWorld; protects the entire commissioned map.
+- `worldguard-landing.yml`: WorldGuard regions for the disposable dev_world landing, x/z -176 through -112 inclusive, full build height.
 
-Public plugins are installed and boot-verified; gameplay integration is pending. Do not copy the old plugins directory wholesale.
+The two region files are configuration only; they contain no map assets. On a fresh setup copy each to `WorldGuard/worlds/<world-name>/regions.yml`. If regions already exist, merge the named definitions deliberately rather than replacing the file. See [arrival setup](../../README.md#arrival-and-protection) for import and Multiverse settings. Spawn coordinates belong to Multiverse/world spawn settings; MandoMC resolves those rather than maintaining another coordinate copy.
 
-The only initial vendor override is WeaponMechanics `Resource_Pack_Download.Automatically_Send_To_Player: false`. Apply that key within its generated config, preserving other vendor defaults. The new MandoMC pack is delivered through server.properties from GitHub Releases. Startup synchronizes its pinned download URL and hash.
+WorldGuard owns static regions. FactionsUUID will own player claims in the next slice. The development landing has greeting/farewell messages at its boundary; it is not a finished shuttle build.
+
+WeaponMechanics `Resource_Pack_Download.Automatically_Send_To_Player` remains false. Paper sends the required GitHub-hosted MandoMC pack. Preserve unrelated vendor configuration when applying overrides.

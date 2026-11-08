@@ -8,7 +8,7 @@
 6. Build, exercise it in-server and adjust its feel with the user.
 7. Merge the satisfactory feature and start the next from the integrated main.
 
-Recovery branches hold reference material, not ready-to-merge implementations; see recovery.md. Main currently has no gameplay modules.
+Recovery branches hold reference material, not ready-to-merge implementations; see recovery.md. The arrival branch introduces the first gameplay module; other legacy features remain recovery material.
 
 ## Local build
 Run ./scripts/build.sh to verify the Maven reactor and produce plugin/target/MandoMC.jar. Select Java 25 using MANDOMC_JAVA_HOME, the local JDK, or JAVA_HOME. Wrapper and dependency downloads stay under ignored .local.
