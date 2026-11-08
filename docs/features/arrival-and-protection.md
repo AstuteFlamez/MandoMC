@@ -30,3 +30,8 @@ Still requires a real client: map/pack appearance, first-ever join placement, pe
 Join localhost, visit SpawnWorld, and play through `/tutorial` and `/survival`; inspect the commissioned map and test the safe-zone boundary without operator bypass.
 
 Temporary interface note (2026-11-07): `/tutorial` and `/survival` are development-only commands. Their behavior is available for testing; the final onboarding/travel interface is undecided.
+
+## Spawn travel follow-up
+`/spawn` now goes to SpawnWorld; temporary `/survival` goes to SurvivalWorld (the existing dev_world under that Multiverse alias). Both use the shared three-second countdown in `teleport.yml`, replacing the earlier five-second, one-way-only departure. Looking around is allowed; changing position cancels. See [command documentation](../commands.md).
+
+Future tutorial direction: `/tutorial` will show short text and take the player to a library building in SpawnWorld with takeable, feature-specific guidebooks. This is deferred; current tutorial text is temporary.

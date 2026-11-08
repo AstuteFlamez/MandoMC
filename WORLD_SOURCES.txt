@@ -14,7 +14,7 @@ SpawnWorld (BlackSpireOutpost)
   Initial import: server/runtime/SpawnWorld/ then mv import SpawnWorld normal
   Replacement: Build a small original outpost or use a permitted free lobby; update spawn coordinates and protection.
 
-dev_world
+SurvivalWorld (Multiverse alias; existing dev_world)
   Source: Generated locally by Paper; no map purchase needed. Permanent survival terrain is not selected.
   Installation: server/runtime/dev_world/dimensions/minecraft/overworld/
   Initial import: generated under server/runtime/dev_world/

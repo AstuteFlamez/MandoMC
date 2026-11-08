@@ -7,29 +7,22 @@ import static org.junit.Assert.assertThrows;
 public class ArrivalSettingsTest {
     @Test
     public void acceptsDistinctNamespacedWorlds() {
-        var settings = new ArrivalSettings("minecraft:spawnworld", "minecraft:overworld", 5);
-        assertEquals(5, settings.warmupSeconds());
+        var settings = new ArrivalSettings("minecraft:spawnworld", "minecraft:overworld");
+        assertEquals("minecraft:overworld", settings.survivalWorld());
     }
 
     @Test
     public void rejectsMissingAndAmbiguousWorldNames() {
         for (var invalid : new String[] {null, "", "SpawnWorld", "minecraft:SpawnWorld", "../../world"}) {
             assertThrows(IllegalArgumentException.class,
-                    () -> new ArrivalSettings(invalid, "minecraft:overworld", 5));
+                    () -> new ArrivalSettings(invalid, "minecraft:overworld"));
         }
     }
 
     @Test
     public void rejectsSurvivalPointingToProtectedOutpost() {
         assertThrows(IllegalArgumentException.class,
-                () -> new ArrivalSettings("minecraft:spawnworld", "minecraft:spawnworld", 5));
+                () -> new ArrivalSettings("minecraft:spawnworld", "minecraft:spawnworld"));
     }
 
-    @Test
-    public void rejectsInvalidWarmups() {
-        for (int seconds : new int[] {-1, 0, 31, Integer.MAX_VALUE}) {
-            assertThrows(IllegalArgumentException.class,
-                    () -> new ArrivalSettings("minecraft:spawnworld", "minecraft:overworld", seconds));
-        }
-    }
 }

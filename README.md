@@ -46,3 +46,5 @@ The new pack is maintained in this repository. [MandoPack](https://github.com/As
 The original history is preserved. The full previous main is available at bilal/legacy-main-2026-11-05 and tag legacy/pre-rebuild-2026-11-05.
 
 Map acquisition, installation and replacement notes: [WORLD_SOURCES.txt](WORLD_SOURCES.txt).
+
+[Command catalogue and shared teleport architecture](docs/commands.md).

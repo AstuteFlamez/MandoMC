@@ -13,6 +13,7 @@ import java.util.UUID;
 import net.mandomc.gameplay.arrival.ArrivalDestinations;
 import net.mandomc.gameplay.arrival.ArrivalListener;
 import net.mandomc.gameplay.arrival.ArrivalSettings;
+import net.mandomc.gameplay.travel.TeleportService;
 import net.mandomc.integrations.regions.WorldGuardArrivalProtection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -29,7 +30,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /** Run only in the local development server. Player proxies never connect or write player files. */
 public final class ArrivalProbe extends JavaPlugin {
-    private final List<ArrivalListener> listeners = new ArrayList<>();
+    private final List<TeleportService> listeners = new ArrayList<>();
     private int checks;
 
     @Override
@@ -39,13 +40,13 @@ public final class ArrivalProbe extends JavaPlugin {
                 verify();
             } catch (Throwable error) {
                 getLogger().log(java.util.logging.Level.SEVERE, "ARRIVAL PROBE FAILED", error);
-                listeners.forEach(ArrivalListener::close);
+                listeners.forEach(TeleportService::close);
             }
         }, 20L);
     }
 
     private void verify() throws Exception {
-        var settings = new ArrivalSettings("minecraft:spawnworld", "minecraft:overworld", 1);
+        var settings = new ArrivalSettings("minecraft:spawnworld", "minecraft:overworld");
         var protection = new WorldGuardArrivalProtection();
         var destinations = new ArrivalDestinations(settings, protection);
         destinations.validate();
@@ -77,12 +78,25 @@ public final class ArrivalProbe extends JavaPlugin {
             expectFailure(() -> protection.requireProtected(location), "unsafe arrival outside region rejected");
         }
         expectFailure(() -> new ArrivalDestinations(new ArrivalSettings("minecraft:missing_world",
-                "minecraft:overworld", 1), protection).validate(), "missing destination rejected");
+                "minecraft:overworld"), protection).validate(), "missing destination rejected");
 
         var plugin = (JavaPlugin) Bukkit.getPluginManager().getPlugin("MandoMC");
         var language = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "messages.yml"));
         var listener = new ArrivalListener(this, settings, destinations, language);
-        listeners.add(listener);
+        var travelConfig = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "teleport.yml"));
+        travelConfig.set("warmup-seconds", 3);
+        var travel = new TeleportService(this, travelConfig, language);
+        listeners.add(travel);
+        check(Bukkit.getPluginCommand("spawn").getPlugin().getName().equals("MandoMC"), "spawn owned by MandoMC");
+        var looking = new TestPlayer(landing);
+        travel.request(looking.player, destinations::spawn);
+        var rotated = landing.clone(); rotated.setYaw(140); rotated.setPitch(-75);
+        travel.onMove(new PlayerMoveEvent(looking.player, landing, rotated));
+        var tagged = new TestPlayer(landing);
+        travel.tagCombat(tagged.player);
+        travel.request(tagged.player, destinations::spawn);
+        var failed = new TestPlayer(landing);
+        travel.request(failed.player, () -> { throw new IllegalStateException("Unavailable test world"); });
         var learner = new TestPlayer(spawn);
         listener.onPack(new PlayerResourcePackStatusEvent(learner.player, UUID.randomUUID(),
                 PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD));
@@ -99,31 +113,52 @@ public final class ArrivalProbe extends JavaPlugin {
         listener.tutorial(returning.player);
         check(returning.messages == firstMessages, "tutorial can be replayed manually");
 
+        var denied = new TestPlayer(landing);
+        denied.allowTeleport = false;
+        travel.request(denied.player, destinations::spawn);
+        var stale = new TestPlayer(landing);
+        int[] resolutions = {0};
+        travel.request(stale.player, () -> {
+            if (++resolutions[0] > 1) throw new IllegalStateException("Destination removed during countdown");
+            return destinations.spawn();
+        });
+        int startedTick = Bukkit.getCurrentTick();
         var completed = new TestPlayer(spawn);
-        listener.depart(completed.player);
-        listener.depart(completed.player);
+        travel.request(completed.player, destinations::survival);
+        travel.request(completed.player, destinations::survival);
         var moved = new TestPlayer(spawn);
-        listener.depart(moved.player);
-        listener.onMove(new PlayerMoveEvent(moved.player, spawn, spawn.clone().add(1, 0, 0)));
+        travel.request(moved.player, destinations::survival);
+        travel.onMove(new PlayerMoveEvent(moved.player, spawn, spawn.clone().add(1, 0, 0)));
         var quit = new TestPlayer(spawn);
-        listener.depart(quit.player);
-        listener.onQuit(new PlayerQuitEvent(quit.player, (net.kyori.adventure.text.Component) null));
+        travel.request(quit.player, destinations::survival);
+        travel.onQuit(new PlayerQuitEvent(quit.player, (net.kyori.adventure.text.Component) null));
         var outside = new TestPlayer(landing);
-        listener.depart(outside.player);
+        travel.request(outside.player, destinations::spawn);
         var mounted = new TestPlayer(spawn);
         mounted.mounted = true;
-        listener.depart(mounted.player);
+        travel.request(mounted.player, destinations::survival);
         var changedWorld = new TestPlayer(spawn);
-        listener.depart(changedWorld.player);
+        travel.request(changedWorld.player, destinations::survival);
         changedWorld.location = landing;
 
         getServer().getScheduler().runTaskLater(this, () -> {
+            check(completed.teleports == 0, "does not teleport before the full three seconds");
+        }, 59L);
+        getServer().getScheduler().runTaskLater(this, () -> {
             try {
+                check(completed.titleText.subList(0, 3).equals(List.of("3", "2", "1")), "countdown titles are exactly 3, 2, 1");
+                check(completed.teleportTick - startedTick >= 60, "teleport waits at least 60 server ticks");
                 check(completed.teleports == 1 && completed.location.getWorld().equals(landing.getWorld()),
                         "one warmup produces one survival teleport, even after duplicate command");
                 check(moved.teleports == 0, "movement cancels departure");
                 check(quit.teleports == 0, "disconnect cancels departure");
-                check(outside.teleports == 0, "cannot depart from survival or bypass future combat travel rules");
+                check(outside.teleports == 1 && outside.location.getWorld().equals(spawn.getWorld()), "spawn returns to SpawnWorld");
+                check(looking.teleports == 1, "looking around does not cancel teleport");
+                check(tagged.teleports == 0, "combat-tagged travel blocked");
+                check(failed.teleports == 0, "missing destination never teleports");
+                check(denied.teleports == 0 && denied.titles == 3, "cancelled teleport has no success title/effect");
+                check(stale.teleports == 0, "destination revalidated at completion");
+                check(completed.titles >= 2 && completed.sounds >= 1, "countdown and success titles plus sound emitted");
                 check(mounted.teleports == 0, "mounted departure refused");
                 check(changedWorld.teleports == 0, "world change during warmup cancels departure");
                 getLogger().info("ARRIVAL PROBE PASSED: " + checks
@@ -131,9 +166,9 @@ public final class ArrivalProbe extends JavaPlugin {
             } catch (Throwable error) {
                 getLogger().log(java.util.logging.Level.SEVERE, "ARRIVAL PROBE FAILED", error);
             } finally {
-                listener.close();
+                travel.close();
             }
-        }, 25L);
+        }, 65L);
     }
 
     private void expectFailure(Runnable action, String label) {
@@ -156,7 +191,7 @@ public final class ArrivalProbe extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        listeners.forEach(ArrivalListener::close);
+        listeners.forEach(TeleportService::close);
     }
 
     private static final class TestPlayer {
@@ -166,8 +201,13 @@ public final class ArrivalProbe extends JavaPlugin {
         private final Player player;
         private Location location;
         private boolean mounted;
+        private boolean allowTeleport = true;
         private int teleports;
         private int messages;
+        private int titles;
+        private final List<String> titleText = new ArrayList<>();
+        private int teleportTick;
+        private int sounds;
 
         private TestPlayer(Location location) {
             this.location = location.clone();
@@ -183,8 +223,16 @@ public final class ArrivalProbe extends JavaPlugin {
                         case "getPassengers" -> List.of();
                         case "getEffectivePermissions" -> java.util.Set.of();
                         case "getGameMode" -> org.bukkit.GameMode.SURVIVAL;
+                        case "showTitle" -> {
+                            titles++;
+                            titleText.add(net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
+                                    .serialize(((net.kyori.adventure.title.Title) args[0]).title()));
+                            yield null;
+                        }
+                        case "clearTitle" -> null;
+                        case "playSound" -> { sounds++; yield null; }
                         case "sendMessage" -> { messages++; yield null; }
-                        case "teleport" -> { this.location = ((Location) args[0]).clone(); teleports++; yield true; }
+                        case "teleport" -> { if (!allowTeleport) yield false; this.location = ((Location) args[0]).clone(); teleports++; teleportTick = Bukkit.getCurrentTick(); yield true; }
                         case "equals" -> proxy == args[0];
                         case "hashCode" -> id.hashCode();
                         case "toString" -> "ArrivalProbe " + id;

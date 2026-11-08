@@ -11,3 +11,5 @@ The two region files are configuration only; they contain no map assets. On a fr
 WorldGuard owns static regions. FactionsUUID will own player claims in the next slice. The development landing has greeting/farewell messages at its boundary; it is not a finished shuttle build.
 
 WeaponMechanics `Resource_Pack_Download.Automatically_Send_To_Player` remains false. Paper sends the required GitHub-hosted MandoMC pack. Preserve unrelated vendor configuration when applying overrides.
+
+`teleport.yml` is the shared spawn/survival countdown and effect configuration; copy it to the MandoMC runtime directory while stopped. Restore the survival alias with `mv modify dev_world set alias SurvivalWorld`.

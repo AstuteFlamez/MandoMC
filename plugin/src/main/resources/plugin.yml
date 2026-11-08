@@ -10,15 +10,23 @@ commands:
     description: Check MandoMC and arrival destinations
     usage: /mandomc
     permission: mandomc.admin.status
+  spawn:
+    description: Return to SpawnWorld after standing still
+    usage: /spawn
+    permission: mandomc.travel.spawn
   tutorial:
     description: Read the MandoMC introduction
     usage: /tutorial
     permission: mandomc.arrival
   survival:
-    description: Depart from Black Spire Outpost for survival
+    description: Travel to SurvivalWorld after standing still
     usage: /survival
-    permission: mandomc.arrival
+    permission: mandomc.travel.survival
 permissions:
+  mandomc.travel.spawn:
+    default: true
+  mandomc.travel.survival:
+    default: true
   mandomc.admin.status:
     default: op
   mandomc.arrival:

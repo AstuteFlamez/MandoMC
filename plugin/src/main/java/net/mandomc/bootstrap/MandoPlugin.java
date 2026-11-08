@@ -18,6 +18,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     private ArrivalListener arrival;
     private ArrivalDestinations destinations;
     private boolean failed;
+    private net.mandomc.gameplay.travel.TeleportService travel;
 
     @Override
     public void onEnable() {
@@ -40,13 +41,10 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             }
             return true;
         });
-        for (var name : new String[] {"tutorial", "survival"}) {
+        for (var name : new String[] {"tutorial", "survival", "spawn"}) {
             Objects.requireNonNull(getCommand(name)).setExecutor((sender, command, label, arguments) -> {
-                if (arrival == null) {
-                    sender.sendMessage(Component.text("Arrival is unavailable. Please contact a server administrator."));
-                    return true;
-                }
-                return command.getName().equals("tutorial") ? arrival.tutorial(sender) : arrival.depart(sender);
+                sender.sendMessage(Component.text("Travel is unavailable. Please contact a server administrator."));
+                return true;
             });
         }
         try {
@@ -61,7 +59,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 throw new IllegalStateException("arrival.enabled requires WorldGuard");
             }
             var settings = new ArrivalSettings(getConfig().getString("arrival.spawn-world"),
-                    getConfig().getString("arrival.survival-world"), getConfig().getInt("arrival.warmup-seconds", -1));
+                    getConfig().getString("arrival.survival-world"));
             destinations = new ArrivalDestinations(settings, new WorldGuardArrivalProtection());
             destinations.validate();
             if (!new File(getDataFolder(), "messages.yml").isFile()) {
@@ -69,9 +67,20 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             }
             var language = new YamlConfiguration();
             language.load(new File(getDataFolder(), "messages.yml"));
+            // New message keys fall back to bundled defaults without overwriting operator translations.
+            try (var reader = new java.io.InputStreamReader(Objects.requireNonNull(getResource("messages.yml")),
+                    java.nio.charset.StandardCharsets.UTF_8)) {
+                language.setDefaults(YamlConfiguration.loadConfiguration(reader));
+            }
             arrival = new ArrivalListener(this, settings, destinations, language);
             getServer().getPluginManager().registerEvents(arrival, this);
-            getLogger().info("Arrival enabled: protected SpawnWorld -> survival; /tutorial and /survival ready.");
+            if (!new File(getDataFolder(), "teleport.yml").isFile()) saveResource("teleport.yml", false);
+            var teleportConfig = new YamlConfiguration();
+            teleportConfig.load(new File(getDataFolder(), "teleport.yml"));
+            travel = new net.mandomc.gameplay.travel.TeleportService(this, teleportConfig, language);
+            getServer().getPluginManager().registerEvents(travel, this);
+            net.mandomc.commands.ArrivalCommands.register(this, arrival, destinations, travel);
+            getLogger().info("Arrival enabled: protected SpawnWorld -> survival; /spawn, /survival and temporary /tutorial ready.");
         } catch (Exception | LinkageError error) {
             failed = true;
             getLogger().severe("Arrival unavailable; player logins blocked until repaired: " + error.getMessage());
@@ -88,8 +97,6 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        if (arrival != null) {
-            arrival.close();
-        }
+        if (travel != null) travel.close();
     }
 }

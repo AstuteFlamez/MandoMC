@@ -4,4 +4,3 @@ arrival:
   enabled: true
   spawn-world: minecraft:spawnworld
   survival-world: minecraft:overworld
-  warmup-seconds: 5

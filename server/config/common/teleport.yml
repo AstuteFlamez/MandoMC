@@ -1,0 +1,12 @@
+# Shared by every MandoMC teleport route. Restart after editing.
+schema-version: 1
+warmup-seconds: 3
+# Provisional PvP travel block until the full combat feature owns tagging.
+combat-block-seconds: 30
+effects:
+  enabled: true
+  volume: 0.65
+  countdown-sound: minecraft:block.note_block.chime
+  arrival-sound: minecraft:entity.enderman.teleport
+  cancel-sound: minecraft:block.note_block.bass
+  spiral-ticks: 30

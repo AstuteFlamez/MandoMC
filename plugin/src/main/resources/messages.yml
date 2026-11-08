@@ -12,3 +12,17 @@ departing: '<gold>Departing in {seconds} seconds. Stand still; movement or damag
 cancelled: '<yellow>Departure cancelled. Type /survival to try again.</yellow>'
 arrived: '<green>You have reached the protected survival landing. Walk out until the leaving-safe-zone message appears; you can build beyond it.</green>'
 already-departing: '<yellow>Your shuttle is preparing. Stand still.</yellow>'
+
+teleport:
+  countdown-title: '<gradient:#FFCC66:#55FFFF><bold><seconds></bold></gradient>'
+  countdown-subtitle: '<gray>Preparing transport… <white>Stand still</white></gray>'
+  success-title: '<aqua><bold>TRANSPORT COMPLETE</bold></aqua>'
+  success-subtitle: '<gray>You have arrived.</gray>'
+  moved: '<red>You moved. Teleportation cancelled.</red>'
+  damaged: '<red>You took damage. Teleportation cancelled.</red>'
+  interrupted: '<yellow>Teleportation cancelled.</yellow>'
+  unavailable: '<red>That destination is unavailable. Teleportation cancelled.</red>'
+  combat: '<red>You cannot teleport during combat.</red>'
+  mounted: '<yellow>Dismount and leave passengers behind before teleporting.</yellow>'
+  pending: '<yellow>You already have a teleport counting down.</yellow>'
+  players-only: '<gray>Use this command in game.</gray>'

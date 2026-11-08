@@ -34,7 +34,7 @@ All 12 plugins enabled together. Verified `/mandomc`, console plugin list, Facti
 Expected startup notices: newer Minecraft/Paper is available; ModelEngine has no MineSkin API key for optional skin generation; Java reports a third-party Unsafe deprecation. These did not prevent startup.
 
 ## What is ready
-SpawnWorld, a protected survival landing, a replayable tutorial and a one-way `/survival` departure are deployed locally. Custom weapons, group branding, raids, events and vehicles still need implementation. Default FactionsUUID rules and commands are temporary vendor behavior. This remains a local development build.
+SpawnWorld, a protected survival landing, a replayable tutorial and shared `/spawn` and `/survival` travel are deployed locally. Custom weapons, group branding, raids, events and vehicles still need implementation. Default FactionsUUID rules and commands are temporary vendor behavior. This remains a local development build.
 
 EssentialsX is the credit balance provider. No EssentialsChat/Spawn/Protect modules were installed. Other plugins' kits, travel, selling and raid defaults must be restricted when their feature slices are implemented.
 
@@ -53,7 +53,7 @@ cp plugin/target/MandoMC.jar server/runtime/plugins/MandoMC.jar
 The runtime itself is not a Git backup. A clean clone needs Java 25, the Paper artifact saved as `server/runtime/paper.jar`, and each locked vendor artifact in `server/runtime/plugins/`. Build/copy MandoMC, copy the local server.properties template on initial setup, and accept Minecraft's EULA before starting. Downloaded plugin dependencies and defaults are generated on the first boot. Do not overwrite an existing server.properties or world with setup templates.
 
 ## Arrival and protection
-The supplied BlackSpireOutpost map is imported as SpawnWorld (`minecraft:spawnworld`). Its whole world is protected. New players arrive there; existing players retain their saved login location. As an operator, use `/mv tp SpawnWorld` to visit, `/tutorial` for the introduction, then `/survival` and stand still for five seconds. This route only works from SpawnWorld. A future group/combat slice supplies general return and home travel.
+The supplied BlackSpireOutpost map is imported as SpawnWorld (`minecraft:spawnworld`). Its whole world is protected. New players arrive there; existing players retain their saved login location. As an operator, use `/mv tp SpawnWorld` to visit, `/tutorial` for the introduction, then `/survival` and stand still for three seconds. `/spawn` returns to SpawnWorld. Looking around is allowed; walking/jumping cancels. Group home travel remains future work.
 
 The survival landing is in `dev_world`, around (-143.5, 73, -143.5). Protection covers x/z -176 through -112 inclusive and the full build height. You see a message when leaving protection; the terrain is still a disposable development world. Operator accounts normally bypass WorldGuard: test with a non-op account, or use `/rg bypass` deliberately for your own test. `/mandomc` checks both destinations and their protection.
 
@@ -75,3 +75,8 @@ The paid/commissioned assets are not a Git backup. Keep their originals and runt
 Temporary interface note (2026-11-07): `/tutorial` and `/survival` are development-only commands. Their behavior is available for testing; the final onboarding/travel interface is undecided.
 
 See [runtime configuration policy](runtime/README.md) and [world sources](../WORLD_SOURCES.txt).
+
+## Spawn travel follow-up
+`/spawn` now goes to SpawnWorld; temporary `/survival` goes to SurvivalWorld (the existing dev_world under that Multiverse alias). Both use the shared three-second countdown in `teleport.yml`, replacing the earlier five-second, one-way-only departure. Looking around is allowed; changing position cancels. See [command documentation](../docs/commands.md).
+
+Future tutorial direction: `/tutorial` will show short text and take the player to a library building in SpawnWorld with takeable, feature-specific guidebooks. This is deferred; current tutorial text is temporary.

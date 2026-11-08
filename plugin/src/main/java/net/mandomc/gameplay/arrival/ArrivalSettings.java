@@ -1,15 +1,13 @@
 package net.mandomc.gameplay.arrival;
 
-public record ArrivalSettings(String spawnWorld, String survivalWorld, int warmupSeconds) {
+public record ArrivalSettings(String spawnWorld, String survivalWorld) {
     public ArrivalSettings {
         validateWorld("arrival.spawn-world", spawnWorld);
         validateWorld("arrival.survival-world", survivalWorld);
         if (spawnWorld.equals(survivalWorld)) {
             throw new IllegalArgumentException("config.yml: arrival worlds must be different");
         }
-        if (warmupSeconds < 1 || warmupSeconds > 30) {
-            throw new IllegalArgumentException("config.yml: arrival.warmup-seconds must be between 1 and 30");
-        }
+
     }
 
     private static void validateWorld(String key, String value) {
