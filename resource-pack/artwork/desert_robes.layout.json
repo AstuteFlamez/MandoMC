@@ -1,0 +1,305 @@
+{
+  "source": "desert_robes.png",
+  "sourceSha256": "11eafb3eed38536869f62ee04895f22a7d9e975ad81837cb381d5e0a658d9539",
+  "sourceSize": [
+    128,
+    64
+  ],
+  "origin": "User-supplied replacement image, 2026-11-08",
+  "sampling": "nearest-neighbor, original RGBA pixels; rectangles are x,y,width,height",
+  "humanoid": "Source copied unchanged; native armor slots select the head, body/arms and boot regions.",
+  "humanoidLeggings": {
+    "torsoOpeningFill": {
+      "source": [
+        52,
+        48,
+        4,
+        16
+      ],
+      "target": [
+        40,
+        40,
+        16,
+        24
+      ],
+      "rule": "Only transparent pixels in the copied torso front"
+    },
+    "torso": {
+      "source": [
+        32,
+        32,
+        48,
+        32
+      ],
+      "target": [
+        32,
+        32,
+        48,
+        32
+      ]
+    },
+    "panels": [
+      {
+        "face": "outer",
+        "source": [
+          32,
+          48,
+          8,
+          16
+        ],
+        "target": [
+          0,
+          40,
+          8,
+          24
+        ]
+      },
+      {
+        "face": "front",
+        "source": [
+          52,
+          48,
+          4,
+          16
+        ],
+        "target": [
+          8,
+          40,
+          8,
+          24
+        ]
+      },
+      {
+        "face": "inner",
+        "source": [
+          56,
+          48,
+          8,
+          16
+        ],
+        "target": [
+          16,
+          40,
+          8,
+          24
+        ]
+      },
+      {
+        "face": "back",
+        "source": [
+          64,
+          48,
+          8,
+          16
+        ],
+        "target": [
+          24,
+          40,
+          8,
+          24
+        ]
+      },
+      {
+        "face": "top",
+        "source": [
+          32,
+          48,
+          8,
+          8
+        ],
+        "target": [
+          8,
+          32,
+          8,
+          8
+        ]
+      },
+      {
+        "face": "sole",
+        "source": [
+          64,
+          56,
+          8,
+          8
+        ],
+        "target": [
+          16,
+          32,
+          8,
+          8
+        ]
+      }
+    ]
+  },
+  "icons": {
+    "robes_helmet": {
+      "size": [
+        32,
+        32
+      ],
+      "crops": [
+        {
+          "source": [
+            16,
+            16,
+            16,
+            16
+          ],
+          "target": [
+            8,
+            8,
+            16,
+            16
+          ]
+        }
+      ]
+    },
+    "robes_chestplate": {
+      "size": [
+        32,
+        32
+      ],
+      "crops": [
+        {
+          "source": [
+            40,
+            40,
+            16,
+            24
+          ],
+          "target": [
+            8,
+            4,
+            16,
+            24
+          ]
+        },
+        {
+          "source": [
+            88,
+            40,
+            8,
+            24
+          ],
+          "target": [
+            0,
+            4,
+            8,
+            24
+          ]
+        },
+        {
+          "source": [
+            88,
+            40,
+            8,
+            24
+          ],
+          "target": [
+            24,
+            4,
+            8,
+            24
+          ],
+          "mirrorX": true
+        }
+      ]
+    },
+    "robes_leggings": {
+      "size": [
+        32,
+        32
+      ],
+      "crops": [
+        {
+          "source": [
+            40,
+            36,
+            16,
+            4
+          ],
+          "target": [
+            8,
+            3,
+            16,
+            4
+          ]
+        },
+        {
+          "texture": "humanoid_leggings",
+          "source": [
+            8,
+            40,
+            8,
+            24
+          ],
+          "target": [
+            8,
+            7,
+            8,
+            24
+          ]
+        },
+        {
+          "texture": "humanoid_leggings",
+          "source": [
+            8,
+            40,
+            8,
+            24
+          ],
+          "target": [
+            16,
+            7,
+            8,
+            24
+          ],
+          "mirrorX": true
+        }
+      ],
+      "transparentCutout": [
+        15,
+        14,
+        2,
+        17
+      ]
+    },
+    "robes_boots": {
+      "size": [
+        32,
+        32
+      ],
+      "crops": [
+        {
+          "source": [
+            8,
+            51,
+            8,
+            13
+          ],
+          "target": [
+            6,
+            9,
+            8,
+            13
+          ]
+        },
+        {
+          "source": [
+            8,
+            51,
+            8,
+            13
+          ],
+          "target": [
+            18,
+            9,
+            8,
+            13
+          ],
+          "mirrorX": true
+        }
+      ]
+    }
+  }
+}

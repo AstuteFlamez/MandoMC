@@ -4,22 +4,16 @@
       {
         "texture": "mandomc:desert_robes",
         "dyeable": {
-          "color_when_undyed": 10511680
+          "color_when_undyed": 16777215
         }
-      },
-      {
-        "texture": "mandomc:desert_robes_overlay"
       }
     ],
     "humanoid_leggings": [
       {
         "texture": "mandomc:desert_robes",
         "dyeable": {
-          "color_when_undyed": 10511680
+          "color_when_undyed": 16777215
         }
-      },
-      {
-        "texture": "mandomc:desert_robes_overlay"
       }
     ]
   }

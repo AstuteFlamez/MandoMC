@@ -40,3 +40,10 @@ Confirmed defect: robe dye defaults were RGB-only integers (initially 10511680, 
 Correction changes only four inventory tint defaults to -1. Models, PNGs, native dye behavior and worn armor are unchanged. The pack builder now rejects nonopaque integer dye defaults, with regression tests for both previous invalid values and valid vanilla/white values. Explicit RGB-vector defaults and equipment color_when_undyed remain separate formats. Client hotbar confirmation is still required.
 
 References: https://www.minecraft.net/en-us/article/minecraft-java-edition-26-1 documents the separate item shader and UI lightmap; exact tint behavior was verified in the installed 26.1.2 client classes rather than inferred from older pack guides.
+
+## Replacement artwork (2026-11-08)
+Branch: `bilal/robes-texture`. The user-supplied 128×64 brown robe sheet replaces the worn outer armor byte-for-byte. Matching pants are cut from its dark cloth panels, with nearest-neighbor scaling and fabric beneath the open tunic. The four 32×32 inventory icons are cut from the hood, tunic/sleeves, pants and boot-wrap fronts. The original input and exact crop rectangles are retained in `resource-pack/artwork/desert_robes.png` and `desert_robes.layout.json`, outside the distributed pack source.
+
+Both equipment layers now use white as the undyed color so the supplied colors survive rendering. Obsolete leather overlays are removed; explicit dyes tint the replacement artwork. Inventory dye defaults remain opaque white (`-1`). Armor IDs, stats, item models and equipment asset keys are unchanged.
+
+Verification: the outer texture is byte-identical to the attachment; all six pants faces and all four icons match the recorded crop recipe. A front/back texture preview was inspected. The 49-file resource pack builds, nine pack tests pass, and `./scripts/build.sh -o` passes all 33 Java tests. This branch is a local preview, not a published server pack. Next action: load the built ZIP in a matching client and inspect all four pieces, separately and together, including inventory icons and explicit dyeing.
