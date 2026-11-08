@@ -32,4 +32,4 @@ Regenerate through the pinned ModelEngine, then import its generated resource pa
 Five unit tests cover 10,000 patrol rolls, all level bands, no mixed wildlife, group capacity reservations, configuration bounds and mob rifle scaling. Existing Java and resource-pack tests pass. 47 Java tests, nine pack tests and 76 live Paper assertions pass. Live checks include real spawning, all five models, mob level and health scaling, cycler item generation, real player damage with retained hit-location modifiers, combat tags, safe zones, vanilla interaction denial, and the Mythic skill firing a real CyclerRifle projectile. Simulated players are unregistered native entities; real client visuals, automatic AI targeting/encounter density and multiplayer combat feel remain to be playtested.
 
 ## Pause note
-Next: publish/deploy the verified pack and playtest density, appearance and combat before designing drops.
+The verified pack is published and deployed (`resource-pack-26.1.2-8e3136fd1d49`, SHA-1 `37aa12d9942fb1569742a3f60946227582c87fde`); the temporary probe is removed and the normal server is running. Next: playtest density, appearance and combat before designing drops.
