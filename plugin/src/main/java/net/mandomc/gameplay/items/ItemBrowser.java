@@ -48,6 +48,7 @@ public final class ItemBrowser implements Listener {
             this.page = page;
             this.pages = pages;
             inventory = Bukkit.createInventory(this, 54, title);
+            net.mandomc.gameplay.ui.MenuItems.fill(inventory);
         }
         @Override public Inventory getInventory() { return inventory; }
     }

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "archiveSha256": "32a578caac7c4c8976868abf0aa20f545c9926eb8d6382b94ccf5e986c95cce5",
+  "recoveredAssets": [
+    {
+      "sourcePath": "assets/minecraft/textures/custom/consumables/smoked_massiff_ribs.png",
+      "sourceSha256": "56f7125ddb74b481c0cc40c9222a6f3cb8047dde4fe54b4149ba0426908590ed",
+      "destination": "assets/mandomc/textures/item/consumables/massiff_ribs.png",
+      "changes": "Unchanged legacy texture."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/consumable.png",
+      "sourceSha256": "e34051d9bd409e12dfdc3b74c474926931effbf998197450c819dd2957c7759d",
+      "destination": "assets/mandomc/textures/font/item_labels/consumable.png",
+      "changes": "Unchanged legacy texture."
+    }
+  ]
+}

@@ -6,6 +6,12 @@
       "sourceSha256": "3b4348697dfc55b3253bf7b884e3d2b8422298d287df5448920597cbfdee61cb",
       "destination": "assets/mandomc/textures/item/materials/bantha_hide.png",
       "changes": "Rename ronto_hide to bantha_hide; texture bytes unchanged. Legacy Bantha Hide CMD 155 mapped to this texture."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/material.png",
+      "sourceSha256": "1dd001b0fd4e411e00da8de78edca3ea3fbc8e8c3bc415dd17da25eed6633f5d",
+      "destination": "assets/mandomc/textures/font/item_labels/material.png",
+      "changes": "Unchanged legacy material category badge, glyph \u010c."
     }
   ]
 }

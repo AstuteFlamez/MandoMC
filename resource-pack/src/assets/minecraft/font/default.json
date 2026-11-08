@@ -6,7 +6,7 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "Đ"
+        "\u0110"
       ]
     },
     {
@@ -15,7 +15,7 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "đ"
+        "\u0111"
       ]
     },
     {
@@ -24,7 +24,7 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "ģ"
+        "\u0123"
       ]
     },
     {
@@ -33,7 +33,7 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "ĉ"
+        "\u0109"
       ]
     },
     {
@@ -42,7 +42,7 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "Ė"
+        "\u0116"
       ]
     },
     {
@@ -51,7 +51,25 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "ĕ"
+        "\u0115"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/consumable.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u010b"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/material.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u010c"
       ]
     }
   ]

@@ -104,6 +104,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             itemCommands = new net.mandomc.commands.ItemCommand(this, items, language, root);
             try {
                 items.reload();
+            new net.mandomc.gameplay.items.ItemPresentationRefresh(this, items);
                 getLogger().info("Loaded " + items.ids().size() + " custom items.");
             } catch (Exception error) {
                 getLogger().severe("Custom items unavailable; repair config and /mandomc items reload: " + error.getMessage());

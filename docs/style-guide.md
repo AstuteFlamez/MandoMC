@@ -57,3 +57,8 @@ Accepted 2026-11-08; applies to weapons, ammo and future custom items.
 ## Validation
 Automate formatting and build checks during bootstrap. Until a formatter is configured, do not claim style is machine-enforced.
 Prefer tests for rules and failure paths. Use in-server checks for event ordering, resource-pack appearance, vehicle motion and multi-plugin behavior.
+
+## Inventory menus
+- All player-facing custom inventory menus, including command menus, fill unused slots with light gray stained glass panes with an empty name and hidden tooltip. Use `MenuItems.fill` for this shared background; controls and content replace the panes.
+- Recipe grid slots are the exception: unused positions must remain actually empty (air), including unused rows and columns of the 3x3 grid. Do not put filler panes or labels in these cells.
+- Filler panes are decorative and cannot be taken. Preserve cancellation of click/shift/hotbar/drag transfer paths.

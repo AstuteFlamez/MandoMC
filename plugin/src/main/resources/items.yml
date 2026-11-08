@@ -1,10 +1,13 @@
 schema-version: 1
-# Only badge images shipped in the current pack may be referenced here.
+# Image badges must exist in the pack; categories without art use a text label.
 rarities:
+  common: 'đ'
   uncommon: 'Ė'
   rare: 'ĕ'
 categories:
+  materials: 'Č'
   armor: 'ĉ'
+  consumables: 'ċ'
   weapons: 'Đ'
 # Explicitly list shipped vendor content; WeaponMechanics demo weapons stay out of the browser.
 external-items:
