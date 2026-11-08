@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/assets/server-icon.png" alt="MandoMC server logo" width="128" height="128"></p>
+
 # MandoMC
 Minecraft Star Wars survival PvP server with player groups and claimed bases, developed locally in small playable slices. The group name and commands are being redesigned; see the player-experience document.
 

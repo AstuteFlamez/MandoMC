@@ -29,3 +29,29 @@ server/runtime/
 # Python tool caches
 __pycache__/
 *.py[cod]
+
+# Only source-controlled setup files belong directly under server/.
+# This also excludes commissioned worlds with arbitrary folder names.
+/server/*
+!/server/README.md
+!/server/start.command
+!/server/paper.lock.json
+!/server/plugins.lock.json
+!/server/plugins.catalog.json
+!/server/config/
+# Never track installed plugins or world payloads, even inside config subfolders.
+/server/**/plugins/
+/server/**/worlds/
+/server/**/region/
+/server/**/entities/
+/server/**/poi/
+/server/**/playerdata/
+/server/**/advancements/
+/server/**/stats/
+/server/**/DIM*/
+/server/**/dimensions/
+/server/**/level.dat*
+/server/**/uid.dat
+/server/**/session.lock
+/server/**/*.mca
+/server/**/*.mcc
