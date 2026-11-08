@@ -2,7 +2,7 @@
 Updated: 2026-11-08
 
 ## Milestone
-Gaffi size/grip follow-up: increase physical item display scales by 25% and raise both third-person hand poses by one model pixel. Inventory pose and geometry preserved. Pack validation/publication pending; client grip alignment needs confirmation.
+Gaffi size/grip follow-up: increase physical item display scales by 25% and raise both third-person hand poses by one model pixel. Inventory pose and geometry preserved. Pack validation passed (202 files), published as `resource-pack-26.1.2-f9ae0dc250e4`. Normal server restarted at 17:07:49 with verified SHA-1 `f35822c1224a788ea4234bac82e0d93b9c8ff84f`. Client size/grip alignment awaits confirmation.
 
 Tusken weapons/sounds: added catalog `gaffi_stick` using native iron-sword damage, attack speed and durability, with the existing melee Tusken stick geometry. Melee/ranged death events roll one matching weapon at configurable 10% chance; wildlife/despawns do not get these weapons. Both variants use a shared voice skill with the same volume/pitch and eight-second cooldown during combat and ambient calls. 47 Java tests, nine pack tests and ten live assertions pass, including native attributes, survival exemption and 6,000 vendor death-event samples (199 gaffi, 205 cycler, zero wildlife weapons). Pack `resource-pack-26.1.2-3ae092e179b0` is published and startup verified SHA-1 `48164cd2a40414238ff47ca7175780a0ab15c081`. Normal server started at 17:05:03 with the probe removed and no startup errors. Next: client-check gaffi poses, drops and ranged voice frequency; other drops and skirt work remain deferred.
 
