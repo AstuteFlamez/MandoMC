@@ -16,3 +16,7 @@ external-items:
     kind: ammo
     vendor-id: Standard_Plasma_Cells
     category: ammo
+  cycler_rifle:
+    kind: weapon
+    vendor-id: CyclerRifle
+    category: weapons

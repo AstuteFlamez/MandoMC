@@ -1,0 +1,544 @@
+{
+  "generator": "ModelEngine R4.1.1",
+  "models": [
+    "bantha",
+    "dewback",
+    "massiff",
+    "melee_raider",
+    "ranged_raider"
+  ],
+  "files": [
+    {
+      "path": "assets/modelengine/items/bantha/body.json",
+      "sha256": "40a5336b65eb63fab104b0fead60a9d2beec4394838052bb4f007f9e14f6d86c"
+    },
+    {
+      "path": "assets/modelengine/items/bantha/head.json",
+      "sha256": "3264ea5a1287ec4e509f4bcbf7a5de9e59d4aa8f7300703544a41c557eedb926"
+    },
+    {
+      "path": "assets/modelengine/items/bantha/left_front_leg.json",
+      "sha256": "25d885afb30d95d3c9fc43c00e25784178029cba85b119265952615796c1456a"
+    },
+    {
+      "path": "assets/modelengine/items/bantha/left_horn.json",
+      "sha256": "bf600bdd6e2a4250ed4b8df9d5c92c4d69b3192e7b8ed9c34bfd4cf23becfb9f"
+    },
+    {
+      "path": "assets/modelengine/items/bantha/left_rear_leg.json",
+      "sha256": "d582ea41b048b44b004733028f34df54a446c6f6fa6fbbd1aba63852efac643c"
+    },
+    {
+      "path": "assets/modelengine/items/bantha/right_front_leg.json",
+      "sha256": "9b26b17711cf852e57019cc4b816ed1e8151a18b9dfd32dd86c37e01d5b3abd2"
+    },
+    {
+      "path": "assets/modelengine/items/bantha/right_horn.json",
+      "sha256": "9b27be5f31c90dcb81bb493d2d069deb2ae25a59af02dd74408a5b986573b42f"
+    },
+    {
+      "path": "assets/modelengine/items/bantha/right_rear_leg.json",
+      "sha256": "071b3963f67b93113037cbf2502571c76ae7e781fb9efe0a5f66ee6ef550ca57"
+    },
+    {
+      "path": "assets/modelengine/items/bantha/tail.json",
+      "sha256": "dae1f127b3c896396fa454aa9c7fd25942f739c2b392358d11b20c5719af6171"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/back_body.json",
+      "sha256": "4dbd5ddada7949e70e6a64192d0b5e5b028b4cbd70864f414f607a2fc64ce76b"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/bone.json",
+      "sha256": "a19e8aeddd8e6de797b62fb68534683421461596339dbe5922d0e10e838cc2e9"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/bone10.json",
+      "sha256": "dc0ab47dd0c56950e1a6ca0eaecc6a8aaf22b7e33b0f251d6967efdb1e624707"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/bone11.json",
+      "sha256": "1001687d6d38b097e0f4405ae630fb4753554c754a1229f2a315805f4fb8f515"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/bone13.json",
+      "sha256": "219fabdbdcab38ef3551983aca8015b6b3110872b846e71f878c7aa3aaf87767"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/bone2.json",
+      "sha256": "f4d4fc191e463436b455debac1607377dc0f57beeda98a23a1ee3a454256a8a1"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/bone3.json",
+      "sha256": "8a45879583bd5cdca79206f4bb73124ca612f48a5c392da38ab7c5cfcb7a65d4"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/bone4.json",
+      "sha256": "b5062ffd8a97d310465426a3217f5e57795fcab82a77ed5e5c358df487c09f85"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/bone5.json",
+      "sha256": "8fc733721f5cf162a865d5003e785e1c38d9c619f920379972491d83aa0c1fd7"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/bone6.json",
+      "sha256": "eed95acecbffc6ec929deb839b2412cbed73c509034fd102cd6592313be8236f"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/bone7.json",
+      "sha256": "0ef4e789b07a6fb587769b1d52a4c21db752e20810a3eb06bec646623ee5d84b"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/bone8.json",
+      "sha256": "a97b25b4598b65322f61b4a0eabef27bd4ca15a406e5bfdcb906951dca8788a7"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/bone9.json",
+      "sha256": "787846adc40575f8eb6af77e450fe172587add8f0b36987fef884b24be8a37e6"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/bottom_jaw.json",
+      "sha256": "46a78aca319c59cbd6af81ecb45425f0e2cef659592fe4ca14e96cc1c8555033"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/head.json",
+      "sha256": "d6d401d8f4b473817b85baeb81e9e45a9fd1cae069317c8ddf6f4708e05e2070"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/left_back_leg.json",
+      "sha256": "d96b1aa07c1cd5b06fcd187914a753c76f1b7b41a3a5644b535c300969d8806d"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/left_front_leg.json",
+      "sha256": "5c0cf15c907c1dcb262856f643215df04ccfed5959867a38aa603a7d85f0579b"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/right_back_leg.json",
+      "sha256": "56271310545d85fb71d08d20b4480edc15d4e607f53343f65615b9438c20606c"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/right_front_leg.json",
+      "sha256": "b45cd315f93e0f6e9c29f304601bea63350989e78af1b32699891c5e9cd74d42"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/top_jaw.json",
+      "sha256": "b1f360dcaa0df37e538f1c486099a52c4818a76f60f7e8a0162c964f34eb2d75"
+    },
+    {
+      "path": "assets/modelengine/items/internal_fire/fire_0.json",
+      "sha256": "97507ad54ee2d09a17a4a06c7e0e67791fb8e083eeff6d929a78db9f4dc5e113"
+    },
+    {
+      "path": "assets/modelengine/items/internal_fire/fire_1.json",
+      "sha256": "48e46be2d7d31ba71aba01db5814f1ef2bf402919b0b94c35cd37caf63bd5b03"
+    },
+    {
+      "path": "assets/modelengine/items/massiff/body.json",
+      "sha256": "760012ef99489e764d9772e55976746834f771d24ac5b937cb1f74b746377fdd"
+    },
+    {
+      "path": "assets/modelengine/items/massiff/head.json",
+      "sha256": "1e4783d6f634486c3f2d2a29eb2540e811ba9cdd61852feaa10678547e6d0c9c"
+    },
+    {
+      "path": "assets/modelengine/items/massiff/jaw.json",
+      "sha256": "20658544320c3e55e4c90ab61a693a771127c2ae15db70850d01d8b9f875afaa"
+    },
+    {
+      "path": "assets/modelengine/items/massiff/left_front_leg.json",
+      "sha256": "e956d1c3f11ec8b7fdc2e8979156c0a08eaa2839c1f071c9587b4bb2cd7b13b1"
+    },
+    {
+      "path": "assets/modelengine/items/massiff/left_rear_leg.json",
+      "sha256": "c6a5b3ae2c84b663735b6fde590c54ed392530a9d55984c91d6c6351a483e360"
+    },
+    {
+      "path": "assets/modelengine/items/massiff/right_front_leg.json",
+      "sha256": "447449766276657b94e0fcc79fd45d168f69d70a51e8770561983524eee92cdd"
+    },
+    {
+      "path": "assets/modelengine/items/massiff/right_rear_leg.json",
+      "sha256": "db95deb87650ed52825138b1a01c8500e395d9ea559a015c065e7462bd588f98"
+    },
+    {
+      "path": "assets/modelengine/items/melee_raider/cloak.json",
+      "sha256": "1b6118acb0791dc398d4749174ed2f0b77e932fa3f876b984cdd8e889525ed6b"
+    },
+    {
+      "path": "assets/modelengine/items/melee_raider/head.json",
+      "sha256": "fdb848ac26b230e38540c9376a5505c126dad62641e35f7e3777aa8db599a350"
+    },
+    {
+      "path": "assets/modelengine/items/melee_raider/left_arm.json",
+      "sha256": "a9d137941cf35afe934fee355f8441f846de73c5cd18c66750c5133e07096b5f"
+    },
+    {
+      "path": "assets/modelengine/items/melee_raider/left_leg.json",
+      "sha256": "3a841c2334a5b1a4ea50ff6b9258cdaefb5478d548c4e52ff47638391c2f6aba"
+    },
+    {
+      "path": "assets/modelengine/items/melee_raider/lower_robe.json",
+      "sha256": "0f46eb068b8c517e654d00270ebb52ab3c0aadcdd4651bc9f5e1e93943882fb6"
+    },
+    {
+      "path": "assets/modelengine/items/melee_raider/right_arm.json",
+      "sha256": "66514fdb7de757d744e7bbe7ed1e9fc98ddcb507b6ec79607c8e8073b3c407d7"
+    },
+    {
+      "path": "assets/modelengine/items/melee_raider/right_leg.json",
+      "sha256": "7cb0125520c1fccbe75edc5e3b6956bca513fee956fe0d728b5dff05380b8e1d"
+    },
+    {
+      "path": "assets/modelengine/items/melee_raider/stick.json",
+      "sha256": "55c2e292397199fd22f32fb402185e31449f89a1a67e2b20c421eff995a47a28"
+    },
+    {
+      "path": "assets/modelengine/items/melee_raider/torso.json",
+      "sha256": "00278adc2a233c667e6199852d84aa92601fae16753259e0d506bb0d2b3b81a7"
+    },
+    {
+      "path": "assets/modelengine/items/player_head.json",
+      "sha256": "7229997165c6a65560974fa49853502ceaf1eda2cbb7d097de9b3d74aed1b24b"
+    },
+    {
+      "path": "assets/modelengine/items/ranged_raider/head.json",
+      "sha256": "7697cb2bb76b087b1a224a4492633b8f114461cc294709945031cb750629123d"
+    },
+    {
+      "path": "assets/modelengine/items/ranged_raider/left_arm.json",
+      "sha256": "6ec9ad73607d0b5c8ffa5f14c1f0ca1230a32cfc7de0560c33f9a84d3d7688f5"
+    },
+    {
+      "path": "assets/modelengine/items/ranged_raider/left_leg.json",
+      "sha256": "76816ec122ee89447240093dbf0ee4dd6fa9f3473cad35b846880ed5636980c1"
+    },
+    {
+      "path": "assets/modelengine/items/ranged_raider/lower_robe.json",
+      "sha256": "1f98233454e50c3efbea7bfe48e029ccd7773fc38695910447dc3403ebed66b0"
+    },
+    {
+      "path": "assets/modelengine/items/ranged_raider/rifle.json",
+      "sha256": "14468e850b31b73ff243afdd47ef032500197f9332c4aedf309e8f88dafcf65e"
+    },
+    {
+      "path": "assets/modelengine/items/ranged_raider/right_arm.json",
+      "sha256": "69a2d479bdcde4a6c51a9256fdfd8d5c857fdb3e8943fb31b438e003a97b9d39"
+    },
+    {
+      "path": "assets/modelengine/items/ranged_raider/right_leg.json",
+      "sha256": "6ba4f4f066127baa06733affafea5aff3b8ab17fb47db44235607b38bd18a19f"
+    },
+    {
+      "path": "assets/modelengine/items/ranged_raider/torso.json",
+      "sha256": "599dd79452e636b9b96d7df5ed0f16a3f1cab554c54ea1aac9aba7297863e961"
+    },
+    {
+      "path": "assets/modelengine/models/bantha/body.json",
+      "sha256": "9d2b29adfa2f6bafed1d692cd5747cece64e2d48a8b8fc5b27ef5bd146f96bcb"
+    },
+    {
+      "path": "assets/modelengine/models/bantha/head.json",
+      "sha256": "fbadc59bf4e961f2c7337ab175477096f34072100e059563e8067f19a29b48d7"
+    },
+    {
+      "path": "assets/modelengine/models/bantha/left_front_leg.json",
+      "sha256": "2958a331c5a3f0362cc916d8eaefcd1917adcfce8af22faf758e17dd715ffd9e"
+    },
+    {
+      "path": "assets/modelengine/models/bantha/left_horn.json",
+      "sha256": "6ceab22f3a026097af8dd186dc3abd26aecc91d783d5e334621928a76011bb60"
+    },
+    {
+      "path": "assets/modelengine/models/bantha/left_rear_leg.json",
+      "sha256": "74591665c80fa7803c23ce5a3b7517b89cbf975d97a87415902c89f985dc5cd4"
+    },
+    {
+      "path": "assets/modelengine/models/bantha/right_front_leg.json",
+      "sha256": "8dbaa414a2fdd2ec417c99ba3f17fc8f95bb40eebfda94d5474240602b60ff3c"
+    },
+    {
+      "path": "assets/modelengine/models/bantha/right_horn.json",
+      "sha256": "902e1a363ac28762e522f157ccd85bbcc62f3d22def138131766a01d993a8af6"
+    },
+    {
+      "path": "assets/modelengine/models/bantha/right_rear_leg.json",
+      "sha256": "8c21718099acd23f8859fa4f646784a004e633e3a952504be5d14a25ec2f1352"
+    },
+    {
+      "path": "assets/modelengine/models/bantha/tail.json",
+      "sha256": "a0df366a3ce5dda3c16d95c0edaa5f37fc8efa8259ef66454c21b97aea4415c7"
+    },
+    {
+      "path": "assets/modelengine/models/custom/entities/player/head.json",
+      "sha256": "b97a414dfc4557f73cfa6f6f52de19cca9246f24a2e21a188e7c43432caaa046"
+    },
+    {
+      "path": "assets/modelengine/models/custom/entities/player/left_arm.json",
+      "sha256": "8c128c0c3d637031b3b66194a6598f87f9f08793da156149adfe154c494446f8"
+    },
+    {
+      "path": "assets/modelengine/models/custom/entities/player/left_leg.json",
+      "sha256": "148f943faea780fb67b9ec9c061b12d61ab2b33a2a922244733d8b048ee02295"
+    },
+    {
+      "path": "assets/modelengine/models/custom/entities/player/right_arm.json",
+      "sha256": "e62b7c15ceee4647bc9919912a02ad711c31f2c0c3a06c9726d67f599a541eef"
+    },
+    {
+      "path": "assets/modelengine/models/custom/entities/player/right_leg.json",
+      "sha256": "148f943faea780fb67b9ec9c061b12d61ab2b33a2a922244733d8b048ee02295"
+    },
+    {
+      "path": "assets/modelengine/models/custom/entities/player/slim_left.json",
+      "sha256": "e6bf63c42338336054ef399c07711ee1f028d56e5463849fa6df5704bebe0b0c"
+    },
+    {
+      "path": "assets/modelengine/models/custom/entities/player/slim_right.json",
+      "sha256": "57ead3af8a831c515ee0ec7123c1c9562d6f58d63175cf50917f15fdd58aff5b"
+    },
+    {
+      "path": "assets/modelengine/models/custom/entities/player/torso.json",
+      "sha256": "c3ace3586b82cb6dcf33df4191aeb9ea12c3b2a4c845f038a6aaede9228c0daf"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/back_body.json",
+      "sha256": "6f4cde29c66bc5383a8a04fa0a01761009f772eaf8eee39140c8d78573e60ad7"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone.json",
+      "sha256": "df4977bd51370616286d9670e8760138012bc2dc21703f9f04ce9d0a614408d0"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone10.json",
+      "sha256": "131533b9dc3ab93aed902c614f411a827381d403402d15d9233c8ca9b8cd6f49"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone11.json",
+      "sha256": "74d144f6390056cba86827ebe5ef0ec96268d9bb37970e14f3e8eb77e63c57fb"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone13.json",
+      "sha256": "b92be75118eafd569f2c19fdf6b976d4f641d8ec63f0878b9e0dce0e0f761107"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone2/1.json",
+      "sha256": "2f12e6945ba52eba929a584a46d35f76ecd20cfda8e258e14c1a2dec72f91997"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone2/2.json",
+      "sha256": "6160f89f58e16394ed4e6bbd1bb20022b2bc0b819a2bdce746e1a3b51119adb3"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone2.json",
+      "sha256": "9037d007d2ec603f74ee7451ff130fdc01143e1bf6686149c4e309a74c6d67cb"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone3.json",
+      "sha256": "a1fd88183c606ed72587afc229b831740d640ff2ebf752b4e1a5d5cd19b7c7be"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone4/1.json",
+      "sha256": "b0f07261b13415ee274e405f78e6a73ea9bc6dc53c7873a45748e83e53f16fa9"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone4/2.json",
+      "sha256": "81773127e9262fc170624c779f76c90555058c134b19a88922f17d42316185a9"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone4.json",
+      "sha256": "baa12a038d1c202c44be47950a20c5ab12c019ff7267fa1a3904dcf875dce2cf"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone5.json",
+      "sha256": "de856deb5b96e31914dcf9b1502ce73856260af024fe388d5abbbd76be4aafd2"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone6/1.json",
+      "sha256": "60a8ff326e50564c389421bf8640df578d03140bac367c6bc4dc68e8b0ea02f9"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone6/2.json",
+      "sha256": "6c8ecf039cfd1b343a6e168aa80ee76391544a68d076c525e4a723e26be2fd14"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone6.json",
+      "sha256": "b1850a93c00a8436b6b2f33801391efb2837d74009fc97c776f42b0535319bc6"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone7.json",
+      "sha256": "fbc72a68969041f995e91fa250712028a92d379993bfe8e8ce91e84953eab1b0"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone8/1.json",
+      "sha256": "1445754bff33580e53da5c879c9ba84347e068ed0ee757c2af0f87f7d6101294"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone8/2.json",
+      "sha256": "21a2e0182350e6b1e387a52fc94a36fa972aade529ad66b14b4d8dd904f2b333"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone8.json",
+      "sha256": "650aec924f00e0f4cafc2907d4988031e543c710aa6263b7b828770dc6daf1c8"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone9.json",
+      "sha256": "0b8d14e5f13a557d5b66020f3c504d6c1f15d3576a67e6a59270acdc8ddaf4ea"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bottom_jaw.json",
+      "sha256": "51b4b79cf0f98733a0718aa5262c6ab1ef9c57a7c57defc9f4425a4f568884b3"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/head/1.json",
+      "sha256": "7c536a2966b25067b2947fe0378801ea32cb47d2a5ac117c064cb3e22816f08e"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/head.json",
+      "sha256": "df2cd328962e37fd157be28d78ef5d896b79180cbd1187d2000e66579b66fcb8"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/left_back_leg.json",
+      "sha256": "2391de278e87d9f246d3cc416e924aef05244866dbf3aa3730aa2d1546e29b21"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/left_front_leg.json",
+      "sha256": "6e537edb8cff8abc96ee254ff2a3f6b520bcec09e8927dfe7b25528bf4994ad1"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/right_back_leg.json",
+      "sha256": "7ed4e80d2dd4709339485da12db64842850d3cd8a490f548e5e3235c6c0bac5e"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/right_front_leg.json",
+      "sha256": "6ba0d99dc12829d9f1ecf91b762857b9b5ecd4a2309b4b3015d627ae78895170"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/top_jaw.json",
+      "sha256": "bcaf35d2438f26eea03a419182a98e5d86538dc7f9e93732d48f03a5e14bb9d0"
+    },
+    {
+      "path": "assets/modelengine/models/internal_fire/fire_0.json",
+      "sha256": "a63a008f81db4059920be6b1e8e33a91f67fd0e511332c26aff2cd62e8be55a6"
+    },
+    {
+      "path": "assets/modelengine/models/internal_fire/fire_1.json",
+      "sha256": "efca233b56d76d68cec93b9ecc545cde7126a2328e71a7453ef4d19ddc8e48d9"
+    },
+    {
+      "path": "assets/modelengine/models/massiff/body.json",
+      "sha256": "cd09207b58439e68ebd2465c8e0ea376ebeafeee9aa301b04183756ed3be04b5"
+    },
+    {
+      "path": "assets/modelengine/models/massiff/head.json",
+      "sha256": "0837ce578122601efdcc71401d1679f9b8f61a119d90b6c44ba58fa866f6d65f"
+    },
+    {
+      "path": "assets/modelengine/models/massiff/jaw.json",
+      "sha256": "e5b41e9e2ca51e54699032bbda3fb35b82f93db76e12bb087beb9ebc082fab17"
+    },
+    {
+      "path": "assets/modelengine/models/massiff/left_front_leg.json",
+      "sha256": "26c5df7b8deff43975123293172cd91750f975843d82a6ba2ef1da2457676aa6"
+    },
+    {
+      "path": "assets/modelengine/models/massiff/left_rear_leg.json",
+      "sha256": "ab51be0f14e2dd68dfa21dedc72d97b98e3f877d6856a6cbd79d7c0a748950a7"
+    },
+    {
+      "path": "assets/modelengine/models/massiff/right_front_leg.json",
+      "sha256": "992f0c6dfca29f84a037e967abce6fb9cb0475bf8a6f3862b948c029b7a2c4f0"
+    },
+    {
+      "path": "assets/modelengine/models/massiff/right_rear_leg.json",
+      "sha256": "a46aca5f0cdf8c365c424486784db385cf899fa2dd1a9b25c2299374e550a659"
+    },
+    {
+      "path": "assets/modelengine/models/melee_raider/cloak.json",
+      "sha256": "ed0903926f84d11eb1ee190000eac0ec4ebe3eb973cbc09115221e72aa8f339e"
+    },
+    {
+      "path": "assets/modelengine/models/melee_raider/head.json",
+      "sha256": "cfe69d4dd3e2026252cf1112388ba15f54f636cfa585d180ae50188ee495d98f"
+    },
+    {
+      "path": "assets/modelengine/models/melee_raider/left_arm.json",
+      "sha256": "f44d8a91b7d2e4645255825f4706e1eee0dab40d19fbb5d0c0c180f955ff52f7"
+    },
+    {
+      "path": "assets/modelengine/models/melee_raider/left_leg.json",
+      "sha256": "82a8f38f1fe70e41842f39cba64bba043f23e4a5af6729dd3066dfc5a8a37aa3"
+    },
+    {
+      "path": "assets/modelengine/models/melee_raider/lower_robe.json",
+      "sha256": "30924e67e1441985a2efe9ed9782140e8b7bbd405ec5066f3d9833fe325011b8"
+    },
+    {
+      "path": "assets/modelengine/models/melee_raider/right_arm.json",
+      "sha256": "2ae5e21d68420f5278b6ad43f5de164da2b6d5cf8f13dc6fb00bb62a361014f5"
+    },
+    {
+      "path": "assets/modelengine/models/melee_raider/right_leg.json",
+      "sha256": "67ad2f38ae55f3d2c8732d54bf8437d65db96f961aaa97b76ea8d87c26f4bafc"
+    },
+    {
+      "path": "assets/modelengine/models/melee_raider/stick.json",
+      "sha256": "3a2ef8c3c81fb6397c04590fd0d878f6a8b3a4db8d7e00750d8e9edf61942866"
+    },
+    {
+      "path": "assets/modelengine/models/melee_raider/torso.json",
+      "sha256": "9079b2829ecc78818e30fa06ad42a29623750180301f68b35312d1bb685c8bf4"
+    },
+    {
+      "path": "assets/modelengine/models/ranged_raider/head.json",
+      "sha256": "72be4b9128cb79806a67f927a5c74fa8c2c4fab67cf37fcbc893e706b23eb91a"
+    },
+    {
+      "path": "assets/modelengine/models/ranged_raider/left_arm.json",
+      "sha256": "a42a52770b3df1d12c90572c6d7b6eb1d3f22426a79d8981c3d9caedb6ce998e"
+    },
+    {
+      "path": "assets/modelengine/models/ranged_raider/left_leg.json",
+      "sha256": "7d176b51f2db8c41a7d7939c217ddd175ea21455d5c273f02d318d2b82e784a1"
+    },
+    {
+      "path": "assets/modelengine/models/ranged_raider/lower_robe.json",
+      "sha256": "caf374f2aeacbc58aef3b9f4c7fe8abeaa7df8e4a83e8f64752665c6c1e31cbf"
+    },
+    {
+      "path": "assets/modelengine/models/ranged_raider/rifle.json",
+      "sha256": "7650cab19f92442ce99b9e77fa58311c9432415ddfa4d68d9a6ce23159680167"
+    },
+    {
+      "path": "assets/modelengine/models/ranged_raider/right_arm.json",
+      "sha256": "7dc8ba5abcac3502eaa53870aa27606dace86988f8c41ff0a8b98d259a48eb15"
+    },
+    {
+      "path": "assets/modelengine/models/ranged_raider/right_leg.json",
+      "sha256": "be4d71b419ce784ae7374e29e99b3fbfe0f37d81aad9b6e03b44cf6117aa3c34"
+    },
+    {
+      "path": "assets/modelengine/models/ranged_raider/torso.json",
+      "sha256": "23900ac352bf23e070e291e5610fef243ca68392f8c56d483681074337e0cf64"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/bantha.png",
+      "sha256": "408e6873ace2e126e39b7dfb382b807454538b37434e117319ce0b5e0768aba7"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/dewback.png",
+      "sha256": "d7338b073aa839987ba16c210421c9a918c238d7cbb017080c707363437ee8bd"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/massiff.png",
+      "sha256": "87a42d625a810e10bfdcb07756684a273a995a06cdeafc65bafc9b22834d49c1"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/tusken_raider_melee.png",
+      "sha256": "1f1c136d5edf92c26f2f29bdb9adaa59fc773687038971bd19b3a3d18bafa85c"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/tusken_raider_ranged.png",
+      "sha256": "f379a7db01b98a28166fc3a65a6e32c18db82efc2a86b5482a833f9417d3d0c9"
+    }
+  ]
+}

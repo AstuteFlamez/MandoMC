@@ -1,0 +1,22 @@
+{
+  "parent": "mandomc:item/blasters/cycler",
+  "display": {
+    "firstperson_righthand": {
+      "rotation": [
+        20,
+        145,
+        15
+      ],
+      "translation": [
+        2,
+        1,
+        -1
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ]
+    }
+  }
+}

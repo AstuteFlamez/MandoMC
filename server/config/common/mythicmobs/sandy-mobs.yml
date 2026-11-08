@@ -1,0 +1,171 @@
+# MythicMobs owns AI, health and level. MandoMC owns group placement and population budgets.
+# Loot and equipment drops intentionally wait for the next progression pass.
+TuskenRaiderSniper:
+  Type: ZOMBIE
+  Display: '&6Tusken Raider &7[Lv. <caster.level>]'
+  Health: 20
+  Damage: 3
+  Faction: Tusken
+  LevelModifiers:
+    Health: 4
+    Damage: 0.5
+  Options:
+    PreventSunburn: true
+    PreventJockeyMounts: true
+    PreventRandomEquipment: true
+    PreventOtherDrops: true
+    PreventItemPickup: true
+    PreventTransformation: true
+    Despawn: true
+    Silent: true
+    MovementSpeed: 0.27
+    FollowRange: 32
+    KnockbackResistance: 0.2
+    AlwaysShowName: false
+  AIGoalSelectors:
+    - clear
+    - lookattarget
+    - movetowardsdistanceoftarget{s=1;minr=10;maxrange=16}
+    - fleeTarget{s=1;distance=6}
+    - randomstroll
+    - lookatplayers
+  AITargetSelectors:
+    - clear
+    - players
+  Modules:
+    ThreatTable: true
+  Skills:
+    - model{mid=ranged_raider} @self ~onSpawn
+    - model{mid=ranged_raider} @self ~onLoad
+    - skill{s=MandoTuskenCycler} @target ~onTimer:80
+    - sound{s=mandomc:mobs.tuskenraider;v=1.5;p=1} @self ~onTimer:160 0.25
+
+TuskenRaiderMelee:
+  Type: ZOMBIE
+  Display: '&6Tusken Raider &7[Lv. <caster.level>]'
+  Health: 20
+  Damage: 4
+  Faction: Tusken
+  LevelModifiers:
+    Health: 4
+    Damage: 0.5
+  Options:
+    PreventSunburn: true
+    PreventJockeyMounts: true
+    PreventRandomEquipment: true
+    PreventOtherDrops: true
+    PreventItemPickup: true
+    PreventTransformation: true
+    Despawn: true
+    Silent: true
+    MovementSpeed: 0.27
+    FollowRange: 32
+    KnockbackResistance: 0.2
+    AlwaysShowName: false
+  AIGoalSelectors:
+    - clear
+    - meleeattack
+    - randomstroll
+    - lookatplayers
+  AITargetSelectors:
+    - clear
+    - players
+  Skills:
+    - model{mid=melee_raider} @self ~onSpawn
+    - model{mid=melee_raider} @self ~onLoad
+    - state{mid=melee_raider;s=attack1} @self ~onAttack
+    - sound{s=mandomc:mobs.tuskenraider;v=1.5;p=1} @self ~onTimer:160 0.25
+
+Bantha:
+  Type: PIG
+  Display: '&6Bantha &7[Lv. <caster.level>]'
+  Health: 50
+  Damage: 0
+  LevelModifiers:
+    Health: 8
+  Options:
+    Silent: true
+    PreventOtherDrops: true
+    PreventItemPickup: true
+    PreventLeashing: true
+    PreventRenaming: true
+    Despawn: true
+    MovementSpeed: 0.18
+    AlwaysShowName: false
+  AIGoalSelectors:
+    - clear
+    - randomstroll
+    - lookatplayers
+  AITargetSelectors:
+    - clear
+  Skills:
+    - model{mid=bantha} @self ~onSpawn
+    - model{mid=bantha} @self ~onLoad
+    - sound{s=mandomc:mobs.bantha_growl;v=1.5;p=1} @self ~onTimer:160 0.2
+    - sound{s=mandomc:mobs.bantha_growl2;v=1.5;p=1} @self ~onTimer:220 0.2
+    - sound{s=mandomc:mobs.bantha_death;v=2;p=1} @self ~onDeath
+
+Dewback:
+  Type: PIG
+  Display: '&2Dewback &7[Lv. <caster.level>]'
+  Health: 40
+  Damage: 0
+  LevelModifiers:
+    Health: 6
+  Options:
+    Silent: true
+    PreventOtherDrops: true
+    PreventItemPickup: true
+    PreventLeashing: true
+    PreventRenaming: true
+    Despawn: true
+    MovementSpeed: 0.2
+    AlwaysShowName: false
+  AIGoalSelectors:
+    - clear
+    - randomstroll
+    - lookatplayers
+  AITargetSelectors:
+    - clear
+  Skills:
+    - model{mid=dewback} @self ~onSpawn
+    - model{mid=dewback} @self ~onLoad
+    - sound{s=mandomc:mobs.dewback_hiss;v=1.5;p=1} @self ~onTimer:160 0.2
+    - sound{s=mandomc:mobs.dewback_idle;v=1.5;p=1} @self ~onTimer:220 0.2
+    - sound{s=mandomc:mobs.dewback_death;v=2;p=1} @self ~onDeath
+
+Massiff:
+  Type: ZOMBIE
+  Display: '&6Massiff &7[Lv. <caster.level>]'
+  Health: 24
+  Damage: 4
+  Faction: Tusken
+  LevelModifiers:
+    Health: 4
+    Damage: 0.5
+  Options:
+    PreventSunburn: true
+    PreventJockeyMounts: true
+    PreventRandomEquipment: true
+    PreventOtherDrops: true
+    PreventItemPickup: true
+    PreventTransformation: true
+    Despawn: true
+    Silent: true
+    MovementSpeed: 0.29
+    FollowRange: 24
+    AlwaysShowName: false
+  AIGoalSelectors:
+    - clear
+    - meleeattack
+    - randomstroll
+    - lookatplayers
+  AITargetSelectors:
+    - clear
+    - players
+  Skills:
+    - model{mid=massiff} @self ~onSpawn
+    - model{mid=massiff} @self ~onLoad
+    - state{mid=massiff;s=attack} @self ~onAttack
+    - sound{s=entity.wolf.growl;v=1;p=0.8} @self ~onTimer:160 0.2
+    - sound{s=entity.zoglin.hurt;v=1;p=0.8} @self ~onDamaged 0.5

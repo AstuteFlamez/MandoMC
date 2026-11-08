@@ -15,6 +15,7 @@ generate-structures=true
 
 level-name=dev_world
 gamemode=survival
+force-gamemode=false
 difficulty=normal
 white-list=false
 require-resource-pack=true

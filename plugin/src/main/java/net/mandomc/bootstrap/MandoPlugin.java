@@ -23,6 +23,8 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     public net.mandomc.gameplay.combat.CombatService combat() { return combat; }
     public net.mandomc.gameplay.arrival.StarterKit starterKit() { return starterKit; }
     public net.mandomc.gameplay.rules.SurvivalRules rules() { return rules; }
+    private net.mandomc.gameplay.mobs.SandySpawns mobs;
+    public net.mandomc.gameplay.mobs.SandySpawns mobs() { return mobs; }
     private ArrivalListener arrival;
     private ArrivalDestinations destinations;
     private boolean failed;
@@ -124,6 +126,14 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             starterKit = new net.mandomc.gameplay.arrival.StarterKit(this, items, loadFeature("starter-kit.yml"),
                     language.getString("starter-kit.received"));
             getLogger().info("Combat basics ready: shared combat tag, logout death, survival rules and first-join kit.");
+            var mobConfig = loadFeature("mobs.yml");
+            if (mobConfig.getBoolean("enabled", false)) {
+                var settings = net.mandomc.gameplay.mobs.SandySettings.read(mobConfig);
+                var mythic = new net.mandomc.integrations.mobs.MythicMobAccess();
+                new net.mandomc.integrations.weapons.MobWeaponDamage(this, mythic, settings);
+                mobs = new net.mandomc.gameplay.mobs.SandySpawns(this, settings, mythic);
+                getLogger().info("Sandy mobs ready: five types, levelled encounters and shared population limits.");
+            }
             if (!getConfig().getBoolean("arrival.enabled", false)) {
                 getLogger().info("Foundation enabled; arrival is disabled.");
                 return;
@@ -168,6 +178,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         if (barrier != null) barrier.close();
+        if (mobs != null) mobs.close();
         if (combat != null) combat.close();
         if (sabers != null) sabers.close();
         if (travel != null) travel.close();

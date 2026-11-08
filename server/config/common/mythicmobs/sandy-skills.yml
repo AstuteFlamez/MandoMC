@@ -1,0 +1,8 @@
+MandoTuskenCycler:
+  Cooldown: 4
+  TargetConditions:
+    - lineofsight
+    - distance{d=0to32}
+  Skills:
+    - state{mid=ranged_raider;s=attack} @self
+    - weaponMechanicsShoot{weapon=CyclerRifle;spread=3;head=false} @target

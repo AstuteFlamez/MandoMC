@@ -51,5 +51,45 @@
     "sounds": [
       "mandomc:melee/lightsaber/swing-1"
     ]
+  },
+  "shoot.cycler": {
+    "sounds": [
+      "mandomc:shoot/cycler"
+    ]
+  },
+  "mobs.tuskenraider": {
+    "sounds": [
+      "mandomc:mobs/tuskenraider"
+    ]
+  },
+  "mobs.bantha_death": {
+    "sounds": [
+      "mandomc:mobs/bantha_death"
+    ]
+  },
+  "mobs.bantha_growl": {
+    "sounds": [
+      "mandomc:mobs/bantha_growl"
+    ]
+  },
+  "mobs.bantha_growl2": {
+    "sounds": [
+      "mandomc:mobs/bantha_growl2"
+    ]
+  },
+  "mobs.dewback_death": {
+    "sounds": [
+      "mandomc:mobs/dewback_death"
+    ]
+  },
+  "mobs.dewback_hiss": {
+    "sounds": [
+      "mandomc:mobs/dewback_hiss"
+    ]
+  },
+  "mobs.dewback_idle": {
+    "sounds": [
+      "mandomc:mobs/dewback_idle"
+    ]
   }
 }

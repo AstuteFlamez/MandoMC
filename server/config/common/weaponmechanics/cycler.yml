@@ -1,0 +1,93 @@
+# Legacy CyclerRifle tuning retained for the player item; mob shot damage is in mobs.yml.
+CyclerRifle:
+  Info:
+    Weapon_Item:
+      Type: "DIAMOND_HOE"
+      Custom_Model_Data: 7
+      Item_Model: "mandomc:blasters/cycler"
+      Name: "<light_purple><bold><italic>Cycler Rifle"
+      Lore:
+        - "<white>ĕĐ"
+        - ""
+        - "<gray>Tusken slugthrower prized for its range and power."
+        - "<gray>Single-shot and deadly at long distances."
+        - ""
+        - "<yellow><!italic>[<key:key.drop>] Reload"
+        - ""
+        - "<gray>Takes <red>Standard Plasma Cells<gray>."
+      Unbreakable: true
+      Hide_Flags: true
+      Attributes:
+        - "movement_speed -0.022"
+      Deny_Use_In_Crafting: true
+    Weapon_Info_Display:
+      Action_Bar:
+        Message: "<light_purple>Cycler Rifle<firearm_state> <gray>«<red><ammo_left><gray>»<gold><reload>"
+    Weapon_Get_Mechanics:
+      - "Sound{sound=item.armor.equip_chain, pitch=0.85, listeners=Source{}}"
+    Weapon_Equip_Delay: 35
+    Cancel:
+      Drop_Item: true
+      Arm_Swing_Animation: true
+      Break_Blocks: true
+
+  Skin:
+    Default:
+      Custom_Model_Data: 7
+      Item_Model: "mandomc:blasters/cycler"
+    Scope:
+      Custom_Model_Data: 1007
+      Item_Model: "mandomc:blasters/cycler_scope"
+    Sprint:
+      Custom_Model_Data: 2007
+      Item_Model: "mandomc:blasters/cycler_sprint"
+
+  Projectile: "redlaser"
+
+  Shoot:
+    Trigger:
+      Main_Hand: "RIGHT_CLICK"
+    Projectile_Speed: 120
+    Fully_Automatic_Shots_Per_Second: 1
+    Spread:
+      Base_Spread: 1.2
+      Modify_Spread_When:
+        Zooming: 30%
+        Sneaking: 40%
+        In_Midair: 150%
+    Recoil:
+      Mean_X: 0.2
+      Mean_Y: 1.8
+      Variance_X: 0.1
+      Variance_Y: 0.2
+      Speed: 3.2
+      Damping: 0.12
+      Damping_Recovery: 0.2
+      Smoothing: 0.5
+      Max_Accumulation: 8.0
+    Mechanics:
+      - "CustomSound{sound=mandomc:shoot.cycler, volume=0.4, noise=0.1}"
+
+  Reload:
+    Trigger:
+      Main_Hand: "DROP_ITEM"
+    Magazine_Size: 1
+    Reload_Duration: 75
+    Start_Mechanics:
+      - "CustomSound{sound=mandomc:reload.start, volume=0.6, noise=0.1}"
+    Finish_Mechanics:
+      - "CustomSound{sound=mandomc:reload.complete, volume=0.6, noise=0.1}"
+    Ammo:
+      Out_Of_Ammo_Mechanics:
+        - "Message{message=<red><bold>ᴍᴀɴᴅᴏᴍᴄ</bold></red> <dark_gray>» <red>Out of plasma cells!}"
+      Ammos:
+        - Standard_Plasma_Cells
+  Damage:
+    Base_Damage: 15
+    Armor_Damage: 1
+
+  Scope:
+    Trigger:
+      Main_Hand: "LEFT_CLICK"
+    Zoom_Amount: 2.0
+    Shoot_Delay_After_Scope: 10

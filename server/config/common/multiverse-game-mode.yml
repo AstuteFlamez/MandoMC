@@ -1,0 +1,3 @@
+# Merge this setting into Multiverse-Core/config.yml; do not replace the full file.
+world:
+  enforce-gamemode: false

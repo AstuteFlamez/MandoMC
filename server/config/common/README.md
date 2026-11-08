@@ -27,3 +27,6 @@ Apply these vendor settings to the existing files; preserve unrelated settings a
 - Essentials `config.yml`: `newbies.kit: ''`, so MandoMC alone grants the first-join kit.
 
 SurvivalWorld's native keepInventory game rule remains false. MandoMC additionally forces carried-item loss for a combat logout even if a plugin sets keepInventory on that death. Do not install an additional combat logger or starter-kit plugin. `CombatProbe.jar` is temporary and must be removed before ordinary play.
+
+## Preserve player game modes
+Apply `mv config enforce-gamemode false` through the server console. Multiverse saves `world.enforce-gamemode: false` to its own config and applies it immediately. The same enforcement handler runs after login and world changes; disabling it preserves the player's selected mode. Keep `force-gamemode=false` in server.properties. New players still begin in the server default Survival mode. WorldGuard continues to protect SpawnWorld and the survival landing independently of game mode.

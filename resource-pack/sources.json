@@ -216,5 +216,59 @@
     "project": "https://modrinth.com/resourcepack/justtimms-lightsaber-workshop",
     "delivery": "Official unmodified upstream pack; see dependencies.json. No extracted artwork in MandoMC ZIP.",
     "credits": "credits.txt"
+  },
+  "mobAssets": {
+    "source": "Supplied legacy ModelEngine blueprints and resource pack",
+    "rifle": "Legacy item dispatch points at absent cycler files; item reuses ranged_raider/rifle geometry and texture, with item display transforms. Original geometry and UVs preserved.",
+    "sounds": [
+      {
+        "sourcePath": "assets/minecraft/sounds/shoot/cycler.ogg",
+        "sourceSha256": "fecbaba214f9bb9cc2a1067c8f3b69a6992e1b88234cfcdda584e2375c32f1c4",
+        "destination": "assets/mandomc/sounds/shoot/cycler.ogg",
+        "changes": "Unchanged original audio; namespaced sound event."
+      },
+      {
+        "sourcePath": "assets/minecraft/sounds/mobs/tuskenraider.ogg",
+        "sourceSha256": "a31844a036a13047441e0b58a532d4d52d9eb073cff8c6e3d2d3b1f6152b250f",
+        "destination": "assets/mandomc/sounds/mobs/tuskenraider.ogg",
+        "changes": "Unchanged original audio; namespaced sound event."
+      },
+      {
+        "sourcePath": "assets/minecraft/sounds/mobs/bantha_death.ogg",
+        "sourceSha256": "49cc9b6fc0371715783735697f5d7169b40e73c8b167a35b93d87b996ec594ef",
+        "destination": "assets/mandomc/sounds/mobs/bantha_death.ogg",
+        "changes": "Unchanged original audio; namespaced sound event."
+      },
+      {
+        "sourcePath": "assets/minecraft/sounds/mobs/bantha_growl.ogg",
+        "sourceSha256": "0b5b8345b9c1303a9bef2271873d6e1ea485fc2990fdcffaf77abec7b231fd7d",
+        "destination": "assets/mandomc/sounds/mobs/bantha_growl.ogg",
+        "changes": "Unchanged original audio; namespaced sound event."
+      },
+      {
+        "sourcePath": "assets/minecraft/sounds/mobs/bantha_growl2.ogg",
+        "sourceSha256": "0b1ba30a9d2dac5584de1cf55d6d1a616527035348054a1752ff45eaff49312d",
+        "destination": "assets/mandomc/sounds/mobs/bantha_growl2.ogg",
+        "changes": "Unchanged original audio; namespaced sound event."
+      },
+      {
+        "sourcePath": "assets/minecraft/sounds/mobs/dewback_death.ogg",
+        "sourceSha256": "47bf1a668144c5d54b65b860074b6ed8a75d0be5244bd10f5ebdb091c82916f1",
+        "destination": "assets/mandomc/sounds/mobs/dewback_death.ogg",
+        "changes": "Unchanged original audio; namespaced sound event."
+      },
+      {
+        "sourcePath": "assets/minecraft/sounds/mobs/dewback_hiss.ogg",
+        "sourceSha256": "04ee1898a285737de095fa9cd65aab640a1b0dea8fa39ca276871a61af5ea4ac",
+        "destination": "assets/mandomc/sounds/mobs/dewback_hiss.ogg",
+        "changes": "Unchanged original audio; namespaced sound event."
+      },
+      {
+        "sourcePath": "assets/minecraft/sounds/mobs/dewback_idle.ogg",
+        "sourceSha256": "ab1210e4e960a667d44d1974f98137d9d26103a74174030cb64f17096e6833f2",
+        "destination": "assets/mandomc/sounds/mobs/dewback_idle.ogg",
+        "changes": "Unchanged original audio; namespaced sound event."
+      }
+    ]
   }
 }
