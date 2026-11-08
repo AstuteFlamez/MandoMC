@@ -61,6 +61,8 @@ The new pack builds from `resource-pack/src/` with `./scripts/build-resource-pac
 The player experience, FigJam diagrams and proposed feature order remain recorded: arrival/protection, group base/travel, combat, supplies/progression, KOTH, Jabba, vehicles, raids. Pairwise kill recording lands with combat. See docs/features/arrival-and-protection.md for the first slice and docs/recovery.md for legacy code.
 
 ## Verification
+Item-standard deployment: pack `resource-pack-26.1.2-59e8bdb76485` is published; startup selected SHA-1 `ce4dba773808913f13d0a32b2b3a2020128f5392`. The previous agent-console process was stopped cleanly and server/start.command was opened in Terminal for the user’s console access. New ammo items show the accepted blank-line spacing; existing item lore is not rewritten.
+
 Item-standard cleanup: the pack builds with 23 files, all remaining font texture references resolve, and no active config references the removed drop/reload glyphs. Ammo spacing is deployed; WeaponMechanics reload succeeded. The next gameplay slice in docs/build-order.md is one basic armor set, then the first shield-based saber; remaining E-11 client checks stay on the combat checklist.
 
 Latest deployment: `0fcd2b0` is pushed, and pack `resource-pack-26.1.2-0fcd2b06f238` is published and selected by server startup with verified SHA-1 `b49b10dc2094688fbb2e0ec9e711f9176f26d21a`. The ordinary 12-plugin server restarted cleanly with arrival enabled and both test plugins removed. Reconnect for the pack; obtain a fresh E11 to replace any item carrying the previous stored lore. Client glyph rendering remains to be checked.
