@@ -1,8 +1,28 @@
 MandoTuskenCycler:
   Cooldown: 4
+  Conditions:
+    - health{h=>0} true
   TargetConditions:
+    - health{h=>0} true
     - lineofsight
     - distance{d=0to32}
   Skills:
-    - state{mid=ranged_raider;s=attack} @self
+    # Plant feet for the firing pose; restore AI automatically after the full clip.
+    - stun{d=46;facing=true;stopai=true;gravity=false} @self
+    - look{force=true;headOnly=false;immediately=true} @target
+    - state{mid=ranged_raider;s=attack;li=0;lo=2} @self
+    - look{force=true;headOnly=false;immediately=true;repeat=18;repeatInterval=1} @target
+    # Recoil begins at 0.9 seconds in the original 2.3-second attack clip.
+    - delay 18
+    - skill{s=MandoTuskenCyclerFire} @target
+
+MandoTuskenCyclerFire:
+  Conditions:
+    - health{h=>0} true
+  TargetConditions:
+    - health{h=>0} true
+    - lineofsight
+    - distance{d=0to32}
+  Skills:
+    - look{force=true;headOnly=false;immediately=true} @target
     - weaponMechanicsShoot{weapon=CyclerRifle;spread=3;head=false} @target

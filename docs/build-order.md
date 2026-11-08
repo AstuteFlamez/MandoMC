@@ -36,3 +36,6 @@ Desert Robes and the admin browser are implemented and the corrected icons confi
 Game-mode reset fixed: Multiverse enforcement is disabled; live login/world-change event checks preserve Creative and Spectator.
 
 Current content: [levelled sandy-biome encounters](features/sandy-biome-mobs.md) are implemented and server-verified: ranged/melee Tuskens, cycler rifle, separate wildlife groups, random levels 1–5, shared spawn budgets and vanilla natural-spawn replacement. Next playtest models, density and combat; then define drops (cycler rifle, bantha hide, species materials). A first ranged mob now exists for deferred saber defense testing and later throw stamina. Clan/FactionsUUID work remains deferred.
+
+## Late pre-release animation polish
+User-requested, deferred until the end of the todo list: fix skirt animations on **both ranged and melee Tuskens** before release. Do not change those keyframes during the current aiming, shot-timing and locomotion fixes.

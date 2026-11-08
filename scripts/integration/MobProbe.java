@@ -163,7 +163,7 @@ public final class MobProbe extends JavaPlugin {
                 for(var entity:entities) check(!entity.isDead(),"verification mobs remain alive before cleanup");
                 getLogger().info("MOB PROBE PASSED: "+checks+" assertions");cleanup();
             } catch(Throwable e) {fail(e);}
-        },5);
+        },25);
     }
     private Player player(Location location) throws Exception {var p=nativeTestPlayer(location.getWorld(),location);players.add(p);return p;}
     private void check(boolean ok,String message) {if(!ok)throw new IllegalStateException(message);checks++;if(!message.equals("test surface occupies empty sky"))getLogger().info("PASS "+message);}
