@@ -7,6 +7,7 @@ import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
@@ -58,6 +59,21 @@ public final class SandySpawns implements Listener, AutoCloseable {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void natural(CreatureSpawnEvent event) {
         if (suppress(event.getSpawnReason(), event.getLocation())) event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void interact(PlayerInteractEntityEvent event) {
+        if (mobs.managed(event.getRightClicked())) event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void breed(EntityBreedEvent event) {
+        if (mobs.managed(event.getMother()) || mobs.managed(event.getFather())) event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void mount(EntityMountEvent event) {
+        if (mobs.managed(event.getMount())) event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

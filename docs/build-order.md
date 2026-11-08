@@ -33,4 +33,6 @@ The accepted player-facing name is **Clans**. Creation/joining, claims, clan hom
 
 Desert Robes and the admin browser are implemented and the corrected icons confirmed. The Vader throw was accepted on 2026-11-08. Current slice: [combat basics](features/combat-basics.md) — restrictions, native repairs, 15-second mob/PvP tag and decimal sidebar, logout death/drops, and a first-join kit including 64 E-11 ammo. WeaponMechanics owns ammo consumption.
 
-Next content: [Tatooine mobs in sandy survival biomes](features/sandy-biome-mobs.md), reusing Tusken Raiders, banthas, dewbacks and massiffs without a dedicated Tatooine location. Start with one mob that shoots blasters. **Blocking, reflection and throw stamina work are deferred until that first blaster-shooting mob exists.** Then validate defense and give throws a substantial stamina cost (amount undecided). Clan/FactionsUUID work remains deferred.
+Game-mode reset fixed: Multiverse enforcement is disabled; live login/world-change event checks preserve Creative and Spectator.
+
+Current content: [levelled sandy-biome encounters](features/sandy-biome-mobs.md) are implemented and server-verified: ranged/melee Tuskens, cycler rifle, separate wildlife groups, random levels 1–5, shared spawn budgets and vanilla natural-spawn replacement. Next playtest models, density and combat; then define drops (cycler rifle, bantha hide, species materials). A first ranged mob now exists for deferred saber defense testing and later throw stamina. Clan/FactionsUUID work remains deferred.

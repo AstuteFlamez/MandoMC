@@ -41,8 +41,11 @@ public final class SaberProjectiles implements Listener {
         Vector direction=player.getEyeLocation().getDirection();
         Vector incoming=(Vector)call(bolt,"getMotion");
         Location origin=player.getEyeLocation().add(direction.clone().multiply(0.8));
+        // MythicMobs fires through WeaponMechanics' NPC API, which supplies no inventory stack.
+        ItemStack weapon = (ItemStack) call(bolt,"getWeaponStack");
+        if (weapon == null) weapon = new WeaponMechanicsItems().generate("weapon", (String) call(bolt,"getWeaponTitle"));
         Object reflected=constructor.newInstance(call(bolt,"getProjectileSettings"),player,origin,
-                direction.clone().multiply(Math.max(0.1,incoming.length())), ((ItemStack)call(bolt,"getWeaponStack")).clone(),
+                direction.clone().multiply(Math.max(0.1,incoming.length())), weapon.clone(),
                 call(bolt,"getWeaponTitle"),EquipmentSlot.HAND,call(bolt,"getSticky"),call(bolt,"getThrough"),call(bolt,"getBouncy"));
         int count=(int)bolt.getClass().getMethod("getIntTag",String.class).invoke(bolt,REFLECTIONS);
         reflected.getClass().getMethod("setIntTag",String.class,int.class).invoke(reflected,REFLECTIONS,count+1);
@@ -72,7 +75,7 @@ public final class SaberProjectiles implements Listener {
                     spawn.invoke(spawner,reflected);
                 } catch(ReflectiveOperationException error) {plugin.getLogger().log(java.util.logging.Level.SEVERE,"Cannot spawn reflected bolt",error);}
             });
-        } catch(ReflectiveOperationException error) {
+        } catch(ReflectiveOperationException | RuntimeException error) {
             // A broken compatibility hook must not convert an attempted reflection into an unprotected hit.
             ((Cancellable)event).setCancelled(true);
             plugin.getLogger().log(java.util.logging.Level.SEVERE,"Saber projectile adapter failed",error);

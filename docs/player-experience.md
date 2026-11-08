@@ -141,4 +141,8 @@ Temporary interface note (2026-11-07): `/tutorial` and `/survival` are developme
 Future tutorial direction: `/tutorial` will show short text and take the player to a library building in SpawnWorld with takeable, feature-specific guidebooks. This is deferred; current tutorial text is temporary.
 
 ## Survival mob content
-Use existing Tusken Raider, bantha, dewback and massiff models/mobs in sandy biomes of SurvivalWorld rather than requiring a Tatooine location. First implement one blaster-shooting hostile mob; blocking/reflection work and the later substantial throw stamina cost wait for it. Exact spawn rules and balancing belong in [the mob brief](features/sandy-biome-mobs.md).
+Use existing Tusken Raider, bantha, dewback and massiff models in Desert, Badlands and Eroded Badlands in SurvivalWorld. Beaches and Wooded Badlands remain unchanged. Random encounter levels are 1–5; group members remain within one level of the leader. No distance-from-spawn or player-dependent scaling.
+
+Tusken patrols have 2–4 ranged/melee raiders, 0–2 banthas and 0–2 massiffs, with six total at most. Separate wildlife groups contain 1–3 of exactly one species: bantha, dewback or massiff. Natural vanilla spawns are replaced within the selected biomes, preserving player breeding/spawners and existing animals. Custom wildlife cannot use vanilla pig feeding, saddling, breeding or mounting. Banthas/dewbacks wander; Tuskens/massiffs are hostile.
+
+The first cycler-shooting Tusken and bounded spawning are implemented. Playtest density/combat before the drop pass: cycler rifle, bantha hide and species-specific materials. Rates, quantities and crafting uses are undecided. Blocking/reflection balance and later throw stamina may now be tested against ranged mobs. See [the mob brief](features/sandy-biome-mobs.md) for parameters and verification.

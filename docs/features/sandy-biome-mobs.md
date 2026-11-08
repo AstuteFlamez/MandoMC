@@ -1,5 +1,5 @@
 # Feature: Levelled sandy-biome encounters
-Status: implementation; live integration verification in progress
+Status: implemented; server verified, client playtest pending
 Branch: bilal/tusken-mobs
 
 ## Player experience
@@ -9,7 +9,7 @@ SurvivalWorld deserts, badlands and eroded badlands have Tusken patrols and wild
 - Tusken patrols: 2–4 raiders, including both ranged and melee variants; 0–2 banthas and 0–2 massiffs, with a hard total of six. Companion selection shares the remaining budget rather than rolling eight mobs independently.
 - Separate wildlife encounters: 1–3 banthas, OR 1–3 dewbacks, OR 1–3 massiffs. Species never mix in these wildlife groups. Banthas/dewbacks wander; Tuskens/massiffs are hostile to players.
 - Levels increase health and attack damage, not walking speed or firing rate. Names show levels. MythicMobs owns the authoritative level; no parallel persisted level state.
-- Ranged Tuskens use the actual WeaponMechanics CyclerRifle with one aimed shot per four seconds, line of sight and a 32-block attack range. Mob shots start at 6 damage at level 1 and reach 8 at level 5. The player rifle retains its legacy damage of 15; these are initial tuning values for playtesting.
+- Ranged Tuskens use the actual WeaponMechanics CyclerRifle with one aimed shot per four seconds, line of sight and a 32-block attack range. Mob shots start at 6 base damage at level 1 and reach 8 at level 5. The player rifle retains its legacy damage of 15; these are initial tuning values for playtesting.
 - Suppress vanilla NATURAL, CHUNK_GEN, PATROL and REINFORCEMENTS spawning only in the selected SurvivalWorld biomes. Preserve breeding, eggs, spawners and custom spawns. Do not delete existing vanilla mobs or player animals.
 - Spawn only on clear, supported surface ground in already loaded chunks, at least 32 blocks from every player. No SpawnWorld, protected landing or other WorldGuard-safe locations. Both hostile targeting and damage respect protection; combat tags keep their existing 15-second behavior.
 - Shared cap: at most 12 of these mobs within 96 horizontal blocks of a new member, and 96 in loaded SurvivalWorld chunks. Reserve capacity for the whole group. Overlapping players share the same population, rather than each receiving a separate allowance.
@@ -29,7 +29,7 @@ Copy mob definitions to `MythicMobs/mobs/mandomc-sandy.yml`, skills to `MythicMo
 Regenerate through the pinned ModelEngine, then import its generated resource pack with `scripts/import-mob-models.py PATH`. The importer accepts only the five models plus ModelEngine's internal fire model. It imports namespaced assets and the required atlas directory, preserving vanilla shaders. Build and publish the required MandoMC pack as usual; the upstream JustTimm saber pack remains separate.
 
 ## Verification
-Five unit tests cover 10,000 patrol rolls, all level bands, no mixed wildlife, group capacity reservations, configuration bounds and mob rifle scaling. Existing Java and resource-pack tests pass. Live checks and client playtest pending.
+Five unit tests cover 10,000 patrol rolls, all level bands, no mixed wildlife, group capacity reservations, configuration bounds and mob rifle scaling. Existing Java and resource-pack tests pass. 47 Java tests, nine pack tests and 76 live Paper assertions pass. Live checks include real spawning, all five models, mob level and health scaling, cycler item generation, real player damage with retained hit-location modifiers, combat tags, safe zones, vanilla interaction denial, and the Mythic skill firing a real CyclerRifle projectile. Simulated players are unregistered native entities; real client visuals, automatic AI targeting/encounter density and multiplayer combat feel remain to be playtested.
 
 ## Pause note
-Next: complete the live integration probe and publish/deploy the combined pack; then playtest density and combat before designing drops.
+Next: publish/deploy the verified pack and playtest density, appearance and combat before designing drops.

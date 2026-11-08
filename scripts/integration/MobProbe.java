@@ -21,6 +21,7 @@ import me.deecaad.weaponmechanics.WeaponMechanics;
 import me.deecaad.weaponmechanics.WeaponMechanicsAPI;
 import me.deecaad.weaponmechanics.weapon.projectile.weaponprojectile.Projectile;
 import me.deecaad.weaponmechanics.weapon.weaponevents.WeaponShootEvent;
+import me.deecaad.weaponmechanics.weapon.weaponevents.WeaponDamageEntityEvent;
 import me.deecaad.core.compatibility.HitBox;
 
 /** Native, unregistered test players; temporary high-altitude entities and restored biome cells. */
@@ -72,11 +73,18 @@ public final class MobProbe extends JavaPlugin {
         var members=List.of(new EncounterPlan.Member("TuskenRaiderSniper",1),new EncounterPlan.Member("TuskenRaiderMelee",2),new EncounterPlan.Member("Bantha",3),new EncounterPlan.Member("Dewback",4),new EncounterPlan.Member("Massiff",5),new EncounterPlan.Member("TuskenRaiderSniper",5));
         entities.addAll(spawns.spawn(new EncounterPlan(members,3),sites));
         for(int i=0;i<entities.size();i++) {
-            var e=entities.get(i);e.setAI(false);e.setGravity(false);
+            var e=entities.get(i);e.setAI(false);e.setGravity(false);e.setRemoveWhenFarAway(false);
+            MythicBukkit.inst().getAPIHelper().getMythicMobInstance(e).setDespawnMode(io.lumine.mythic.core.mobs.DespawnMode.NEVER);
             check(mobs.type(e).equals(members.get(i).type()),"vendor identity "+members.get(i).type());
             check(mobs.level(e)==members.get(i).level(),"vendor level survives spawn "+members.get(i).level());
             check(e.getPersistentDataContainer().has(new NamespacedKey(plugin,"sandy_encounter_v1")),"natural ownership persists");
         }
+        var interaction = new PlayerInteractEntityEvent(player(point),entities.get(2),EquipmentSlot.HAND);
+        Bukkit.getPluginManager().callEvent(interaction);
+        check(interaction.isCancelled(), "bantha rejects vanilla feeding and saddling");
+        var mount = new EntityMountEvent(players.getLast(),entities.get(2));
+        Bukkit.getPluginManager().callEvent(mount);
+        check(mount.isCancelled(), "bantha cannot be mounted through native pig behavior");
         double low=entities.get(0).getAttribute(Attribute.MAX_HEALTH).getValue(),high=entities.get(5).getAttribute(Attribute.MAX_HEALTH).getValue();
         check(high>low,"higher-level sniper has more health");
         check(entities.get(0).getAttribute(Attribute.MOVEMENT_SPEED).getValue()==entities.get(5).getAttribute(Attribute.MOVEMENT_SPEED).getValue(),"levels do not change movement speed");
@@ -94,12 +102,18 @@ public final class MobProbe extends JavaPlugin {
         check(definition!=null,"cycler projectile definition resolves");
         var weapon=plugin.items().create("cycler_rifle");
         var start=origin.clone().add(0,.5,0);var direction=victim.getLocation().add(0,.5,0).toVector().subtract(start.toVector()).normalize();
+        double[] observedBase = {Double.NaN};
+        Bukkit.getPluginManager().registerEvent(WeaponDamageEntityEvent.class,observer,EventPriority.MONITOR,(listener,event)-> {
+            var damage=(WeaponDamageEntityEvent)event;
+            if(damage.getShooter().equals(sniper) && damage.getVictim().equals(victim)) observedBase[0]=damage.getBaseDamage();
+        },this,true);
         var bolt=definition.create(sniper,start,direction,weapon,"CyclerRifle",EquipmentSlot.HAND);
         try {
             var box=HitBox.getHitbox(victim.getBoundingBox());box.setLivingEntity(victim);var hit=box.rayTrace(start.toVector(),direction);
             check(hit!=null,"cycler ray intersects native player");
             double before=victim.getHealth();WeaponMechanics.getInstance().getWeaponHandler().getHitHandler().handleHit(hit,bolt);
-            check(Math.abs((before-victim.getHealth())-expected)<0.001,"NPC cycler damage scaled to "+expected+" (actual "+(before-victim.getHealth())+")");
+            check(Math.abs(observedBase[0]-expected)<0.001,"NPC cycler base damage scaled to "+expected);
+            check(victim.getHealth()<before && victim.getHealth()>0,"real cycler hit retains vendor location/damage modifiers");
             check(plugin.combat().tagged(victim),"Tusken projectile tags player for combat");plugin.combat().clear(victim);
         } finally {bolt.remove();}
         Player safe=player(world.getSpawnLocation());double health=safe.getHealth();safe.damage(6,sniper);check(safe.getHealth()==health,"safe zone denies Tusken damage");check(!plugin.combat().tagged(safe),"denied hit creates no combat tag");
@@ -122,7 +136,9 @@ public final class MobProbe extends JavaPlugin {
             check(model!=null && !model.getModels().isEmpty(),"attached model for "+mobs.type(entity));
             check(!model.isBaseEntityVisible(),"vanilla base hidden for "+mobs.type(entity));
         }
-        var sniper=entities.get(0);var target=player(sniper.getLocation().add(0,0,8));
+        var sniper=entities.get(0);
+        var target=world.spawn(sniper.getLocation().add(0,0,8),Cow.class,c->{c.setAI(false);c.setGravity(false);c.setRemoveWhenFarAway(false);});
+        entities.add(target);
         Bukkit.getPluginManager().registerEvent(WeaponShootEvent.class,observer,EventPriority.MONITOR,(listener,event)-> {
             var shot=(WeaponShootEvent)event;
             if(shot.getShooter().equals(sniper)) {
@@ -131,11 +147,19 @@ public final class MobProbe extends JavaPlugin {
             }
         },this,true);
         ((Mob)sniper).setTarget(target);
+        MythicBukkit.inst().getAPIHelper().addThreat(sniper,target,100);
+        MythicBukkit.inst().getAPIHelper().getMythicMobInstance(sniper).setTarget(io.lumine.mythic.bukkit.BukkitAdapter.adapt(target));
         var api=MythicBukkit.inst().getAPIHelper();
         check(api.castSkill(sniper,"MandoTuskenCycler",sniper.getLocation(),List.of(target),List.of(),1),"Mythic ranged skill executes");
         Bukkit.getScheduler().runTaskLater(this,()-> {
             try {
                 check(!projectiles.isEmpty(),"ranged skill emits a real WeaponMechanics projectile");
+                var bolt = (me.deecaad.weaponmechanics.weapon.projectile.weaponprojectile.WeaponProjectile)projectiles.getFirst();
+                check(bolt.getShooter().equals(sniper), "real NPC shot preserves Tusken ownership");
+                check(bolt.getWeaponStack() == null, "probe covers NPC shot without an inventory stack");
+                var reflected = (me.deecaad.weaponmechanics.weapon.projectile.weaponprojectile.WeaponProjectile)plugin.saberProjectiles().createReflection(bolt,player(point));
+                check(reflected.getWeaponStack()!=null, "NPC shot can enter saber reflection without null-stack failure");
+                reflected.remove();
                 for(var entity:entities) check(!entity.isDead(),"verification mobs remain alive before cleanup");
                 getLogger().info("MOB PROBE PASSED: "+checks+" assertions");cleanup();
             } catch(Throwable e) {fail(e);}
