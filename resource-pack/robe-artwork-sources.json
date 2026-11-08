@@ -1,4 +1,6 @@
 {
   "sourceCommit": "e6e6d89",
-  "description": "Restore the accepted supplied Desert Robes artwork and white undyed tint."
+  "description": "Restore the accepted supplied Desert Robes artwork and white undyed tint.",
+  "inventoryIconSourceCommit": "e22f7a2",
+  "inventoryIcons": "Original accepted icons restored byte-for-byte; worn artwork remains e6e6d89."
 }

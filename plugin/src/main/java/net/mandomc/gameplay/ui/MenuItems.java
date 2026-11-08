@@ -10,7 +10,7 @@ public final class MenuItems {
     private MenuItems() { }
 
     public static void fill(Inventory inventory) {
-        var pane = new ItemStack(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
+        var pane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         var meta = pane.getItemMeta();
         meta.displayName(Component.text(" "));
         meta.setHideTooltip(true);

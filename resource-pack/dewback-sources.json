@@ -1,0 +1,11 @@
+{
+  "source": "Legacy MandoPack",
+  "recoveredAssets": [
+    {
+      "sourcePath": "assets/minecraft/textures/custom/consumables/roasted_nuna_leg.png",
+      "sourceSha256": "fd3b8b7b4443dffa8cd6288a50214eef128979d75cac939d40aea421c7f53be3",
+      "destination": "assets/mandomc/textures/item/consumables/dewback_leg.png",
+      "changes": "Unchanged artwork renamed to Dewback Leg."
+    }
+  ]
+}
