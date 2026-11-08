@@ -53,3 +53,5 @@ His terms allow server use but prohibit rehosting extracted artwork without perm
 
 ## Sandy-biome mob assets
 Five recovered ModelEngine blueprints are tracked under server/config/common/modelengine with provenance. Generate with pinned ModelEngine R4.1.1 and import its output with `scripts/import-mob-models.py PATH_TO_GENERATED_PACK`. The required MandoMC ZIP contains these namespaced model assets plus their texture atlas directory; vanilla shader files are preserved. Cycler rifle item geometry is adapted from the ranged Tusken's existing rifle because the legacy item dispatch referenced absent cycler models. Its item poses require a client check. Original mob/cycler sounds are recovered from the pinned legacy pack.
+
+Gaffi Stick: the player item reuses the existing generated melee Tusken stick geometry and its embedded-model texture, with item display poses under `mandomc:melee/gaffi_stick`. No new artwork or shader overrides; client item poses await playtesting.

@@ -1,5 +1,5 @@
 # MythicMobs owns AI, health and level. MandoMC owns group placement and population budgets.
-# Loot and equipment drops intentionally wait for the next progression pass.
+# Tusken weapon drops are supplied once through the Mythic death integration (10% each).
 TuskenRaiderSniper:
   Type: ZOMBIE
   Display: '&6Tusken Raider &7[Lv. <caster.level>]'
@@ -41,7 +41,7 @@ TuskenRaiderSniper:
     - skill{s=MandoTuskenRelax} @self ~onDropCombat
     - skill{s=MandoTuskenCombatMovement} @target ~onTimer:10
     - skill{s=MandoTuskenCycler} @target ~onTimer:80
-    - sound{s=mandomc:mobs.tuskenraider;v=1.5;p=1} @self ~onTimer:160 0.25
+    - skill{s=MandoTuskenVoice} @self ~onTimer:160 0.25
 
 TuskenRaiderMelee:
   Type: ZOMBIE
@@ -77,7 +77,8 @@ TuskenRaiderMelee:
     - model{mid=melee_raider} @self ~onSpawn
     - model{mid=melee_raider} @self ~onLoad
     - state{mid=melee_raider;s=attack1} @self ~onAttack
-    - sound{s=mandomc:mobs.tuskenraider;v=1.5;p=1} @self ~onTimer:160 0.25
+    - skill{s=MandoTuskenVoice} @self ~onAttack
+    - skill{s=MandoTuskenVoice} @self ~onTimer:160 0.25
 
 Bantha:
   Type: PIG

@@ -29,3 +29,6 @@ spawn:
 cycler:
   mob-base-damage: 6.0
   damage-per-level: 0.5
+
+weapon-drops:
+  chance: 0.10

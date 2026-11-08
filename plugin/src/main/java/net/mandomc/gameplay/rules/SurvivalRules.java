@@ -62,7 +62,7 @@ public final class SurvivalRules implements Listener {
         if (elytras && type == Material.ELYTRA) return true;
         if (potions && (type == Material.POTION || type == Material.SPLASH_POTION
                 || type == Material.LINGERING_POTION || type == Material.TIPPED_ARROW)) return true;
-        if (!vanillaWeapons) return false;
+        if (!vanillaWeapons || "gaffi_stick".equals(items.identify(item))) return false;
         return type.name().endsWith("_SWORD") || type == Material.BOW || type == Material.CROSSBOW
                 || type == Material.SHIELD && !saber.test(item);
     }

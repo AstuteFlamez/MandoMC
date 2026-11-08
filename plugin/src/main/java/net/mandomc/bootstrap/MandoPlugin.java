@@ -34,6 +34,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     public net.mandomc.gameplay.saber.SaberService sabers() { return sabers; }
     private net.mandomc.gameplay.items.ItemCatalog items;
     private net.mandomc.commands.ItemCommand itemCommands;
+    private net.mandomc.gameplay.items.RobeRecipes robeRecipes;
 
     public net.mandomc.gameplay.items.ItemCatalog items() {
         return items;
@@ -81,7 +82,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 }
             }, sender -> sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage()
                     .deserialize(Objects.requireNonNull(language.getString("items.denied")))));
-            for (var resource : new String[] {"items.yml", "items/robes.yml", "items/sabers.yml", "sabers.yml"}) {
+            for (var resource : new String[] {"items.yml", "items/robes.yml", "items/materials.yml", "items/sabers.yml", "items/tusken.yml", "sabers.yml"}) {
                 if (!new File(getDataFolder(), resource).isFile()) saveResource(resource, false);
             }
             // Add only missing presentation badges when new bundled item families arrive.
@@ -107,6 +108,9 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             } catch (Exception error) {
                 getLogger().severe("Custom items unavailable; repair config and /mandomc items reload: " + error.getMessage());
             }
+            var hideConfig = loadFeature("bantha-hide.yml");
+            robeRecipes = new net.mandomc.gameplay.items.RobeRecipes(this, items,
+                    hideConfig.getConfigurationSection("recipes"));
             var saberConfig = new YamlConfiguration();
             saberConfig.load(new File(getDataFolder(), "sabers.yml"));
             sabers = new net.mandomc.gameplay.saber.SaberService(this, items,
@@ -131,6 +135,9 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 var settings = net.mandomc.gameplay.mobs.SandySettings.read(mobConfig);
                 var mythic = new net.mandomc.integrations.mobs.MythicMobAccess();
                 new net.mandomc.integrations.weapons.MobWeaponDamage(this, mythic, settings);
+                new net.mandomc.integrations.mobs.TuskenDrops(this, items,
+                        mobConfig.getDouble("weapon-drops.chance", 0.10));
+                new net.mandomc.integrations.mobs.BanthaDrops(this, items, hideConfig.getConfigurationSection("drops"));
                 mobs = new net.mandomc.gameplay.mobs.SandySpawns(this, settings, mythic);
                 getLogger().info("Sandy mobs ready: five types, levelled encounters and shared population limits.");
             }
@@ -177,6 +184,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (robeRecipes != null) robeRecipes.close();
         if (barrier != null) barrier.close();
         if (mobs != null) mobs.close();
         if (combat != null) combat.close();

@@ -7,6 +7,7 @@ MandoTuskenCycler:
     - lineofsight
     - distance{d=0to32}
   Skills:
+    - skill{s=MandoTuskenVoice} @self
     # Plant feet for the firing pose; restore AI automatically after the full clip.
     - stun{auraName=MandoTuskenAiming;d=46;facing=true;stopai=true;gravity=false;onEnd=MandoTuskenCombatMovement} @self
     - look{force=true;headOnly=false;immediately=true} @target
@@ -57,3 +58,8 @@ MandoTuskenRelax:
   Skills:
     - clearpath @self
     - defaultstate{mid=ranged_raider;type=walk;speed=1} @self
+
+MandoTuskenVoice:
+  Cooldown: 8
+  Skills:
+    - sound{s=mandomc:mobs.tuskenraider;v=1.5;p=1} @self
