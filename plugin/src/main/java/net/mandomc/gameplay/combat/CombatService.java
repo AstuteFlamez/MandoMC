@@ -42,6 +42,7 @@ public final class CombatService implements Listener, AutoCloseable {
     private final Map<UUID, UUID> attackers = new HashMap<>();
     private final Map<UUID, List<ItemStack>> logoutDrops = new HashMap<>();
     private final BukkitTask ticker;
+    private final java.util.Set<UUID> movementCorrections = new java.util.HashSet<>();
     private boolean closed;
 
     public CombatService(JavaPlugin plugin, ConfigurationSection config, ConfigurationSection language,
@@ -161,10 +162,17 @@ public final class CombatService implements Listener, AutoCloseable {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void teleport(PlayerTeleportEvent event) {
-        if (tagged(event.getPlayer())) {
+        if (tagged(event.getPlayer()) && !movementCorrections.contains(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(message("teleport-denied"));
         }
+    }
+
+    /** Narrow internal escape hatch for returning a vehicle rider to a verified outside position. */
+    public boolean correctMovement(Player player, org.bukkit.Location outside) {
+        movementCorrections.add(player.getUniqueId());
+        try { return player.teleport(outside, PlayerTeleportEvent.TeleportCause.PLUGIN); }
+        finally { movementCorrections.remove(player.getUniqueId()); }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

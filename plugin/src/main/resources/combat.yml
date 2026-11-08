@@ -1,3 +1,8 @@
 schema-version: 1
 # One timer for PvP, mob combat, scoreboard, travel and logout death. Restart to change.
 tag-seconds: 15
+# Client-only red glass follows the safe side of nearby WorldGuard boundaries.
+barrier:
+  radius-blocks: 6
+  blocks-below: 1
+  blocks-above: 4

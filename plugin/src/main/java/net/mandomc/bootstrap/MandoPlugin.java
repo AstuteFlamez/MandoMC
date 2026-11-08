@@ -16,6 +16,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MandoPlugin extends JavaPlugin implements Listener {
     private net.mandomc.gameplay.combat.CombatService combat;
+    private net.mandomc.gameplay.combat.CombatBarrier barrier;
+    public net.mandomc.gameplay.combat.CombatBarrier barrier() { return barrier; }
     private net.mandomc.gameplay.arrival.StarterKit starterKit;
     private net.mandomc.gameplay.rules.SurvivalRules rules;
     public net.mandomc.gameplay.combat.CombatService combat() { return combat; }
@@ -110,8 +112,13 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             saberProjectiles = new net.mandomc.integrations.weapons.SaberProjectiles(this, sabers);
             new net.mandomc.integrations.packs.SaberPack(this, saberConfig.getConfigurationSection("upstream-pack"));
             getLogger().info("Vader saber enabled: native melee, guard, reflection and bounded throws.");
-            combat = new net.mandomc.gameplay.combat.CombatService(this, loadFeature("combat.yml"),
+            var combatConfig = loadFeature("combat.yml");
+            combat = new net.mandomc.gameplay.combat.CombatService(this, combatConfig,
                     language.getConfigurationSection("combat"), sabers::finish);
+            var boundaryProtection = new net.mandomc.integrations.regions.SaberProtection();
+            barrier = new net.mandomc.gameplay.combat.CombatBarrier(this, combat,
+                    location -> !boundaryProtection.allowed(location), combatConfig.getConfigurationSection("barrier"),
+                    language.getString("combat.barrier-denied"));
             rules = new net.mandomc.gameplay.rules.SurvivalRules(this, loadFeature("survival-rules.yml"),
                     language.getConfigurationSection("rules"), sabers::isSaber, items);
             starterKit = new net.mandomc.gameplay.arrival.StarterKit(this, items, loadFeature("starter-kit.yml"),
@@ -160,6 +167,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (barrier != null) barrier.close();
         if (combat != null) combat.close();
         if (sabers != null) sabers.close();
         if (travel != null) travel.close();

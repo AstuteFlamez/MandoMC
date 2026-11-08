@@ -62,6 +62,7 @@ combat:
   timer: '<gray>Safe in <yellow><seconds>s</yellow></gray>'
   tagged: '<red>In combat. Logging out now drops your items.</red>'
   safe: '<green>You are out of combat.</green>'
+  barrier-denied: "<red>You cannot enter a safe zone while in combat.</red>"
   teleport-denied: '<red>You cannot teleport while in combat.</red>'
 rules:
   item-disabled: '<red>This item is disabled.</red>'
