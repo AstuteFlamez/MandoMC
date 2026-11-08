@@ -2,6 +2,8 @@
 Updated: 2026-11-08
 
 ## Milestone
+Client check accepted: user confirmed the latest robe icons/worn textures, gray one-space menu panes with empty recipe cells, food behavior and drops pass. These presentation/food checks are closed for this iteration. Next: balance saber blocking/reflection against ranged Tuskens, then add a substantial saber-throw stamina cost. Clans and both Tusken skirt fixes remain deferred.
+
 Food integration complete: Dewback Leg restores 8 hunger points (four icons) and drops once per Dewback death; Massiff Ribs restore 4 points (two icons), retaining their existing drop chance. Existing owned stacks refresh food metadata without losing quantity. Combined build passes 52 Java tests and 1,921 live assertions, including actual native eating and one real collectible Dewback death drop. The currently published 211-file pack already includes all food textures and the accepted robe/icon fixes; its verified hash is unchanged. Temporary FoodProbe removed; normal server restarted successfully at 17:37:52 with no startup errors. Deployed plugin hash matches the combined verified build. Next: client-check the combined food behavior and presentation.
 
 Gray panes/original icons correction: use GRAY_STAINED_GLASS_PANE with exactly one space as its name and hidden tooltip. Restore all four original robe inventory PNGs from e22f7a2; accepted worn armor textures remain intact. 52 Java tests and 350 live checks pass. Published `resource-pack-26.1.2-abb69968e525`; server restarted at 17:34:14 with verified SHA-1 `47e92a5e8b5642a0dca25e6d234fb6d202e4c2a2` and the probe removed. Next: verify the original icons in the client.
@@ -140,7 +142,7 @@ The pack builds without downloads, has root pack.mcmeta, and validates JSON plus
 Earlier recovery verification remains valid: all 294 legacy feature files matched their original Git blobs across 16 recovery branches; the full snapshot preserves obsolete docs and old main. FigJam diagrams were reviewed during the design checkpoint.
 
 ## Next action
-Playtest the ranged Tusken’s relaxed-versus-combat movement and repositioning rhythm, then continue encounter/combat tuning before drops; both skirt fixes remain deferred until late pre-release polish.
+Balance saber blocking/reflection against the ranged Tuskens, then implement the planned saber-throw stamina cost. Both Tusken skirt fixes remain deferred until late pre-release polish.
 
 ## Open
 Clan command aliases, starting credits, later travel, sandy-biome spawn/combat tuning and loot tables, defense and throw stamina after that mob, group creation cooldown, claim capacity, warpoint threshold/edge cases, raid-window duration/refresh and active-raid detection, explosive/block limits, KOTH reward delivery, event schedules, recipes/prices, vehicle redeployment details and content depth for the integrated playtest. Resource planets, aerial combat and themed replacement swords/bows are deferred. Continue through concrete player scenarios and the proposed playable slices. The arrival slice is deployed; the remaining gameplay systems are unimplemented.
