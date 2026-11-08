@@ -28,7 +28,7 @@ Legacy improvements: directional reflection instead of omnidirectional protectio
 Adding item families now installs missing bundled rarity/category badge keys without overwriting operator choices. The existing robes remain unchanged.
 
 ## Verification
-The final live Paper probe passed 33 assertions; 14 Java tests and nine pack tests pass. Four guard tests cover overheat timing, cooldown delay, heat floor and directional rejection; existing item/travel tests remain. scripts/build-saber-probe.sh builds the isolated live Paper probe. It tests native item attributes, zone policy, reflection creation/ownership and throw ownership/lifecycle with real APIs and fake-player inventories. Remove its JAR after use. This does not replace rendered client checks or authenticated multiplayer reflection/death testing.
+The final live Paper probe passed 33 assertions; 14 Java tests and nine pack tests pass. Four guard tests cover overheat timing, cooldown delay, heat floor and directional rejection; existing item/travel tests remain. scripts/build-saber-probe.sh builds the isolated live Paper probe. It tests native item attributes, zone policy, reflection creation/ownership and throw ownership/lifecycle with real APIs and fake-player inventories. The temporary test JAR was removed after passing. This does not replace rendered client checks or authenticated multiplayer reflection/death testing.
 
 ## Pause note
 Next action: client-playtest Vader’s hilt/blade/blocking pose, throw path and heat feedback with E11 fire outside the safe zone. Crafting, broad enchantment validation and multiplayer balance remain deferred.
