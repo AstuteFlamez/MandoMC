@@ -25,8 +25,9 @@ TuskenRaiderSniper:
   AIGoalSelectors:
     - clear
     - lookattarget
-    - movetowardsdistanceoftarget{s=1;minr=10;maxrange=16}
-    - fleeTarget{s=1;distance=6}
+    # Faster combat goals; ordinary wandering retains speed 1 / base 0.27.
+    - fleePlayers{speed=1.5;safespeed=1.5;distance=8}
+    - moveWithinDistanceOfTarget{speed=1.5;minrange=16;maxrange=32}
     - randomstroll
     - lookatplayers
   AITargetSelectors:
@@ -37,6 +38,9 @@ TuskenRaiderSniper:
   Skills:
     - model{mid=ranged_raider;h=false} @self ~onSpawn
     - model{mid=ranged_raider;h=false} @self ~onLoad
+    - defaultstate{mid=ranged_raider;type=walk;speed=1.5} @self ~onEnterCombat
+    - skill{s=MandoTuskenRelax} @self ~onDropCombat
+    - skill{s=MandoTuskenCombatMovement} @target ~onTimer:10
     - skill{s=MandoTuskenCycler} @target ~onTimer:80
     - sound{s=mandomc:mobs.tuskenraider;v=1.5;p=1} @self ~onTimer:160 0.25
 

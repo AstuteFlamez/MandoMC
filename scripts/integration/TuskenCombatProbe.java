@@ -131,15 +131,92 @@ public final class TuskenCombatProbe extends JavaPlugin {
                 later(15,()-> {
                     check(model.getAnimationHandler().isWalking(model),"melee native locomotion detected");
                     check(model.getAnimationHandler().isPlayingAnimation("walk"),"melee walk automatically resumes");
-                    getLogger().info("TUSKEN COMBAT PROBE PASSED: "+checks+" assertions");cleanup();
+                    melee.remove(); combatMovement();
                 });
             });
         });
     }
+    private void combatMovement() throws Exception {
+        var calm=spawn("TuskenRaiderSniper",new Location(world,600.5,301,600.5),false);
+        later(5,()-> {
+            check(walkSpeed(calm)==1,"calm Tusken keeps normal walk playback");
+            var calmStart=calm.getLocation();
+            calm.getPathfinder().moveTo(new Location(world,624.5,301,600.5),1);
+            later(12,()-> {
+                double calmDistance=calmStart.distance(calm.getLocation());
+                check(calmDistance>1,"baseline normal-speed navigation advances");
+                calm.remove();
+                var fighter=spawn("TuskenRaiderSniper",new Location(world,600.5,301,600.5),false);
+                var enemy=world.spawn(new Location(world,627.5,301,600.5),Cow.class,c->{
+                    c.setAI(false);c.setGravity(false);c.setRemoveWhenFarAway(false);
+                });
+                entities.add(enemy);
+                var mythic=MythicBukkit.inst();
+                var activeMob=mythic.getAPIHelper().getMythicMobInstance(fighter);
+                var fire=(io.lumine.mythic.core.skills.AbstractSkill)mythic.getSkillManager()
+                        .getSkill("MandoTuskenCycler").orElseThrow();
+                // Isolate real native combat movement before allowing the next shot.
+                activeMob.setSkillCooldownMillis(fire,60000);
+                later(5,()-> {
+                    var combatStart=fighter.getLocation();
+                    select(fighter,enemy);
+                    later(12,()-> {
+                        double combatDistance=combatStart.distance(fighter.getLocation());
+                        getLogger().info("MOVEMENT normal="+calmDistance+" combat="+combatDistance);
+                        check(combatDistance>calmDistance*1.25,"real combat chase is faster than calm walking");
+                        check(walkSpeed(fighter)==1.5,"combat automatically increases walk playback");
+                        enemy.teleport(fighter.getLocation().add(0,0,12));
+                        fighter.getPathfinder().stopPathfinding();
+                        var repositionStart=fighter.getLocation();
+                        later(25,()-> {
+                            check(repositionStart.distance(fighter.getLocation())>0.8,
+                                    "natural combat timer repositions inside firing range");
+                            check(fighter.hasAI(),"movement between shots keeps AI active");
+                            var model=active(fighter,"ranged_raider");
+                            check(model.getAnimationHandler().isWalking(model),
+                                    "restless repositioning drives the automatic walk animation");
+                            enemy.teleport(fighter.getLocation().add(0,0,12));
+                            var aimStart=fighter.getLocation();
+                            activeMob.clearSkillCooldowns();
+                            cast(fighter,"MandoTuskenCycler",enemy);
+                            later(10,()-> {
+                                check(!fighter.hasAI(),"aiming suspends restless AI movement");
+                                check(aimStart.distance(fighter.getLocation())<0.15,
+                                        "combat reposition timer cannot move the planted shooter");
+                            });
+                            later(40,()->check(aimStart.distance(fighter.getLocation())<0.15,
+                                    "shooter stays planted through recoil recovery"));
+                            later(65,()-> {
+                                check(fighter.hasAI(),"combat movement resumes after firing pose");
+                                check(aimStart.distance(fighter.getLocation())>0.5,
+                                        "Tusken automatically repositions again after shooting");
+                                activeMob.getThreatTable().dropCombat();
+                                activeMob.setTarget(null);fighter.setTarget(null);enemy.remove();
+                                later(5,()-> {
+                                    check(!activeMob.getThreatTable().inCombat(),"target loss clears Mythic combat state");
+                                    check(walkSpeed(fighter)==1,"dropping combat restores calm walk playback");
+                                    getLogger().info("TUSKEN COMBAT PROBE PASSED: "+checks+" assertions");
+                                    cleanup();
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    }
+    private double walkSpeed(Mob mob) {
+        return active(mob,"ranged_raider").getAnimationHandler()
+                .getDefaultProperty(com.ticxo.modelengine.api.animation.ModelState.WALK).getSpeed();
+    }
     private Mob spawn(String type,Location p) throws Exception {
+        return spawn(type,p,true);
+    }
+    private Mob spawn(String type,Location p,boolean removeGoals) throws Exception {
         var e=(Mob)MythicBukkit.inst().getAPIHelper().spawnMythicMob(type,p,1);entities.add(e);
         MythicBukkit.inst().getAPIHelper().getMythicMobInstance(e).setDespawnMode(DespawnMode.NEVER);
-        Bukkit.getMobGoals().removeAllGoals(e); e.setRemoveWhenFarAway(false);return e;
+        if(removeGoals) Bukkit.getMobGoals().removeAllGoals(e);
+        e.setRemoveWhenFarAway(false);return e;
     }
     private void select(Mob e,LivingEntity t) {
         e.setTarget(t);var api=MythicBukkit.inst().getAPIHelper();

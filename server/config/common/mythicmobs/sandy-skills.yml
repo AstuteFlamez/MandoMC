@@ -8,7 +8,7 @@ MandoTuskenCycler:
     - distance{d=0to32}
   Skills:
     # Plant feet for the firing pose; restore AI automatically after the full clip.
-    - stun{d=46;facing=true;stopai=true;gravity=false} @self
+    - stun{auraName=MandoTuskenAiming;d=46;facing=true;stopai=true;gravity=false;onEnd=MandoTuskenCombatMovement} @self
     - look{force=true;headOnly=false;immediately=true} @target
     - state{mid=ranged_raider;s=attack;li=0;lo=2} @self
     - look{force=true;headOnly=false;immediately=true;repeat=18;repeatInterval=1} @target
@@ -26,3 +26,35 @@ MandoTuskenCyclerFire:
   Skills:
     - look{force=true;headOnly=false;immediately=true} @target
     - weaponMechanicsShoot{weapon=CyclerRifle;spread=3;head=false} @target
+
+# Mythic's threat table owns combat state. Movement never changes the fire cadence.
+MandoTuskenCombatMovement:
+  Conditions:
+    - health{h=>0} true
+    - incombat true
+    - hasaura{aura=MandoTuskenAiming} false
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=0to32}
+  Skills:
+    - defaultstate{mid=ranged_raider;type=walk;speed=1.5} @self
+    - skill{s=MandoTuskenReposition} @target
+
+MandoTuskenReposition:
+  Cooldown: 1
+  Conditions:
+    - incombat true
+    - hasaura{aura=MandoTuskenAiming} false
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=8to16}
+  Skills:
+    # Pick a nearby surface point; native navigation handles obstacles, no teleporting.
+    - goto{speed=1.5} @RandomLocationsNearCaster{amount=3;limit=1;minradius=3;radius=5;onsurface=true}
+
+MandoTuskenRelax:
+  Conditions:
+    - incombat false
+  Skills:
+    - clearpath @self
+    - defaultstate{mid=ranged_raider;type=walk;speed=1} @self
