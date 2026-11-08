@@ -33,6 +33,12 @@ def check_reference(reference, folder, extension):
 
 def check_item_models(value):
     if isinstance(value, dict):
+        # 26.1.2 Dye.calculate passes an undyed integer default through as ARGB.
+        # RGB-only integers silently make GUI icons transparent; use -1 for white.
+        if value.get('type') == 'minecraft:dye':
+            color = value.get('default')
+            if isinstance(color, int) and ((color >> 24) & 255) != 255:
+                raise SystemExit('Dye tint default must be opaque ARGB (use -1 for white), not RGB-only.')
         if value.get('type') == 'minecraft:model':
             check_reference(value['model'], 'models', '.json')
         for child in value.values():

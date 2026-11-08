@@ -31,3 +31,12 @@ Robes and admin browser implemented. Crafting remains deferred. Next action: use
 
 ## Icon correction
 The recovered 32px inventory icons are already colored. They use a white default dye tint and a single model layer; explicit leather dye colors still tint them. Removed the unrelated 16px leather icon overlays and vanilla chestplate overlay, which obscured the custom silhouettes. Worn equipment layers are unchanged and were confirmed good by the user. Revised inventory appearance needs a client check.
+
+## Invisible GUI icon diagnosis
+Only robes were affected; E11, ammo and vanilla items remained visible. Compared the exact installed 26.1.2 vanilla generated/leather models and client code before changing assets. GUI transforms match vanilla; PNGs and model references resolve. The available client log predates the latest reconnect, so it cannot rule out a later pack conflict.
+
+Confirmed defect: robe dye defaults were RGB-only integers (initially 10511680, then 16777215). In this client, Dye.calculate calls DyedItemColor.getOrDefault, which returns an undyed default unchanged; only explicit DYED_COLOR values are forced opaque. ExtraCodecs.RGB_COLOR_CODEC preserves integer input. Thus 16777215 becomes 0x00FFFFFF, with zero alpha. Vanilla leather uses -6265536 (0xFFA06540). The correct untinted opaque default is -1 (0xFFFFFFFF). Removing untinted overlays exposed the entirely transparent base. GUI item rendering retains alpha; held visibility therefore does not establish a valid GUI icon.
+
+Correction changes only four inventory tint defaults to -1. Models, PNGs, native dye behavior and worn armor are unchanged. The pack builder now rejects nonopaque integer dye defaults, with regression tests for both previous invalid values and valid vanilla/white values. Explicit RGB-vector defaults and equipment color_when_undyed remain separate formats. Client hotbar confirmation is still required.
+
+References: https://www.minecraft.net/en-us/article/minecraft-java-edition-26-1 documents the separate item shader and UI lightmap; exact tint behavior was verified in the installed 26.1.2 client classes rather than inferred from older pack guides.
