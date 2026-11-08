@@ -30,6 +30,10 @@ public final class TuskenCombatProbe extends JavaPlugin {
         later(120, this::begin);
     }
     private void begin() throws Exception {
+        for (String id:List.of("ranged_raider","melee_raider")) {
+            for(var animation:ModelEngineAPI.getBlueprint(id).getAnimations().values())
+                check(animation.isOverride(),id+" "+animation.getName()+" has Override enabled");
+        }
         world = Bukkit.getWorld(NamespacedKey.minecraft("overworld"));
         for (int x=36; x<=39; x++) for (int z=36; z<=39; z++) {
             var c=world.getChunkAt(x,z); c.addPluginChunkTicket(this); chunks.add(c);
@@ -163,8 +167,8 @@ public final class TuskenCombatProbe extends JavaPlugin {
                     later(12,()-> {
                         double combatDistance=combatStart.distance(fighter.getLocation());
                         getLogger().info("MOVEMENT normal="+calmDistance+" combat="+combatDistance);
-                        check(combatDistance>calmDistance*1.25,"real combat chase is faster than calm walking");
-                        check(walkSpeed(fighter)==1.5,"combat automatically increases walk playback");
+                        check(combatDistance>calmDistance*1.15,"real combat chase is faster than calm walking");
+                        check(walkSpeed(fighter)==1.3,"combat automatically increases walk playback");
                         enemy.teleport(fighter.getLocation().add(0,0,12));
                         fighter.getPathfinder().stopPathfinding();
                         var repositionStart=fighter.getLocation();

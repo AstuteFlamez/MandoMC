@@ -37,7 +37,7 @@ MandoTuskenCombatMovement:
     - health{h=>0} true
     - distance{d=0to32}
   Skills:
-    - defaultstate{mid=ranged_raider;type=walk;speed=1.5} @self
+    - defaultstate{mid=ranged_raider;type=walk;speed=1.3} @self
     - skill{s=MandoTuskenReposition} @target
 
 MandoTuskenReposition:
@@ -50,7 +50,7 @@ MandoTuskenReposition:
     - distance{d=8to16}
   Skills:
     # Pick a nearby surface point; native navigation handles obstacles, no teleporting.
-    - goto{speed=1.5} @RandomLocationsNearCaster{amount=3;limit=1;minradius=3;radius=5;onsurface=true}
+    - goto{speed=1.3} @RandomLocationsNearCaster{amount=3;limit=1;minradius=3;radius=5;onsurface=true}
 
 MandoTuskenRelax:
   Conditions:
