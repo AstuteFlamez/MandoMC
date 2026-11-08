@@ -5,10 +5,19 @@ item-model: mandomc:sabers/vader
 hilt-model: mandomc:sabers/vader_hilt
 throw-damage: 8.0
 throw-cooldown-ticks: 40
-throw-range: 12.0
+throw-range: 18.0
 throw-speed: 1.0
 throw-return-speed: 1.5
-throw-hit-radius: 0.45
+throw-hit-radius: 0.22
+# Each throw samples a coherent curve, bank and spin. 0 disables variation; 1 uses the full range.
+throw-arc-width: 1.8
+throw-arc-height: 0.65
+throw-bank-degrees: 25.0
+throw-spin-degrees: 38.0
+throw-lock-half-angle: 18.0
+throw-lock-correction: 1.5
+throw-return-height: 2.4
+throw-variation: 1.0
 guard-capacity: 100.0
 guard-cost-per-hit: 20.0
 guard-cooling-per-tick: 0.5

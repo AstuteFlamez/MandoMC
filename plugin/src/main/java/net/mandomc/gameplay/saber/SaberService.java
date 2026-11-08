@@ -15,10 +15,15 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.*;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
+import org.bukkit.util.BoundingBox;
+import java.util.concurrent.ThreadLocalRandom;
+import io.papermc.paper.event.entity.EntityKnockbackEvent;
+import io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent;
 
-/** One main-thread scheduler owns bounded throws and guard heat. The real item never leaves its owner. */
+/** One main-thread scheduler owns bounded throws and guard heat. The airborne item is held for its owner until catch or cleanup. */
 public final class SaberService implements Listener {
     private final JavaPlugin plugin;
     private final ItemCatalog catalog;
@@ -31,19 +36,68 @@ public final class SaberService implements Listener {
     private final Set<UUID> selected=new HashSet<>();
     private final Set<UUID> throwDamage=new HashSet<>();
     private final BukkitTask task;
+    private final NamespacedKey storedItem;
+    private final NamespacedKey storedSlot;
+    private HitImpact impact;
+    private static final class HitImpact {
+        final UUID owner;
+        final UUID victim;
+        final Vector direction;
+        boolean accepted;
+        HitImpact(Player owner, LivingEntity victim, Vector direction) {
+            this.owner = owner.getUniqueId();
+            this.victim = victim.getUniqueId();
+            this.direction = direction.clone().setY(0);
+        }
+    }
     private int tick;
     private static final class Flight {
-        final Player owner; final int slot; final ItemStack reserved; final ItemDisplay display;
-        final Vector direction; final Set<UUID> hit=new HashSet<>();
-        Location location; int age; double distance; boolean returning;
-        Flight(Player p,ItemStack i,ItemDisplay d) {
-            owner=p;slot=p.getInventory().getHeldItemSlot();reserved=i;display=d;
-            location=d.getLocation(); direction=p.getEyeLocation().getDirection().normalize();
+        final Player owner;
+        final int slot;
+        final ItemStack item;
+        final ItemDisplay display;
+        final SaberArc arc;
+        final SaberContacts contacts = new SaberContacts();
+        final Location origin;
+        final Vector targetAnchor;
+        final Vector targetOffset = new Vector();
+        final SaberArc.Style style;
+        final SaberMotion motion;
+        SaberBlade.Pose blade;
+        Mob target;
+        Location location;
+        int age;
+        boolean recalling;
+
+        Flight(Player player, ItemDisplay display, Mob target, SaberSettings settings) {
+            this.owner = player;
+            this.slot = player.getInventory().getHeldItemSlot();
+            this.item = player.getInventory().getItem(slot).clone();
+            this.display = display;
+            this.target = target;
+            this.origin = display.getLocation();
+            this.location = origin.clone();
+            this.targetAnchor = target == null ? origin.toVector() : body(target).toVector();
+            Vector direction = target == null ? player.getEyeLocation().getDirection()
+                    : targetAnchor.clone().subtract(origin.toVector()).normalize();
+            Vector right = new Vector(-direction.getZ(), 0, direction.getX());
+            if (right.lengthSquared() < 1e-6) {
+                double yaw = Math.toRadians(player.getLocation().getYaw());
+                right = new Vector(-Math.cos(yaw), 0, -Math.sin(yaw));
+            }
+            double distance = target == null ? 0 : targetAnchor.distance(origin.toVector());
+            double reach = target == null ? settings.range() : Math.min(settings.range(), distance + 1.5);
+            this.style = SaberArc.Style.sample(settings, ThreadLocalRandom.current());
+            this.arc = new SaberArc(origin.toVector(), direction, right, reach, distance, style);
+            this.motion = new SaberMotion(arc, style, settings, origin.toVector(), player.getEyeLocation().getYaw());
+            this.blade = motion.initialPose(origin.toVector());
         }
     }
     public SaberService(JavaPlugin plugin,ItemCatalog catalog,SaberSettings settings,ConfigurationSection messages) {
         this.plugin=plugin;this.catalog=catalog;this.settings=settings;this.messages=messages;
         if(!isSaber(catalog.create(settings.itemId()))) throw new IllegalArgumentException("Configured saber must be a registered SHIELD");
+        storedItem = new NamespacedKey(plugin, "saber_flight_item");
+        storedSlot = new NamespacedKey(plugin, "saber_flight_slot");
         plugin.getServer().getPluginManager().registerEvents(this,plugin);
         task=plugin.getServer().getScheduler().runTaskTimer(plugin,this::tick,1,1);
     }
@@ -85,7 +139,9 @@ public final class SaberService implements Listener {
     }
     @EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
     public void attack(EntityDamageByEntityEvent e) {
-        if(!(e.getDamager() instanceof Player p) || throwDamage.contains(p.getUniqueId()) || !isSaber(p.getInventory().getItemInMainHand())) return;
+        if(!(e.getDamager() instanceof Player p) || throwDamage.contains(p.getUniqueId())) return;
+        if(busy(p)) {e.setCancelled(true);message(p,"in-flight");return;}
+        if(!isSaber(p.getInventory().getItemInMainHand())) return;
         if(p.isSneaking()) {e.setCancelled(true);launch(p);return;}
         if(busy(p)||guard(p).disabled(tick)||!allowed(p.getLocation())||!allowed(e.getEntity().getLocation())) {
             e.setCancelled(true);message(p,busy(p)?"in-flight":guard(p).disabled(tick)?"overheated":"safe-zone");
@@ -93,10 +149,27 @@ public final class SaberService implements Listener {
     }
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
     public void damaged(EntityDamageByEntityEvent e) {
-        if(e.getDamager() instanceof Player p && isSaber(p.getInventory().getItemInMainHand()) && e.getFinalDamage()>0) sound(e.getEntity().getLocation(),"hit");
+        if (e.getDamager() instanceof Player p && e.getFinalDamage() > 0) {
+            if (impact != null && impact.owner.equals(p.getUniqueId()) && impact.victim.equals(e.getEntity().getUniqueId())) {
+                impact.accepted = true;
+            } else if (isSaber(p.getInventory().getItemInMainHand())) sound(e.getEntity().getLocation(), "hit");
+        }
         if(e.getEntity() instanceof Player p && isSaber(p.getInventory().getItemInMainHand())
                 && e.isApplicable(EntityDamageEvent.DamageModifier.BLOCKING) && e.getDamage(EntityDamageEvent.DamageModifier.BLOCKING)<0) consumeGuard(p);
     }
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void knockback(EntityKnockbackEvent event) {
+        if (impact == null || !impact.accepted || !impact.victim.equals(event.getEntity().getUniqueId())
+                || impact.direction.lengthSquared() < 1e-6) return;
+        if (event instanceof EntityPushedByEntityAttackEvent byEntity
+                && !impact.owner.equals(byEntity.getPushedBy().getUniqueId())) return;
+        Vector nativePush = event.getKnockback();
+        double force = Math.hypot(nativePush.getX(), nativePush.getZ());
+        // Preserve native resistance/vertical response and the cancellable knockback event.
+        Vector push = impact.direction.clone().normalize().multiply(force).setY(nativePush.getY());
+        event.setKnockback(push);
+    }
+
     @EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
     public void projectile(ProjectileHitEvent e) {
         if(!(e.getHitEntity() instanceof Player p)||!canReflect(p,e.getEntity().getVelocity())) return;
@@ -125,9 +198,11 @@ public final class SaberService implements Listener {
             d.setPersistent(false);d.setInvulnerable(true);d.setGravity(false);
             d.setItemStack(real.clone());d.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.FIXED);
             d.setTeleportDuration(1);d.setViewRange(0.5f);
+            d.setInterpolationDuration(1);d.setInterpolationDelay(0);d.setRotation(0,0);
         });
-        var flight=new Flight(p,real,display);flights.put(p.getUniqueId(),flight);
-        model(real,settings.hilt());p.getInventory().setItem(flight.slot,real);p.clearActiveItem();
+        var flight=new Flight(p,display,findTarget(p),settings);flights.put(p.getUniqueId(),flight);
+        display.setTransformation(flight.blade.transformation());
+        reserve(flight);p.clearActiveItem();
         cooldowns.put(p.getUniqueId(),tick+settings.cooldown());sound(p.getLocation(),"throw");return true;
     }
     private void tick() {
@@ -136,7 +211,7 @@ public final class SaberService implements Listener {
         guards.entrySet().removeIf(e->e.getValue().heat()==0&&!e.getValue().disabled(tick));
         cooldowns.entrySet().removeIf(e->e.getValue()<=tick);
         for(Player p:Bukkit.getOnlinePlayers()) {
-            boolean held=isSaber(p.getInventory().getItemInMainHand());
+            boolean held=isSaber(p.getInventory().getItemInMainHand()) || busy(p);
             if(held && selected.add(p.getUniqueId())) sound(p.getLocation(),"on");
             else if(!held && selected.remove(p.getUniqueId())) sound(p.getLocation(),"off");
             if(held && tick%5==0 && guards.containsKey(p.getUniqueId())) p.sendActionBar(MiniMessage.miniMessage().deserialize(
@@ -146,37 +221,244 @@ public final class SaberService implements Listener {
             try {step(f);} catch(RuntimeException error) {plugin.getLogger().warning("Saber throw stopped: "+error.getMessage());finish(f.owner.getUniqueId());}
         }
     }
-    private void step(Flight f) {
-        Player p=f.owner;
-        if(!p.isOnline()||p.isDead()||!p.getWorld().equals(f.location.getWorld())||!f.display.isValid()
-                ||p.getInventory().getHeldItemSlot()!=f.slot||!isSaber(p.getInventory().getItem(f.slot))||++f.age>100) {finish(p.getUniqueId());return;}
-        Location target=p.getEyeLocation();
-        if(f.returning && f.location.distanceSquared(target)<2.25) {finish(p.getUniqueId());return;}
-        Vector motion=f.returning?target.toVector().subtract(f.location.toVector()).normalize().multiply(settings.returnSpeed()):f.direction.clone().multiply(settings.speed());
-        double length=motion.length();
-        if(!f.returning) {
-            var wall=f.location.getWorld().rayTraceBlocks(f.location,motion,length,FluidCollisionMode.NEVER,true);
-            if(wall!=null) length=Math.min(length,wall.getHitPosition().distance(f.location.toVector()));
-            Location end=f.location.clone().add(motion.clone().normalize().multiply(length));
-            if(!allowed(p.getLocation()) || !allowed(end) || !allowed(f.location)) {f.returning=true;return;}
-            var hit=f.location.getWorld().rayTraceEntities(f.location,motion,length,settings.radius(),
-                    e->e instanceof LivingEntity && e!=p && !e.getUniqueId().equals(f.display.getUniqueId()) && !f.hit.contains(e.getUniqueId()));
-            if(hit!=null && hit.getHitEntity() instanceof LivingEntity victim && allowed(victim.getLocation())) {
-                f.hit.add(victim.getUniqueId());throwDamage.add(p.getUniqueId());
-                try {victim.damage(settings.throwDamage(),p);} finally {throwDamage.remove(p.getUniqueId());}
-                sound(victim.getLocation(),"hit");
-            }
-            f.distance+=length;if(wall!=null||f.distance>=settings.range()) f.returning=true;
-        }
-        f.location.add(motion.clone().normalize().multiply(length));
-        f.location.setYaw((f.age*35)%360);f.location.setPitch(90);f.display.teleport(f.location);
+    private static Location body(LivingEntity entity) {
+        return entity.getBoundingBox().getCenter().toLocation(entity.getWorld());
     }
+
+    private Mob findTarget(Player player) {
+        Location eye = player.getEyeLocation();
+        Vector aim = eye.getDirection();
+        double bestAngle = Math.cos(Math.toRadians(settings.lockAngle()));
+        double bestDistance = Double.MAX_VALUE;
+        Mob best = null;
+        for (Entity entity : eye.getWorld().getNearbyEntities(eye, settings.range(), settings.range(), settings.range())) {
+            if (!(entity instanceof Mob mob) || !targetable(mob, player)) continue;
+            Location center = body(mob);
+            Vector offset = center.toVector().subtract(eye.toVector());
+            double distance = offset.length();
+            if (distance < 1 || distance > settings.range() - 0.75) continue;
+            double angle = aim.dot(offset.multiply(1 / distance));
+            if (angle < bestAngle || (Math.abs(angle - bestAngle) < 1e-6 && distance >= bestDistance)) continue;
+            if (!clearSight(eye, center)) continue;
+            best = mob;
+            bestAngle = angle;
+            bestDistance = distance;
+        }
+        return best;
+    }
+
+    private boolean targetable(Mob mob, Player owner) {
+        return mob.isValid() && !mob.isDead() && !mob.isInvulnerable() && allowed(mob.getLocation())
+                && (!(mob instanceof Tameable pet) || !owner.getUniqueId().equals(pet.getOwnerUniqueId()));
+    }
+
+    private record PathBlock(int x, int y, int z) {}
+
+    private boolean clearSight(Location start, Location end) {
+        return clearSight(start, end, new HashMap<>());
+    }
+
+    private boolean clearSight(Location start, Location end, Map<PathBlock, Boolean> permissions) {
+        Vector delta = end.toVector().subtract(start.toVector());
+        double length = delta.length();
+        if (length < 1e-6) return true;
+        int samples = Math.max(1, (int) Math.ceil(length / 0.25));
+        for (int i = 0; i <= samples; i++) {
+            Location point = start.clone().add(delta.clone().multiply((double) i / samples));
+            var block = new PathBlock(point.getBlockX(), point.getBlockY(), point.getBlockZ());
+            if (!permissions.computeIfAbsent(block, ignored -> loaded(point) && allowed(point))) return false;
+        }
+        return start.getWorld().rayTraceBlocks(start, delta, length, FluidCollisionMode.NEVER, true) == null;
+    }
+
+    private static boolean loaded(Location point) {
+        return point.getY() >= point.getWorld().getMinHeight() && point.getY() < point.getWorld().getMaxHeight()
+                && point.getWorld().isChunkLoaded(point.getBlockX() >> 4, point.getBlockZ() >> 4);
+    }
+
+    private void trackTarget(Flight flight) {
+        Mob target = flight.target;
+        if (target == null) return;
+        Location center = body(target);
+        if (!target.getWorld().equals(flight.location.getWorld()) || !targetable(target, flight.owner)
+                || center.toVector().distance(flight.targetAnchor) > settings.lockCorrection()
+                || center.distance(flight.origin) > settings.range() || !clearSight(flight.location, center)) {
+            flight.target = null;
+            return;
+        }
+        Vector correction = center.toVector().subtract(flight.targetAnchor).subtract(flight.targetOffset);
+        double length = correction.length();
+        if (length > 0.15) correction.multiply(0.15 / length);
+        flight.targetOffset.add(correction);
+    }
+
+    private void step(Flight flight) {
+        Player player = flight.owner;
+        if (!player.isOnline() || player.isDead() || !player.getWorld().equals(flight.location.getWorld())
+                || !flight.display.isValid() || player.getInventory().getHeldItemSlot() != flight.slot
+                || !empty(player.getInventory().getItem(flight.slot)) || ++flight.age > 100
+                || !allowed(player.getLocation()) || !allowed(flight.location)) {
+            finish(player.getUniqueId());
+            return;
+        }
+        Location hand = player.getEyeLocation();
+        if (flight.motion.progress() <= flight.arc.attackTime()) trackTarget(flight);
+        else flight.target = null;
+        SaberBlade.Pose pose = flight.motion.next(flight.location.toVector(), hand.toVector(),
+                flight.targetOffset, flight.recalling);
+        Vector motion = pose.center().clone().subtract(flight.location.toVector());
+        if (!move(flight, motion, pose)) {
+            if (flight.display.isValid()) render(flight);
+            return;
+        }
+        if ((flight.recalling || flight.motion.progress() >= 1) && flight.location.distanceSquared(hand) < 0.36) {
+            finish(player.getUniqueId());
+            return;
+        }
+        render(flight);
+    }
+
+    private void render(Flight flight) {
+        flight.location.setYaw(0);
+        flight.location.setPitch(0);
+        flight.display.setInterpolationDelay(0);
+        flight.display.setTransformation(flight.blade.transformation());
+        flight.display.teleport(flight.location);
+    }
+
+    private boolean move(Flight flight, Vector motion) {
+        return move(flight, motion, new SaberBlade.Pose(flight.location.toVector().add(motion),
+                flight.blade.rotation(), flight.blade.halfLength()));
+    }
+
+    private boolean move(Flight flight, Vector motion, SaberBlade.Pose destination) {
+        SaberBlade.Pose start = flight.blade;
+        int steps = SaberBlade.steps(start, destination);
+        // Region boundaries use block coordinates; share checks across this one densely sampled move.
+        Map<PathBlock, Boolean> permissions = new HashMap<>();
+        for (int i = 1; i <= steps; i++) {
+            SaberBlade.Pose next = start.interpolate(destination, (double) i / steps);
+            Location end = next.center().toLocation(flight.location.getWorld());
+            // Check the pivot's travel and the complete visible blade before any contact damage.
+            if (!clearSight(flight.location, end, permissions)
+                    || !clearSight(next.base().toLocation(end.getWorld()), next.tip().toLocation(end.getWorld()), permissions)
+                    || !clearSight(flight.blade.base().toLocation(end.getWorld()), next.base().toLocation(end.getWorld()), permissions)
+                    || !clearSight(flight.blade.tip().toLocation(end.getWorld()), next.tip().toLocation(end.getWorld()), permissions)) {
+                if (flight.recalling) finish(flight.owner.getUniqueId());
+                else flight.recalling = true;
+                return false;
+            }
+            damageContacts(flight, next);
+            if (!flights.containsKey(flight.owner.getUniqueId())) return false;
+            flight.location = end;
+            flight.blade = next;
+        }
+        return true;
+    }
+
+    private void damageContacts(Flight flight, SaberBlade.Pose next) {
+        SaberBlade.Pose previous = flight.blade;
+        double reach = next.halfLength() + settings.radius();
+        BoundingBox sweep = BoundingBox.of(previous.center(), next.center()).expand(reach);
+        Set<UUID> atStart = new HashSet<>();
+        Set<UUID> atEnd = new HashSet<>();
+        List<LivingEntity> hits = new ArrayList<>();
+        for (Entity entity : flight.location.getWorld().getNearbyEntities(sweep)) {
+            if (!(entity instanceof LivingEntity victim) || victim.getUniqueId().equals(flight.owner.getUniqueId())
+                    || victim.isDead() || victim.isInvulnerable() || !allowed(victim.getLocation())) continue;
+            BoundingBox bounds = victim.getBoundingBox();
+            BoundingBox envelope = bounds.clone().expand(reach);
+            // A spinning blade crossing the same body again within one pass is still one contact.
+            if (envelope.contains(previous.center())) atStart.add(victim.getUniqueId());
+            if (envelope.contains(next.center())) atEnd.add(victim.getUniqueId());
+            if (SaberBlade.touches(bounds, previous, settings.radius())
+                    || SaberBlade.touches(bounds, next, settings.radius())) hits.add(victim);
+        }
+        flight.contacts.retain(atStart);
+        for (LivingEntity victim : hits) {
+            Vector center = body(victim).toVector();
+            Vector point = next.closest(center);
+            Location contact = point.toLocation(flight.location.getWorld());
+            if (!clearSight(contact, body(victim)) || !flight.contacts.enter(victim.getUniqueId())) continue;
+            Vector direction = point.clone().subtract(previous.closest(center));
+            if (direction.lengthSquared() < 1e-6) direction = next.center().clone().subtract(previous.center());
+            HitImpact hit = new HitImpact(flight.owner, victim, direction);
+            HitImpact prior = impact;
+            int immunity = victim.getNoDamageTicks();
+            double lastDamage = victim.getLastDamage();
+            impact = hit;
+            throwDamage.add(flight.owner.getUniqueId());
+            try {
+                victim.setNoDamageTicks(0);
+                victim.damage(settings.throwDamage(), flight.owner);
+            } finally {
+                victim.setNoDamageTicks(immunity);
+                victim.setLastDamage(lastDamage);
+                throwDamage.remove(flight.owner.getUniqueId());
+                impact = prior;
+            }
+            if (hit.accepted) {
+                if (flight.target != null && flight.target.getUniqueId().equals(victim.getUniqueId())) flight.target = null;
+                sound(contact, "hit");
+                contact.getWorld().spawnParticle(Particle.CRIT, contact, 8, .16, .16, .16, .12);
+                contact.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, contact, 5, .12, .12, .12, .03);
+            }
+            if (!flights.containsKey(flight.owner.getUniqueId())) break;
+        }
+        flight.contacts.retain(atEnd);
+    }
+    private static boolean empty(ItemStack item) { return item == null || item.getType().isAir(); }
+
+    private void reserve(Flight flight) {
+        // Player snapshots save inventory and PDC together: a saved in-flight item can recover after a crash.
+        byte[] bytes = flight.item.serializeAsBytes();
+        var data = flight.owner.getPersistentDataContainer();
+        data.set(storedItem, PersistentDataType.BYTE_ARRAY, bytes);
+        data.set(storedSlot, PersistentDataType.INTEGER, flight.slot);
+        flight.owner.getInventory().setItem(flight.slot, null);
+    }
+
+    private void clearStored(Player player) {
+        player.getPersistentDataContainer().remove(storedItem);
+        player.getPersistentDataContainer().remove(storedSlot);
+    }
+
+    private void returnItem(Player player, ItemStack item, int slot) {
+        if (empty(player.getInventory().getItem(slot))) player.getInventory().setItem(slot, item);
+        else {
+            // A command or another plugin may fill the reserved slot. Never overwrite that item.
+            for (ItemStack overflow : player.getInventory().addItem(item).values()) {
+                var drop = player.getWorld().dropItem(player.getLocation(), overflow);
+                drop.setOwner(player.getUniqueId());
+            }
+        }
+        clearStored(player);
+    }
+
     public void finish(UUID owner) {
-        Flight f=flights.remove(owner);if(f==null)return;
-        f.display.remove();
-        // Restore only presentation on the item already owned by the player; never create a replacement.
-        ItemStack item=f.owner.getInventory().getItem(f.slot);
-        if(isSaber(item)) {model(item,settings.model());f.owner.getInventory().setItem(f.slot,item);}
+        Flight flight = flights.remove(owner);
+        if (flight == null) return;
+        flight.display.remove();
+        returnItem(flight.owner, flight.item, flight.slot);
+    }
+
+    private void recoverStored(Player player) {
+        if (busy(player)) return;
+        var data = player.getPersistentDataContainer();
+        byte[] bytes = data.get(storedItem, PersistentDataType.BYTE_ARRAY);
+        if (bytes == null) return;
+        ItemStack item;
+        try { item = ItemStack.deserializeBytes(bytes); }
+        catch (RuntimeException error) {
+            plugin.getLogger().warning("Cannot recover airborne saber for " + player.getUniqueId() + ": " + error.getMessage());
+            return;
+        }
+        int slot = data.getOrDefault(storedSlot, PersistentDataType.INTEGER, player.getInventory().getHeldItemSlot());
+        returnItem(player, item, Math.clamp(slot, 0, 8));
+    }
+
+    @EventHandler(ignoreCancelled=true) public void pickup(EntityPickupItemEvent event) {
+        if (event.getEntity() instanceof Player player && busy(player)) event.setCancelled(true);
     }
     @EventHandler public void inventory(InventoryClickEvent e) {if(flights.containsKey(e.getWhoClicked().getUniqueId()))e.setCancelled(true);}
     @EventHandler public void drag(InventoryDragEvent e) {if(flights.containsKey(e.getWhoClicked().getUniqueId()))e.setCancelled(true);}
@@ -185,11 +467,21 @@ public final class SaberService implements Listener {
     @EventHandler public void held(PlayerItemHeldEvent e) {finish(e.getPlayer().getUniqueId());}
     @EventHandler public void teleport(PlayerTeleportEvent e) {finish(e.getPlayer().getUniqueId());}
     @EventHandler public void quit(PlayerQuitEvent e) {finish(e.getPlayer().getUniqueId());selected.remove(e.getPlayer().getUniqueId());}
-    @EventHandler public void death(PlayerDeathEvent e) {
-        finish(e.getEntity().getUniqueId());e.getDrops().stream().filter(this::isSaber).forEach(i->model(i,settings.model()));
+    @EventHandler(priority=EventPriority.HIGHEST) public void death(PlayerDeathEvent event) {
+        Flight flight = flights.remove(event.getEntity().getUniqueId());
+        if (flight != null) {
+            flight.display.remove();
+            if (event.getKeepInventory()) returnItem(flight.owner, flight.item, flight.slot);
+            else {
+                event.getDrops().add(flight.item);
+                clearStored(flight.owner);
+            }
+        }
+        event.getDrops().stream().filter(this::isSaber).forEach(item -> model(item, settings.model()));
     }
     @EventHandler public void join(PlayerJoinEvent e) {
-        // A crash may leave the temporary hilt presentation saved; normalize existing items, never grant another.
+        recoverStored(e.getPlayer());
+        // Normalize legacy hilt presentation from builds that kept the saber in its slot.
         var contents=e.getPlayer().getInventory().getContents();
         for(ItemStack item:contents) if(isSaber(item))model(item,settings.model());
         e.getPlayer().getInventory().setContents(contents);

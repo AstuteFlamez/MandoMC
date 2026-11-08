@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 
 public class GuardStateTest {
     private SaberSettings settings() {
-        return new SaberSettings("vader","mandomc:sabers/vader","mandomc:sabers/vader_hilt",8,40,12,1,1.5,.45,100,20,.5,30,80,80,4);
+        return new SaberSettings("vader","mandomc:sabers/vader","mandomc:sabers/vader_hilt",8,40,12,1,1.5,.45,100,20,.5,30,80,80,4,1.8,.65,25,18,1.5,2.4,1,38);
     }
     @Test public void repeatedFireOverheatsAndCannotCoolDuringLockout() {
         var g=new GuardState();var s=settings();
