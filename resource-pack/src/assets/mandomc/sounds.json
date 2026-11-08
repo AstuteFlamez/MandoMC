@@ -1,0 +1,30 @@
+{
+  "shoot.e-11": {
+    "sounds": [
+      {
+        "name": "mandomc:shoot/e-11"
+      }
+    ]
+  },
+  "reload.start": {
+    "sounds": [
+      {
+        "name": "mandomc:reload/start"
+      }
+    ]
+  },
+  "reload.complete": {
+    "sounds": [
+      {
+        "name": "mandomc:reload/complete"
+      }
+    ]
+  },
+  "misc.zoomrifle": {
+    "sounds": [
+      {
+        "name": "mandomc:misc/zoomrifle"
+      }
+    ]
+  }
+}

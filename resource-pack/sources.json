@@ -35,7 +35,55 @@
       "sourceSha256": "d2f91fef359919dc30c7d895a5c29b1eea21a15add81a3f4b59b23503f002bb4",
       "destination": "assets/mandomc/textures/item/blasters/e11.png",
       "changes": "Moved unchanged into the mandomc namespace and item texture atlas path."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/custom/ammos/standard_plasma_cells.png",
+      "sourceSha256": "e6df7afc07dc7f13187c076ddbf063a7350767153b7e59f50944db885c0f7558",
+      "destination": "assets/mandomc/textures/item/ammo/standard_plasma_cells.png",
+      "changes": "Copied unchanged."
+    },
+    {
+      "sourcePath": "assets/minecraft/models/item/ammos/standard_plasma_cells.json",
+      "sourceSha256": "95134c91dccdd4eb626cf11937a15db026339af8aaa949a5816c786ab9415350",
+      "destination": "assets/mandomc/models/item/ammo/standard_plasma_cells.json",
+      "changes": "Namespaced texture references; geometry preserved."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/custom/projectiles/energy_red.png",
+      "sourceSha256": "f6751c9c8237d1d8c0a75d47f3b516128db8842c57987de756d2ed2bff352b2a",
+      "destination": "assets/mandomc/textures/item/projectiles/redlaser.png",
+      "changes": "Copied unchanged."
+    },
+    {
+      "sourcePath": "assets/minecraft/models/item/projectiles/redlaser.json",
+      "sourceSha256": "c83ea9a8eebd52471a97bc1b4c3b8fde758fe47ea5031496ef1dd0f6ef6f016a",
+      "destination": "assets/mandomc/models/item/projectiles/redlaser.json",
+      "changes": "Namespaced texture references; geometry preserved."
+    },
+    {
+      "sourcePath": "assets/minecraft/sounds/shoot/e-11.ogg",
+      "sourceSha256": "76048b9414bacffc989f0e54ffbc58301ad5b9d7037277634b7560761e6280e4",
+      "destination": "assets/mandomc/sounds/shoot/e-11.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "sourcePath": "assets/minecraft/sounds/reload/start.ogg",
+      "sourceSha256": "72b119df8534483715abd4b4fd5b409cca8b9da8007261e83633472cac860973",
+      "destination": "assets/mandomc/sounds/reload/start.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "sourcePath": "assets/minecraft/sounds/reload/complete.ogg",
+      "sourceSha256": "8157fe156ebd1d2fffb890eace3e75be9615188c47307af84ad1b1bcad7a3e74",
+      "destination": "assets/mandomc/sounds/reload/complete.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "sourcePath": "assets/minecraft/sounds/misc/zoomrifle.ogg",
+      "sourceSha256": "f3564798d52c1f8ce6506e8026b8007396c862dd4d49d5dd4b9af96f04512068",
+      "destination": "assets/mandomc/sounds/misc/zoomrifle.ogg",
+      "changes": "Copied unchanged."
     }
   ],
-  "status": "First cosmetic E-11 slice; client visual check and WeaponMechanics integration pending."
+  "status": "E-11 WeaponMechanics integration, Standard Plasma Cells, red bolt and four legacy sounds; client visual/audio check pending."
 }

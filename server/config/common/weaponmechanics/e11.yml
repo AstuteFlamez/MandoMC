@@ -1,0 +1,134 @@
+# E-11 recovered from the supplied server backup; tuning preserved.
+E11:
+  Info:
+    Weapon_Item:
+      Type: "DIAMOND_HOE"
+      Custom_Model_Data: 2
+      Item_Model: "mandomc:blasters/e11"
+      Name: "<gray>E-11 Blaster Rifle"
+      Lore:
+        - "<gray>Standard-issue Imperial blaster rifle."
+        - "<gray>Compact and fast, but not as accurate."
+        - ""
+        - ""
+        - "<gray>Takes <red>Standard Plasma Cells<gray>."
+      Unbreakable: true
+      Hide_Flags: true
+      Attributes:
+        - "movement_speed -0.005"
+      Deny_Use_In_Crafting: true
+    Weapon_Info_Display:
+      Action_Bar:
+        Message: "<gray>E-11<firearm_state> <gray>«<red><ammo_left><gray>»<aqua><reload>"
+    Weapon_Get_Mechanics:
+      - "Sound{sound=item.armor.equip_chain, pitch=1.4, listeners=Source{}}"
+    Weapon_Equip_Delay: 15
+    Cancel:
+      Drop_Item: true
+      Arm_Swing_Animation: true
+      Break_Blocks: true
+
+  Skin:
+    Default:
+      Custom_Model_Data: 2
+      Item_Model: "mandomc:blasters/e11"
+    Scope:
+      Custom_Model_Data: 1002
+      Item_Model: "mandomc:blasters/e11_scope"
+    Sprint:
+      Custom_Model_Data: 2002
+      Item_Model: "mandomc:blasters/e11_sprint"
+
+  Projectile: "redlaser"
+
+  Shoot:
+    Trigger:
+      Main_Hand: "RIGHT_CLICK"
+      Off_Hand: "RIGHT_CLICK"
+      Circumstance:
+        Swimming: "DENY"
+        Sprinting: "DENY"
+        Dual_Wielding: "DENY"
+    Projectile_Speed: 90
+    Fully_Automatic_Shots_Per_Second: 9
+    Spread:
+      Base_Spread: 4.5
+      Modify_Spread_When:
+        Zooming: 50%
+        Sneaking: 50%
+        In_Midair: 160%
+    Recoil:
+      Mean_X: 0.25
+      Mean_Y: 1.1
+      Variance_X: 0.25
+      Variance_Y: 0.25
+      Speed: 2.3
+      Damping: 0.1
+      Damping_Recovery: 0.18
+      Smoothing: 0.3
+      Max_Accumulation: 10.0
+    Mechanics:
+      - "CustomSound{sound=mandomc:shoot.e-11, volume=5, noise=0.1}"
+
+  Reload:
+    Trigger:
+      Main_Hand: "DROP_ITEM"
+      Off_Hand: "DROP_ITEM"
+    Magazine_Size: 30
+    Reload_Duration: 45
+    Start_Mechanics:
+      - "CustomSound{sound=mandomc:reload.start, volume=0.6, noise=0.1}"
+    Finish_Mechanics:
+      - "CustomSound{sound=mandomc:reload.complete, volume=0.6, noise=0.1}"
+    Ammo:
+      Out_Of_Ammo_Mechanics:
+        - "Message{message=<red><bold>ᴍᴀɴᴅᴏᴍᴄ</bold></red> <dark_gray>» <red>Out of plasma cells!}"
+      Ammos:
+        - Standard_Plasma_Cells
+
+  Damage:
+    Base_Damage: 0.5
+    Armor_Damage: 1
+
+  Scope:
+    Trigger:
+      Main_Hand: "LEFT_CLICK"
+      Off_Hand: "LEFT_CLICK"
+    Zoom_Amount: 1.5
+    Shoot_Delay_After_Scope: 10
+    Mechanics:
+      - "CustomSound{sound=mandomc:misc.zoomrifle, volume=0.5, noise=0.1}"
+    Zoom_Off:
+      Mechanics:
+        - "CustomSound{sound=mandomc:misc.zoomrifle, volume=0.5, noise=0.1}"
+
+  Firearm_Action:
+    Type: "SLIDE"
+    Open:
+      Time: 5
+      Mechanics:
+        - "Sound{sound=block.note_block.hat, volume=0.5, noise=0.1}"
+        - "Sound{sound=block.piston.contract, volume=0.5, noise=0.1, delayBeforePlay=2}"
+    Close:
+      Time: 5
+      Mechanics:
+        - "Sound{sound=block.piston.extend, volume=0.5, noise=0.1}"
+
+  # Optional Cosmetics effects omitted: the supplied backup has no Cosmetics addon JAR.
+
+  Show_Time:
+    Reload:
+      Item_Cooldown: true
+      Exp: true
+      Action_Bar: "<gray>Reloading <bar> <gray><time>s"
+      Action_Bar_Cancelled: "<red>Reload Cancelled"
+      Bar:
+        Left_Color: "<gray>"
+        Right_Color: "<white>"
+        Left_Symbol: "|"
+        Right_Symbol: "|"
+        Symbol_Amount: 30
+    Weapon_Equip_Delay:
+      Item_Cooldown: true
+    Shoot_Delay_After_Scope:
+      Item_Cooldown: true

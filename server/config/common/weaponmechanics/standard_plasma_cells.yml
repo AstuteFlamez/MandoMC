@@ -1,0 +1,11 @@
+Standard_Plasma_Cells:
+  Symbol: ⬡
+  Item_Ammo:
+    Bullet_Item:
+      Type: ECHO_SHARD
+      Name: "<red>Standard Plasma Cells"
+      Custom_Model_Data: 25
+      Item_Model: "mandomc:ammo/standard_plasma_cells"
+      Lore:
+        - "<gray>Reliable mid-tier energy cell designed"
+        - "<gray>for consistent performance in the field."

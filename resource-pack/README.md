@@ -6,7 +6,7 @@ Requires Python 3, with no extra packages:
 ```bash
 ./scripts/build-resource-pack.py
 ```
-Output: `resource-pack/build/MandoMC.zip` and a JSON report containing SHA-1 and SHA-256. Builds use stable ordering/timestamps and validate JSON, local model/texture references and the pinned Minecraft target. Build output is ignored by Git. The build does not download assets, install the pack in Minecraft or start a hosting service.
+Output: `resource-pack/build/MandoMC.zip` and a JSON report containing SHA-1 and SHA-256. Builds use stable ordering/timestamps and validate JSON, local model/texture/sound references and the pinned Minecraft target. Build output is ignored by Git. The build does not download assets, install the pack in Minecraft or start a hosting service.
 
 Target: Minecraft Java 26.1.2, resource format 84.0, verified from the server's version.json and [Minecraft's release notes](https://www.minecraft.net/en-us/article/minecraft-java-edition-26-1). The min/max metadata uses the [current pack format](https://www.minecraft.net/en-us/article/minecraft-java-edition-1-21-9). Change the server and pack target together after validation.
 
@@ -33,7 +33,7 @@ E-11 base, aiming and sprinting models plus the original texture are under `src/
 - `mandomc:blasters/e11_scope`
 - `mandomc:blasters/e11_sprint`
 
-These are cosmetic previews only. They are not yet configured as firing WeaponMechanics weapons, and no pose switching or starter kit has been implemented. Existing vanilla items are not overridden.
+These are wired to the E-11 WeaponMechanics definition, including aim/sprint switching. Standard Plasma Cells, the red bolt and four original sounds are included. See [E-11 setup and verification](../docs/features/e11.md). Starter kits remain deferred. Existing vanilla items are not overridden.
 
 To inspect the base model, join the server and accept the hosted pack, then use this command as an operator. For unpublished local previews, enable the built ZIP in your client's Resource Packs menu instead:
 ```mcfunction

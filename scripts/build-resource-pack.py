@@ -64,6 +64,16 @@ def main():
                     check_reference(data['parent'], 'models', '.json')
                 for texture in data.get('textures', {}).values():
                     check_reference(texture, 'textures', '.png')
+            if path.name == 'sounds.json':
+                namespace = path.parent.name
+                for event in data.values():
+                    for sound in event['sounds']:
+                        reference = sound if isinstance(sound, str) else sound['name']
+                        if isinstance(sound, dict) and sound.get('type', 'file') != 'file':
+                            raise SystemExit(f'Unsupported sound event reference: {reference}')
+                        if ':' not in reference:
+                            reference = namespace + ':' + reference
+                        check_reference(reference, 'sounds', '.ogg')
             if '/items/' in name:
                 check_item_models(data)
 

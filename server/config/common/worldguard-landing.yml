@@ -11,6 +11,8 @@ regions:
       block-break: deny
       block-place: deny
       pvp: deny
+      weapon-shoot: deny
+      weapon-damage: deny
       invincible: allow
       chest-access: deny
       use: allow
