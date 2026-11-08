@@ -2,6 +2,8 @@
 Updated: 2026-11-08
 
 ## Milestone
+Robe icon correction (2026-11-08): the user accepted the new worn/entity robes and clarified that the original inventory icons must stay. Restored all four inventory PNGs byte-for-byte from `4b41b45`; the accepted worn textures and equipment JSON are unchanged. Removed the superseded icon crop recipes and restored their legacy provenance. Next action: verify and publish this icon-only pack correction, then reconnect for the restored icons.
+
 Robe texture deployment (2026-11-08): asset-only branch `bilal/robes-pack-release` publishes `resource-pack-26.1.2-e6e6d89e49e1`, built from commit `e6e6d89e49e124a4d1cd204e758f4ba7e5ee86ad`. The 49-file ZIP is byte-identical to the tested robe implementation; SHA-1 `dd9a439301907ebf36f11cc332c0c0e1a91ba3f9`. The public anonymous download passes SHA-1/SHA-256, size and ZIP checks. The existing local Paper server restarted cleanly at 15:59 America/Chicago, and its active pack manifest/properties select this release. All 14 deployment checks passed before publication. No unpublished gameplay commits were included in this release branch. Client appearance remains unverified. **Next action:** reconnect and inspect the four worn robes and matching inventory icons.
 
 Vader’s Lightsaber is implemented on bilal/vader-lightsaber: `/mmc give vader`, native melee attributes, original JustTimm blade/hilt/blocking models, directional E11/arrow reflection, player-owned guard heat and a bounded returning throw that retains inventory ownership. JustTimm credits/thanks/links are inside credits.txt in the pack. The unchanged upstream pack is sent from the official CDN; no JustTimm artwork is rehosted. Details: docs/features/vader-lightsaber.md. The user confirmed robe icons now work.

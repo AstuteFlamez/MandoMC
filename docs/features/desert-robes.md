@@ -40,3 +40,6 @@ Confirmed defect: robe dye defaults were RGB-only integers (initially 10511680, 
 Correction changes only four inventory tint defaults to -1. Models, PNGs, native dye behavior and worn armor are unchanged. The pack builder now rejects nonopaque integer dye defaults, with regression tests for both previous invalid values and valid vanilla/white values. Explicit RGB-vector defaults and equipment color_when_undyed remain separate formats. Client hotbar confirmation is still required.
 
 References: https://www.minecraft.net/en-us/article/minecraft-java-edition-26-1 documents the separate item shader and UI lightmap; exact tint behavior was verified in the installed 26.1.2 client classes rather than inferred from older pack guides.
+
+## Keep original inventory icons (2026-11-08)
+The user accepted the replacement worn/entity robes but requested the original inventory icons. All four inventory PNGs are restored byte-for-byte from `4b41b45`. The accepted worn textures, equipment layers, opaque inventory dye defaults and item models are unchanged. Replacement artwork/crop metadata now covers worn armor only.
