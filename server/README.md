@@ -4,11 +4,19 @@ The installed development server runs from `server/runtime/`; reviewed shareable
 ## Start and join
 From the repository root:
 ```bash
-./scripts/start-server.sh
+./scripts/server-control.py start
+./scripts/server-control.py status
+./scripts/server-control.py command 'mandomc'
+./scripts/server-control.py restart
+./scripts/server-control.py stop
 ```
-On macOS, double-click `server/start.command` for a Terminal console. Development starts should use this visible Terminal window so the user can also operate the console; from a shell use `open -a Terminal server/start.command` after stopping any existing instance. Join `localhost` using **Minecraft Java 26.1.2**. The server binds to `127.0.0.1:25565` with online-mode enabled. It has the recovered SpawnWorld plus disposable survival `dev_world`, 20 slots, and a 4 GiB maximum heap. Override the heap with `MANDOMC_MAX_MEMORY=6G` if needed. Java 25 is selected by `scripts/java-env.sh`. Python 3 is also required: startup synchronizes the hosted resource pack before launching Paper.
+Startup is detached from the calling shell and waits for Paper's ready line. Start is idempotent; stop saves and exits cleanly, and restart completes both steps without asking for input. The controller verifies process identity and the runtime directory before signalling anything. It refuses an unrelated listener on port 25565 and never sends a forced kill. Runtime control files and console logs stay under ignored `.local/`.
 
-Type `stop` in the server console to save and exit. Use full restarts for plugin changes. Do not run two copies against the same runtime.
+On macOS, double-click `server/start.command` for one persistent Terminal console view. Commands go to Paper; `start`, `stop`, `restart` and `status` are handled by the controller. `exit` closes only the console view; the server keeps running. Agent-controlled restarts appear in that same view, with no Enter prompt. A visible Terminal window is optional for startup. This does not configure login/boot autostart or a crash-restart loop.
+
+Join `localhost` using **Minecraft Java 26.1.2**. The server binds to `127.0.0.1:25565` with online-mode enabled. It loads SpawnWorld and SurvivalWorld; Nether and End are disabled. Java 25 is selected by `scripts/java-env.sh`; Python 3 synchronizes the hosted resource pack and controls the process. Default maximum heap is 4 GiB; set `MANDOMC_MAX_MEMORY=6G` before start to override it.
+
+`./scripts/start-server.sh` remains the low-level foreground entry point for isolated integration probes. Do not run it alongside the managed server. Full code changes require stop → deploy → start, never Bukkit reload. Read `.local/server-console.log` or `server/runtime/logs/latest.log` for output.
 
 ## Installed baseline
 Paper 26.1.2 build 74 is pinned in `paper.lock.json`. Newer Minecraft/Paper 26.3 exists; the chosen version is the newest documented common baseline we verified with the selected gameplay stack, including [WeaponMechanics 4.3.1](https://github.com/WeaponMechanics/WeaponMechanics/releases/tag/v4.3.1) and [EssentialsX 2.22.0](https://github.com/EssentialsX/Essentials/releases/tag/2.22.0).
@@ -34,7 +42,7 @@ All 12 plugins enabled together. Verified `/mandomc`, console plugin list, Facti
 Expected startup notices: newer Minecraft/Paper is available; ModelEngine has no MineSkin API key for optional skin generation; Java reports a third-party Unsafe deprecation. These did not prevent startup.
 
 ## What is ready
-SpawnWorld, a protected survival landing, a replayable tutorial and shared `/spawn` and `/survival` travel are deployed locally. Custom weapons, group branding, raids, events and vehicles still need implementation. Default FactionsUUID rules and commands are temporary vendor behavior. This remains a local development build.
+SpawnWorld, a protected survival landing, a replayable tutorial and shared `/spawn` and `/survival` travel are deployed locally. Group branding, raids, events and vehicles still need implementation. E-11, Desert Robes, the accepted Vader throw, first-join kit and combat basics are implemented; see the feature briefs. Default FactionsUUID rules and commands are temporary vendor behavior. This remains a local development build.
 
 EssentialsX is the credit balance provider. No EssentialsChat/Spawn/Protect modules were installed. Other plugins' kits, travel, selling and raid defaults must be restricted when their feature slices are implemented.
 
@@ -46,8 +54,9 @@ Stop the server, back up `server/runtime/`, then restore one plugin config or ma
 To deploy a new MandoMC build while stopped:
 ```bash
 ./scripts/build.sh
+./scripts/server-control.py stop
 cp plugin/target/MandoMC.jar server/runtime/plugins/MandoMC.jar
-./scripts/start-server.sh
+./scripts/server-control.py start
 ```
 
 The runtime itself is not a Git backup. A clean clone needs Java 25, the Paper artifact saved as `server/runtime/paper.jar`, and each locked vendor artifact in `server/runtime/plugins/`. Build/copy MandoMC, copy the local server.properties template on initial setup, and accept Minecraft's EULA before starting. Downloaded plugin dependencies and defaults are generated on the first boot. Do not overwrite an existing server.properties or world with setup templates.
@@ -82,4 +91,4 @@ See [runtime configuration policy](runtime/README.md) and [world sources](../WOR
 Future tutorial direction: `/tutorial` will show short text and take the player to a library building in SpawnWorld with takeable, feature-specific guidebooks. This is deferred; current tutorial text is temporary.
 
 ### Reuse the console tab
-Run `server/start.command` once in the existing Terminal tab. After `stop`, press Enter to launch again in that same tab, or type `q` to exit. Do not open a fresh Terminal tab for each restart. The loop also supports a managed restart: only after verifying that the running Java process is a child of this launcher, create `.local/server-restart-request`, then cleanly stop that Java child. The launcher consumes the request after shutdown and restarts in place. Without a request, crashes/stops wait for input instead of looping automatically. Older already-running launchers need to be started once with this updated script before this behavior applies.
+The managed console view stays open across automated restarts. Use `scripts/server-control.py` for all ordinary agent starts/stops; never ask the user to press Enter. The former restart-request marker/manual loop is retired. An old console tab running that earlier loop can be closed; new launches use the controller above.

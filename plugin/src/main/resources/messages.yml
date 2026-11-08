@@ -56,3 +56,16 @@ sabers:
   throw-cooldown: '<yellow>Your saber throw is recharging.'
   safe-zone: '<red>You cannot attack with a lightsaber in a safe zone.'
   heat: '<yellow>Saber heat: <heat>%'
+
+combat:
+  title: '<red><bold>Combat</bold></red>'
+  timer: '<gray>Safe in <yellow><seconds>s</yellow></gray>'
+  tagged: '<red>In combat. Logging out now drops your items.</red>'
+  safe: '<green>You are out of combat.</green>'
+  teleport-denied: '<red>You cannot teleport while in combat.</red>'
+rules:
+  item-disabled: '<red>This item is disabled.</red>'
+  enchanting-disabled: '<red>Enchanting is disabled. Anvil repairs are still available.</red>'
+  dimension-disabled: '<red>The Nether and End are disabled.</red>'
+starter-kit:
+  received: '<green>Starter kit received: stone tools, steak, robes, an E-11 and 64 plasma cells.</green>'

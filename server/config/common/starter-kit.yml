@@ -1,0 +1,15 @@
+schema-version: 1
+# Once on a new player's first join; no respawn or reconnect refills.
+materials:
+  STONE_PICKAXE: 1
+  STONE_AXE: 1
+  STONE_SHOVEL: 1
+  STONE_HOE: 1
+  COOKED_BEEF: 64
+custom-items:
+  robes_helmet: 1
+  robes_chestplate: 1
+  robes_leggings: 1
+  robes_boots: 1
+  e11: 1
+  standard_plasma_cells: 64

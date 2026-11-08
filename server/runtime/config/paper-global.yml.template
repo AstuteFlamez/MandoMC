@@ -81,7 +81,7 @@ misc:
     chat-executor-max-size: -1
   client-interaction-leniency-distance: default
   compression-level: default
-  enable-nether: true
+  enable-nether: false
   fix-far-end-terrain-generation: true
   load-permissions-yml-before-plugins: true
   max-joins-per-tick: 5

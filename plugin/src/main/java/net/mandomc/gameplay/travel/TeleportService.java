@@ -14,11 +14,9 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -34,7 +32,7 @@ public final class TeleportService implements Listener, AutoCloseable {
     private final JavaPlugin plugin;
     private final YamlConfiguration language;
     private final int seconds;
-    private final int combatSeconds;
+    private final net.mandomc.gameplay.combat.CombatService combat;
     private final int spiralTicks;
     private final Sound tickSound;
     private final Sound arrivalSound;
@@ -43,22 +41,22 @@ public final class TeleportService implements Listener, AutoCloseable {
     private final boolean effects;
     private final Map<UUID, Pending> pending = new HashMap<>();
     private final Map<UUID, Spiral> spirals = new HashMap<>();
-    private final Map<UUID, Long> combatUntil = new HashMap<>();
     private final BukkitTask ticker;
     private long clock;
 
-    public TeleportService(JavaPlugin plugin, YamlConfiguration config, YamlConfiguration language) {
+    public TeleportService(JavaPlugin plugin, YamlConfiguration config, YamlConfiguration language,
+                           net.mandomc.gameplay.combat.CombatService combat) {
+        this.combat = combat;
         this.plugin = plugin;
         this.language = language;
         if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("teleport.yml: expected schema-version 1");
         seconds = config.getInt("warmup-seconds", -1);
-        combatSeconds = config.getInt("combat-block-seconds", -1);
         spiralTicks = config.getInt("effects.spiral-ticks", -1);
         double configuredVolume = config.getDouble("effects.volume", -1);
-        if (seconds < 1 || seconds > 30 || combatSeconds < 1 || combatSeconds > 300
+        if (seconds < 1 || seconds > 30
                 || spiralTicks < 1 || spiralTicks > 100 || !Double.isFinite(configuredVolume)
                 || configuredVolume < 0 || configuredVolume > 2) {
-            throw new IllegalArgumentException("teleport.yml: invalid warmup (1..30), combat block (1..300), "
+            throw new IllegalArgumentException("teleport.yml: invalid warmup (1..30), "
                     + "spiral ticks (1..100), or volume (0..2)");
         }
         volume = (float) configuredVolume;
@@ -118,14 +116,14 @@ public final class TeleportService implements Listener, AutoCloseable {
 
     private String refusal(Player player) {
         if (!player.isOnline() || player.isDead()) return "interrupted";
-        if (combatUntil.getOrDefault(player.getUniqueId(), 0L) > clock) return "combat";
+        if (combat.tagged(player)) return "combat";
         if (player.isInsideVehicle() || !player.getPassengers().isEmpty()) return "mounted";
         return null;
     }
 
     /** Combat adapters must call this for attributed PvP that does not emit normal Bukkit damage events. */
     public void tagCombat(Player player) {
-        combatUntil.put(player.getUniqueId(), clock + combatSeconds * 20L);
+        combat.tag(player);
         cancel(player, "combat", true);
     }
 
@@ -138,7 +136,6 @@ public final class TeleportService implements Listener, AutoCloseable {
 
     private void tick() {
         clock++;
-        if (clock % 20 == 0) combatUntil.entrySet().removeIf(entry -> entry.getValue() <= clock);
         for (var request : java.util.List.copyOf(pending.values())) {
             var player = request.player();
             String refusal = refusal(player);
@@ -227,15 +224,6 @@ public final class TeleportService implements Listener, AutoCloseable {
         if (event.getFinalDamage() <= 0) return;
         if (event.getEntity() instanceof Player player) {
             cancel(player, "damaged", true);
-            if (event instanceof EntityDamageByEntityEvent hit) {
-                Player attacker = hit.getDamager() instanceof Player direct ? direct
-                        : hit.getDamager() instanceof Projectile projectile
-                        && projectile.getShooter() instanceof Player shooter ? shooter : null;
-                if (attacker != null && !attacker.getUniqueId().equals(player.getUniqueId())) {
-                    tagCombat(attacker);
-                    tagCombat(player);
-                }
-            }
         }
     }
 
@@ -247,7 +235,6 @@ public final class TeleportService implements Listener, AutoCloseable {
     @EventHandler public void onQuit(PlayerQuitEvent event) {
         cancel(event.getPlayer(), "interrupted", false);
         spirals.remove(event.getPlayer().getUniqueId());
-        // Keep the expiring tag across reconnects; logout penalties belong to the combat feature.
     }
 
     @Override public void close() {
@@ -257,6 +244,5 @@ public final class TeleportService implements Listener, AutoCloseable {
         }
         pending.clear();
         spirals.clear();
-        combatUntil.clear();
     }
 }

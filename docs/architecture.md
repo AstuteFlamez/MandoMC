@@ -47,7 +47,7 @@ The catalog in server/plugins.catalog.json records admission status. Installed v
 - MandoMC stores only its own state. Select file or transactional local storage when a feature needs it.
 - Disabled features must not load missing vendor classes. Missing dependencies for enabled features fail clearly. Protection failures never open an unprotected gameplay path.
 - Stable MandoMC IDs survive vendor replacement through explicit mapping and saved-data migration.
-- Identify custom items before applying ordinary-weapon restrictions. Removing vanilla shields must not disable registered shield-based lightsabers. Keep the custom guard limit explicit when integrating allowed vanilla enchantments and repair behavior.
+- Identify custom items before applying ordinary-weapon restrictions. Removing vanilla shields must not disable registered shield-based lightsabers. Enchanting is disabled; keep the custom guard limit independent of native repair behavior.
 
 ## Vehicles
 The initial aircraft scope is player transport; aerial combat is deferred. MandoMC owns vehicle state and seat access, while ModelEngine owns visuals. Persist the placing player's UUID as the pilot authority for a deployed vehicle. Group membership and passenger access do not grant piloting rights.
@@ -88,3 +88,6 @@ Current FactionsUUID changed names, packages and coordinates from the old source
 
 ## Custom items
 `ItemCatalog` owns one validated snapshot of native item templates and explicit vendor factories. Native IDs use mandomc:item_id; vendor generation remains behind integrations/weapons. Definitions/presentation are configuration; item delivery and the paginated inventory browser are Java behavior. `RootCommand` dispatches registered feature handlers, keeping bootstrap and command parsing independent of catalog internals. No recipe or economy state is stored in item presentation.
+
+## Combat basics
+CombatService owns the sole 15-second elapsed-time tag, temporary sidebar, external teleport denial and combat-logout death. TeleportService consults that state. Positive, uncancelled Bukkit damage provides mob/player attribution, including WeaponMechanics. Paper performs one death/drop pipeline after SaberService returns an airborne item. SurvivalRules owns use/crafting/portal restrictions; Paper/Bukkit and Multiverse also disable dimension loading. StarterKit owns once-only first-join delivery; WeaponMechanics generates its E-11 and ammo. See [combat basics](features/combat-basics.md).

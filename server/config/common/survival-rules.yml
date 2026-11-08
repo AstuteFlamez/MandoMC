@@ -1,0 +1,7 @@
+schema-version: 1
+# Restart after changing. Native custom saber shields remain usable.
+disable-elytras: true
+disable-enchanting: true
+disable-potions: true
+disable-vanilla-weapons: true
+disable-nether-and-end: true

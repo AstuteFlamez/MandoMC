@@ -87,7 +87,7 @@ public final class ArrivalProbe extends JavaPlugin {
         var listener = new ArrivalListener(this, settings, destinations, language);
         var travelConfig = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "teleport.yml"));
         travelConfig.set("warmup-seconds", 3);
-        var travel = new TeleportService(this, travelConfig, language);
+        var travel = new TeleportService(this, travelConfig, language, ((net.mandomc.bootstrap.MandoPlugin) plugin).combat());
         listeners.add(travel);
         check(Bukkit.getPluginCommand("spawn").getPlugin().getName().equals("MandoMC"), "spawn owned by MandoMC");
         var looking = new TestPlayer(landing);
@@ -197,6 +197,7 @@ public final class ArrivalProbe extends JavaPlugin {
     }
 
     private static final class TestPlayer {
+        private org.bukkit.scoreboard.Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         private final UUID id = UUID.randomUUID();
         private final PersistentDataContainer data = new ItemStack(Material.STONE).getItemMeta()
                 .getPersistentDataContainer();
@@ -215,6 +216,8 @@ public final class ArrivalProbe extends JavaPlugin {
             this.location = location.clone();
             player = (Player) Proxy.newProxyInstance(Player.class.getClassLoader(), new Class<?>[] {Player.class},
                     (proxy, method, args) -> switch (method.getName()) {
+                        case "getScoreboard" -> scoreboard;
+                        case "setScoreboard" -> { scoreboard = (org.bukkit.scoreboard.Scoreboard) args[0]; yield null; }
                         case "getName" -> "ArrivalProbe";
                         case "getUniqueId" -> id;
                         case "getWorld" -> this.location.getWorld();

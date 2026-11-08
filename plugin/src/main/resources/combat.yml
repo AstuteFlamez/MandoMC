@@ -1,0 +1,3 @@
+schema-version: 1
+# One timer for PvP, mob combat, scoreboard, travel and logout death. Restart to change.
+tag-seconds: 15

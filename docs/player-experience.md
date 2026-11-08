@@ -16,9 +16,9 @@ A solo player can create a group and claim a starter base on eligible land outsi
 
 Death loses only what the player carries. Respawn priority is group home, then a valid bed, then SpawnWorld. If no valid group home or bed is available, use SpawnWorld. A player with stored group supplies can re-equip from that stockpile. Otherwise they repeat the same acquisition process used to obtain the gear originally; there is no separate replacement mechanic. Voluntary return travel and specific recipes/prices remain open.
 
-Combat blocks voluntary teleporting. Logging out while in combat causes death, with the normal carried-item loss. Combat tag duration, triggering actions and server-initiated disconnect handling still need definition.
+Combat blocks voluntary teleporting. Logging out while in combat causes death, with the normal carried-item loss. An uncancelled positive-damage player/mob or player/player hit refreshes a 15-second tag for involved players. Show the remaining time to one decimal on the scoreboard. Clean server shutdowns are exempt from logout punishment.
 
-The first join grants a basic blaster, vanilla tools and food. Equipment is granted only once, not on subsequent joins or deaths. Exact items, quantities and ammunition remain to be configured. Starting credits are possible but neither their inclusion nor amount is decided.
+The first join grants a stone pickaxe, axe, shovel and hoe, 64 steak, four Desert Robes pieces, an E-11 and 64 standard plasma cells. Equipment is granted only once, not on subsequent joins or deaths. Starting credits are possible but neither their inclusion nor amount is decided.
 
 The first friends playtest should bring the in-scope gameplay systems together in a rough, integrated version. The development slices below are incremental building and checking steps toward that target. The precise content depth for each system still needs agreement; force powers and resource planets are excluded for now.
 
@@ -46,7 +46,7 @@ Record pairwise kills when combat lands; enable explosive raiding only after cla
 - Review the consolidated gameplay loop and proposed implementation order.
 - Settle the public group name and travel proposal before implementing those interfaces.
 
-Clans naming is accepted; clan integration is deferred. Travel beyond the implemented spawn/survival routes remains open. Combat tagging details and initial equipment quantities can be settled when their feature briefs are written.
+Clans naming is accepted; clan integration is deferred. Travel beyond the implemented spawn/survival routes remains open. Combat tagging and initial equipment quantities are defined in the combat-basics brief.
 
 ## Vehicle baseline
 Aircraft carry players in the first integrated playtest; aerial combat is deferred. Speeders and aircraft are initially bought with credits. The long-term direction is crafting for all equipment, including blasters and vehicles. The accepted initial shop/crafting mix remains the first playable version; the later transition must preserve item identities and existing ownership.
@@ -69,7 +69,7 @@ The intended progression has a large power difference between basic and top-tier
 
 Keep a configurable guard/overheat limit so sustained fire can temporarily overwhelm saber defense. Ordinary Minecraft swords, bows, crossbows and shields are removed from the intended gameplay. Recognized custom sabers remain allowed despite using the shield material. Star Wars-themed swords and bows may be added later; they are not in the current scope.
 
-Vanilla enchantments remain part of progression. Applicable enchantments on each custom item, wear, and repair behavior still need verification and explicit configuration. The user has not chosen a separate repair system. Avoid accidentally making the guard limit disappear through an item's enchantment or repair behavior; separating guard state from permanent item wear is a recommendation to evaluate during implementation.
+Updated 2026-11-08: enchanting, potions, elytras, Nether/End portals and the Nether/End dimensions are disabled. Normal anvil repairs and repair crafting remain available; no separate repair system. Avoid accidentally making the guard limit disappear through an item's enchantment or repair behavior; separating guard state from permanent item wear is a recommendation to evaluate during implementation.
 
 Source inspection of `bilal/legacy-lightsabers` confirms:
 - Saber recognition requires `SHIELD` material and a saber tag; saber definitions include models, recipes and combat values.
@@ -114,7 +114,7 @@ Use free commands and a destination menu for routine travel, with optional theme
 - A five-second stationary warmup, cancelled by movement or damage. All entry points enforce the same combat restrictions. Five seconds is a suggested initial tuning value, not an accepted rule.
 - No death-return `/back` and no network of arbitrary personal homes initially. Exploration, journeys from landing zones to activities, and reaching other bases provide routes for walking, speeders and aircraft. Teleporting to other players remains a separate open choice.
 
-A shuttle terminal in SpawnWorld can teach first-time travel while returning players use commands. Routine travel should be free initially; vehicle fuel and other economy costs are separate decisions. Combat tag duration remains open; a 30-second PvP tag is a candidate for playtesting, not an established requirement.
+A shuttle terminal in SpawnWorld can teach first-time travel while returning players use commands. Routine travel should be free initially; vehicle fuel and other economy costs are separate decisions. Combat tagging is now fixed at 15 seconds for mob and player combat; see the combat-basics brief.
 
 Research checked 2026-11-05: [Minecadia's published faction guide](https://wiki.minecadia.com/index.php?title=Faction_Commands) documents `/f home` and menu-based faction warps (page last edited March 2023). [Complex's October 2026 guide](https://www.mc-complex.com/forums/vanilla/wiki-page/56/factions-commands-full-f-command-list-2026/) documents faction-home travel with a warmup and restricted activity areas. [PirateCraft's getting-started guide](https://piratemc.com/guides/getting-started/) combines ships with free public warps, portals and home teleports; the guide contains older version references. These are examples of published designs, not live-server tests or a player-preference survey.
 
@@ -139,3 +139,6 @@ Temporary interface note (2026-11-07): `/tutorial` and `/survival` are developme
 `/spawn` now goes to SpawnWorld; temporary `/survival` goes to SurvivalWorld (the existing dev_world under that Multiverse alias). Both use the shared three-second countdown in `teleport.yml`, replacing the earlier five-second, one-way-only departure. Looking around is allowed; changing position cancels. See [command documentation](commands.md).
 
 Future tutorial direction: `/tutorial` will show short text and take the player to a library building in SpawnWorld with takeable, feature-specific guidebooks. This is deferred; current tutorial text is temporary.
+
+## Survival mob content
+Use existing Tusken Raider, bantha, dewback and massiff models/mobs in sandy biomes of SurvivalWorld rather than requiring a Tatooine location. First implement one blaster-shooting hostile mob; blocking/reflection work and the later substantial throw stamina cost wait for it. Exact spawn rules and balancing belong in [the mob brief](features/sandy-biome-mobs.md).

@@ -15,3 +15,15 @@ WeaponMechanics `Resource_Pack_Download.Automatically_Send_To_Player` remains fa
 `teleport.yml` is the shared spawn/survival countdown and effect configuration; copy it to the MandoMC runtime directory while stopped. Restore the survival alias with `mv modify dev_world set alias SurvivalWorld`.
 
 The temporary survival landing now occupies chunk (-9,-9). Its middle-block arrival is (-135.5, 73, -135.5); restore those coordinates in Multiverse’s SurvivalWorld spawn-location along with the region template. Both protected regions set weapon-shoot-message to “You can’t shoot in a safe zone.”
+
+## Combat basics
+While the server is stopped, copy `combat.yml`, `starter-kit.yml`, `survival-rules.yml` and `teleport.yml` into `plugins/MandoMC/`. New messages use bundled defaults, preserving existing translations. Delete the old teleport `combat-block-seconds` key; only `combat.yml:tag-seconds` owns the timer now.
+
+Apply these vendor settings to the existing files; preserve unrelated settings and world data:
+- Paper `config/paper-global.yml`: `misc.enable-nether: false` (also in the tracked template).
+- Bukkit `bukkit.yml`: `settings.allow-end: false` (tracked).
+- Multiverse-Core `config.yml`, `world` section: `auto-import-default-worlds: false`, `auto-import-3rd-party-worlds: false`.
+- Multiverse-Core `worlds.yml`: `minecraft:the_nether` and `minecraft:the_end` get `auto-load: false`; all current worlds get `portal-form: none`. Keep SurvivalWorld/SpawnWorld auto-load true. Do not delete dimension folders or world entries.
+- Essentials `config.yml`: `newbies.kit: ''`, so MandoMC alone grants the first-join kit.
+
+SurvivalWorld's native keepInventory game rule remains false. MandoMC additionally forces carried-item loss for a combat logout even if a plugin sets keepInventory on that death. Do not install an additional combat logger or starter-kit plugin. `CombatProbe.jar` is temporary and must be removed before ordinary play.
