@@ -97,18 +97,6 @@
       "changes": "Moved unchanged; original bitmap glyph metrics retained."
     },
     {
-      "sourcePath": "assets/minecraft/textures/default/drop.png",
-      "sourceSha256": "9be7af9b713f664e86e8dbbd3b4c400f478fd1d3730050513d12a695c8c22c42",
-      "destination": "assets/mandomc/textures/font/item_labels/drop.png",
-      "changes": "Moved unchanged; original bitmap glyph metrics retained."
-    },
-    {
-      "sourcePath": "assets/minecraft/textures/default/reload.png",
-      "sourceSha256": "b031fd0acc29690cfc6c3b2fb0b97a6b47bbb3f9aad7322a7586000219f3ace6",
-      "destination": "assets/mandomc/textures/font/item_labels/reload.png",
-      "changes": "Moved unchanged; original bitmap glyph metrics retained."
-    },
-    {
       "sourcePath": "assets/minecraft/textures/default/ammo.png",
       "sourceSha256": "27827a43f6b0b279ff629af4710c29e8331b943857bc842843de684e7d7c3b59",
       "destination": "assets/mandomc/textures/font/item_labels/ammo.png",
@@ -118,8 +106,8 @@
       "sourcePath": "assets/minecraft/font/default.json",
       "sourceSha256": "abb393f43ed18434bc4da70eff1733346427f541ed4b6fe08f3fec915ab58cc4",
       "destination": "assets/minecraft/font/default.json",
-      "changes": "Retained only five E11/ammo bitmap providers with original glyphs and metrics; redirected texture paths to mandomc namespace."
+      "changes": "Retained only common/weapon/ammo badge providers with original glyph metrics; namespaced textures. Drop/reload icons replaced with text controls."
     }
   ],
-  "status": "E-11 with original bitmap lore restored; client visual check pending."
+  "status": "E-11 and ammo use accepted item-lore standard: badges, blank line, description, compact yellow keybind hints where applicable."
 }

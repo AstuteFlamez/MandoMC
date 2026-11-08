@@ -6,7 +6,7 @@ From the repository root:
 ```bash
 ./scripts/start-server.sh
 ```
-On macOS, double-click `server/start.command` for a Terminal console. Join `localhost` using **Minecraft Java 26.1.2**. The server binds to `127.0.0.1:25565` with online-mode enabled. It has the recovered SpawnWorld plus disposable survival `dev_world`, 20 slots, and a 4 GiB maximum heap. Override the heap with `MANDOMC_MAX_MEMORY=6G` if needed. Java 25 is selected by `scripts/java-env.sh`. Python 3 is also required: startup synchronizes the hosted resource pack before launching Paper.
+On macOS, double-click `server/start.command` for a Terminal console. Development starts should use this visible Terminal window so the user can also operate the console; from a shell use `open -a Terminal server/start.command` after stopping any existing instance. Join `localhost` using **Minecraft Java 26.1.2**. The server binds to `127.0.0.1:25565` with online-mode enabled. It has the recovered SpawnWorld plus disposable survival `dev_world`, 20 slots, and a 4 GiB maximum heap. Override the heap with `MANDOMC_MAX_MEMORY=6G` if needed. Java 25 is selected by `scripts/java-env.sh`. Python 3 is also required: startup synchronizes the hosted resource pack before launching Paper.
 
 Type `stop` in the server console to save and exit. Use full restarts for plugin changes. Do not run two copies against the same runtime.
 

@@ -20,24 +20,6 @@
     },
     {
       "type": "bitmap",
-      "file": "mandomc:font/item_labels/drop.png",
-      "ascent": 9,
-      "height": 12,
-      "chars": [
-        "ğ"
-      ]
-    },
-    {
-      "type": "bitmap",
-      "file": "mandomc:font/item_labels/reload.png",
-      "ascent": 9,
-      "height": 12,
-      "chars": [
-        "Ġ"
-      ]
-    },
-    {
-      "type": "bitmap",
       "file": "mandomc:font/item_labels/ammo.png",
       "ascent": 8,
       "height": 9,

@@ -31,4 +31,4 @@ Finish each work session with a buildable checkpoint, the relevant verification 
 ## Deferred clan milestone
 The accepted player-facing name is **Clans**. Creation/joining, claims, clan homes, clan respawn priority and FactionsUUID customization wait until the user returns to them. Do not build a parallel custom membership system. Group-specific KOTH ownership, clan damage rules, pairwise warpoints and raids cannot be considered complete before that integration.
 
-Immediate recommended next slice: turn the recovered E-11 cosmetic preview into one usable blaster through WeaponMechanics, with configurable firing/ammo/reload behavior, sound and WorldGuard protection checks. Broader equipment balancing follows after that one example works.
+Immediate recommended next slice: one basic armor set, followed by the first shield-based saber (block/reflection/throw/overheat). The E-11 is implemented; finish its remaining client ammo-consumption and combat-tag checks as part of combat validation. Clan/FactionsUUID work remains deferred.

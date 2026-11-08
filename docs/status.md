@@ -2,6 +2,12 @@
 Updated: 2026-11-08
 
 ## Milestone
+Accepted item-tooltip standard is recorded in docs/style-guide.md: rarity/category badges, blank line, gray description, compact yellow keybind controls only where applicable. Ammo now has matching spacing. Unused drop/reload bitmap providers and textures are removed; common/weapon/ammo badges remain.
+
+Console preference: start development servers in a visible Terminal window via server/start.command so the user can operate the console.
+
+E-11 tooltip trial: replaced the drop/arrow/reload image row with yellow `[<key:key.drop>] Reload` in the tracked and live weapon config. The keybind component follows the client’s drop-key binding. `wm reload` succeeded with all 26 weapons loaded; existing items need a fresh `/wm get E11`. Added a blank line between the Common/Weapon badges and description; the subsequent `wm reload` also succeeded. Next visual check: tooltip spacing and compact yellow reload hint.
+
 E-11 feedback follow-up: restored the exact legacy name/lore and five original image glyphs, moved glyph textures into mandomc/textures/font/item_labels, and added a safe-zone shooting-denial message. Survival protection now covers only chunk (-9,-9), x/z -144..-129, with a safe middle-block arrival at (-135.5,73,-135.5). WorldGuard and Multiverse remain the authorities; no new production Java.
 
 Current E-11 work: `bilal/e11-blaster` adds only the recovered E11 and its plasma-cell/red-bolt dependencies, explicit pose models and four original sounds. No MandoMC production Java or vendor versions changed. Legacy tuning is preserved; optional Cosmetics/Plus binaries are absent from the supplied backup. See docs/features/e11.md for installation, differences and client checks.
@@ -55,6 +61,8 @@ The new pack builds from `resource-pack/src/` with `./scripts/build-resource-pac
 The player experience, FigJam diagrams and proposed feature order remain recorded: arrival/protection, group base/travel, combat, supplies/progression, KOTH, Jabba, vehicles, raids. Pairwise kill recording lands with combat. See docs/features/arrival-and-protection.md for the first slice and docs/recovery.md for legacy code.
 
 ## Verification
+Item-standard cleanup: the pack builds with 23 files, all remaining font texture references resolve, and no active config references the removed drop/reload glyphs. Ammo spacing is deployed; WeaponMechanics reload succeeded. The next gameplay slice in docs/build-order.md is one basic armor set, then the first shield-based saber; remaining E-11 client checks stay on the combat checklist.
+
 Latest deployment: `0fcd2b0` is pushed, and pack `resource-pack-26.1.2-0fcd2b06f238` is published and selected by server startup with verified SHA-1 `b49b10dc2094688fbb2e0ec9e711f9176f26d21a`. The ordinary 12-plugin server restarted cleanly with arrival enabled and both test plugins removed. Reconnect for the pack; obtain a fresh E11 to replace any item carrying the previous stored lore. Client glyph rendering remains to be checked.
 
 Glyph/safe-zone follow-up: six Maven tests and six pack-deployment tests pass. The pack builds with 25 files; exact legacy Name/Lore text and all five glyph image bytes match the supplied source. The E-11 probe passes 56 assertions including restored glyph lore and both region denial messages. The new centered landing required removing one natural short-grass tuft; surrounding terrain is unchanged. The updated arrival probe passed 54 assertions, including safe footing, the new chunk edges and central landing. Both temporary test plugins are removed before normal play.

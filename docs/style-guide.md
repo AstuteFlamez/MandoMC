@@ -37,6 +37,15 @@ Scope: the new MandoMC project. This guide is the baseline and applies to newly 
 - Ship plugin defaults in plugin/src/main/resources. Store intentional server-specific overrides under server/config/common.
 - Add schema versions and migrations when persisted meaning changes. Use safe, additive defaults where possible.
 
+## Item tooltip standard
+Accepted 2026-11-08; applies to weapons, ammo and future custom items.
+
+- Item name, then the rarity/category badge row.
+- One blank lore line before the gray description.
+- Where an item has an action, use a compact yellow, non-italic control hint: `[<key:key.drop>] Reload` for blasters. Use the client keybinding component instead of hardcoding Q.
+- Separate description, controls and ammunition requirements with one blank line when present. Omit sections that do not apply; ammo does not need a reload control.
+- Keep the common/weapon/ammo image badges. Do not use oversized drop/reload images or an arrow between control badges.
+
 ## Player-facing language
 - Use short, concrete messages: what happened and what the player can do next.
 - Player-facing group identity must replace "Faction" and the `/f` command root. The final name/root is pending; use "player group" in planning until selected. Apply the chosen name consistently to commands, help, menus, messages and tutorial text. Preserve accurate vendor/API names and historical source references in technical documentation.

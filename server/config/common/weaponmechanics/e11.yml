@@ -8,10 +8,11 @@ E11:
       Name: "<gray>E-11 Blaster Rifle"
       Lore:
         - "<white>đĐ"
+        - ""
         - "<gray>Standard-issue Imperial blaster rifle."
         - "<gray>Compact and fast, but not as accurate."
         - ""
-        - "<white>ğ <yellow><bold>➣ <reset><white><!italic>Ġ"
+        - "<yellow><!italic>[<key:key.drop>] Reload"
         - ""
         - "<gray>Takes <red>Standard Plasma Cells<gray>."
       Unbreakable: true
