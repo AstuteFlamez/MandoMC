@@ -1,0 +1,11 @@
+{
+  "source": "Pinned legacy MandoPack archive",
+  "recoveredAssets": [
+    {
+      "sourcePath": "assets/minecraft/textures/custom/materials/ronto_hide.png",
+      "sourceSha256": "3b4348697dfc55b3253bf7b884e3d2b8422298d287df5448920597cbfdee61cb",
+      "destination": "assets/mandomc/textures/item/materials/bantha_hide.png",
+      "changes": "Rename ronto_hide to bantha_hide; texture bytes unchanged. Legacy Bantha Hide CMD 155 mapped to this texture."
+    }
+  ]
+}
