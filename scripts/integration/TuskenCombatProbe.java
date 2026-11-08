@@ -168,7 +168,7 @@ public final class TuskenCombatProbe extends JavaPlugin {
                         double combatDistance=combatStart.distance(fighter.getLocation());
                         getLogger().info("MOVEMENT normal="+calmDistance+" combat="+combatDistance);
                         check(combatDistance>calmDistance*1.15,"real combat chase is faster than calm walking");
-                        check(walkSpeed(fighter)==1.3,"combat automatically increases walk playback");
+                        check(walkSpeed(fighter)==1,"combat preserves normal walk playback");
                         enemy.teleport(fighter.getLocation().add(0,0,12));
                         fighter.getPathfinder().stopPathfinding();
                         var repositionStart=fighter.getLocation();

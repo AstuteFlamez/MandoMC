@@ -37,7 +37,6 @@ MandoTuskenCombatMovement:
     - health{h=>0} true
     - distance{d=0to32}
   Skills:
-    - defaultstate{mid=ranged_raider;type=walk;speed=1.3} @self
     - skill{s=MandoTuskenReposition} @target
 
 MandoTuskenReposition:

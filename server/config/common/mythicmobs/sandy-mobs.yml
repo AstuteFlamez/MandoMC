@@ -38,7 +38,6 @@ TuskenRaiderSniper:
   Skills:
     - model{mid=ranged_raider;h=false} @self ~onSpawn
     - model{mid=ranged_raider;h=false} @self ~onLoad
-    - defaultstate{mid=ranged_raider;type=walk;speed=1.3} @self ~onEnterCombat
     - skill{s=MandoTuskenRelax} @self ~onDropCombat
     - skill{s=MandoTuskenCombatMovement} @target ~onTimer:10
     - skill{s=MandoTuskenCycler} @target ~onTimer:80
