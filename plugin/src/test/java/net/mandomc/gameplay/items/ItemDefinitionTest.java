@@ -58,4 +58,17 @@ public class ItemDefinitionTest {
         assertEquals(1, ItemBrowser.clampPage(10, 46));
         assertEquals(0, ItemBrowser.clampPage(5, 0));
     }
+    @Test public void foodNutritionUsesFoodPointsAndRejectsInvalidValues() throws Exception {
+        var food = config();
+        food.set("material", "COOKED_MUTTON");
+        food.set("equipment-model", null);
+        for (int points : java.util.List.of(4, 8)) {
+            food.set("food-nutrition", points);
+            assertEquals(Integer.valueOf(points), ItemDefinition.parse("food", food, "food.yml").foodNutrition());
+        }
+        for (Object value : java.util.List.of(0, 21, 4.5, "four")) {
+            food.set("food-nutrition", value);
+            assertThrows(IllegalArgumentException.class, () -> ItemDefinition.parse("food", food, "food.yml"));
+        }
+    }
 }

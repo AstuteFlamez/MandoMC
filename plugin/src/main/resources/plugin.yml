@@ -6,6 +6,11 @@ author: AstuteFlamez
 description: MandoMC gameplay
 softdepend: [Multiverse-Core, WorldGuard, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
+  recipes:
+    description: Browse crafting recipes and ingredient sources
+    usage: /recipes [item]
+    aliases: [recipe]
+    permission: mandomc.recipes
   mandomc:
     description: MandoMC administration and custom items
     usage: /mandomc [give [player] [item] | items reload]
@@ -23,6 +28,9 @@ commands:
     usage: /survival
     permission: mandomc.travel.survival
 permissions:
+  mandomc.recipes:
+    description: Browse the recipe guide
+    default: true
   mandomc.items.give:
     description: Give custom items and use the item browser
     default: op

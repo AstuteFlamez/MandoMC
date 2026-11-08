@@ -1,0 +1,4 @@
+schema-version: 1
+drops:
+  minimum: 1
+  maximum: 3

@@ -1,0 +1,43 @@
+schema-version: 1
+# Legacy-style shaped recipes. Ingredients: catalog ID or minecraft:material.
+recipes:
+  robes_helmet:
+    result: robes_helmet
+    amount: 1
+    category: armor
+    shape: ['BBB', 'B B']
+    ingredients: {B: bantha_hide}
+  robes_chestplate:
+    result: robes_chestplate
+    amount: 1
+    category: armor
+    shape: ['B B', 'BBB', 'BBB']
+    ingredients: {B: bantha_hide}
+  robes_leggings:
+    result: robes_leggings
+    amount: 1
+    category: armor
+    shape: ['BBB', 'B B', 'B B']
+    ingredients: {B: bantha_hide}
+  robes_boots:
+    result: robes_boots
+    amount: 1
+    category: armor
+    shape: ['B B', 'B B']
+    ingredients: {B: bantha_hide}
+sources:
+  bantha_hide: '<gray>Dropped by banthas: 1–3 hides per kill.'
+guide:
+  title: '<gold>Recipes'
+  detail-title: '<gold>Recipe'
+  previous: '<yellow>Previous page'
+  next: '<yellow>Next page'
+  back: '<yellow>Back'
+  close: '<red>Close'
+  all: '<yellow>All categories'
+  category: '<yellow>Category: <value>'
+  hint: '<gray>Click to view the recipe.'
+  ingredient-hint: '<gray>Click an ingredient for its recipe or source.'
+  crafting: '<yellow>Craft at a crafting table'
+  unavailable: '<gray>No crafting recipe is available for this ingredient.'
+  player-only: '<red>Open this guide in-game.'

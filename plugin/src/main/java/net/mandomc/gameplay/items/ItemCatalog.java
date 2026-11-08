@@ -140,6 +140,12 @@ public final class ItemCatalog {
             item.setData(io.papermc.paper.datacomponent.DataComponentTypes.EQUIPPABLE,
                     equipment.toBuilder().assetId(definition.equipmentModel()));
         }
+        if (definition.foodNutrition() != null) {
+            var food = item.getData(io.papermc.paper.datacomponent.DataComponentTypes.FOOD);
+            if (food == null) throw new IllegalArgumentException(definition.id() + ": native food component missing");
+            item.setData(io.papermc.paper.datacomponent.DataComponentTypes.FOOD,
+                    food.toBuilder().nutrition(definition.foodNutrition()));
+        }
         return item;
     }
 

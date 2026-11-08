@@ -21,14 +21,18 @@ public final class ItemPresentationRefresh implements Listener {
 
     public static boolean refresh(ItemCatalog items, ItemStack item) {
         String id = items.identify(item);
-        if (id == null || !Set.of("bantha_hide", "massiff_ribs").contains(id)) return false;
-        var current = items.create(id).getItemMeta();
+        if (id == null || !Set.of("bantha_hide", "massiff_ribs", "dewback_leg").contains(id)) return false;
+        var template = items.create(id);
+        var current = template.getItemMeta();
+        var food = template.getData(io.papermc.paper.datacomponent.DataComponentTypes.FOOD);
         var meta = item.getItemMeta();
         if (java.util.Objects.equals(meta.lore(), current.lore())
-                && java.util.Objects.equals(meta.getItemModel(), current.getItemModel())) return false;
+                && java.util.Objects.equals(meta.getItemModel(), current.getItemModel())
+                && java.util.Objects.equals(item.getData(io.papermc.paper.datacomponent.DataComponentTypes.FOOD), food)) return false;
         meta.lore(current.lore());
         meta.setItemModel(current.getItemModel());
         item.setItemMeta(meta);
+        if (food != null) item.setData(io.papermc.paper.datacomponent.DataComponentTypes.FOOD, food);
         return true;
     }
 
