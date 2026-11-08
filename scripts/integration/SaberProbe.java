@@ -38,6 +38,8 @@ public final class SaberProbe extends JavaPlugin {
         var packConfig=org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.File(plugin.getDataFolder(),"sabers.yml")).getConfigurationSection("upstream-pack");
         var pack=new net.mandomc.integrations.packs.SaberPack(this,packConfig);
         org.bukkit.event.HandlerList.unregisterAll(pack);
+        pack.request(player.player);
+        check(player.packRequests==1,"join delivery works without a prior pack-loaded callback");
         pack.loaded(new org.bukkit.event.player.PlayerResourcePackStatusEvent(player.player,UUID.fromString(packConfig.getString("main-pack-id")),org.bukkit.event.player.PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED));
         check(player.packRequests==1 && player.forcedPack,"main pack completion requests required upstream pack");
         check(player.packUrl.equals(packConfig.getString("url")),"upstream delivered directly from pinned official URL");
