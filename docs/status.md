@@ -11,7 +11,7 @@ New arrivals start in the existing SpawnWorld map, receive a short tutorial, and
 
 Survival has a fixed protected landing zone. Solo players can create a group and claim a starter base outside protected spawn without a credit requirement. Respawn priority: group home, valid bed, SpawnWorld. A possible three-hour group creation cooldown remains tentative.
 
-Player-facing identity must replace Factions and `/f`. Final naming is pending; Clans (`/clan`, `/cl`) is the advisor recommendation, with Crews and Syndicates as alternatives. FactionsUUID remains the underlying integration.
+Clans is the accepted player-facing name. `/clan` and `/cl` remain proposed commands. The user deferred FactionsUUID-dependent clan membership, claims, homes and related integrations on 2026-11-08; do not start those next.
 
 Combat blocks voluntary teleports; logging out in combat causes death. First join grants a basic blaster, vanilla tools and food once. Starting credits remain undecided.
 
@@ -64,13 +64,15 @@ The pack builds without downloads, has root pack.mcmeta, and validates JSON plus
 Earlier recovery verification remains valid: all 294 legacy feature files matched their original Git blobs across 16 recovery branches; the full snapshot preserves obsolete docs and old main. FigJam diagrams were reviewed during the design checkpoint.
 
 ## Next action
-Playtest `/spawn` and `/survival`: turn the camera during the 3/2/1 countdown, then try walking/jumping, and assess the arrival spiral/sounds. Tune presentation before merging the stacked arrival/travel work and moving to groups/bases.
+Define and implement the first usable E-11 blaster slice: firing, ammunition/reloading, sounds and WorldGuard safe-zone enforcement through WeaponMechanics. This is the advisor-recommended next feature; clan/FactionsUUID work is deferred by the user.
 
 ## Open
-Group name/command, kit quantities/ammo, starting credits, travel, combat tag details, saber direction/tuning, enchantment compatibility/repair, group creation cooldown, claim capacity, warpoint threshold/edge cases, raid-window duration/refresh and active-raid detection, explosive/block limits, KOTH reward delivery, event schedules, recipes/prices, vehicle redeployment details and content depth for the integrated playtest. Resource planets, aerial combat and themed replacement swords/bows are deferred. Continue through concrete player scenarios and the proposed playable slices. The arrival slice is deployed; the remaining gameplay systems are unimplemented.
+Clan command aliases, kit quantities/ammo, starting credits, travel, combat tag details, saber direction/tuning, enchantment compatibility/repair, group creation cooldown, claim capacity, warpoint threshold/edge cases, raid-window duration/refresh and active-raid detection, explosive/block limits, KOTH reward delivery, event schedules, recipes/prices, vehicle redeployment details and content depth for the integrated playtest. Resource planets, aerial combat and themed replacement swords/bows are deferred. Continue through concrete player scenarios and the proposed playable slices. The arrival slice is deployed; the remaining gameplay systems are unimplemented.
 
 Temporary interface note (2026-11-07): `/tutorial` and `/survival` are development-only commands. Their behavior is available for testing; the final onboarding/travel interface is undecided.
 
 Repository configuration follow-up: `WORLD_SOURCES.txt` inventories active and archived maps with source-link placeholders, installation paths and fallback options. Runtime uses a file allowlist; logs, caches, credentials and player data remain excluded. No live gameplay settings were changed in this follow-up.
 
 Tutorial direction: much later `/tutorial` will show short text and send players to a library in SpawnWorld, where they can take feature-specific guidebooks. Current text is temporary; library coordinates and book content remain unimplemented.
+
+2026-11-08 planning update: Clans accepted; faction-plugin-dependent work moved later. The next recommendation is one working E-11, using the existing visual asset. No gameplay code or runtime settings changed in this planning update.

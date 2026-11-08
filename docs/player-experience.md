@@ -5,14 +5,9 @@ Status: working design, not a finalized feature order.
 Players use Java Minecraft and a required resource pack. They form player groups, build on the main survival world, and encounter PvP outside designated safe areas. Death drops carried items, weapons and armor. KOTH and Jabba are proven activities. A base can be vulnerable, including offline, to a rival group that has earned the required pairwise net-kill lead. Force powers and resource planets are deferred.
 
 ## Player-facing group identity
-The user wants a name other than Factions and a replacement for the `/f` player command. The final name and command are undecided. Use "player group" as a neutral planning placeholder. Commands, help, menus, messages and tutorial language must use the chosen identity consistently. FactionsUUID remains the selected underlying integration; its technical name is not the server's player-facing identity.
+Clans is the accepted name (2026-11-08). `/clan` and `/cl` remain proposed command names. Player-facing commands, help, menus and messages must replace Factions and `/f` consistently when implemented.
 
-Advisor shortlist, not accepted names:
-- Clans: `/clan`, with `/cl` as a proposed short alias. Recommended for the MandoMC identity and territorial groups; [Clan Wren](https://www.starwars.com/databank/clan-wren) provides a direct Mandalorian precedent.
-- Crews: `/crew`. A more informal group identity that also fits Star Wars adventurers, such as the [Ghost crew](https://www.starwars.com/databank/Hera-Syndulla).
-- Syndicates: `/syndicate`, with `/syn` as a proposed short alias. Strong underworld flavor, exemplified by the [Pyke Syndicate](https://www.starwars.com/news/who-are-the-pykes), but implies a criminal identity for every group.
-
-These are naming recommendations, not evidence of current Minecraft player preferences. Verify command ownership and aliases when implementing the selected integration.
+The user has deferred FactionsUUID-dependent work: clan creation/membership, claims, clan homes and group-aware respawn. FactionsUUID remains the intended state owner. Do not replace this deferral with a custom clan implementation. Clan relations, pairwise warpoints and group event ownership must be integrated when clan work resumes.
 
 ## Confirmed first session and recovery
 New players arrive in SpawnWorld, an existing map file the user already has. The arrival slice uses a short replayable chat tutorial, shown after the required pack loads. Their first goal is to travel to survival and establish a base. Survival arrivals use a fixed protected landing zone.
@@ -51,7 +46,7 @@ Record pairwise kills when combat lands; enable explosive raiding only after cla
 - Review the consolidated gameplay loop and proposed implementation order.
 - Settle the public group name and travel proposal before implementing those interfaces.
 
-Group naming and the travel recommendation remain open. Combat tagging details and initial equipment quantities can be settled when their feature briefs are written.
+Clans naming is accepted; clan integration is deferred. Travel beyond the implemented spawn/survival routes remains open. Combat tagging details and initial equipment quantities can be settled when their feature briefs are written.
 
 ## Vehicle baseline
 Aircraft carry players in the first integrated playtest; aerial combat is deferred. Speeders and aircraft are initially bought with credits. The long-term direction is crafting for all equipment, including blasters and vehicles. The accepted initial shop/crafting mix remains the first playable version; the later transition must preserve item identities and existing ownership.

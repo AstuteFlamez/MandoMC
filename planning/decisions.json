@@ -1,6 +1,6 @@
 {
   "project": "MandoMC",
-  "updated": "2026-11-05",
+  "updated": "2026-11-08",
   "figjam": {
     "fileKey": "oCcBlAvyGEoYnQzK1pMYM6",
     "url": "https://www.figma.com/board/oCcBlAvyGEoYnQzK1pMYM6",
@@ -24,7 +24,7 @@
     "assets": "User has models, sounds, menus, armor, mobs and item assets; repository archive inspected.",
     "developmentApproach": "Clean laptop-hosted development server, selective recovery from older attempts, feature branches integrated into main after satisfaction. Gameplay plugin boundaries first; voting and chat presentation deferred.",
     "pluginOwnership": "Accepted the proposed public/custom division; plugins may be replaced later when beneficial.",
-    "groupIdentity": "Player-facing naming must replace Factions and the /f command root across commands, help, menus, messages and tutorial text. Final name and command are undecided. FactionsUUID remains the selected underlying integration.",
+    "groupIdentity": "Clans is the accepted player-facing name. FactionsUUID remains the intended underlying integration, but its integration, membership, claims and clan homes are deferred at the user's request. /clan and /cl remain proposed commands until implementation.",
     "designMethod": "Player experience first, feature ordering second, then parameterized Java systems and configured content.",
     "firstSession": "New players arrive in the existing SpawnWorld map, receive a short tutorial (format undecided), then enter survival at a fixed protected landing zone to establish a base.",
     "starterFaction": "Solo players can create a faction and claim a starter base on eligible land outside the spawn safe zone without a credit requirement. A possible three-hour faction creation cooldown is tentative, not accepted.",
@@ -47,14 +47,24 @@
     "vehicleLossAndPacking": "Destruction permanently loses the vehicle. The placing player can pack it into an inventory item only when stationary, empty and out of combat.",
     "combatEscape": "Combat blocks voluntary teleporting. Logging out in combat causes death and normal carried-item loss. Tag duration, triggers and server-initiated disconnect handling remain undecided.",
     "starterEquipment": "A basic blaster, vanilla tools and food are granted only on first join. Exact items, quantities and ammo are undecided. Starting credits and their amount remain tentative.",
-    "firstFriendsPlaytest": "The in-scope gameplay systems should work together in a rough integrated version. Small development slices lead toward this target; content depth remains undecided. Force powers, resource planets and aerial combat are deferred."
+    "firstFriendsPlaytest": "The in-scope gameplay systems should work together in a rough integrated version. Small development slices lead toward this target; content depth remains undecided. Force powers, resource planets and aerial combat are deferred.",
+    "clanScheduling": "Defer FactionsUUID-dependent clan work. This does not defer unrelated vendors such as WeaponMechanics."
   },
   "architecture": "docs/architecture.md",
   "playerDesign": "docs/player-experience.md",
   "buildOrderProposal": {
     "status": "advisor-recommendation-awaiting-review",
     "document": "docs/build-order.md",
-    "sequence": ["arrival-and-protection", "group-base-and-travel", "combat-and-loss", "supplies-and-progression", "koth", "jabba", "vehicles", "raids"],
+    "sequence": [
+      "arrival-and-protection",
+      "group-base-and-travel",
+      "combat-and-loss",
+      "supplies-and-progression",
+      "koth",
+      "jabba",
+      "vehicles",
+      "raids"
+    ],
     "firstFeatureBrief": "docs/features/arrival-and-protection.md",
     "dependencyNote": "Record pairwise kills with combat; enable explosive raid permissions only after combat and claim protection are verified."
   },
@@ -93,10 +103,21 @@
   },
   "groupNamingProposal": {
     "status": "awaiting-user-choice",
-    "recommended": {"name": "Clans", "command": "/clan", "shortAlias": "/cl"},
+    "recommended": {
+      "name": "Clans",
+      "command": "/clan",
+      "shortAlias": "/cl"
+    },
     "alternatives": [
-      {"name": "Crews", "command": "/crew"},
-      {"name": "Syndicates", "command": "/syndicate", "shortAlias": "/syn"}
+      {
+        "name": "Crews",
+        "command": "/crew"
+      },
+      {
+        "name": "Syndicates",
+        "command": "/syndicate",
+        "shortAlias": "/syn"
+      }
     ],
     "sources": [
       "https://www.starwars.com/databank/clan-wren",
