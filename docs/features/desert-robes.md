@@ -43,3 +43,5 @@ References: https://www.minecraft.net/en-us/article/minecraft-java-edition-26-1 
 
 ## Keep original inventory icons (2026-11-08)
 The user accepted the replacement worn/entity robes but requested the original inventory icons. All four inventory PNGs are restored byte-for-byte from `4b41b45`. The accepted worn textures, equipment layers, opaque inventory dye defaults and item models are unchanged. Replacement artwork/crop metadata now covers worn armor only.
+
+Correction deployed as `resource-pack-26.1.2-e22f7a2ac17d` (SHA-1 `4267d55bbb53c8fdb66555c170eacc7c534598d7`). ZIP comparison proves only the four icon entries differ from the previous live pack; all four match their original bytes. Nine pack checks pass. Public download hashes and the server cache/properties verify; Paper restarted cleanly with the corrected pack. Reconnect for the restored inventory icons.
