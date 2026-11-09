@@ -1,0 +1,53 @@
+{
+  "source": "Supplied legacy Rancor files and pinned MandoPack archive (see sources.json)",
+  "files": [
+    {
+      "source": "MythicMobs/mobs/Rancor.yml",
+      "sha256": "a62cb5ea25db865eb19cfe5cf6df35be2d0cc9c8677a01863dae71764e154764",
+      "destination": "server/config/common/mythicmobs/rancor-mob.yml",
+      "changes": "Retain health, speed, faction, target selectors, boss bar, damage modifiers and cadence. Explicit current model attachment/reload at original scale 2; namespaced voices and threat table."
+    },
+    {
+      "source": "MythicMobs/skills/RancorSkills.yml",
+      "sha256": "09f01f1d7437ea108585220f0d12d452eed7ae150e731ddf05dd02cc9fbe9773",
+      "destination": "server/config/common/mythicmobs/rancor-skills.yml",
+      "changes": "Retain swing/stomp/slam damage, throw values, random choices and animation-relative cues; add shared facing pre-turn. Current block particles and native expanding, floor-matched cosmetic rubble replace the slam dust rings."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/rancor_snarl_1.ogg",
+      "sha256": "c524d23678f23f6a5af84a021de7eadba7ab113716f858ff9cdcac298e236e9c",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/rancor_snarl_1.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/rancor_snarl_2.ogg",
+      "sha256": "2c849e3ebaab9e30cc02ab634f26cc5f2776ee25430591732d01a645113b3f35",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/rancor_snarl_2.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/rancor_snarl_3.ogg",
+      "sha256": "062352fa5d847dfc76e778821f4574d324b321dbd0e79be3060cf40319c12fa0",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/rancor_snarl_3.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/rancor_roar_1.ogg",
+      "sha256": "9a4ae5d385cb832ae1421090a53d7f96d896789631d51f03f7586a4f27e9437e",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/rancor_roar_1.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/rancor_roar_2.ogg",
+      "sha256": "06e4c2a8847502032342a03863292596611e7eb07b5c52156ae70ac5a4a757dc",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/rancor_roar_2.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/rancor_growl.ogg",
+      "sha256": "dc197b514e8ced2fb69243241b3c0c23421355eaf46ad30b2b8fc665313185c5",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/rancor_growl.ogg",
+      "changes": "Copied unchanged."
+    }
+  ]
+}

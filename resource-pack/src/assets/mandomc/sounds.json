@@ -222,5 +222,35 @@
     "sounds": [
       "mandomc:shoot/ee3"
     ]
+  },
+  "mobs.rancor_snarl_1": {
+    "sounds": [
+      "mandomc:mobs/rancor_snarl_1"
+    ]
+  },
+  "mobs.rancor_snarl_2": {
+    "sounds": [
+      "mandomc:mobs/rancor_snarl_2"
+    ]
+  },
+  "mobs.rancor_snarl_3": {
+    "sounds": [
+      "mandomc:mobs/rancor_snarl_3"
+    ]
+  },
+  "mobs.rancor_roar_1": {
+    "sounds": [
+      "mandomc:mobs/rancor_roar_1"
+    ]
+  },
+  "mobs.rancor_roar_2": {
+    "sounds": [
+      "mandomc:mobs/rancor_roar_2"
+    ]
+  },
+  "mobs.rancor_growl": {
+    "sounds": [
+      "mandomc:mobs/rancor_growl"
+    ]
   }
 }
