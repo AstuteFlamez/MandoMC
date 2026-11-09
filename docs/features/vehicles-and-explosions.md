@@ -1,5 +1,5 @@
 # Feature: legacy vehicles and temporary explosions
-Status: initial deployment complete; tested playtest follow-up ready for deployment
+Status: deployed; client follow-up playtest pending
 Branch: bilal/vehicles-and-config
 
 ## Player experience
@@ -38,3 +38,5 @@ Client rendering, steering feel, gunner alignment and multiplayer latency requir
 
 ## Combined deployment
 The deployment branch includes integrated Jabba/Tatooine and the deployed Rancor close-follow tuning. ModelEngine Premium R4.1.1 is required: the free edition's 12-model import cap cannot load the complete 15-model custom roster plus internal fire. The owner-supplied binary is pinned in the plugin lock and remains private. Deployment retains stopped-runtime backups and uses a clean restart. Runtime state and worlds must be preserved when deploying follow-ups; never restore a pre-playtest world merely to update code.
+
+Follow-up deployment: source `b27b0f1`, published `resource-pack-26.1.2-b27b0f118ade` (497 files, SHA-1 `d3f5cb6557242c65cc45078e182604055957a3f8`). Restart completed at 16:36:05 local on 2026-11-09 with no startup errors. The tested JAR is installed, KOTH restored, expected seat/badge config migrations applied, and existing vehicle identity/health state preserved.
