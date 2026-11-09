@@ -6,7 +6,8 @@
       {
         "when": [
           "gui",
-          "ground"
+          "ground",
+          "on_shelf"
         ],
         "model": {
           "type": "minecraft:model",

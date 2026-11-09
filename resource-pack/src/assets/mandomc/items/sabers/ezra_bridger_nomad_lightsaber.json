@@ -1,0 +1,31 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+    "cases": [
+      {
+        "when": [
+          "gui",
+          "ground",
+          "on_shelf"
+        ],
+        "model": {
+          "type": "minecraft:model",
+          "model": "workshop:item/ezra_bridger_nomad_lightsaber_hilt"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:condition",
+      "property": "minecraft:using_item",
+      "on_true": {
+        "type": "minecraft:model",
+        "model": "workshop:item/ezra_bridger_nomad_lightsaber_blocking"
+      },
+      "on_false": {
+        "type": "minecraft:model",
+        "model": "workshop:item/ezra_bridger_nomad_lightsaber"
+      }
+    }
+  }
+}
