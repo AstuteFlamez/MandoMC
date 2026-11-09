@@ -58,6 +58,7 @@ public final class SaberService implements Listener {
         final int slot;
         final ItemStack item;
         final ItemDisplay display;
+        final SaberVariant variant;
         final SaberArc arc;
         final SaberContacts contacts = new SaberContacts();
         final Location origin;
@@ -71,7 +72,8 @@ public final class SaberService implements Listener {
         int age;
         boolean recalling;
 
-        Flight(Player player, ItemDisplay display, Mob target, SaberSettings settings) {
+        Flight(Player player, ItemDisplay display, Mob target, SaberSettings settings, SaberVariant variant) {
+            this.variant = variant;
             this.owner = player;
             this.slot = player.getInventory().getHeldItemSlot();
             this.item = player.getInventory().getItem(slot).clone();
@@ -92,19 +94,26 @@ public final class SaberService implements Listener {
             this.style = SaberArc.Style.sample(settings, ThreadLocalRandom.current());
             this.arc = new SaberArc(origin.toVector(), direction, right, reach, distance, style);
             this.motion = new SaberMotion(arc, style, settings, origin.toVector(), player.getEyeLocation().getYaw());
-            this.blade = motion.initialPose(origin.toVector());
+            this.blade = variant.pose(motion.initialPose(origin.toVector()));
         }
     }
     public SaberService(JavaPlugin plugin,ItemCatalog catalog,SaberSettings settings,ConfigurationSection messages) {
         this.plugin=plugin;this.catalog=catalog;this.settings=settings;this.messages=messages;
         if(!isSaber(catalog.create(settings.itemId()))) throw new IllegalArgumentException("Configured saber must be a registered SHIELD");
+        for (String id : settings.variants().keySet()) {
+            if (!isSaber(catalog.create(id))) throw new IllegalArgumentException("sabers.yml: unregistered SHIELD " + id);
+        }
         storedItem = new NamespacedKey(plugin, "saber_flight_item");
         storedSlot = new NamespacedKey(plugin, "saber_flight_slot");
         plugin.getServer().getPluginManager().registerEvents(this,plugin);
         task=plugin.getServer().getScheduler().runTaskTimer(plugin,this::tick,1,1);
     }
     public SaberSettings settings() { return settings; }
-    public boolean isSaber(ItemStack item) { return item!=null && item.getType()==Material.SHIELD && settings.itemId().equals(catalog.identify(item)); }
+    public boolean isSaber(ItemStack item) {
+        if (item == null || item.getType() != Material.SHIELD) return false;
+        String id = catalog.identify(item);
+        return id != null && settings.variants().containsKey(id);
+    }
     public boolean allowed(Location location) { return protection.allowed(location); }
     public boolean busy(Player p) { return flights.containsKey(p.getUniqueId()); }
     private GuardState guard(Player p) { return guards.computeIfAbsent(p.getUniqueId(),id->new GuardState()); }
@@ -272,8 +281,8 @@ public final class SaberService implements Listener {
             d.setTeleportDuration(1);d.setViewRange(0.5f);
             d.setInterpolationDuration(1);d.setInterpolationDelay(0);d.setRotation(0,0);
         });
-        var flight=new Flight(p,display,findTarget(p),settings);flights.put(p.getUniqueId(),flight);
-        display.setTransformation(flight.blade.transformation());
+        var flight=new Flight(p,display,findTarget(p),settings,settings.variants().get(catalog.identify(real)));flights.put(p.getUniqueId(),flight);
+        display.setTransformation(flight.blade.transformation(flight.variant.center()));
         reserve(flight);p.clearActiveItem();
         guard(p).thrown(settings);
         cooldowns.put(p.getUniqueId(),tick+settings.cooldown());sound(p.getLocation(),"throw");return true;
@@ -384,8 +393,8 @@ public final class SaberService implements Listener {
         Location hand = player.getEyeLocation();
         if (flight.motion.progress() <= flight.arc.attackTime()) trackTarget(flight);
         else flight.target = null;
-        SaberBlade.Pose pose = flight.motion.next(flight.location.toVector(), hand.toVector(),
-                flight.targetOffset, flight.recalling);
+        SaberBlade.Pose pose = flight.variant.pose(flight.motion.next(flight.location.toVector(), hand.toVector(),
+                flight.targetOffset, flight.recalling));
         Vector motion = pose.center().clone().subtract(flight.location.toVector());
         if (!move(flight, motion, pose)) {
             if (flight.display.isValid()) render(flight);
@@ -402,7 +411,7 @@ public final class SaberService implements Listener {
         flight.location.setYaw(0);
         flight.location.setPitch(0);
         flight.display.setInterpolationDelay(0);
-        flight.display.setTransformation(flight.blade.transformation());
+        flight.display.setTransformation(flight.blade.transformation(flight.variant.center()));
         flight.display.teleport(flight.location);
     }
 
@@ -561,13 +570,30 @@ public final class SaberService implements Listener {
                 clearStored(flight.owner);
             }
         }
-        event.getDrops().stream().filter(this::isSaber).forEach(item -> model(item, settings.model()));
+        event.getDrops().stream().filter(this::isSaber).forEach(item -> model(item, settings.variants().get(catalog.identify(item)).model()));
     }
     @EventHandler public void join(PlayerJoinEvent e) {
         recoverStored(e.getPlayer());
         // Normalize legacy hilt presentation from builds that kept the saber in its slot.
         var contents=e.getPlayer().getInventory().getContents();
-        for(ItemStack item:contents) if(isSaber(item))model(item,settings.model());
+        for (ItemStack item : contents) {
+            if (!isSaber(item)) continue;
+            String id = catalog.identify(item);
+            model(item, settings.variants().get(id).model());
+            var meta = item.getItemMeta();
+            var template = catalog.create(id).getItemMeta();
+            var plain = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText();
+            // Refresh default titles/badges, preserving player renames and custom lore/metadata.
+            if (meta.hasDisplayName() && plain.serialize(meta.displayName()).equals(plain.serialize(template.displayName()))) {
+                meta.displayName(template.displayName());
+            }
+            if (meta.hasLore() && !meta.lore().isEmpty()) {
+                var lore = new ArrayList<>(meta.lore());
+                lore.set(0, template.lore().getFirst());
+                meta.lore(lore);
+            }
+            item.setItemMeta(meta);
+        }
         e.getPlayer().getInventory().setContents(contents);
     }
     public void close() {task.cancel();new ArrayList<>(flights.keySet()).forEach(this::finish);}

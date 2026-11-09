@@ -6,7 +6,7 @@ import org.bukkit.util.Vector;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
-/** Shared render/collision pose for JustTimm's fixed-context Vader blade, in block units. */
+/** Shared render/collision pose for JustTimm's fixed-context blades, in block units. */
 public final class SaberBlade {
     // Derived from the referenced upstream model and its fixed transform, without copying artwork.
     private static final Vector3f MODEL_BLADE_CENTER = new Vector3f(.00625f, 1.34375f, -.09375f);
@@ -19,7 +19,10 @@ public final class SaberBlade {
             return center.clone().add(new Vector(point.x, point.y, point.z));
         }
         public Transformation transformation() {
-            Vector3f translation = rotation.transform(new Vector3f(MODEL_BLADE_CENTER)).negate();
+            return transformation(MODEL_BLADE_CENTER);
+        }
+        public Transformation transformation(Vector3f modelCenter) {
+            Vector3f translation = rotation.transform(new Vector3f(modelCenter)).negate();
             return new Transformation(translation, new Quaternionf(rotation), new Vector3f(1), new Quaternionf());
         }
         public Pose interpolate(Pose end, double t) {

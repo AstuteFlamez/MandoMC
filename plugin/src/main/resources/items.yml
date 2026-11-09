@@ -4,6 +4,8 @@ rarities:
   common: 'đ'
   uncommon: 'Ė'
   rare: 'ĕ'
+  epic: 'Ē'
+  legendary: 'ē'
 categories:
   materials: 'Č'
   armor: 'ĉ'
