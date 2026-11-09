@@ -130,7 +130,7 @@ public final class ItemCatalog {
                 new org.bukkit.attribute.AttributeModifier(new NamespacedKey("mandomc", "item_speed"), definition.attackSpeed() - 4,
                         org.bukkit.attribute.AttributeModifier.Operation.ADD_NUMBER, org.bukkit.inventory.EquipmentSlotGroup.MAINHAND));
         item.setItemMeta(meta);
-        if (definition.equipmentModel() != null) {
+        if (definition.equipmentModel() != null || definition.headModel()) {
             EquipmentSlot slot = definition.material().getEquipmentSlot();
             if (!Set.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET).contains(slot)) {
                 throw new IllegalArgumentException(definition.id() + ": equipment-model requires wearable armor");
@@ -138,7 +138,7 @@ public final class ItemCatalog {
             var equipment = item.getData(io.papermc.paper.datacomponent.DataComponentTypes.EQUIPPABLE);
             if (equipment == null) throw new IllegalArgumentException(definition.id() + ": no native equipment component");
             item.setData(io.papermc.paper.datacomponent.DataComponentTypes.EQUIPPABLE,
-                    equipment.toBuilder().assetId(definition.equipmentModel()));
+                    equipment.toBuilder().assetId(definition.headModel() ? null : definition.equipmentModel()));
         }
         if (definition.foodNutrition() != null) {
             var food = item.getData(io.papermc.paper.datacomponent.DataComponentTypes.FOOD);

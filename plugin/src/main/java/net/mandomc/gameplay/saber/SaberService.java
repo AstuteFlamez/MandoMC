@@ -98,13 +98,20 @@ public final class SaberService implements Listener {
     public SaberService(JavaPlugin plugin,ItemCatalog catalog,SaberSettings settings,ConfigurationSection messages) {
         this.plugin=plugin;this.catalog=catalog;this.settings=settings;this.messages=messages;
         if(!isSaber(catalog.create(settings.itemId()))) throw new IllegalArgumentException("Configured saber must be a registered SHIELD");
+        for (String id : settings.additionalItemIds()) {
+            if (!isSaber(catalog.create(id))) throw new IllegalArgumentException("Additional saber must be a registered SHIELD: " + id);
+        }
         storedItem = new NamespacedKey(plugin, "saber_flight_item");
         storedSlot = new NamespacedKey(plugin, "saber_flight_slot");
         plugin.getServer().getPluginManager().registerEvents(this,plugin);
         task=plugin.getServer().getScheduler().runTaskTimer(plugin,this::tick,1,1);
     }
     public SaberSettings settings() { return settings; }
-    public boolean isSaber(ItemStack item) { return item!=null && item.getType()==Material.SHIELD && settings.itemId().equals(catalog.identify(item)); }
+    public boolean isSaber(ItemStack item) {
+        if (item == null || item.getType() != Material.SHIELD) return false;
+        String id = catalog.identify(item);
+        return id != null && (settings.itemId().equals(id) || settings.additionalItemIds().contains(id));
+    }
     public boolean allowed(Location location) { return protection.allowed(location); }
     public boolean busy(Player p) { return flights.containsKey(p.getUniqueId()); }
     private GuardState guard(Player p) { return guards.computeIfAbsent(p.getUniqueId(),id->new GuardState()); }
@@ -164,6 +171,10 @@ public final class SaberService implements Listener {
         p.sendActionBar(MiniMessage.miniMessage().deserialize(Objects.requireNonNull(messages.getString(key))));
     }
     private void sound(Location l,String name) { l.getWorld().playSound(l,"mandomc:saber."+name,SoundCategory.PLAYERS,0.7f,1f); }
+    private void restoreModel(ItemStack item) {
+        var template = catalog.create(catalog.identify(item));
+        if (template != null) model(item, template.getItemMeta().getItemModel().toString());
+    }
     private void model(ItemStack i,String key) { if(i==null)return;var m=i.getItemMeta();m.setItemModel(NamespacedKey.fromString(key));i.setItemMeta(m); }
 
     @EventHandler public void swing(PlayerAnimationEvent e) {
@@ -561,13 +572,13 @@ public final class SaberService implements Listener {
                 clearStored(flight.owner);
             }
         }
-        event.getDrops().stream().filter(this::isSaber).forEach(item -> model(item, settings.model()));
+        event.getDrops().stream().filter(this::isSaber).forEach(item -> restoreModel(item));
     }
     @EventHandler public void join(PlayerJoinEvent e) {
         recoverStored(e.getPlayer());
         // Normalize legacy hilt presentation from builds that kept the saber in its slot.
         var contents=e.getPlayer().getInventory().getContents();
-        for(ItemStack item:contents) if(isSaber(item))model(item,settings.model());
+        for(ItemStack item:contents) if(isSaber(item))restoreModel(item);
         e.getPlayer().getInventory().setContents(contents);
     }
     public void close() {task.cancel();new ArrayList<>(flights.keySet()).forEach(this::finish);}

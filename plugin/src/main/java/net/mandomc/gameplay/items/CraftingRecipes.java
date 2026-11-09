@@ -22,7 +22,7 @@ public final class CraftingRecipes implements AutoCloseable {
         this.items = items;
         if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("items/recipes.yml: unsupported schema-version");
         var section = Objects.requireNonNull(config.getConfigurationSection("recipes"), "items/recipes.yml: recipes missing");
-        var pending = new ArrayList<ShapedRecipe>();
+        var pending = new ArrayList<org.bukkit.inventory.Recipe>();
         var parsed = new ArrayList<RecipeDefinition>();
         for (String id : section.getKeys(false)) {
             var definition = RecipeDefinition.parse(id, section.getConfigurationSection(id));
@@ -40,11 +40,25 @@ public final class CraftingRecipes implements AutoCloseable {
             pending.add(recipe);
             parsed.add(definition);
         }
+        var smelting = config.getConfigurationSection("smelting");
+        if (smelting != null) {
+            for (String id : smelting.getKeys(false)) {
+                var definition = RecipeDefinition.parseSmelting(id, smelting.getConfigurationSection(id));
+                var result = Objects.requireNonNull(items.create(definition.result()), "Unknown smelting result: " + id);
+                String input = definition.ingredients().get('I');
+                var ingredient = ingredient(input);
+                RecipeChoice choice = input.startsWith("minecraft:") ? new RecipeChoice.MaterialChoice(ingredient.getType())
+                        : new RecipeChoice.ExactChoice(ingredient);
+                pending.add(new org.bukkit.inventory.BlastingRecipe(new NamespacedKey(plugin, "smelt_" + id), result,
+                        choice, definition.experience(), definition.cookTime()));
+                parsed.add(definition);
+            }
+        }
         definitions = List.copyOf(parsed);
         try {
             for (var recipe : pending) {
-                if (!Bukkit.addRecipe(recipe)) throw new IllegalStateException("Duplicate recipe: " + recipe.getKey());
-                keys.add(recipe.getKey());
+                if (!Bukkit.addRecipe(recipe)) throw new IllegalStateException("Duplicate recipe: " + ((org.bukkit.Keyed) recipe).getKey());
+                keys.add(((org.bukkit.Keyed) recipe).getKey());
             }
         } catch (RuntimeException error) {
             close();

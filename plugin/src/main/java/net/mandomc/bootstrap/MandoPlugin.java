@@ -119,7 +119,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 worldEditRanks = new net.mandomc.integrations.permissions.WorldEditRanks(this, ranks);
             new net.mandomc.commands.RankCommands(root, ranks, language.getConfigurationSection("ranks"));
             credits = new net.mandomc.gameplay.credits.CreditService(this, loadFeature("economy/credits.yml"));
-            for (var resource : new String[] {"items/catalog.yml", "items/definitions/vehicles.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/jabba.yml", "items/definitions/jabba-loot.yml", "items/definitions/dioxis.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
+            for (var resource : new String[] {"items/catalog.yml", "items/definitions/vehicles.yml", "items/definitions/legacy.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/jabba.yml", "items/definitions/jabba-loot.yml", "items/definitions/dioxis.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
                 if (!new File(getDataFolder(), resource).isFile()) saveResource(resource, false);
             }
             // Add only missing badges and vendor registrations; preserve local overrides.

@@ -39,3 +39,6 @@ upstream-pack:
   version: 3.2.2
   url: "https://cdn.modrinth.com/data/HVjHFmDU/versions/heHnARk2/JustTimm%27s%20Lightsaber%20Workshop%203.2.2.zip"
   sha1: 0f1a11ab321d5d4ac39ed2659ddbdf207a82f5dc
+
+# Recovered sabers use the shared guard/throw rules and their own native melee stats/models.
+additional-item-ids: [obiwan, cal_survivor_crossguard, windu, quigon, ventress_yellow]

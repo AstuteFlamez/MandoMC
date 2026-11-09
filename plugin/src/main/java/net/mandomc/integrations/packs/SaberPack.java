@@ -36,7 +36,7 @@ public final class SaberPack implements Listener {
     public void request(Player player) {
         if (!player.isOnline() || !requested.add(player.getUniqueId())) return;
         try {
-            player.addResourcePack(id,url,hash,"Vader's saber models by JustTimm — thank you!",true);
+            player.addResourcePack(id,url,hash,"Lightsaber models by JustTimm — thank you!",true);
             plugin.getLogger().info("Requested JustTimm saber pack for " + player.getName());
         } catch (RuntimeException error) {
             requested.remove(player.getUniqueId());

@@ -8,9 +8,9 @@ import org.bukkit.configuration.ConfigurationSection;
 
 /** Immutable content description; runtime items are built only after all files validate. */
 public record ItemDefinition(String id, Material material, String name, String rarity, String category,
-        List<String> lore, int customModelData, NamespacedKey itemModel, NamespacedKey equipmentModel, Double attackDamage, Double attackSpeed, Integer foodNutrition) {
+        List<String> lore, int customModelData, NamespacedKey itemModel, NamespacedKey equipmentModel, Double attackDamage, Double attackSpeed, Integer foodNutrition, boolean headModel) {
     private static final Set<String> KEYS = Set.of("material", "name", "rarity", "category", "lore",
-            "custom-model-data", "item-model", "equipment-model", "attack-damage", "attack-speed", "food-nutrition");
+            "custom-model-data", "item-model", "equipment-model", "attack-damage", "attack-speed", "food-nutrition", "head-model");
 
     public ItemDefinition {
         lore = List.copyOf(lore);
@@ -44,11 +44,18 @@ public record ItemDefinition(String id, Material material, String name, String r
                 throw new IllegalArgumentException(path + ".food-nutrition: require integer 1–20");
             nutrition = section.getInt("food-nutrition");
         }
+        if (section.contains("head-model") && !section.isBoolean("head-model")) {
+            throw new IllegalArgumentException(path + ".head-model: expected a boolean");
+        }
+        boolean headModel = section.getBoolean("head-model");
+        if (headModel && (!material.name().endsWith("_HELMET") || section.contains("equipment-model"))) {
+            throw new IllegalArgumentException(path + ": head-model requires a helmet without equipment-model");
+        }
         var equipment = section.contains("equipment-model") ? key(section, "equipment-model", path) : null;
         return new ItemDefinition(id, material, required(section, "name", path),
                 required(section, "rarity", path), required(section, "category", path),
                 section.getStringList("lore"), modelData, key(section, "item-model", path), equipment,
-                number(section, "attack-damage", path, 1, 100), number(section, "attack-speed", path, 0.1, 4), nutrition);
+                number(section, "attack-damage", path, 1, 100), number(section, "attack-speed", path, 0.1, 4), nutrition, headModel);
     }
 
     private static Double number(ConfigurationSection section, String key, String path, double min, double max) {

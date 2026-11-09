@@ -8,10 +8,34 @@ import org.bukkit.configuration.ConfigurationSection;
 
 /** Validated, immutable legacy-style shaped recipe shared by crafting and the guide. */
 public record RecipeDefinition(String id, String result, int amount, String category,
-        List<String> shape, Map<Character, String> ingredients) {
+        List<String> shape, Map<Character, String> ingredients, int cookTime, float experience) {
     public RecipeDefinition {
         shape = List.copyOf(shape);
         ingredients = Map.copyOf(ingredients);
+    }
+
+    public boolean smelting() { return cookTime > 0; }
+
+    public static RecipeDefinition parseSmelting(String id, ConfigurationSection config) {
+        String path = "items/recipes.yml: smelting." + id;
+        if (!id.matches("[a-z0-9_]+") || config == null) throw new IllegalArgumentException(path + ": invalid recipe");
+        for (String key : config.getKeys(false)) {
+            if (!Set.of("result", "input", "furnace", "cook-time", "experience", "category").contains(key)) {
+                throw new IllegalArgumentException(path + ": unsupported key " + key);
+            }
+        }
+        String result = config.getString("result", "");
+        String input = config.getString("input", "");
+        String category = config.getString("category", "");
+        int time = config.getInt("cook-time", -1);
+        double experience = config.getDouble("experience", Double.NaN);
+        if (!result.matches("[a-z0-9_]+") || !input.matches("(?:minecraft:)?[a-z0-9_]+")
+                || !category.matches("[a-z0-9_]+") || !"blast".equals(config.getString("furnace"))
+                || !config.isInt("cook-time") || time < 1 || time > 72000
+                || !Double.isFinite(experience) || experience < 0 || experience > 100) {
+            throw new IllegalArgumentException(path + ": invalid blast-furnace recipe");
+        }
+        return new RecipeDefinition(id, result, 1, category, List.of("I"), Map.of('I', input), time, (float) experience);
     }
 
     public static RecipeDefinition parse(String id, ConfigurationSection config) {
@@ -53,6 +77,6 @@ public record RecipeDefinition(String id, String result, int amount, String cate
         if (used.isEmpty() || !used.equals(ingredients.keySet())) {
             throw new IllegalArgumentException(path + ": ingredient symbols must exactly match the shape");
         }
-        return new RecipeDefinition(id, result, amount, category, shape, ingredients);
+        return new RecipeDefinition(id, result, amount, category, shape, ingredients, 0, 0);
     }
 }

@@ -13,3 +13,6 @@ Verification: all 51 Maven tests pass, including malformed recipe rejection, imm
 Next action: deploy on the next coordinated restart and run those in-game checks.
 
 Deployment update: deployed locally and cleanly restarted Paper at 17:12:42 on 2026-11-08. Plugin hash matches the verified build, all 11 items load, and `/recipes` registers successfully. Interactive crafting/drop/client checks remain pending.
+
+## Legacy expansion (2026-11-09)
+The shared guide now opens category cards and includes 51 shaped recipes plus 11 blast-furnace recipes, with visible page numbers, nested input navigation and exact workstation/timing. See [legacy items and armor](legacy-items-and-armor.md) for recovered content, repaired aliases and verification.
