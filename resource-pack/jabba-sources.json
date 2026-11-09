@@ -1,0 +1,184 @@
+{
+  "legacyPack": {
+    "repository": "https://github.com/AstuteFlamez/MandoPack",
+    "commit": "2731b9e4ae5d8d142cd4a1aaa14f3f1b7c0e56c7",
+    "archive": "MandoPack.zip",
+    "archiveSha256": "32a578caac7c4c8976868abf0aa20f545c9926eb8d6382b94ccf5e986c95cce5"
+  },
+  "files": [
+    {
+      "source": "MythicMobs/mobs/GamorreanGuard.yml",
+      "sha256": "069beb196e0c23fe9c2c02ee2729d14d8aa0c5bce3364ec4978cc741eb018749",
+      "destination": "server/config/common/mythicmobs/jabba-mobs.yml",
+      "changes": "Retain stats, level modifiers, attack cadence and voices. Current model/sound references, explicit player AI, reload attachment and zombie safeguards. Catalog death adapter owns the original weapon/ammo rolls."
+    },
+    {
+      "source": "MythicMobs/mobs/QuarrenGuard.yml",
+      "sha256": "dab54e54972cc0eaf7f835b71231ae3950244caa034e8d1f96f932f33832bd77",
+      "destination": "server/config/common/mythicmobs/jabba-mobs.yml",
+      "changes": "Retain stats, level modifiers, attack cadence and voices. Current model/sound references, explicit player AI, reload attachment and zombie safeguards. Catalog death adapter owns the original weapon/ammo rolls."
+    },
+    {
+      "source": "MythicMobs/mobs/TwilekGuard.yml",
+      "sha256": "0844d594bca6a8839e1754c88a9e11e0bd01609e90aedade899cc3e2da5099da",
+      "destination": "server/config/common/mythicmobs/jabba-mobs.yml",
+      "changes": "Retain stats, level modifiers, attack cadence and voices. Current model/sound references, explicit player AI, reload attachment and zombie safeguards. Catalog death adapter owns the original weapon/ammo rolls."
+    },
+    {
+      "source": "MythicMobs/skills/GamorreanSkills.yml",
+      "sha256": "516927272edc3e3e37f8251e149ad59ce0c0d691ae3d91bd3905b8ae889605b7",
+      "destination": "server/config/common/mythicmobs/jabba-skills.yml",
+      "changes": "Original attack weights, damage, speed, timings and six-shot ranged sequences; current weapon IDs/sounds, delayed hit validity checks. Correct obsolete damage d= to current amount a=; make ignored velocity mode explicit as SET, retaining original vertical lift."
+    },
+    {
+      "source": "MythicMobs/skills/QuarrenGuardSkills.yml",
+      "sha256": "4b48f575033f4c4ac08685f893b21cf10338f171001daa9f6a85730341cdb2cf",
+      "destination": "server/config/common/mythicmobs/jabba-skills.yml",
+      "changes": "Original attack weights, damage, speed, timings and six-shot ranged sequences; current weapon IDs/sounds, delayed hit validity checks."
+    },
+    {
+      "source": "MythicMobs/skills/TwilekGuardSkills.yml",
+      "sha256": "1f3becd0687cec8c5429ebd8fc3a74d733a35ae17eab58cfacbca015fe631f90",
+      "destination": "server/config/common/mythicmobs/jabba-skills.yml",
+      "changes": "Original attack weights, damage, speed, timings and six-shot ranged sequences; current weapon IDs/sounds, delayed hit validity checks."
+    },
+    {
+      "source": "MythicMobs/skills/AlienSoundSkills.yml",
+      "sha256": "916e1e191e804c1ed491ef96ea78980c6a4d9390636a1dd718e4af3ade446c76",
+      "destination": "server/config/common/mythicmobs/jabba-skills.yml",
+      "changes": "Original attack weights, damage, speed, timings and six-shot ranged sequences; current weapon IDs/sounds, delayed hit validity checks."
+    },
+    {
+      "source": "WeaponMechanics/weapons/sub_machine_guns/se14c.yml",
+      "sha256": "3a9bac0ecae55596b9d575038d68596356b401726730c7637e769d785e842a4c",
+      "destination": "server/config/common/weaponmechanics/se14c.yml",
+      "changes": "Retain all firing, recoil, damage, ammo, equip/reload/scope and firearm action values. Namespaced model/sound references and current projectile/skin schema; compact keybinding lore; omit unavailable cosmetics extension; prevent block breaking. Replace missing legacy light-reload/scope sounds with original reload/zoom samples present in the pack."
+    },
+    {
+      "source": "WeaponMechanics/weapons/assault_rifles/a280.yml",
+      "sha256": "60ad99035dc7913c4d111ae61027cef5f9a8f62668302bba68747b7cab7310df",
+      "destination": "server/config/common/weaponmechanics/a280.yml",
+      "changes": "Retain all firing, recoil, damage, ammo, equip/reload/scope and firearm action values. Namespaced model/sound references and current projectile/skin schema; compact keybinding lore; omit unavailable cosmetics extension; prevent block breaking. Replace missing legacy light-reload/scope sounds with original reload/zoom samples present in the pack."
+    },
+    {
+      "source": "assets/minecraft/textures/custom/blasters/se14c.png",
+      "sha256": "440ac554a3b988e33d8747000b30bfd6d880eb4b43d8787440903453f799469b",
+      "destination": "resource-pack/src/assets/mandomc/textures/item/blasters/se14c.png",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/models/item/blasters/se14c/se14c.json",
+      "sha256": "be40bef010961eabf0cba9ebdef1ef5e3d6207e4ec4b60e4988151fa856bd735",
+      "destination": "resource-pack/src/assets/mandomc/models/item/blasters/se14c.json",
+      "changes": "Namespaced reference adaptation; original geometry, UVs, displays and media preserved."
+    },
+    {
+      "source": "assets/minecraft/models/item/blasters/se14c/se14cscope.json",
+      "sha256": "a37f6c535d166ba62baf3777caad41fd72fc74878a0029793bc42f72b0d9f96e",
+      "destination": "resource-pack/src/assets/mandomc/models/item/blasters/se14c_scope.json",
+      "changes": "Namespaced reference adaptation; original geometry, UVs, displays and media preserved."
+    },
+    {
+      "source": "assets/minecraft/models/item/blasters/se14c/se14csprint.json",
+      "sha256": "61a740c2b241dceb13cc018843e9c4fec7bcfe5167b330ed4aa8bf40bcf6de64",
+      "destination": "resource-pack/src/assets/mandomc/models/item/blasters/se14c_sprint.json",
+      "changes": "Namespaced reference adaptation; original geometry, UVs, displays and media preserved."
+    },
+    {
+      "source": "assets/minecraft/textures/custom/blasters/a280.png",
+      "sha256": "8099328947c65e727746a32c27882dcc467ca54c727ae126a5f12d6820f12e0f",
+      "destination": "resource-pack/src/assets/mandomc/textures/item/blasters/a280.png",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/models/item/blasters/a280/a280.json",
+      "sha256": "450b7e3d327cf3f0083d1425754a680af1e5e7944db71455ef427788abfd2231",
+      "destination": "resource-pack/src/assets/mandomc/models/item/blasters/a280.json",
+      "changes": "Namespaced reference adaptation; original geometry, UVs, displays and media preserved."
+    },
+    {
+      "source": "assets/minecraft/models/item/blasters/a280/a280scope.json",
+      "sha256": "e6c649ee22157db41a4bad2ce9a258bcb0648d81714e1d5c356361b4ded9e1ea",
+      "destination": "resource-pack/src/assets/mandomc/models/item/blasters/a280_scope.json",
+      "changes": "Namespaced reference adaptation; original geometry, UVs, displays and media preserved."
+    },
+    {
+      "source": "assets/minecraft/models/item/blasters/a280/a280sprint.json",
+      "sha256": "d78d048060154af5346712ab6a59ce1588a80a41180d511bd4cdb8648ead6aff",
+      "destination": "resource-pack/src/assets/mandomc/models/item/blasters/a280_sprint.json",
+      "changes": "Namespaced reference adaptation; original geometry, UVs, displays and media preserved."
+    },
+    {
+      "source": "assets/minecraft/textures/custom/weapons/gamorrean_axe.png",
+      "sha256": "e2e6d8b099aa61a438820f1f998348c5bad663dc5ecb6f08f56d4470267cee7b",
+      "destination": "resource-pack/src/assets/mandomc/textures/item/melee/gamorrean_axe.png",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/models/item/weapons/gamorrean_axe.json",
+      "sha256": "587699a4de1e9a06612efe0dc10b46bd03c62b9067013d54ad3256042b19fd78",
+      "destination": "resource-pack/src/assets/mandomc/models/item/melee/gamorrean_axe.json",
+      "changes": "Namespaced reference adaptation; original geometry, UVs, displays and media preserved."
+    },
+    {
+      "source": "assets/minecraft/sounds/misc/zoompistol.ogg",
+      "sha256": "cca41d71ac9d800d0cb9d9b7df8576719c56f22caa73155f1653d70f671afa74",
+      "destination": "resource-pack/src/assets/mandomc/sounds/misc/zoompistol.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/alien1.ogg",
+      "sha256": "ae703bf6915f5929b3cab15276e8d4284883487819ccab63cfe4571823f7bdc5",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/alien1.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/alien2.ogg",
+      "sha256": "b6623c2749f5a3412a58003aac67459926a945ae78b455dbe4117a1bb816848d",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/alien2.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/alien3.ogg",
+      "sha256": "b5eff28780dc08c4df8fe8a8fb43a09a0c1894dfd4a18fff11c8b7308370510d",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/alien3.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/gamorrean_death.ogg",
+      "sha256": "dca8ae9c9604873cb1f5ddd93fb5b281405e3563a8d48a953a1e6961cb7b6c55",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/gamorrean_death.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/gamorrean_idle1.ogg",
+      "sha256": "adc7ebca14c278f5538846523890d3dec3bf7a4ff6e3cf9211fd341090bafc19",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/gamorrean_idle1.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/gamorrean_idle2.ogg",
+      "sha256": "e080c21c90be329d83dc638163520df88c56b0b3c8d79022e7315ba1488c17b2",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/gamorrean_idle2.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/shoot/a280.ogg",
+      "sha256": "8940b77ab6228700a28ca8d0bc6878526742f42dc6ed5891830b2a5ca9475f40",
+      "destination": "resource-pack/src/assets/mandomc/sounds/shoot/a280.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/shoot/cr-21.ogg",
+      "sha256": "479709345c275e42339b97ce8f29591b6cc9e6d1524d1c29367f8f97f981c921",
+      "destination": "resource-pack/src/assets/mandomc/sounds/shoot/cr-21.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/textures/default/epic.png",
+      "sha256": "93353a1baedae654acd372e9999c4311a7ec533431e6903d990f2a5aee172e58",
+      "destination": "resource-pack/src/assets/mandomc/textures/font/item_labels/epic.png",
+      "changes": "Copied unchanged; original A280 epic rarity badge."
+    }
+  ]
+}

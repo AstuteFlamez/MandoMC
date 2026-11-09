@@ -76,7 +76,7 @@ TuskenRaiderMelee:
   Skills:
     - model{mid=melee_raider} @self ~onSpawn
     - model{mid=melee_raider} @self ~onLoad
-    - state{mid=melee_raider;s=attack1} @self ~onAttack
+    - skill{s=MandoTuskenMeleeAttack} @trigger ~onAttack
     - skill{s=MandoTuskenVoice} @self ~onAttack
     - skill{s=MandoTuskenVoice} @self ~onTimer:160 0.25
 
@@ -176,6 +176,7 @@ Massiff:
     - model{mid=massiff} @self ~onSpawn
     - state{mid=massiff;s=idle;lerpin=5} @self ~onSpawn
     - model{mid=massiff} @self ~onLoad
+    - skill{s=MandoFaceTargetNow} @trigger ~onAttack
     - skill{s=Massif_Combat} @self ~onTimer:35
     - skill{s=Massif_Idle} @self ~onTimer:35
     - sound{s=entity.hoglin.death;v=1;p=0.7} @self ~onDeath

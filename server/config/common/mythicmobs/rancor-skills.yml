@@ -1,0 +1,126 @@
+rancor_attack_selector:
+  Conditions:
+    - incombat true
+  Skills:
+  # Favor swipes: 60%, with stomp and slam at 20% each.
+  - randomskill{s=rancor_swing 0.6,rancor_stomp 0.2,rancor_slam 0.2}
+
+
+
+############
+# SWING
+############
+
+rancor_swing:
+  Skills:
+  - randomskill{s=rancor_swing_left,rancor_swing_right}
+
+
+
+rancor_swing_left:
+  Skills:
+  - skill{s=MandoFaceTarget;repeat=23;repeatInterval=1} @target
+  - delay 6
+  - state{mid=rancor;s=attack.swing_left;lerpin=2} @self
+  - command{c="mandomc rancorswipe <caster.uuid> left"} @self
+  - delay 16
+  - sound{s=mandomc:mobs.rancor_snarl_1;v=2;p=1} @self
+  - damage{a=8} @PlayersInRadius{r=7}
+
+  # show hit location on players
+
+
+
+rancor_swing_right:
+  Skills:
+  - skill{s=MandoFaceTarget;repeat=23;repeatInterval=1} @target
+  - delay 6
+  - state{mid=rancor;s=attack.swing_right;lerpin=2} @self
+  - command{c="mandomc rancorswipe <caster.uuid> right"} @self
+  - delay 16
+  - sound{s=mandomc:mobs.rancor_snarl_2;v=2;p=1} @self
+  - damage{a=8} @PlayersInRadius{r=7}
+
+  # show hit location on players
+
+
+
+############
+# STOMP
+############
+
+rancor_stomp:
+  Skills:
+  - randomskill{s=rancor_stomp_left,rancor_stomp_right}
+
+
+
+rancor_stomp_left:
+  Skills:
+  - skill{s=MandoFaceTarget;repeat=23;repeatInterval=1} @target
+  - delay 6
+  - state{mid=rancor;s=attack.stomp_left;lerpin=2} @self
+  - delay 16
+  - sound{s=mandomc:mobs.rancor_roar_1;v=3;p=1} @self
+  - command{c="mandomc rancorstomp <caster.uuid> left"} @self
+  - throw{velocity=14;velocityY=14} @PlayersInRadius{r=12}
+  - damage{a=9} @PlayersInRadius{r=12}
+
+  # stone debris burst
+
+
+
+rancor_stomp_right:
+  Skills:
+  - skill{s=MandoFaceTarget;repeat=23;repeatInterval=1} @target
+  - delay 6
+  - state{mid=rancor;s=attack.stomp_right;lerpin=2} @self
+  - delay 16
+  - sound{s=mandomc:mobs.rancor_roar_2;v=3;p=1} @self
+  - command{c="mandomc rancorstomp <caster.uuid> right"} @self
+  - throw{velocity=14;velocityY=14} @PlayersInRadius{r=12}
+  - damage{a=9} @PlayersInRadius{r=12}
+
+  # stone debris burst
+
+
+
+############
+# SLAM
+############
+
+rancor_slam:
+  Skills:
+  - skill{s=MandoFaceTarget;repeat=23;repeatInterval=1} @target
+  - delay 6
+  - state{mid=rancor;s=attack.slam;lerpin=2} @self
+  - delay 15
+  - sound{s=mandomc:mobs.rancor_roar_1;v=3;p=0.9} @self
+  - skill{s=rancor_slam_shockwave} @target
+
+
+
+############
+# SHOCKWAVE
+############
+
+rancor_slam_shockwave:
+  Skills:
+  - command{c="mandomc rancorslam <caster.uuid> <target.uuid>"} @target
+
+
+############
+# HURT SOUNDS
+############
+
+rancor_hurt1:
+  Skills:
+  - sound{s=mandomc:mobs.rancor_snarl_1;v=2;p=1} @self
+
+rancor_hurt2:
+  Skills:
+  - sound{s=mandomc:mobs.rancor_snarl_2;v=2;p=1} @self
+
+rancor_hurt3:
+  Skills:
+  - sound{s=mandomc:mobs.rancor_snarl_3;v=2;p=1} @self

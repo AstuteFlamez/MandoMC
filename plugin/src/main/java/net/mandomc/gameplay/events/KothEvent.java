@@ -53,6 +53,8 @@ public final class KothEvent implements ManagedEvent, Listener {
     public String id() { return "koth"; }
     public String displayName() { return name; }
     public boolean running() { return running; }
+    public boolean relevant(Player player) { return settings.world().equals(player.getWorld().getKey().toString()); }
+    public long endingInTicks() { return running ? Math.max(0, settings.maximumTicks() - age) : Long.MAX_VALUE; }
     public CaptureState capture() { return capture; }
     public UUID winner() { return winner; }
     public KothSettings settings() { return settings; }

@@ -49,16 +49,16 @@ public final class UtilitiesProbe extends JavaPlugin {
         check(Bukkit.getPluginManager().getPlugin("Essentials") == null, "Essentials absent");
         check(Bukkit.getPluginManager().getPlugin("Multiverse-Core") == null, "Multiverse absent");
         check(Bukkit.getWorld(NamespacedKey.minecraft("the_nether")) == null && Bukkit.getWorld(NamespacedKey.minecraft("the_end")) == null, "disabled dimensions stay unloaded");
-        for (String world : List.of("spawnworld", "overworld", "hoth", "devworld")) {
+        for (String world : List.of("spawnworld", "overworld", "hoth", "tatooine", "devworld")) {
             check(Bukkit.getWorld(NamespacedKey.minecraft(world)) != null, world + " loaded without Multiverse");
         }
-        for (String id : List.of("spawn", "earth", "hoth")) {
+        for (String id : List.of("spawn", "earth", "hoth", "tatooine")) {
             var location = plugin.warps().destination(id);
             check(location.getWorld() != null, id + " public arrival validated");
         }
-        var hoth = plugin.warps().destination("hoth");
-        check(hoth.getX() == -47.0 && hoth.getZ() == -153.0
-                && hoth.getYaw() == -18.75f && hoth.getPitch() == -1.65f, "Hoth arrival retains exact position and facing");
+        var palace = plugin.warps().destination("tatooine");
+        check(palace.getX() == 1711.845046707056 && palace.getZ() == 2201.7401780545574
+                && palace.getYaw() == 81.4468f && palace.getPitch() == -11.09995f, "palace arrival retains exact position and facing");
         check(plugin.worlds().resolve("SurvivalWorld").getKey().equals(NamespacedKey.minecraft("overworld")), "old world alias preserved");
         denied(() -> plugin.worlds().resolve("the_nether"), "disabled world unavailable through alias resolver");
         var publicNames = List.of("home", "homes", "sethome", "delhome", "back", "tpa", "tpahere", "tpaccept", "tpdeny", "tpacancel", "tpcancel", "spawn", "survival", "warp");
@@ -87,9 +87,9 @@ public final class UtilitiesProbe extends JavaPlugin {
         var saved = a.data.serializeToBytes(); a.data.readFromBytes(saved);
         check(personal.home(a.player, "base").resolve().equals(earth), "homes survive native PDC serialization");
         personal.delete(a.player, "second"); denied(() -> personal.home(a.player, "second"), "deleted home unavailable");
-        var cancelled = new PlayerTeleportEvent(a.player, earth, hoth, PlayerTeleportEvent.TeleportCause.COMMAND);
+        var cancelled = new PlayerTeleportEvent(a.player, earth, palace, PlayerTeleportEvent.TeleportCause.COMMAND);
         cancelled.setCancelled(true); personal.teleport(cancelled); denied(() -> personal.back(a.player), "cancelled teleport does not create back history");
-        personal.teleport(new PlayerTeleportEvent(a.player, earth, hoth, PlayerTeleportEvent.TeleportCause.COMMAND));
+        personal.teleport(new PlayerTeleportEvent(a.player, earth, palace, PlayerTeleportEvent.TeleportCause.COMMAND));
         check(personal.back(a.player).equals(SavedLocation.of(earth)), "successful teleport records departure");
         personal.death(new org.bukkit.event.entity.PlayerDeathEvent(a.player, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), new ArrayList<>(), 0, Component.empty(), false));
         check(personal.back(a.player).equals(SavedLocation.of(earth)), "death records return location");
@@ -125,11 +125,11 @@ public final class UtilitiesProbe extends JavaPlugin {
         clock.addAndGet(6_000_000_000L);
         plugin.combat().tag(a.player);
         check(!requests.send(a.player, b.player, false), "combat blocks teleport requests");
-        check(!plugin.admin().teleport(a.player, hoth), "combat blocks direct admin teleports too");
+        check(!plugin.admin().teleport(a.player, palace), "combat blocks direct admin teleports too");
         plugin.combat().clear(a.player);
-        check(travel.request(a.player, () -> hoth), "public trip starts out of combat");
+        check(travel.request(a.player, () -> palace), "public trip starts out of combat");
         a.location.add(.1,0,0); tick(60); check(a.teleports == 1, "movement cancels shared warmup");
-        check(travel.request(a.player, () -> hoth), "cancelled trip can be retried"); travel.cancelRequest(a.player); tick(60);
+        check(travel.request(a.player, () -> palace), "cancelled trip can be retried"); travel.cancelRequest(a.player); tick(60);
         check(a.teleports == 1, "tpcancel clears countdown");
         a.location = earth.clone();
         a.admin = true;
@@ -149,15 +149,15 @@ public final class UtilitiesProbe extends JavaPlugin {
         a.health = 3; a.food = 2; cmd(a, "heal"); check(a.health == 20 && a.food == 20, "heal restores health and food");
         a.food = 1; cmd(a, "feed"); check(a.food == 20, "feed restores food");
         cmd(a, "tp", "~1", "~", "~"); check(a.location.getX() == earth.getX()+1, "admin tp supports relative coordinates");
-        cmd(a, "mvtp", "Hoth"); check(a.location.equals(hoth), "mvtp reaches exact saved world spawn");
+        cmd(a, "mvtp", "Tatooine"); check(a.location.equals(palace), "mvtp reaches exact saved world spawn");
         a.admin = false; var before = a.mode; cmd(a, "gm1"); check(a.mode == before, "non-op cannot execute admin command");
         var arrival = new ArrivalListener(this, new ArrivalSettings("minecraft:spawnworld", "minecraft:overworld"),
                 new ArrivalDestinations(new ArrivalSettings("minecraft:spawnworld", "minecraft:overworld"),
                 new net.mandomc.integrations.regions.WorldGuardArrivalProtection(), plugin.worlds()::spawn), language);
         var first = new io.papermc.paper.event.player.AsyncPlayerSpawnLocationEvent(null, earth, true);
         arrival.firstSpawn(first); check(first.getSpawnLocation().equals(plugin.warps().destination("spawn")), "new players arrive at Batuu");
-        a.played = true; var returning = new io.papermc.paper.event.player.AsyncPlayerSpawnLocationEvent(null, hoth, false);
-        arrival.firstSpawn(returning); check(returning.getSpawnLocation().equals(hoth), "returning players keep their position");
+        a.played = true; var returning = new io.papermc.paper.event.player.AsyncPlayerSpawnLocationEvent(null, palace, false);
+        arrival.firstSpawn(returning); check(returning.getSpawnLocation().equals(palace), "returning players keep their position");
         var death = new PlayerRespawnEvent(a.player, earth, false, false, false, PlayerRespawnEvent.RespawnReason.DEATH);
         arrival.respawn(death); check(death.getRespawnLocation().equals(plugin.warps().destination("spawn")), "bedless death returns to Batuu");
         var bed = new PlayerRespawnEvent(a.player, earth, true, false, false, PlayerRespawnEvent.RespawnReason.DEATH);
@@ -178,8 +178,8 @@ public final class UtilitiesProbe extends JavaPlugin {
         plugin.admin().vanish(a.player, false);
         inventory(a, b);
         a.mode = GameMode.CREATIVE; a.location = earth.clone(); int beforeCreative = a.teleports;
-        check(travel.request(a.player, () -> hoth) && a.teleports == beforeCreative + 1, "Creative public teleport is immediate");
-        check(a.location.equals(hoth), "instant Creative teleport uses exact destination");
+        check(travel.request(a.player, () -> palace) && a.teleports == beforeCreative + 1, "Creative public teleport is immediate");
+        check(a.location.equals(palace), "instant Creative teleport uses exact destination");
         plugin.combat().tag(a.player);
         check(!travel.request(a.player, () -> earth) && a.teleports == beforeCreative + 1, "Creative bypass never bypasses combat");
         plugin.combat().clear(a.player);

@@ -54,7 +54,7 @@ public final class TuskenCombatProbe extends JavaPlugin {
             if (!testingShot || shot.getShooter()!=sniper) return;
             try {
                 int elapsed=Bukkit.getCurrentTick()-started;
-                check(elapsed>=18 && elapsed<=20,"actual cycler emits at tick 18 (observed "+elapsed+")");
+                check(elapsed>=24 && elapsed<=26,"actual cycler emits at tick 24 (six-tick pre-turn plus tick-18 recoil) (observed "+elapsed+")");
                 check(shot.getWeaponTitle().equals("CyclerRifle"),"shot retains WeaponMechanics CyclerRifle identity");
                 var base=ModelEngineAPI.getModeledEntity(sniper).getBase();
                 float yaw=sniper.getLocation().setDirection(target.getLocation().toVector().subtract(sniper.getLocation().toVector())).getYaw();
@@ -87,7 +87,7 @@ public final class TuskenCombatProbe extends JavaPlugin {
         check(shots.getOrDefault(sniper.getUniqueId(),0)==0,"no immediate shot or damage at animation start");
         later(8,()-> {target.teleport(target.getLocation().add(-8,0,8));});
         later(16,()->check(shots.getOrDefault(sniper.getUniqueId(),0)==0,"no projectile before recoil onset"));
-        later(24,()-> {
+        later(30,()-> {
             check(shots.getOrDefault(sniper.getUniqueId(),0)==1,"exactly one delayed shot");
             testingShot=false; select(sniper,null);
         });

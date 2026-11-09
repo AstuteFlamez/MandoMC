@@ -41,6 +41,8 @@ Massiff_Attack:
   Skills:
     - state{mid=massiff;s=run;r=true} @self
     - sound{s=entity.zoglin.attack;v=1;p=0.8} @self
+    - skill{s=MandoFaceTarget;repeat=16;repeatInterval=1} @target
+    - delay 6
     - state{mid=massiff;s=attack} @self
 
     - setspeed{speed=0.33;type=walking} @self

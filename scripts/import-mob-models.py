@@ -11,10 +11,11 @@ parser = argparse.ArgumentParser()
 parser.add_argument('pack', type=Path, help='ModelEngine generated resource pack directory')
 args = parser.parse_args()
 source = args.pack / 'assets/modelengine'
-expected = {'ranged_raider', 'melee_raider', 'bantha', 'dewback', 'massiff'}
+blueprints = json.loads((ROOT / 'server/config/common/modelengine/sources.json').read_text())
+expected = {Path(model['destination']).stem for model in blueprints['models']}
 actual = {p.name for p in (source / 'items').iterdir() if p.is_dir()}
 if not expected <= actual or actual - expected - {'internal_fire'}:
-    raise SystemExit(f'Expected only the five sandy models and optional internal_fire; got {sorted(actual)}')
+    raise SystemExit(f'Expected only the tracked mob blueprints and optional internal_fire; got {sorted(actual)}')
 destination = ROOT / 'resource-pack/src/assets/modelengine'
 # No vanilla shader overrides are required for these rigid models (none uses player limbs).
 shutil.copytree(source, destination, dirs_exist_ok=True)

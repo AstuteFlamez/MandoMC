@@ -30,5 +30,14 @@ SurvivalWorld's native keepInventory game rule remains false. MandoMC additional
 ## Preserve player game modes
 The MandoMC world loader does not force game mode on login or world changes. Keep `force-gamemode=false` in server.properties. New players still begin in the server default Survival mode. WorldGuard continues to protect SpawnWorld and the survival landing independently of game mode.
 
+## Hostile attack facing
+Deploy mythicmobs/hostile-facing.yml with the existing reviewed mob/skill files and current MandoMC JAR. The shared MandoFaceTarget/MandoFaceTargetNow skills depend on the console-only native/model rotation bridge. Keep existing runtime mandomc-* filenames when updating those definitions; do not leave duplicate mob/skill files under source aliases. See docs/features/hostile-facing.md. No resource-pack regeneration is required.
+
+## Rancor
+Deploy rancor.yml to MandoMC, mythicmobs/rancor-mob.yml and rancor-skills.yml to the matching Mythic folders, and the rancor blueprint to ModelEngine. Requires the current plugin/shared hostile-facing skills and published Rancor pack. Legacy combat remains in Mythic; the configured native rubble effect is cosmetic. See docs/features/rancor.md.
+
 ## Native utilities
 Copy worlds.yml and utilities.yml into plugins/MandoMC while stopped. They replace Multiverse world loading/exact spawns and configure personal homes/teleport requests. Preserve existing world keys and precise spawn coordinates. Messages use bundled defaults. See docs/features/native-utilities.md for permissions and migration. Creative bypasses the public countdown; all other checks remain.
+
+## Event-ending titles
+`events.yml:ending-countdown` controls the final-ten-second title and subtitle. `<seconds>` and `<event>` are supported placeholders. Existing idle-only `/event reload` applies presentation updates; implementation changes require the normal restart. Audiences remain event-owned (palace bounds for Jabba, Hoth for KOTH), and KOTH's timeout is included even with the shared scheduler disabled.

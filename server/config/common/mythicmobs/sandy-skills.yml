@@ -9,10 +9,10 @@ MandoTuskenCycler:
   Skills:
     - skill{s=MandoTuskenVoice} @self
     # Plant feet for the firing pose; restore AI automatically after the full clip.
-    - stun{auraName=MandoTuskenAiming;d=46;facing=true;stopai=true;gravity=false;onEnd=MandoTuskenCombatMovement} @self
-    - look{force=true;headOnly=false;immediately=true} @target
+    - stun{auraName=MandoTuskenAiming;d=52;facing=false;stopai=true;gravity=false;onEnd=MandoTuskenCombatMovement} @self
+    - skill{s=MandoFaceTarget;repeat=24;repeatInterval=1} @target
+    - delay 6
     - state{mid=ranged_raider;s=attack;li=0;lo=2} @self
-    - look{force=true;headOnly=false;immediately=true;repeat=18;repeatInterval=1} @target
     # Recoil begins at 0.9 seconds in the original 2.3-second attack clip.
     - delay 18
     - skill{s=MandoTuskenCyclerFire} @target
@@ -25,7 +25,7 @@ MandoTuskenCyclerFire:
     - lineofsight
     - distance{d=0to32}
   Skills:
-    - look{force=true;headOnly=false;immediately=true} @target
+    - skill{s=MandoFaceTarget} @target
     - weaponMechanicsShoot{weapon=CyclerRifle;spread=3;head=false} @target
 
 # Mythic's threat table owns combat state. Movement never changes the fire cadence.

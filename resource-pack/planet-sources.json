@@ -20,6 +20,12 @@
       "sourceSha256": "4a498b2c3f8702ed005481ecd86a3986bc334ea508c4c780931a45a7e1dc9d85",
       "destination": "assets/mandomc/textures/item/planets/batuu.png",
       "changes": "Unchanged pixels; legacy spawn used the Naboo icon."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/custom/planets/tatooine.png",
+      "sourceSha256": "f18e01d01a8fcf093ae2d6d0c345241300998c050c820d9719420695c4186896",
+      "destination": "assets/mandomc/textures/item/planets/tatooine.png",
+      "changes": "Unchanged pixels; namespaced reference."
     }
   ]
 }

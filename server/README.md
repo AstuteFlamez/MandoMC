@@ -67,7 +67,7 @@ The survival landing is in `dev_world`, around (-135.5, 73, -135.5). Protection 
 
 For a clean local restore:
 1. Stop Paper and back up the entire runtime/world container and WorldGuard/MandoMC configuration. Restore the already migrated `dev_world/dimensions` and player data from a verified Paper backup. Do not feed raw legacy archives to WorldService: it deliberately refuses missing dimension data instead of generating terrain.
-2. Copy `config/common/worlds.yml` and `utilities.yml` into `plugins/MandoMC`. Preserve stable dimension keys, exact coordinates/facing and aliases. The four integrated dimensions are overworld, devworld, spawnworld and hoth; Nether/End remain disabled.
+2. Copy `config/common/worlds.yml` and `utilities.yml` into `plugins/MandoMC`. Preserve stable dimension keys, exact coordinates/facing and aliases. The five current dimensions are overworld, devworld, spawnworld, hoth and tatooine; Nether/End remain disabled.
 3. Restore the existing WorldGuard regions; never overwrite unrelated regions. Deploy `mandomc.yml` as MandoMC `config.yml`, with `spawn-protection=0` so WorldGuard owns static protection.
 4. Preserve native map gamerules (`advance_time=false`, `advance_weather=false`, `spawn_mobs=false`, `random_tick_speed=0`, `fire_spread_radius_around_player=0` on the adventure maps). Survival retains its normal rules. MandoMC preserves beds and uses Batuu as the fallback for deaths; first joins go to Batuu and returning players keep their position/game mode.
 5. Build/deploy MandoMC and restart. `/mandomc` must report both arrivals ready. Missing enabled worlds or unsafe/unprotected arrival configuration blocks logins until repaired. `/mvtp` accepts world names and old aliases.
@@ -96,7 +96,18 @@ Hoth is loaded as `minecraft:hoth`; Paper stores it under the main world's `dime
 
 The deployable `events.yml`, `events/koth.yml` and `warps.yml` defaults are in server/config/common. `/warp` reaches only SpawnWorld, Earth and Hoth; `/events` shows hourly KOTH. `/event start koth` starts a manual round. Rewards remain disabled. `./scripts/build-koth-probe.sh` builds the isolated integration probe; install only while stopped, remove after controlled verification, and use normal restarts for code changes. See docs/features/koth-and-warps.md for lifecycle and verification limits.
 
+## Jabba generic mob test slice
+Install the three blueprints, separate Mythic mob/skill files and two WeaponMechanics definitions as described in [Jabba generic guards](../docs/features/jabba-generic-mobs.md). This does not activate a dungeon event or natural spawns. Use `scripts/build-jabba-probe.sh` only for controlled local verification; remove `JabbaProbe.jar` after testing and restart normally.
+
+## Tatooine dungeon testing
+Tatooine is loaded as `minecraft:tatooine` under the main world's `dimensions/minecraft/tatooine`. `worlds.yml` preserves the player-selected palace arrival at (1711.845046707056, 100, 2201.7401780545574), yaw 81.4468, pitch -11.09995. MandoMC checks standing space/support without rounding away position or facing. `/warp tatooine` uses the shared travel policy and the recovered planet icon. See [Tatooine import](../docs/features/tatooine-import.md) and [Boba recovery](../docs/features/boba-fett.md) for historical provenance.
+
+Tatooine WorldGuard regions were cleared at the user's request after the initial mob-spawning deny blocked Mythic's player spawn command. The current worldguard-tatooine.yml template has empty regions; do not reapply the historical protection configuration above. WorldGuard setup is deferred; Hoth regions are unchanged.
+
 ## Native utility deployment
 Deploy MandoMC plus common/worlds.yml and common/utilities.yml while stopped. Back up world/player data and vendor configuration, then move EssentialsX and Multiverse-Core JARs outside plugins/. Keep old userdata/balances for rollback. The replacement does not require resource-pack changes. Use normal restart, never Bukkit reload.
 
 See [native utilities](../docs/features/native-utilities.md) for commands and permissions. Public trips are instant in Creative; other modes keep the shared three-second warmup. Consent, destination safety and combat checks apply in either case.
+
+## Native Jabba operation
+The nine-room operation uses `events/jabba.yml`, original loot items in `items/jabba-loot.yml`, and the current plugin. Supply private gate panels with `scripts/import-jabba-doors.py LEGACY_ROOT server/runtime/plugins/MandoMC/jabba/doors.yml`; retain the private closed-state checkpoints and map backups. BigDoors is not installed or required. `/event start jabba` begins the run; `/event stop` resets it. See [operation details](../docs/features/jabba-dungeon.md) for the latest kills-only progression, cache timing, native door animation and recovery.

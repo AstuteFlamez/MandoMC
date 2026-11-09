@@ -2,10 +2,16 @@
   "generator": "ModelEngine R4.1.1",
   "models": [
     "bantha",
+    "boba_fett",
+    "bossk",
     "dewback",
+    "gamorrean_guard",
     "massiff",
     "melee_raider",
-    "ranged_raider"
+    "quarren_guard",
+    "rancor",
+    "ranged_raider",
+    "twilek_guard"
   ],
   "files": [
     {
@@ -43,6 +49,82 @@
     {
       "path": "assets/modelengine/items/bantha/tail.json",
       "sha256": "dae1f127b3c896396fa454aa9c7fd25942f739c2b392358d11b20c5719af6171"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/head.json",
+      "sha256": "6c9f2492e9617619ba26053750641720ebc74d9e0c184c157ed7ad110589c481"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/left_arm.json",
+      "sha256": "eaae1dd436ee4bf0610484167cf3bb6a3af0d58b9f0cced8bed97e1b2e815239"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/left_flame.json",
+      "sha256": "429c6289dd5d046289667d425abe574276133421cd406cfa7d0417c0f5cf8df8"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/left_leg.json",
+      "sha256": "48fe99d533fc815fbf71205c74cbde6ad9399e220bccaae3535c16b776dff181"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/left_nozzle.json",
+      "sha256": "69e0719e89a3d5eac6ecd07740594c407ef43e6ba1992b3dfcc5de82973d00d6"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/rifle.json",
+      "sha256": "44d01acaad347ecb035f456382da56990556460dd0b616a88fcac41dfc3a075c"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/right_arm.json",
+      "sha256": "a54de2f8c0e6f366af9fa03153b0f92139605b3125a1ef4d4306d33c9b36eea8"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/right_flame.json",
+      "sha256": "e331dc3adc34176814e72bf972a8466e9490c9115eb410c2fdd7ba73ce4a5fcd"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/right_leg.json",
+      "sha256": "7f9094cf9f1f61fcf3148c8e7a9f34f33989ae9d9c84b21db931829ac7560cbe"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/right_nozzle.json",
+      "sha256": "6fff2bc5d0b82d44362e3f67dcefb5594778773ad6c4688118e6cf101f10913f"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/torso.json",
+      "sha256": "bdda14b03076457da5711039f5930d32772f526f6c15426a0505679534c258d5"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/visor.json",
+      "sha256": "92561eb64006346f19b425446b724cfd75c27960060274b1b047dd786322ed89"
+    },
+    {
+      "path": "assets/modelengine/items/bossk/head.json",
+      "sha256": "cd3dc23912d10b58a96f36ec10918c16288d467db84aa70714c383b98ba80da0"
+    },
+    {
+      "path": "assets/modelengine/items/bossk/left_arm.json",
+      "sha256": "9fa8edc2335c29d36d22a911d33c67054e0559b9f9affae58c368d4df8ad6120"
+    },
+    {
+      "path": "assets/modelengine/items/bossk/left_leg.json",
+      "sha256": "eb53c6f5b74954511d72243f012a8622d4d7d7db36a4968191a9082226d4507f"
+    },
+    {
+      "path": "assets/modelengine/items/bossk/rifle.json",
+      "sha256": "58c80942e4a15a83c1f4fc25c53cb57377a7a0b1b99ee70ab607837d46c6be10"
+    },
+    {
+      "path": "assets/modelengine/items/bossk/right_arm.json",
+      "sha256": "a3fd8cdabc8208d480c74677831ed15d5708fdfcacdc9659f1b1b991b201ffcf"
+    },
+    {
+      "path": "assets/modelengine/items/bossk/right_leg.json",
+      "sha256": "0331fd33c4f334251422447fdc8e77caa8f43b043b5622348eff4502af39301e"
+    },
+    {
+      "path": "assets/modelengine/items/bossk/torso.json",
+      "sha256": "cbbf2e181f7fe4c24cca852fed7967b5c65872eecc28f7b3d28c89f9762637c8"
     },
     {
       "path": "assets/modelengine/items/dewback/back_body.json",
@@ -125,6 +207,38 @@
       "sha256": "b1f360dcaa0df37e538f1c486099a52c4818a76f60f7e8a0162c964f34eb2d75"
     },
     {
+      "path": "assets/modelengine/items/gamorrean_guard/axe.json",
+      "sha256": "419dd6d5817e86243bb197e24d79446f5da94f9e5a7d22471276094124c12980"
+    },
+    {
+      "path": "assets/modelengine/items/gamorrean_guard/body.json",
+      "sha256": "db8e6c65b8e460dbd569b3d6cc45ed23c09895230f072a2e60904e3f6d4ebfdd"
+    },
+    {
+      "path": "assets/modelengine/items/gamorrean_guard/head.json",
+      "sha256": "2ee335a5b5a51b1a336d80fc9255691cc2a3eb931921df2c63c5bfd178971953"
+    },
+    {
+      "path": "assets/modelengine/items/gamorrean_guard/left_arm.json",
+      "sha256": "5ddbe738088a7b11a0ce8bb50eef4f0a4a26bfe08d2f757f7ec72d4c41eea897"
+    },
+    {
+      "path": "assets/modelengine/items/gamorrean_guard/left_leg.json",
+      "sha256": "840e808df1bf72329b74f7d2db77a11afd5fdc4cb736a16b603cec46a9c0b33f"
+    },
+    {
+      "path": "assets/modelengine/items/gamorrean_guard/right_arm.json",
+      "sha256": "dc91aaed2f04f1e58fc33abaf449c2b1acf526f89531ceec9d6b12364d247da1"
+    },
+    {
+      "path": "assets/modelengine/items/gamorrean_guard/right_leg.json",
+      "sha256": "64182112b5f171aacc7dc75f2ca9fc90f9d2e3244b68e7f6850abab8e00541ec"
+    },
+    {
+      "path": "assets/modelengine/items/gamorrean_guard/torso.json",
+      "sha256": "8b1dc83904258129b6c7085008e4624353ac11dbfde21dc01d7410aef9b4ef57"
+    },
+    {
       "path": "assets/modelengine/items/internal_fire/fire_0.json",
       "sha256": "97507ad54ee2d09a17a4a06c7e0e67791fb8e083eeff6d929a78db9f4dc5e113"
     },
@@ -201,6 +315,94 @@
       "sha256": "b48c6e1dd130aa44103d866ca17e4439ebc4f0cd3cec21cf225fe37e87b1d4cc"
     },
     {
+      "path": "assets/modelengine/items/quarren_guard/blaster.json",
+      "sha256": "f72b2ec9281f5b12c2d516281aa0902aec193ed0fbdbc943c2380caa71ef1a2f"
+    },
+    {
+      "path": "assets/modelengine/items/quarren_guard/body.json",
+      "sha256": "5a56ac4658c4129ac1559c3ec2dde3002602d8bc326fce46976cfb56c5c8dd29"
+    },
+    {
+      "path": "assets/modelengine/items/quarren_guard/cape.json",
+      "sha256": "2fec2fbd8b1cbe671d4f28b091cdb33bc2d451028e7806294fc9d583f07410c1"
+    },
+    {
+      "path": "assets/modelengine/items/quarren_guard/head.json",
+      "sha256": "fa4d3deb310a6d8fa37112b4e5ed97d0c60044af0d5ac3cddb7b22c9d62bb5d1"
+    },
+    {
+      "path": "assets/modelengine/items/quarren_guard/left_arm.json",
+      "sha256": "425180d89b773e4f54029575ec0a4ca51fb9cc69f597b54cb79182f4e16bd553"
+    },
+    {
+      "path": "assets/modelengine/items/quarren_guard/right_arm.json",
+      "sha256": "2f608a700e158e0457d24f4eb40c8918dfe6c09068d695514af6a2677fad6ed2"
+    },
+    {
+      "path": "assets/modelengine/items/quarren_guard/torso.json",
+      "sha256": "e95f813fae6c910a56e0be166ed1f082785a7800d475a00e61d08e1df188c926"
+    },
+    {
+      "path": "assets/modelengine/items/rancor/body.json",
+      "sha256": "db3a6ac8a26e9c09b30302cd99f5c35892c4603a51580b3b2d7a3871ae1f181f"
+    },
+    {
+      "path": "assets/modelengine/items/rancor/head.json",
+      "sha256": "058393a656dcc27eb8bc38ad9f59b8936e41f7736e75a2ca6def2991529851dc"
+    },
+    {
+      "path": "assets/modelengine/items/rancor/left_arm.json",
+      "sha256": "5c7223a08987fc23f59b4c1803774d5df5a52442cb8a6d37bbbac5f7d44ea302"
+    },
+    {
+      "path": "assets/modelengine/items/rancor/left_foot.json",
+      "sha256": "94bedac422100897c6f81529b6f2585ae0373e689caa9777a456f592125e5e13"
+    },
+    {
+      "path": "assets/modelengine/items/rancor/left_hand.json",
+      "sha256": "5ecdf39fdf9275bad85a4fe21f7ffed5f592e0a7c7de98a1d9dd2525c90eb88d"
+    },
+    {
+      "path": "assets/modelengine/items/rancor/left_leg.json",
+      "sha256": "3ed7c44403894e2922edb2c39cdf5a1ba2bf68089a3afd16b9ff17e7c5138cb9"
+    },
+    {
+      "path": "assets/modelengine/items/rancor/left_lower_arm.json",
+      "sha256": "285f73fe6055ea00570fb8b7a7ee17484007986f88e6eea648265111f8672d8a"
+    },
+    {
+      "path": "assets/modelengine/items/rancor/left_lower_leg.json",
+      "sha256": "ee3a68645deb6a15f70ced57d2601ee7ac02e8c9e802a69962cfd7843420d17c"
+    },
+    {
+      "path": "assets/modelengine/items/rancor/neck.json",
+      "sha256": "2382e4a4216bca60a7a9a3cc632842f5283c409d56170e6b11aec2cc6927c215"
+    },
+    {
+      "path": "assets/modelengine/items/rancor/right_arm.json",
+      "sha256": "f291aff217fd738bc3895a703ca2cdd370f0510416a5d94365b86374559395ff"
+    },
+    {
+      "path": "assets/modelengine/items/rancor/right_foot.json",
+      "sha256": "4267c24f0a155a1f32eb896fb7ba66b01d9231b940faa7d89b58434a78d913a4"
+    },
+    {
+      "path": "assets/modelengine/items/rancor/right_hand.json",
+      "sha256": "c6f0fdf07bc186c086f086d87ace8df1f5a12cecd028ae3ed54a6d0953845f85"
+    },
+    {
+      "path": "assets/modelengine/items/rancor/right_leg.json",
+      "sha256": "5883aa979298b555ef397f19fb23f775a3bec6335f78bc94787b5d62792a55b5"
+    },
+    {
+      "path": "assets/modelengine/items/rancor/right_lower_arm.json",
+      "sha256": "d05ef908fd4a2c8e2cc5592ea1a73161f5139205f209012dfb7787f63f82d6ef"
+    },
+    {
+      "path": "assets/modelengine/items/rancor/right_lower_leg.json",
+      "sha256": "2a45c6bef0c89de385341ec9f9e62b5c0ad7e1972b2ea7e51e9de1d3f372b347"
+    },
+    {
       "path": "assets/modelengine/items/ranged_raider/head.json",
       "sha256": "7697cb2bb76b087b1a224a4492633b8f114461cc294709945031cb750629123d"
     },
@@ -231,6 +433,34 @@
     {
       "path": "assets/modelengine/items/ranged_raider/torso.json",
       "sha256": "599dd79452e636b9b96d7df5ed0f16a3f1cab554c54ea1aac9aba7297863e961"
+    },
+    {
+      "path": "assets/modelengine/items/twilek_guard/head.json",
+      "sha256": "c26ed9b5cefdc5b59fb0b107e0a57ee625b754cab2d3630cb4137e3a139e950a"
+    },
+    {
+      "path": "assets/modelengine/items/twilek_guard/left_arm.json",
+      "sha256": "4f586e429305c259ce0b6ff5a12125ea261146a8cf68c9a7fc529e2873c43ed9"
+    },
+    {
+      "path": "assets/modelengine/items/twilek_guard/left_leg.json",
+      "sha256": "09d745aa13e77e5b800d65dc857eca50ffe519b09d8f425cc5e75be4dfcbf92f"
+    },
+    {
+      "path": "assets/modelengine/items/twilek_guard/rifle.json",
+      "sha256": "4f186950b027bb46827ae65daa92810a4fbfd5371435b245dcdf5e7aec92c7aa"
+    },
+    {
+      "path": "assets/modelengine/items/twilek_guard/right_arm.json",
+      "sha256": "85293531027d26ee6603ceedafd23595c9de55a9fd5e012efa7386576f90a0ef"
+    },
+    {
+      "path": "assets/modelengine/items/twilek_guard/right_leg.json",
+      "sha256": "ecc54312e03733bd36b33064a44af29070fa9e0459674277ad776d461e2112ff"
+    },
+    {
+      "path": "assets/modelengine/items/twilek_guard/torso.json",
+      "sha256": "fe4b3e889741208b2789e8430a1684feed04a31ab5742422b513f747d0db868d"
     },
     {
       "path": "assets/modelengine/models/bantha/body.json",
@@ -267,6 +497,82 @@
     {
       "path": "assets/modelengine/models/bantha/tail.json",
       "sha256": "a0df366a3ce5dda3c16d95c0edaa5f37fc8efa8259ef66454c21b97aea4415c7"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/head.json",
+      "sha256": "01c051a89bd91c33d679995221f6a38ab5085ef22b46df10889e6864e2784818"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/left_arm.json",
+      "sha256": "da1c023e903ab7acf170853ddfbc461b5980eb2873c42a312379c736176a160a"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/left_flame.json",
+      "sha256": "93d5bb36dc9e1b824d8ca75805ed1fcd8a8aa6a9918656c3088b9337967c04cd"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/left_leg.json",
+      "sha256": "a13d22a8193911a0b5ec97f5b51ce495e580ab0546ff70e1c01167de7f22328a"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/left_nozzle.json",
+      "sha256": "d3df644ee4ac19e1a898c493af22b402422527abfe8b6cacc4a26144dc12bf61"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/rifle.json",
+      "sha256": "6f57d0bf95e832b6670337ae514f8756109d0649ea665556dc896f64f8180b6f"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/right_arm.json",
+      "sha256": "d82f836383dda0c41750e4a653d593cba16a24403b12fb6e43a89b1556555c8a"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/right_flame.json",
+      "sha256": "abb2713bf665f824243a5942d3ea19e9aa9b028d0d22c3772d927cbab8ef6a31"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/right_leg.json",
+      "sha256": "6850efe62410a51257a85d1760731adeb342dffe91a5eabd1fb016d4dda7642b"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/right_nozzle.json",
+      "sha256": "ee8717455497f4015273297f4bd6d722dcb8b4678ee8b50026595b8fb1240377"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/torso.json",
+      "sha256": "7c80dc94c4149e6f3393664c8d7b26104bd7fa13390b13114b77632d192425f8"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/visor.json",
+      "sha256": "96808fe9e5019550fdf5272e8f47af8304057a07a6335c0c937350f1aca2cc6f"
+    },
+    {
+      "path": "assets/modelengine/models/bossk/head.json",
+      "sha256": "0f726dc4447b5f685e87f5b6633452836f6d1c243d2ac789a40a3d8601aa667d"
+    },
+    {
+      "path": "assets/modelengine/models/bossk/left_arm.json",
+      "sha256": "58077ccf1013c45438a5f5204a343eaced9cac76fa49dc26cd8a8c3b9d8f928a"
+    },
+    {
+      "path": "assets/modelengine/models/bossk/left_leg.json",
+      "sha256": "733ab2789eb54ab89dfaf50cffd21befd7af53bf1dcbcb42f41cb564acfb2faa"
+    },
+    {
+      "path": "assets/modelengine/models/bossk/rifle.json",
+      "sha256": "5ba8cd4715fa15036c3f4ccdf7c23b0371460630012619a6728e7f360db5b7db"
+    },
+    {
+      "path": "assets/modelengine/models/bossk/right_arm.json",
+      "sha256": "5bc21212603cc666803a70de1171d4c2a64e3c22ad16c0d734f3e321f357d81b"
+    },
+    {
+      "path": "assets/modelengine/models/bossk/right_leg.json",
+      "sha256": "f0f675c8a3a8e48ec5b2691ec9715b88953b4b596581d216adee738b0a63e046"
+    },
+    {
+      "path": "assets/modelengine/models/bossk/torso.json",
+      "sha256": "9ad3b2e5bf4f37743a7891220c1a6fe927b7ed6d248b84c78c159ec244d71505"
     },
     {
       "path": "assets/modelengine/models/custom/entities/player/head.json",
@@ -417,6 +723,38 @@
       "sha256": "bcaf35d2438f26eea03a419182a98e5d86538dc7f9e93732d48f03a5e14bb9d0"
     },
     {
+      "path": "assets/modelengine/models/gamorrean_guard/axe.json",
+      "sha256": "e1d023e47a2a3b2a0ddd29fc90b2e29268baac1d1b2fead42ae5724ef2b8e0d9"
+    },
+    {
+      "path": "assets/modelengine/models/gamorrean_guard/body.json",
+      "sha256": "d462f047e6cc2149c1fe8726ec25dce72c6caddcd19358b1acfbbd39b6ed60c5"
+    },
+    {
+      "path": "assets/modelengine/models/gamorrean_guard/head.json",
+      "sha256": "7b0fd4d8d6b4cd411c3a21d61f2d92e8f239420dee3a1737f53273001f887467"
+    },
+    {
+      "path": "assets/modelengine/models/gamorrean_guard/left_arm.json",
+      "sha256": "a7078208f2cf4dc245bb88fdfc0c9f88de53a165ec3efb289442798110f37730"
+    },
+    {
+      "path": "assets/modelengine/models/gamorrean_guard/left_leg.json",
+      "sha256": "b977cbd18f493eee2746959742930439e10658fa3c84141dac9df174a23d7f60"
+    },
+    {
+      "path": "assets/modelengine/models/gamorrean_guard/right_arm.json",
+      "sha256": "9f5de05711cedf827f6f4653e8c912202267bc3cf7bb827ebeb2089c6de62c2b"
+    },
+    {
+      "path": "assets/modelengine/models/gamorrean_guard/right_leg.json",
+      "sha256": "1f30bedec9be6c25b0e76b8a9210d35646e674fcfe61825736b40c09a61f2ffe"
+    },
+    {
+      "path": "assets/modelengine/models/gamorrean_guard/torso.json",
+      "sha256": "9956309909482f33f05796771146c39ad72a7a717792b0ef7ce925555e6b0b17"
+    },
+    {
       "path": "assets/modelengine/models/internal_fire/fire_0.json",
       "sha256": "a63a008f81db4059920be6b1e8e33a91f67fd0e511332c26aff2cd62e8be55a6"
     },
@@ -489,6 +827,94 @@
       "sha256": "9079b2829ecc78818e30fa06ad42a29623750180301f68b35312d1bb685c8bf4"
     },
     {
+      "path": "assets/modelengine/models/quarren_guard/blaster.json",
+      "sha256": "d029ec6d9ca1207aa2fc599df671db0ca92cd0ea33bc50f8dc8012ee23f1dfdf"
+    },
+    {
+      "path": "assets/modelengine/models/quarren_guard/body.json",
+      "sha256": "216c9df7fd927f935f416ef426d9be369a17787516cba2681bbd832696308aca"
+    },
+    {
+      "path": "assets/modelengine/models/quarren_guard/cape.json",
+      "sha256": "952f0fe4bf468546ec11935986c2fbc2621e2dfec6ef9f65ab280d439ddc8dd0"
+    },
+    {
+      "path": "assets/modelengine/models/quarren_guard/head.json",
+      "sha256": "971901360831514d5d9a254c99abc13dc71c21b57bcc01d49236597435f5df28"
+    },
+    {
+      "path": "assets/modelengine/models/quarren_guard/left_arm.json",
+      "sha256": "290d004f3387ebd82d832d5e3201f09b1c87565d392daf842a7b69b902fa5dc4"
+    },
+    {
+      "path": "assets/modelengine/models/quarren_guard/right_arm.json",
+      "sha256": "9e17b977203507ccd5543fe06b0e9bd672fbfda04b3730abec6c5f7efcd5b66b"
+    },
+    {
+      "path": "assets/modelengine/models/quarren_guard/torso.json",
+      "sha256": "59d95eb5bd462c05db6f05333c40df1f2b28640bca9a893f64b57f37b555dbc7"
+    },
+    {
+      "path": "assets/modelengine/models/rancor/body.json",
+      "sha256": "0b4ce2ef53fc83841116f294b5743a07d3e2a98ebc35558db4f7940adcd6f9c2"
+    },
+    {
+      "path": "assets/modelengine/models/rancor/head.json",
+      "sha256": "c18ceb55b8fcf0197d1c52d6eb1cfe57670d377005ad43a95f4d88ec8c705ccf"
+    },
+    {
+      "path": "assets/modelengine/models/rancor/left_arm.json",
+      "sha256": "0f6187b40470cdaf7ae46ede90b49a37bac43b1d39ed6d492cd1b279d4bce18a"
+    },
+    {
+      "path": "assets/modelengine/models/rancor/left_foot.json",
+      "sha256": "6abb7f8e44c9311726ae8e8d2803ff6d67f6fd5f94884290b48bd23f90fdb2cd"
+    },
+    {
+      "path": "assets/modelengine/models/rancor/left_hand.json",
+      "sha256": "81e7fb3f94f7e4d4d656ad3f658dcff5bcc2c90f52023c7642848d3f1c2fac77"
+    },
+    {
+      "path": "assets/modelengine/models/rancor/left_leg.json",
+      "sha256": "27f7d548cee0db8c4a5ab46697f230440ed2d808e31a28137ced22fd57196a5c"
+    },
+    {
+      "path": "assets/modelengine/models/rancor/left_lower_arm.json",
+      "sha256": "3841699169fc4fc3d91422f71163782a9d15a6b6c6c43e80b87fa1639496ba9b"
+    },
+    {
+      "path": "assets/modelengine/models/rancor/left_lower_leg.json",
+      "sha256": "220251dcb68f13077c06841b2664ab73b831996360a8b561249503324ec18300"
+    },
+    {
+      "path": "assets/modelengine/models/rancor/neck.json",
+      "sha256": "b7d3b3fa174e06303200fa0cd144ebfdf8e84b94dea54aa30732a20a0240ef3f"
+    },
+    {
+      "path": "assets/modelengine/models/rancor/right_arm.json",
+      "sha256": "c1f3edf1412d6b798506aa92a2acf0b64202bbd162cfa4878b3d150aebf3b161"
+    },
+    {
+      "path": "assets/modelengine/models/rancor/right_foot.json",
+      "sha256": "bfd2f9c2c6fda66da9d35aa6ff002708b00c8de607ad2ff417a4f454ccdc5553"
+    },
+    {
+      "path": "assets/modelengine/models/rancor/right_hand.json",
+      "sha256": "7f4bcbb6323fa64d55d856dc9b2d3f2d06adfd577b4f48dc1f431f2f86e02c42"
+    },
+    {
+      "path": "assets/modelengine/models/rancor/right_leg.json",
+      "sha256": "b9ee8a33a8fd5734134d3699c4059b9bee90d74a8775c253940fd96786471b46"
+    },
+    {
+      "path": "assets/modelengine/models/rancor/right_lower_arm.json",
+      "sha256": "291ec5075260b2f30491e82ca7cc67765cfe57b23b7c8852bf2d6ee01ca45f4a"
+    },
+    {
+      "path": "assets/modelengine/models/rancor/right_lower_leg.json",
+      "sha256": "4d71957c28794435682a2acbbc5cb7b71b0a310be1d013ede680d7d5e97787e9"
+    },
+    {
       "path": "assets/modelengine/models/ranged_raider/head.json",
       "sha256": "72be4b9128cb79806a67f927a5c74fa8c2c4fab67cf37fcbc893e706b23eb91a"
     },
@@ -521,16 +947,64 @@
       "sha256": "23900ac352bf23e070e291e5610fef243ca68392f8c56d483681074337e0cf64"
     },
     {
+      "path": "assets/modelengine/models/twilek_guard/head.json",
+      "sha256": "2e3a37230459646cca347c5904f54ca4502c78c91375210aa16402ecd7a95fdd"
+    },
+    {
+      "path": "assets/modelengine/models/twilek_guard/left_arm.json",
+      "sha256": "da93d9fdb075823d4530a79b6292e0c5cd61bc274d3ac31a87c368eb5478c4de"
+    },
+    {
+      "path": "assets/modelengine/models/twilek_guard/left_leg.json",
+      "sha256": "bdc2669aa9d9a77ff155aca207bc30a0952412eb66bf320f512606314b500e03"
+    },
+    {
+      "path": "assets/modelengine/models/twilek_guard/rifle.json",
+      "sha256": "6c3308f70ad6aeff17014a20e59ecdd72e29332a84d355f7eb9a5e8251a1a7f1"
+    },
+    {
+      "path": "assets/modelengine/models/twilek_guard/right_arm.json",
+      "sha256": "9fa305c332ca0ecaa166155e8d7793a02cdd09d3d75ae3853a2ef8f399003dd2"
+    },
+    {
+      "path": "assets/modelengine/models/twilek_guard/right_leg.json",
+      "sha256": "f73dceeea0df0b685fd3de54e6c46d789e7af2237b9a4776c4e29c3a623d80f8"
+    },
+    {
+      "path": "assets/modelengine/models/twilek_guard/torso.json",
+      "sha256": "a4450066fdf26732e384e7139d0861334f34b5b2445c31fa0e589b86e606a1f8"
+    },
+    {
       "path": "assets/modelengine/textures/entity/models/bantha.png",
       "sha256": "408e6873ace2e126e39b7dfb382b807454538b37434e117319ce0b5e0768aba7"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/boba_fett.png",
+      "sha256": "5f2a3508d0a4f62015b3aa5586168edac993ed9c149a235cb1255519a4f6e2ef"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/bossk.png",
+      "sha256": "9957350cfde6ebac157d6d180a8c40f7910b271983b5974d10a7e0e2cca9f9d4"
     },
     {
       "path": "assets/modelengine/textures/entity/models/dewback.png",
       "sha256": "d7338b073aa839987ba16c210421c9a918c238d7cbb017080c707363437ee8bd"
     },
     {
+      "path": "assets/modelengine/textures/entity/models/gamorrean_guard.png",
+      "sha256": "29c5545f0c7e420caac92b6a8a8441bd2873c54e52aa503b2dfc5e862fb8f231"
+    },
+    {
       "path": "assets/modelengine/textures/entity/models/massiff.png",
       "sha256": "87a42d625a810e10bfdcb07756684a273a995a06cdeafc65bafc9b22834d49c1"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/rancor.png",
+      "sha256": "03641195fdd3eafd0a006be7fd6b6feffa3ee64ce1a619d394b69adab7990c67"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/tessek.png",
+      "sha256": "33bf63f8c76f4794ea227b95a8053e8cedb4140c36cd26f5cc0734d4637d83b8"
     },
     {
       "path": "assets/modelengine/textures/entity/models/tusken_raider_melee.png",
@@ -539,6 +1013,10 @@
     {
       "path": "assets/modelengine/textures/entity/models/tusken_raider_ranged.png",
       "sha256": "f379a7db01b98a28166fc3a65a6e32c18db82efc2a86b5482a833f9417d3d0c9"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/twilek_guard.png",
+      "sha256": "bb82c1b563f7444ece1e4b14069dc5ee39a79d5faafc1b85ea91302a3329a986"
     }
   ]
 }

@@ -55,3 +55,18 @@ His terms allow server use but prohibit rehosting extracted artwork without perm
 Five recovered ModelEngine blueprints are tracked under server/config/common/modelengine with provenance. Generate with pinned ModelEngine R4.1.1 and import its output with `scripts/import-mob-models.py PATH_TO_GENERATED_PACK`. The required MandoMC ZIP contains these namespaced model assets plus their texture atlas directory; vanilla shader files are preserved. Cycler rifle item geometry is adapted from the ranged Tusken's existing rifle because the legacy item dispatch referenced absent cycler models. Its item poses require a client check. Original mob/cycler sounds are recovered from the pinned legacy pack.
 
 Gaffi Stick: the player item reuses the existing generated melee Tusken stick geometry and its embedded-model texture, with item display poses under `mandomc:melee/gaffi_stick`. No new artwork or shader overrides; client item poses await playtesting.
+
+## Galaxy warp icons
+Legacy Earth, Hoth and spawn icons are recovered unchanged under `mandomc:planets/earth`, `mandomc:planets/hoth` and `mandomc:planets/batuu`. The original spawn entry used the Naboo texture; that same artwork represents the renamed Batuu entry. `planet-sources.json` records exact texture hashes and mappings. Only these namespaced item models are added; ordinary sticks are untouched. The six-row warp layout is configured in warps.yml, with Earth placed separately in the Unknown Regions by the user.
+
+## Jabba generic guards
+The Gamorrean, Quarren and Twi'lek blueprints join the five sandy mobs in the tracked ModelEngine roster. The importer derives its strict allowed set from blueprint provenance. `jabba-sources.json` records the original SE-14C/A280 models, axe, textures, voices and weapon sounds. The new item keys are `mandomc:blasters/se14c`, `mandomc:blasters/a280` (each with `_scope` and `_sprint`) and `mandomc:melee/gamorrean_axe`. Original geometry, UVs and display transforms are preserved. No vanilla shader or item override is added. See [the feature brief](../docs/features/jabba-generic-mobs.md).
+
+## Boba Fett and Tatooine
+Recovered Boba Fett model/animations, EE-3 base/scope/sprint models and original voices/jetpack/flamethrower audio are included with provenance in boba-sources.json. Tatooine's original planet texture uses `mandomc:planets/tatooine`; planet-sources.json records the unchanged pixels. Existing items, sound mappings and generated mob assets are preserved.
+
+## Rancor
+The recovered Rancor model, original scale/hitbox and six voice samples are included; rancor-sources.json and the tracked blueprint manifest record provenance. Ground-slam rubble uses native floor-matched block displays and requires no extra texture assets.
+
+## Jabba stash components
+The original seven JABBA-tagged component items use namespaced material models with original pixels; provenance is in jabba-loot-sources.json. The dungeon's native doors and revised Rancor particle/block-display effects need no additional artwork.

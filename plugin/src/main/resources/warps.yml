@@ -3,7 +3,7 @@ gui-title: '<dark_gray>Galaxy Map'
 gui-size: 54
 messages:
   players-only: '<red>Open warps in game.'
-  unknown: '<red>Choose Batuu, Earth or Hoth.'
+  unknown: '<red>Choose Batuu, Earth, Hoth or Tatooine.'
   unavailable: '<red>This destination is unavailable.'
   click: '<yellow>Click to travel.'
 warps:
@@ -25,3 +25,9 @@ warps:
     item-model: mandomc:planets/hoth
     slot: 39
     description: '<gray>King of the Hill and PvP warzone.'
+  tatooine:
+    name: '<gold>Tatooine'
+    material: STICK
+    item-model: mandomc:planets/tatooine
+    slot: 43
+    description: '<gray>Jabba’s Palace. Dungeon testing.'

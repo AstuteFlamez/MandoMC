@@ -1,6 +1,6 @@
 # Feature: Native worlds, administration and personal travel
 Status: playable
-Integration: main; native utilities extracted separately from the active dungeon checkout.
+Integration: main; native utilities and the Tatooine dungeon world are integrated.
 
 ## Player experience
 Operators retain the selected Essentials/Multiverse commands directly in MandoMC. Players can request consent-based teleports, save up to three named homes and return to their previous teleport/death location. Public trips retain shared travel checks. Creative mode skips the countdown; other modes wait three seconds.
@@ -22,7 +22,7 @@ Operators retain the selected Essentials/Multiverse commands directly in MandoMC
 - Beds remain the first valid respawn choice; otherwise deaths return to Batuu. New players start at Batuu; returning players keep their saved location and game mode. Nether/End stay disabled.
 
 ## Smallest playable version
-All existing worlds and all three public warps load without either removed plugin; an ordinary player can set a home and accept another player's request, then return with `/back`. Admin commands work through their bare aliases.
+All existing worlds and all four public warps load without either removed plugin; an ordinary player can set a home and accept another player's request, then return with `/back`. Admin commands work through their bare aliases.
 
 Credits, shops and a new economy provider remain deferred by the user. Vault stays installed as an inactive bridge. Clans/claims remain deferred. No new planet content or resource-pack changes.
 
@@ -31,7 +31,7 @@ WorldService reads `worlds.yml`, loads existing migrated Paper dimensions by sta
 
 TeleportService remains the sole public countdown owner. PersonalTravel stores home/back data; TeleportRequests stores only ephemeral consent. AdminService owns operator actions and visibility; normal Paper events remain authoritative. CommandBindings explicitly selects MandoMC's bare labels where WorldEdit/vanilla register duplicates.
 
-Migration: copy the four integrated Multiverse entries into `worlds.yml`, including exact spawn position/facing, aliases and flags. Keep disabled dimensions absent. Stop the server, back up world/player data and plugin settings, replace MandoMC and move the two vendor JARs out of the plugin search path. Retain their configuration/userdata for rollback; existing Essentials balances stay archived and inactive. No existing Essentials homes were present at inspection. New MandoMC return history and god/vanish markers start with this feature. Old vendor implementation is removed from source and plugin lock/catalog.
+Migration: copy the five enabled Multiverse entries into `worlds.yml`, including exact spawn position/facing, aliases and flags. Keep disabled dimensions absent. Stop the server, back up world/player data and plugin settings, replace MandoMC and move the two vendor JARs out of the plugin search path. Retain their configuration/userdata for rollback; existing Essentials balances stay archived and inactive. No existing Essentials homes were present at inspection. New MandoMC return history and god/vanish markers start with this feature. Old vendor implementation is removed from source and plugin lock/catalog.
 
 ## Parameters
 | Key | Meaning | Default/range | Application |
@@ -46,7 +46,7 @@ Migration: copy the four integrated Multiverse entries into `worlds.yml`, includ
 Both configuration files use schema version 1. Messages fall back to bundled `messages.yml:utilities`, preserving local translations. Personal persisted keys carry version 1.
 
 ## Verification
-The integrated main build passes 81 Java tests, including input bounds, nonfinite coordinates/speeds, game-mode aliases and location serialization. `./scripts/build-utilities-probe.sh` builds the real Paper verification harness. The same integrated JAR passes 168 focused utility assertions and 54 arrival/WorldGuard regression assertions in an isolated Paper copy. All four configured worlds load with both removed vendors absent and no startup errors. The tests preserve exact Hoth arrival/facing; Tatooine is excluded with Jabba. Native PDC serialization verifies saved homes/history; no human client rendering test is claimed. The earlier five-world development version had 99 Java tests and 170 utility assertions, including excluded dungeon-related coverage. See docs/status.md for integration and deployment boundaries.
+`./scripts/build.sh` passes 99 Java tests, including input bounds, nonfinite coordinates/speeds, game-mode aliases and location serialization. `./scripts/build-utilities-probe.sh` builds the real Paper verification harness. The final tested JAR passes 170 focused utility assertions and 54 arrival/WorldGuard regression assertions in isolated Paper. Normal runtime startup confirms all five worlds and ten plugins, with both removed vendors absent and no startup errors. Native PDC serialization verifies saved homes/history; no human client rendering test is claimed. See docs/status.md for deployment evidence.
 
 API references: [Paper WorldCreator](https://jd.papermc.io/paper/26.1.2/org/bukkit/WorldCreator.html), [async initial spawn event](https://jd.papermc.io/paper/26.1.2/io/papermc/paper/event/player/AsyncPlayerSpawnLocationEvent.html), [command map](https://jd.papermc.io/paper/26.1.2/org/bukkit/command/CommandMap.html).
 

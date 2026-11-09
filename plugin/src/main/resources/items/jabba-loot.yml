@@ -1,0 +1,105 @@
+{
+  "schema-version": 1,
+  "items": {
+    "fusion_coil_stabilizer": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Fusion Coil Stabilizer",
+      "rarity": "rare",
+      "category": "materials",
+      "custom-model-data": 101,
+      "item-model": "mandomc:materials/fusion_coil_stabilizer",
+      "lore": [
+        "<gray>Stabilizes volatile fusion output",
+        "<gray>for consistent performance.",
+        "",
+        "<dark_green><italic>Recovered from the depths of",
+        "<dark_green><bold>Jabba's Palace"
+      ]
+    },
+    "plasma_capacitor_array": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Plasma Capacitor Array",
+      "rarity": "rare",
+      "category": "materials",
+      "custom-model-data": 107,
+      "item-model": "mandomc:materials/plasma_capacitor_array",
+      "lore": [
+        "<gray>Stores and stabilizes plasma",
+        "<gray>for rapid discharge.",
+        "",
+        "<dark_green><italic>Recovered from the depths of",
+        "<dark_green><bold>Jabba's Palace"
+      ]
+    },
+    "precision_crafted_lens": {
+      "material": "ECHO_SHARD",
+      "name": "<green>Precision Crafted Lens",
+      "rarity": "uncommon",
+      "category": "materials",
+      "custom-model-data": 108,
+      "item-model": "mandomc:materials/precision_crafted_lens",
+      "lore": [
+        "<gray>Improves targeting precision",
+        "<gray>in energy-based weapons."
+      ]
+    },
+    "alloy_plating": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Alloy Plating",
+      "rarity": "rare",
+      "category": "materials",
+      "custom-model-data": 130,
+      "item-model": "mandomc:materials/alloy_plating",
+      "lore": [
+        "<gray>Durable plating used in advanced builds.",
+        "",
+        "<dark_green><italic>Recovered from the depths of",
+        "<dark_green><bold>Jabba's Palace"
+      ]
+    },
+    "energy_conduits": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Energy Conduits",
+      "rarity": "rare",
+      "category": "materials",
+      "custom-model-data": 140,
+      "item-model": "mandomc:materials/energy_conduits",
+      "lore": [
+        "<gray>Transfers energy efficiently.",
+        "",
+        "<dark_green><italic>Recovered from the depths of",
+        "<dark_green><bold>Jabba's Palace"
+      ]
+    },
+    "transparisteel_shard": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Transparisteel Shard",
+      "rarity": "rare",
+      "category": "materials",
+      "custom-model-data": 162,
+      "item-model": "mandomc:materials/transparisteel_shard",
+      "lore": [
+        "<gray>A fragment of transparent yet",
+        "<gray>incredibly durable material.",
+        "",
+        "<dark_green><italic>Recovered from the depths of",
+        "<dark_green><bold>Jabba's Palace"
+      ]
+    },
+    "wiring_coil": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Wiring Coil",
+      "rarity": "common",
+      "category": "materials",
+      "custom-model-data": 163,
+      "item-model": "mandomc:materials/wiring_coil",
+      "lore": [
+        "<gray>Coiled wiring used to connect",
+        "<gray>electrical components.",
+        "",
+        "<dark_green><italic>Recovered from the depths of",
+        "<dark_green><bold>Jabba's Palace"
+      ]
+    }
+  }
+}

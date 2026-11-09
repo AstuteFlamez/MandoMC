@@ -16,6 +16,8 @@ public final class MythicMobAccess {
     private final Method type;
     private final Method level;
     private final Method remove;
+    private final Method persist;
+    private final Object never;
 
     public MythicMobAccess() throws ReflectiveOperationException {
         var vendor = Bukkit.getPluginManager().getPlugin("MythicMobs");
@@ -29,6 +31,8 @@ public final class MythicMobAccess {
         type = activeType.getMethod("getMobType");
         level = activeType.getMethod("getLevel");
         remove = activeType.getMethod("remove");
+        var mode=Class.forName("io.lumine.mythic.core.mobs.DespawnMode",true,vendor.getClass().getClassLoader());
+        persist=activeType.getMethod("setDespawnMode",mode);never=mode.getField("NEVER").get(null);
         var definition = api.getClass().getMethod("getMythicMob", String.class);
         for (String id : TYPES) {
             if (definition.invoke(api, id) == null) throw new IllegalStateException("Missing MythicMobs definition: " + id);
@@ -59,6 +63,11 @@ public final class MythicMobAccess {
         } catch (ReflectiveOperationException error) {
             throw new IllegalStateException("Cannot read Mythic mob level", error);
         }
+    }
+
+    public void persist(Entity entity) {
+        try {var mob=active.invoke(api,entity);if(mob!=null)persist.invoke(mob,never);}
+        catch(ReflectiveOperationException error){throw new IllegalStateException("Cannot persist dungeon mob",error);}
     }
 
     public void remove(Entity entity) {

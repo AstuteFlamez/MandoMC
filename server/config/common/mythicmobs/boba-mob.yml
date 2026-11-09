@@ -1,0 +1,34 @@
+BobaFett:
+  Type: ZOMBIE
+  Display: '&2&lBoba Fett'
+  Health: 500
+  Damage: 0
+  Armor: 8
+  Faction: Hutts
+  BossBar:
+    Enabled: true
+    Range: 50
+    Style: SOLID
+    Color: RED
+    Title: '&2&lBOBA FETT'
+  Options:
+    Silent: true
+    PreventSunburn: true     # ✅ Stops sunlight damage
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    PreventTransformation: true
+    PreventJockeyMounts: true
+    MovementSpeed: 0.28
+    KnockbackResistance: 0.9
+  DamageModifiers:
+    - FALL 0
+  Modules:
+    ThreatTable: true
+  Skills:
+    - model{mid=boba_fett;h=false} @self ~onSpawn
+    - model{mid=boba_fett;h=false} @self ~onLoad
+    - defaultstate{mid=boba_fett;s=idle;lerpin=5} @self ~onSpawn
+    - skill{s=Boba_dodge} @self ~onDamaged
+    - skill{s=Boba_bobafett_attack} @self ~onTimer:100
+    - skill{s=Boba_boba_voice} @self ~onTimer:150 0.75

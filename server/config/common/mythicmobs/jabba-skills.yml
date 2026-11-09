@@ -1,0 +1,225 @@
+Gamorrean_Brain:
+  Conditions:
+    - health{h=>0} true
+  Skills:
+    - randomskill{skills=Light_Slash 0.5, Heavy_Slash 0.3, Spin_Attack 0.2}
+
+# Original weighted light, heavy and spin attacks.
+Light_Slash:
+  Conditions:
+  - targetwithin{d=3} true
+  Skills:
+    - skill{s=MandoFaceTarget;repeat=32;repeatInterval=1} @target
+    - delay 6
+    - state{mid=gamorrean_guard;s=attack1} @self
+    - delay 10
+    - sound{s=item.axe.scrape;v=2;p=1;c=MASTER} @self
+    - skill{s=JabbaLightHit} @Target
+
+Heavy_Slash:
+  Conditions:
+  - targetwithin{d=3} true
+  Skills:
+    - skill{s=MandoFaceTarget;repeat=32;repeatInterval=1} @target
+    - delay 6
+    - state{mid=gamorrean_guard;s=attack2} @self
+    - delay 10
+    - sound{s=item.trident.throw;v=2;p=1;c=MASTER} @self
+    - skill{s=JabbaHeavyHit} @Target
+
+Spin_Attack:
+  Conditions:
+  - targetwithin{d=4} true
+  Skills:
+    - skill{s=MandoFaceTarget;repeat=32;repeatInterval=1} @target
+    - delay 6
+    - state{mid=gamorrean_guard;s=attack3} @self
+    - delay 10
+    - sound{s=item.axe.scrape;v=2;p=1;c=MASTER} @self
+    - skill{s=JabbaSpinHit} @PlayersInRadius{r=4}
+
+quarren_attack:
+  Cooldown: 2.5to4.5
+  Conditions:
+    - health{h=>0} true
+    - incombat true
+    - hasaura{aura=JabbaAiming} false
+    - hasaura{aura=JabbaInitialWait} false
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=0to32}
+    - lineofsight
+  Skills:
+    - stun{auraName=JabbaAiming;d=52;facing=false;stopai=true;gravity=false;onEnd=JabbaCombatMovement} @self
+    - skill{s=MandoFaceTarget;repeat=32;repeatInterval=1} @target
+    - delay 6
+    - state{mid=quarren_guard;s=attack} @self
+    - delay 10
+    - skill{s=MandoFaceTarget} @target
+    - skill{s=JabbaFireSE14C} @Target
+    - delay 4
+    - skill{s=MandoFaceTarget} @target
+    - skill{s=JabbaFireSE14C} @Target
+    - delay 4
+    - skill{s=MandoFaceTarget} @target
+    - skill{s=JabbaFireSE14C} @Target
+    - delay 20
+    - state{mid=quarren_guard;s=attack;r=true} @self
+
+
+twilek_attack:
+  Cooldown: 2.5to4.5
+  Conditions:
+    - health{h=>0} true
+    - incombat true
+    - hasaura{aura=JabbaAiming} false
+    - hasaura{aura=JabbaInitialWait} false
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=0to32}
+    - lineofsight
+  Skills:
+    - randomskill{skills=twilek_attack1, twilek_attack2}
+
+twilek_attack1:
+  Conditions:
+    - health{h=>0} true
+    - hasaura{aura=JabbaAiming} false
+  Skills:
+    - stun{auraName=JabbaAiming;d=52;facing=false;stopai=true;gravity=false;onEnd=JabbaCombatMovement} @self
+    - skill{s=MandoFaceTarget;repeat=32;repeatInterval=1} @target
+    - delay 6
+    - state{mid=twilek_guard;s=attack1} @self
+    - delay 10
+    - skill{s=MandoFaceTarget} @target
+    - skill{s=JabbaFireA280} @Target
+    - delay 4
+    - skill{s=MandoFaceTarget} @target
+    - skill{s=JabbaFireA280} @Target
+    - delay 4
+    - skill{s=MandoFaceTarget} @target
+    - skill{s=JabbaFireA280} @Target
+    - delay 20
+    - state{mid=twilek_guard;s=attack1;r=true} @self
+
+
+twilek_attack2:
+  Conditions:
+    - health{h=>0} true
+    - hasaura{aura=JabbaAiming} false
+  Skills:
+    - stun{auraName=JabbaAiming;d=52;facing=false;stopai=true;gravity=false;onEnd=JabbaCombatMovement} @self
+    - skill{s=MandoFaceTarget;repeat=32;repeatInterval=1} @target
+    - delay 6
+    - state{mid=twilek_guard;s=attack2} @self
+    - delay 10
+    - skill{s=MandoFaceTarget} @target
+    - skill{s=JabbaFireA280} @Target
+    - delay 4
+    - skill{s=MandoFaceTarget} @target
+    - skill{s=JabbaFireA280} @Target
+    - delay 4
+    - skill{s=MandoFaceTarget} @target
+    - skill{s=JabbaFireA280} @Target
+    - delay 20
+    - state{mid=twilek_guard;s=attack2;r=true} @self
+
+
+alien_sounds:
+  Skills:
+    - randomskill{skills=alien_sounds1, alien_sounds2, alien_sounds3}
+
+alien_sounds1:
+  Skills:
+    - sound{s=mandomc:mobs.alien1;v=2;p=1} @self
+
+alien_sounds2:
+  Skills:
+    - sound{s=mandomc:mobs.alien2;v=2;p=1} @self
+
+alien_sounds3:
+  Skills:
+    - sound{s=mandomc:mobs.alien3;v=2;p=1} @self
+
+JabbaFireSE14C:
+  Conditions:
+    - health{h=>0} true
+  TargetConditions:
+    - health{h=>0} true
+    - lineofsight
+    - distance{d=0to32}
+  Skills:
+    - skill{s=MandoFaceTarget} @target
+    - weaponMechanicsShoot{weapon=QuarrenSE14C;spread=2;head=false} @target
+
+JabbaFireA280:
+  Conditions:
+    - health{h=>0} true
+  TargetConditions:
+    - health{h=>0} true
+    - lineofsight
+    - distance{d=0to32}
+  Skills:
+    - skill{s=MandoFaceTarget} @target
+    - weaponMechanicsShoot{weapon=TwilekA280;spread=2;head=false} @target
+
+JabbaLightHit:
+  Conditions:
+    - health{h=>0} true
+  TargetConditions:
+    - health{h=>0} true
+    - lineofsight
+    - distance{d=0to3}
+  Skills:
+    - damage{a=6}
+
+JabbaHeavyHit:
+  Conditions:
+    - health{h=>0} true
+  TargetConditions:
+    - health{h=>0} true
+    - lineofsight
+    - distance{d=0to3}
+  Skills:
+    - damage{a=10}
+    - velocity{mode=SET;y=0.3}
+
+JabbaSpinHit:
+  Conditions:
+    - health{h=>0} true
+  TargetConditions:
+    - health{h=>0} true
+    - lineofsight
+    - distance{d=0to4}
+  Skills:
+    - damage{a=12}
+    - velocity{mode=SET;y=0.3}
+
+# Shared ranged movement. Threat tables own combat state; aim aura owns planted attacks.
+JabbaCombatMovement:
+  Conditions:
+    - health{h=>0} true
+    - incombat true
+    - hasaura{aura=JabbaAiming} false
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=0to32}
+  Skills:
+    - skill{s=JabbaReposition} @target
+
+JabbaReposition:
+  Cooldown: 1.25
+  Conditions:
+    - incombat true
+    - hasaura{aura=JabbaAiming} false
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=7to18}
+  Skills:
+    - goto{speed=1.15} @RandomLocationsNearCaster{amount=3;limit=1;minradius=3;radius=5;onsurface=true}
+
+JabbaRelax:
+  Conditions:
+    - incombat false
+  Skills:
+    - clearpath @self

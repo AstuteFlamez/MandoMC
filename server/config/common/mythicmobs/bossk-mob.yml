@@ -1,0 +1,51 @@
+Bossk:
+  Type: ZOMBIE
+  Display: '&a&lBOSSK'
+  Health: 800
+  Damage: 0
+  Armor: 8
+  Faction: Hutts
+  BossBar:
+    Enabled: true
+    Range: 50
+    Style: SOLID
+    Color: RED
+    Title: '&a&lBOSSK'
+  Options:
+    Silent: true
+    PreventSunburn: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    PreventTransformation: true
+    PreventJockeyMounts: true
+    MovementSpeed: 0.32
+    FollowRange: 40
+    KnockbackResistance: 0.6
+  Modules:
+    ThreatTable: true
+  DamageModifiers:
+    - FIRE_TICK 0
+    - FIRE 0
+    - POISON 0
+  AIGoalSelectors:
+    - clear
+    - lookattarget
+    - fleePlayers{speed=1.15;safespeed=1.15;distance=4}
+    - moveWithinDistanceOfTarget{speed=1.2;minrange=13;maxrange=40}
+    - randomstroll
+    - lookatplayers
+  AITargetSelectors:
+    - clear
+    - players
+  Drops:
+    - weaponMechanicsWeapon{weapon=RelbyV10} 1 0.5
+  Skills:
+    - model{mid=bossk;h=false} @self ~onSpawn
+    - model{mid=bossk;h=false} @self ~onLoad
+    - aura{auraName=BosskInitialWait;d=10to30} @self ~onSpawn
+    - skill{s=BosskCloseCombo} @target ~onTimer:5
+    - skill{s=BosskRangedBrain} @target ~onTimer:5
+    - skill{s=BosskCombatMovement} @target ~onTimer:10
+    - skill{s=BosskRelax} @self ~onDropCombat
+    - skill{s=BosskVoice} @self ~onTimer:150 0.6
