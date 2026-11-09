@@ -6,7 +6,8 @@
     512
   ],
   "textures": {
-    "0": "mandomc:item/vehicles/tiefighter"
+    "0": "mandomc:item/vehicles/tiefighter",
+    "particle": "#0"
   },
   "elements": [
     {

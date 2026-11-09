@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "mandomc:custom/metals/scraps/electrum_scrap"
+    "layer0": "mandomc:item/legacy/metals/scraps/electrum_scrap"
   }
 }

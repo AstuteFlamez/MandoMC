@@ -6,7 +6,8 @@
     32
   ],
   "textures": {
-    "1": "mandomc:item/armor/plastoid_helmet"
+    "1": "mandomc:item/armor/plastoid_helmet",
+    "particle": "#1"
   },
   "elements": [
     {
@@ -743,9 +744,19 @@
     },
     "gui": {
       "rotation": [
+        23,
+        -165,
+        18
+      ],
+      "translation": [
         0,
-        -180,
+        -0.5,
         0
+      ],
+      "scale": [
+        0.95,
+        0.95,
+        0.95
       ]
     },
     "head": {

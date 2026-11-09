@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "mandomc:custom/vehicles/components/tiefighter_cockpit"
+    "layer0": "mandomc:item/legacy/vehicles/components/tiefighter_cockpit"
   }
 }

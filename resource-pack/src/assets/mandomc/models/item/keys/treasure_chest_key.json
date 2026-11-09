@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "mandomc:custom/keys/treasure_chest_key"
+    "layer0": "mandomc:item/legacy/keys/treasure_chest_key"
   }
 }

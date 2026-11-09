@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "mandomc:custom/materials/coaxium_fragment"
+    "layer0": "mandomc:item/legacy/materials/coaxium_fragment"
   }
 }

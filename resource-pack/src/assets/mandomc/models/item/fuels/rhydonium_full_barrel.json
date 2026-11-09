@@ -6,8 +6,8 @@
     64
   ],
   "textures": {
-    "0": "mandomc:custom/fuels/rhydonium_full_barrel",
-    "particle": "mandomc:custom/fuels/rhydonium_full_barrel"
+    "0": "mandomc:item/legacy/fuels/rhydonium_full_barrel",
+    "particle": "mandomc:item/legacy/fuels/rhydonium_full_barrel"
   },
   "elements": [
     {

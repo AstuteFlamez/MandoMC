@@ -6,7 +6,8 @@
     128
   ],
   "textures": {
-    "0": "mandomc:item/blasters/se14c"
+    "0": "mandomc:item/blasters/se14c",
+    "particle": "#0"
   },
   "elements": [
     {

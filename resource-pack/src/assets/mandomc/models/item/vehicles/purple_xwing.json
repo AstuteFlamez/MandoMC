@@ -6,7 +6,8 @@
     512
   ],
   "textures": {
-    "0": "mandomc:custom/vehicles/purple_xwing"
+    "0": "mandomc:item/legacy/vehicles/purple_xwing",
+    "particle": "#0"
   },
   "elements": [
     {

@@ -34,6 +34,63 @@ def check_reference(reference, folder, extension):
         raise SystemExit(f'Missing {folder} resource: {reference}')
 
 
+def check_model_texture(reference):
+    """An existing PNG is unusable if no item/block atlas stitches its sprite."""
+    if reference.startswith('#'):
+        return
+    check_reference(reference, 'textures', '.png')
+    namespace, _, name = reference.partition(':')
+    if not name:
+        namespace, name = 'minecraft', namespace
+    if namespace == 'minecraft' or name.startswith(('item/', 'block/')):
+        return
+    for atlas_name in ('items', 'blocks'):
+        atlas = SOURCE / 'assets/minecraft/atlases' / (atlas_name + '.json')
+        if not atlas.is_file():
+            continue
+        for entry in read_json(atlas).get('sources', []):
+            kind = entry.get('type', '').removeprefix('minecraft:')
+            if kind == 'directory':
+                prefix = entry.get('prefix', '')
+                source = entry.get('source', '').rstrip('/') + '/'
+                if name.startswith(prefix) and source == prefix:
+                    return
+            if kind == 'single' and entry.get('sprite', entry.get('resource')) == reference:
+                return
+    raise SystemExit(f'Texture is not stitched into an item/block atlas: {reference}. Use textures/item/.')
+
+
+def check_model_aliases(path, visiting=None):
+    """Resolve inherited face/particle aliases so purple particles cannot slip through."""
+    visiting = set() if visiting is None else visiting
+    if path in visiting:
+        raise SystemExit(f'Cyclic model parent: {path}')
+    data = read_json(path)
+    textures = {}
+    parent = data.get('parent')
+    if parent:
+        namespace, _, name = parent.partition(':')
+        if not name:
+            namespace, name = 'minecraft', namespace
+        parent_path = SOURCE / 'assets' / namespace / 'models' / (name + '.json')
+        if parent_path.is_file():
+            textures.update(check_model_aliases(parent_path, visiting | {path}))
+    textures.update(data.get('textures', {}))
+    references = list(textures.values())
+    for element in data.get('elements', []):
+        references.extend(face['texture'] for face in element.get('faces', {}).values() if 'texture' in face)
+    for reference in references:
+        seen = set()
+        while reference.startswith('#'):
+            key = reference[1:]
+            if key not in textures or key in seen:
+                raise SystemExit(f'Unresolved texture alias {reference} in {path.relative_to(SOURCE)}')
+            seen.add(key)
+            reference = textures[key]
+        check_model_texture(reference)
+    return textures
+
+
 def check_item_models(value):
     if isinstance(value, dict):
         # 26.1.2 Dye.calculate passes an undyed integer default through as ARGB.
@@ -71,8 +128,7 @@ def main():
             if '/models/' in name:
                 if 'parent' in data:
                     check_reference(data['parent'], 'models', '.json')
-                for texture in data.get('textures', {}).values():
-                    check_reference(texture, 'textures', '.png')
+                check_model_aliases(path)
             if '/equipment/' in name:
                 for layer_type, layers in data.get('layers', {}).items():
                     for layer in layers:

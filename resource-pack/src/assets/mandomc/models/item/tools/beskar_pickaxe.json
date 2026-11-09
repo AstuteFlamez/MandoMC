@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "mandomc:custom/tools/beskar_pickaxe"
+    "layer0": "mandomc:item/legacy/tools/beskar_pickaxe"
   }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "mandomc:custom/materials/detonator"
+    "layer0": "mandomc:item/legacy/materials/detonator"
   }
 }

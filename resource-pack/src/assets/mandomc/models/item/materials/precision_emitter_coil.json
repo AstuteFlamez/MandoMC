@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "mandomc:custom/materials/precision_emitter_coil"
+    "layer0": "mandomc:item/legacy/materials/precision_emitter_coil"
   }
 }

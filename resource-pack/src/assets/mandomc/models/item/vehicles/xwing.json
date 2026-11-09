@@ -6,7 +6,8 @@
     512
   ],
   "textures": {
-    "0": "mandomc:item/vehicles/xwing"
+    "0": "mandomc:item/vehicles/xwing",
+    "particle": "#0"
   },
   "elements": [
     {

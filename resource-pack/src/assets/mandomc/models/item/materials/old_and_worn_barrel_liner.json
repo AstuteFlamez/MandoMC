@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "mandomc:custom/materials/old_and_worn_barrel_liner"
+    "layer0": "mandomc:item/legacy/materials/old_and_worn_barrel_liner"
   }
 }

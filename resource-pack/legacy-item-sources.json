@@ -5,7 +5,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/cyro_gel.png",
       "sourceSha256": "2d8fa09390c55a9efbd48fee4c5a875a6005c6cc2200f17bff7d72f3200bc498",
-      "destination": "assets/mandomc/textures/custom/materials/cyro_gel.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/cyro_gel.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/cyro_gel.json",
@@ -15,7 +15,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/detonator.png",
       "sourceSha256": "6fcc0c4c7e37714fbcc4611bafdc2ff8ce65ae564a85acf41bfdaa4616ccb697",
-      "destination": "assets/mandomc/textures/custom/materials/detonator.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/detonator.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/detonator.json",
@@ -25,7 +25,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/detonite.png",
       "sourceSha256": "14f23499ea04ceb35c233f0e9c338a062a943bb4d994cbb3cef514fb31fd1afd",
-      "destination": "assets/mandomc/textures/custom/materials/detonite.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/detonite.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/detonite.json",
@@ -35,7 +35,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/duracrete_chunk.png",
       "sourceSha256": "65f23217942f452196b8ae2997249d8a44cc731ae1fcf5ab187654100f4faf89",
-      "destination": "assets/mandomc/textures/custom/materials/duracrete_chunk.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/duracrete_chunk.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/duracrete_chunk.json",
@@ -45,7 +45,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/duraplast.png",
       "sourceSha256": "44a74b0b710399365e85fd9995ec85dd87c70ca79d9ea43769493e4fbab64569",
-      "destination": "assets/mandomc/textures/custom/materials/duraplast.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/duraplast.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/duraplast.json",
@@ -55,7 +55,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/glitterstim_fibers.png",
       "sourceSha256": "8e6072e0ef4da9171cd61d080ec9881be74f2fc303bc3f50deedbf5b53fee331",
-      "destination": "assets/mandomc/textures/custom/materials/glitterstim_fibers.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/glitterstim_fibers.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/glitterstim_fibers.json",
@@ -65,7 +65,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/gundark_sinew.png",
       "sourceSha256": "5f75f6dbe3028e020f1b3ebe9b80e16128ded09146ad869689cab074ce883956",
-      "destination": "assets/mandomc/textures/custom/materials/gundark_sinew.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/gundark_sinew.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/gundark_sinew.json",
@@ -75,7 +75,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/hutta_silk.png",
       "sourceSha256": "241ab576a352bcd62bcfb106db70932f797b79bd82d0ece28f4d8a55ffa4cad0",
-      "destination": "assets/mandomc/textures/custom/materials/hutta_silk.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/hutta_silk.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/hutta_silk.json",
@@ -85,7 +85,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/hyperspace_coil_fragment.png",
       "sourceSha256": "50f596969833b997be539c9db9a635bf6b0251f0fb02a9590d73b949e5bf3a38",
-      "destination": "assets/mandomc/textures/custom/materials/hyperspace_coil_fragment.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/hyperspace_coil_fragment.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/hyperspace_coil_fragment.json",
@@ -95,7 +95,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/isotope_5.png",
       "sourceSha256": "374b249cdff485c837921ad98613e9e956cae379d86f645cf8701c46d68fc4b0",
-      "destination": "assets/mandomc/textures/custom/materials/isotope_5.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/isotope_5.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/isotope_5.json",
@@ -105,7 +105,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/metal_casing.png",
       "sourceSha256": "958b220544543cc53702bce1ade49c6b1e03de071ca4a6962a762f9fdacdc095",
-      "destination": "assets/mandomc/textures/custom/materials/metal_casing.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/metal_casing.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/metal_casing.json",
@@ -115,7 +115,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/metal_scrap.png",
       "sourceSha256": "3d304f1f06c64e29d73567408e4b67a3261db3c9fb75e1c28ddced9ff213ea8e",
-      "destination": "assets/mandomc/textures/custom/materials/metal_scrap.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/metal_scrap.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/metal_scrap.json",
@@ -125,7 +125,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/micro_servo_motor.png",
       "sourceSha256": "9322be34d8fe7a06613d7c5d0554427555bfe7a55b32ade87c295d2bfe985b45",
-      "destination": "assets/mandomc/textures/custom/materials/micro_servo_motor.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/micro_servo_motor.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/micro_servo_motor.json",
@@ -135,7 +135,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/myocaine_gel.png",
       "sourceSha256": "f37356dbded27d71cce97317360635a048b387e91aa879c36bb84ec6f43568a7",
-      "destination": "assets/mandomc/textures/custom/materials/myocaine_gel.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/myocaine_gel.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/myocaine_gel.json",
@@ -145,7 +145,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/nova_crystal_dust.png",
       "sourceSha256": "aa117c7c8327bc24d7b3eb80126b33ceafb6211f7b4d5e5b70ba9592b9beb42f",
-      "destination": "assets/mandomc/textures/custom/materials/nova_crystal_dust.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/nova_crystal_dust.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/nova_crystal_dust.json",
@@ -155,7 +155,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/plastoid.png",
       "sourceSha256": "b93c738f6768dd91abd4a314bfe673061a02b9a856f9c9cf7d0857d159a03c4c",
-      "destination": "assets/mandomc/textures/custom/materials/plastoid.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/plastoid.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/plastoid.json",
@@ -165,7 +165,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/quadanium_steel.png",
       "sourceSha256": "5835ecb81ad297734bbad10162859d9d8c3cf6d8c9105475091815f50a3dd2b6",
-      "destination": "assets/mandomc/textures/custom/materials/quadanium_steel.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/quadanium_steel.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/quadanium_steel.json",
@@ -175,7 +175,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/refined_coaxium.png",
       "sourceSha256": "31a9ee84721a96ed19236c2d8111dee08d42d4c5350b7ede04bddf30bc26ec32",
-      "destination": "assets/mandomc/textures/custom/materials/refined_coaxium.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/refined_coaxium.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/refined_coaxium.json",
@@ -185,7 +185,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/refined_kolto.png",
       "sourceSha256": "4f16d6fc3d9421e41d9d411729d4e02891360caf7049598daad40c13e86168e0",
-      "destination": "assets/mandomc/textures/custom/materials/refined_kolto.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/refined_kolto.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/refined_kolto.json",
@@ -195,7 +195,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/ronto_hide.png",
       "sourceSha256": "3b4348697dfc55b3253bf7b884e3d2b8422298d287df5448920597cbfdee61cb",
-      "destination": "assets/mandomc/textures/custom/materials/ronto_hide.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/ronto_hide.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/ronto_hide.json",
@@ -205,7 +205,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/ryll_spice.png",
       "sourceSha256": "7898cf1ec40dbd3bc098f2d9c183fbbb6a427ee52863dac2b3cc712bba16d694",
-      "destination": "assets/mandomc/textures/custom/materials/ryll_spice.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/ryll_spice.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/ryll_spice.json",
@@ -215,7 +215,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/scrap_heap.png",
       "sourceSha256": "adc8872d7a01071e667c0d8b6c1ffb3fb363810eaf886a5a0782d802230d7ad7",
-      "destination": "assets/mandomc/textures/custom/materials/scrap_heap.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/scrap_heap.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/scrap_heap.json",
@@ -225,7 +225,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/switch.png",
       "sourceSha256": "64118dcaf1b30366c7880bf9600a59976c3a4ec15626bc4ff5eeb51a5d5f0853",
-      "destination": "assets/mandomc/textures/custom/materials/switch.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/switch.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/switch.json",
@@ -235,7 +235,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/synthetic_polymer.png",
       "sourceSha256": "cfdb8b84458f1f5fde2beb77510a38bcb9f3be182bcbca43c55b2529d6a1b247",
-      "destination": "assets/mandomc/textures/custom/materials/synthetic_polymer.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/synthetic_polymer.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/synthetic_polymer.json",
@@ -245,7 +245,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/synthrubber.png",
       "sourceSha256": "a8e6587f368f9dd7b4ec230283f7a1d50c4db8d7346cca5205ea86f80986a6bc",
-      "destination": "assets/mandomc/textures/custom/materials/synthrubber.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/synthrubber.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/synthrubber.json",
@@ -255,7 +255,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/tibanna_gas_vial.png",
       "sourceSha256": "820334382f067eadd37a53d71dfdef76434b1dbc7bf0e886d78e0ffcf3d6b38b",
-      "destination": "assets/mandomc/textures/custom/materials/tibanna_gas_vial.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/tibanna_gas_vial.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/tibanna_gas_vial.json",
@@ -265,7 +265,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/zersium.png",
       "sourceSha256": "39a10cc5d455f7a686c69dd6ffffd7ceed1348725aed49a4a1040653d2e2355d",
-      "destination": "assets/mandomc/textures/custom/materials/zersium.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/zersium.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/zersium.json",
@@ -275,7 +275,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/consumables/bantha_wrap.png",
       "sourceSha256": "983495389eb8175f1b6443464d10d73b898c194ecdd2b9162d594852d418a1d5",
-      "destination": "assets/mandomc/textures/custom/consumables/bantha_wrap.png"
+      "destination": "assets/mandomc/textures/item/legacy/consumables/bantha_wrap.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/consumables/bantha_wrap.json",
@@ -285,7 +285,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/fuels/rhydonium_full_barrel.png",
       "sourceSha256": "09b2ea6fdb6d2f1f92005a4bda5e162f275b7de70acf33db2be953baca28fa2a",
-      "destination": "assets/mandomc/textures/custom/fuels/rhydonium_full_barrel.png"
+      "destination": "assets/mandomc/textures/item/legacy/fuels/rhydonium_full_barrel.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/fuels/rhydonium_full_barrel.json",
@@ -295,7 +295,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/fuels/rhydonium_empty_barrel.png",
       "sourceSha256": "8ad0f0613e9f7e9969acdeacaab3a2991b8760d8bbd6721fc7b03a47d0565fa4",
-      "destination": "assets/mandomc/textures/custom/fuels/rhydonium_empty_barrel.png"
+      "destination": "assets/mandomc/textures/item/legacy/fuels/rhydonium_empty_barrel.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/fuels/rhydonium_empty_barrel.json",
@@ -305,7 +305,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/fuels/rhydonium_quarter_filled_barrel.png",
       "sourceSha256": "e4c8ea212328d2c9efda48ae98ab7d58d38d86fbe66a42b89544dec6b44b9ab8",
-      "destination": "assets/mandomc/textures/custom/fuels/rhydonium_quarter_filled_barrel.png"
+      "destination": "assets/mandomc/textures/item/legacy/fuels/rhydonium_quarter_filled_barrel.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/fuels/rhydonium_quarter_filled_barrel.json",
@@ -315,7 +315,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/fuels/rhydonium_half_filled_barrel.png",
       "sourceSha256": "d474fea9ead5fb14c53b5877d1ace0866d1dcd40c9fa5326d564198460fd0adc",
-      "destination": "assets/mandomc/textures/custom/fuels/rhydonium_half_filled_barrel.png"
+      "destination": "assets/mandomc/textures/item/legacy/fuels/rhydonium_half_filled_barrel.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/fuels/rhydonium_half_filled_barrel.json",
@@ -325,7 +325,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/fuels/rhydonium_three_quarters_filled_barrel.png",
       "sourceSha256": "0f3f7de417d21a45d78ee7993c4671a91b97e9f5171f70bb414fdf5fee417e6e",
-      "destination": "assets/mandomc/textures/custom/fuels/rhydonium_three_quarters_filled_barrel.png"
+      "destination": "assets/mandomc/textures/item/legacy/fuels/rhydonium_three_quarters_filled_barrel.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/fuels/rhydonium_three_quarters_filled_barrel.json",
@@ -335,7 +335,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/fuels/rhydonium_full_canister.png",
       "sourceSha256": "e66fc42d899aa8f54f13574c477f3ab6032c8cedb55b4d1771539e6a298f7434",
-      "destination": "assets/mandomc/textures/custom/fuels/rhydonium_full_canister.png"
+      "destination": "assets/mandomc/textures/item/legacy/fuels/rhydonium_full_canister.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/fuels/rhydonium_full_canister.json",
@@ -345,7 +345,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/straight_hilt.png",
       "sourceSha256": "784900d916ba2ff6a6fe7e109a171dcde91118b991383f8146006c8783fbd2ea",
-      "destination": "assets/mandomc/textures/custom/materials/straight_hilt.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/straight_hilt.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/straight_hilt.json",
@@ -355,7 +355,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/great_hilt.png",
       "sourceSha256": "e95582fa7fc2ed5f41f17332862ded9aeb30f82c47e874fa0da3181bf93a3341",
-      "destination": "assets/mandomc/textures/custom/materials/great_hilt.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/great_hilt.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/great_hilt.json",
@@ -365,7 +365,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/whip_hilt.png",
       "sourceSha256": "115182dc61e6e15c1bd16908d976edaa6be9190b53b17ecb3d67b125b6147c2c",
-      "destination": "assets/mandomc/textures/custom/materials/whip_hilt.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/whip_hilt.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/whip_hilt.json",
@@ -375,7 +375,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/pike_hilt.png",
       "sourceSha256": "22af12644048e25825571f7db9e17e5a85b357eec2b98e6cb8eb84ae856e1ff3",
-      "destination": "assets/mandomc/textures/custom/materials/pike_hilt.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/pike_hilt.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/pike_hilt.json",
@@ -385,7 +385,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/fang_hilt.png",
       "sourceSha256": "41407e0022175f13ea0bfb099cc152fd16d174e968dad98e6e3c0e58bf0ec9c7",
-      "destination": "assets/mandomc/textures/custom/materials/fang_hilt.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/fang_hilt.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/materials/fang_hilt.json",
@@ -395,7 +395,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/keys/palace_dungeon_key.png",
       "sourceSha256": "fb66d1dbe9350a17341bfc9189e1805488dd9900b5b11dfbdee86bb906ff9da3",
-      "destination": "assets/mandomc/textures/custom/keys/palace_dungeon_key.png"
+      "destination": "assets/mandomc/textures/item/legacy/keys/palace_dungeon_key.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/keys/palace_dungeon_key.json",
@@ -405,7 +405,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/keys/lock_box_key.png",
       "sourceSha256": "867989eb08f2f2df24f47a95725a42872d3a71755750bbc6a9ecdafa825ebf06",
-      "destination": "assets/mandomc/textures/custom/keys/lock_box_key.png"
+      "destination": "assets/mandomc/textures/item/legacy/keys/lock_box_key.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/keys/lock_box_key.json",
@@ -415,7 +415,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/keys/treasure_chest_key.png",
       "sourceSha256": "431595b41f62dd9cfb48c4c894ae08b25d32588a88049b02952efa68740db8e6",
-      "destination": "assets/mandomc/textures/custom/keys/treasure_chest_key.png"
+      "destination": "assets/mandomc/textures/item/legacy/keys/treasure_chest_key.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/keys/treasure_chest_key.json",
@@ -425,7 +425,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/keys/starfighter_crate_key.png",
       "sourceSha256": "0547c8157eaa6f05fc7ba71ec282d370476e22d7fac68caaeb39304ac34f0058",
-      "destination": "assets/mandomc/textures/custom/keys/starfighter_crate_key.png"
+      "destination": "assets/mandomc/textures/item/legacy/keys/starfighter_crate_key.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/keys/starfighter_crate_key.json",
@@ -435,7 +435,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/keys/galactic_crate_key.png",
       "sourceSha256": "3dfae74f997c84267c658d056fb5761a565fa824365b969dd130fe8ff950b783",
-      "destination": "assets/mandomc/textures/custom/keys/galactic_crate_key.png"
+      "destination": "assets/mandomc/textures/item/legacy/keys/galactic_crate_key.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/keys/galactic_crate_key.json",
@@ -445,7 +445,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/kyber/red_kyber.png",
       "sourceSha256": "3847a99b20acc8cd7512f2ad0d2c5fe3c2a601b0db6a537cd478e794cd5cf133",
-      "destination": "assets/mandomc/textures/custom/kyber/red_kyber.png"
+      "destination": "assets/mandomc/textures/item/legacy/kyber/red_kyber.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/kybers/red.json",
@@ -455,7 +455,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/kyber/orange_kyber.png",
       "sourceSha256": "e5695f1af1e3b673f910c5ff26b0afd0246d7ca166c181a85b1ee7b3f6712abe",
-      "destination": "assets/mandomc/textures/custom/kyber/orange_kyber.png"
+      "destination": "assets/mandomc/textures/item/legacy/kyber/orange_kyber.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/kybers/orange.json",
@@ -465,7 +465,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/kyber/yellow_kyber.png",
       "sourceSha256": "f891db2590da1f4ccaf53200366d61e1566a2ea10d7cf1eda15c8d44ecd9e684",
-      "destination": "assets/mandomc/textures/custom/kyber/yellow_kyber.png"
+      "destination": "assets/mandomc/textures/item/legacy/kyber/yellow_kyber.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/kybers/yellow.json",
@@ -475,7 +475,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/kyber/green_kyber.png",
       "sourceSha256": "bcbc6a0c246b0e00fcd6f10bec02b019eaf59d59c8051eefd5e18270872512a7",
-      "destination": "assets/mandomc/textures/custom/kyber/green_kyber.png"
+      "destination": "assets/mandomc/textures/item/legacy/kyber/green_kyber.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/kybers/green.json",
@@ -485,7 +485,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/kyber/purple_kyber.png",
       "sourceSha256": "92655385bef80b413cace0f6a54af3f4803f87ea9d2be7ec384ad8b8b17bf257",
-      "destination": "assets/mandomc/textures/custom/kyber/purple_kyber.png"
+      "destination": "assets/mandomc/textures/item/legacy/kyber/purple_kyber.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/kybers/purple.json",
@@ -495,7 +495,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/kyber/white_kyber.png",
       "sourceSha256": "bcf0e3e7498707d9e2023c4aaf51ce408bc376c8778ca4e666f29f4e3466d892",
-      "destination": "assets/mandomc/textures/custom/kyber/white_kyber.png"
+      "destination": "assets/mandomc/textures/item/legacy/kyber/white_kyber.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/kybers/white.json",
@@ -505,7 +505,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/kyber/blue_kyber.png",
       "sourceSha256": "e0a7ac2521e4f2265828a86c85512f02e50e29db202177553f9a51ad9f52d79c",
-      "destination": "assets/mandomc/textures/custom/kyber/blue_kyber.png"
+      "destination": "assets/mandomc/textures/item/legacy/kyber/blue_kyber.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/kybers/blue.json",
@@ -515,7 +515,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/scraps/agrinium_scrap.png",
       "sourceSha256": "21dd168d6299d3299c56cd03d7f5195c1dd38bf0e12692289f3484b8a47e19bd",
-      "destination": "assets/mandomc/textures/custom/metals/scraps/agrinium_scrap.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/scraps/agrinium_scrap.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/scraps/agrinium_scrap.json",
@@ -525,7 +525,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/ingots/agrinium.png",
       "sourceSha256": "e4c162d2a3f7143d05578dfaa7d1115aea116d979e73d9e41b07fa499e12c6fa",
-      "destination": "assets/mandomc/textures/custom/metals/ingots/agrinium.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/ingots/agrinium.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/ingots/agrinium.json",
@@ -535,7 +535,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/sheets/agrinium_sheet.png",
       "sourceSha256": "e53f22319955bc7b77a7348bd6f788e64987d8e165ede3529119010ce68594e9",
-      "destination": "assets/mandomc/textures/custom/metals/sheets/agrinium_sheet.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/sheets/agrinium_sheet.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/sheets/agrinium_sheet.json",
@@ -545,7 +545,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/scraps/aurodium_scrap.png",
       "sourceSha256": "b9f980522f4781cfef541cba776dcc92d1f5e918225b63b68b3581dda0d24c5e",
-      "destination": "assets/mandomc/textures/custom/metals/scraps/aurodium_scrap.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/scraps/aurodium_scrap.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/scraps/aurodium_scrap.json",
@@ -555,7 +555,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/ingots/aurodium.png",
       "sourceSha256": "1bb823513bc68c6cf21a72810797eb70f42ff2d920fcfcf4d15dfcb3a6f2caea",
-      "destination": "assets/mandomc/textures/custom/metals/ingots/aurodium.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/ingots/aurodium.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/ingots/aurodium.json",
@@ -565,7 +565,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/sheets/aurodium_sheet.png",
       "sourceSha256": "091758a19d93ea3243264e0678e88fb6e2c5ceb78fd69a4c11ac2fecaea5ab02",
-      "destination": "assets/mandomc/textures/custom/metals/sheets/aurodium_sheet.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/sheets/aurodium_sheet.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/sheets/aurodium_sheet.json",
@@ -575,7 +575,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/scraps/beskar_scrap.png",
       "sourceSha256": "0b33c2a2d46dd4a4834895249b48767e40df505a9e9d22f673bedecdf8ccdc1d",
-      "destination": "assets/mandomc/textures/custom/metals/scraps/beskar_scrap.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/scraps/beskar_scrap.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/scraps/beskar_scrap.json",
@@ -585,7 +585,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/ingots/beskar.png",
       "sourceSha256": "50a883adcbfae084831762f1d81c5b81578e7e58ff332797966bdb011138d665",
-      "destination": "assets/mandomc/textures/custom/metals/ingots/beskar.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/ingots/beskar.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/ingots/beskar.json",
@@ -595,7 +595,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/sheets/beskar_sheet.png",
       "sourceSha256": "f00671d7dcc81a336b83e6031242f1cebba2990f7a7a690cb1c0e3bb3a15cf4d",
-      "destination": "assets/mandomc/textures/custom/metals/sheets/beskar_sheet.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/sheets/beskar_sheet.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/sheets/beskar_sheet.json",
@@ -605,7 +605,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/scraps/cortosis_scrap.png",
       "sourceSha256": "e02085d6fff0a940c36f76c6ad157c2e0a12cc3759ea04bd8d48f13af81944d5",
-      "destination": "assets/mandomc/textures/custom/metals/scraps/cortosis_scrap.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/scraps/cortosis_scrap.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/scraps/cortosis_scrap.json",
@@ -615,7 +615,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/ingots/cortosis.png",
       "sourceSha256": "6566fe4afc913d1b47e4f4029b92357b81bfe80be2c6dd923856a7e89f3148fd",
-      "destination": "assets/mandomc/textures/custom/metals/ingots/cortosis.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/ingots/cortosis.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/ingots/cortosis.json",
@@ -625,7 +625,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/sheets/cortosis_sheet.png",
       "sourceSha256": "ef81199dd40ea0f751d4805324e7a4f3eff6c99de9b8a36ae5fcf367cf5e063c",
-      "destination": "assets/mandomc/textures/custom/metals/sheets/cortosis_sheet.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/sheets/cortosis_sheet.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/sheets/cortosis_sheet.json",
@@ -635,7 +635,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/scraps/durasteel_scrap.png",
       "sourceSha256": "450ab85edd0a27e6eb248c0b6d56ffcf88ce13eee522ff07944574d7dc55fa08",
-      "destination": "assets/mandomc/textures/custom/metals/scraps/durasteel_scrap.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/scraps/durasteel_scrap.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/scraps/durasteel_scrap.json",
@@ -645,7 +645,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/ingots/durasteel.png",
       "sourceSha256": "9fc730eda635fc979227a1053b645019e1d5b559242a7c4da381bef94cdcd3cd",
-      "destination": "assets/mandomc/textures/custom/metals/ingots/durasteel.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/ingots/durasteel.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/ingots/durasteel.json",
@@ -655,7 +655,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/sheets/durasteel_sheet.png",
       "sourceSha256": "6f094ae779bc1d5c9cfd69e44d95cbe509cfedc7d768d4d35c0ce341f8d220e3",
-      "destination": "assets/mandomc/textures/custom/metals/sheets/durasteel_sheet.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/sheets/durasteel_sheet.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/sheets/durasteel_sheet.json",
@@ -665,7 +665,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/scraps/electrum_scrap.png",
       "sourceSha256": "c7ff36c832f9c43b747b3f12afb239f6b7c6f53d87a29ba51da57e10ca16ba13",
-      "destination": "assets/mandomc/textures/custom/metals/scraps/electrum_scrap.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/scraps/electrum_scrap.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/scraps/electrum_scrap.json",
@@ -675,7 +675,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/ingots/electrum.png",
       "sourceSha256": "a63707f74a4ad2e703ea4410755d51ce46b4bd11da1136ec15d87b68bef0c741",
-      "destination": "assets/mandomc/textures/custom/metals/ingots/electrum.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/ingots/electrum.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/ingots/electrum.json",
@@ -685,7 +685,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/sheets/electrum_sheet.png",
       "sourceSha256": "ae2f42e14dfad9610b070de75508ba3f50134f209d6bf1fbfbec1c520041f77b",
-      "destination": "assets/mandomc/textures/custom/metals/sheets/electrum_sheet.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/sheets/electrum_sheet.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/sheets/electrum_sheet.json",
@@ -695,7 +695,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/scraps/lommite_scrap.png",
       "sourceSha256": "44b287bb2fb2b1df5461e7152f85cd9fb5a57e61945fdfa042c5fdf5d9c4318c",
-      "destination": "assets/mandomc/textures/custom/metals/scraps/lommite_scrap.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/scraps/lommite_scrap.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/scraps/lommite_scrap.json",
@@ -705,7 +705,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/ingots/lommite.png",
       "sourceSha256": "0082a3f3f7edd148c0bffe779ce09ca1e606dd9ab8286bb630ba7cea9eced946",
-      "destination": "assets/mandomc/textures/custom/metals/ingots/lommite.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/ingots/lommite.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/ingots/lommite.json",
@@ -715,7 +715,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/sheets/lommite_sheet.png",
       "sourceSha256": "266af11787eb4be7c90b89fd95cd7400f322bf5f6135f8ce246f7dfe54f0ea9f",
-      "destination": "assets/mandomc/textures/custom/metals/sheets/lommite_sheet.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/sheets/lommite_sheet.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/sheets/lommite_sheet.json",
@@ -725,7 +725,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/scraps/mandalorian_iron_scrap.png",
       "sourceSha256": "e8b59613793a564654921d7a77b4691448473ba7ffaa1e50febf801d16386bf8",
-      "destination": "assets/mandomc/textures/custom/metals/scraps/mandalorian_iron_scrap.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/scraps/mandalorian_iron_scrap.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/scraps/mandalorian_iron_scrap.json",
@@ -735,7 +735,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/ingots/mandalorian_iron.png",
       "sourceSha256": "782bd1a27d1ae1bb37fe9d9585c90229b1b6b99285a0c7239b4e6df832f08728",
-      "destination": "assets/mandomc/textures/custom/metals/ingots/mandalorian_iron.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/ingots/mandalorian_iron.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/ingots/mandalorian_iron.json",
@@ -745,7 +745,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/sheets/mandalorian_sheet.png",
       "sourceSha256": "767b62435f517cf7d0888a06b6b0d9906360582254207ae56015632ef63812e7",
-      "destination": "assets/mandomc/textures/custom/metals/sheets/mandalorian_sheet.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/sheets/mandalorian_sheet.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/sheets/mandalorian_sheet.json",
@@ -755,7 +755,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/scraps/neuranium_scrap.png",
       "sourceSha256": "a0f6f6b2dc0e28ada67c65b86817e116e2a9d57e3fd73838a31f60121a064bdd",
-      "destination": "assets/mandomc/textures/custom/metals/scraps/neuranium_scrap.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/scraps/neuranium_scrap.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/scraps/neuranium_scrap.json",
@@ -765,7 +765,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/ingots/neuranium.png",
       "sourceSha256": "6aa4b5390b40ead9eb928cb23562ee3cf4ec2e42dc6d3afe4a300dcd6216df35",
-      "destination": "assets/mandomc/textures/custom/metals/ingots/neuranium.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/ingots/neuranium.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/ingots/neuranium.json",
@@ -775,7 +775,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/sheets/neuranium_sheet.png",
       "sourceSha256": "d045fd27e4f057197a98ff62d774359e568f346d481e0bffb8181936ddbc9404",
-      "destination": "assets/mandomc/textures/custom/metals/sheets/neuranium_sheet.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/sheets/neuranium_sheet.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/sheets/neuranium_sheet.json",
@@ -785,7 +785,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/scraps/phrik_scrap.png",
       "sourceSha256": "7799dbf89f5a40f05cea42ce12e75139d0cb014ad1ed9445288ef65e915c33e5",
-      "destination": "assets/mandomc/textures/custom/metals/scraps/phrik_scrap.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/scraps/phrik_scrap.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/scraps/phrik_scrap.json",
@@ -795,7 +795,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/ingots/phrik.png",
       "sourceSha256": "a9f98f664cd0982f0c94430730ccc89c34f02f4a38121a70668f4371259337df",
-      "destination": "assets/mandomc/textures/custom/metals/ingots/phrik.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/ingots/phrik.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/ingots/phrik.json",
@@ -805,7 +805,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/sheets/phrik_sheet.png",
       "sourceSha256": "c8e307b3fbb705d33fc438d8f3b91a14583256760d8739fa003487e73f41c773",
-      "destination": "assets/mandomc/textures/custom/metals/sheets/phrik_sheet.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/sheets/phrik_sheet.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/sheets/phrik_sheet.json",
@@ -815,7 +815,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/scraps/songsteel_scrap.png",
       "sourceSha256": "cb8619f1a2fcd726bae792430ba28d22e856a5d592828a6d27d22fda2af5a7a1",
-      "destination": "assets/mandomc/textures/custom/metals/scraps/songsteel_scrap.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/scraps/songsteel_scrap.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/scraps/songsteel_scrap.json",
@@ -825,7 +825,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/ingots/songsteel.png",
       "sourceSha256": "0f60af320376ec9f3120d8d52b0e255841354a7b5782c6a0fa01ff2528731b7f",
-      "destination": "assets/mandomc/textures/custom/metals/ingots/songsteel.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/ingots/songsteel.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/ingots/songsteel.json",
@@ -835,7 +835,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/metals/sheets/songsteel_sheet.png",
       "sourceSha256": "67ce532b5b7a8f630cac75e58db1723e3fc02c4a19a013c8fd231a547c005e2e",
-      "destination": "assets/mandomc/textures/custom/metals/sheets/songsteel_sheet.png"
+      "destination": "assets/mandomc/textures/item/legacy/metals/sheets/songsteel_sheet.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/metals/sheets/songsteel_sheet.json",
@@ -845,7 +845,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/tools/durasteel_pickaxe.png",
       "sourceSha256": "41f95bfbad45244427bbd6a20bbcc75668c4897cbc4bc5a7d502d675faa77646",
-      "destination": "assets/mandomc/textures/custom/tools/durasteel_pickaxe.png"
+      "destination": "assets/mandomc/textures/item/legacy/tools/durasteel_pickaxe.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/tools/durasteel_pickaxe.json",
@@ -855,7 +855,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/tools/durasteel_shovel.png",
       "sourceSha256": "d38c8ec37f53c8f35e2f1c3cdca33b6604ca00c92d61dde22b9b6f4fee154fd8",
-      "destination": "assets/mandomc/textures/custom/tools/durasteel_shovel.png"
+      "destination": "assets/mandomc/textures/item/legacy/tools/durasteel_shovel.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/tools/durasteel_shovel.json",
@@ -865,7 +865,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/tools/durasteel_wrench.png",
       "sourceSha256": "5932da782cae67dcd41e801fbacb7c1a5ec2dbb2229c587716ed4a73b727a919",
-      "destination": "assets/mandomc/textures/custom/tools/durasteel_wrench.png"
+      "destination": "assets/mandomc/textures/item/legacy/tools/durasteel_wrench.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/tools/durasteel_wrench.json",
@@ -875,7 +875,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/tools/beskar_pickaxe.png",
       "sourceSha256": "f575d9c13ebb037a0ac0227379db02cd915f3d487c21e28497605facfd8da455",
-      "destination": "assets/mandomc/textures/custom/tools/beskar_pickaxe.png"
+      "destination": "assets/mandomc/textures/item/legacy/tools/beskar_pickaxe.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/tools/beskar_pickaxe.json",
@@ -885,7 +885,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/tools/beskar_shovel.png",
       "sourceSha256": "3edb4bf65c1ff6d42a3d8fea3a9aabc68a992241eb4b258ba6ad5dbccd0c9ed4",
-      "destination": "assets/mandomc/textures/custom/tools/beskar_shovel.png"
+      "destination": "assets/mandomc/textures/item/legacy/tools/beskar_shovel.png"
     },
     {
       "sourcePath": "assets/minecraft/models/item/tools/beskar_shovel.json",
@@ -1130,182 +1130,182 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/simple_emitter_coil.png",
       "sourceSha256": "e223c4d4b193f2d13daa5756bd2f6cced3c1fb4f222343540ddd7777a737690d",
-      "destination": "assets/mandomc/textures/custom/materials/simple_emitter_coil.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/simple_emitter_coil.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/high_tech_stabilizer.png",
       "sourceSha256": "b23e209938767fc797576d79aeb11b4ee78185e6edc171bca0be03e70351540f",
-      "destination": "assets/mandomc/textures/custom/materials/high_tech_stabilizer.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/high_tech_stabilizer.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/precision_emitter_coil.png",
       "sourceSha256": "23c384cfba34975259d9264848ebfe9392b87b293e386acdc9b997ae4aad69e4",
-      "destination": "assets/mandomc/textures/custom/materials/precision_emitter_coil.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/precision_emitter_coil.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/durasteel_power_core.png",
       "sourceSha256": "179b363c36619f00e0905bf3ebfd2f93651ba370c8bde02a8ef671a91c2201f9",
-      "destination": "assets/mandomc/textures/custom/materials/durasteel_power_core.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/durasteel_power_core.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/makeshift_recoil_buffer.png",
       "sourceSha256": "29f29c1109e8bb33ac3b0514070a5cc693d8c42e4121eb64f534704abcab76cb",
-      "destination": "assets/mandomc/textures/custom/materials/makeshift_recoil_buffer.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/makeshift_recoil_buffer.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/basic_ion_chamber.png",
       "sourceSha256": "883da775cf28aeed0dcb7c026b1ace18a23381fc28a7ca7fbab7bbf94a128913",
-      "destination": "assets/mandomc/textures/custom/materials/basic_ion_chamber.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/basic_ion_chamber.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/durable_mid_grade_power_core.png",
       "sourceSha256": "ec5ad89d02a214833c7135405a599abf8cd1e5d77097ea014b317f83332c285b",
-      "destination": "assets/mandomc/textures/custom/materials/durable_mid_grade_power_core.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/durable_mid_grade_power_core.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/basic_power_cell.png",
       "sourceSha256": "ab4214fbff14882bdb89126c4b9e36d15721a2b59c7397e189ead6194d08f155",
-      "destination": "assets/mandomc/textures/custom/materials/basic_power_cell.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/basic_power_cell.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/barrel_liner.png",
       "sourceSha256": "3cd9a7d949b07afd1044df695d56e7a4c83de7780f4fa01b4e0d02a40179e04e",
-      "destination": "assets/mandomc/textures/custom/materials/barrel_liner.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/barrel_liner.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/coaxium_fragment.png",
       "sourceSha256": "79d1d8a0de172790f7e8bf0f1bbacbc67a30b6c3514da97b64fbd7ac61d3de59",
-      "destination": "assets/mandomc/textures/custom/materials/coaxium_fragment.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/coaxium_fragment.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/circuit_board.png",
       "sourceSha256": "9faaabd7213d533e477b5a8bb543e82153102601e5e6c1370ccb7abc6ac14c46",
-      "destination": "assets/mandomc/textures/custom/materials/circuit_board.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/circuit_board.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/incredibly_strong_and_lightweight_frame.png",
       "sourceSha256": "ba6b42cbe24ba88f490d9e17894067d3f8bc373ef1aea2f3fe3c66d3e34e0e89",
-      "destination": "assets/mandomc/textures/custom/materials/incredibly_strong_and_lightweight_frame.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/incredibly_strong_and_lightweight_frame.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/modular_recoil_buffer.png",
       "sourceSha256": "ffbd47c1aa01cc3804b3b366e7805f62c887299af2954fa8543a0af4a8ef873a",
-      "destination": "assets/mandomc/textures/custom/materials/modular_recoil_buffer.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/modular_recoil_buffer.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/state_of_the_art_recoil_dampener.png",
       "sourceSha256": "2177aebcc68222606b2fdaf4b27befbd31e858cfd72e2e3da7d41f45a60ad164",
-      "destination": "assets/mandomc/textures/custom/materials/state_of_the_art_recoil_dampener.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/state_of_the_art_recoil_dampener.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/reinforced_barrel_liner.png",
       "sourceSha256": "641d89a1d71a8eeb748a3ef97c51186369d672d0b3a0d6a3ee306242e3a55877",
-      "destination": "assets/mandomc/textures/custom/materials/reinforced_barrel_liner.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/reinforced_barrel_liner.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/worn_barrel_liner.png",
       "sourceSha256": "0a571924166691655ae120aecc76c0d34192163415ba343a706da569253e5e43",
-      "destination": "assets/mandomc/textures/custom/materials/worn_barrel_liner.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/worn_barrel_liner.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/cortosis_alloy_frame.png",
       "sourceSha256": "ab2b84a231aaf9d66fb142844ae080f7ba05b73be4aff7de9d64c14732a0470d",
-      "destination": "assets/mandomc/textures/custom/materials/cortosis_alloy_frame.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/cortosis_alloy_frame.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/enhanced_ion_chamber.png",
       "sourceSha256": "d1ebd243e39ead2d6d3a223fa624a7af9e636626ffbd5763ab27303f4baf2b86",
-      "destination": "assets/mandomc/textures/custom/materials/enhanced_ion_chamber.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/enhanced_ion_chamber.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/old_and_worn_barrel_liner.png",
       "sourceSha256": "e4a80b02cf8eea167713332d55e50502013475fc42ef534b05a7e2f27ac14aaf",
-      "destination": "assets/mandomc/textures/custom/materials/old_and_worn_barrel_liner.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/old_and_worn_barrel_liner.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/finely_tuned_emitter_coil.png",
       "sourceSha256": "0a43c0d6da79cca7cfa1e7556410a159079fc058b7915ac37c4598beddd4117d",
-      "destination": "assets/mandomc/textures/custom/materials/finely_tuned_emitter_coil.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/finely_tuned_emitter_coil.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/old_ion_chamber.png",
       "sourceSha256": "0b37c07ea65c8e04b0eac3dd4d5a9b9dfb8434f31ecdf49e4c0758c24828cf50",
-      "destination": "assets/mandomc/textures/custom/materials/old_ion_chamber.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/old_ion_chamber.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/reinforced_ion_chamber.png",
       "sourceSha256": "69877b4e680907820d5f2c74b4820fed1115a8c5d9c4c04787464f7553e90a6f",
-      "destination": "assets/mandomc/textures/custom/materials/reinforced_ion_chamber.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/reinforced_ion_chamber.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/basic_emitter_coil.png",
       "sourceSha256": "f0329bfeda9e0eb9a4af76c096f185ceb95c46f64f4d4b91bce074fbbbca0049",
-      "destination": "assets/mandomc/textures/custom/materials/basic_emitter_coil.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/basic_emitter_coil.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/batteries.png",
       "sourceSha256": "c85e19b260eac1f928d8927fea452461ca3131bbec67e816c8b615c72d365e52",
-      "destination": "assets/mandomc/textures/custom/materials/batteries.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/batteries.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/primitive_recoil_buffer.png",
       "sourceSha256": "3878b5fd09324a2a310d5140d70ed06935d675cfa70ddd3b86489ddfc8c70605",
-      "destination": "assets/mandomc/textures/custom/materials/primitive_recoil_buffer.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/primitive_recoil_buffer.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/ionized_focusing_lens.png",
       "sourceSha256": "03463a37f07ea1b8ec0cd3de61a9170385855df87d688002185b7a0b2ba66dac",
-      "destination": "assets/mandomc/textures/custom/materials/ionized_focusing_lens.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/ionized_focusing_lens.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/kyber_tech_recoil_dampener.png",
       "sourceSha256": "ab3650ddbc3d40af2231ef1dbc7785901a39ac21db1c6fbd3c1768a96de3eac9",
-      "destination": "assets/mandomc/textures/custom/materials/kyber_tech_recoil_dampener.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/kyber_tech_recoil_dampener.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/biosample.png",
       "sourceSha256": "4030d3359244d65b7e7159337fe786c4e2b67a5d78f31389bafe2b48e26a0dad",
-      "destination": "assets/mandomc/textures/custom/materials/biosample.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/biosample.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/rough_power_cell.png",
       "sourceSha256": "1901111d0e5dd6ac40d8e376fadf824534839551b7a853d0fd74e20303a893a9",
-      "destination": "assets/mandomc/textures/custom/materials/rough_power_cell.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/rough_power_cell.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/materials/recoil_reduction_system.png",
       "sourceSha256": "97ca6af7707c73ba5425fbf001a0d92e299e7e175525217ef82df01aac3a0ada",
-      "destination": "assets/mandomc/textures/custom/materials/recoil_reduction_system.png"
+      "destination": "assets/mandomc/textures/item/legacy/materials/recoil_reduction_system.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/vehicles/purple_xwing.png",
       "sourceSha256": "cf05f39958eda285018907968aac5286ff40e4aeb68eccb365302d78fe611edb",
-      "destination": "assets/mandomc/textures/custom/vehicles/purple_xwing.png"
+      "destination": "assets/mandomc/textures/item/legacy/vehicles/purple_xwing.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/vehicles/components/tiefighter_cockpit.png",
       "sourceSha256": "10d5aa48240f362b8228bafcdfe013a9c6080b428a8bdcea4fdb1fde79b1f636",
-      "destination": "assets/mandomc/textures/custom/vehicles/components/tiefighter_cockpit.png"
+      "destination": "assets/mandomc/textures/item/legacy/vehicles/components/tiefighter_cockpit.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/vehicles/components/x_wing_cockpit.png",
       "sourceSha256": "9d8c736e75c05ce08a7894e11a535fcb5e532149eabe00bd6a1cf78d845e1a1b",
-      "destination": "assets/mandomc/textures/custom/vehicles/components/x_wing_cockpit.png"
+      "destination": "assets/mandomc/textures/item/legacy/vehicles/components/x_wing_cockpit.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/vehicles/components/tiefighter_wing.png",
       "sourceSha256": "47f0cfdf806f720e88d19284090d289aa20b90a5e415f03e2649621b9e0e577b",
-      "destination": "assets/mandomc/textures/custom/vehicles/components/tiefighter_wing.png"
+      "destination": "assets/mandomc/textures/item/legacy/vehicles/components/tiefighter_wing.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/vehicles/components/x_wing_left_wing.png",
       "sourceSha256": "66e5562e6ab0a3dc5b0f0a7b4ad94671b2a01c0b364e874cd98a1ecb4d7892de",
-      "destination": "assets/mandomc/textures/custom/vehicles/components/x_wing_left_wing.png"
+      "destination": "assets/mandomc/textures/item/legacy/vehicles/components/x_wing_left_wing.png"
     },
     {
       "sourcePath": "assets/minecraft/textures/custom/vehicles/components/x_wing_right_wing.png",
       "sourceSha256": "de375cef2e058c04a02af9de6b253dd7856a4db32fb8d4b997f6a9addba351c5",
-      "destination": "assets/mandomc/textures/custom/vehicles/components/x_wing_right_wing.png"
+      "destination": "assets/mandomc/textures/item/legacy/vehicles/components/x_wing_right_wing.png"
     }
   ],
   "addedItems": [
@@ -1467,7 +1467,8 @@
     "Fuel and keys are catalog components only; existing vehicle fuel policy and retired keycard dungeon logic are unchanged.",
     "Right X-wing wing recipe reverses the original vertical row order to disambiguate the identical legacy left/right recipes. Ingredient quantities are preserved.",
     "Repaired cryo_gel model dispatch to existing cyro_gel. Repaired light_frame texture to lightweight_frame. Missing high_efficiency_energy_segment texture uses the original durable_mid_grade_power_core art. Money note has no original pack dispatch and keeps its vanilla paper icon.",
-    "Recovered lightsabers reference the separately delivered unmodified official JustTimm pack; shared current saber guard and throw tuning is retained."
+    "Recovered lightsabers reference the separately delivered unmodified official JustTimm pack; shared current saber guard and throw tuning is retained.",
+    "Corrected all legacy custom texture paths to item/legacy for the 26.1.2 item atlas. Files existing under textures/custom were not enough: the client could not stitch them. Explicit particle aliases also repair legacy 3D model warnings."
   ],
   "userAssets": [
     {
@@ -1525,5 +1526,23 @@
       "sha256": "3421fd328ba54f96f5f114be9de428b97f47b2d0ac8bca837c7a3a3c823253f9",
       "changes": "Runtime model only changes texture references into the mandomc namespace."
     }
-  ]
+  ],
+  "textureAtlasCorrection": {
+    "movedTextures": 125,
+    "changedModels": 147,
+    "particleAliases": 22
+  },
+  "helmetInventoryPoses": {
+    "3dGuiRotation": [
+      23,
+      -165,
+      18
+    ],
+    "robesGuiRotation": [
+      18,
+      -15,
+      -8
+    ],
+    "changes": "Explicit front-facing GUI poses with two-axis tilt and a small roll. Other 3D display contexts and geometry are preserved."
+  }
 }
