@@ -1,0 +1,929 @@
+{
+  "schema-version": 1,
+  "method": "Luminance-ordered original RGB palette, linearly interpolated over normalized 32px template shading; unchanged template alpha and pixel positions.",
+  "textures": [
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/ingots/agrinium.png",
+      "original": "artwork/metals/16x/ingots/agrinium.png",
+      "originalSha256": "e4c162d2a3f7143d05578dfaa7d1115aea116d979e73d9e41b07fa499e12c6fa",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/ingots/durasteel.png",
+      "palette": [
+        [
+          37,
+          54,
+          61
+        ],
+        [
+          54,
+          72,
+          79
+        ],
+        [
+          111,
+          127,
+          133
+        ],
+        [
+          131,
+          147,
+          153
+        ],
+        [
+          186,
+          178,
+          147
+        ],
+        [
+          191,
+          190,
+          132
+        ],
+        [
+          212,
+          189,
+          140
+        ],
+        [
+          255,
+          253,
+          231
+        ]
+      ],
+      "outputSha256": "8d8ac6e367282e20843c9cd0aa3b39b669161120ccdbe547db513f6389b956a7"
+    },
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/ingots/aurodium.png",
+      "original": "artwork/metals/16x/ingots/aurodium.png",
+      "originalSha256": "1bb823513bc68c6cf21a72810797eb70f42ff2d920fcfcf4d15dfcb3a6f2caea",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/ingots/durasteel.png",
+      "palette": [
+        [
+          14,
+          13,
+          64
+        ],
+        [
+          67,
+          66,
+          150
+        ],
+        [
+          97,
+          96,
+          190
+        ],
+        [
+          108,
+          106,
+          201
+        ],
+        [
+          129,
+          128,
+          203
+        ],
+        [
+          149,
+          149,
+          204
+        ],
+        [
+          170,
+          170,
+          214
+        ],
+        [
+          187,
+          187,
+          222
+        ],
+        [
+          201,
+          201,
+          229
+        ],
+        [
+          214,
+          210,
+          242
+        ]
+      ],
+      "outputSha256": "623adae92a14c847818581129533b7a32a633bbb9bfa9b3ae864ab927318c085"
+    },
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/ingots/cortosis.png",
+      "original": "artwork/metals/16x/ingots/cortosis.png",
+      "originalSha256": "6566fe4afc913d1b47e4f4029b92357b81bfe80be2c6dd923856a7e89f3148fd",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/ingots/durasteel.png",
+      "palette": [
+        [
+          80,
+          44,
+          30
+        ],
+        [
+          153,
+          95,
+          58
+        ],
+        [
+          215,
+          115,
+          77
+        ],
+        [
+          241,
+          145,
+          42
+        ]
+      ],
+      "outputSha256": "9d50156de4b21e6be2a3969f2db42f56066d6af6c89cff568a8d9ed4d4da88d1"
+    },
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/ingots/lommite.png",
+      "original": "artwork/metals/16x/ingots/lommite.png",
+      "originalSha256": "0082a3f3f7edd148c0bffe779ce09ca1e606dd9ab8286bb630ba7cea9eced946",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/ingots/durasteel.png",
+      "palette": [
+        [
+          57,
+          57,
+          74
+        ],
+        [
+          90,
+          90,
+          90
+        ],
+        [
+          98,
+          98,
+          106
+        ],
+        [
+          131,
+          139,
+          148
+        ],
+        [
+          180,
+          189,
+          197
+        ],
+        [
+          238,
+          213,
+          172
+        ],
+        [
+          230,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "outputSha256": "983b267f55ff03fd0ce7251d941650676577e9efb8803fa49defdd49409fc0f0"
+    },
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/ingots/mandalorian_iron.png",
+      "original": "artwork/metals/16x/ingots/mandalorian_iron.png",
+      "originalSha256": "782bd1a27d1ae1bb37fe9d9585c90229b1b6b99285a0c7239b4e6df832f08728",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/ingots/durasteel.png",
+      "palette": [
+        [
+          72,
+          53,
+          53
+        ],
+        [
+          84,
+          66,
+          66
+        ],
+        [
+          91,
+          74,
+          74
+        ],
+        [
+          97,
+          81,
+          81
+        ],
+        [
+          101,
+          86,
+          86
+        ],
+        [
+          116,
+          101,
+          101
+        ],
+        [
+          117,
+          102,
+          102
+        ],
+        [
+          125,
+          112,
+          112
+        ],
+        [
+          138,
+          126,
+          126
+        ],
+        [
+          155,
+          144,
+          144
+        ],
+        [
+          160,
+          151,
+          151
+        ],
+        [
+          178,
+          170,
+          170
+        ],
+        [
+          182,
+          175,
+          175
+        ],
+        [
+          195,
+          189,
+          189
+        ],
+        [
+          204,
+          199,
+          199
+        ],
+        [
+          214,
+          210,
+          210
+        ],
+        [
+          220,
+          216,
+          216
+        ],
+        [
+          226,
+          223,
+          223
+        ],
+        [
+          235,
+          234,
+          234
+        ],
+        [
+          249,
+          249,
+          249
+        ],
+        [
+          252,
+          252,
+          252
+        ]
+      ],
+      "outputSha256": "9a6db86f5b344b8782cce1b0c18115c09db5ec64e274a037aa87d4dc75507e06"
+    },
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/ingots/neuranium.png",
+      "original": "artwork/metals/16x/ingots/neuranium.png",
+      "originalSha256": "6aa4b5390b40ead9eb928cb23562ee3cf4ec2e42dc6d3afe4a300dcd6216df35",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/ingots/durasteel.png",
+      "palette": [
+        [
+          46,
+          56,
+          47
+        ],
+        [
+          67,
+          66,
+          53
+        ],
+        [
+          72,
+          121,
+          77
+        ],
+        [
+          113,
+          110,
+          68
+        ],
+        [
+          162,
+          156,
+          67
+        ],
+        [
+          170,
+          255,
+          177
+        ],
+        [
+          227,
+          255,
+          229
+        ],
+        [
+          255,
+          250,
+          203
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "outputSha256": "737dec87f837c61620e23671b91c263cd49759225898df2f78ae85782c3868d6"
+    },
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/ingots/phrik.png",
+      "original": "artwork/metals/16x/ingots/phrik.png",
+      "originalSha256": "a9f98f664cd0982f0c94430730ccc89c34f02f4a38121a70668f4371259337df",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/ingots/durasteel.png",
+      "palette": [
+        [
+          39,
+          50,
+          59
+        ],
+        [
+          55,
+          71,
+          79
+        ],
+        [
+          68,
+          90,
+          100
+        ],
+        [
+          97,
+          117,
+          114
+        ],
+        [
+          114,
+          134,
+          131
+        ],
+        [
+          120,
+          144,
+          156
+        ],
+        [
+          143,
+          159,
+          167
+        ],
+        [
+          189,
+          189,
+          189
+        ],
+        [
+          224,
+          224,
+          224
+        ]
+      ],
+      "outputSha256": "f3bef4ddeec61f41a6883a06fa012f06206ef430de2fe37d304d98123246c86a"
+    },
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/ingots/songsteel.png",
+      "original": "artwork/metals/16x/ingots/songsteel.png",
+      "originalSha256": "0f60af320376ec9f3120d8d52b0e255841354a7b5782c6a0fa01ff2528731b7f",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/ingots/durasteel.png",
+      "palette": [
+        [
+          57,
+          52,
+          40
+        ],
+        [
+          82,
+          72,
+          46
+        ],
+        [
+          95,
+          81,
+          75
+        ],
+        [
+          111,
+          98,
+          57
+        ],
+        [
+          149,
+          135,
+          115
+        ],
+        [
+          152,
+          135,
+          126
+        ],
+        [
+          197,
+          172,
+          157
+        ],
+        [
+          204,
+          179,
+          152
+        ],
+        [
+          251,
+          231,
+          219
+        ],
+        [
+          254,
+          254,
+          254
+        ]
+      ],
+      "outputSha256": "d6330005d45b77ddab4944543938185224f9d66976961a278dc284793af47fcb"
+    },
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/sheets/agrinium_sheet.png",
+      "original": "artwork/metals/16x/sheets/agrinium_sheet.png",
+      "originalSha256": "e53f22319955bc7b77a7348bd6f788e64987d8e165ede3529119010ce68594e9",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/sheets/durasteel_sheet.png",
+      "palette": [
+        [
+          54,
+          72,
+          79
+        ],
+        [
+          111,
+          127,
+          133
+        ],
+        [
+          131,
+          147,
+          153
+        ],
+        [
+          186,
+          178,
+          147
+        ],
+        [
+          191,
+          190,
+          132
+        ],
+        [
+          212,
+          189,
+          140
+        ],
+        [
+          255,
+          253,
+          231
+        ]
+      ],
+      "outputSha256": "d5aad6f22c6657ec286f22145091c732fdaa6337c7cda8ecce9b956d5e6fb722"
+    },
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/sheets/aurodium_sheet.png",
+      "original": "artwork/metals/16x/sheets/aurodium_sheet.png",
+      "originalSha256": "091758a19d93ea3243264e0678e88fb6e2c5ceb78fd69a4c11ac2fecaea5ab02",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/sheets/durasteel_sheet.png",
+      "palette": [
+        [
+          67,
+          66,
+          150
+        ],
+        [
+          97,
+          96,
+          190
+        ],
+        [
+          129,
+          128,
+          203
+        ],
+        [
+          149,
+          149,
+          204
+        ],
+        [
+          170,
+          170,
+          214
+        ],
+        [
+          180,
+          179,
+          228
+        ],
+        [
+          187,
+          187,
+          222
+        ],
+        [
+          195,
+          194,
+          234
+        ],
+        [
+          201,
+          201,
+          229
+        ],
+        [
+          214,
+          210,
+          242
+        ]
+      ],
+      "outputSha256": "02bf21253265daac0b49a7c18a438ee791d996036eb85c7eda97a02bab4fbf7b"
+    },
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/sheets/cortosis_sheet.png",
+      "original": "artwork/metals/16x/sheets/cortosis_sheet.png",
+      "originalSha256": "ef81199dd40ea0f751d4805324e7a4f3eff6c99de9b8a36ae5fcf367cf5e063c",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/sheets/durasteel_sheet.png",
+      "palette": [
+        [
+          80,
+          44,
+          30
+        ],
+        [
+          153,
+          95,
+          58
+        ],
+        [
+          215,
+          115,
+          77
+        ],
+        [
+          241,
+          145,
+          42
+        ]
+      ],
+      "outputSha256": "c8418736fc76e4c4faf718ea290f50a4137a6c7496265ed46f2c40c38ad570ae"
+    },
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/sheets/lommite_sheet.png",
+      "original": "artwork/metals/16x/sheets/lommite_sheet.png",
+      "originalSha256": "266af11787eb4be7c90b89fd95cd7400f322bf5f6135f8ce246f7dfe54f0ea9f",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/sheets/durasteel_sheet.png",
+      "palette": [
+        [
+          57,
+          57,
+          74
+        ],
+        [
+          90,
+          90,
+          90
+        ],
+        [
+          98,
+          98,
+          106
+        ],
+        [
+          131,
+          139,
+          148
+        ],
+        [
+          180,
+          189,
+          197
+        ],
+        [
+          238,
+          213,
+          172
+        ],
+        [
+          230,
+          255,
+          255
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "outputSha256": "c64c64d5c5ce23d626403592aefd5dcd1020684040eb11dc9d678c0e2bd1627d"
+    },
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/sheets/mandalorian_sheet.png",
+      "original": "artwork/metals/16x/sheets/mandalorian_sheet.png",
+      "originalSha256": "767b62435f517cf7d0888a06b6b0d9906360582254207ae56015632ef63812e7",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/sheets/durasteel_sheet.png",
+      "palette": [
+        [
+          81,
+          63,
+          63
+        ],
+        [
+          84,
+          66,
+          66
+        ],
+        [
+          91,
+          74,
+          74
+        ],
+        [
+          97,
+          81,
+          81
+        ],
+        [
+          101,
+          86,
+          86
+        ],
+        [
+          107,
+          92,
+          92
+        ],
+        [
+          108,
+          93,
+          93
+        ],
+        [
+          116,
+          101,
+          101
+        ],
+        [
+          144,
+          133,
+          133
+        ],
+        [
+          160,
+          151,
+          151
+        ],
+        [
+          164,
+          155,
+          155
+        ],
+        [
+          168,
+          159,
+          159
+        ],
+        [
+          175,
+          166,
+          166
+        ],
+        [
+          182,
+          175,
+          175
+        ],
+        [
+          187,
+          181,
+          181
+        ],
+        [
+          195,
+          189,
+          189
+        ],
+        [
+          204,
+          199,
+          199
+        ],
+        [
+          209,
+          204,
+          204
+        ],
+        [
+          235,
+          233,
+          233
+        ],
+        [
+          252,
+          252,
+          252
+        ]
+      ],
+      "outputSha256": "297b514fe0ba538d785ec2562927aacf55cc5d1162a82b1042302e6476603d65"
+    },
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/sheets/neuranium_sheet.png",
+      "original": "artwork/metals/16x/sheets/neuranium_sheet.png",
+      "originalSha256": "d045fd27e4f057197a98ff62d774359e568f346d481e0bffb8181936ddbc9404",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/sheets/durasteel_sheet.png",
+      "palette": [
+        [
+          67,
+          66,
+          53
+        ],
+        [
+          72,
+          121,
+          77
+        ],
+        [
+          113,
+          110,
+          68
+        ],
+        [
+          162,
+          156,
+          67
+        ],
+        [
+          170,
+          255,
+          177
+        ],
+        [
+          227,
+          255,
+          229
+        ],
+        [
+          255,
+          250,
+          203
+        ],
+        [
+          255,
+          255,
+          255
+        ]
+      ],
+      "outputSha256": "25860ad1ce156418c09d1c9fd7256bc42684eaea3a95d2b0911d09613e979d09"
+    },
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/sheets/phrik_sheet.png",
+      "original": "artwork/metals/16x/sheets/phrik_sheet.png",
+      "originalSha256": "c8e307b3fbb705d33fc438d8f3b91a14583256760d8739fa003487e73f41c773",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/sheets/durasteel_sheet.png",
+      "palette": [
+        [
+          55,
+          71,
+          79
+        ],
+        [
+          68,
+          90,
+          100
+        ],
+        [
+          68,
+          99,
+          102
+        ],
+        [
+          97,
+          117,
+          114
+        ],
+        [
+          114,
+          134,
+          131
+        ],
+        [
+          143,
+          159,
+          167
+        ],
+        [
+          189,
+          189,
+          189
+        ],
+        [
+          224,
+          224,
+          224
+        ]
+      ],
+      "outputSha256": "0d86aa5216f39855da7dd391957e20d95950caef2a9dbbd82e2992764014f0d4"
+    },
+    {
+      "texture": "src/assets/mandomc/textures/item/legacy/metals/sheets/songsteel_sheet.png",
+      "original": "artwork/metals/16x/sheets/songsteel_sheet.png",
+      "originalSha256": "67ce532b5b7a8f630cac75e58db1723e3fc02c4a19a013c8fd231a547c005e2e",
+      "template": "src/assets/mandomc/textures/item/legacy/metals/sheets/durasteel_sheet.png",
+      "palette": [
+        [
+          82,
+          72,
+          46
+        ],
+        [
+          95,
+          81,
+          75
+        ],
+        [
+          107,
+          97,
+          92
+        ],
+        [
+          152,
+          135,
+          126
+        ],
+        [
+          197,
+          172,
+          157
+        ],
+        [
+          204,
+          179,
+          152
+        ],
+        [
+          251,
+          231,
+          219
+        ],
+        [
+          254,
+          254,
+          254
+        ]
+      ],
+      "outputSha256": "1ea83ad2c6f7b28f120777ad1d3d045360f361dc432ff110f729880d6f9a03c4"
+    }
+  ],
+  "preserved32px": {
+    "src/assets/mandomc/textures/item/legacy/metals/sheets/electrum_sheet.png": "ae2f42e14dfad9610b070de75508ba3f50134f209d6bf1fbfbec1c520041f77b",
+    "src/assets/mandomc/textures/item/legacy/metals/sheets/beskar_sheet.png": "f00671d7dcc81a336b83e6031242f1cebba2990f7a7a690cb1c0e3bb3a15cf4d",
+    "src/assets/mandomc/textures/item/legacy/metals/sheets/durasteel_sheet.png": "6f094ae779bc1d5c9cfd69e44d95cbe509cfedc7d768d4d35c0ce341f8d220e3",
+    "src/assets/mandomc/textures/item/legacy/metals/ingots/electrum.png": "a63707f74a4ad2e703ea4410755d51ce46b4bd11da1136ec15d87b68bef0c741",
+    "src/assets/mandomc/textures/item/legacy/metals/ingots/durasteel.png": "9fc730eda635fc979227a1053b645019e1d5b559242a7c4da381bef94cdcd3cd",
+    "src/assets/mandomc/textures/item/legacy/metals/ingots/beskar.png": "50a883adcbfae084831762f1d81c5b81578e7e58ff332797966bdb011138d665",
+    "src/assets/mandomc/textures/item/legacy/metals/scraps/aurodium_scrap.png": "b9f980522f4781cfef541cba776dcc92d1f5e918225b63b68b3581dda0d24c5e",
+    "src/assets/mandomc/textures/item/legacy/metals/scraps/beskar_scrap.png": "0b33c2a2d46dd4a4834895249b48767e40df505a9e9d22f673bedecdf8ccdc1d",
+    "src/assets/mandomc/textures/item/legacy/metals/scraps/neuranium_scrap.png": "a0f6f6b2dc0e28ada67c65b86817e116e2a9d57e3fd73838a31f60121a064bdd",
+    "src/assets/mandomc/textures/item/legacy/metals/scraps/mandalorian_iron_scrap.png": "e8b59613793a564654921d7a77b4691448473ba7ffaa1e50febf801d16386bf8",
+    "src/assets/mandomc/textures/item/legacy/metals/scraps/durasteel_scrap.png": "450ab85edd0a27e6eb248c0b6d56ffcf88ce13eee522ff07944574d7dc55fa08",
+    "src/assets/mandomc/textures/item/legacy/metals/scraps/songsteel_scrap.png": "cb8619f1a2fcd726bae792430ba28d22e856a5d592828a6d27d22fda2af5a7a1",
+    "src/assets/mandomc/textures/item/legacy/metals/scraps/phrik_scrap.png": "7799dbf89f5a40f05cea42ce12e75139d0cb014ad1ed9445288ef65e915c33e5",
+    "src/assets/mandomc/textures/item/legacy/metals/scraps/agrinium_scrap.png": "21dd168d6299d3299c56cd03d7f5195c1dd38bf0e12692289f3484b8a47e19bd",
+    "src/assets/mandomc/textures/item/legacy/metals/scraps/electrum_scrap.png": "c7ff36c832f9c43b747b3f12afb239f6b7c6f53d87a29ba51da57e10ca16ba13",
+    "src/assets/mandomc/textures/item/legacy/metals/scraps/lommite_scrap.png": "44b287bb2fb2b1df5461e7152f85cd9fb5a57e61945fdfa042c5fdf5d9c4318c",
+    "src/assets/mandomc/textures/item/legacy/metals/scraps/cortosis_scrap.png": "e02085d6fff0a940c36f76c6ad157c2e0a12cc3759ea04bd8d48f13af81944d5"
+  }
+}

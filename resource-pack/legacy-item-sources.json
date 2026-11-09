@@ -1544,5 +1544,11 @@
       -8
     ],
     "changes": "GUI-only upward pitch, retaining the accepted horizontal tilt and roll. Other display contexts and geometry are preserved."
+  },
+  "metalPaletteUpgrade": {
+    "manifest": "artwork/metals/palette-transfer.json",
+    "textures": 16,
+    "preserved32px": 17,
+    "method": "User-requested exact pixel palette transfer onto existing 32x32 Durasteel ingot/sheet templates. Original 16x16 files retained; existing 32x32 assets preserved."
   }
 }
