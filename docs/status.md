@@ -2,6 +2,8 @@
 Updated: 2026-11-09
 
 ## Milestone
+Merged-branch cleanup (2026-11-09): deleted 15 local completed-feature branches and 11 GitHub feature branches after verifying every tip is an ancestor of main. Confirmed remote deletion and unchanged main/Jabba-related/legacy branch tips. The two clean robe worktrees are detached at their existing commits, preserving their files. Active Jabba development, uncommitted changes, release tags and published packs are preserved. No gameplay code or runtime changes; no new tests required. Next action remains completing and validating the excluded Jabba slice before integration.
+
 Completed-feature integration (2026-11-09): main now combines the completed arrival/travel, E-11, robes and original icons, Vader saber, combat barriers/rules, sandy mobs/food/crafting presentation, galaxy warp assets, KOTH, native world/admin/personal-travel commands, saber durability tuning, global natural-slime restriction and server-list settings. Historical feature and pack branches are merged with their history preserved. KOTH/native utilities/saber follow-ups were extracted from a snapshot of the shared development checkout because those completed changes were still uncommitted there.
 
 Jabba-specific work is excluded: generic guards and dungeon operation, Bossk/Boba/Rancor/dioxis assets and gameplay, Tatooine access and the shared facing implementation developed with those mobs. All legacy recovery branches remain reference-only. Main has exactly Batuu, Earth and Hoth public warps, four configured existing dimensions and KOTH as its only registered event. The separate active Jabba checkout and its uncommitted files are preserved. Its old branch tip shares the already-completed Tusken history; no Jabba-specific commits are merged.
