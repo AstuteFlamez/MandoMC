@@ -586,6 +586,8 @@ public final class SaberService implements Listener {
             // Refresh default titles/badges, preserving player renames and custom lore/metadata.
             if (meta.hasDisplayName() && plain.serialize(meta.displayName()).equals(plain.serialize(template.displayName()))) {
                 meta.displayName(template.displayName());
+            } else if (meta.hasDisplayName()) {
+                meta.displayName(nonBold(meta.displayName()));
             }
             if (meta.hasLore() && !meta.lore().isEmpty()) {
                 var lore = new ArrayList<>(meta.lore());
@@ -595,6 +597,10 @@ public final class SaberService implements Listener {
             item.setItemMeta(meta);
         }
         e.getPlayer().getInventory().setContents(contents);
+    }
+    private static net.kyori.adventure.text.Component nonBold(net.kyori.adventure.text.Component name) {
+        return name.decoration(net.kyori.adventure.text.format.TextDecoration.BOLD, false)
+                .children(name.children().stream().map(SaberService::nonBold).toList());
     }
     public void close() {task.cancel();new ArrayList<>(flights.keySet()).forEach(this::finish);}
 }

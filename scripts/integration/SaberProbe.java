@@ -130,6 +130,15 @@ public final class SaberProbe extends JavaPlugin {
         actor.storage.setItem(0, actor.storage.getItem(1));
         check(!sabers.launch(actor.player), "switching variants cannot bypass the throw charge requirement");
         check(!sabers.isSaber(new ItemStack(Material.SHIELD)), "ordinary shields never become sabers");
+        var legacy = plugin.items().create("obiwan");
+        var meta = legacy.getItemMeta();
+        meta.displayName(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage()
+                .deserialize("<blue><bold>Obi-Wan's Lightsaber"));legacy.setItemMeta(meta);
+        actor.storage.setItem(0, legacy);
+        sabers.join(new org.bukkit.event.player.PlayerJoinEvent(actor.player, net.kyori.adventure.text.Component.empty()));
+        check(actor.storage.getItem(0).getItemMeta().displayName().decoration(net.kyori.adventure.text.format.TextDecoration.BOLD)
+                == net.kyori.adventure.text.format.TextDecoration.State.FALSE, "older legacy saber titles lose bold without losing their text");
+
     }
 
     private void verifyDurability(MandoPlugin plugin, World world) throws Exception {
