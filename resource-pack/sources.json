@@ -109,6 +109,18 @@
       "changes": "Common/weapon/ammo and uncommon/armor bitmap providers, original metrics, namespaced texture paths; control hints are text."
     },
     {
+      "sourcePath": "assets/minecraft/textures/default/armor.png",
+      "sourceSha256": "cb4d5efefcb384aa5803ed1fb98bd3125ae4e0cca04e856bc8e36ad7a765f132",
+      "destination": "assets/mandomc/textures/font/item_labels/armor.png",
+      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/uncommon.png",
+      "sourceSha256": "1d0d5e054783bc52c0e3dc979956783268245acadaa8143e291291ea22047083",
+      "destination": "assets/mandomc/textures/font/item_labels/uncommon.png",
+      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
+    },
+    {
       "sourcePath": "assets/minecraft/textures/item/leather_helmet.png",
       "sourceSha256": "4b23c0e74dadde193d99a9bfb4886d13e6466d706e65083e6e56d6b8173acfa1",
       "destination": "assets/mandomc/textures/item/armor/robes_helmet.png",
@@ -131,45 +143,9 @@
       "sourceSha256": "25d58925ff553f70b029c3c4caa5ff736d5de0438cee0bbe2416409a0b28ce6e",
       "destination": "assets/mandomc/textures/item/armor/robes_boots.png",
       "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
-    },
-    {
-      "sourcePath": "assets/minecraft/textures/entity/equipment/humanoid/leather.png",
-      "sourceSha256": "84dee2d86dd928dbc092be395efd674a1c24366d58eb12bdeae6de39bdc4cac3",
-      "destination": "assets/mandomc/textures/entity/equipment/humanoid/desert_robes.png",
-      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
-    },
-    {
-      "sourcePath": "assets/minecraft/textures/entity/equipment/humanoid/leather_overlay.png",
-      "sourceSha256": "cef496da03645ba0cb5ceba79be98701a6afd1905521feec10e93fe3156f69c6",
-      "destination": "assets/mandomc/textures/entity/equipment/humanoid/desert_robes_overlay.png",
-      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
-    },
-    {
-      "sourcePath": "assets/minecraft/textures/entity/equipment/humanoid_leggings/leather.png",
-      "sourceSha256": "65797099692b7d9e25aefd1092d1b14704e3ffc8d50caca9f1756028f8b4654c",
-      "destination": "assets/mandomc/textures/entity/equipment/humanoid_leggings/desert_robes.png",
-      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
-    },
-    {
-      "sourcePath": "assets/minecraft/textures/entity/equipment/humanoid_leggings/leather_overlay.png",
-      "sourceSha256": "9014c65d31555081c42a4e2af6b1987640c3ace714676822b36292a317131269",
-      "destination": "assets/mandomc/textures/entity/equipment/humanoid_leggings/desert_robes_overlay.png",
-      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
-    },
-    {
-      "sourcePath": "assets/minecraft/textures/default/armor.png",
-      "sourceSha256": "cb4d5efefcb384aa5803ed1fb98bd3125ae4e0cca04e856bc8e36ad7a765f132",
-      "destination": "assets/mandomc/textures/font/item_labels/armor.png",
-      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
-    },
-    {
-      "sourcePath": "assets/minecraft/textures/default/uncommon.png",
-      "sourceSha256": "1d0d5e054783bc52c0e3dc979956783268245acadaa8143e291291ea22047083",
-      "destination": "assets/mandomc/textures/font/item_labels/uncommon.png",
-      "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
     }
   ],
-  "status": "E-11 and Desert Robes. Robe inventory icons use original pre-colored art, white default dye tint and no vanilla overlays. Worn armor confirmed by user; revised icon rendering awaits client check.",
+  "status": "E-11 and Desert Robes. User accepted the new worn robe textures; original inventory icons restored unchanged at their request.",
   "saberAssets": {
     "legacyArchiveSha256": "32a578caac7c4c8976868abf0aa20f545c9926eb8d6382b94ccf5e986c95cce5",
     "files": [
@@ -269,6 +245,17 @@
         "destination": "assets/mandomc/sounds/mobs/dewback_idle.ogg",
         "changes": "Unchanged original audio; namespaced sound event."
       }
+    ]
+  },
+  "robeTextureReplacement": {
+    "source": "artwork/desert_robes.png",
+    "sourceSha256": "11eafb3eed38536869f62ee04895f22a7d9e975ad81837cb381d5e0a658d9539",
+    "origin": "User-supplied replacement image, 2026-11-08",
+    "layout": "artwork/desert_robes.layout.json",
+    "changes": "Outer armor uses supplied pixels unchanged. Separate pants use cropped cloth panels with nearest-neighbor scaling. Old worn overlays removed. White undyed equipment tint preserves source colors; explicit leather dyes still tint the textures. Original inventory icons are retained unchanged.",
+    "destinations": [
+      "assets/mandomc/textures/entity/equipment/humanoid/desert_robes.png",
+      "assets/mandomc/textures/entity/equipment/humanoid_leggings/desert_robes.png"
     ]
   }
 }
