@@ -59,7 +59,19 @@
       "source": "WeaponMechanics/weapons/light_machine_guns/RelbyV10.yml",
       "sha256": "70089c9896f78124c4c2a05caa8e4abb0de531e59fb929d3b9dcc32a95a6dbcc",
       "destination": "server/config/common/weaponmechanics/relbyv10.yml",
-      "changes": "Current skin/projectile syntax, namespaced models/sounds, reload sound repair, current keybinding lore; original actual gun tuning retained. Uninstalled cosmetic extension removed."
+      "changes": "Current skin/projectile syntax, namespaced models/sounds, reload sound repair, current keybinding lore; original actual gun tuning retained. Uninstalled cosmetic extension removed. Current WM rejects fractional full-auto rates: represent approximately 1.2 shots/sec as a 17-tick semi-auto delay; describe actual plasma bolts in lore. Subsequent client tuning deliberately reduces base damage to 1, armor wear to 1 and falloff; this does not alter pack artwork."
+    },
+    {
+      "source": "assets/minecraft/models/item/grenades/dioxis_grenade.json",
+      "sha256": "756bc0eb0fbaf10d0026f476682612a4ea6a96a8fb46b4e84d0bb481e9526846",
+      "destination": "resource-pack/src/assets/mandomc/models/item/grenades/dioxis_grenade.json",
+      "changes": "Namespaced textures; original inventory/hand grenade geometry and display transforms retained."
+    },
+    {
+      "source": "assets/minecraft/textures/custom/grenades/dioxis_grenade.png",
+      "sha256": "16a80835164b7296cb41208d19a47b79848cbd703c46df812ebb181295d4dc76",
+      "destination": "resource-pack/src/assets/mandomc/textures/item/grenades/dioxis_grenade.png",
+      "changes": "Copied unchanged."
     }
   ]
 }
