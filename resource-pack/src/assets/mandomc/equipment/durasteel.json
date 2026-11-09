@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "mandomc:durasteel"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "mandomc:durasteel"
+      }
+    ]
+  }
+}

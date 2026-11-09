@@ -35,7 +35,7 @@ public final class SaberProbe extends JavaPlugin {
         var world=Bukkit.getWorld(NamespacedKey.minecraft("overworld"));
         var point=new Location(world,-150,300,-150,0,0);world.getChunkAt(point).addPluginChunkTicket(this);
         player=new TestPlayer("SaberProbe",point);player.storage.setItem(0,item);
-        var packConfig=org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.File(plugin.getDataFolder(),"sabers.yml")).getConfigurationSection("upstream-pack");
+        var packConfig=org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.File(plugin.getDataFolder(),"combat/sabers.yml")).getConfigurationSection("upstream-pack");
         var pack=new net.mandomc.integrations.packs.SaberPack(this,packConfig);
         org.bukkit.event.HandlerList.unregisterAll(pack);
         pack.request(player.player);
@@ -95,7 +95,7 @@ public final class SaberProbe extends JavaPlugin {
     }
     private void verifyVariants(MandoPlugin plugin, World world) throws Exception {
         var expected = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
-                new java.io.File(plugin.getDataFolder(), "items/sabers.yml"));
+                new java.io.File(plugin.getDataFolder(), "items/definitions/sabers.yml"));
         var ids = expected.getConfigurationSection("items").getKeys(false);
         check(ids.size() == 78, "every named upstream saber is registered");
         for (String id : ids) {
@@ -105,7 +105,7 @@ public final class SaberProbe extends JavaPlugin {
             check(item.getItemMeta().displayName().decoration(net.kyori.adventure.text.format.TextDecoration.BOLD)
                     == net.kyori.adventure.text.format.TextDecoration.State.FALSE, id + " title is explicitly non-bold");
             var presentation = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
-                    new java.io.File(plugin.getDataFolder(), "items.yml"));
+                    new java.io.File(plugin.getDataFolder(), "items/catalog.yml"));
             String badge = presentation.getString("rarities." + expected.getString("items." + id + ".rarity"));
             check(net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
                     .serialize(item.getItemMeta().lore().getFirst()).startsWith(badge), id + " displays assigned rarity");
@@ -398,7 +398,7 @@ public final class SaberProbe extends JavaPlugin {
             check(find.invoke(sabers, owner) == other, "single target favors crosshair alignment over nearest mob");
             other.remove();
             check(find.invoke(sabers, owner) == cow, "visible mob inside aim cone acquires lock");
-            Object flight = constructor.newInstance(owner, display, cow, sabers.settings());
+            Object flight = constructor.newInstance(owner, display, cow, sabers.settings(), sabers.settings().variants().get("vader"));
             flights.put(owner.getUniqueId(), flight);reserve.invoke(sabers, flight);
             cow.teleport(cow.getLocation().add(.5, 0, 0));
             track.invoke(sabers, flight);
@@ -438,7 +438,7 @@ public final class SaberProbe extends JavaPlugin {
             // Both endpoints can be outside the protected landing while the segment crosses it.
             display = world.spawn(new Location(world, -145, 301, -135), ItemDisplay.class,
                     entity -> {entity.setPersistent(false);entity.setGravity(false);});
-            flight = constructor.newInstance(owner, display, null, sabers.settings());
+            flight = constructor.newInstance(owner, display, null, sabers.settings(), sabers.settings().variants().get("vader"));
             flights.put(owner.getUniqueId(), flight);reserve.invoke(sabers, flight);
             move.invoke(sabers, flight, new Vector(18, 0, 0));
             check(((Location) locationField.get(flight)).getX() < -144 && (boolean) recallingField.get(flight),
@@ -452,7 +452,7 @@ public final class SaberProbe extends JavaPlugin {
             });
             display = world.spawn(point.clone().add(-3, 1, 0), ItemDisplay.class,
                     entity -> {entity.setPersistent(false);entity.setGravity(false);});
-            flight = constructor.newInstance(owner, display, null, sabers.settings());
+            flight = constructor.newInstance(owner, display, null, sabers.settings(), sabers.settings().variants().get("vader"));
             flights.put(owner.getUniqueId(), flight);reserve.invoke(sabers, flight);
             final Vector[] knockback = {null};
             Bukkit.getPluginManager().registerEvent(io.papermc.paper.event.entity.EntityKnockbackEvent.class, listener,
@@ -506,7 +506,7 @@ public final class SaberProbe extends JavaPlugin {
                     entity.setPersistent(false);entity.setGravity(false);
                 });
                 try {
-                    Object flight = constructor.newInstance(actor.player, display, null, sabers.settings());
+                    Object flight = constructor.newInstance(actor.player, display, null, sabers.settings(), sabers.settings().variants().get("vader"));
                     flights.put(actor.id, flight);reserve.invoke(sabers, flight);
                     Location previous = (Location) locationField.get(flight);
                     double farthest = 0, largestStep = 0;
@@ -550,7 +550,7 @@ public final class SaberProbe extends JavaPlugin {
                 entity.setPersistent(false);entity.setGravity(false);
             });
             try {
-                Object flight = constructor.newInstance(actor.player, display, null, sabers.settings());
+                Object flight = constructor.newInstance(actor.player, display, null, sabers.settings(), sabers.settings().variants().get("vader"));
                 flights.put(actor.id, flight);reserve.invoke(sabers, flight);
                 switch (mode) {
                     case "catch" -> {

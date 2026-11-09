@@ -23,7 +23,7 @@ public final class EventEndCountdown {
 
     public EventEndCountdown(String title, String subtitle) {
         if (title == null || title.isBlank() || subtitle == null) {
-            throw new IllegalArgumentException("events.yml: invalid ending-countdown title/subtitle");
+            throw new IllegalArgumentException("events/schedule.yml: invalid ending-countdown title/subtitle");
         }
         this.title = title;
         this.subtitle = subtitle;

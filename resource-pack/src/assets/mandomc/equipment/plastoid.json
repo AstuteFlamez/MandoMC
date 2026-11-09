@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "mandomc:plastoid"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "mandomc:plastoid"
+      }
+    ]
+  }
+}

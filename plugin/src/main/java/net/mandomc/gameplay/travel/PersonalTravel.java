@@ -22,7 +22,7 @@ public final class PersonalTravel implements Listener {
 
     public PersonalTravel(JavaPlugin plugin, int limit, java.util.function.Predicate<Player> correction) {
         this.correction = correction;
-        if (limit < 1 || limit > 100) throw new IllegalArgumentException("utilities.yml: homes-limit must be 1..100");
+        if (limit < 1 || limit > 100) throw new IllegalArgumentException("admin/utilities.yml: homes-limit must be 1..100");
         this.limit = limit;
         homesKey = new NamespacedKey(plugin, "homes_v1");
         backKey = new NamespacedKey(plugin, "back_v1");

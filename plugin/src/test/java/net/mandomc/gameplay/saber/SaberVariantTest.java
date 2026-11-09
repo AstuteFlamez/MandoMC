@@ -13,13 +13,13 @@ import static org.junit.Assert.*;
 public class SaberVariantTest {
     private YamlConfiguration config() {
         return YamlConfiguration.loadConfiguration(new InputStreamReader(
-                getClass().getResourceAsStream("/sabers.yml"), StandardCharsets.UTF_8));
+                getClass().getResourceAsStream("/combat/sabers.yml"), StandardCharsets.UTF_8));
     }
 
     @Test public void everyNamedSaberHasMatchingItemAndDistinctPresentation() {
         var settings = SaberSettings.read(config());
         var items = YamlConfiguration.loadConfiguration(new InputStreamReader(
-                getClass().getResourceAsStream("/items/sabers.yml"), StandardCharsets.UTF_8));
+                getClass().getResourceAsStream("/items/definitions/sabers.yml"), StandardCharsets.UTF_8));
         assertEquals(78, settings.variants().size());
         assertEquals(items.getConfigurationSection("items").getKeys(false), settings.variants().keySet());
         settings.variants().forEach((id, variant) -> {

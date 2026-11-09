@@ -1,0 +1,29 @@
+{
+  "source": "Supplied legacy server backup",
+  "models": [
+    {
+      "source": "ModelEngine/blueprints/speederbike.bbmodel",
+      "sha256": "5d685eb9d3cd2d17ab324461b1c84e403173242f9183ad438b55e9ed87290235",
+      "destination": "server/config/common/modelengine/blueprints/speederbike.bbmodel",
+      "changes": "Normalize model identity, use the modelengine texture namespace, keep the required empty texture folder, and strip local paths; preserve original geometry, textures, mounts and animations. One fixed model, no skins."
+    },
+    {
+      "source": "ModelEngine/blueprints/xwing.bbmodel",
+      "sha256": "5d3c8e31835b5464eaa529ff50e58ceebd25fef0de3709ac1307d43dd67aa07a",
+      "destination": "server/config/common/modelengine/blueprints/xwing.bbmodel",
+      "changes": "Normalize model identity, use the modelengine texture namespace, keep the required empty texture folder, and strip local paths; preserve original geometry, textures, mounts and animations. One fixed model, no skins."
+    },
+    {
+      "source": "ModelEngine/blueprints/tiefighter.bbmodel",
+      "sha256": "ec834d0542be52c80bca1add2d0a0b9bdf13065ff7efc503283233166aa1fc1a",
+      "destination": "server/config/common/modelengine/blueprints/tiefighter.bbmodel",
+      "changes": "Normalize model identity, use the modelengine texture namespace, keep the required empty texture folder, and strip local paths; preserve original geometry, textures, mounts and animations. One fixed model, no skins."
+    },
+    {
+      "source": "ModelEngine/blueprints/uwing.bbmodel",
+      "sha256": "3068580c131e897fb0839a573e38c7a5fdef73805d96be5557f57a1f6030825f",
+      "destination": "server/config/common/modelengine/blueprints/uwing.bbmodel",
+      "changes": "Normalize model identity, use the modelengine texture namespace, keep the required empty texture folder, and strip local paths; preserve original geometry, textures, mounts and animations. One fixed model, no skins."
+    }
+  ]
+}

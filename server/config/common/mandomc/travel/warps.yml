@@ -1,0 +1,37 @@
+schema-version: 1
+gui-title: '<dark_gray>Galaxy Map'
+gui-size: 54
+messages:
+  players-only: '<red>Open warps in game.'
+  unknown: '<red>Choose Batuu, Earth, Hoth or Tatooine.'
+  unavailable: '<red>This destination is unavailable.'
+  click: '<yellow>Click to travel.'
+warps:
+  spawn:
+    name: '<gold>Batuu'
+    material: STICK
+    item-model: mandomc:planets/batuu
+    slot: 28
+    badges: '<white>đġ'
+    description: '<gray>Black Spire Outpost. Protected spawn hub.'
+  earth:
+    name: '<green>Earth'
+    material: STICK
+    item-model: mandomc:planets/earth
+    slot: 1
+    badges: '<white>đġ'
+    description: '<gray>Unknown Regions. Survival, building and gathering.'
+  hoth:
+    name: '<white>Hoth'
+    material: STICK
+    item-model: mandomc:planets/hoth
+    slot: 39
+    badges: '<white>ĕġ'
+    description: '<gray>King of the Hill and PvP warzone.'
+  tatooine:
+    name: '<gold>Tatooine'
+    material: STICK
+    item-model: mandomc:planets/tatooine
+    slot: 43
+    badges: '<white>đġ'
+    description: '<gray>Jabba’s Palace. Dungeon testing.'

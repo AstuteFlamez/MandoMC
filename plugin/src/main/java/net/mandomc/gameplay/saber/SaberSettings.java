@@ -9,7 +9,7 @@ public record SaberSettings(String itemId, String model, String hilt, double thr
         double returnHeight, double variation, double spinDegrees, double throwCostPercent, int throwDrainTicks,
         double damageMultiplier, java.util.Map<String, SaberVariant> variants) {
     public static SaberSettings read(ConfigurationSection c) {
-        if (c.getInt("schema-version") != 1) throw new IllegalArgumentException("sabers.yml: expected schema-version 1");
+        if (c.getInt("schema-version") != 1) throw new IllegalArgumentException("combat/sabers.yml: expected schema-version 1");
         return new SaberSettings(text(c,"item-id"), text(c,"item-model"), text(c,"hilt-model"),
                 number(c,"throw-damage",0,100), (int)number(c,"throw-cooldown-ticks",1,1200),
                 number(c,"throw-range",1,32), number(c,"throw-speed",0.1,3), number(c,"throw-return-speed",0.1,4),
@@ -31,11 +31,11 @@ public record SaberSettings(String itemId, String model, String hilt, double thr
         return c.contains(key) ? number(c, key, min, max) : fallback;
     }
     private static String text(ConfigurationSection c, String k) {
-        String v=c.getString(k); if(v==null || v.isBlank()) throw new IllegalArgumentException("sabers.yml: missing "+k); return v;
+        String v=c.getString(k); if(v==null || v.isBlank()) throw new IllegalArgumentException("combat/sabers.yml: missing "+k); return v;
     }
     private static double number(ConfigurationSection c,String k,double min,double max) {
         double v=c.getDouble(k,Double.NaN);
-        if(!Double.isFinite(v)||v<min||v>max) throw new IllegalArgumentException("sabers.yml: invalid "+k);
+        if(!Double.isFinite(v)||v<min||v>max) throw new IllegalArgumentException("combat/sabers.yml: invalid "+k);
         return v;
     }
 }

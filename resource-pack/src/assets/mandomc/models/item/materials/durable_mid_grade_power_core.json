@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "mandomc:custom/materials/durable_mid_grade_power_core"
+  }
+}

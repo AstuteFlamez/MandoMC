@@ -60,24 +60,26 @@ public final class CombatProbe extends JavaPlugin {
         previous = Bukkit.getScoreboardManager().getNewScoreboard();
         var team = previous.registerNewTeam("probe_team");team.addEntry(timed.getName());team.setAllowFriendlyFire(false);
         timed.setScoreboard(previous);
+        plugin.hud().attach(timed);
         combat.tag(timed);
         check(!timed.getScoreboard().getTeam("probe_team").allowFriendlyFire(), "combat sidebar preserves team friendly-fire policy");
         team.setOption(org.bukkit.scoreboard.Team.Option.COLLISION_RULE, org.bukkit.scoreboard.Team.OptionStatus.NEVER);
         check(combat.remainingTenths(timed) == 150, "new combat tag starts at 15.0 seconds");
-        check(text(timed.getScoreboard().getObjective("mandomc_combat").getScore("timer").customName()).contains("15.0"), "scoreboard displays one decimal");
+        check(timed.getScoreboard().getObjective("mandomc_hud") != null, "combat retains full sidebar");
         Bukkit.getScheduler().runTaskLater(this, () -> {
             try {
                 check(timed.getScoreboard().getTeam("probe_team").getOption(org.bukkit.scoreboard.Team.Option.COLLISION_RULE)
                         == org.bukkit.scoreboard.Team.OptionStatus.NEVER, "active scoreboard follows original team policy updates");
                 int left = combat.remainingTenths(timed);
                 check(left < 150 && left > 130, "timer decreases with elapsed real time");
-                check(text(timed.getScoreboard().getObjective("mandomc_combat").getScore("timer").customName()).matches("Safe in [0-9]+\\.[0-9]s"), "sidebar updates a single decimal timer line");
+                check(text(timed.getScoreboard().getObjective("mandomc_hud").getScore("mmc_line_8").customName()).matches("⚔ ɪɴ ᴄᴏᴍʙᴀᴛ: [0-9]+\\.[0-9]s"), "sidebar updates a single decimal timer line");
             } catch (Throwable error) { fail(error); }
         }, 20);
         Bukkit.getScheduler().runTaskLater(this, () -> {
             try {
                 check(!combat.tagged(timed), "tag expires after fifteen seconds");
-                check(timed.getScoreboard() == previous, "expiry restores previous scoreboard");
+                check(timed.getScoreboard().getObjective("mandomc_hud") != null, "expiry preserves full sidebar");
+                check(text(timed.getScoreboard().getObjective("mandomc_hud").getScore("mmc_line_8").customName()).contains("ᴋɪʟʟѕ"), "expiry restores kills row");
                 var safeQuit = player(point);
                 combat.quit(new PlayerQuitEvent(safeQuit, Component.empty()));
                 check(!safeQuit.isDead(), "safe logout does not kill");
@@ -265,7 +267,7 @@ public final class CombatProbe extends JavaPlugin {
     private void fail(Throwable error) { getLogger().log(java.util.logging.Level.SEVERE,"COMBAT PROBE FAILED",error);Bukkit.getScheduler().cancelTasks(this);cleanup(); }
     private void cleanup() {
         HandlerList.unregisterAll(observer);
-        for (Player player : players) {if (combat != null) combat.clear(player);if (plugin != null) plugin.sabers().finish(player.getUniqueId());}
+        for (Player player : players) {if (combat != null) combat.clear(player); if (plugin != null && plugin.hud() != null) plugin.hud().detach(player);if (plugin != null) plugin.sabers().finish(player.getUniqueId());}
         entities.forEach(Entity::remove);
         if (world != null && beforeDrops != null) world.getEntitiesByClass(Item.class).stream().filter(item -> !beforeDrops.contains(item.getUniqueId()) && item.getLocation().distanceSquared(point) < 400).forEach(Entity::remove);
         if (point != null) point.getChunk().removePluginChunkTicket(this);

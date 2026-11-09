@@ -37,9 +37,9 @@ public final class ItemCatalog {
     }
 
     public void reload() throws IOException, InvalidConfigurationException {
-        var presentation = read(directory.resolve("items.yml"));
+        var presentation = read(directory.resolve("items/catalog.yml"));
         var definitions = new LinkedHashMap<String, ItemDefinition>();
-        try (var files = Files.list(directory.resolve("items"))) {
+        try (var files = Files.list(directory.resolve("items/definitions"))) {
             for (Path file : files.filter(p -> p.getFileName().toString().endsWith(".yml")).sorted().toList()) {
                 var config = read(file);
                 var section = config.getConfigurationSection("items");
@@ -63,17 +63,17 @@ public final class ItemCatalog {
             for (String id : external.getKeys(false)) {
                 var section = external.getConfigurationSection(id);
                 if (!id.matches("[a-z0-9_]+") || section == null) {
-                    throw new IllegalArgumentException("items.yml: invalid external item " + id);
+                    throw new IllegalArgumentException("items/catalog.yml: invalid external item " + id);
                 }
                 String kind = section.getString("kind", "");
                 String vendorId = section.getString("vendor-id", "");
                 String category = section.getString("category", "");
                 if (!Set.of("weapon", "ammo").contains(kind) || !vendorId.matches("[A-Za-z0-9_]+")
                         || !category.matches("[a-z0-9_]+")) {
-                    throw new IllegalArgumentException("items.yml: invalid external item fields for " + id);
+                    throw new IllegalArgumentException("items/catalog.yml: invalid external item fields for " + id);
                 }
                 if (candidate.putIfAbsent(id, new Entry(category, () -> externalFactory.apply(kind, vendorId))) != null) {
-                    throw new IllegalArgumentException("items.yml: duplicate item ID " + id);
+                    throw new IllegalArgumentException("items/catalog.yml: duplicate item ID " + id);
                 }
             }
         }
@@ -130,7 +130,7 @@ public final class ItemCatalog {
                 new org.bukkit.attribute.AttributeModifier(new NamespacedKey("mandomc", "item_speed"), definition.attackSpeed() - 4,
                         org.bukkit.attribute.AttributeModifier.Operation.ADD_NUMBER, org.bukkit.inventory.EquipmentSlotGroup.MAINHAND));
         item.setItemMeta(meta);
-        if (definition.equipmentModel() != null) {
+        if (definition.equipmentModel() != null || definition.headModel()) {
             EquipmentSlot slot = definition.material().getEquipmentSlot();
             if (!Set.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET).contains(slot)) {
                 throw new IllegalArgumentException(definition.id() + ": equipment-model requires wearable armor");
@@ -138,7 +138,7 @@ public final class ItemCatalog {
             var equipment = item.getData(io.papermc.paper.datacomponent.DataComponentTypes.EQUIPPABLE);
             if (equipment == null) throw new IllegalArgumentException(definition.id() + ": no native equipment component");
             item.setData(io.papermc.paper.datacomponent.DataComponentTypes.EQUIPPABLE,
-                    equipment.toBuilder().assetId(definition.equipmentModel()));
+                    equipment.toBuilder().assetId(definition.headModel() ? null : definition.equipmentModel()));
         }
         if (definition.foodNutrition() != null) {
             var food = item.getData(io.papermc.paper.datacomponent.DataComponentTypes.FOOD);
@@ -156,7 +156,7 @@ public final class ItemCatalog {
     private static String badge(YamlConfiguration config, String group, String name) {
         String key = group + "." + name;
         if (!config.isString(key) || config.getString(key).isBlank()) {
-            throw new IllegalArgumentException("items.yml: unknown or empty badge " + key);
+            throw new IllegalArgumentException("items/catalog.yml: unknown or empty badge " + key);
         }
         return config.getString(key);
     }

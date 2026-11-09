@@ -14,10 +14,12 @@ Rancor:
   Faction: Hutts # Sets the mob to be in the faction
 
   AIGoalSelectors: # What's the mob going to do?
-  - clear # Clears the mob's AI
-  - meleeattack # Melee-attacks its targets
-  - lookatplayers # Looks at players.
-  - randomstroll # Randomly walks around when off-combat.
+  - 0 clear
+  # Keep closing even when the large model is already within vanilla melee reach.
+  - 1 MoveWithinDistanceOfTarget{s=1.25;minrange=2.5;maxrange=24}
+  - 2 meleeattack{s=1.25;fu=true}
+  - 3 lookatplayers
+  - 4 randomstroll
 
   AITargetSelectors:
   - clear # Clears the mob's AI
@@ -37,7 +39,7 @@ Rancor:
     Silent: true
     FollowRange: 24
     PreventOtherDrops: true
-    MovementSpeed: 0.22
+    MovementSpeed: 0.32
     MaxCombatDistance: 24
 
   Skills:

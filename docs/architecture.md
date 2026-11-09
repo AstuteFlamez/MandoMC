@@ -26,16 +26,16 @@ The new pack lives in `resource-pack/` in this repository. Its build targets the
 | Capability | Selected public component | MandoMC owns |
 | --- | --- | --- |
 | Blasters and grenades | WeaponMechanics and dependencies | Acquisition, saber interaction, combat policy |
-| Animated models | ModelEngine | Vehicle controls, ownership, seats, fuel, health |
+| Animated models | ModelEngine | Vehicle controls, ownership, seats, health |
 | Dungeon mobs | MythicMobs | Runs, objectives, doors, cleanup, completion rewards |
 | Factions | FactionsUUID | Warpoints, vulnerability, controlled breaches |
 | Protected regions | WorldGuard with WorldEdit | Enforcement for every custom action |
 | Worlds | Paper APIs | Existing dimension loading, exact arrivals, aliases and travel |
-| Credits | Provider deferred; Vault retained | Shops, prices, sinks and rewards remain deferred |
+| Credits | MandoMC native ledger | Atomic balances, payments and admin adjustments; shops/rewards deferred |
 | Items, armor, crafting | Paper APIs and resource-pack/ | Stable IDs, recipes, custom behavior |
 | KOTH and resource regeneration | Paper APIs | Event rules, bounded regeneration |
 
-The catalog in server/plugins.catalog.json records admission status. Installed versions and artifact hashes are in server/plugins.lock.json. Boot validation does not establish gameplay compatibility. EssentialsX and Multiverse-Core are removed. MandoMC owns the selected utility commands and migration; their old runtime data is retained for rollback. Voting and global chat presentation remain deferred.
+The catalog in server/plugins.catalog.json records admission status. Installed versions and artifact hashes are in server/plugins.lock.json. Boot validation does not establish gameplay compatibility. EssentialsX and Multiverse-Core are removed. MandoMC owns the selected utility commands and migration; their old runtime data is retained for rollback. Native rank badges now format tab, nameplates and the existing chat renderer; voting remains deferred.
 
 ## Contracts
 - FactionsUUID owns membership, relations and claims. MandoMC owns pairwise warpoints keyed by stable group IDs; vendor faction power is not the raid authority. Do not mirror claims into WorldGuard.
@@ -50,9 +50,9 @@ The catalog in server/plugins.catalog.json records admission status. Installed v
 - Identify custom items before applying ordinary-weapon restrictions. Removing vanilla shields must not disable registered shield-based lightsabers. Enchanting is disabled; keep the custom guard limit independent of native repair behavior.
 
 ## Vehicles
-The initial aircraft scope is player transport; aerial combat is deferred. MandoMC owns vehicle state and seat access, while ModelEngine owns visuals. Persist the placing player's UUID as the pilot authority for a deployed vehicle. Group membership and passenger access do not grant piloting rights.
+Built-in aircraft weapons remain deferred; the U-wing gunner may fire held blasters. MandoMC owns vehicle state and seat access, while ModelEngine owns visuals. Persist the placing player's UUID as the pilot authority for a deployed vehicle. Group membership and passenger access do not grant piloting rights.
 
-Passenger seats are available to any player. Future gunner seats follow the same access rule when weapons are introduced. Evaluate mounting, pilot-seat switching and vehicle damage separately: enemies can destroy vehicles outside protected areas, but cannot take over piloting. Destruction is permanent loss. The placer may pack a vehicle into an item only while stationary, unoccupied and out of combat. Use one authoritative identity across deployed/packed/destroyed states; preserve applicable health/fuel and prevent simultaneous item/entity copies. Acquisition starts with credit purchases and later moves to crafting for all equipment; do not encode the purchase route into runtime item or vehicle identity. Redeployment/transfer details belong in the vehicle feature brief.
+Passenger and gunner seats are available to any player. The existing U-wing secondary mount is Gunner, its only firing role; actual passenger seats are deferred until added to the model/config. Absent roles are hidden in the riding menu. Evaluate mounting, pilot-seat switching and vehicle damage separately: enemies can destroy vehicles outside protected areas, but cannot take over piloting. Destruction is permanent loss. The placer may pack a vehicle into an item only while stationary, unoccupied and out of combat. Use one authoritative identity across deployed/packed/destroyed states; preserve remaining health and prevent simultaneous item/entity copies. Acquisition starts with credit purchases and later moves to crafting for all equipment; do not encode the purchase route into runtime item or vehicle identity. Redeployment/transfer details belong in the vehicle feature brief.
 
 ## Events and warpoints
 Jabba uses one scheduled shared dungeon with PvP and open loot. Private copies per group are outside the current design. MandoMC owns event state, progression and cleanup; MythicMobs owns mob definitions and AI.
@@ -90,7 +90,10 @@ Current FactionsUUID changed names, packages and coordinates from the old source
 `ItemCatalog` owns one validated snapshot of native item templates and explicit vendor factories. Native IDs use mandomc:item_id; vendor generation remains behind integrations/weapons. Definitions/presentation are configuration; item delivery and the paginated inventory browser are Java behavior. `RootCommand` dispatches registered feature handlers, keeping bootstrap and command parsing independent of catalog internals. No recipe or economy state is stored in item presentation.
 
 ## Combat basics
-CombatService owns the sole 15-second elapsed-time tag, temporary sidebar, external teleport denial and combat-logout death. TeleportService consults that state. Positive, uncancelled Bukkit damage provides mob/player attribution, including WeaponMechanics. Paper performs one death/drop pipeline after SaberService returns an airborne item. SurvivalRules owns use/crafting/portal restrictions; Paper/Bukkit and the MandoMC world registry also disable dimension loading. StarterKit owns once-only first-join delivery; WeaponMechanics generates its E-11 and ammo. See [combat basics](features/combat-basics.md).
+CombatService owns the sole 15-second elapsed-time tag, external teleport denial and combat-logout death. PlayerHud owns the persistent sidebar and reads that tag; combat replaces its kills row only while active. TeleportService consults that state. Positive, uncancelled Bukkit damage provides mob/player attribution, including WeaponMechanics. Paper performs one death/drop pipeline after SaberService returns an airborne item. SurvivalRules owns use/crafting/portal restrictions; Paper/Bukkit and the MandoMC world registry also disable dimension loading. StarterKit owns once-only first-join delivery; WeaponMechanics generates its E-11 and ammo. See [combat basics](features/combat-basics.md).
 
 ## Native utilities
 WorldService owns the existing dimension registry and exact arrivals in worlds.yml. PersonalTravel saves homes/return locations in native player data; TeleportRequests stores bounded ephemeral consent and delegates to TeleportService. AdminService exposes explicit operator actions. See [native utilities](features/native-utilities.md).
+
+## Native ranks, HUD and credits
+RankService owns UUID memberships and Bukkit permission attachments. WorldEdit/WorldGuard query the same native grants through the supported WEPIF provider; no LuckPerms or Vault permission fallback. PlayerHud owns one sidebar per viewer while mirroring existing gameplay teams. CreditLedger commits integer-cent account changes on one IO worker with atomic durable replacement; the HUD reads only committed balances. The user requested fresh accounts on 2026-11-09: everyone defaults to Default and zero credits; only AstuteFlamez is explicitly MandoStudios. No legacy account import runs at startup. See [feature brief](features/native-hud-ranks-credits.md).

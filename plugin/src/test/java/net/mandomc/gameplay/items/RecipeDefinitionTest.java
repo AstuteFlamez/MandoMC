@@ -55,12 +55,12 @@ public class RecipeDefinitionTest {
     }
 
     @Test public void bundledRecipesResolveToExistingRobesAndRequireTwentyFourHides() throws Exception {
-        var recipes = resource("recipes.yml").getConfigurationSection("recipes");
-        var robes = resource("items/robes.yml").getConfigurationSection("items");
-        var materials = resource("items/materials.yml").getConfigurationSection("items");
+        var recipes = resource("items/recipes.yml").getConfigurationSection("recipes");
+        var robes = resource("items/definitions/robes.yml").getConfigurationSection("items");
+        var materials = resource("items/definitions/materials.yml").getConfigurationSection("items");
         int hides = 0;
-        assertEquals(4, recipes.getKeys(false).size());
-        for (String id : recipes.getKeys(false)) {
+        assertTrue(recipes.getKeys(false).size() >= 4);
+        for (String id : List.of("robes_helmet", "robes_chestplate", "robes_leggings", "robes_boots")) {
             var recipe = RecipeDefinition.parse(id, recipes.getConfigurationSection(id));
             assertNotNull(robes.getConfigurationSection(recipe.result()));
             assertEquals("bantha_hide", recipe.ingredients().get('B'));

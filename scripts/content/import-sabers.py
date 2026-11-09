@@ -10,6 +10,12 @@ import sys
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
+STABLE_IDS = {
+    'obi-wan_kenobi_jedi_master_lightsaber': 'obiwan',
+    'cal_kestis_survivor_crossguard_lightsaber': 'cal_survivor_crossguard',
+    'mace_windu_lightsaber': 'windu', 'qui-gon_jinn_lightsaber': 'quigon',
+    'asajj_ventress_yellow_lightsaber': 'ventress_yellow',
+}
 LEGENDARY = ('darth_vader', 'anakin_skywalker', 'obi-wan_kenobi', 'luke_skywalker',
              'yoda', 'mace_windu', 'revan', 'darth_maul', 'ahsoka_tano', 'dark_saber')
 EPIC = ('cal_kestis', 'qui-gon_jinn', 'count_dooku', 'asajj_ventress', 'kylo_ren',
@@ -60,7 +66,7 @@ def main():
         if model.endswith(('_hilt', '_blocking')):
             continue
         slug = model.split('/')[-1]
-        item_id = 'vader' if slug == 'darth_vader_lightsaber' else slug.replace('-', '_')
+        item_id = 'vader' if slug == 'darth_vader_lightsaber' else STABLE_IDS.get(slug, slug.replace('-', '_'))
         # Hilt and blocking selections sometimes intentionally reuse a related saber.
         hilt = next(m for m in by_title[title] if m.endswith('_hilt'))
         blocking = next(m for m in by_title[title] if m.endswith('_blocking'))
@@ -106,8 +112,8 @@ def main():
         manifest.append({'id': item_id, 'name': title, 'rarity': rarity, 'held': model,
                          'hilt': hilt, 'blocking': blocking, 'bladeCenter': center, 'bladeHalfLength': half})
         refs.update((model, hilt, blocking))
-    (ROOT / 'plugin/src/main/resources/items/sabers.yml').write_text('\n'.join(items) + '\n')
-    config = ROOT / 'plugin/src/main/resources/sabers.yml'
+    (ROOT / 'plugin/src/main/resources/items/definitions/sabers.yml').write_text('\n'.join(items) + '\n')
+    config = ROOT / 'plugin/src/main/resources/combat/sabers.yml'
     base = config.read_text().split('\nvariants:')[0].rstrip()
     config.write_text(base + '\n# Explicit catalog identities; all variants share player-owned charge and tuning.\nvariants:\n' + '\n'.join(variants) + '\n')
     pack['models'] = sorted(refs)

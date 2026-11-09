@@ -1,0 +1,50 @@
+schema-version: 1
+items:
+  speederbike:
+    material: PAPER
+    name: '<gold>74-Z Speeder Bike'
+    custom-model-data: 1
+    item-model: mandomc:vehicles/speederbike
+    rarity: rare
+    category: vehicles
+    lore:
+      - '<gray>Surface transport.'
+      - ''
+      - '<yellow>[<key:key.use>] Place or choose a seat'
+      - '<yellow>[<key:key.sneak>] + [<key:key.use>] Pack when empty'
+  uwing:
+    material: PAPER
+    name: '<gold>U-Wing'
+    custom-model-data: 1
+    item-model: mandomc:vehicles/uwing
+    rarity: rare
+    category: vehicles
+    lore:
+      - '<gray>Aerial transport.'
+      - ''
+      - '<yellow>[<key:key.use>] Place or choose a seat'
+      - '<yellow>[<key:key.sneak>] + [<key:key.use>] Pack when empty'
+  xwing:
+    material: PAPER
+    name: '<gold>X-Wing'
+    custom-model-data: 1
+    item-model: mandomc:vehicles/xwing
+    rarity: rare
+    category: vehicles
+    lore:
+      - '<gray>Aerial transport.'
+      - ''
+      - '<yellow>[<key:key.use>] Place or choose a seat'
+      - '<yellow>[<key:key.sneak>] + [<key:key.use>] Pack when empty'
+  tiefighter:
+    material: PAPER
+    name: '<gold>TIE Fighter'
+    custom-model-data: 1
+    item-model: mandomc:vehicles/tiefighter
+    rarity: rare
+    category: vehicles
+    lore:
+      - '<gray>Aerial transport.'
+      - ''
+      - '<yellow>[<key:key.use>] Place or choose a seat'
+      - '<yellow>[<key:key.sneak>] + [<key:key.use>] Pack when empty'

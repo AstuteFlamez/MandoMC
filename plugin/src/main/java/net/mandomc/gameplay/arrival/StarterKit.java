@@ -31,16 +31,16 @@ public final class StarterKit implements Listener {
         this.message = message;
         granted = new NamespacedKey(plugin, "starter_kit_v1");
         pending = new NamespacedKey(plugin, "starter_kit_pending_v1");
-        if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("starter-kit.yml: expected schema-version 1");
+        if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("arrival/starter-kit.yml: expected schema-version 1");
         for (String group : List.of("materials", "custom-items")) {
             var section = config.getConfigurationSection(group);
-            if (section == null) throw new IllegalArgumentException("starter-kit.yml: missing " + group);
+            if (section == null) throw new IllegalArgumentException("arrival/starter-kit.yml: missing " + group);
             for (String id : section.getKeys(false)) {
                 int amount = section.getInt(id, -1);
-                if (amount < 1 || amount > 64) throw new IllegalArgumentException("starter-kit.yml: invalid amount for " + id);
+                if (amount < 1 || amount > 64) throw new IllegalArgumentException("arrival/starter-kit.yml: invalid amount for " + id);
                 boolean custom = group.equals("custom-items");
                 if (custom ? !catalog.ids().contains(id) : Material.matchMaterial(id) == null)
-                    throw new IllegalArgumentException("starter-kit.yml: unknown item " + id);
+                    throw new IllegalArgumentException("arrival/starter-kit.yml: unknown item " + id);
                 entries.add(new Entry(id, amount, custom));
             }
         }

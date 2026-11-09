@@ -30,12 +30,12 @@ public record JabbaDropsSettings(Map<String, Drop> mobs) {
     public static JabbaDropsSettings read(ConfigurationSection config) {
         var section = config.getConfigurationSection("drops");
         if (config.getInt("schema-version") != 1 || section == null || (!section.getKeys(false).containsAll(GUARDS) || !java.util.Set.of("GamorreanGuard", "QuarrenGuard", "TwilekGuard", "BobaFett").containsAll(section.getKeys(false)))) {
-            throw new IllegalArgumentException("jabba-mobs.yml: expected schema 1 and all three generic guard drops and optional BobaFett");
+            throw new IllegalArgumentException("mobs/drops/jabba.yml: expected schema 1 and all three generic guard drops and optional BobaFett");
         }
         var result = new LinkedHashMap<String, Drop>();
         for (String mob : section.getKeys(false)) {
             var rule = section.getConfigurationSection(mob);
-            if (rule == null) throw new IllegalArgumentException("jabba-mobs.yml: missing drop section " + mob);
+            if (rule == null) throw new IllegalArgumentException("mobs/drops/jabba.yml: missing drop section " + mob);
             String weapon = rule.getString("weapon", "");
             String ammo = rule.getString("ammo", "");
             double weaponChance = rule.getDouble("weapon-chance", Double.NaN);
@@ -44,7 +44,7 @@ public record JabbaDropsSettings(Map<String, Drop> mobs) {
             if (!weapon.matches("[a-z0-9_]+") || !chance(weaponChance) || !chance(ammoChance)
                     || !rule.isInt("ammo-rolls") || rolls < 0 || rolls > 64
                     || (rolls > 0 && !ammo.matches("[a-z0-9_]+"))) {
-                throw new IllegalArgumentException("jabba-mobs.yml: invalid items, chances (0–1) or ammo-rolls (0–64) for " + mob);
+                throw new IllegalArgumentException("mobs/drops/jabba.yml: invalid items, chances (0–1) or ammo-rolls (0–64) for " + mob);
             }
             result.put(mob, new Drop(weapon, weaponChance, ammo, ammoChance, rolls));
         }

@@ -162,9 +162,9 @@ public final class KothProbe extends JavaPlugin {
         var eventClick=new InventoryClickEvent(a.view,InventoryType.SlotType.CONTAINER,13,ClickType.LEFT,InventoryAction.PICKUP_ALL);
         plugin.events().click(eventClick);check(eventClick.isCancelled() && pending(plugin.travel()).containsKey(a.id),"event menu travel also uses shared combat/warmup contract");
         plugin.travel().onQuit(new org.bukkit.event.player.PlayerQuitEvent(a.player,net.kyori.adventure.text.Component.empty()));
-        var config=YamlConfiguration.loadConfiguration(new java.io.File(plugin.getDataFolder(),"teleport.yml"));
-        var language=YamlConfiguration.loadConfiguration(new java.io.File(plugin.getDataFolder(),"messages.yml"));
-        try(var reader=new java.io.InputStreamReader(plugin.getResource("messages.yml"),java.nio.charset.StandardCharsets.UTF_8)) {
+        var config=YamlConfiguration.loadConfiguration(new java.io.File(plugin.getDataFolder(),"travel/teleport.yml"));
+        var language=YamlConfiguration.loadConfiguration(new java.io.File(plugin.getDataFolder(),"language/messages.yml"));
+        try(var reader=new java.io.InputStreamReader(plugin.getResource("language/messages.yml"),java.nio.charset.StandardCharsets.UTF_8)) {
             language.setDefaults(YamlConfiguration.loadConfiguration(reader));
         }
         var isolated=new TeleportService(this,config,language,plugin.combat());

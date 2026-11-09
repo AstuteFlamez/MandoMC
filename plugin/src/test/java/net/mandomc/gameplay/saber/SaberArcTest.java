@@ -15,7 +15,7 @@ public class SaberArcTest {
     private final Vector origin = new Vector(10, 70, -20);
     private YamlConfiguration config() {
         return YamlConfiguration.loadConfiguration(new InputStreamReader(
-                getClass().getResourceAsStream("/sabers.yml"), StandardCharsets.UTF_8));
+                getClass().getResourceAsStream("/combat/sabers.yml"), StandardCharsets.UTF_8));
     }
     private SaberSettings settings() { return SaberSettings.read(config()); }
     private SaberArc arc(double distance, SaberArc.Style style) {

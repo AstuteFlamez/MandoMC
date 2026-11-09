@@ -170,7 +170,7 @@
       "bladeHalfLength": 2.74765625
     },
     {
-      "id": "asajj_ventress_yellow_lightsaber",
+      "id": "ventress_yellow",
       "name": "Asajj Ventress' Lightsaber (Yellow)",
       "rarity": "epic",
       "held": "workshop:item/asajj_ventress_yellow_lightsaber",
@@ -296,7 +296,7 @@
       "bladeHalfLength": 2.53125
     },
     {
-      "id": "cal_kestis_survivor_crossguard_lightsaber",
+      "id": "cal_survivor_crossguard",
       "name": "Cal Kestis' Lightsaber (Crossguard)",
       "rarity": "epic",
       "held": "workshop:item/cal_kestis_survivor_crossguard_lightsaber",
@@ -730,7 +730,7 @@
       "bladeHalfLength": 0.9375
     },
     {
-      "id": "mace_windu_lightsaber",
+      "id": "windu",
       "name": "Mace Windu's Lightsaber",
       "rarity": "legendary",
       "held": "workshop:item/mace_windu_lightsaber",
@@ -758,7 +758,7 @@
       "bladeHalfLength": 0.9375
     },
     {
-      "id": "obi_wan_kenobi_jedi_master_lightsaber",
+      "id": "obiwan",
       "name": "Obi-Wan Kenobi's Lightsaber (Jedi Master)",
       "rarity": "legendary",
       "held": "workshop:item/obi-wan_kenobi_jedi_master_lightsaber",
@@ -856,7 +856,7 @@
       "bladeHalfLength": 0.9375
     },
     {
-      "id": "qui_gon_jinn_lightsaber",
+      "id": "quigon",
       "name": "Qui-Gon Jinn's Lightsaber",
       "rarity": "epic",
       "held": "workshop:item/qui-gon_jinn_lightsaber",

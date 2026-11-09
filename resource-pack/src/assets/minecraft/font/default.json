@@ -83,11 +83,92 @@
     },
     {
       "type": "bitmap",
+      "file": "mandomc:font/item_labels/planet.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0121"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/vehicle.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u010f"
+      ]
+    },
+    {
+      "type": "bitmap",
       "file": "mandomc:font/item_labels/legendary.png",
       "ascent": 8,
       "height": 9,
       "chars": [
         "\u0113"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/mythic.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0114"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/component.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u010a"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/metal.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u010d"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/fuel.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0122"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/tool.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0138"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/valuable.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u010e"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/key.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0124"
       ]
     }
   ]

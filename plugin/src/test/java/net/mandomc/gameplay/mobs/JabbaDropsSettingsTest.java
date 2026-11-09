@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 public class JabbaDropsSettingsTest {
     private YamlConfiguration config() {
         return YamlConfiguration.loadConfiguration(new InputStreamReader(
-                Objects.requireNonNull(getClass().getResourceAsStream("/jabba-mobs.yml"))));
+                Objects.requireNonNull(getClass().getResourceAsStream("/mobs/drops/jabba.yml"))));
     }
 
     @Test public void preservesLegacyIndependentRollsAndBounds() {

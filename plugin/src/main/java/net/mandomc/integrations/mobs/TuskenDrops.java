@@ -13,7 +13,7 @@ public final class TuskenDrops implements Listener {
     @SuppressWarnings("unchecked")
     public TuskenDrops(JavaPlugin plugin, ItemCatalog items, double chance) throws ReflectiveOperationException {
         if (!Double.isFinite(chance) || chance < 0 || chance > 1)
-            throw new IllegalArgumentException("mobs.yml: weapon-drops.chance must be between 0 and 1");
+            throw new IllegalArgumentException("mobs/spawning.yml: weapon-drops.chance must be between 0 and 1");
         var vendor = Bukkit.getPluginManager().getPlugin("MythicMobs");
         var type = (Class<? extends Event>) Class.forName("io.lumine.mythic.bukkit.events.MythicMobDeathEvent",
                 true, vendor.getClass().getClassLoader());
