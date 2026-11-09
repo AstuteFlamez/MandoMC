@@ -184,6 +184,12 @@
         "sourceSha256": "65720fca2272e73ab5c0b66723b25243d32009e103caecf0d0583b77ebdd3273",
         "destination": "assets/mandomc/textures/font/item_labels/rare.png",
         "changes": "Unchanged legacy badge."
+      },
+      {
+        "sourcePath": "assets/minecraft/textures/default/legendary.png",
+        "sourceSha256": "bb39b3b88fa5f920d93b5645189f65d049fc1208d55deaf140059ac8d3e27922",
+        "destination": "assets/mandomc/textures/font/item_labels/legendary.png",
+        "changes": "Unchanged legacy badge."
       }
     ]
   },
