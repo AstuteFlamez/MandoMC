@@ -1,0 +1,25 @@
+{
+  "source": "Pinned legacy MandoPack archive; mappings from legacy MandoMC/warps.yml and assets/minecraft/items/stick.json",
+  "layoutReference": "https://www.starwars.com/star-wars-galaxy-map",
+  "earthPlacement": "User-selected distant Unknown Regions position; server-specific, not canon",
+  "recoveredAssets": [
+    {
+      "sourcePath": "assets/minecraft/textures/custom/planets/earth.png",
+      "sourceSha256": "5ee79e99ceb578c1645941f258912f128ce51fd90c8ff91cef134ffb8c3f9b6f",
+      "destination": "assets/mandomc/textures/item/planets/earth.png",
+      "changes": "Unchanged pixels; namespaced reference."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/custom/planets/hoth.png",
+      "sourceSha256": "d4e3d9500a21bf48b1a5404581bdbd714610c4e8cb31e58934955fefec8f0bbe",
+      "destination": "assets/mandomc/textures/item/planets/hoth.png",
+      "changes": "Unchanged pixels; namespaced reference."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/custom/planets/naboo.png",
+      "sourceSha256": "4a498b2c3f8702ed005481ecd86a3986bc334ea508c4c780931a45a7e1dc9d85",
+      "destination": "assets/mandomc/textures/item/planets/batuu.png",
+      "changes": "Unchanged pixels; legacy spawn used the Naboo icon."
+    }
+  ]
+}
