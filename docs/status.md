@@ -2,6 +2,8 @@
 Updated: 2026-11-08
 
 ## Milestone
+Jabba generic-guard pack prepared (2026-11-08): adds Gamorrean, Quarren and Twilek model assets, SE-14C/A280 item poses, Gamorrean Axe, voices and the original A280 epic badge. Pack build and 14 Python tests pass; all 220 previous pack files remain, with only additive sound/font registrations changed. Source gameplay and live verification are on bilal/jabba-generic-mobs. Next action: publish the verified 294-file pack for client playtesting.
+
 Client check accepted: user confirmed the latest robe icons/worn textures, gray one-space menu panes with empty recipe cells, food behavior and drops pass. These presentation/food checks are closed for this iteration. Next: balance saber blocking/reflection against ranged Tuskens, then add a substantial saber-throw stamina cost. Clans and both Tusken skirt fixes remain deferred.
 
 Food integration complete: Dewback Leg restores 8 hunger points (four icons) and drops once per Dewback death; Massiff Ribs restore 4 points (two icons), retaining their existing drop chance. Existing owned stacks refresh food metadata without losing quantity. Combined build passes 52 Java tests and 1,921 live assertions, including actual native eating and one real collectible Dewback death drop. The currently published 211-file pack already includes all food textures and the accepted robe/icon fixes; its verified hash is unchanged. Temporary FoodProbe removed; normal server restarted successfully at 17:37:52 with no startup errors. Deployed plugin hash matches the combined verified build. Next: client-check the combined food behavior and presentation.

@@ -3,9 +3,12 @@
   "models": [
     "bantha",
     "dewback",
+    "gamorrean_guard",
     "massiff",
     "melee_raider",
-    "ranged_raider"
+    "quarren_guard",
+    "ranged_raider",
+    "twilek_guard"
   ],
   "files": [
     {
@@ -125,6 +128,38 @@
       "sha256": "b1f360dcaa0df37e538f1c486099a52c4818a76f60f7e8a0162c964f34eb2d75"
     },
     {
+      "path": "assets/modelengine/items/gamorrean_guard/axe.json",
+      "sha256": "419dd6d5817e86243bb197e24d79446f5da94f9e5a7d22471276094124c12980"
+    },
+    {
+      "path": "assets/modelengine/items/gamorrean_guard/body.json",
+      "sha256": "db8e6c65b8e460dbd569b3d6cc45ed23c09895230f072a2e60904e3f6d4ebfdd"
+    },
+    {
+      "path": "assets/modelengine/items/gamorrean_guard/head.json",
+      "sha256": "2ee335a5b5a51b1a336d80fc9255691cc2a3eb931921df2c63c5bfd178971953"
+    },
+    {
+      "path": "assets/modelengine/items/gamorrean_guard/left_arm.json",
+      "sha256": "5ddbe738088a7b11a0ce8bb50eef4f0a4a26bfe08d2f757f7ec72d4c41eea897"
+    },
+    {
+      "path": "assets/modelengine/items/gamorrean_guard/left_leg.json",
+      "sha256": "840e808df1bf72329b74f7d2db77a11afd5fdc4cb736a16b603cec46a9c0b33f"
+    },
+    {
+      "path": "assets/modelengine/items/gamorrean_guard/right_arm.json",
+      "sha256": "dc91aaed2f04f1e58fc33abaf449c2b1acf526f89531ceec9d6b12364d247da1"
+    },
+    {
+      "path": "assets/modelengine/items/gamorrean_guard/right_leg.json",
+      "sha256": "64182112b5f171aacc7dc75f2ca9fc90f9d2e3244b68e7f6850abab8e00541ec"
+    },
+    {
+      "path": "assets/modelengine/items/gamorrean_guard/torso.json",
+      "sha256": "8b1dc83904258129b6c7085008e4624353ac11dbfde21dc01d7410aef9b4ef57"
+    },
+    {
       "path": "assets/modelengine/items/internal_fire/fire_0.json",
       "sha256": "97507ad54ee2d09a17a4a06c7e0e67791fb8e083eeff6d929a78db9f4dc5e113"
     },
@@ -201,6 +236,34 @@
       "sha256": "b48c6e1dd130aa44103d866ca17e4439ebc4f0cd3cec21cf225fe37e87b1d4cc"
     },
     {
+      "path": "assets/modelengine/items/quarren_guard/blaster.json",
+      "sha256": "f72b2ec9281f5b12c2d516281aa0902aec193ed0fbdbc943c2380caa71ef1a2f"
+    },
+    {
+      "path": "assets/modelengine/items/quarren_guard/body.json",
+      "sha256": "5a56ac4658c4129ac1559c3ec2dde3002602d8bc326fce46976cfb56c5c8dd29"
+    },
+    {
+      "path": "assets/modelengine/items/quarren_guard/cape.json",
+      "sha256": "2fec2fbd8b1cbe671d4f28b091cdb33bc2d451028e7806294fc9d583f07410c1"
+    },
+    {
+      "path": "assets/modelengine/items/quarren_guard/head.json",
+      "sha256": "fa4d3deb310a6d8fa37112b4e5ed97d0c60044af0d5ac3cddb7b22c9d62bb5d1"
+    },
+    {
+      "path": "assets/modelengine/items/quarren_guard/left_arm.json",
+      "sha256": "425180d89b773e4f54029575ec0a4ca51fb9cc69f597b54cb79182f4e16bd553"
+    },
+    {
+      "path": "assets/modelengine/items/quarren_guard/right_arm.json",
+      "sha256": "2f608a700e158e0457d24f4eb40c8918dfe6c09068d695514af6a2677fad6ed2"
+    },
+    {
+      "path": "assets/modelengine/items/quarren_guard/torso.json",
+      "sha256": "e95f813fae6c910a56e0be166ed1f082785a7800d475a00e61d08e1df188c926"
+    },
+    {
       "path": "assets/modelengine/items/ranged_raider/head.json",
       "sha256": "7697cb2bb76b087b1a224a4492633b8f114461cc294709945031cb750629123d"
     },
@@ -231,6 +294,34 @@
     {
       "path": "assets/modelengine/items/ranged_raider/torso.json",
       "sha256": "599dd79452e636b9b96d7df5ed0f16a3f1cab554c54ea1aac9aba7297863e961"
+    },
+    {
+      "path": "assets/modelengine/items/twilek_guard/head.json",
+      "sha256": "c26ed9b5cefdc5b59fb0b107e0a57ee625b754cab2d3630cb4137e3a139e950a"
+    },
+    {
+      "path": "assets/modelengine/items/twilek_guard/left_arm.json",
+      "sha256": "4f586e429305c259ce0b6ff5a12125ea261146a8cf68c9a7fc529e2873c43ed9"
+    },
+    {
+      "path": "assets/modelengine/items/twilek_guard/left_leg.json",
+      "sha256": "09d745aa13e77e5b800d65dc857eca50ffe519b09d8f425cc5e75be4dfcbf92f"
+    },
+    {
+      "path": "assets/modelengine/items/twilek_guard/rifle.json",
+      "sha256": "4f186950b027bb46827ae65daa92810a4fbfd5371435b245dcdf5e7aec92c7aa"
+    },
+    {
+      "path": "assets/modelengine/items/twilek_guard/right_arm.json",
+      "sha256": "85293531027d26ee6603ceedafd23595c9de55a9fd5e012efa7386576f90a0ef"
+    },
+    {
+      "path": "assets/modelengine/items/twilek_guard/right_leg.json",
+      "sha256": "ecc54312e03733bd36b33064a44af29070fa9e0459674277ad776d461e2112ff"
+    },
+    {
+      "path": "assets/modelengine/items/twilek_guard/torso.json",
+      "sha256": "fe4b3e889741208b2789e8430a1684feed04a31ab5742422b513f747d0db868d"
     },
     {
       "path": "assets/modelengine/models/bantha/body.json",
@@ -417,6 +508,38 @@
       "sha256": "bcaf35d2438f26eea03a419182a98e5d86538dc7f9e93732d48f03a5e14bb9d0"
     },
     {
+      "path": "assets/modelengine/models/gamorrean_guard/axe.json",
+      "sha256": "e1d023e47a2a3b2a0ddd29fc90b2e29268baac1d1b2fead42ae5724ef2b8e0d9"
+    },
+    {
+      "path": "assets/modelengine/models/gamorrean_guard/body.json",
+      "sha256": "d462f047e6cc2149c1fe8726ec25dce72c6caddcd19358b1acfbbd39b6ed60c5"
+    },
+    {
+      "path": "assets/modelengine/models/gamorrean_guard/head.json",
+      "sha256": "7b0fd4d8d6b4cd411c3a21d61f2d92e8f239420dee3a1737f53273001f887467"
+    },
+    {
+      "path": "assets/modelengine/models/gamorrean_guard/left_arm.json",
+      "sha256": "a7078208f2cf4dc245bb88fdfc0c9f88de53a165ec3efb289442798110f37730"
+    },
+    {
+      "path": "assets/modelengine/models/gamorrean_guard/left_leg.json",
+      "sha256": "b977cbd18f493eee2746959742930439e10658fa3c84141dac9df174a23d7f60"
+    },
+    {
+      "path": "assets/modelengine/models/gamorrean_guard/right_arm.json",
+      "sha256": "9f5de05711cedf827f6f4653e8c912202267bc3cf7bb827ebeb2089c6de62c2b"
+    },
+    {
+      "path": "assets/modelengine/models/gamorrean_guard/right_leg.json",
+      "sha256": "1f30bedec9be6c25b0e76b8a9210d35646e674fcfe61825736b40c09a61f2ffe"
+    },
+    {
+      "path": "assets/modelengine/models/gamorrean_guard/torso.json",
+      "sha256": "9956309909482f33f05796771146c39ad72a7a717792b0ef7ce925555e6b0b17"
+    },
+    {
       "path": "assets/modelengine/models/internal_fire/fire_0.json",
       "sha256": "a63a008f81db4059920be6b1e8e33a91f67fd0e511332c26aff2cd62e8be55a6"
     },
@@ -489,6 +612,34 @@
       "sha256": "9079b2829ecc78818e30fa06ad42a29623750180301f68b35312d1bb685c8bf4"
     },
     {
+      "path": "assets/modelengine/models/quarren_guard/blaster.json",
+      "sha256": "d029ec6d9ca1207aa2fc599df671db0ca92cd0ea33bc50f8dc8012ee23f1dfdf"
+    },
+    {
+      "path": "assets/modelengine/models/quarren_guard/body.json",
+      "sha256": "216c9df7fd927f935f416ef426d9be369a17787516cba2681bbd832696308aca"
+    },
+    {
+      "path": "assets/modelengine/models/quarren_guard/cape.json",
+      "sha256": "952f0fe4bf468546ec11935986c2fbc2621e2dfec6ef9f65ab280d439ddc8dd0"
+    },
+    {
+      "path": "assets/modelengine/models/quarren_guard/head.json",
+      "sha256": "971901360831514d5d9a254c99abc13dc71c21b57bcc01d49236597435f5df28"
+    },
+    {
+      "path": "assets/modelengine/models/quarren_guard/left_arm.json",
+      "sha256": "290d004f3387ebd82d832d5e3201f09b1c87565d392daf842a7b69b902fa5dc4"
+    },
+    {
+      "path": "assets/modelengine/models/quarren_guard/right_arm.json",
+      "sha256": "9e17b977203507ccd5543fe06b0e9bd672fbfda04b3730abec6c5f7efcd5b66b"
+    },
+    {
+      "path": "assets/modelengine/models/quarren_guard/torso.json",
+      "sha256": "59d95eb5bd462c05db6f05333c40df1f2b28640bca9a893f64b57f37b555dbc7"
+    },
+    {
       "path": "assets/modelengine/models/ranged_raider/head.json",
       "sha256": "72be4b9128cb79806a67f927a5c74fa8c2c4fab67cf37fcbc893e706b23eb91a"
     },
@@ -521,6 +672,34 @@
       "sha256": "23900ac352bf23e070e291e5610fef243ca68392f8c56d483681074337e0cf64"
     },
     {
+      "path": "assets/modelengine/models/twilek_guard/head.json",
+      "sha256": "2e3a37230459646cca347c5904f54ca4502c78c91375210aa16402ecd7a95fdd"
+    },
+    {
+      "path": "assets/modelengine/models/twilek_guard/left_arm.json",
+      "sha256": "da93d9fdb075823d4530a79b6292e0c5cd61bc274d3ac31a87c368eb5478c4de"
+    },
+    {
+      "path": "assets/modelengine/models/twilek_guard/left_leg.json",
+      "sha256": "bdc2669aa9d9a77ff155aca207bc30a0952412eb66bf320f512606314b500e03"
+    },
+    {
+      "path": "assets/modelengine/models/twilek_guard/rifle.json",
+      "sha256": "6c3308f70ad6aeff17014a20e59ecdd72e29332a84d355f7eb9a5e8251a1a7f1"
+    },
+    {
+      "path": "assets/modelengine/models/twilek_guard/right_arm.json",
+      "sha256": "9fa305c332ca0ecaa166155e8d7793a02cdd09d3d75ae3853a2ef8f399003dd2"
+    },
+    {
+      "path": "assets/modelengine/models/twilek_guard/right_leg.json",
+      "sha256": "f73dceeea0df0b685fd3de54e6c46d789e7af2237b9a4776c4e29c3a623d80f8"
+    },
+    {
+      "path": "assets/modelengine/models/twilek_guard/torso.json",
+      "sha256": "a4450066fdf26732e384e7139d0861334f34b5b2445c31fa0e589b86e606a1f8"
+    },
+    {
       "path": "assets/modelengine/textures/entity/models/bantha.png",
       "sha256": "408e6873ace2e126e39b7dfb382b807454538b37434e117319ce0b5e0768aba7"
     },
@@ -529,8 +708,16 @@
       "sha256": "d7338b073aa839987ba16c210421c9a918c238d7cbb017080c707363437ee8bd"
     },
     {
+      "path": "assets/modelengine/textures/entity/models/gamorrean_guard.png",
+      "sha256": "29c5545f0c7e420caac92b6a8a8441bd2873c54e52aa503b2dfc5e862fb8f231"
+    },
+    {
       "path": "assets/modelengine/textures/entity/models/massiff.png",
       "sha256": "87a42d625a810e10bfdcb07756684a273a995a06cdeafc65bafc9b22834d49c1"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/tessek.png",
+      "sha256": "33bf63f8c76f4794ea227b95a8053e8cedb4140c36cd26f5cc0734d4637d83b8"
     },
     {
       "path": "assets/modelengine/textures/entity/models/tusken_raider_melee.png",
@@ -539,6 +726,10 @@
     {
       "path": "assets/modelengine/textures/entity/models/tusken_raider_ranged.png",
       "sha256": "f379a7db01b98a28166fc3a65a6e32c18db82efc2a86b5482a833f9417d3d0c9"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/twilek_guard.png",
+      "sha256": "bb82c1b563f7444ece1e4b14069dc5ee39a79d5faafc1b85ea91302a3329a986"
     }
   ]
 }

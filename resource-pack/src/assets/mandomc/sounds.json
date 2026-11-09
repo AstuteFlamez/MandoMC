@@ -91,5 +91,77 @@
     "sounds": [
       "mandomc:mobs/dewback_idle"
     ]
+  },
+  "misc.zoompistol": {
+    "sounds": [
+      {
+        "name": "mandomc:misc/zoompistol"
+      }
+    ],
+    "subtitle": "Scope engaged"
+  },
+  "mobs.alien1": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/alien1"
+      }
+    ],
+    "subtitle": "Alien chitters"
+  },
+  "mobs.alien2": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/alien2"
+      }
+    ],
+    "subtitle": "Alien screeches"
+  },
+  "mobs.alien3": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/alien3"
+      }
+    ],
+    "subtitle": "Alien growls"
+  },
+  "mobs.gamorrean_death": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/gamorrean_death"
+      }
+    ],
+    "subtitle": "Gamorrean dies"
+  },
+  "mobs.gamorrean_idle1": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/gamorrean_idle1"
+      }
+    ],
+    "subtitle": "Gamorrean grunts"
+  },
+  "mobs.gamorrean_idle2": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/gamorrean_idle2"
+      }
+    ],
+    "subtitle": "Gamorrean snorts"
+  },
+  "shoot.a280": {
+    "sounds": [
+      {
+        "name": "mandomc:shoot/a280"
+      }
+    ],
+    "subtitle": "Blaster fires"
+  },
+  "shoot.cr-21": {
+    "sounds": [
+      {
+        "name": "mandomc:shoot/cr-21"
+      }
+    ],
+    "subtitle": "Blaster fires"
   }
 }
