@@ -12,13 +12,13 @@ Rancor:
     Style: SEGMENTED_10
 
   Faction: Hutts # Sets the mob to be in the faction
-  
+
   AIGoalSelectors: # What's the mob going to do?
   - clear # Clears the mob's AI
   - meleeattack # Melee-attacks its targets
   - lookatplayers # Looks at players.
   - randomstroll # Randomly walks around when off-combat.
-  
+
   AITargetSelectors:
   - clear # Clears the mob's AI
   - players # Targets players

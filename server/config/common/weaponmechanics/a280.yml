@@ -70,7 +70,7 @@ A280:
       Max_Accumulation: 12.0
     Mechanics:
       - "CustomSound{sound=mandomc:shoot.a280, volume=5, noise=0.1}"
-  
+
   Reload:
     Trigger:
       Main_Hand: "DROP_ITEM"

@@ -140,4 +140,3 @@ TwilekGuard:
     - skill{s=twilek_attack} @target ~onTimer:5
     - skill{s=JabbaCombatMovement} @target ~onTimer:10
     - skill{s=JabbaRelax} @self ~onDropCombat
-
