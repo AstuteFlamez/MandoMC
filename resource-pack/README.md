@@ -47,7 +47,7 @@ Use the other keys to inspect the alternate poses. Check inventory, ground, item
 Recover one feature's assets with its configuration. Models, textures, sounds and item definitions belong under the `mandomc` namespace where possible. Do not restore broad vanilla overrides, shaders, generated HUD assets or generated ModelEngine files just because they were bundled in the old ZIP. ModelEngine blueprints must be recovered separately before its models can be regenerated and merged deliberately.
 
 ## Credits and saber dependency
-Thank you to **JustTimm** for the lightsaber models and textures, including Darth Vader's saber. Visit [Lightsaber Workshop](https://modrinth.com/resourcepack/justtimms-lightsaber-workshop), [his creator profile](https://modrinth.com/user/JustTimm) and [his links](https://linktr.ee/JustTimm). The distributed MandoMC ZIP includes `credits.txt`.
+Thank you to **JustTimm** for the lightsaber models and textures, including all 78 named saber variants. Visit [Lightsaber Workshop](https://modrinth.com/resourcepack/justtimms-lightsaber-workshop), [his creator profile](https://modrinth.com/user/JustTimm) and [his links](https://linktr.ee/JustTimm). The distributed MandoMC ZIP includes `credits.txt`.
 
 His terms allow server use but prohibit rehosting extracted artwork without permission. MandoMC sends the pinned, unchanged official pack from its Modrinth CDN using Paper's additional-pack API. Our item JSON references its `workshop` models; the original artwork is not bundled or committed here. The exact version/hash/model allowlist is in dependencies.json, and runtime delivery is configured in sabers.yml. Both packs are required for the full visuals.
 
@@ -74,5 +74,8 @@ The recovered Rancor model, original scale/hitbox and six voice samples are incl
 ## Jabba stash components
 The original seven JABBA-tagged component items use namespaced material models with original pixels; provenance is in jabba-loot-sources.json. The dungeon's native doors and revised Rancor particle/block-display effects need no additional artwork.
 
+## Named lightsaber catalog
+
+All 78 named sabers reference the unchanged official JustTimm 3.2.2 dependency. Optional recolors are excluded. `sabers.json` records IDs, rarity and upstream entry points; `scripts/content/import-sabers.py` regenerates references and numeric throw bounds from a checksum-verified local archive without extracting artwork. The legendary badge is recovered from the existing MandoPack source.
 ## Native rank and warp badges
 All eight legacy rank names and small icons are recovered unchanged, with ascent 8/height 9, under `mandomc:font/ranks/`. The dedicated `mandomc:ranks` font preserves the old glyph mapping without replacing ordinary Latin text globally. `rank-sources.json` records per-texture source hashes. Native tab/chat use small icons; sidebar/nameplates use full rank badges. The Common/Rare + Planet lore rows in `/warps` reuse the original Planet glyph/texture documented in `planet-sources.json`; existing planet item models are unchanged.
