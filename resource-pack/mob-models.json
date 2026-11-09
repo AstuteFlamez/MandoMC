@@ -2,6 +2,7 @@
   "generator": "ModelEngine R4.1.1",
   "models": [
     "bantha",
+    "boba_fett",
     "bossk",
     "dewback",
     "gamorrean_guard",
@@ -47,6 +48,54 @@
     {
       "path": "assets/modelengine/items/bantha/tail.json",
       "sha256": "dae1f127b3c896396fa454aa9c7fd25942f739c2b392358d11b20c5719af6171"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/head.json",
+      "sha256": "6c9f2492e9617619ba26053750641720ebc74d9e0c184c157ed7ad110589c481"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/left_arm.json",
+      "sha256": "eaae1dd436ee4bf0610484167cf3bb6a3af0d58b9f0cced8bed97e1b2e815239"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/left_flame.json",
+      "sha256": "429c6289dd5d046289667d425abe574276133421cd406cfa7d0417c0f5cf8df8"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/left_leg.json",
+      "sha256": "48fe99d533fc815fbf71205c74cbde6ad9399e220bccaae3535c16b776dff181"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/left_nozzle.json",
+      "sha256": "69e0719e89a3d5eac6ecd07740594c407ef43e6ba1992b3dfcc5de82973d00d6"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/rifle.json",
+      "sha256": "44d01acaad347ecb035f456382da56990556460dd0b616a88fcac41dfc3a075c"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/right_arm.json",
+      "sha256": "a54de2f8c0e6f366af9fa03153b0f92139605b3125a1ef4d4306d33c9b36eea8"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/right_flame.json",
+      "sha256": "e331dc3adc34176814e72bf972a8466e9490c9115eb410c2fdd7ba73ce4a5fcd"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/right_leg.json",
+      "sha256": "7f9094cf9f1f61fcf3148c8e7a9f34f33989ae9d9c84b21db931829ac7560cbe"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/right_nozzle.json",
+      "sha256": "6fff2bc5d0b82d44362e3f67dcefb5594778773ad6c4688118e6cf101f10913f"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/torso.json",
+      "sha256": "bdda14b03076457da5711039f5930d32772f526f6c15426a0505679534c258d5"
+    },
+    {
+      "path": "assets/modelengine/items/boba_fett/visor.json",
+      "sha256": "92561eb64006346f19b425446b724cfd75c27960060274b1b047dd786322ed89"
     },
     {
       "path": "assets/modelengine/items/bossk/head.json",
@@ -387,6 +436,54 @@
     {
       "path": "assets/modelengine/models/bantha/tail.json",
       "sha256": "a0df366a3ce5dda3c16d95c0edaa5f37fc8efa8259ef66454c21b97aea4415c7"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/head.json",
+      "sha256": "01c051a89bd91c33d679995221f6a38ab5085ef22b46df10889e6864e2784818"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/left_arm.json",
+      "sha256": "da1c023e903ab7acf170853ddfbc461b5980eb2873c42a312379c736176a160a"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/left_flame.json",
+      "sha256": "93d5bb36dc9e1b824d8ca75805ed1fcd8a8aa6a9918656c3088b9337967c04cd"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/left_leg.json",
+      "sha256": "a13d22a8193911a0b5ec97f5b51ce495e580ab0546ff70e1c01167de7f22328a"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/left_nozzle.json",
+      "sha256": "d3df644ee4ac19e1a898c493af22b402422527abfe8b6cacc4a26144dc12bf61"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/rifle.json",
+      "sha256": "6f57d0bf95e832b6670337ae514f8756109d0649ea665556dc896f64f8180b6f"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/right_arm.json",
+      "sha256": "d82f836383dda0c41750e4a653d593cba16a24403b12fb6e43a89b1556555c8a"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/right_flame.json",
+      "sha256": "abb2713bf665f824243a5942d3ea19e9aa9b028d0d22c3772d927cbab8ef6a31"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/right_leg.json",
+      "sha256": "6850efe62410a51257a85d1760731adeb342dffe91a5eabd1fb016d4dda7642b"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/right_nozzle.json",
+      "sha256": "ee8717455497f4015273297f4bd6d722dcb8b4678ee8b50026595b8fb1240377"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/torso.json",
+      "sha256": "7c80dc94c4149e6f3393664c8d7b26104bd7fa13390b13114b77632d192425f8"
+    },
+    {
+      "path": "assets/modelengine/models/boba_fett/visor.json",
+      "sha256": "96808fe9e5019550fdf5272e8f47af8304057a07a6335c0c937350f1aca2cc6f"
     },
     {
       "path": "assets/modelengine/models/bossk/head.json",
@@ -759,6 +856,10 @@
     {
       "path": "assets/modelengine/textures/entity/models/bantha.png",
       "sha256": "408e6873ace2e126e39b7dfb382b807454538b37434e117319ce0b5e0768aba7"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/boba_fett.png",
+      "sha256": "5f2a3508d0a4f62015b3aa5586168edac993ed9c149a235cb1255519a4f6e2ef"
     },
     {
       "path": "assets/modelengine/textures/entity/models/bossk.png",

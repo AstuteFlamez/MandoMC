@@ -187,5 +187,40 @@
       }
     ],
     "subtitle": "Rancor snarls"
+  },
+  "mobs.boba_impressed": {
+    "sounds": [
+      "mandomc:mobs/boba_impressed"
+    ]
+  },
+  "mobs.boba_stay_out_of_my_way": {
+    "sounds": [
+      "mandomc:mobs/boba_stay_out_of_my_way"
+    ]
+  },
+  "mobs.boba_die": {
+    "sounds": [
+      "mandomc:mobs/boba_die"
+    ]
+  },
+  "mobs.boba_burn": {
+    "sounds": [
+      "mandomc:mobs/boba_burn"
+    ]
+  },
+  "mobs.flamethrower": {
+    "sounds": [
+      "mandomc:mobs/flamethrower"
+    ]
+  },
+  "mobs.jetpack": {
+    "sounds": [
+      "mandomc:mobs/jetpack"
+    ]
+  },
+  "shoot.ee3": {
+    "sounds": [
+      "mandomc:shoot/ee3"
+    ]
   }
 }
