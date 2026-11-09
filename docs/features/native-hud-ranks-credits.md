@@ -20,7 +20,9 @@ Native UUID assignments live in ignored `data/rank-users.yml`; integer-cent bala
 Pack provenance is in rank-sources.json and planet-sources.json. All sixteen rank textures and the planet label preserve original pixels, glyphs, height and ascent. Ranks use `mandomc:ranks` so ordinary Latin letters are not globally replaced. Existing item badges/planet artwork remain intact.
 
 ## Verification
-Combined build: 132 Java tests and 19 script tests pass. Pack validates and builds deterministically. Combined vehicle/config integration is included; 51 focused Paper assertions pass, plus 81 combat regressions covering tags, drops, logout punishment and travel denial. Client appearance remains to be checked.
+Combined build: 132 Java tests and 19 script tests pass. The 515-file pack validates and builds deterministically. Combined vehicle/config integration is included; 51 focused Paper assertions pass, plus 81 combat regressions covering tags, drops, logout punishment and travel denial. Client appearance remains to be checked.
 
 ## Pause note
-Implementation and account migration are staged on `bilal/native-hud-ranks`. Next action: publish the combined pack and deploy alongside the latest vehicle/config changes.
+Deployed from implementation commit `0163011` on `bilal/native-hud-ranks`, including the latest vehicle changes. Public release `resource-pack-26.1.2-01630112d11a` was verified anonymously; normal server restarted at 16:40 local, with KOTH restored and no probes installed. The tested/deployed JAR and hosted hashes match. Live console confirms AstuteFlamez is MandoStudios with $0.00; all other accounts default to Default/zero. No legacy assignments or balances were imported. Rollback files remain in ignored `.local/rollout-backup`.
+
+Next action: client-check rank/tab/nameplate appearance, combat sidebar and warp lore; use `/balance` and `/pay` to try credits.
