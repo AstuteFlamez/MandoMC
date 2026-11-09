@@ -15,7 +15,7 @@ Restore the current real block data when combat expires, the player moves away, 
 ## Ownership and parameters
 CombatService remains the only tag/timer owner. CombatBarrier owns only boundary enforcement and temporary client visuals. WorldGuard remains protection authority; use its resolved flag queries rather than hardcoded landing coordinates.
 
-`combat.yml` gains `barrier.radius-blocks` (2..8, default 6), `blocks-below` (0..3, default 1), and `blocks-above` (2..6, default 4). Restart after edits. Glass is red stained glass; it updates after position changes and is refreshed periodically to recover from normal server block updates.
+`combat/combat.yml` gains `barrier.radius-blocks` (2..8, default 6), `blocks-below` (0..3, default 1), and `blocks-above` (2..6, default 4). Restart after edits. Glass is red stained glass; it updates after position changes and is refreshed periodically to recover from normal server block updates.
 
 ## References
 The [official DeluxeCombat FAQ](https://deluxecombat.com/wiki/faq#how-can-i-enable-combat-borders) describes physical combat borders as packet blocks visible only to the affected player. This implementation uses the existing MandoMC timer and WorldGuard setup. [WorldGuard spatial-query documentation](https://worldguard.enginehub.org/en/latest/developer/regions/spatial-queries/) specifies resolved queries for priorities and inherited flags. Current [Paper teleport behavior](https://jd.papermc.io/paper/26.1.2/io/papermc/paper/entity/TeleportFlag.EntityState.html) retains passengers by default.

@@ -17,11 +17,11 @@ public final class BanthaDrops implements Listener {
     @SuppressWarnings("unchecked")
     public BanthaDrops(JavaPlugin plugin, ItemCatalog items, ConfigurationSection config)
             throws ReflectiveOperationException {
-        Objects.requireNonNull(config, "bantha-hide.yml: drops missing");
+        Objects.requireNonNull(config, "mobs/drops/bantha.yml: drops missing");
         int min = config.getInt("minimum", -1);
         int max = config.getInt("maximum", -1);
         if (!config.isInt("minimum") || !config.isInt("maximum") || min < 1 || max < min || max > 64) {
-            throw new IllegalArgumentException("bantha-hide.yml: require 1 <= drops.minimum <= drops.maximum <= 64");
+            throw new IllegalArgumentException("mobs/drops/bantha.yml: require 1 <= drops.minimum <= drops.maximum <= 64");
         }
         Objects.requireNonNull(items.create("bantha_hide"), "Missing bantha_hide item");
         var vendor = Objects.requireNonNull(Bukkit.getPluginManager().getPlugin("MythicMobs"), "Missing MythicMobs");

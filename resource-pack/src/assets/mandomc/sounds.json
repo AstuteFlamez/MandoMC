@@ -91,5 +91,29 @@
     "sounds": [
       "mandomc:mobs/dewback_idle"
     ]
+  },
+  "vehicles.speederbike_drive": {
+    "sounds": [
+      {
+        "name": "mandomc:vehicles/speederbike_drive",
+        "stream": false
+      }
+    ]
+  },
+  "vehicles.tie_fighter_fly": {
+    "sounds": [
+      {
+        "name": "mandomc:vehicles/tie_fighter_fly",
+        "stream": false
+      }
+    ]
+  },
+  "vehicles.xwing_fly": {
+    "sounds": [
+      {
+        "name": "mandomc:vehicles/xwing_fly",
+        "stream": false
+      }
+    ]
   }
 }

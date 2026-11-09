@@ -11,10 +11,10 @@ parser = argparse.ArgumentParser()
 parser.add_argument('pack', type=Path, help='ModelEngine generated resource pack directory')
 args = parser.parse_args()
 source = args.pack / 'assets/modelengine'
-expected = {'ranged_raider', 'melee_raider', 'bantha', 'dewback', 'massiff'}
+expected = {'ranged_raider', 'melee_raider', 'bantha', 'dewback', 'massiff', 'speederbike', 'xwing', 'tiefighter', 'uwing'}
 actual = {p.name for p in (source / 'items').iterdir() if p.is_dir()}
 if not expected <= actual or actual - expected - {'internal_fire'}:
-    raise SystemExit(f'Expected only the five sandy models and optional internal_fire; got {sorted(actual)}')
+    raise SystemExit(f'Expected the configured creature and vehicle models and optional internal_fire; got {sorted(actual)}')
 destination = ROOT / 'resource-pack/src/assets/modelengine'
 # No vanilla shader overrides are required for these rigid models (none uses player limbs).
 shutil.copytree(source, destination, dirs_exist_ok=True)
@@ -33,4 +33,4 @@ for path in files:
         path.write_bytes(path.read_bytes().replace(b'\r\n', b'\n'))
 manifest.write_text(json.dumps({'generator': 'ModelEngine R4.1.1', 'models': sorted(expected),
     'files': [{'path': str(p.relative_to(ROOT / 'resource-pack/src')), 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()} for p in files]}, indent=2) + '\n')
-print(f'Imported {len(files)} model files for {len(expected)} mob models.')
+print(f'Imported {len(files)} model files for {len(expected)} creature and vehicle models.')

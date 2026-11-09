@@ -67,8 +67,8 @@ public final class CombatBarrier implements Listener, AutoCloseable {
         below = config == null ? 1 : config.getInt("blocks-below", 1);
         above = config == null ? 4 : config.getInt("blocks-above", 4);
         if (radius < 2 || radius > 8 || below < 0 || below > 3 || above < 2 || above > 6)
-            throw new IllegalArgumentException("combat.yml: barrier radius 2..8, below 0..3, above 2..6 required");
-        if (message == null || message.isBlank()) throw new IllegalArgumentException("messages.yml: missing combat.barrier-denied");
+            throw new IllegalArgumentException("combat/combat.yml: barrier radius 2..8, below 0..3, above 2..6 required");
+        if (message == null || message.isBlank()) throw new IllegalArgumentException("language/messages.yml: missing combat.barrier-denied");
         denied = MiniMessage.miniMessage().deserialize(message);
         ticker = plugin.getServer().getScheduler().runTaskTimer(plugin, this::tick, 1, 4);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);

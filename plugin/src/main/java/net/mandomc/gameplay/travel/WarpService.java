@@ -37,19 +37,19 @@ public final class WarpService implements Listener, AutoCloseable {
     private final Map<Integer,String> slots=new HashMap<>();
     public WarpService(JavaPlugin plugin,TeleportService travel,ArrivalDestinations arrivals,ConfigurationSection config) {
         this.plugin=plugin;this.travel=travel;this.arrivals=arrivals;this.config=config;
-        if(config.getInt("schema-version")!=1) throw new IllegalArgumentException("warps.yml: expected schema-version 1");
+        if(config.getInt("schema-version")!=1) throw new IllegalArgumentException("travel/warps.yml: expected schema-version 1");
         size=config.getInt("gui-size",54);
-        if(size<9 || size>54 || size%9!=0) throw new IllegalArgumentException("warps.yml: gui-size must be 9..54 in rows of nine");
+        if(size<9 || size>54 || size%9!=0) throw new IllegalArgumentException("travel/warps.yml: gui-size must be 9..54 in rows of nine");
         var section=config.getConfigurationSection("warps");
         if(section==null || !section.getKeys(false).equals(java.util.Set.copyOf(ids())))
-            throw new IllegalArgumentException("warps.yml: configure exactly spawn, earth and hoth");
+            throw new IllegalArgumentException("travel/warps.yml: configure exactly spawn, earth and hoth");
         for(String id:ids()) {
             int slot=config.getInt("warps."+id+".slot",-1);
             Material material=Material.matchMaterial(config.getString("warps."+id+".material",""));
             if(slot<0 || slot>=size || slots.put(slot,id)!=null || material==null || !material.isItem() || material.isAir())
-                throw new IllegalArgumentException("warps.yml: invalid/duplicate slot or material for "+id);
+                throw new IllegalArgumentException("travel/warps.yml: invalid/duplicate slot or material for "+id);
             String model=config.getString("warps."+id+".item-model","");
-            if(!model.isEmpty() && org.bukkit.NamespacedKey.fromString(model)==null) throw new IllegalArgumentException("warps.yml: missing/invalid item-model for "+id);
+            if(!model.isEmpty() && org.bukkit.NamespacedKey.fromString(model)==null) throw new IllegalArgumentException("travel/warps.yml: missing/invalid item-model for "+id);
             for(String key:List.of("name","description")) require("warps."+id+"."+key);
         }
         require("gui-title");
@@ -67,7 +67,7 @@ public final class WarpService implements Listener, AutoCloseable {
         plugin.getServer().getPluginManager().registerEvents(this,plugin);
     }
     private void require(String path) {
-        if(!config.isString(path) || config.getString(path).isBlank()) throw new IllegalArgumentException("warps.yml: missing "+path);
+        if(!config.isString(path) || config.getString(path).isBlank()) throw new IllegalArgumentException("travel/warps.yml: missing "+path);
     }
     public static List<String> ids() {return List.of("spawn","earth","hoth");}
     public static String canonical(String input) {

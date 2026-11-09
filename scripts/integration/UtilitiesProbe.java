@@ -93,11 +93,11 @@ public final class UtilitiesProbe extends JavaPlugin {
         check(personal.back(a.player).equals(SavedLocation.of(earth)), "successful teleport records departure");
         personal.death(new org.bukkit.event.entity.PlayerDeathEvent(a.player, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(), new ArrayList<>(), 0, Component.empty(), false));
         check(personal.back(a.player).equals(SavedLocation.of(earth)), "death records return location");
-        var language = YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(plugin.getResource("messages.yml")));
-        var config = YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(plugin.getResource("teleport.yml")));
+        var language = YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(plugin.getResource("language/messages.yml")));
+        var config = YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(plugin.getResource("travel/teleport.yml")));
         config.set("effects.enabled", false);
         travel = new TeleportService(this, config, language, plugin.combat());
-        var utilityConfig = YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(plugin.getResource("utilities.yml")));
+        var utilityConfig = YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(plugin.getResource("admin/utilities.yml")));
         var clock = new AtomicLong(1_000_000_000L);
         var directory = new HashMap<UUID, Player>(); for (var actor : actors) directory.put(actor.id, actor.player);
         requests = new TeleportRequests(this, travel, plugin.combat(), new CommandMessages(language), utilityConfig, directory::get, clock::get);

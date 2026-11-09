@@ -53,7 +53,7 @@ Aircraft carry players in the first integrated playtest; aerial combat is deferr
 
 Only the player who placed a vehicle can pilot it. Membership in the same group does not grant pilot access. Anyone, including an opposing player, may use an available passenger seat. The same open-access rule applies to gunner seats when vehicle weapons are introduced; gunner permission does not add aerial weapons to the first transport-only version.
 
-Outside protected areas, enemies may destroy vehicles but cannot steal them by taking the pilot seat. Destruction permanently removes the vehicle; the player must obtain another. The placing player can pack a vehicle back into an inventory item only when it is stationary, empty and out of combat. Packing must not repair, refuel or duplicate it for free. Damage permission, piloting and other seat access are separate rules; do not infer one from another.
+Outside protected areas, enemies may destroy vehicles but cannot steal them by taking the pilot seat. Destruction permanently removes the vehicle; the player must obtain another. The placing player can pack a vehicle back into an inventory item only when it is stationary, empty and out of combat. Packing must not repair or duplicate it for free. Damage permission, piloting and other seat access are separate rules; do not infer one from another.
 
 ## Accepted acquisition loop
 Sell ordinary survival resources to buy basic blasters and ammunition; craft basic armor from survival materials; earn credits and rare components from KOTH/Jabba; use those components to craft lightsabers and advanced equipment.

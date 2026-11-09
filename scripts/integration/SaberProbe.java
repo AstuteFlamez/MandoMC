@@ -35,7 +35,7 @@ public final class SaberProbe extends JavaPlugin {
         var world=Bukkit.getWorld(NamespacedKey.minecraft("overworld"));
         var point=new Location(world,-150,300,-150,0,0);world.getChunkAt(point).addPluginChunkTicket(this);
         player=new TestPlayer("SaberProbe",point);player.storage.setItem(0,item);
-        var packConfig=org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.File(plugin.getDataFolder(),"sabers.yml")).getConfigurationSection("upstream-pack");
+        var packConfig=org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.File(plugin.getDataFolder(),"combat/sabers.yml")).getConfigurationSection("upstream-pack");
         var pack=new net.mandomc.integrations.packs.SaberPack(this,packConfig);
         org.bukkit.event.HandlerList.unregisterAll(pack);
         pack.request(player.player);

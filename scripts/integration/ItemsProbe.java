@@ -80,15 +80,15 @@ public final class ItemsProbe extends JavaPlugin {
 
         fixture = Files.createTempDirectory("mandomc-items-probe-");
         Files.createDirectory(fixture.resolve("items"));
-        Files.copy(plugin.getDataFolder().toPath().resolve("items.yml"), fixture.resolve("items.yml"));
-        String original = Files.readString(plugin.getDataFolder().toPath().resolve("items/robes.yml"));
-        Files.writeString(fixture.resolve("items/robes.yml"), original);
+        Files.copy(plugin.getDataFolder().toPath().resolve("items/catalog.yml"), fixture.resolve("items/catalog.yml"));
+        String original = Files.readString(plugin.getDataFolder().toPath().resolve("items/definitions/robes.yml"));
+        Files.writeString(fixture.resolve("items/definitions/robes.yml"), original);
         catalog = new ItemCatalog(fixture, new WeaponMechanicsItems()::generate);
         catalog.reload();
-        Files.writeString(fixture.resolve("items/robes.yml"), original.replace("LEATHER_HELMET", "INVALID"));
+        Files.writeString(fixture.resolve("items/definitions/robes.yml"), original.replace("LEATHER_HELMET", "INVALID"));
         expectRejected(catalog::reload, "invalid material rejects reload");
         check(catalog.create("robes_helmet") != null, "failed reload keeps working catalog");
-        Files.writeString(fixture.resolve("items/robes.yml"), original);
+        Files.writeString(fixture.resolve("items/definitions/robes.yml"), original);
         Files.writeString(fixture.resolve("items/duplicate.yml"), original);
         expectRejected(catalog::reload, "duplicate IDs reject reload");
         Files.delete(fixture.resolve("items/duplicate.yml"));
@@ -98,9 +98,9 @@ public final class ItemsProbe extends JavaPlugin {
                     .append("    material: PAPER\n    name: '<yellow>Test item'\n    rarity: uncommon\n    category: test\n")
                     .append("    lore: ['<gray>Pagination fixture']\n    custom-model-data: 1\n    item-model: mandomc:armor/robes_helmet\n");
         }
-        var settings = YamlConfiguration.loadConfiguration(fixture.resolve("items.yml").toFile());
+        var settings = YamlConfiguration.loadConfiguration(fixture.resolve("items/catalog.yml").toFile());
         settings.set("categories.test", "ĉ");
-        settings.save(fixture.resolve("items.yml").toFile());
+        settings.save(fixture.resolve("items/catalog.yml").toFile());
         Files.writeString(fixture.resolve("items/pages.yml"), extra);
         catalog.reload();
         check(catalog.ids("test").size() == 47, "pagination fixture spans two pages");

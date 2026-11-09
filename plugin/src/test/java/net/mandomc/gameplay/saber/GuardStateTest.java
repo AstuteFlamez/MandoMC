@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 public class GuardStateTest {
     private YamlConfiguration config() {
         return YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(
-                getClass().getResourceAsStream("/sabers.yml"), java.nio.charset.StandardCharsets.UTF_8));
+                getClass().getResourceAsStream("/combat/sabers.yml"), java.nio.charset.StandardCharsets.UTF_8));
     }
     private SaberSettings settings() { return SaberSettings.read(config()); }
 

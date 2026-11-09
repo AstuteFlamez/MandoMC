@@ -22,10 +22,10 @@ Elytra flight, enchanting, potions and ordinary swords/bows/crossbows/shields ar
 MandoMC CombatService is the sole tag authority. TeleportService delegates to it; remove the old provisional teleport.yml `combat-block-seconds` key. Tags are session state; kit and saber ownership use player PDC. WorldGuard cancels protected damage, Multiverse owns normal world placement, and Paper owns the actual death/drops. Essentials' default newbie kit is disabled to avoid duplicate grants.
 
 ## Parameters
-- `combat.yml`: schema-version 1; tag-seconds 1..300, default 15.
-- `starter-kit.yml`: schema-version 1; materials and custom-items IDs with whole-stack quantities 1..64, constrained by each item's native maximum stack.
-- `survival-rules.yml`: schema-version 1; disable-elytras, disable-enchanting, disable-potions, disable-vanilla-weapons, disable-nether-and-end, all true.
-- `messages.yml`: combat sidebar/messages, rule denials and kit receipt text.
+- `combat/combat.yml`: schema-version 1; tag-seconds 1..300, default 15.
+- `arrival/starter-kit.yml`: schema-version 1; materials and custom-items IDs with whole-stack quantities 1..64, constrained by each item's native maximum stack.
+- `rules/survival.yml`: schema-version 1; disable-elytras, disable-enchanting, disable-potions, disable-vanilla-weapons, disable-nether-and-end, all true.
+- `language/messages.yml`: combat sidebar/messages, rule denials and kit receipt text.
 All gameplay config changes require a clean restart. Bundled language defaults are additive.
 
 For fresh installs, also apply the Paper/Bukkit/Multiverse/Essentials settings in [shared config instructions](../../server/config/common/README.md). Disabling a gameplay flag alone does not re-enable unloaded dimensions.
@@ -39,4 +39,4 @@ Blocking, reflection tuning/testing and substantial throw stamina cost wait unti
 ## Deployment result
 Installed build SHA-256: `5b7e8258436e44941ffa67dd1762557f9765e4f6e2e779f32184ebfa7d70b8d9`. The temporary probe is removed. Normal 12-plugin startup and automated restart pass through `scripts/server-control.py`; five controller safety tests also pass. No manual restart step is needed.
 
-Global natural-spawn restriction: `survival-rules.yml` lists `disabled-natural-mobs: [SLIME]`. This cancels NATURAL and CHUNK_GEN spawns in every world and biome, including DevWorld. It preserves spawners, eggs, commands, custom summons, slime splitting and existing entities.
+Global natural-spawn restriction: `rules/survival.yml` lists `disabled-natural-mobs: [SLIME]`. This cancels NATURAL and CHUNK_GEN spawns in every world and biome, including DevWorld. It preserves spawners, eggs, commands, custom summons, slime splitting and existing entities.

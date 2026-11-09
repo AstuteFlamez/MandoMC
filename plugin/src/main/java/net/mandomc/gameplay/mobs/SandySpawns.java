@@ -32,14 +32,14 @@ public final class SandySpawns implements Listener, AutoCloseable {
         this.mobs = mobs;
         encounter = new NamespacedKey(plugin, "sandy_encounter_v1");
         if (Bukkit.getWorld(NamespacedKey.fromString(settings.world())) == null) {
-            throw new IllegalArgumentException("mobs.yml: configured survival world is not loaded: " + settings.world());
+            throw new IllegalArgumentException("mobs/spawning.yml: configured survival world is not loaded: " + settings.world());
         }
         for (String biome : settings.biomes()) {
             if (Registry.BIOME.get(NamespacedKey.fromString(biome)) == null)
-                throw new IllegalArgumentException("mobs.yml: unknown biome " + biome);
+                throw new IllegalArgumentException("mobs/spawning.yml: unknown biome " + biome);
         }
         for (String ground : settings.ground()) {
-            if (Material.matchMaterial(ground) == null) throw new IllegalArgumentException("mobs.yml: unknown ground " + ground);
+            if (Material.matchMaterial(ground) == null) throw new IllegalArgumentException("mobs/spawning.yml: unknown ground " + ground);
         }
         Bukkit.getPluginManager().registerEvents(this, plugin);
         task = Bukkit.getScheduler().runTaskTimer(plugin, this::tick, 200, settings.interval() * 20L);

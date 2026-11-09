@@ -17,7 +17,7 @@ The tutorial appears after a successfully loaded resource pack. Its versioned ma
 - Starter equipment, credits, claims, combat tagging and custom damage remain later work. A permanent survival world still needs the agreed generation exclusions.
 
 ## Parameters and ownership
-MandoMC config schema remains version 1. `arrival.enabled` defaults to false for a clean clone. The local override enables it; `arrival.spawn-world` and `arrival.survival-world` are distinct namespaced IDs, and `arrival.warmup-seconds` must be 1..30. Multiverse/world settings own the actual coordinates. `messages.yml` owns the tutorial and route messages. Restart after configuration changes.
+MandoMC config schema remains version 1. `arrival.enabled` defaults to false for a clean clone. The local override enables it; `arrival.spawn-world` and `arrival.survival-world` are distinct namespaced IDs, and `arrival.warmup-seconds` must be 1..30. Multiverse/world settings own the actual coordinates. `language/messages.yml` owns the tutorial and route messages. Restart after configuration changes.
 
 WorldGuard owns the regions, not MandoMC. Its API is isolated in `integrations/regions`. Paper serves the required resource pack. No legacy plugin binaries or player data were imported.
 
@@ -32,6 +32,6 @@ Join localhost, visit SpawnWorld, and play through `/tutorial` and `/survival`; 
 Temporary interface note (2026-11-07): `/tutorial` and `/survival` are development-only commands. Their behavior is available for testing; the final onboarding/travel interface is undecided.
 
 ## Spawn travel follow-up
-`/spawn` now goes to SpawnWorld; temporary `/survival` goes to SurvivalWorld (the existing dev_world under that Multiverse alias). Both use the shared three-second countdown in `teleport.yml`, replacing the earlier five-second, one-way-only departure. Looking around is allowed; changing position cancels. See [command documentation](../commands.md).
+`/spawn` now goes to SpawnWorld; temporary `/survival` goes to SurvivalWorld (the existing dev_world under that Multiverse alias). Both use the shared three-second countdown in `travel/teleport.yml`, replacing the earlier five-second, one-way-only departure. Looking around is allowed; changing position cancels. See [command documentation](../commands.md).
 
 Future tutorial direction: `/tutorial` will show short text and take the player to a library building in SpawnWorld with takeable, feature-specific guidebooks. This is deferred; current tutorial text is temporary.

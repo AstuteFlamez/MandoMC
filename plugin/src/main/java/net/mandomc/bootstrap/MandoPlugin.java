@@ -39,6 +39,10 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     public net.mandomc.gameplay.admin.AdminService admin() { return admin; }
     public net.mandomc.gameplay.travel.TeleportRequests requests() { return requests; }
     public net.mandomc.gameplay.travel.PersonalTravel personal() { return personal; }
+    private net.mandomc.gameplay.vehicles.VehicleService vehicles;
+    private net.mandomc.gameplay.explosions.TemporaryExplosions explosions;
+    public net.mandomc.gameplay.vehicles.VehicleService vehicles() { return vehicles; }
+    public net.mandomc.gameplay.explosions.TemporaryExplosions explosions() { return explosions; }
     private ArrivalListener arrival;
     private ArrivalDestinations destinations;
     private boolean failed;
@@ -67,20 +71,21 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             });
         }
         try {
+            net.mandomc.config.ConfigFiles.migrate(this);
             if (getConfig().getInt("schema-version", -1) != 1) {
                 throw new IllegalArgumentException("config.yml: unsupported schema-version; expected 1");
             }
-            if (!new File(getDataFolder(), "messages.yml").isFile()) {
-                saveResource("messages.yml", false);
+            if (!new File(getDataFolder(), "language/messages.yml").isFile()) {
+                saveResource("language/messages.yml", false);
             }
             var language = new YamlConfiguration();
-            language.load(new File(getDataFolder(), "messages.yml"));
+            language.load(new File(getDataFolder(), "language/messages.yml"));
             // New message keys fall back to bundled defaults without overwriting operator translations.
-            try (var reader = new java.io.InputStreamReader(Objects.requireNonNull(getResource("messages.yml")),
+            try (var reader = new java.io.InputStreamReader(Objects.requireNonNull(getResource("language/messages.yml")),
                     java.nio.charset.StandardCharsets.UTF_8)) {
                 language.setDefaults(YamlConfiguration.loadConfiguration(reader));
             }
-            worlds = new net.mandomc.gameplay.worlds.WorldService(this, loadFeature("worlds.yml"));
+            worlds = new net.mandomc.gameplay.worlds.WorldService(this, loadFeature("worlds/worlds.yml"));
             var root = new net.mandomc.commands.RootCommand(this, sender -> {
                 try {
                     if (failed) {
@@ -98,14 +103,14 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 }
             }, sender -> sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage()
                     .deserialize(Objects.requireNonNull(language.getString("items.denied")))));
-            for (var resource : new String[] {"items.yml", "items/robes.yml", "items/materials.yml", "items/sabers.yml", "items/tusken.yml", "items/massiff.yml", "massiff-drops.yml", "items/dewback.yml", "dewback-drops.yml", "sabers.yml"}) {
+            for (var resource : new String[] {"items/catalog.yml", "items/definitions/vehicles.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
                 if (!new File(getDataFolder(), resource).isFile()) saveResource(resource, false);
             }
             // Add only missing badges and vendor registrations; preserve local overrides.
             var presentation = new YamlConfiguration();
-            var presentationFile = new File(getDataFolder(), "items.yml");
+            var presentationFile = new File(getDataFolder(), "items/catalog.yml");
             presentation.load(presentationFile);
-            try (var reader = new java.io.InputStreamReader(Objects.requireNonNull(getResource("items.yml")), java.nio.charset.StandardCharsets.UTF_8)) {
+            try (var reader = new java.io.InputStreamReader(Objects.requireNonNull(getResource("items/catalog.yml")), java.nio.charset.StandardCharsets.UTF_8)) {
                 var defaults = YamlConfiguration.loadConfiguration(reader);
                 for (String group : new String[] {"rarities", "categories", "external-items"}) {
                     for (String key : Objects.requireNonNull(defaults.getConfigurationSection(group)).getKeys(false)) {
@@ -125,30 +130,30 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             } catch (Exception error) {
                 getLogger().severe("Custom items unavailable; repair config and /mandomc items reload: " + error.getMessage());
             }
-            var hideConfig = loadFeature("bantha-hide.yml");
-            var recipeConfig = loadFeature("recipes.yml");
+            var hideConfig = loadFeature("mobs/drops/bantha.yml");
+            var recipeConfig = loadFeature("items/recipes.yml");
             craftingRecipes = new net.mandomc.gameplay.items.CraftingRecipes(this, items, recipeConfig);
             recipeGuide = new net.mandomc.gameplay.items.RecipeGuide(this, craftingRecipes, recipeConfig);
             var saberConfig = new YamlConfiguration();
-            saberConfig.load(new File(getDataFolder(), "sabers.yml"));
+            saberConfig.load(new File(getDataFolder(), "combat/sabers.yml"));
             sabers = new net.mandomc.gameplay.saber.SaberService(this, items,
                     net.mandomc.gameplay.saber.SaberSettings.read(saberConfig), language.getConfigurationSection("sabers"));
             saberProjectiles = new net.mandomc.integrations.weapons.SaberProjectiles(this, sabers);
             new net.mandomc.integrations.packs.SaberPack(this, saberConfig.getConfigurationSection("upstream-pack"));
             getLogger().info("Vader saber enabled: native melee, guard, reflection and bounded throws.");
-            var combatConfig = loadFeature("combat.yml");
+            var combatConfig = loadFeature("combat/combat.yml");
             combat = new net.mandomc.gameplay.combat.CombatService(this, combatConfig,
                     language.getConfigurationSection("combat"), sabers::finish);
             var boundaryProtection = new net.mandomc.integrations.regions.SaberProtection();
             barrier = new net.mandomc.gameplay.combat.CombatBarrier(this, combat,
                     location -> !boundaryProtection.allowed(location), combatConfig.getConfigurationSection("barrier"),
                     language.getString("combat.barrier-denied"));
-            rules = new net.mandomc.gameplay.rules.SurvivalRules(this, loadFeature("survival-rules.yml"),
+            rules = new net.mandomc.gameplay.rules.SurvivalRules(this, loadFeature("rules/survival.yml"),
                     language.getConfigurationSection("rules"), sabers::isSaber, items);
-            starterKit = new net.mandomc.gameplay.arrival.StarterKit(this, items, loadFeature("starter-kit.yml"),
+            starterKit = new net.mandomc.gameplay.arrival.StarterKit(this, items, loadFeature("arrival/starter-kit.yml"),
                     language.getString("starter-kit.received"));
             getLogger().info("Combat basics ready: shared combat tag, logout death, survival rules and first-join kit.");
-            var mobConfig = loadFeature("mobs.yml");
+            var mobConfig = loadFeature("mobs/spawning.yml");
             if (mobConfig.getBoolean("enabled", false)) {
                 var settings = net.mandomc.gameplay.mobs.SandySettings.read(mobConfig);
                 var mythic = new net.mandomc.integrations.mobs.MythicMobAccess();
@@ -161,10 +166,18 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 mobs = new net.mandomc.gameplay.mobs.SandySpawns(this, settings, mythic);
                 getLogger().info("Sandy mobs ready: five types, levelled encounters and shared population limits.");
             }
-            var utilityConfig = loadFeature("utilities.yml");
-            if (utilityConfig.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("utilities.yml: expected schema-version 1");
+            var vehicleProtection = new net.mandomc.integrations.regions.VehicleProtection();
+            explosions = new net.mandomc.gameplay.explosions.TemporaryExplosions(this,
+                    net.mandomc.gameplay.explosions.BlastSettings.read(loadFeature("worlds/explosions.yml")), vehicleProtection::blocks);
+            vehicles = new net.mandomc.gameplay.vehicles.VehicleService(this, items, combat,
+                    new net.mandomc.integrations.models.ModelEngineVehicles(this), vehicleProtection, explosions,
+                    language.getConfigurationSection("vehicles"));
+            new net.mandomc.integrations.weapons.VehicleWeapons(this, vehicles, explosions);
+            getLogger().info("Vehicles ready: speederbike, X-Wing, TIE Fighter and U-Wing; temporary explosions enabled.");
+            var utilityConfig = loadFeature("admin/utilities.yml");
+            if (utilityConfig.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("admin/utilities.yml: expected schema-version 1");
             var utilityMessages = new net.mandomc.commands.CommandMessages(language);
-            travel = new net.mandomc.gameplay.travel.TeleportService(this, loadFeature("teleport.yml"), language, combat);
+            travel = new net.mandomc.gameplay.travel.TeleportService(this, loadFeature("travel/teleport.yml"), language, combat);
             getServer().getPluginManager().registerEvents(travel, this);
             personal = new net.mandomc.gameplay.travel.PersonalTravel(this, utilityConfig.getInt("homes-limit"), combat::tagged);
             requests = new net.mandomc.gameplay.travel.TeleportRequests(this, travel, combat, utilityMessages, utilityConfig);
@@ -186,7 +199,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             arrival = new ArrivalListener(this, settings, destinations, language);
             getServer().getPluginManager().registerEvents(arrival, this);
             net.mandomc.commands.ArrivalCommands.register(this, arrival, destinations, travel);
-            warps = new net.mandomc.gameplay.travel.WarpService(this, travel, destinations, loadFeature("warps.yml"));
+            warps = new net.mandomc.gameplay.travel.WarpService(this, travel, destinations, loadFeature("travel/warps.yml"));
             events = new net.mandomc.gameplay.events.EventManager(this, warps);
             getLogger().info("Legacy events and public warps ready: KOTH, Black Spire Outpost, Earth and Hoth; rewards disabled.");
             getLogger().info("Arrival enabled: protected SpawnWorld -> survival; /spawn, /survival and temporary /tutorial ready.");
@@ -213,6 +226,8 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (vehicles != null) vehicles.close();
+        if (explosions != null) explosions.close();
         if (commandBindings != null) commandBindings.close();
         if (requests != null) requests.close();
         if (admin != null) admin.close();

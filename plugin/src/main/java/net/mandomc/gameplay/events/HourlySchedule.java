@@ -14,7 +14,7 @@ public final class HourlySchedule {
     private final int start;
     public HourlySchedule(ZonedDateTime now, int endWarning, int end, int startWarning, int start) {
         for (int value : new int[]{endWarning, end, startWarning, start})
-            if (value < 0 || value > 59) throw new IllegalArgumentException("events.yml: schedule minutes must be 0..59");
+            if (value < 0 || value > 59) throw new IllegalArgumentException("events/schedule.yml: schedule minutes must be 0..59");
         this.endWarning = endWarning;this.end = end;this.startWarning = startWarning;this.start = start;
         lastMinute = now.toEpochSecond() / 60;
     }

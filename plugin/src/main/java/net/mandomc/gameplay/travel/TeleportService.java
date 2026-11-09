@@ -49,14 +49,14 @@ public final class TeleportService implements Listener, AutoCloseable {
         this.combat = combat;
         this.plugin = plugin;
         this.language = language;
-        if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("teleport.yml: expected schema-version 1");
+        if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("travel/teleport.yml: expected schema-version 1");
         seconds = config.getInt("warmup-seconds", -1);
         spiralTicks = config.getInt("effects.spiral-ticks", -1);
         double configuredVolume = config.getDouble("effects.volume", -1);
         if (seconds < 1 || seconds > 30
                 || spiralTicks < 1 || spiralTicks > 100 || !Double.isFinite(configuredVolume)
                 || configuredVolume < 0 || configuredVolume > 2) {
-            throw new IllegalArgumentException("teleport.yml: invalid warmup (1..30), "
+            throw new IllegalArgumentException("travel/teleport.yml: invalid warmup (1..30), "
                     + "spiral ticks (1..100), or volume (0..2)");
         }
         volume = (float) configuredVolume;
@@ -66,12 +66,12 @@ public final class TeleportService implements Listener, AutoCloseable {
             arrivalSound = sound(config, "effects.arrival-sound");
             cancelSound = sound(config, "effects.cancel-sound");
         } catch (IllegalArgumentException error) {
-            throw new IllegalArgumentException("teleport.yml: unknown effects sound", error);
+            throw new IllegalArgumentException("travel/teleport.yml: unknown effects sound", error);
         }
         for (var key : new String[] {"countdown-title", "countdown-subtitle", "success-title", "success-subtitle",
                 "moved", "damaged", "interrupted", "unavailable", "combat", "mounted", "pending", "players-only"}) {
             if (!language.isString("teleport." + key) || language.getString("teleport." + key).isBlank()) {
-                throw new IllegalArgumentException("messages.yml: missing teleport." + key);
+                throw new IllegalArgumentException("language/messages.yml: missing teleport." + key);
             }
         }
         ticker = plugin.getServer().getScheduler().runTaskTimer(plugin, this::tick, 1L, 1L);
@@ -80,7 +80,7 @@ public final class TeleportService implements Listener, AutoCloseable {
     private static Sound sound(YamlConfiguration config, String path) {
         var key = org.bukkit.NamespacedKey.fromString(config.getString(path, ""));
         var sound = key == null ? null : org.bukkit.Registry.SOUNDS.get(key);
-        if (sound == null) throw new IllegalArgumentException("teleport.yml: unknown sound at " + path);
+        if (sound == null) throw new IllegalArgumentException("travel/teleport.yml: unknown sound at " + path);
         return sound;
     }
 

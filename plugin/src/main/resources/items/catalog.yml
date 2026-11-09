@@ -5,6 +5,7 @@ rarities:
   uncommon: 'Ė'
   rare: 'ĕ'
 categories:
+  vehicles: '<gold>VEHICLE'
   materials: 'Č'
   armor: 'ĉ'
   consumables: 'ċ'

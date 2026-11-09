@@ -67,8 +67,8 @@ The survival landing is in `dev_world`, around (-135.5, 73, -135.5). Protection 
 
 For a clean local restore:
 1. Stop Paper and back up the entire runtime/world container and WorldGuard/MandoMC configuration. Restore the already migrated `dev_world/dimensions` and player data from a verified Paper backup. Do not feed raw legacy archives to WorldService: it deliberately refuses missing dimension data instead of generating terrain.
-2. Copy `config/common/worlds.yml` and `utilities.yml` into `plugins/MandoMC`. Preserve stable dimension keys, exact coordinates/facing and aliases. The four integrated dimensions are overworld, devworld, spawnworld and hoth; Nether/End remain disabled.
-3. Restore the existing WorldGuard regions; never overwrite unrelated regions. Deploy `mandomc.yml` as MandoMC `config.yml`, with `spawn-protection=0` so WorldGuard owns static protection.
+2. Apply `config/common/mandomc/worlds/worlds.yml` and `config/common/mandomc/admin/utilities.yml` at the same relative paths under `plugins/MandoMC/`. Preserve stable dimension keys, exact coordinates/facing and aliases. The four integrated dimensions are overworld, devworld, spawnworld and hoth; Nether/End remain disabled.
+3. Restore the existing WorldGuard regions; never overwrite unrelated regions. Deploy `config/common/mandomc/config.yml` as MandoMC `config.yml`, with `spawn-protection=0` so WorldGuard owns static protection.
 4. Preserve native map gamerules (`advance_time=false`, `advance_weather=false`, `spawn_mobs=false`, `random_tick_speed=0`, `fire_spread_radius_around_player=0` on the adventure maps). Survival retains its normal rules. MandoMC preserves beds and uses Batuu as the fallback for deaths; first joins go to Batuu and returning players keep their position/game mode.
 5. Build/deploy MandoMC and restart. `/mandomc` must report both arrivals ready. Missing enabled worlds or unsafe/unprotected arrival configuration blocks logins until repaired. `/mvtp` accepts world names and old aliases.
 
@@ -84,7 +84,7 @@ Temporary interface note (2026-11-07): `/tutorial` and `/survival` are developme
 See [runtime configuration policy](runtime/README.md) and [world sources](../WORLD_SOURCES.txt).
 
 ## Spawn travel follow-up
-`/spawn` now goes to SpawnWorld; temporary `/survival` goes to SurvivalWorld (the existing dev_world under that MandoMC world alias). Both use the shared three-second countdown in `teleport.yml`, replacing the earlier five-second, one-way-only departure. Looking around is allowed; changing position cancels. See [command documentation](../docs/commands.md).
+`/spawn` now goes to SpawnWorld; temporary `/survival` goes to SurvivalWorld (the existing dev_world under that MandoMC world alias). Both use the shared three-second countdown in `travel/teleport.yml`, replacing the earlier five-second, one-way-only departure. Looking around is allowed; changing position cancels. See [command documentation](../docs/commands.md).
 
 Future tutorial direction: `/tutorial` will show short text and take the player to a library building in SpawnWorld with takeable, feature-specific guidebooks. This is deferred; current tutorial text is temporary.
 
@@ -92,11 +92,11 @@ Future tutorial direction: `/tutorial` will show short text and take the player 
 The managed console view stays open across automated restarts. Use `scripts/server-control.py` for all ordinary agent starts/stops; never ask the user to press Enter. The former restart-request marker/manual loop is retired. An old console tab running that earlier loop can be closed; new launches use the controller above.
 
 ## Recovered Hoth and event travel
-Hoth is loaded as `minecraft:hoth`; Paper stores it under the main world's `dimensions/minecraft/hoth`. Back up that directory and WorldGuard/MandoMC configuration together. Its exact arrival and Hoth alias are in `worlds.yml`. The native map gamerules and WorldGuard warzone/safe arrival remain intact. The legacy archive remains untouched.
+Hoth is loaded as `minecraft:hoth`; Paper stores it under the main world's `dimensions/minecraft/hoth`. Back up that directory and WorldGuard/MandoMC configuration together. Its exact arrival and Hoth alias are in `worlds/worlds.yml`. The native map gamerules and WorldGuard warzone/safe arrival remain intact. The legacy archive remains untouched.
 
-The deployable `events.yml`, `events/koth.yml` and `warps.yml` defaults are in server/config/common. `/warp` reaches only SpawnWorld, Earth and Hoth; `/events` shows hourly KOTH. `/event start koth` starts a manual round. Rewards remain disabled. `./scripts/build-koth-probe.sh` builds the isolated integration probe; install only while stopped, remove after controlled verification, and use normal restarts for code changes. See docs/features/koth-and-warps.md for lifecycle and verification limits.
+The deployable `events/schedule.yml`, `events/koth.yml` and `travel/warps.yml` defaults are in server/config/common/mandomc/. `/warp` reaches only SpawnWorld, Earth and Hoth; `/events` shows hourly KOTH. `/event start koth` starts a manual round. Rewards remain disabled. `./scripts/build-koth-probe.sh` builds the isolated integration probe; install only while stopped, remove after controlled verification, and use normal restarts for code changes. See docs/features/koth-and-warps.md for lifecycle and verification limits.
 
 ## Native utility deployment
-Deploy MandoMC plus common/worlds.yml and common/utilities.yml while stopped. Back up world/player data and vendor configuration, then move EssentialsX and Multiverse-Core JARs outside plugins/. Keep old userdata/balances for rollback. The replacement does not require resource-pack changes. Use normal restart, never Bukkit reload.
+Deploy MandoMC plus common/mandomc/worlds/worlds.yml and common/mandomc/admin/utilities.yml while stopped. Back up world/player data and vendor configuration, then move EssentialsX and Multiverse-Core JARs outside plugins/. Keep old userdata/balances for rollback. The replacement does not require resource-pack changes. Use normal restart, never Bukkit reload.
 
 See [native utilities](../docs/features/native-utilities.md) for commands and permissions. Public trips are instant in Creative; other modes keep the shared three-second warmup. Consent, destination safety and combat checks apply in either case.

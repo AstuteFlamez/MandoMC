@@ -1,0 +1,7 @@
+schema-version: 1
+# Shared by native, vehicle and WeaponMechanics blasts, outside protected regions.
+radius: 4
+max-blocks: 64
+restore-seconds: 60
+# Stop making new holes if this many blocks are waiting to regenerate.
+pending-limit: 4096

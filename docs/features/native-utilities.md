@@ -27,11 +27,11 @@ All existing worlds and all three public warps load without either removed plugi
 Credits, shops and a new economy provider remain deferred by the user. Vault stays installed as an inactive bridge. Clans/claims remain deferred. No new planet content or resource-pack changes.
 
 ## Ownership and integrations
-WorldService reads `worlds.yml`, loads existing migrated Paper dimensions by stable key and refuses to generate a replacement when dimension data is missing. It owns aliases, precise arrival coordinates, PvP/difficulty and weather locks. Existing native world rules and terrain remain intact. WorldGuard still owns region protection.
+WorldService reads `worlds/worlds.yml`, loads existing migrated Paper dimensions by stable key and refuses to generate a replacement when dimension data is missing. It owns aliases, precise arrival coordinates, PvP/difficulty and weather locks. Existing native world rules and terrain remain intact. WorldGuard still owns region protection.
 
 TeleportService remains the sole public countdown owner. PersonalTravel stores home/back data; TeleportRequests stores only ephemeral consent. AdminService owns operator actions and visibility; normal Paper events remain authoritative. CommandBindings explicitly selects MandoMC's bare labels where WorldEdit/vanilla register duplicates.
 
-Migration: copy the four integrated Multiverse entries into `worlds.yml`, including exact spawn position/facing, aliases and flags. Keep disabled dimensions absent. Stop the server, back up world/player data and plugin settings, replace MandoMC and move the two vendor JARs out of the plugin search path. Retain their configuration/userdata for rollback; existing Essentials balances stay archived and inactive. No existing Essentials homes were present at inspection. New MandoMC return history and god/vanish markers start with this feature. Old vendor implementation is removed from source and plugin lock/catalog.
+Migration: copy the four integrated Multiverse entries into `worlds/worlds.yml`, including exact spawn position/facing, aliases and flags. Keep disabled dimensions absent. Stop the server, back up world/player data and plugin settings, replace MandoMC and move the two vendor JARs out of the plugin search path. Retain their configuration/userdata for rollback; existing Essentials balances stay archived and inactive. No existing Essentials homes were present at inspection. New MandoMC return history and god/vanish markers start with this feature. Old vendor implementation is removed from source and plugin lock/catalog.
 
 ## Parameters
 | Key | Meaning | Default/range | Application |
@@ -43,7 +43,7 @@ Migration: copy the four integrated Multiverse entries into `worlds.yml`, includ
 | worlds.yml `worlds.<id>.key` | Existing Paper dimension | Stable namespaced key | Restart |
 | `aliases`, `spawn`, `weather`, `pvp`, `difficulty` | Name resolution, exact arrival and world flags | Migrated server configuration | Restart |
 
-Both configuration files use schema version 1. Messages fall back to bundled `messages.yml:utilities`, preserving local translations. Personal persisted keys carry version 1.
+Both configuration files use schema version 1. Messages fall back to bundled `language/messages.yml:utilities`, preserving local translations. Personal persisted keys carry version 1.
 
 ## Verification
 The integrated main build passes 81 Java tests, including input bounds, nonfinite coordinates/speeds, game-mode aliases and location serialization. `./scripts/build-utilities-probe.sh` builds the real Paper verification harness. The same integrated JAR passes 168 focused utility assertions and 54 arrival/WorldGuard regression assertions in an isolated Paper copy. All four configured worlds load with both removed vendors absent and no startup errors. The tests preserve exact Hoth arrival/facing; Tatooine is excluded with Jabba. Native PDC serialization verifies saved homes/history; no human client rendering test is claimed. The earlier five-world development version had 99 Java tests and 170 utility assertions, including excluded dungeon-related coverage. See docs/status.md for integration and deployment boundaries.

@@ -26,16 +26,16 @@ public final class WorldService implements Listener {
 
     public WorldService(JavaPlugin plugin, ConfigurationSection config) {
         if (config.getInt("schema-version", -1) != 1) {
-            throw new IllegalArgumentException("worlds.yml: expected schema-version 1");
+            throw new IllegalArgumentException("worlds/worlds.yml: expected schema-version 1");
         }
         var section = config.getConfigurationSection("worlds");
-        if (section == null) throw new IllegalArgumentException("worlds.yml: missing worlds");
+        if (section == null) throw new IllegalArgumentException("worlds/worlds.yml: missing worlds");
         for (String id : section.getKeys(false)) {
             var data = section.getConfigurationSection(id);
             var key = NamespacedKey.fromString(data.getString("key", ""));
             if (key == null || key.equals(NamespacedKey.minecraft("the_nether"))
                     || key.equals(NamespacedKey.minecraft("the_end")) || entries.containsKey(key)) {
-                throw new IllegalArgumentException("worlds.yml: invalid, disabled or duplicate dimension " + id);
+                throw new IllegalArgumentException("worlds/worlds.yml: invalid, disabled or duplicate dimension " + id);
             }
             World world = Bukkit.getWorld(key);
             if (world == null) {
@@ -43,7 +43,7 @@ public final class WorldService implements Listener {
                         .resolve(key.getNamespace()).resolve(key.getKey());
                 if (!Files.isDirectory(directory.resolve("region"))
                         || !Files.isRegularFile(directory.resolve("data/paper/level_overrides.dat"))) {
-                    throw new IllegalStateException("worlds.yml: existing dimension data missing for " + key
+                    throw new IllegalStateException("worlds/worlds.yml: existing dimension data missing for " + key
                             + "; refusing to generate replacement terrain");
                 }
                 world = WorldCreator.ofKey(key).createWorld();
@@ -53,7 +53,7 @@ public final class WorldService implements Listener {
             float yaw = (float) number(data, "spawn.yaw"), pitch = (float) number(data, "spawn.pitch");
             if (Math.abs(x) > 29999984 || Math.abs(z) > 29999984 || y < world.getMinHeight()
                     || y >= world.getMaxHeight() || Math.abs(pitch) > 90 || !Float.isFinite(yaw)) {
-                throw new IllegalArgumentException("worlds.yml: invalid spawn for " + key);
+                throw new IllegalArgumentException("worlds/worlds.yml: invalid spawn for " + key);
             }
             var location = new Location(world, x, y, z, yaw, pitch);
             var entry = new Entry(key, data.getStringList("aliases"), location, data.getBoolean("weather", true));
@@ -71,10 +71,10 @@ public final class WorldService implements Listener {
 
     private static double number(ConfigurationSection data, String path) {
         if (!data.isDouble(path) && !data.isInt(path) && !data.isLong(path)) {
-            throw new IllegalArgumentException("worlds.yml: missing numeric " + path);
+            throw new IllegalArgumentException("worlds/worlds.yml: missing numeric " + path);
         }
         double value = data.getDouble(path);
-        if (!Double.isFinite(value)) throw new IllegalArgumentException("worlds.yml: non-finite " + path);
+        if (!Double.isFinite(value)) throw new IllegalArgumentException("worlds/worlds.yml: non-finite " + path);
         return value;
     }
 

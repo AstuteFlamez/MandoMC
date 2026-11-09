@@ -26,7 +26,7 @@ The new pack lives in `resource-pack/` in this repository. Its build targets the
 | Capability | Selected public component | MandoMC owns |
 | --- | --- | --- |
 | Blasters and grenades | WeaponMechanics and dependencies | Acquisition, saber interaction, combat policy |
-| Animated models | ModelEngine | Vehicle controls, ownership, seats, fuel, health |
+| Animated models | ModelEngine | Vehicle controls, ownership, seats, health |
 | Dungeon mobs | MythicMobs | Runs, objectives, doors, cleanup, completion rewards |
 | Factions | FactionsUUID | Warpoints, vulnerability, controlled breaches |
 | Protected regions | WorldGuard with WorldEdit | Enforcement for every custom action |
@@ -52,7 +52,7 @@ The catalog in server/plugins.catalog.json records admission status. Installed v
 ## Vehicles
 The initial aircraft scope is player transport; aerial combat is deferred. MandoMC owns vehicle state and seat access, while ModelEngine owns visuals. Persist the placing player's UUID as the pilot authority for a deployed vehicle. Group membership and passenger access do not grant piloting rights.
 
-Passenger seats are available to any player. Future gunner seats follow the same access rule when weapons are introduced. Evaluate mounting, pilot-seat switching and vehicle damage separately: enemies can destroy vehicles outside protected areas, but cannot take over piloting. Destruction is permanent loss. The placer may pack a vehicle into an item only while stationary, unoccupied and out of combat. Use one authoritative identity across deployed/packed/destroyed states; preserve applicable health/fuel and prevent simultaneous item/entity copies. Acquisition starts with credit purchases and later moves to crafting for all equipment; do not encode the purchase route into runtime item or vehicle identity. Redeployment/transfer details belong in the vehicle feature brief.
+Passenger seats are available to any player. Future gunner seats follow the same access rule when weapons are introduced. Evaluate mounting, pilot-seat switching and vehicle damage separately: enemies can destroy vehicles outside protected areas, but cannot take over piloting. Destruction is permanent loss. The placer may pack a vehicle into an item only while stationary, unoccupied and out of combat. Use one authoritative identity across deployed/packed/destroyed states; preserve remaining health and prevent simultaneous item/entity copies. Acquisition starts with credit purchases and later moves to crafting for all equipment; do not encode the purchase route into runtime item or vehicle identity. Redeployment/transfer details belong in the vehicle feature brief.
 
 ## Events and warpoints
 Jabba uses one scheduled shared dungeon with PvP and open loot. Private copies per group are outside the current design. MandoMC owns event state, progression and cleanup; MythicMobs owns mob definitions and AI.
