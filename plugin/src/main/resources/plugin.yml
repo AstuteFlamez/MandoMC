@@ -6,6 +6,29 @@ author: AstuteFlamez
 description: MandoMC gameplay
 softdepend: [ WorldGuard, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
+  scoreboard:
+    description: Toggle your sidebar
+    usage: /scoreboard
+    aliases: [sb]
+    permission: mandomc.hud
+  balance:
+    description: View a credit balance
+    usage: /balance [player]
+    aliases: [bal, money]
+    permission: mandomc.credits.balance
+  pay:
+    description: Send credits to another player
+    usage: /pay <player> <amount>
+    permission: mandomc.credits.pay
+  balancetop:
+    description: View the richest players
+    usage: /balancetop
+    aliases: [baltop]
+    permission: mandomc.credits.top
+  credits:
+    description: Administer credit balances
+    usage: /credits <give|take|set> <player|UUID> <amount>
+    permission: mandomc.credits.admin
   warp:
     description: Choose Batuu, Earth, Hoth or Tatooine
     usage: /warp [batuu|earth|hoth|tatooine]
@@ -180,6 +203,18 @@ commands:
     usage: '/tpcancel'
     permission: mandomc.travel.tpcancel
 permissions:
+  mandomc.ranks.manage:
+    default: op
+  mandomc.hud:
+    default: true
+  mandomc.credits.balance:
+    default: true
+  mandomc.credits.pay:
+    default: true
+  mandomc.credits.top:
+    default: true
+  mandomc.credits.admin:
+    default: op
   mandomc.travel.warp:
     default: true
   mandomc.event:

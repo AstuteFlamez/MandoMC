@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "legacySource": {
+    "repository": "https://github.com/AstuteFlamez/MandoPack",
+    "commit": "2731b9e4ae5d8d142cd4a1aaa14f3f1b7c0e56c7",
+    "archive": "MandoPack.zip",
+    "archiveSha256": "32a578caac7c4c8976868abf0aa20f545c9926eb8d6382b94ccf5e986c95cce5"
+  },
+  "changes": "Exact rank pixels, ascent, height and glyphs; dedicated mandomc:ranks font avoids overriding ordinary Latin characters.",
+  "assets": [
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/mandostudios.png",
+      "sourceSha256": "de480860341ac36ffae79121c1fec05963f1873d961ce0b564f85cdc943b623a",
+      "destination": "assets/mandomc/textures/font/ranks/mandostudios.png"
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/mandostudios_icon.png",
+      "sourceSha256": "6d0a817495fcb60caf2210d6458e143d7133d331265721491904e692a6ab5cba",
+      "destination": "assets/mandomc/textures/font/ranks/mandostudios_icon.png"
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/marshal.png",
+      "sourceSha256": "3b96c71fc7a12f366155eb5a5367197f09a7056a161cea812784ade34bd4d386",
+      "destination": "assets/mandomc/textures/font/ranks/marshal.png"
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/marshal_icon.png",
+      "sourceSha256": "108db37c122b37f8ddf111d4c193e4110c6dd0c9fb68fca28e8620a5e833ef23",
+      "destination": "assets/mandomc/textures/font/ranks/marshal_icon.png"
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/moderator.png",
+      "sourceSha256": "b5f4ba12fd6d0e28ca91a671f32b0c63a4e664e1af3a06f7f9301cd2970e7d51",
+      "destination": "assets/mandomc/textures/font/ranks/moderator.png"
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/moderator_icon.png",
+      "sourceSha256": "a6b4391bad0d6594d8cd1c278f5ef198921993b9be242c58aa592a8804f5a219",
+      "destination": "assets/mandomc/textures/font/ranks/moderator_icon.png"
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/mandalore.png",
+      "sourceSha256": "57c6475986738d20787dee0813f54c7eb5988ec6f7a91eccaf52e01df614914d",
+      "destination": "assets/mandomc/textures/font/ranks/mandalore.png"
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/mandalore_icon.png",
+      "sourceSha256": "7b9d9c7a2a28aabb43b8fa9004e71e21c27adc9b424246a2fcb5926c0d8fdc60",
+      "destination": "assets/mandomc/textures/font/ranks/mandalore_icon.png"
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/warrior.png",
+      "sourceSha256": "f2d1ff914025c4f2032c689a1a1678767875bcb152c999b202f4d18c3270833b",
+      "destination": "assets/mandomc/textures/font/ranks/warrior.png"
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/warrior_icon.png",
+      "sourceSha256": "722ac9dfa53e55fbf2c3f143e79b2f7acf2d3022ae41440bfef56ba286267f4d",
+      "destination": "assets/mandomc/textures/font/ranks/warrior_icon.png"
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/builder.png",
+      "sourceSha256": "f37cd3baf28e221ce9a6a1c76ddf2d5e24cd7979a0dd8afb72fea10994c92fd5",
+      "destination": "assets/mandomc/textures/font/ranks/builder.png"
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/builder_icon.png",
+      "sourceSha256": "69b8006e7caf14bcc7b5284ceb32d2fa0ee193e184153104c8e77735664336de",
+      "destination": "assets/mandomc/textures/font/ranks/builder_icon.png"
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/creator.png",
+      "sourceSha256": "913e646252af60be5e61cd9521f0505790ba3da5c36b9883579772ffed3f52b9",
+      "destination": "assets/mandomc/textures/font/ranks/creator.png"
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/creator_icon.png",
+      "sourceSha256": "7b952ece350e2e25b989466598def7e3cf7a7108b2c8db7f8c2b3e0790a349eb",
+      "destination": "assets/mandomc/textures/font/ranks/creator_icon.png"
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/default.png",
+      "sourceSha256": "0af910018787bea7976bbee9d9076ff3ae187832933b274582f84191b5b3b399",
+      "destination": "assets/mandomc/textures/font/ranks/default.png"
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/default/ranks/default_icon.png",
+      "sourceSha256": "1adb6cf61713129343816941310a66378fb2781ca8fb46413414600d4a5035fa",
+      "destination": "assets/mandomc/textures/font/ranks/default_icon.png"
+    }
+  ]
+}

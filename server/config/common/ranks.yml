@@ -1,0 +1,67 @@
+schema-version: 1
+# Permissions beginning with - are explicit denials. Exact nodes beat wildcard nodes.
+ranks:
+  mandostudios:
+    name: MandoStudios
+    order: 0
+    badge: "Ā"
+    icon: "ā"
+    color: "#55FFFF"
+    inherits: ["builder"]
+    permissions: ["*"]
+  mod:
+    name: Moderator
+    order: 1
+    badge: "Ą"
+    icon: "ą"
+    color: "#00AA00"
+    inherits: ["mandalore"]
+    permissions: ["mandomc.admin.vanish", "mandomc.admin.vanish.see", "mandomc.admin.invsee", "mandomc.admin.fly", "mandomc.admin.mvtp", "minecraft.command.ban", "minecraft.command.pardon"]
+  builder:
+    name: Builder
+    order: 2
+    badge: "Ħ"
+    icon: "ħ"
+    color: "#00AAAA"
+    inherits: ["mandalore"]
+    permissions: ["mandomc.admin.fly", "mandomc.admin.gamemode", "mandomc.admin.mvtp", "mandomc.admin.speed", "mandomc.admin.flyspeed", "mandomc.travel.homes.unlimited", "minecraft.command.clear", "worldedit.*"]
+  creator:
+    name: Creator
+    order: 3
+    badge: "ĩ"
+    icon: "Ĩ"
+    color: "#FF55FF"
+    inherits: ["mandalore"]
+    permissions: []
+  mandalore:
+    name: Mandalore
+    order: 4
+    badge: "Ć"
+    icon: "ć"
+    color: "#555555"
+    inherits: ["marshal"]
+    permissions: []
+  marshal:
+    name: Marshal
+    order: 5
+    badge: "Ă"
+    icon: "ă"
+    color: "#5555FF"
+    inherits: ["warrior"]
+    permissions: []
+  warrior:
+    name: Warrior
+    order: 6
+    badge: "Ĉ"
+    icon: "ĥ"
+    color: "#55FF55"
+    inherits: ["default"]
+    permissions: []
+  default:
+    name: Default
+    order: 7
+    badge: "Ī"
+    icon: "ī"
+    color: "#AAAAAA"
+    inherits: []
+    permissions: ["mandomc.arrival", "mandomc.travel.*", "-mandomc.travel.homes.unlimited", "mandomc.event", "mandomc.recipes", "mandomc.hud", "mandomc.credits.balance", "mandomc.credits.pay", "mandomc.credits.top", "weaponmechanics.use.*"]

@@ -1,0 +1,20 @@
+schema-version: 1
+# New accounts start at zero. Balances are stored as integer cents in credits-data.yml.
+messages:
+  balance: '<gray><player>: <gold>$<amount>'
+  paid: '<gray>Paid <gold>$<amount> <gray>to <white><player><gray>.'
+  received: '<gray>Received <gold>$<amount> <gray>from <white><player><gray>.'
+  adjusted: '<gray><player> now has <gold>$<amount><gray>.'
+  top-title: '<gold><bold>Richest players'
+  top-row: '<gray><player> <dark_gray>» <gold>$<amount>'
+  top-empty: '<gray>No credit balances yet.'
+  amount: '<red>Use a positive amount with at most two decimal places (zero is allowed for admin adjustments).'
+  self-pay: '<red>You cannot pay yourself.'
+  insufficient: '<red>There are not enough credits for that transaction.'
+  limit: '<red>That transaction exceeds the account limit.'
+  usage: '<gray>/balance [player] · /pay <player> <amount> · /balancetop · /credits <give|take|set> <player|UUID> <amount>'
+  player-missing: '<red>Player not found. Use an exact known name or UUID.'
+  players-only: '<red>Use this command in game or specify a player.'
+  denied: '<red>You do not have permission.'
+  saving: '<yellow>A change is being saved. Try again in a moment.'
+  save-failed: '<red>The transaction could not be saved. Balances were not changed.'
