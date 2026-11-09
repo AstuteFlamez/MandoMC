@@ -4,7 +4,7 @@ main: net.mandomc.bootstrap.MandoPlugin
 api-version: '26.1.2'
 author: AstuteFlamez
 description: MandoMC gameplay
-softdepend: [ WorldGuard, WeaponMechanics, MythicMobs, ModelEngine]
+softdepend: [ WorldEdit, WorldGuard, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
   scoreboard:
     description: Toggle your sidebar

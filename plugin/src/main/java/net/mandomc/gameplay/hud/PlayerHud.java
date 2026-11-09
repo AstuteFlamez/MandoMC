@@ -84,14 +84,15 @@ public final class PlayerHud implements Listener, AutoCloseable {
         if (ticks % 10 == 1) {
             var online = new ArrayList<>(Bukkit.getOnlinePlayers());
             online.sort(Comparator.comparingInt((Player player) -> ranks.rank(player).order()).thenComparing(Player::getName));
-            int order = 1;
+            // The client puts larger list-order values first.
+            int order = online.size();
             for (Player player : online) {
                 var view = views.get(player.getUniqueId());
                 if (view == null) continue;
                 Component name = ranks.rank(player).playerName(player.getName());
                 if (!name.equals(view.name)) { player.playerListName(name); view.name = name; }
                 if (view.order != order) { player.setPlayerListOrder(order); view.order = order; }
-                order++;
+                order--;
 
             }
             for (var view : views.values()) { updateStats(view); mirrorTeams(view, online); }
