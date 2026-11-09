@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class RankCatalogTest {
-    private YamlConfiguration config() { return YamlConfiguration.loadConfiguration(new InputStreamReader(getClass().getResourceAsStream("/ranks.yml"))); }
+    private YamlConfiguration config() { return YamlConfiguration.loadConfiguration(new InputStreamReader(getClass().getResourceAsStream("/ranks/ranks.yml"))); }
     @Test public void restoredRanksAndInheritance() {
         var ranks = new RankCatalog(config());
         assertEquals(List.of("mandostudios", "mod", "builder", "creator", "mandalore", "marshal", "warrior", "default"), ranks.ids());

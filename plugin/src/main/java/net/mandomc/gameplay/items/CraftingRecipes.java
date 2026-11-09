@@ -20,8 +20,8 @@ public final class CraftingRecipes implements AutoCloseable {
 
     public CraftingRecipes(JavaPlugin plugin, ItemCatalog items, ConfigurationSection config) {
         this.items = items;
-        if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("recipes.yml: unsupported schema-version");
-        var section = Objects.requireNonNull(config.getConfigurationSection("recipes"), "recipes.yml: recipes missing");
+        if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("items/recipes.yml: unsupported schema-version");
+        var section = Objects.requireNonNull(config.getConfigurationSection("recipes"), "items/recipes.yml: recipes missing");
         var pending = new ArrayList<ShapedRecipe>();
         var parsed = new ArrayList<RecipeDefinition>();
         for (String id : section.getKeys(false)) {

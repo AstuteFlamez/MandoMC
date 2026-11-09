@@ -6,7 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class HudSettingsTest {
-    private YamlConfiguration config() { return YamlConfiguration.loadConfiguration(new InputStreamReader(getClass().getResourceAsStream("/hud.yml"))); }
+    private YamlConfiguration config() { return YamlConfiguration.loadConfiguration(new InputStreamReader(getClass().getResourceAsStream("/interface/hud.yml"))); }
     @Test public void recoveredLayoutFitsAndAnimationsKeepCadence() {
         var settings = HudSettings.read(config()); assertEquals(14, settings.lines().size());
         var logo = settings.animations().get("logo"); assertEquals(68, logo.frames().size());

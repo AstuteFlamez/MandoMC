@@ -1,0 +1,5 @@
+schema-version: 1
+# Bounds live entities/chunk tickets; one deployed vehicle per placer.
+max-deployed: 32
+combat-seconds: 15
+packing-max-horizontal-speed: 0.05

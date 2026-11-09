@@ -48,7 +48,7 @@ public final class RecipeGuide implements Listener, AutoCloseable {
         this.config = config;
         for (String key : List.of("title", "detail-title", "previous", "next", "back", "close", "all",
                 "category", "hint", "ingredient-hint", "crafting", "unavailable", "player-only")) {
-            if (!config.isString("guide." + key)) throw new IllegalArgumentException("recipes.yml: missing guide." + key);
+            if (!config.isString("guide." + key)) throw new IllegalArgumentException("items/recipes.yml: missing guide." + key);
         }
         Bukkit.getPluginManager().registerEvents(this, plugin);
         var command = Objects.requireNonNull(plugin.getCommand("recipes"));
@@ -135,7 +135,7 @@ public final class RecipeGuide implements Listener, AutoCloseable {
     }
 
     private Component text(String key, String value) {
-        return render(Objects.requireNonNull(config.getString("guide." + key, key.equals("leave-empty") ? "<gray>Leave empty" : null), "recipes.yml: guide." + key)
+        return render(Objects.requireNonNull(config.getString("guide." + key, key.equals("leave-empty") ? "<gray>Leave empty" : null), "items/recipes.yml: guide." + key)
                 .replace("<value>", value));
     }
 

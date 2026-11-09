@@ -50,7 +50,7 @@ public final class TeleportRequests implements Listener, AutoCloseable {
         int cooldown = config.getInt("request-cooldown-seconds", -1);
         maxIncoming = config.getInt("max-incoming-requests", -1);
         if (expiry < 5 || expiry > 300 || cooldown < 1 || cooldown > 60 || maxIncoming < 1 || maxIncoming > 100) {
-            throw new IllegalArgumentException("utilities.yml: invalid request expiry/cooldown/capacity");
+            throw new IllegalArgumentException("admin/utilities.yml: invalid request expiry/cooldown/capacity");
         }
         expiryNanos = expiry * 1_000_000_000L; cooldownNanos = cooldown * 1_000_000_000L;
         ticker = Bukkit.getScheduler().runTaskTimer(plugin, this::expire, 20, 20);

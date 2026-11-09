@@ -1,0 +1,71 @@
+{
+  "source": "MandoPack at 2731b9e4ae5d8d142cd4a1aaa14f3f1b7c0e56c7",
+  "files": [
+    {
+      "source": "assets/minecraft/textures/custom/vehicles/speederbike.png",
+      "sha256": "b73363030ea56f7407a0f009aa8178a48668941f730b8fb00147c5d309a78589",
+      "destination": "assets/mandomc/textures/item/vehicles/speederbike.png",
+      "changes": "Namespaced references; original artwork and poses preserved."
+    },
+    {
+      "source": "assets/minecraft/models/item/vehicles/speederbike.json",
+      "sha256": "b991b12891aa4cccdf406cabad0185e9c6c2ca4d3a7eb084acc666d03edfdd87",
+      "destination": "assets/mandomc/models/item/vehicles/speederbike.json",
+      "changes": "Namespaced references; original artwork and poses preserved."
+    },
+    {
+      "source": "assets/minecraft/textures/custom/vehicles/xwing.png",
+      "sha256": "10c6fd0a989b805338cf4ec1cf873af54ec3b30af5798326b6f231ff9c0260cf",
+      "destination": "assets/mandomc/textures/item/vehicles/xwing.png",
+      "changes": "Namespaced references; original artwork and poses preserved."
+    },
+    {
+      "source": "assets/minecraft/models/item/vehicles/xwing.json",
+      "sha256": "39f9a8858f31df66869d6a41d2f941aba91a7d86ed670e1f82b70b3fde054997",
+      "destination": "assets/mandomc/models/item/vehicles/xwing.json",
+      "changes": "Namespaced references; original artwork and poses preserved."
+    },
+    {
+      "source": "assets/minecraft/textures/custom/vehicles/tiefighter.png",
+      "sha256": "836616db56fbad5089ae007d1e7a1d0f0840fc471cfd1a42e6f8f29f616d59f5",
+      "destination": "assets/mandomc/textures/item/vehicles/tiefighter.png",
+      "changes": "Namespaced references; original artwork and poses preserved."
+    },
+    {
+      "source": "assets/minecraft/models/item/vehicles/tiefighter.json",
+      "sha256": "f0859faf69f76ddc2919e5cfe467e55220821af1733574174a840717b5a4cf92",
+      "destination": "assets/mandomc/models/item/vehicles/tiefighter.json",
+      "changes": "Namespaced references; original artwork and poses preserved."
+    },
+    {
+      "source": "assets/minecraft/textures/custom/vehicles/uwing.png",
+      "sha256": "c4ea5f05ef0d507f54704b7371f87da111f9b333ee4b882f9288402cf3ad3b40",
+      "destination": "assets/mandomc/textures/item/vehicles/uwing.png",
+      "changes": "Namespaced references; original artwork and poses preserved."
+    },
+    {
+      "source": "assets/minecraft/models/item/vehicles/uwing.json",
+      "sha256": "06a9c01cf5f55dfb1da599e8aee4e255c96fbc19803334b569c5904ddf0acb87",
+      "destination": "assets/mandomc/models/item/vehicles/uwing.json",
+      "changes": "Namespaced references; original artwork and poses preserved."
+    },
+    {
+      "source": "assets/minecraft/sounds/vehicles/speederbike_drive.ogg",
+      "sha256": "cc6ce1f43d3784c9149c9398fc441f80045dac627f3fabd8d467409c5e4ac01b",
+      "destination": "assets/mandomc/sounds/vehicles/speederbike_drive.ogg",
+      "changes": "Unchanged legacy transport sound."
+    },
+    {
+      "source": "assets/minecraft/sounds/vehicles/tie_fighter_fly.ogg",
+      "sha256": "ce7d5def2ff952af69c1e744bc2d3365980a72432ea07d92c37df8c70f60d339",
+      "destination": "assets/mandomc/sounds/vehicles/tie_fighter_fly.ogg",
+      "changes": "Unchanged legacy transport sound."
+    },
+    {
+      "source": "assets/minecraft/sounds/vehicles/xwing_fly.ogg",
+      "sha256": "7f91c05e430e6c7254eac68bcba024750119e2235c151ae38031fbbbbe8e5912",
+      "destination": "assets/mandomc/sounds/vehicles/xwing_fly.ogg",
+      "changes": "Unchanged legacy transport sound."
+    }
+  ]
+}

@@ -21,13 +21,13 @@ public final class RankService implements Listener, AutoCloseable {
     private final Map<UUID, PermissionAttachment> attachments = new HashMap<>();
     private final ExecutorService writer = Executors.newSingleThreadExecutor();
     private boolean saving;
-    private boolean closed;
+    private volatile boolean closed;
     private final org.bukkit.scheduler.BukkitTask refresh;
     private Set<String> registered = Set.of();
     public RankService(JavaPlugin plugin, org.bukkit.configuration.ConfigurationSection config) throws Exception {
         this.plugin = plugin;
         catalog = new RankCatalog(config);
-        file = plugin.getDataFolder().toPath().resolve("rank-users.yml");
+        file = plugin.getDataFolder().toPath().resolve("data/rank-users.yml");
         users = read(file, catalog);
         Bukkit.getPluginManager().registerEvents(this, plugin);
         Bukkit.getOnlinePlayers().forEach(this::apply);
@@ -65,13 +65,11 @@ public final class RankService implements Listener, AutoCloseable {
         writer.submit(() -> {
             boolean success = false;
             try {
-                Path temp = file.resolveSibling(file.getFileName() + ".tmp");
-                Files.writeString(temp, snapshot);
-                Files.move(temp, file, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+                net.mandomc.config.AtomicData.write(file, snapshot);
                 users = Map.copyOf(next); success = true;
             } catch (Exception error) { plugin.getLogger().log(java.util.logging.Level.SEVERE, "Could not save rank-users.yml; change rejected", error); }
             boolean saved = success;
-            if (plugin.isEnabled()) Bukkit.getScheduler().runTask(plugin, () -> {
+            if (!closed && plugin.isEnabled()) Bukkit.getScheduler().runTask(plugin, () -> {
                 saving = false;
                 var player = Bukkit.getPlayer(id);
                 if (saved && player != null) { apply(player); player.updateCommands(); }

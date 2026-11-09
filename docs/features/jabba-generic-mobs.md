@@ -25,7 +25,7 @@ Compatibility changes: explicit player AI; no random zombie equipment, item pick
 ## Parameters
 | Configuration | Meaning/default | Reload |
 | --- | --- | --- |
-| `jabba-mobs.yml: enabled` | Enables only the death-loot adapter, true | Restart |
+| `mobs/drops/jabba.yml: enabled` | Enables only the death-loot adapter, true | Restart |
 | `drops.<mob>.weapon`, `weapon-chance` | Catalog weapon; 0.25 axe / 0.20 blaster | Restart |
 | `drops.<mob>.ammo`, `ammo-chance`, `ammo-rolls` | Catalog cell; 0.5 and 3 for ranged guards, 0 rolls for axe guard | Restart |
 | Mythic `Health`, `Armor`, `LevelModifiers`, `Skills` | Original mob baseline described above | Mythic config reload; use fresh mobs |
@@ -34,7 +34,7 @@ Compatibility changes: explicit player AI; no random zombie equipment, item pick
 Drop probabilities must be finite 0–1; ammo rolls must be integral 0–64; all three guard rules and referenced catalog IDs are required. New external item registrations are added only when absent, preserving existing local overrides.
 
 ## Deployment
-Copy `server/config/common/mythicmobs/jabba-mobs.yml` and `jabba-skills.yml` into separate Mythic `mobs/mandomc-jabba.yml` and `skills/mandomc-jabba.yml` files. Copy the three guard blueprints into ModelEngine and the two gun configs into WeaponMechanics `weapons/mandomc`. The plugin adds missing `items/jabba.yml`, `jabba-mobs.yml` and external catalog entries on startup.
+Copy `server/config/common/mythicmobs/jabba-mobs.yml` and `jabba-skills.yml` into separate Mythic `mobs/mandomc-jabba.yml` and `skills/mandomc-jabba.yml` files. Copy the three guard blueprints into ModelEngine and the two gun configs into WeaponMechanics `weapons/mandomc`. The plugin adds missing `items/definitions/jabba.yml`, `mobs/drops/jabba.yml` and external catalog entries on startup.
 
 Generate through ModelEngine R4.1.1, then run `scripts/import-mob-models.py` on its generated pack. The importer validates against all tracked blueprint IDs; unknown extra models are rejected. Build/publish the combined required pack using the existing release path. Asset provenance is in `resource-pack/jabba-sources.json` and `server/config/common/modelengine/sources.json`; the supplied legacy files are untouched.
 

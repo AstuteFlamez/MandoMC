@@ -56,6 +56,9 @@ Five recovered ModelEngine blueprints are tracked under server/config/common/mod
 
 Gaffi Stick: the player item reuses the existing generated melee Tusken stick geometry and its embedded-model texture, with item display poses under `mandomc:melee/gaffi_stick`. No new artwork or shader overrides; client item poses await playtesting.
 
+## Legacy transport models
+The vehicle slice adds the original speederbike, X-wing, TIE fighter and U-wing fixed models, inventory icons and engine sounds. Provenance is in `vehicle-sources.json` and `server/config/common/modelengine/vehicle-sources.json`. The current ModelEngine generator's output is imported alongside creature models by `scripts/import-mob-models.py`; alternate skins and fuel assets are excluded. The speeder's embedded texture is explicitly namespaced to `modelengine`, matching the generated model reference.
+
 ## Galaxy warp icons
 Legacy Earth, Hoth and spawn icons are recovered unchanged under `mandomc:planets/earth`, `mandomc:planets/hoth` and `mandomc:planets/batuu`. The original spawn entry used the Naboo texture; that same artwork represents the renamed Batuu entry. `planet-sources.json` records exact texture hashes and mappings. Only these namespaced item models are added; ordinary sticks are untouched. The six-row warp layout is configured in warps.yml, with Earth placed separately in the Unknown Regions by the user.
 

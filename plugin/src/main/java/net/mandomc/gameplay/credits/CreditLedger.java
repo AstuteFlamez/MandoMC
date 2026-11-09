@@ -62,9 +62,7 @@ public final class CreditLedger {
     private void save(Map<UUID, Long> updated) throws Exception {
         var yaml = new YamlConfiguration(); yaml.set("schema-version", 1); yaml.createSection("balances");
         updated.forEach((id, cents) -> yaml.set("balances." + id, cents));
-        Path temp = file.resolveSibling(file.getFileName() + ".tmp");
-        Files.writeString(temp, yaml.saveToString());
-        Files.move(temp, file, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+        net.mandomc.config.AtomicData.write(file, yaml.saveToString());
         balances = Map.copyOf(updated);
     }
 }

@@ -54,6 +54,11 @@ __pycache__/
 /server/**/*.mca
 /server/**/*.mcc
 
+# Reviewed MandoMC world settings are YAML, not installed world payloads.
+!/server/config/common/mandomc/worlds/
+/server/config/common/mandomc/worlds/*
+!/server/config/common/mandomc/worlds/*.yml
+
 # Share only reviewed runtime configuration; unknown files/directories stay private.
 !/server/runtime/
 /server/runtime/*

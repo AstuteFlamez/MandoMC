@@ -17,14 +17,14 @@ public final class CreditService implements AutoCloseable {
     private final ConfigurationSection messages;
     private final ExecutorService writer = Executors.newSingleThreadExecutor();
     private final Set<UUID> pending = new HashSet<>();
-    private boolean closed;
+    private volatile boolean closed;
     public CreditService(JavaPlugin plugin, ConfigurationSection config) throws Exception {
         this.plugin = plugin;
         if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("credits.yml: expected schema-version 1");
         messages = Objects.requireNonNull(config.getConfigurationSection("messages"), "credits.yml: missing messages");
         for (String key : List.of("balance", "paid", "received", "adjusted", "top-title", "top-row", "top-empty", "amount", "self-pay", "insufficient", "limit", "usage", "player-missing", "players-only", "denied", "saving", "save-failed"))
             if (!messages.isString(key)) throw new IllegalArgumentException("credits.yml: missing messages." + key);
-        ledger = new CreditLedger(plugin.getDataFolder().toPath().resolve("credits-data.yml"));
+        ledger = new CreditLedger(plugin.getDataFolder().toPath().resolve("data/credits-data.yml"));
         for (String command : List.of("balance", "pay", "balancetop", "credits")) {
             var binding = Objects.requireNonNull(plugin.getCommand(command));
             binding.setExecutor((sender, cmd, label, args) -> { execute(sender, cmd.getName(), args); return true; });
@@ -103,7 +103,7 @@ public final class CreditService implements AutoCloseable {
                 plugin.getLogger().log(java.util.logging.Level.SEVERE, "Credits save failed; transaction rejected", error);
             }
             String result = failure;
-            if (plugin.isEnabled()) Bukkit.getScheduler().runTask(plugin, () -> {
+            if (!closed && plugin.isEnabled()) Bukkit.getScheduler().runTask(plugin, () -> {
                 pending.remove(key);
                 if (result == null) success.run(); else send(sender, result, "", "");
             });

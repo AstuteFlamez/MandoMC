@@ -12,7 +12,7 @@ public final class RankCatalog {
     public record Rank(String id, String name, int order, String badge, String icon, TextColor color,
                        List<String> parents, Map<String, Boolean> permissions) {
         public Component badge(boolean small) {
-            return Component.text(small ? icon : badge, NamedTextColor.WHITE).font(Key.key("mandomc:ranks"));
+            return Component.empty().append(Component.text(small ? icon : badge, NamedTextColor.WHITE).font(Key.key("mandomc:ranks")));
         }
         public Component playerName(String player) {
             return badge(true).append(Component.text(" " + player, color).font(Key.key("minecraft:default")));

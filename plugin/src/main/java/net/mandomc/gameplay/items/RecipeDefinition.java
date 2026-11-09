@@ -15,7 +15,7 @@ public record RecipeDefinition(String id, String result, int amount, String cate
     }
 
     public static RecipeDefinition parse(String id, ConfigurationSection config) {
-        String path = "recipes.yml: recipes." + id;
+        String path = "items/recipes.yml: recipes." + id;
         if (!id.matches("[a-z0-9_]+") || config == null) throw new IllegalArgumentException(path + ": invalid recipe");
         for (String key : config.getKeys(false)) {
             if (!Set.of("result", "amount", "category", "shape", "ingredients").contains(key)) {

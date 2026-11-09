@@ -85,12 +85,12 @@
     {
       "id": "modelengine",
       "name": "ModelEngine-4.1.1.jar",
-      "url": "https://mythiccraft.io/downloads/modelengine4/free/ModelEngine-4.1.1.jar",
-      "sha256": "020ef9361c2ab3805933a78994aac529e5e624b0746755044609caf5a6e5df09",
-      "edition": "official-free",
-      "bytes": 4749683,
+      "sha256": "512f0e5306cebca6df7dfbd1c3f3afb8199f6b55d4d45fb45017735ccd44e1ba",
+      "edition": "user-supplied-premium",
+      "bytes": 4713442,
       "version": "R4.1.1",
-      "verifiedPublishedHashes": []
+      "verifiedPublishedHashes": [],
+      "distribution": "Licensed Premium R4.1.1 supplied by the server owner; obtain through the official account. The JAR is not redistributed."
     },
     {
       "id": "factionsuuid",

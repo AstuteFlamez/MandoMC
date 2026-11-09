@@ -18,12 +18,12 @@ public final class MassiffDrops implements Listener {
     @SuppressWarnings("unchecked")
     public MassiffDrops(JavaPlugin plugin, ItemCatalog items) throws Exception {
         var config = new YamlConfiguration();
-        config.load(new File(plugin.getDataFolder(), "massiff-drops.yml"));
+        config.load(new File(plugin.getDataFolder(), "mobs/drops/massiff.yml"));
         String id = config.getString("item", "");
         double chance = config.getDouble("chance", Double.NaN);
         if (config.getInt("schema-version") != 1 || !Double.isFinite(chance) || chance < 0 || chance > 1
                 || items.create(id) == null || !items.create(id).getType().isEdible()) {
-            throw new IllegalArgumentException("massiff-drops.yml: expected schema 1, edible catalog item and chance 0–1");
+            throw new IllegalArgumentException("mobs/drops/massiff.yml: expected schema 1, edible catalog item and chance 0–1");
         }
         var vendor = Bukkit.getPluginManager().getPlugin("MythicMobs");
         var type = (Class<? extends Event>) Class.forName("io.lumine.mythic.bukkit.events.MythicMobDeathEvent",

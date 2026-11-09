@@ -159,6 +159,7 @@ public final class PlayerHud implements Listener, AutoCloseable {
             if (team == null) {
                 team = target.registerNewTeam(id); team.setAllowFriendlyFire(true); team.setCanSeeFriendlyInvisibles(false);
                 team.prefix(rank.badge(false).append(Component.text(" ")));
+                team.color(net.kyori.adventure.text.format.NamedTextColor.nearestTo(rank.color()));
             }
             if (!team.hasEntry(player.getName())) team.addEntry(player.getName());
         }

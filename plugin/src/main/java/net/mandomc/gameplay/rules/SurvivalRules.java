@@ -50,7 +50,7 @@ public final class SurvivalRules implements Listener {
 
     public SurvivalRules(JavaPlugin plugin, ConfigurationSection config, ConfigurationSection language,
                          Predicate<ItemStack> saber, ItemCatalog items) {
-        if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("survival-rules.yml: expected schema-version 1");
+        if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("rules/survival.yml: expected schema-version 1");
         this.saber = saber;
         this.items = items;
         this.language = language;
@@ -65,7 +65,7 @@ public final class SurvivalRules implements Listener {
             try {
                 disabledNaturalMobs.add(EntityType.valueOf(type));
             } catch (IllegalArgumentException error) {
-                throw new IllegalArgumentException("survival-rules.yml: invalid disabled-natural-mobs entry " + type, error);
+                throw new IllegalArgumentException("rules/survival.yml: invalid disabled-natural-mobs entry " + type, error);
             }
         }
         plugin.getServer().getPluginManager().registerEvents(this, plugin);

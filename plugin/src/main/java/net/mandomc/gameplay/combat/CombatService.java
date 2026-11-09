@@ -40,13 +40,13 @@ public final class CombatService implements Listener, AutoCloseable {
 
     public CombatService(JavaPlugin plugin, ConfigurationSection config, ConfigurationSection language,
                          Consumer<UUID> returnSaber) {
-        if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("combat.yml: expected schema-version 1");
+        if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("combat/combat.yml: expected schema-version 1");
         this.plugin = plugin;
         this.language = language;
         this.returnSaber = returnSaber;
         tags = new CombatTags(config.getInt("tag-seconds", -1), () -> System.nanoTime() / 1_000_000);
         for (String key : List.of("tagged", "safe", "teleport-denied")) {
-            if (language == null || !language.isString(key)) throw new IllegalArgumentException("messages.yml: missing combat." + key);
+            if (language == null || !language.isString(key)) throw new IllegalArgumentException("language/messages.yml: missing combat." + key);
         }
         ticker = plugin.getServer().getScheduler().runTaskTimer(plugin, this::tick, 2L, 2L);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
