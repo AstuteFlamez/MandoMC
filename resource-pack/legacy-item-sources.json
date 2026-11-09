@@ -1534,15 +1534,15 @@
   },
   "helmetInventoryPoses": {
     "3dGuiRotation": [
-      23,
+      -23,
       -165,
       18
     ],
     "robesGuiRotation": [
-      18,
+      -18,
       -15,
       -8
     ],
-    "changes": "Explicit front-facing GUI poses with two-axis tilt and a small roll. Other 3D display contexts and geometry are preserved."
+    "changes": "GUI-only upward pitch, retaining the accepted horizontal tilt and roll. Other display contexts and geometry are preserved."
   }
 }
