@@ -1,0 +1,150 @@
+RelbyV10:
+  Info:
+    Weapon_Item:
+      Type: "DIAMOND_HOE"
+      Custom_Model_Data: 20
+      Item_Model: "mandomc:blasters/relbyv10"
+      Name: "<aqua>Relby V-10 Mortar Gun"
+      Lore:
+        - "<white>ĕĐ"
+        - ""
+        - "<gray>Trandoshan heavy mortar launcher used by bounty hunters."
+        - "<gray>Fires heavy plasma bolts to flush out prey."
+        - ""
+        - "<yellow><!italic>[<key:key.drop>] Reload"
+        - ""
+        - "<gray>Takes <red>Standard Plasma Cells<gray>."
+      Unbreakable: true
+      Hide_Flags: true
+      Attributes:
+        - "movement_speed -0.0296"
+      Deny_Use_In_Crafting: true
+
+    Weapon_Info_Display:
+      Action_Bar:
+        Message: "<aqua>Relby V-10<firearm_state> <gray>«<red><ammo_left><gray>»<aqua><reload>"
+
+    Weapon_Get_Mechanics:
+      - "Sound{sound=item.armor.equip_chain, pitch=0.75, listeners=Source{}}"
+
+    Weapon_Equip_Delay: 40
+
+    Cancel:
+      Drop_Item: true
+      Arm_Swing_Animation: true
+      Break_Blocks: true
+
+  Skin:
+    Default:
+      Custom_Model_Data: 20
+      Item_Model: "mandomc:blasters/relbyv10"
+    Scope:
+      Custom_Model_Data: 1020
+      Item_Model: "mandomc:blasters/relbyv10_scope"
+    Sprint:
+      Custom_Model_Data: 2020
+      Item_Model: "mandomc:blasters/relbyv10_sprint"
+
+  Projectile: "redlaser" # (kept same as requested)
+
+  Shoot:
+    Trigger:
+      Main_Hand: "RIGHT_CLICK"
+
+    Projectile_Speed: 55   # ↓ slower → more mortar feel
+    Delay_Between_Shots: 17 # Approximately 1.2 shots/sec; current WM requires integer full-auto rates.
+
+    Spread:
+      Base_Spread: 6.0
+      Modify_Spread_When:
+        Sneaking: 60%
+        In_Midair: 180%
+
+    Recoil:
+      Mean_X: 0.3
+      Mean_Y: 3.8
+      Variance_X: 0.2
+      Variance_Y: 0.6
+      Speed: 3.0
+      Damping: 0.15
+      Damping_Recovery: 0.2
+      Smoothing: 0.35
+      Max_Accumulation: 12.0
+
+    Mechanics:
+      - "CustomSound{sound=mandomc:shoot.a280, volume=5, noise=0.1}"
+
+  Reload:
+    Trigger:
+      Main_Hand: "DROP_ITEM"
+
+    Magazine_Size: 6
+    Reload_Duration: 80
+
+    Start_Mechanics:
+      - "CustomSound{sound=mandomc:reload.start, volume=0.5, noise=0.1}"
+
+    Finish_Mechanics:
+      - "CustomSound{sound=mandomc:reload.complete, volume=0.5, noise=0.1}"
+
+    Ammo:
+      Out_Of_Ammo_Mechanics:
+        - "Message{message=<red><bold>ᴍᴀɴᴅᴏᴍᴄ</bold></red> <dark_gray>» <red>Out of plasma cells!}"
+      Ammos:
+        - Standard_Plasma_Cells
+
+  Damage:
+    Base_Damage: 1
+    Armor_Damage: 1
+
+    Dropoff:
+      - "10 -0.1"
+      - "25 -0.2"
+      - "50 -0.35"
+
+  Scope:
+    Trigger:
+      Main_Hand: "LEFT_CLICK"
+
+    Zoom_Amount: 1.2   # slight zoom (not a sniper)
+
+  Firearm_Action:
+    Type: "SLIDE"
+
+    Open:
+      Time: 10
+      Mechanics:
+        - "Sound{sound=block.piston.contract, volume=0.5, noise=0.1, listeners=Source{}}"
+
+    Close:
+      Time: 10
+      Mechanics:
+        - "Sound{sound=block.piston.extend, volume=0.5, noise=0.1, listeners=Source{}}"
+
+  Trail:
+    Distance_Between_Particles: 0.4
+    Particle_Chooser: LOOP
+    Particles:
+      - "Particle{particle=SMOKE}"
+
+  Show_Time:
+    Reload:
+      Item_Cooldown: true
+      Exp: true
+      Action_Bar: "<gray>Reloading <bar> <gray><time>s"
+      Action_Bar_Cancelled: "<red>Reload Cancelled"
+      Bar:
+        Left_Color: "<gray>"
+        Right_Color: "<red>"
+        Left_Symbol: "|"
+        Right_Symbol: "|"
+        Symbol_Amount: 20
+
+    Weapon_Equip_Delay:
+      Item_Cooldown: true
+
+    Firearm_Actions:
+      Item_Cooldown: true
+
+    Shoot_Delay_After_Scope:
+      Item_Cooldown: true

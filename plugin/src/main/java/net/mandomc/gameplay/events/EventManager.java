@@ -19,6 +19,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.mandomc.gameplay.travel.WarpService;
 import net.mandomc.gameplay.ui.MenuItems;
 import org.bukkit.Material;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -46,6 +47,8 @@ public final class EventManager implements Listener, AutoCloseable {
     private ZoneId zone;
     private HourlySchedule schedule;
     private int startMinute;
+    private int endMinute;
+    private EventEndCountdown endingCountdown;
     private final Map<UUID,Inventory> menus=new HashMap<>();
     private final BukkitTask ticker;
     public EventManager(JavaPlugin plugin,WarpService warps) throws Exception {
@@ -83,6 +86,9 @@ public final class EventManager implements Listener, AutoCloseable {
                 "denied","players-only","busy","reloaded","invalid","started","stopped","queued","enabled","disabled","usage"))
             if(!nextConfig.isString("messages."+key)) throw new IllegalArgumentException("events/schedule.yml: missing messages."+key);
         if(!nextConfig.isString("gui.title")) throw new IllegalArgumentException("events/schedule.yml: missing gui.title");
+        var nextCountdown = new EventEndCountdown(
+                nextConfig.getString("ending-countdown.title", EventEndCountdown.DEFAULT_TITLE),
+                nextConfig.getString("ending-countdown.subtitle", EventEndCountdown.DEFAULT_SUBTITLE));
         // Register the next event type here when its playable slice lands; do not load old unused definitions.
         var nextEvents=new LinkedHashMap<String,ManagedEvent>();
         var nextEntries=new LinkedHashMap<String,EventRotation.Entry>();
@@ -92,8 +98,16 @@ public final class EventManager implements Listener, AutoCloseable {
         nextEvents.put(koth.id(),koth);
         nextEntries.put(koth.id(),new EventRotation.Entry(koth.id(),kothConfig.getInt("weight",-1),
                 kothConfig.getInt("cooldown-cycles",-1),kothConfig.getBoolean("enabled",false)));
+        try {
+            var jabbaConfig=read("events/jabba.yml");
+            var catalog=((net.mandomc.bootstrap.MandoPlugin)plugin).items();
+            var jabba=new net.mandomc.gameplay.dungeon.JabbaEvent(plugin,catalog,jabbaConfig);
+            nextEvents.put(jabba.id(),jabba);
+            nextEntries.put(jabba.id(),new EventRotation.Entry(jabba.id(),jabbaConfig.getInt("weight",-1),jabbaConfig.getInt("cooldown-cycles",-1),jabbaConfig.getBoolean("enabled",false)));
+        } catch(Exception error) {nextEvents.values().forEach(ManagedEvent::close);throw error;}
         events.values().forEach(ManagedEvent::close);
         config=nextConfig;zone=nextZone;schedule=nextSchedule;startMinute=nextMinute;
+        endMinute=nextConfig.getInt("scheduler.announcements.end-minute");endingCountdown=nextCountdown;
         events=Map.copyOf(nextEvents);entries=Map.copyOf(nextEntries);rotation=new EventRotation();
         reroll();refreshMenus();
     }
@@ -104,10 +118,11 @@ public final class EventManager implements Listener, AutoCloseable {
         if(active!=null || !entries.containsKey(id) || !entries.get(id).enabled()) return false;
         try {events.get(id).start();}
         catch(RuntimeException error) {events.get(id).stop(false);plugin.getLogger().warning("Cannot start event "+id+": "+error.getMessage());return false;}
-        active=id;if(id.equals(queued)) queued=null;
+        endingCountdown.reset();active=id;if(id.equals(queued)) queued=null;
         rotation.started(entries.get(id));return true;
     }
     public void stop(boolean announce) {
+        endingCountdown.reset();
         if(active!=null) {events.get(active).stop(announce);active=null;}
     }
     public boolean queue(String id) {
@@ -135,7 +150,12 @@ public final class EventManager implements Listener, AutoCloseable {
             var event=events.get(active);
             try {event.tick();}
             catch(RuntimeException error) {plugin.getLogger().log(java.util.logging.Level.SEVERE,"Event stopped after gameplay error",error);event.stop(false);}
-            if(!event.running()) active=null;
+            if(!event.running()) {active=null;endingCountdown.reset();}
+            else if(config.getBoolean("ending-countdown.enabled",true)) {
+                long scheduled=config.getBoolean("scheduler.enabled")
+                        ?EventEndCountdown.secondsUntilStop(ZonedDateTime.now(zone),endMinute):Long.MAX_VALUE;
+                endingCountdown.send(event,scheduled,Bukkit.getOnlinePlayers());
+            } else endingCountdown.reset();
         }
         refreshMenus();
     }
@@ -204,7 +224,7 @@ public final class EventManager implements Listener, AutoCloseable {
         if(!menus.containsValue(e.getView().getTopInventory()))return;
         e.setCancelled(true);
         if(e.getWhoClicked() instanceof Player p && e.isLeftClick() && !e.isShiftClick()
-                && (e.getRawSlot()==11 || e.getRawSlot()==13)) {String target=e.getRawSlot()==11?active:queued;p.closeInventory();if(target!=null)warps.request(p,"hoth");}
+                && (e.getRawSlot()==11 || e.getRawSlot()==13)) {String target=e.getRawSlot()==11?active:queued;p.closeInventory();if(target!=null)warps.request(p,target.equals("jabba")?"tatooine":"hoth");}
     }
     @EventHandler public void drag(InventoryDragEvent e) {if(menus.containsValue(e.getView().getTopInventory()))e.setCancelled(true);}
     @EventHandler public void closed(InventoryCloseEvent e) {menus.remove(e.getPlayer().getUniqueId(),e.getInventory());}

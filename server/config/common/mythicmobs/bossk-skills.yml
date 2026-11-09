@@ -1,0 +1,249 @@
+BosskVoice:
+  Cooldown: 5
+  Skills:
+    - randomskill{skills=BosskTrophy,BosskSlay,BosskProfit}
+BosskTrophy:
+  Skills:
+    - sound{s=mandomc:mobs.bossk_trophy;v=2;p=1} @self
+BosskSlay:
+  Skills:
+    - sound{s=mandomc:mobs.bossk_slay;v=2;p=1} @self
+BosskProfit:
+  Skills:
+    - sound{s=mandomc:mobs.bossk_profit;v=2;p=1} @self
+
+BosskCloseCombo:
+  Cooldown: 8to11
+  Conditions:
+    - health{h=>0} true
+    - incombat true
+    - hasaura{aura=BosskBusy} false
+    - hasaura{aura=BosskCombo} false
+    - hasaura{aura=BosskSwipeWindow} false
+    - hasaura{aura=BosskInitialWait} false
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=0to6}
+    - lineofsight
+  Skills:
+    # Swipe, launch gas, relocate while it takes effect, then take one aimed shot.
+    - aura{auraName=BosskCombo;d=145} @self
+    - aura{auraName=BosskSwipeWindow;d=18} @self
+    - clearpath @self
+    - skill{s=BosskTrack;repeat=10;repeatInterval=1} @target
+    - skill{s=BosskTrack;repeat=6;repeatInterval=1} @target
+    - delay 6
+    - state{mid=bossk;s=attack1;li=0;lo=3} @self
+    - delay 5
+    - skill{s=BosskSwipeLunge} @target
+    - delay 5
+    - skill{s=BosskSwipeHit} @target
+    - velocity{mode=SET;x=0;y=0;z=0} @self
+    - stun{auraName=BosskBusy;d=58;facing=false;stopai=true;gravity=false;onEnd=BosskCombatMovement} @self
+    - delay 25
+    - skill{s=BosskTrack;repeat=17;repeatInterval=1} @target
+    - skill{s=BosskTrack;repeat=6;repeatInterval=1} @target
+    - delay 6
+    - state{mid=bossk;s=attack3;li=3;lo=3} @self
+    - delay 17
+    - skill{s=BosskThrow} @target
+    - skill{s=BosskGrenadeFollowup} @target
+
+BosskSwipeHit:
+  Conditions:
+    - health{h=>0} true
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=0to4}
+    - lineofsight
+  Skills:
+    - skill{s=BosskTrack} @target
+    - sound{s=entity.player.attack.sweep;v=1;p=0.8} @self
+    - aura{auraName=BosskConnectingSwipe;d=2} @self
+    - damage{a=9} @target
+
+BosskRangedBrain:
+  Cooldown: 3to5
+  Conditions:
+    - health{h=>0} true
+    - incombat true
+    - hasaura{aura=BosskBusy} false
+    - hasaura{aura=BosskCombo} false
+    - hasaura{aura=BosskSwipeWindow} false
+    - hasaura{aura=BosskInitialWait} false
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=6to32}
+    - lineofsight
+  Skills:
+    - randomskill{skills=BosskBurst 4,BosskGrenade 2,BosskAim 2}
+
+BosskBurst:
+  Conditions:
+    - health{h=>0} true
+    - hasaura{aura=BosskBusy} false
+    - hasaura{aura=BosskCombo} false
+    - hasaura{aura=BosskSwipeWindow} false
+  Skills:
+    - stun{auraName=BosskBusy;d=52;facing=false;stopai=true;gravity=false;onEnd=BosskCombatMovement} @self
+    - skill{s=BosskTrack;repeat=6;repeatInterval=1} @target
+    - delay 6
+    - state{mid=bossk;s=attack2;li=0;lo=3} @self
+    - delay 10
+    - skill{s=BosskFire} @target
+    - delay 4
+    - skill{s=BosskFire} @target
+    - delay 4
+    - skill{s=BosskFire} @target
+
+BosskAim:
+  Conditions:
+    - health{h=>0} true
+    - hasaura{aura=BosskBusy} false
+    - hasaura{aura=BosskCombo} false
+    - hasaura{aura=BosskSwipeWindow} false
+  Skills:
+    - stun{auraName=BosskBusy;d=46;facing=false;stopai=true;gravity=false;onEnd=BosskCombatMovement} @self
+    - skill{s=BosskTrack;repeat=6;repeatInterval=1} @target
+    - delay 6
+    - state{mid=bossk;s=attack4;li=0;lo=3} @self
+    - skill{s=BosskTrack;repeat=15;repeatInterval=1} @target
+    - delay 15
+    - skill{s=BosskAccurateFire} @target
+
+BosskGrenade:
+  Cooldown: 7to10
+  Conditions:
+    - health{h=>0} true
+    - hasaura{aura=BosskBusy} false
+    - hasaura{aura=BosskCombo} false
+    - hasaura{aura=BosskSwipeWindow} false
+  Skills:
+    - aura{auraName=BosskCombo;d=104} @self
+    - stun{auraName=BosskBusy;d=27;facing=false;stopai=true;gravity=false} @self
+    - skill{s=BosskTrack;repeat=17;repeatInterval=1} @target
+    - skill{s=BosskTrack;repeat=6;repeatInterval=1} @target
+    - delay 6
+    - state{mid=bossk;s=attack3;li=0;lo=3} @self
+    - delay 17
+    - skill{s=BosskThrow} @target
+    - skill{s=BosskGrenadeFollowup} @target
+
+# Called at grenade release: allow its 16-tick flight and time for gas exposure.
+BosskGrenadeFollowup:
+  Skills:
+    - delay 12
+    - state{mid=bossk;s=attack3;r=true;lo=3} @self
+    - skill{s=BosskComboReposition} @target
+    - delay 20
+    - skill{s=BosskComboAim} @target
+
+BosskComboReposition:
+  Conditions:
+    - health{h=>0} true
+    - incombat true
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=0to32}
+  Skills:
+    - goto{speed=1.8} @RandomLocationsNearCaster{amount=3;limit=1;minradius=3;radius=5;onsurface=true}
+
+BosskComboAim:
+  Conditions:
+    - health{h=>0} true
+    - incombat true
+  TargetConditions:
+    - health{h=>0} true
+    - lineofsight
+    - distance{d=0to32}
+  Skills:
+    - stun{auraName=BosskBusy;d=46;facing=false;stopai=true;gravity=false;onEnd=BosskCombatMovement} @self
+    - skill{s=BosskTrack;repeat=6;repeatInterval=1} @target
+    - delay 6
+    - state{mid=bossk;s=attack4;li=3;lo=3} @self
+    - skill{s=BosskTrack;repeat=15;repeatInterval=1} @target
+    - delay 15
+    - skill{s=BosskAccurateFire} @target
+
+BosskThrow:
+  Conditions:
+    - health{h=>0} true
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=0to32}
+    - lineofsight
+  Skills:
+    # Console-only UUID bridge; Java revalidates Bossk, target, range and protection.
+    - command{c="mandomc bosskgrenade <caster.uuid> <target.uuid>"} @target
+
+BosskFire:
+  Conditions:
+    - health{h=>0} true
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=0to32}
+    - lineofsight
+  Skills:
+    - skill{s=BosskTrack} @target
+    - weaponMechanicsShoot{weapon=RelbyV10;spread=2;head=false} @target
+
+BosskCombatMovement:
+  Conditions:
+    - health{h=>0} true
+    - incombat true
+    - hasaura{aura=BosskBusy} false
+    - hasaura{aura=BosskCombo} false
+    - hasaura{aura=BosskSwipeWindow} false
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=0to40}
+  Skills:
+    - skill{s=BosskReposition} @target
+BosskReposition:
+  Cooldown: 1
+  Conditions:
+    - hasaura{aura=BosskBusy} false
+    - hasaura{aura=BosskCombo} false
+    - hasaura{aura=BosskSwipeWindow} false
+    - incombat true
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=5to18}
+  Skills:
+    - goto{speed=1.2} @RandomLocationsNearCaster{amount=3;limit=1;minradius=3;radius=6;onsurface=true}
+BosskRelax:
+  Conditions:
+    - incombat false
+  Skills:
+    - clearpath @self
+
+BosskSwipeLunge:
+  Conditions:
+    - health{h=>0} true
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=1.5to6}
+    - lineofsight
+  Skills:
+    - skill{s=BosskTrack} @target
+    - skill{s=BosskTrack} @target
+    - lunge{velocity=0.95;velocityY=0.08} @target
+
+BosskTrack:
+  Conditions:
+    - health{h=>0} true
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=0to32}
+  Skills:
+    - command{c="mandomc bossktarget face <caster.uuid> <target.uuid>"} @target
+
+BosskAccurateFire:
+  Conditions:
+    - health{h=>0} true
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=0to32}
+    - lineofsight
+  Skills:
+    - command{c="mandomc bossktarget shot <caster.uuid> <target.uuid>"} @target

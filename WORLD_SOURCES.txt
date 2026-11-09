@@ -1,5 +1,5 @@
 MANDOMC WORLD SOURCES
-Updated: 2026-11-07
+Updated: 2026-11-09
 
 World files are deliberately excluded from Git. Keep licensed originals/backups separately.
 Purchase/download links are operator placeholders, not verified sellers. Do not redistribute commissioned maps.
@@ -31,6 +31,13 @@ dev_world_the_end
   Installation: server/runtime/dev_world/dimensions/minecraft/the_end/
   Initial import: generated under server/runtime/dev_world/
   Replacement: Generate a new vanilla End in a fresh test container; do not overwrite active player terrain.
+
+Tatooine
+  Source: Supplied legacy Tatooine backup; map files remain local and excluded from Git.
+  Installation: server/runtime/dev_world/dimensions/minecraft/tatooine/
+  Initial import: clean level.dat + region/ + poi/ copy to runtime/Tatooine, then mv import Tatooine normal.
+  Role: Jabba dungeon room testing; player-selected palace entrance arrival is configured in Multiverse.
+  Replacement: Use an approved map or build an original dungeon; update Multiverse spawn.
 
 LEGACY MAP INVENTORY — NOT INSTALLED / NOT A COMMITMENT TO RESTORE
 Source for each: operator-supplied legacy server backup. Confirm licensing and intended role before import.
@@ -109,11 +116,6 @@ Naboo
 StarPort
   Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
   Installation if restored: server/runtime/StarPort/ (import with Multiverse after checking name/environment).
-  Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
-
-Tatooine
-  Buy/download: [ADD ORIGINAL CREATOR / PURCHASE OR DOWNLOAD URL; or mark self-built/generated].
-  Installation if restored: server/runtime/Tatooine/ (import with Multiverse after checking name/environment).
   Replacement: [ADD APPROVED SUBSTITUTE]; otherwise build an original equivalent or keep this world disabled.
 
 outpost

@@ -1,0 +1,134 @@
+A280:
+  Info:
+    Weapon_Item:
+      Type: "DIAMOND_HOE"
+      Custom_Model_Data: 1
+      Item_Model: "mandomc:blasters/a280"
+      Name: "<light_purple>A280 Blaster Rifle"
+      Lore:
+        - "<white>ĒĐ"
+        - ""
+        - "<gray>Standard-issue Rebel Alliance blaster rifle."
+        - "<gray>Capable of semi and fully-automatic fire."
+        - ""
+        - "<yellow><!italic>[<key:key.drop>] Reload"
+        - ""
+        - "<gray>Takes <red>Standard Plasma Cells<gray>."
+      Unbreakable: true
+      Hide_Flags: true
+      Attributes:
+        - "movement_speed -0.0100"
+      Deny_Use_In_Crafting: true
+    Weapon_Info_Display:
+      Action_Bar:
+        Message: "<light_purple>A280<firearm_state> <gray>«<red><ammo_left><gray>»<aqua><reload>"
+    Weapon_Get_Mechanics:
+      - "Sound{sound=item.armor.equip_chain, pitch=1.2, listeners=Source{}}"
+    Weapon_Equip_Delay: 20
+    Cancel:
+      Drop_Item: true
+      Arm_Swing_Animation: true
+      Break_Blocks: true
+
+  Skin:
+    Default:
+      Custom_Model_Data: 1
+      Item_Model: "mandomc:blasters/a280"
+    Scope:
+      Custom_Model_Data: 1001
+      Item_Model: "mandomc:blasters/a280_scope"
+    Sprint:
+      Custom_Model_Data: 2001
+      Item_Model: "mandomc:blasters/a280_sprint"
+  Projectile: "redlaser"
+
+  Shoot:
+    Trigger:
+      Main_Hand: "RIGHT_CLICK"
+      Off_Hand: "RIGHT_CLICK"
+      Circumstance:
+        Swimming: "DENY"
+        Sprinting: "DENY"
+        Dual_Wielding: "DENY"
+    Projectile_Speed: 100
+    Fully_Automatic_Shots_Per_Second: 8
+    Spread:
+      Base_Spread: 2.5
+      Modify_Spread_When:
+        Zooming: 50%
+        Sneaking: 50%
+        In_Midair: 120%
+    Recoil:
+      Mean_X: 0.15
+      Mean_Y: 0.9
+      Variance_X: 0.2
+      Variance_Y: 0.2
+      Speed: 2.5
+      Damping: 0.1
+      Damping_Recovery: 0.2
+      Smoothing: 0.4
+      Max_Accumulation: 12.0
+    Mechanics:
+      - "CustomSound{sound=mandomc:shoot.a280, volume=5, noise=0.1}"
+
+  Reload:
+    Trigger:
+      Main_Hand: "DROP_ITEM"
+      Off_Hand: "DROP_ITEM"
+    Magazine_Size: 40
+    Reload_Duration: 50
+    Start_Mechanics:
+      - "CustomSound{sound=mandomc:reload.start, volume=0.6, noise=0.1}"
+    Finish_Mechanics:
+      - "CustomSound{sound=mandomc:reload.complete, volume=0.6, noise=0.1}"
+    Ammo:
+      Out_Of_Ammo_Mechanics:
+        - "Message{message=<red><bold>ᴍᴀɴᴅᴏᴍᴄ</bold></red> <dark_gray>» <red>Out of plasma cells!}"
+      Ammos:
+        - Standard_Plasma_Cells
+
+
+  Damage:
+    Base_Damage: 3
+    Armor_Damage: 1
+
+  Scope:
+    Trigger:
+      Main_Hand: "LEFT_CLICK"
+      Off_Hand: "LEFT_CLICK"
+    Zoom_Amount: 1.7
+    Shoot_Delay_After_Scope: 10
+    Mechanics:
+      - "CustomSound{sound=mandomc:misc.zoomrifle, volume=0.5, noise=0.1}"
+    Zoom_Off:
+      Mechanics:
+        - "CustomSound{sound=mandomc:misc.zoomrifle, volume=0.5, noise=0.1}"
+
+  Firearm_Action:
+    Type: "SLIDE"
+    Open:
+      Time: 5
+      Mechanics:
+        - "Sound{sound=block.note_block.hat, volume=0.5, noise=0.1}"
+        - "Sound{sound=block.piston.contract, volume=0.5, noise=0.1, delayBeforePlay=2}"
+    Close:
+      Time: 5
+      Mechanics:
+        - "Sound{sound=block.piston.extend, volume=0.5, noise=0.1}"
+
+  Show_Time:
+    Reload:
+      Item_Cooldown: true
+      Exp: true
+      Action_Bar: "<gray>Reloading <bar> <gray><time>s"
+      Action_Bar_Cancelled: "<red>Reload Cancelled"
+      Bar:
+        Left_Color: "<gray>"
+        Right_Color: "<aqua>"
+        Left_Symbol: "|"
+        Right_Symbol: "|"
+        Symbol_Amount: 30
+    Weapon_Equip_Delay:
+      Item_Cooldown: true
+    Shoot_Delay_After_Scope:
+      Item_Cooldown: true

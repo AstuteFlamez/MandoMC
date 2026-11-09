@@ -1,0 +1,3 @@
+# User requested clearing Tatooine regions for dungeon playtesting.
+# Revisit WorldGuard setup separately. Native map-preserving gamerules remain configured.
+regions: {}

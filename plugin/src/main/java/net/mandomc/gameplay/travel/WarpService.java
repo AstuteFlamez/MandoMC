@@ -42,7 +42,7 @@ public final class WarpService implements Listener, AutoCloseable {
         if(size<9 || size>54 || size%9!=0) throw new IllegalArgumentException("travel/warps.yml: gui-size must be 9..54 in rows of nine");
         var section=config.getConfigurationSection("warps");
         if(section==null || !section.getKeys(false).equals(java.util.Set.copyOf(ids())))
-            throw new IllegalArgumentException("travel/warps.yml: configure exactly spawn, earth and hoth");
+            throw new IllegalArgumentException("travel/warps.yml: configure exactly spawn, earth, hoth and tatooine");
         for(String id:ids()) {
             int slot=config.getInt("warps."+id+".slot",-1);
             Material material=Material.matchMaterial(config.getString("warps."+id+".material",""));
@@ -63,18 +63,19 @@ public final class WarpService implements Listener, AutoCloseable {
             return true;
         });
         command.setTabCompleter((sender,ignored,label,args)->args.length==1
-                ?List.of("batuu","earth","hoth").stream().filter(id->id.startsWith(args[0].toLowerCase(Locale.ROOT))).toList():List.of());
+                ?List.of("batuu","earth","hoth","tatooine").stream().filter(id->id.startsWith(args[0].toLowerCase(Locale.ROOT))).toList():List.of());
         plugin.getServer().getPluginManager().registerEvents(this,plugin);
     }
     private void require(String path) {
         if(!config.isString(path) || config.getString(path).isBlank()) throw new IllegalArgumentException("travel/warps.yml: missing "+path);
     }
-    public static List<String> ids() {return List.of("spawn","earth","hoth");}
+    public static List<String> ids() {return List.of("spawn","earth","hoth","tatooine");}
     public static String canonical(String input) {
         return switch(input.toLowerCase(Locale.ROOT)) {
             case "batuu","spawn","spawnworld","blackspireoutpost","black_spire_outpost"->"spawn";
             case "earth","survival","survivalworld"->"earth";
             case "hoth"->"hoth";
+            case "tatooine"->"tatooine";
             default->null;
         };
     }
@@ -82,6 +83,7 @@ public final class WarpService implements Listener, AutoCloseable {
     private Component message(String key) {return text("messages."+key);}
     public Location destination(String id) {
         return switch(id) {case "spawn"->arrivals.spawn();case "earth"->arrivals.survival();case "hoth"->arrivals.protectedWorld("minecraft:hoth");
+            case "tatooine"->arrivals.adventureWorld("minecraft:tatooine");
             default->throw new IllegalStateException("Unknown public warp: "+id);};
     }
     public boolean request(Player player,String input) {

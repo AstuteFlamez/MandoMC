@@ -1,0 +1,10 @@
+schema-version: 1
+enabled: true
+# Shared debris/range budget. MandoMC owns the forward slam and directional swipe launch.
+slam:
+  radius: 14
+  ring-step: 2
+  ring-interval-ticks: 2
+  fragment-lifetime-ticks: 20
+  max-fragments: 256
+  max-waves: 4

@@ -46,6 +46,10 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     private ArrivalListener arrival;
     private ArrivalDestinations destinations;
     private boolean failed;
+    private net.mandomc.gameplay.mobs.RancorSlam rancorSlam;
+    private net.mandomc.gameplay.mobs.BosskDioxis bosskDioxis;
+    private net.mandomc.integrations.weapons.BosskAim bosskAim;
+    public net.mandomc.gameplay.mobs.BosskDioxis bosskDioxis(){return bosskDioxis;}
     private net.mandomc.gameplay.saber.SaberService sabers;
     private net.mandomc.integrations.weapons.SaberProjectiles saberProjectiles;
     public net.mandomc.integrations.weapons.SaberProjectiles saberProjectiles() { return saberProjectiles; }
@@ -103,7 +107,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 }
             }, sender -> sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage()
                     .deserialize(Objects.requireNonNull(language.getString("items.denied")))));
-            for (var resource : new String[] {"items/catalog.yml", "items/definitions/vehicles.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
+            for (var resource : new String[] {"items/catalog.yml", "items/definitions/vehicles.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/jabba.yml", "items/definitions/jabba-loot.yml", "items/definitions/dioxis.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
                 if (!new File(getDataFolder(), resource).isFile()) saveResource(resource, false);
             }
             // Add only missing badges and vendor registrations; preserve local overrides.
@@ -153,6 +157,34 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             starterKit = new net.mandomc.gameplay.arrival.StarterKit(this, items, loadFeature("arrival/starter-kit.yml"),
                     language.getString("starter-kit.received"));
             getLogger().info("Combat basics ready: shared combat tag, logout death, survival rules and first-join kit.");
+            if(getServer().getPluginManager().isPluginEnabled("ModelEngine") && getServer().getPluginManager().isPluginEnabled("MythicMobs"))
+                new net.mandomc.integrations.mobs.HostileFacing(this,root);
+            var rancorConfig=loadFeature("mobs/rancor.yml");
+            if(rancorConfig.getBoolean("enabled",false)) {
+                var rancorMobs=new net.mandomc.integrations.mobs.MythicMobAccess();
+                rancorSlam=new net.mandomc.gameplay.mobs.RancorSlam(this,
+                        net.mandomc.gameplay.mobs.RancorSlamSettings.read(rancorConfig.getConfigurationSection("slam")),
+                        rancorMobs::type,boundaryProtection::allowed,root);
+            }
+            var bosskConfig=loadFeature("mobs/bossk.yml");
+            if(bosskConfig.getBoolean("enabled",false)) {
+                var bosskMobs=new net.mandomc.integrations.mobs.MythicMobAccess();
+                new net.mandomc.integrations.weapons.BosskShotDamage(this,bosskMobs::type,boundaryProtection::allowed,
+                        net.mandomc.gameplay.mobs.BosskShotSettings.read(bosskConfig.getConfigurationSection("shooting")));
+                var bosskPose=new net.mandomc.integrations.models.BosskMuzzle();
+                bosskAim=new net.mandomc.integrations.weapons.BosskAim(this,root,bosskMobs::type,boundaryProtection::allowed,bosskPose);
+                bosskDioxis=new net.mandomc.gameplay.mobs.BosskDioxis(this,
+                        net.mandomc.gameplay.mobs.DioxisSettings.read(bosskConfig.getConfigurationSection("dioxis")),
+                        bosskMobs::type,boundaryProtection::allowed,combat::tag,root,
+                        bosskPose::position,items);
+                new net.mandomc.integrations.mobs.BosskCombat(this,items,bosskMobs::type,boundaryProtection::allowed);
+            }
+            var jabbaConfig = loadFeature("mobs/drops/jabba.yml");
+            if (jabbaConfig.getBoolean("enabled", false)) {
+                new net.mandomc.integrations.mobs.JabbaDrops(this, items,
+                        net.mandomc.gameplay.mobs.JabbaDropsSettings.read(jabbaConfig));
+                getLogger().info("Jabba generic guard drops ready; dungeon spawning is not enabled.");
+            }
             var mobConfig = loadFeature("mobs/spawning.yml");
             if (mobConfig.getBoolean("enabled", false)) {
                 var settings = net.mandomc.gameplay.mobs.SandySettings.read(mobConfig);
@@ -201,7 +233,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             net.mandomc.commands.ArrivalCommands.register(this, arrival, destinations, travel);
             warps = new net.mandomc.gameplay.travel.WarpService(this, travel, destinations, loadFeature("travel/warps.yml"));
             events = new net.mandomc.gameplay.events.EventManager(this, warps);
-            getLogger().info("Legacy events and public warps ready: KOTH, Black Spire Outpost, Earth and Hoth; rewards disabled.");
+            getLogger().info("Legacy events and public warps ready: KOTH, Black Spire Outpost, Earth, Hoth and Tatooine; rewards disabled.");
             getLogger().info("Arrival enabled: protected SpawnWorld -> survival; /spawn, /survival and temporary /tutorial ready.");
         } catch (Exception | LinkageError error) {
             failed = true;
@@ -231,6 +263,9 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
         if (commandBindings != null) commandBindings.close();
         if (requests != null) requests.close();
         if (admin != null) admin.close();
+        if(rancorSlam!=null)rancorSlam.close();
+        if(bosskDioxis!=null)bosskDioxis.close();
+        if(bosskAim!=null)bosskAim.close();
         if (events != null) events.close();
         if (warps != null) warps.close();
         if (recipeGuide != null) recipeGuide.close();

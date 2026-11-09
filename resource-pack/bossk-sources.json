@@ -1,0 +1,77 @@
+{
+  "source": "Supplied legacy Bossk server config and pinned MandoPack archive",
+  "files": [
+    {
+      "source": "assets/minecraft/textures/custom/blasters/relbyv10.png",
+      "sha256": "6c949a16431d693b4dd011bf9c63b2ba3b723ed2b3d675522cac977a5b08a41b",
+      "destination": "resource-pack/src/assets/mandomc/textures/item/blasters/relbyv10.png",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/models/item/blasters/relbyv10/relbyv10.json",
+      "sha256": "e5974275f58050e285b33d0ef967f1e3bf2958dc1dc02bec0d38920597349539",
+      "destination": "resource-pack/src/assets/mandomc/models/item/blasters/relbyv10.json",
+      "changes": "Namespaced references; original geometry, texture and display poses retained."
+    },
+    {
+      "source": "assets/minecraft/models/item/blasters/relbyv10/relbyv10scope.json",
+      "sha256": "08d2e46809e4c9f6f80f73ebda336f47c7d555786374cbbf24bbe84d37fd78ee",
+      "destination": "resource-pack/src/assets/mandomc/models/item/blasters/relbyv10_scope.json",
+      "changes": "Namespaced references; original geometry, texture and display poses retained."
+    },
+    {
+      "source": "assets/minecraft/models/item/blasters/relbyv10/relbyv10sprint.json",
+      "sha256": "66b406526792be6b8eff8581ef6c5cc3045895c4b047429bf0586d700c03147b",
+      "destination": "resource-pack/src/assets/mandomc/models/item/blasters/relbyv10_sprint.json",
+      "changes": "Namespaced references; original geometry, texture and display poses retained."
+    },
+    {
+      "source": "assets/minecraft/textures/custom/projectiles/dioxis_grenade.png",
+      "sha256": "ab7c2387fe8bebe6872062e589ebf209140554fe27aba9078608648ba9599699",
+      "destination": "resource-pack/src/assets/mandomc/textures/item/projectiles/dioxis_grenade.png",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/models/item/projectiles/dioxis_grenade.json",
+      "sha256": "563a6154c56af5682f8dc464b36a3ff9ead670894fd15451f8128b403fe9ae7c",
+      "destination": "resource-pack/src/assets/mandomc/models/item/projectiles/dioxis_grenade.json",
+      "changes": "Namespaced references; original geometry, texture and display poses retained."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/bossk_trophy.ogg",
+      "sha256": "05eb5499fa7260a648d77605b21df195780e94f092b93991d4bb14bae65e058a",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/bossk_trophy.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/bossk_slay.ogg",
+      "sha256": "0ace572626f3b0ba7a7dca54eb42b7954a9c24ef07a7d173b112ea9828a1a8c6",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/bossk_slay.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/bossk_profit.ogg",
+      "sha256": "275089953209acda35d063d19ec1ca7983fcaeb747f9a9c7fdd11122e8235adb",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/bossk_profit.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "WeaponMechanics/weapons/light_machine_guns/RelbyV10.yml",
+      "sha256": "70089c9896f78124c4c2a05caa8e4abb0de531e59fb929d3b9dcc32a95a6dbcc",
+      "destination": "server/config/common/weaponmechanics/relbyv10.yml",
+      "changes": "Current skin/projectile syntax, namespaced models/sounds, reload sound repair, current keybinding lore; original actual gun tuning retained. Uninstalled cosmetic extension removed. Current WM rejects fractional full-auto rates: represent approximately 1.2 shots/sec as a 17-tick semi-auto delay; describe actual plasma bolts in lore. Subsequent client tuning deliberately reduces base damage to 1, armor wear to 1 and falloff; this does not alter pack artwork."
+    },
+    {
+      "source": "assets/minecraft/models/item/grenades/dioxis_grenade.json",
+      "sha256": "756bc0eb0fbaf10d0026f476682612a4ea6a96a8fb46b4e84d0bb481e9526846",
+      "destination": "resource-pack/src/assets/mandomc/models/item/grenades/dioxis_grenade.json",
+      "changes": "Namespaced textures; original inventory/hand grenade geometry and display transforms retained."
+    },
+    {
+      "source": "assets/minecraft/textures/custom/grenades/dioxis_grenade.png",
+      "sha256": "16a80835164b7296cb41208d19a47b79848cbd703c46df812ebb181295d4dc76",
+      "destination": "resource-pack/src/assets/mandomc/textures/item/grenades/dioxis_grenade.png",
+      "changes": "Copied unchanged."
+    }
+  ]
+}

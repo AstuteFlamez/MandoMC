@@ -1,0 +1,99 @@
+{
+  "format_version": "1.21.11",
+  "credit": "Made with Blockbench",
+  "texture_size": [
+    128,
+    128
+  ],
+  "textures": {
+    "0": "mandomc:item/projectiles/dioxis_grenade"
+  },
+  "elements": [
+    {
+      "from": [
+        6.75,
+        6.5,
+        6.5
+      ],
+      "to": [
+        9.75,
+        9.5,
+        9.5
+      ],
+      "rotation": {
+        "angle": 0,
+        "axis": "y",
+        "origin": [
+          8.75,
+          6.5,
+          8.5
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0.375,
+            0.375,
+            0.75,
+            0.75
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            0,
+            0.375,
+            0.375,
+            0.75
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            1.125,
+            0.375,
+            1.5,
+            0.75
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            0.75,
+            0.375,
+            1.125,
+            0.75
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            0.75,
+            0.375,
+            0.375,
+            0
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            1.125,
+            0,
+            0.75,
+            0.375
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ],
+  "display": {
+    "head": {
+      "translation": [
+        0,
+        -0.75,
+        -0.5
+      ]
+    }
+  }
+}

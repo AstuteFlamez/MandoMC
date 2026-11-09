@@ -31,3 +31,8 @@ messages:
   enabled: '<green>Event enabled.'
   disabled: '<yellow>Event disabled.'
   usage: '<yellow>/event [start <id>|stop|next <id>|reroll|status|list|reload|enable <id>|disable <id>]'
+
+ending-countdown:
+  enabled: true
+  title: '<red><bold>Event ending in <seconds>'
+  subtitle: '<gold><event>'

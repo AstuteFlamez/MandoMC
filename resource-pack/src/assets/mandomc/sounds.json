@@ -115,5 +115,166 @@
         "stream": false
       }
     ]
+  },
+  "misc.zoompistol": {
+    "sounds": [
+      {
+        "name": "mandomc:misc/zoompistol"
+      }
+    ],
+    "subtitle": "Scope engaged"
+  },
+  "mobs.alien1": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/alien1"
+      }
+    ],
+    "subtitle": "Alien chitters"
+  },
+  "mobs.alien2": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/alien2"
+      }
+    ],
+    "subtitle": "Alien screeches"
+  },
+  "mobs.alien3": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/alien3"
+      }
+    ],
+    "subtitle": "Alien growls"
+  },
+  "mobs.gamorrean_death": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/gamorrean_death"
+      }
+    ],
+    "subtitle": "Gamorrean dies"
+  },
+  "mobs.gamorrean_idle1": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/gamorrean_idle1"
+      }
+    ],
+    "subtitle": "Gamorrean grunts"
+  },
+  "mobs.gamorrean_idle2": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/gamorrean_idle2"
+      }
+    ],
+    "subtitle": "Gamorrean snorts"
+  },
+  "shoot.a280": {
+    "sounds": [
+      {
+        "name": "mandomc:shoot/a280"
+      }
+    ],
+    "subtitle": "Blaster fires"
+  },
+  "shoot.cr-21": {
+    "sounds": [
+      {
+        "name": "mandomc:shoot/cr-21"
+      }
+    ],
+    "subtitle": "Blaster fires"
+  },
+  "mobs.bossk_trophy": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/bossk_trophy"
+      }
+    ],
+    "subtitle": "Rancor snarls"
+  },
+  "mobs.bossk_slay": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/bossk_slay"
+      }
+    ],
+    "subtitle": "Rancor snarls"
+  },
+  "mobs.bossk_profit": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/bossk_profit"
+      }
+    ],
+    "subtitle": "Rancor snarls"
+  },
+  "mobs.boba_impressed": {
+    "sounds": [
+      "mandomc:mobs/boba_impressed"
+    ]
+  },
+  "mobs.boba_stay_out_of_my_way": {
+    "sounds": [
+      "mandomc:mobs/boba_stay_out_of_my_way"
+    ]
+  },
+  "mobs.boba_die": {
+    "sounds": [
+      "mandomc:mobs/boba_die"
+    ]
+  },
+  "mobs.boba_burn": {
+    "sounds": [
+      "mandomc:mobs/boba_burn"
+    ]
+  },
+  "mobs.flamethrower": {
+    "sounds": [
+      "mandomc:mobs/flamethrower"
+    ]
+  },
+  "mobs.jetpack": {
+    "sounds": [
+      "mandomc:mobs/jetpack"
+    ]
+  },
+  "shoot.ee3": {
+    "sounds": [
+      "mandomc:shoot/ee3"
+    ]
+  },
+  "mobs.rancor_snarl_1": {
+    "sounds": [
+      "mandomc:mobs/rancor_snarl_1"
+    ]
+  },
+  "mobs.rancor_snarl_2": {
+    "sounds": [
+      "mandomc:mobs/rancor_snarl_2"
+    ]
+  },
+  "mobs.rancor_snarl_3": {
+    "sounds": [
+      "mandomc:mobs/rancor_snarl_3"
+    ]
+  },
+  "mobs.rancor_roar_1": {
+    "sounds": [
+      "mandomc:mobs/rancor_roar_1"
+    ]
+  },
+  "mobs.rancor_roar_2": {
+    "sounds": [
+      "mandomc:mobs/rancor_roar_2"
+    ]
+  },
+  "mobs.rancor_growl": {
+    "sounds": [
+      "mandomc:mobs/rancor_growl"
+    ]
   }
 }

@@ -49,3 +49,15 @@ worlds:
       z: -16.25
       yaw: -9.0
       pitch: -0.9
+  tatooine:
+    key: minecraft:tatooine
+    aliases: [Tatooine]
+    weather: false
+    pvp: true
+    difficulty: normal
+    spawn:
+      x: 1711.845046707056
+      y: 100.0
+      z: 2201.7401780545574
+      yaw: 81.4468
+      pitch: -11.09995

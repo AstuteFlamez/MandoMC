@@ -46,7 +46,7 @@ public final class KothProbe extends JavaPlugin {
         check(hoth.getWorldFolder().toPath().toString().contains("hoth"),"Hoth uses migrated dimension storage");
         for(String id:WarpService.ids()) {
             var point=plugin.warps().destination(id);
-            new WorldGuardArrivalProtection().requireProtected(point);
+            if (!id.equals("tatooine")) new WorldGuardArrivalProtection().requireProtected(point);
             check(net.mandomc.gameplay.arrival.ArrivalDestinations.safeSpawn(point) != null,id+" arrival has safe footing and protection");
         }
         check(plugin.warps().destination("earth").getWorld().getKey().equals(NamespacedKey.minecraft("overworld")),"Earth reuses existing survival world");

@@ -1,0 +1,16 @@
+schema-version: 1
+enabled: true
+dioxis:
+  flight-ticks: 16
+  cloud-ticks: 120
+  radius: 2
+  stun-ticks: 30
+  stun-immunity-ticks: 100
+  poison-ticks: 100
+  poison-amplifier: 0
+  fake-hit-interval: 5
+  arc-height: 0.65
+
+shooting:
+  single-damage: 6
+  burst-total-damage: 8

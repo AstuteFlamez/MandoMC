@@ -7,8 +7,8 @@ description: MandoMC gameplay
 softdepend: [ WorldGuard, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
   warp:
-    description: Choose Batuu, Earth or Hoth
-    usage: /warp [batuu|earth|hoth]
+    description: Choose Batuu, Earth, Hoth or Tatooine
+    usage: /warp [batuu|earth|hoth|tatooine]
     aliases: [warps, travel]
     permission: mandomc.travel.warp
   event:

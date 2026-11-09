@@ -11,10 +11,13 @@ parser = argparse.ArgumentParser()
 parser.add_argument('pack', type=Path, help='ModelEngine generated resource pack directory')
 args = parser.parse_args()
 source = args.pack / 'assets/modelengine'
-expected = {'ranged_raider', 'melee_raider', 'bantha', 'dewback', 'massiff', 'speederbike', 'xwing', 'tiefighter', 'uwing'}
+blueprints = json.loads((ROOT / 'server/config/common/modelengine/sources.json').read_text())
+expected = {Path(model['destination']).stem for model in blueprints['models']}
+vehicles = json.loads((ROOT / 'server/config/common/modelengine/vehicle-sources.json').read_text())
+expected.update(Path(model['destination']).stem for model in vehicles['models'])
 actual = {p.name for p in (source / 'items').iterdir() if p.is_dir()}
 if not expected <= actual or actual - expected - {'internal_fire'}:
-    raise SystemExit(f'Expected the configured creature and vehicle models and optional internal_fire; got {sorted(actual)}')
+    raise SystemExit(f'Expected the tracked creature and vehicle blueprints and optional internal_fire; got {sorted(actual)}')
 destination = ROOT / 'resource-pack/src/assets/modelengine'
 # No vanilla shader overrides are required for these rigid models (none uses player limbs).
 shutil.copytree(source, destination, dirs_exist_ok=True)

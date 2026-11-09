@@ -30,6 +30,42 @@
       "sha256": "d1994d860f68547a914a00c5d532d3fcc5575cc49d8c6b675cf832f8e444fdfc",
       "destination": "server/config/common/modelengine/blueprints/massiff.bbmodel",
       "changes": "Normalize model ID; remove local texture path metadata; preserve embedded textures, geometry and animation."
+    },
+    {
+      "source": "ModelEngine/blueprints/gamorrean_guard.bbmodel",
+      "sha256": "8cfa12b8e9614daa424b7c5ffbfa1336d6b3f8a641510187f6b2ec500e1ac181",
+      "destination": "server/config/common/modelengine/blueprints/gamorrean_guard.bbmodel",
+      "changes": "Normalize model ID and remove local texture paths. Preserve geometry, embedded textures, keyframes and Override flags. Attack clips finish instead of holding; use native zombie collision (h=false)."
+    },
+    {
+      "source": "ModelEngine/blueprints/quarren_guard.bbmodel",
+      "sha256": "1a7bc617ed63a87a1c71562363a8e31b02f5512d75cbfa43fef4acf431e02a27",
+      "destination": "server/config/common/modelengine/blueprints/quarren_guard.bbmodel",
+      "changes": "Normalize model ID and remove local texture paths. Preserve geometry, embedded textures, keyframes and Override flags. Attack clips finish instead of holding; use native zombie collision (h=false)."
+    },
+    {
+      "source": "ModelEngine/blueprints/twilek_guard.bbmodel",
+      "sha256": "6867407b4fd89e37c949c4226e9940a9a668efc4ac2ffe546281f193e300e74a",
+      "destination": "server/config/common/modelengine/blueprints/twilek_guard.bbmodel",
+      "changes": "Normalize model ID and remove local texture paths. Preserve geometry, embedded textures, keyframes and Override flags. Attack clips finish instead of holding; use native zombie collision (h=false)."
+    },
+    {
+      "source": "ModelEngine/blueprints/bossk.bbmodel",
+      "sha256": "f215169ef17bffd870c0173d53a5b888658443a357d220d55ab97c3069040673",
+      "destination": "server/config/common/modelengine/blueprints/bossk.bbmodel",
+      "changes": "Normalize ID and strip local paths; attack clips play once. All geometry, textures, keyframes and Override flags retained; native collision h=false. Add an empty bossk_muzzle locator at the original barrel tip, inheriting the rifle rig; original visible geometry and all keyframes unchanged."
+    },
+    {
+      "source": "ModelEngine/blueprints/boba_fett.bbmodel",
+      "sha256": "e562a23146f21dd5bdd1f32dd3c875d21754c76298d1fee1a672840ee3bdf043",
+      "destination": "server/config/common/modelengine/blueprints/boba_fett.bbmodel",
+      "changes": "Strip local texture paths; attack clips finish instead of holding. Original rig, embedded textures, keyframes and Override flags retained. Native zombie collision h=false."
+    },
+    {
+      "source": "ModelEngine/blueprints/Rancor.bbmodel",
+      "sha256": "d1924c408712f2fe9314ba6643a575f1f27dedba5978bfe6a63a8e068f8f1174",
+      "destination": "server/config/common/modelengine/blueprints/rancor.bbmodel",
+      "changes": "Normalize ID, strip local texture paths and finish attack clips. Original geometry, embedded textures, hitbox, keyframes and Override flags retained. Original scale 2 is applied by model attachment."
     }
   ]
 }

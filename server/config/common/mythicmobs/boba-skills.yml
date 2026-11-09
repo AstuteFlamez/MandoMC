@@ -1,0 +1,119 @@
+################################################################################
+#   Boba Fett Skills File (FINAL NON-PREMIUM)
+#   All <random> placeholders fully removed.
+################################################################################
+
+Boba_boba_voice:
+  Skills:
+    - randomskill{skills=Boba_boba_impressed_voice,Boba_boba_outofmyway_voice,Boba_boba_die_voice}
+
+Boba_boba_impressed_voice:
+  Skills:
+    - sound{s=mandomc:mobs.boba_impressed;v=2;p=1} @self
+
+Boba_boba_outofmyway_voice:
+  Skills:
+    - sound{s=mandomc:mobs.boba_stay_out_of_my_way;v=2;p=1} @self
+
+Boba_boba_die_voice:
+  Skills:
+    - sound{s=mandomc:mobs.boba_die;v=2;p=1} @self
+
+########################
+# Intro / Death Skills #
+########################
+
+Boba_dodge:
+  Skills:
+    - randomskill{skills=Boba_dodge_left,Boba_dodge_right}
+
+Boba_dodge_left:
+  Skills:
+    - velocity{m=set;x=-2;y=0.3;z=0;relative=true} @self
+    - potion{type=slow_falling;duration=20;level=0;p=false}
+    - state{mid=boba_fett;s=dodge_left} @self
+
+Boba_dodge_right:
+  Skills:
+    - velocity{m=set;x=2;y=0.3;z=0;relative=true} @self
+    - potion{type=slow_falling;duration=20;level=0;p=false}
+    - state{mid=boba_fett;s=dodge_right} @self
+
+Boba_bobafett_attack:
+  Conditions:
+    - incombat true
+  Skills:
+    - randomskill{skills=Boba_burst_shot,Boba_jump_shot,Boba_flamethrower}
+
+Boba_burst_shot:
+  Skills:
+    - setspeed{speed=0;type=walking} @self
+    - skill{s=MandoFaceTarget;repeat=32;repeatInterval=1} @target
+    - delay 6
+    - state{mid=boba_fett;s=attack1} @self
+    - delay 9
+    - skill{s=MandoFaceTarget} @target
+    - weaponMechanicsShoot{weapon=EE3;spread=1;head=true;repeat=1;repeatInterval=1} @Target
+    - delay 4
+    - skill{s=MandoFaceTarget} @target
+    - weaponMechanicsShoot{weapon=EE3;spread=1;head=true;repeat=1;repeatInterval=1} @Target
+    - delay 4
+    - skill{s=MandoFaceTarget} @target
+    - weaponMechanicsShoot{weapon=EE3;spread=1;head=true;repeat=1;repeatInterval=1} @Target
+    - delay 4
+    - skill{s=MandoFaceTarget} @target
+    - weaponMechanicsShoot{weapon=EE3;spread=1;head=true;repeat=1;repeatInterval=1} @Target
+    - delay 4
+    - skill{s=MandoFaceTarget} @target
+    - weaponMechanicsShoot{weapon=EE3;spread=1;head=true;repeat=1;repeatInterval=1} @Target
+    - delay 20
+    - state{mid=boba_fett;s=attack1;r=true} @self
+    - setspeed{speed=1;type=walking} @self
+    - delay 20
+
+Boba_jump_shot:
+  Skills:
+    - setspeed{speed=0;type=walking} @self
+    - skill{s=MandoFaceTarget;repeat=27;repeatInterval=1} @target
+    - delay 6
+    - state{mid=boba_fett;s=attack2} @self
+    - sound{s=mandomc:mobs.jetpack;v=2;p=1} @self
+    - jump{v=0.6}
+    - potion{type=slow_falling;duration=20;level=0;p=false}
+    - delay 20
+    - skill{s=MandoFaceTarget} @target
+    - weaponMechanicsShoot{weapon=EE3;spread=1;head=true;repeat=1;repeatInterval=1} @Target
+    - delay 30
+    - state{mid=boba_fett;s=attack2;r=true} @self
+    - setspeed{speed=1;type=walking} @self
+
+########################
+# Flamethrower Skills  #
+########################
+
+Boba_flamethrower:
+  Skills:
+    - setspeed{speed=0;type=walking} @self
+    - skill{s=MandoFaceTarget;repeat=31;repeatInterval=1} @target
+    - delay 6
+    - state{mid=boba_fett;s=attack3} @self
+    - sound{s=mandomc:mobs.boba_burn;v=2;p=1} @self
+    - sound{s=mandomc:mobs.flamethrower;v=2;p=1} @self
+    - delay 20
+    - projectile{onTick=Boba_FLAMET;onHit=Boba_FLAMETHROWERHIT;ohb=Boba_FLAMETHROWERHIT;v=10;ti=2;i=1;hR=0.5;vR=0.5;hnp=true;ham=true;hn=10;vn=1;mr=9;sfo=0;sE=true;syo=1;so=0.3;id=20;repeat=4;repeatI=1} @Forward{f=200;uel=true}
+    - sound{s=minecraft:block.fire.ambient;v=1;p=1.5;repeat=1;repeati=10} @origin
+    - delay 50
+    - state{mid=boba_fett;s=attack3;r=true} @self
+    - setspeed{speed=1;type=walking} @self
+Boba_FLAMET:
+  Skills:
+  - effect:particles{p=large_smoke;amount=1;speed=0;hS=0.1;vS=0.1} @origin
+  - effect:particles{p=flame;amount=1;speed=0;hS=0.1;vS=0.1} @origin
+Boba_FLAMETHROWERHIT:
+  Skills:
+  - effect:particles{p=large_smoke;amount=3;speed=0.05;hS=0.1;vS=0.1} @origin
+  - effect:particles{p=flame;amount=3;speed=0.05;hS=0.1;vS=0.1} @origin
+  - damage{pi=true;a=0.1;pk=true;i=true;repeat=12;repeatI=16} @ENO{r=1.8}
+  - damage{pi=true;a=0.1;pk=true;i=true;repeat=4;repeatI=20}
+  - ignite{ticks=100;repeat=19;repeatI=10} @ENO{r=1.8}
+  - effect:blockmask{m=fire;r=1;oa=true;d=70to100}

@@ -20,7 +20,7 @@ Operator nodes use `mandomc.admin.<command>` (`gamemode` for all mode aliases); 
 ## Command catalogue
 | Command | Permission | Destination/behavior | Status |
 | --- | --- | --- | --- |
-| `/warp [batuu|earth|hoth]` | `mandomc.travel.warp` | Galaxy menu/direct travel; aliases `/warps`, `/travel` | Implemented |
+| `/warp [batuu|earth|hoth|tatooine]` | `mandomc.travel.warp` | Galaxy menu/direct travel; aliases `/warps`, `/travel` | Implemented |
 | `/event` | `mandomc.event` | Current/next event and selection chances; alias `/events` | Implemented |
 | `/event start koth`, `stop`, `forceend`, `next koth`, `reroll`, `status`, `list`, `reload`, `enable koth`, `disable koth` | `mandomc.event.admin` (op) | Manage shared event lifecycle; reload/enable/disable only while idle | Implemented |
 | `/spawn` | `mandomc.travel.spawn` | SpawnWorld, `minecraft:spawnworld` | Current travel command |
@@ -69,10 +69,12 @@ Vader's first saber is available as `/mmc give vader` (same give permission), or
 Cycler rifle: `/mmc give cycler_rifle`, also in Weapons. Right click fires; left click scopes; the configured drop key reloads. Mob definitions: `TuskenRaiderSniper`, `TuskenRaiderMelee`, `Bantha`, `Dewback`, `Massiff`; use MythicMobs administrator commands for isolated model/combat checks. Natural spawns are limited to selected sandy SurvivalWorld biomes. Drops are not implemented yet.
 
 ## Legacy KOTH/events and current-world warps
-`/warp` has exactly Batuu / Black Spire Outpost (SpawnWorld), Earth (the existing survival world), and recovered Hoth. The legacy direct aliases `blackspireoutpost`, `spawnworld`, `survival` and `survivalworld` resolve to the same protected world-spawn routes. GUI and event-menu travel delegates to TeleportService, including its combat and movement restrictions. Ilum, Alderaan and other legacy worlds remain unavailable.
+`/warp` has exactly Batuu / Black Spire Outpost (SpawnWorld), Earth (the existing survival world) recovered Hoth and Tatooine. The legacy direct aliases `blackspireoutpost`, `spawnworld`, `survival` and `survivalworld` resolve to the same protected world-spawn routes. GUI and event-menu travel delegates to TeleportService, including its combat and movement restrictions. Tatooine is a combat-enabled dungeon test destination; its landing must still have safe standing space. Ilum, Alderaan and other legacy worlds remain unavailable.
 
 `/events` retains current/next/chances, with only KOTH registered. The legacy hourly schedule uses America/Chicago: :50 end warning, :55 forced end/next warning, :00 start. No missed event is replayed on startup. `/event start koth` begins an immediate round; only one event can run. KOTH is currently solo, with a three-minute continuous capture and no rewards. Enemies entering do not reset a holder who remains on the hill. Clans and rewards wait for their own decisions. See [KOTH and warps](features/koth-and-warps.md).
 
 `/event reload` validates replacement event configuration and refuses while active; invalid data preserves the working definitions. This is a feature-level config reload, not Bukkit/plugin reload and does not reload saber settings. Warp presentation and code changes still require restart.
 
 The galaxy warp menu uses the recovered custom planet icons. Earth is isolated in the upper-left Unknown Regions by the user’s choice, Batuu sits west, and Hoth sits southeast of Batuu. `/warp batuu` is the public spawn destination; `/warp spawn` and the old world-name aliases still work.
+
+Jabba is now a registered scheduled event: `/event start jabba` starts the shared palace operation and `/event stop` resets it. Its current/next GUI entries travel to Tatooine. All caches spawn at start and only room kills unlock gates. See [Jabba operation](features/jabba-dungeon.md).

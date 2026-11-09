@@ -27,21 +27,21 @@ Exact official download URLs, versions and locally verified hashes are in `plugi
 | --- | --- |
 | WeaponMechanics / MechanicsCore | 4.3.1 / 4.3.1 |
 | PacketEvents | 2.14.0 |
-| ModelEngine | R4.1.1, official free edition |
+| ModelEngine | R4.1.1, owner-supplied Premium |
 | MythicMobs | 5.14.0 official Modrinth release |
 | FactionsUUID | 4.6.0 official public Maven artifact |
 | WorldEdit / WorldGuard | 7.4.6 / 7.0.18 |
 | Vault (inactive economy bridge) | 1.7.3-b131 |
 | MandoMC | 0.1.0-SNAPSHOT, built locally |
 
-FactionsUUID's [official Maven repository](https://factions.support/developers/) publishes a complete runnable shadowJar; 4.6.0 was its latest published artifact at setup time and declares API 26.1.2. Newer source tags exist, but were not substituted for this boot-tested binary. MythicMobs' published 5.14.0 artifact internally reports `5.14.0-SNAPSHOT-local`; its downloaded bytes matched the official release hashes. ModelEngine is the free edition; premium capabilities and gameplay limits have not been evaluated.
+FactionsUUID's [official Maven repository](https://factions.support/developers/) publishes a complete runnable shadowJar; 4.6.0 was its latest published artifact at setup time and declares API 26.1.2. Newer source tags exist, but were not substituted for this boot-tested binary. MythicMobs' published 5.14.0 artifact internally reports `5.14.0-SNAPSHOT-local`; its downloaded bytes matched the official release hashes. ModelEngine Premium is required for the combined mob/vehicle set. The free R4.1.1 build stops importing after 12 models; the full roster has 15 custom blueprints plus the engine fire model. Its licensed JAR stays outside Git.
 
 Historical baseline: all 12 plugins enabled together. Verified `/mandomc`, console plugin list, FactionsUUID list, the EssentialsX economy bridge through Vault, clean stop/restart and a Minecraft protocol status request. The GitHub pack publication also passed, its ZIP downloaded anonymously with matching hashes, and Paper restarted with required-pack delivery configured. The user confirmed a successful client join before the arrival work. The new arrival flow and pack/map appearance still need a client playtest.
 
 Expected startup notices: newer Minecraft/Paper is available; ModelEngine has no MineSkin API key for optional skin generation; Java reports a third-party Unsafe deprecation. These did not prevent startup.
 
 ## What is ready
-SpawnWorld, a protected survival landing, a replayable tutorial and shared `/spawn` and `/survival` travel are deployed locally. Group branding, raids, events and vehicles still need implementation. E-11, Desert Robes, the accepted Vader throw, first-join kit and combat basics are implemented; see the feature briefs. Default FactionsUUID rules and commands are temporary vendor behavior. This remains a local development build.
+SpawnWorld, a protected survival landing, a replayable tutorial and shared `/spawn` and `/survival` travel are deployed locally. KOTH, Jabba and the legacy transport vehicles are implemented. Group branding and raids remain deferred. E-11, Desert Robes, the accepted Vader throw, first-join kit and combat basics are implemented; see the feature briefs. Default FactionsUUID rules and commands are temporary vendor behavior. This remains a local development build.
 
 EssentialsX and Multiverse-Core are removed. MandoMC supplies the selected administration, personal travel and world-loading features. Credits are deferred; Vault has no economy provider. Removed plugin userdata/balances remain archived for rollback.
 
@@ -67,7 +67,7 @@ The survival landing is in `dev_world`, around (-135.5, 73, -135.5). Protection 
 
 For a clean local restore:
 1. Stop Paper and back up the entire runtime/world container and WorldGuard/MandoMC configuration. Restore the already migrated `dev_world/dimensions` and player data from a verified Paper backup. Do not feed raw legacy archives to WorldService: it deliberately refuses missing dimension data instead of generating terrain.
-2. Apply `config/common/mandomc/worlds/worlds.yml` and `config/common/mandomc/admin/utilities.yml` at the same relative paths under `plugins/MandoMC/`. Preserve stable dimension keys, exact coordinates/facing and aliases. The four integrated dimensions are overworld, devworld, spawnworld and hoth; Nether/End remain disabled.
+2. Apply `config/common/mandomc/worlds/worlds.yml` and `config/common/mandomc/admin/utilities.yml` at the same relative paths under `plugins/MandoMC/`. Preserve stable dimension keys, exact coordinates/facing and aliases. The five integrated dimensions are overworld, devworld, spawnworld, hoth and tatooine; Nether/End remain disabled.
 3. Restore the existing WorldGuard regions; never overwrite unrelated regions. Deploy `config/common/mandomc/config.yml` as MandoMC `config.yml`, with `spawn-protection=0` so WorldGuard owns static protection.
 4. Preserve native map gamerules (`advance_time=false`, `advance_weather=false`, `spawn_mobs=false`, `random_tick_speed=0`, `fire_spread_radius_around_player=0` on the adventure maps). Survival retains its normal rules. MandoMC preserves beds and uses Batuu as the fallback for deaths; first joins go to Batuu and returning players keep their position/game mode.
 5. Build/deploy MandoMC and restart. `/mandomc` must report both arrivals ready. Missing enabled worlds or unsafe/unprotected arrival configuration blocks logins until repaired. `/mvtp` accepts world names and old aliases.
@@ -96,7 +96,18 @@ Hoth is loaded as `minecraft:hoth`; Paper stores it under the main world's `dime
 
 The deployable `events/schedule.yml`, `events/koth.yml` and `travel/warps.yml` defaults are in server/config/common/mandomc/. `/warp` reaches only SpawnWorld, Earth and Hoth; `/events` shows hourly KOTH. `/event start koth` starts a manual round. Rewards remain disabled. `./scripts/build-koth-probe.sh` builds the isolated integration probe; install only while stopped, remove after controlled verification, and use normal restarts for code changes. See docs/features/koth-and-warps.md for lifecycle and verification limits.
 
+## Jabba generic mob test slice
+Install the three blueprints, separate Mythic mob/skill files and two WeaponMechanics definitions as described in [Jabba generic guards](../docs/features/jabba-generic-mobs.md). This does not activate a dungeon event or natural spawns. Use `scripts/build-jabba-probe.sh` only for controlled local verification; remove `JabbaProbe.jar` after testing and restart normally.
+
+## Tatooine dungeon testing
+Tatooine is loaded as `minecraft:tatooine` under the main world's `dimensions/minecraft/tatooine`. `worlds/worlds.yml` preserves the player-selected palace arrival at (1711.845046707056, 100, 2201.7401780545574), yaw 81.4468, pitch -11.09995. MandoMC checks standing space/support without rounding away position or facing. `/warp tatooine` uses the shared travel policy and the recovered planet icon. See [Tatooine import](../docs/features/tatooine-import.md) and [Boba recovery](../docs/features/boba-fett.md) for historical provenance.
+
+Tatooine WorldGuard regions were cleared at the user's request after the initial mob-spawning deny blocked Mythic's player spawn command. The current worldguard-tatooine.yml template has empty regions; do not reapply the historical protection configuration above. WorldGuard setup is deferred; Hoth regions are unchanged.
+
 ## Native utility deployment
 Deploy MandoMC plus common/mandomc/worlds/worlds.yml and common/mandomc/admin/utilities.yml while stopped. Back up world/player data and vendor configuration, then move EssentialsX and Multiverse-Core JARs outside plugins/. Keep old userdata/balances for rollback. The replacement does not require resource-pack changes. Use normal restart, never Bukkit reload.
 
 See [native utilities](../docs/features/native-utilities.md) for commands and permissions. Public trips are instant in Creative; other modes keep the shared three-second warmup. Consent, destination safety and combat checks apply in either case.
+
+## Native Jabba operation
+The nine-room operation uses `events/jabba.yml`, original loot items in `items/definitions/jabba-loot.yml`, and the current plugin. Supply private gate panels with `scripts/import-jabba-doors.py LEGACY_ROOT server/runtime/plugins/MandoMC/jabba/doors.yml`; retain the private closed-state checkpoints and map backups. BigDoors is not installed or required. `/event start jabba` begins the run; `/event stop` resets it. See [operation details](../docs/features/jabba-dungeon.md) for the latest kills-only progression, cache timing, native door animation and recovery.

@@ -47,12 +47,12 @@
       "owns": "Animated model engine and mounting API",
       "source": "https://wiki.mythiccraft.io/modelengine/API",
       "version": "R4.1.1",
-      "sha256": "020ef9361c2ab3805933a78994aac529e5e624b0746755044609caf5a6e5df09",
+      "sha256": "512f0e5306cebca6df7dfbd1c3f3afb8199f6b55d4d45fb45017735ccd44e1ba",
       "knownDependencies": [],
       "dependencyListComplete": true,
       "admissionCheck": "Latest server compatibility and recovered blueprints",
       "installed": true,
-      "edition": "official-free"
+      "edition": "user-supplied-premium"
     },
     {
       "id": "mythicmobs",

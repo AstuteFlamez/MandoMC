@@ -24,3 +24,19 @@ external-items:
     kind: weapon
     vendor-id: CyclerRifle
     category: weapons
+  se14c:
+    kind: weapon
+    vendor-id: SE14C
+    category: weapons
+  a280:
+    kind: weapon
+    vendor-id: A280
+    category: weapons
+  relby_v10:
+    kind: weapon
+    vendor-id: RelbyV10
+    category: weapons
+  ee3:
+    kind: weapon
+    vendor-id: EE3
+    category: weapons

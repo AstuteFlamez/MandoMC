@@ -1,0 +1,142 @@
+# Generic Jabba guards only. No natural spawns, bosses or dungeon placement.
+# Legacy drop odds live in jabba-mobs.yml and use the catalog death adapter.
+GamorreanGuard:
+  Type: ZOMBIE
+  Display: '&bLvl. &b<caster.level> &7- &2Gamorrean Guard'
+  Health: 30
+  Damage: 0
+  Armor: 8
+  Faction: Hutts
+  Options:
+    PreventItemPickup: true
+    PreventTransformation: true
+    PreventJockeyMounts: true
+    FollowRange: 32
+    PreventRandomEquipment: true
+    Silent: true
+    PreventSunburn: true     # ✅ Stops sunlight damage
+    PreventOtherDrops: true
+  LevelModifiers:
+    Health: 3
+    #Damage: 0.5
+  AIGoalSelectors:
+    - 0 clear
+    - 1 meleeattack
+    - 2 randomstroll
+    - 3 lookatplayers
+  AITargetSelectors:
+    - clear
+    - players
+  Modules:
+    ThreatTable: true
+  Skills:
+    - model{mid=gamorrean_guard;h=false} @self ~onSpawn
+    - defaultstate{mid=gamorrean_guard;s=idle;lerpin=5} @self ~onSpawn
+
+    - model{mid=gamorrean_guard;h=false} @self ~onLoad
+    - defaultstate{mid=gamorrean_guard;s=idle;lerpin=5} @self ~onLoad
+
+    # === Ambient vocalizations (equal weight) ===
+    - sound{s=mandomc:mobs.gamorrean_idle1;v=2;p=1;c=MASTER} @self ~onTimer:120 0.1
+    - sound{s=mandomc:mobs.gamorrean_idle2;v=2;p=1;c=MASTER} @self ~onTimer:87 0.1
+
+    - skill{s=Gamorrean_Brain} @self ~onTimer:40
+
+    # === Death (random anim + sound, then despawn after anim if you added delays elsewhere) ===
+    - sound{s=mandomc:mobs.gamorrean_death;v=2;p=1;c=MASTER} @self ~onDeath
+
+QuarrenGuard:
+  Type: ZOMBIE
+  Display: '&bLvl. &b<caster.level> &7- &6Quarren Guard'
+  Health: 25
+  Damage: 0
+  Armor: 4
+  Faction: Hutts
+  LevelModifiers:
+    Health: 3
+    Damage: 0.5
+
+  Options:
+    PreventItemPickup: true
+    PreventTransformation: true
+    PreventJockeyMounts: true
+    FollowRange: 32
+    Silent: true
+    PreventSunburn: true     # ✅ Stops sunlight damage
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    MovementSpeed: 0.3
+  DamageModifiers:
+    - FALL 0
+  AITargetSelectors:
+    - clear
+    - players
+  Modules:
+    ThreatTable: true
+
+  AIGoalSelectors:
+    - clear
+    - lookattarget
+    - fleePlayers{speed=1.15;safespeed=1.15;distance=7}
+    - moveWithinDistanceOfTarget{speed=1.15;minrange=14;maxrange=32}
+    - randomstroll
+    - lookatplayers
+  Skills:
+    - model{mid=quarren_guard;h=false} @self ~onLoad
+    - model{mid=quarren_guard;h=false} @self ~onSpawn
+    - defaultstate{mid=quarren_guard;s=idle;lerpin=5} @self ~onSpawn
+
+    - skill{s=alien_sounds} @self ~onTimer:150 0.75
+    - aura{auraName=JabbaInitialWait;d=5to35} @self ~onSpawn
+    - aura{auraName=JabbaInitialWait;d=5to35} @self ~onLoad
+    - skill{s=quarren_attack} @target ~onTimer:5
+    - skill{s=JabbaCombatMovement} @target ~onTimer:10
+    - skill{s=JabbaRelax} @self ~onDropCombat
+
+
+TwilekGuard:
+  Type: ZOMBIE
+  Display: '&bLvl. &b<caster.level> &7- &3Twilek Guard'
+  Health: 25
+  Damage: 0
+  Armor: 4
+  Faction: Hutts
+  LevelModifiers:
+    Health: 3
+    Damage: 0.5
+  Options:
+    PreventItemPickup: true
+    PreventTransformation: true
+    PreventJockeyMounts: true
+    FollowRange: 32
+    Silent: true
+    PreventSunburn: true     # ✅ Stops sunlight damage
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    MovementSpeed: 0.3
+  DamageModifiers:
+    - FALL 0
+  AITargetSelectors:
+    - clear
+    - players
+  Modules:
+    ThreatTable: true
+
+  AIGoalSelectors:
+    - clear
+    - lookattarget
+    - fleePlayers{speed=1.15;safespeed=1.15;distance=7}
+    - moveWithinDistanceOfTarget{speed=1.15;minrange=14;maxrange=32}
+    - randomstroll
+    - lookatplayers
+  Skills:
+    - model{mid=twilek_guard;h=false} @self ~onLoad
+    - model{mid=twilek_guard;h=false} @self ~onSpawn
+    - defaultstate{mid=twilek_guard;s=idle;lerpin=5} @self ~onSpawn
+
+    - skill{s=alien_sounds} @self ~onTimer:150 0.75
+    - aura{auraName=JabbaInitialWait;d=5to35} @self ~onSpawn
+    - aura{auraName=JabbaInitialWait;d=5to35} @self ~onLoad
+    - skill{s=twilek_attack} @target ~onTimer:5
+    - skill{s=JabbaCombatMovement} @target ~onTimer:10
+    - skill{s=JabbaRelax} @self ~onDropCombat

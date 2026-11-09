@@ -1,0 +1,95 @@
+{
+  "source": "Supplied legacy Boba Fett config and pinned MandoPack archive (see sources.json)",
+  "files": [
+    {
+      "source": "assets/minecraft/textures/custom/planets/tatooine.png",
+      "sha256": "f18e01d01a8fcf093ae2d6d0c345241300998c050c820d9719420695c4186896",
+      "destination": "resource-pack/src/assets/mandomc/textures/item/planets/tatooine.png",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/textures/custom/blasters/ee3.png",
+      "sha256": "ab35bcc926359648065b671698bde3214f9521f5056ae2f993e266f5e59e1d83",
+      "destination": "resource-pack/src/assets/mandomc/textures/item/blasters/ee3.png",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/models/item/blasters/ee3/ee3.json",
+      "sha256": "4b3faa23b06dcf9210698bfb2aca1056947c767245743f4e7b3c5d33ef4c13c2",
+      "destination": "resource-pack/src/assets/mandomc/models/item/blasters/ee3.json",
+      "changes": "Namespaced references; original artwork, geometry and poses preserved."
+    },
+    {
+      "source": "assets/minecraft/models/item/blasters/ee3/ee3scope.json",
+      "sha256": "aebd57f350cc96d228ef372308b0e0d6232e884be80b693212de54d1f64ceb08",
+      "destination": "resource-pack/src/assets/mandomc/models/item/blasters/ee3_scope.json",
+      "changes": "Namespaced references; original artwork, geometry and poses preserved."
+    },
+    {
+      "source": "assets/minecraft/models/item/blasters/ee3/ee3sprint.json",
+      "sha256": "37bf5224b02b2978f46ce753e2822c784b2219a60260f2ce61c2dd1012b0222c",
+      "destination": "resource-pack/src/assets/mandomc/models/item/blasters/ee3_sprint.json",
+      "changes": "Namespaced references; original artwork, geometry and poses preserved."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/boba_impressed.ogg",
+      "sha256": "0f4dc436888fd4e7c9c277ec11e38f4e76f0ce8df64e5c4e16a3d83f3ce280d8",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/boba_impressed.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/boba_stay_out_of_my_way.ogg",
+      "sha256": "f1fc4d3e4a4e903c08b1774407b1f51f3ba5a5cd4bbe250dac4b8a1c974e2574",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/boba_stay_out_of_my_way.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/boba_die.ogg",
+      "sha256": "cd882ded050710a985d31dd42b5459b0ce934899ed6d04c60d58505bf0aed1e9",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/boba_die.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/boba_burn.ogg",
+      "sha256": "dac7f8c73fdb5d6898b13533143034baee0dd7231eb0812f2c1a3a4293d2fb65",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/boba_burn.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/flamethrower.ogg",
+      "sha256": "6a8ee3133f1c844f512a83645276185b3c25e49c5453607a83cd26124b69b709",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/flamethrower.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/jetpack.ogg",
+      "sha256": "a9b39387f6dd6e9b5f59633752cd13341c68e7c66b17f90fe3a278a7c3205ffc",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/jetpack.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "assets/minecraft/sounds/shoot/ee3.ogg",
+      "sha256": "9079747983bbb53f4b0ae274fb3d758f1724a645eac2bad6cd97d5bf3cf6186d",
+      "destination": "resource-pack/src/assets/mandomc/sounds/shoot/ee3.ogg",
+      "changes": "Copied unchanged."
+    },
+    {
+      "source": "MythicMobs/skills/BobaFettSkills.yml",
+      "sha256": "c5fc1eca6d93f3d8031c161ae333e3aa78962e1a283c8423028c991beceed7c1",
+      "destination": "server/config/common/mythicmobs/boba-skills.yml",
+      "changes": "Prefix global skill IDs; current weapon ID, namespaced sounds and supported blockmask duration range. Original attack timings/values retained."
+    },
+    {
+      "source": "MythicMobs/mobs/BobaFett.yml",
+      "sha256": "7fd61d739d2e9bfc2eb54220296076d13585faa72569554499580de13674e4d8",
+      "destination": "server/config/common/mythicmobs/boba-mob.yml",
+      "changes": "Preserve original stats and cadence; native model collision/reload attachment and zombie safeguards. Shared catalog death-loot pipeline preserves original EE-3/ammo rolls."
+    },
+    {
+      "source": "WeaponMechanics/weapons/assault_rifles/ee3.yml",
+      "sha256": "fb2389a5322f9fa7467d9060a01557a37b83299b2bef3f825e7367dc906b9227",
+      "destination": "server/config/common/weaponmechanics/ee3.yml",
+      "changes": "Retain damage, firing, burst, recoil, ammo and reload values. Current model/projectile/skin schema, namespaced sounds, compact lore and omit unavailable cosmetic extension."
+    }
+  ]
+}

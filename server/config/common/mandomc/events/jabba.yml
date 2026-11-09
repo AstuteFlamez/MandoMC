@@ -1,0 +1,396 @@
+{
+  "schema-version": 1,
+  "id": "jabba",
+  "enabled": true,
+  "display-name": "Jabba's Palace",
+  "weight": 20,
+  "cooldown-cycles": 2,
+  "profile": "palace",
+  "world": "minecraft:tatooine",
+  "blueprints": "jabba/doors.yml",
+  "animation-ticks": 24,
+  "bounds": {
+    "min": [
+      1638,
+      64,
+      2130
+    ],
+    "max": [
+      1720,
+      125,
+      2240
+    ]
+  },
+  "loot": {
+    "fusion_coil_stabilizer": 10,
+    "plasma_capacitor_array": 10,
+    "precision_crafted_lens": 25,
+    "alloy_plating": 10,
+    "energy_conduits": 10,
+    "transparisteel_shard": 10,
+    "wiring_coil": 60
+  },
+  "rooms": {
+    "1": {
+      "gate": 15,
+      "movement": [
+        0,
+        3,
+        0
+      ],
+      "spawns": [
+        [
+          1701,
+          102,
+          2201
+        ]
+      ],
+      "mob": "guards",
+      "count-per-spawn": 3,
+      "chests": [
+        [
+          1700,
+          102,
+          2206,
+          "EAST"
+        ],
+        [
+          1704,
+          102,
+          2210,
+          "WEST"
+        ]
+      ]
+    },
+    "2": {
+      "gate": 16,
+      "movement": [
+        -4,
+        0,
+        0
+      ],
+      "spawns": [
+        [
+          1672,
+          85,
+          2180
+        ],
+        [
+          1686,
+          87,
+          2175
+        ],
+        [
+          1692,
+          78,
+          2180
+        ]
+      ],
+      "mob": "guards",
+      "count-per-spawn": 3,
+      "chests": [
+        [
+          1667,
+          87,
+          2179,
+          "EAST"
+        ],
+        [
+          1677,
+          88,
+          2173,
+          "EAST"
+        ]
+      ]
+    },
+    "3": {
+      "gate": 17,
+      "movement": [
+        5,
+        0,
+        0
+      ],
+      "spawns": [
+        [
+          1695,
+          73,
+          2195
+        ],
+        [
+          1697,
+          76,
+          2206
+        ],
+        [
+          1684,
+          80,
+          2208
+        ]
+      ],
+      "mob": "guards",
+      "count-per-spawn": 3,
+      "chests": [
+        [
+          1690,
+          73,
+          2200,
+          "NORTH"
+        ],
+        [
+          1688,
+          80,
+          2190,
+          "SOUTH"
+        ]
+      ]
+    },
+    "4": {
+      "gate": 18,
+      "movement": [
+        -5,
+        0,
+        0
+      ],
+      "spawns": [
+        [
+          1677,
+          80,
+          2223
+        ]
+      ],
+      "mob": "Bossk",
+      "count-per-spawn": 1,
+      "chests": [
+        [
+          1674,
+          80,
+          2228,
+          "EAST"
+        ],
+        [
+          1655,
+          83,
+          2225,
+          "WEST"
+        ]
+      ]
+    },
+    "5": {
+      "gate": 19,
+      "movement": [
+        5,
+        0,
+        0
+      ],
+      "spawns": [
+        [
+          1662,
+          72,
+          2175
+        ],
+        [
+          1665,
+          74,
+          2159
+        ],
+        [
+          1662,
+          72,
+          2144
+        ]
+      ],
+      "mob": "guards",
+      "count-per-spawn": 3,
+      "chests": [
+        [
+          1652,
+          86,
+          2207,
+          "SOUTH"
+        ],
+        [
+          1659,
+          72,
+          2180,
+          "NORTH"
+        ],
+        [
+          1665,
+          74,
+          2160,
+          "NORTH"
+        ],
+        [
+          1660,
+          72,
+          2155,
+          "NORTH"
+        ],
+        [
+          1671,
+          72,
+          2143,
+          "WEST"
+        ]
+      ]
+    },
+    "6": {
+      "gate": 20,
+      "movement": [
+        0,
+        5,
+        0
+      ],
+      "spawns": [
+        [
+          1665,
+          95,
+          2151
+        ],
+        [
+          1665,
+          95,
+          2163
+        ],
+        [
+          1654,
+          99,
+          2157
+        ],
+        [
+          1676,
+          99,
+          2157
+        ]
+      ],
+      "mob": "guards",
+      "count-per-spawn": 3,
+      "chests": [
+        [
+          1670,
+          84,
+          2161,
+          "SOUTH"
+        ],
+        [
+          1669,
+          95,
+          2146,
+          "WEST"
+        ],
+        [
+          1675,
+          95,
+          2164,
+          "NORTH"
+        ],
+        [
+          1653,
+          99,
+          2160,
+          "EAST"
+        ]
+      ]
+    },
+    "7": {
+      "gate": 21,
+      "movement": [
+        5,
+        0,
+        0
+      ],
+      "spawns": [
+        [
+          1665,
+          97,
+          2202
+        ]
+      ],
+      "mob": "BobaFett",
+      "count-per-spawn": 1,
+      "chests": [
+        [
+          1676,
+          99,
+          2202,
+          "WEST"
+        ],
+        [
+          1657,
+          99,
+          2223,
+          "NORTH"
+        ]
+      ]
+    },
+    "8": {
+      "gate": 22,
+      "movement": [
+        0,
+        7,
+        0
+      ],
+      "spawns": [
+        [
+          1680,
+          98,
+          2219
+        ],
+        [
+          1686,
+          98,
+          2216
+        ]
+      ],
+      "mob": "guards",
+      "count-per-spawn": 3,
+      "chests": [
+        [
+          1692,
+          98,
+          2221,
+          "NORTH"
+        ],
+        [
+          1681,
+          101,
+          2213,
+          "SOUTH"
+        ]
+      ]
+    },
+    "9": {
+      "gate": 23,
+      "movement": [
+        0,
+        0,
+        5
+      ],
+      "spawns": [
+        [
+          1672,
+          73,
+          2197
+        ]
+      ],
+      "mob": "Rancor",
+      "count-per-spawn": 1,
+      "chests": [
+        [
+          1683,
+          73,
+          2202,
+          "NORTH"
+        ]
+      ]
+    }
+  },
+  "messages": {
+    "start": "<gold><bold>Jabba's Palace</bold> is open! <yellow>/warp tatooine",
+    "caches": "<gold><count> supply caches deployed throughout the palace.",
+    "opened": "<aqua>Room <room> unlocked \u00bb blast doors opening",
+    "complete": "<green>Jabba's Palace secured! The palace remains open until the operation ends.",
+    "stopped": "<yellow>The Jabba operation has ended. The palace is resetting.",
+    "looted": "<green>Supply cache recovered."
+  }
+}

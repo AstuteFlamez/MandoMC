@@ -1,0 +1,75 @@
+{
+  "source": "Pinned legacy MandoPack and JABBA-tagged components from supplied legacy backup",
+  "files": [
+    {
+      "source": "assets/minecraft/textures/custom/materials/fusion_coil_stabilizer.png",
+      "sha256": "73b5934ff3884f9e88fc2b9d5edeb418b89358b9cb72046eeb38245e9563b433",
+      "destination": "assets/mandomc/textures/item/materials/fusion_coil_stabilizer.png"
+    },
+    {
+      "source": "assets/minecraft/models/item/materials/fusion_coil_stabilizer.json",
+      "sha256": "67c8e18f51c4dce300b648660648cc7f586bbc34068d4fbdedded4a6a19995d4",
+      "destination": "assets/mandomc/models/item/materials/fusion_coil_stabilizer.json"
+    },
+    {
+      "source": "assets/minecraft/textures/custom/materials/plasma_capacitor_array.png",
+      "sha256": "038868ae13de62cb42d721977a04bf9574f644a2db31e9e891dc2afdce8136ab",
+      "destination": "assets/mandomc/textures/item/materials/plasma_capacitor_array.png"
+    },
+    {
+      "source": "assets/minecraft/models/item/materials/plasma_capacitor_array.json",
+      "sha256": "cc9117d2256ecf7e74781aa3940b4e514dd887bf55af99bae3ebc33f0f832d89",
+      "destination": "assets/mandomc/models/item/materials/plasma_capacitor_array.json"
+    },
+    {
+      "source": "assets/minecraft/textures/custom/materials/precision_crafted_lens.png",
+      "sha256": "a8a670989d372e5807a2d36876e98d3abd9db66d6670a4d65c1c285cd8878205",
+      "destination": "assets/mandomc/textures/item/materials/precision_crafted_lens.png"
+    },
+    {
+      "source": "assets/minecraft/models/item/materials/precision_crafted_lens.json",
+      "sha256": "5d1ba845150d1bf5183d83c362057305b4fe2e089bfd70effe2ca92f90b1d8ac",
+      "destination": "assets/mandomc/models/item/materials/precision_crafted_lens.json"
+    },
+    {
+      "source": "assets/minecraft/textures/custom/materials/alloy_plating.png",
+      "sha256": "db49fd04071f914444acac45cc8174834e5b28916afa19f8691dcc9728ca36e7",
+      "destination": "assets/mandomc/textures/item/materials/alloy_plating.png"
+    },
+    {
+      "source": "assets/minecraft/models/item/materials/alloy_plating.json",
+      "sha256": "f175b70cf12c4643a270bc38d677a9dff6d7505dd2e9018750f967f1ec0d25c9",
+      "destination": "assets/mandomc/models/item/materials/alloy_plating.json"
+    },
+    {
+      "source": "assets/minecraft/textures/custom/materials/energy_conduits.png",
+      "sha256": "cc4719fbbf9ade0657b556ba56fefc77dee135b4bb897c459633c3973b45cf70",
+      "destination": "assets/mandomc/textures/item/materials/energy_conduits.png"
+    },
+    {
+      "source": "assets/minecraft/models/item/materials/energy_conduits.json",
+      "sha256": "c569af46baa8a25ca45f94785b2b9123b59deac77faffe9bb18f9e59be2eda53",
+      "destination": "assets/mandomc/models/item/materials/energy_conduits.json"
+    },
+    {
+      "source": "assets/minecraft/textures/custom/materials/transparisteel_shard.png",
+      "sha256": "b340d6c845f3b83c6321d304b3caa01b1d73254375c479b2d1810a2b0577cfb5",
+      "destination": "assets/mandomc/textures/item/materials/transparisteel_shard.png"
+    },
+    {
+      "source": "assets/minecraft/models/item/materials/transparisteel_shard.json",
+      "sha256": "203ae45b6579007ce557e52cecb8707c4eb28b059a145b07910302b4099cb708",
+      "destination": "assets/mandomc/models/item/materials/transparisteel_shard.json"
+    },
+    {
+      "source": "assets/minecraft/textures/custom/materials/wiring_coil.png",
+      "sha256": "135be3a026bc5274bd7bf19785480ebc344841d1da35cc6daf1d6a5c8902b512",
+      "destination": "assets/mandomc/textures/item/materials/wiring_coil.png"
+    },
+    {
+      "source": "assets/minecraft/models/item/materials/wiring_coil.json",
+      "sha256": "c139139328ce41ce5a1ab0046ffbfd7197d350a3e4db0d1c9ef6c3841e7ed163",
+      "destination": "assets/mandomc/models/item/materials/wiring_coil.json"
+    }
+  ]
+}

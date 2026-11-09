@@ -33,3 +33,6 @@ Verified on an isolated Paper 26.1.2 server with ModelEngine R4.1.1 and WeaponMe
 The build passes 93 Java tests and 17 pack/tooling tests. The 291-file pack builds with SHA-1 `b05385a39ffc666ea8f21de57451d558219978b9`; generated vehicle textures, original icons and engine sounds resolve. This isolated branch is based on integrated main. The active Jabba checkout, development server and published pack remain unchanged; combine the assets with that work before deployment.
 
 Client rendering, steering feel, passenger alignment and multiplayer latency require a matching Minecraft client playtest.
+
+## Combined deployment
+The deployment branch includes integrated Jabba/Tatooine and the deployed Rancor close-follow tuning. Its 496-file pack preserves existing assets and adds vehicles. ModelEngine Premium R4.1.1 is required: the free edition's 12-model import cap cannot load the complete 15-model custom roster plus internal fire. The owner-supplied binary is pinned in the plugin lock and remains private. Combined build: 119 Java tests and 17 pack/tooling tests passing; final live deployment verification follows.

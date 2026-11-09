@@ -19,3 +19,5 @@ Stop the server before applying code/content. Back up existing settings, deploy 
 Static regions remain the protection authority; clan/claim integration is deferred. Exact world keys, aliases and arrival coordinates belong to `mandomc/worlds/worlds.yml`; preserve existing dimension data. Nether/End stay disabled. MandoMC alone owns starter kits and combat logout, and keeps the survival full-loot rule.
 
 Paper sends the required published MandoMC resource pack. Keep WeaponMechanics' automatic pack delivery disabled. `force-gamemode=false` preserves returning players' game modes. Removed Essentials/Multiverse data is not a deployment source.
+
+Jabba shares the same layout: `mandomc/mobs/bossk.yml`, `mandomc/mobs/rancor.yml`, `mandomc/mobs/drops/jabba.yml`, `mandomc/events/jabba.yml` and `mandomc/items/definitions/jabba-loot.yml`. Private gate panels and run checkpoints stay in runtime `MandoMC/jabba/`; they are not moved or published. Five existing dimensions remain enabled, including Tatooine. Its region template is intentionally empty.

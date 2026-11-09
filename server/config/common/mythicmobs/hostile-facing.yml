@@ -1,0 +1,24 @@
+# Required before scripted hostile attack poses; native melee uses immediate facing.
+# Six 30-degree updates can complete a 180-degree turn before animation onset.
+MandoFaceTarget:
+  Conditions:
+    - health{h=>0} true
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=0to64}
+  Skills:
+    - command{c="mandomc mobface <caster.uuid> <target.uuid>"} @target
+
+MandoFaceTargetNow:
+  Conditions:
+    - health{h=>0} true
+  TargetConditions:
+    - health{h=>0} true
+    - distance{d=0to64}
+  Skills:
+    - command{c="mandomc mobface <caster.uuid> <target.uuid> now"} @target
+
+MandoTuskenMeleeAttack:
+  Skills:
+    - skill{s=MandoFaceTargetNow} @target
+    - state{mid=melee_raider;s=attack1} @self

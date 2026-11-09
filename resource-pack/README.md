@@ -58,3 +58,18 @@ Gaffi Stick: the player item reuses the existing generated melee Tusken stick ge
 
 ## Legacy transport models
 The vehicle slice adds the original speederbike, X-wing, TIE fighter and U-wing fixed models, inventory icons and engine sounds. Provenance is in `vehicle-sources.json` and `server/config/common/modelengine/vehicle-sources.json`. The current ModelEngine generator's output is imported alongside creature models by `scripts/import-mob-models.py`; alternate skins and fuel assets are excluded. The speeder's embedded texture is explicitly namespaced to `modelengine`, matching the generated model reference.
+
+## Galaxy warp icons
+Legacy Earth, Hoth and spawn icons are recovered unchanged under `mandomc:planets/earth`, `mandomc:planets/hoth` and `mandomc:planets/batuu`. The original spawn entry used the Naboo texture; that same artwork represents the renamed Batuu entry. `planet-sources.json` records exact texture hashes and mappings. Only these namespaced item models are added; ordinary sticks are untouched. The six-row warp layout is configured in warps.yml, with Earth placed separately in the Unknown Regions by the user.
+
+## Jabba generic guards
+The Gamorrean, Quarren and Twi'lek blueprints join the five sandy mobs in the tracked ModelEngine roster. The importer derives its strict allowed set from blueprint provenance. `jabba-sources.json` records the original SE-14C/A280 models, axe, textures, voices and weapon sounds. The new item keys are `mandomc:blasters/se14c`, `mandomc:blasters/a280` (each with `_scope` and `_sprint`) and `mandomc:melee/gamorrean_axe`. Original geometry, UVs and display transforms are preserved. No vanilla shader or item override is added. See [the feature brief](../docs/features/jabba-generic-mobs.md).
+
+## Boba Fett and Tatooine
+Recovered Boba Fett model/animations, EE-3 base/scope/sprint models and original voices/jetpack/flamethrower audio are included with provenance in boba-sources.json. Tatooine's original planet texture uses `mandomc:planets/tatooine`; planet-sources.json records the unchanged pixels. Existing items, sound mappings and generated mob assets are preserved.
+
+## Rancor
+The recovered Rancor model, original scale/hitbox and six voice samples are included; rancor-sources.json and the tracked blueprint manifest record provenance. Ground-slam rubble uses native floor-matched block displays and requires no extra texture assets.
+
+## Jabba stash components
+The original seven JABBA-tagged component items use namespaced material models with original pixels; provenance is in jabba-loot-sources.json. The dungeon's native doors and revised Rancor particle/block-display effects need no additional artwork.

@@ -1,0 +1,62 @@
+Rancor:
+  Type: PIG
+  Display: '&6&lRancor'
+  Health: 750
+  Damage: 0
+
+  BossBar:
+    Enabled: true
+    Title: '&6&lRANCOR'
+    Range: 40
+    Color: RED
+    Style: SEGMENTED_10
+
+  Faction: Hutts # Sets the mob to be in the faction
+
+  AIGoalSelectors: # What's the mob going to do?
+  - 0 clear
+  # Keep closing even when the large model is already within vanilla melee reach.
+  - 1 MoveWithinDistanceOfTarget{s=1.25;minrange=2.5;maxrange=24}
+  - 2 meleeattack{s=1.25;fu=true}
+  - 3 lookatplayers
+  - 4 randomstroll
+
+  AITargetSelectors:
+  - clear # Clears the mob's AI
+  - players # Targets players
+  - attacker # Then targets whatever attacks it
+  - otherfaction # Targets whatever is not in the 'bad' faction
+
+  DamageModifiers:
+  - PROJECTILE 0
+  - ARROW 0
+  - MAGIC 0
+
+  Modules:
+    ThreatTable: true
+
+  Options:
+    Silent: true
+    FollowRange: 24
+    PreventOtherDrops: true
+    MovementSpeed: 0.32
+    MaxCombatDistance: 24
+
+  Skills:
+
+  # idle animation
+  - model{mid=rancor;scale=2} @self ~onSpawn
+  - model{mid=rancor;scale=2} @self ~onLoad
+  - defaultstate{mid=rancor;s=idle;lerpin=5} @self ~onSpawn
+
+  # ambient growl every ~14 seconds
+  - sound{s=mandomc:mobs.rancor_growl;v=2;p=1} @self ~onTimer:280
+
+  # hurt sounds
+  - randomskill{s=rancor_hurt1,rancor_hurt2,rancor_hurt3} @self ~onDamaged 0.25
+
+  # death roar
+  - sound{s=mandomc:mobs.rancor_roar_2;v=3;p=1} @self ~onDeath
+
+  # attack AI
+  - skill{s=rancor_attack_selector} @target ~onTimer:100
