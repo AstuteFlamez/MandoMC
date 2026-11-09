@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "mandomc:custom/materials/rough_power_cell"
+    "layer0": "mandomc:item/legacy/materials/rough_power_cell"
   }
 }

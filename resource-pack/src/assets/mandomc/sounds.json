@@ -276,5 +276,26 @@
     "sounds": [
       "mandomc:mobs/rancor_growl"
     ]
+  },
+  "vehicles.speederbike_shoot": {
+    "sounds": [
+      {
+        "name": "mandomc:vehicles/speederbike_shoot"
+      }
+    ]
+  },
+  "vehicles.tie_fighter_shoot": {
+    "sounds": [
+      {
+        "name": "mandomc:vehicles/tie_fighter_shoot"
+      }
+    ]
+  },
+  "vehicles.xwing_shoot": {
+    "sounds": [
+      {
+        "name": "mandomc:vehicles/xwing_shoot"
+      }
+    ]
   }
 }

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "mandomc:custom/metals/sheets/mandalorian_sheet"
+    "layer0": "mandomc:item/legacy/metals/sheets/mandalorian_sheet"
   }
 }

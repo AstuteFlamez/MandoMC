@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "mandomc:custom/materials/ionized_focusing_lens"
+    "layer0": "mandomc:item/legacy/materials/ionized_focusing_lens"
   }
 }

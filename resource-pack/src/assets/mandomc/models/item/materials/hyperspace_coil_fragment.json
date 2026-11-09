@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "mandomc:custom/materials/hyperspace_coil_fragment"
+    "layer0": "mandomc:item/legacy/materials/hyperspace_coil_fragment"
   }
 }

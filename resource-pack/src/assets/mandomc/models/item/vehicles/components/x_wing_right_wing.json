@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "mandomc:custom/vehicles/components/x_wing_right_wing"
+    "layer0": "mandomc:item/legacy/vehicles/components/x_wing_right_wing"
   }
 }

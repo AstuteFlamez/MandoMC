@@ -6,7 +6,8 @@
     128
   ],
   "textures": {
-    "0": "mandomc:item/projectiles/dioxis_grenade"
+    "0": "mandomc:item/projectiles/dioxis_grenade",
+    "particle": "#0"
   },
   "elements": [
     {

@@ -1,0 +1,40 @@
+{
+  "source": "MandoPack at 2731b9e4ae5d8d142cd4a1aaa14f3f1b7c0e56c7",
+  "files": [
+    {
+      "source": "assets/minecraft/models/item/ammos/tibanna_gas_cells.json",
+      "destination": "assets/mandomc/models/item/ammo/tibanna_gas_cells.json",
+      "sha256": "c99abfe829b5faf4aeb43e4260bd9dbd19ad08a054ee4b97bf171b706cd538f2"
+    },
+    {
+      "source": "assets/minecraft/textures/custom/ammos/tibanna_gas_cells.png",
+      "destination": "assets/mandomc/textures/item/ammo/tibanna_gas_cells.png",
+      "sha256": "59646a617cf7ee82053cdc8c3faa656301a1339cc20dd86db6e202c4447ec972"
+    },
+    {
+      "source": "assets/minecraft/models/item/ammos/proton_torpedo.json",
+      "destination": "assets/mandomc/models/item/ammo/proton_torpedo.json",
+      "sha256": "9a2fa9f2f976b7662f4f4d5d192d1ec2853d2a939c730a7d7765d732aa1b40c0"
+    },
+    {
+      "source": "assets/minecraft/textures/custom/ammos/proton_torpedo.png",
+      "destination": "assets/mandomc/textures/item/ammo/proton_torpedo.png",
+      "sha256": "3f397a265aa52ccb6704998999ab4e5254331ffb07056e03fcd293c4490adb24"
+    },
+    {
+      "source": "assets/minecraft/sounds/vehicles/speederbike_shoot.ogg",
+      "destination": "assets/mandomc/sounds/vehicles/speederbike_shoot.ogg",
+      "sha256": "6c043e944a6150136a908807ec34bf905c7d1a5a923fd902abccf22a67305786"
+    },
+    {
+      "source": "assets/minecraft/sounds/vehicles/tie_fighter_shoot.ogg",
+      "destination": "assets/mandomc/sounds/vehicles/tie_fighter_shoot.ogg",
+      "sha256": "5194390e9f2c15b7c01e0b30e3e626b69c670f72d1fafceebcfd160fa5cef62d"
+    },
+    {
+      "source": "assets/minecraft/sounds/vehicles/xwing_shoot.ogg",
+      "destination": "assets/mandomc/sounds/vehicles/xwing_shoot.ogg",
+      "sha256": "744e45d3bbbdcc576a9240299cdfc8b6053b4b1d85a263a65b1e0845295c4fc8"
+    }
+  ]
+}

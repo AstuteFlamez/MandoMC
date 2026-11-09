@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "mandomc:custom/materials/makeshift_recoil_buffer"
+    "layer0": "mandomc:item/legacy/materials/makeshift_recoil_buffer"
   }
 }

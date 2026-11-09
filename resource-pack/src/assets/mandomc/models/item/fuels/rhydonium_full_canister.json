@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "mandomc:custom/fuels/rhydonium_full_canister"
+    "layer0": "mandomc:item/legacy/fuels/rhydonium_full_canister"
   }
 }
