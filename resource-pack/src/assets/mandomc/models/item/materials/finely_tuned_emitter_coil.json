@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "mandomc:custom/materials/finely_tuned_emitter_coil"
+  }
+}

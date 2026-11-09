@@ -10,7 +10,22 @@
       "models": [
         "workshop:item/darth_vader_lightsaber",
         "workshop:item/darth_vader_lightsaber_hilt",
-        "workshop:item/darth_vader_lightsaber_blocking"
+        "workshop:item/darth_vader_lightsaber_blocking",
+        "workshop:item/obi-wan_kenobi_jedi_master_lightsaber",
+        "workshop:item/obi-wan_kenobi_jedi_master_lightsaber_hilt",
+        "workshop:item/obi-wan_kenobi_jedi_master_lightsaber_blocking",
+        "workshop:item/cal_kestis_survivor_crossguard_lightsaber",
+        "workshop:item/cal_kestis_survivor_crossguard_lightsaber_hilt",
+        "workshop:item/cal_kestis_survivor_crossguard_lightsaber_blocking",
+        "workshop:item/mace_windu_lightsaber",
+        "workshop:item/mace_windu_lightsaber_hilt",
+        "workshop:item/mace_windu_lightsaber_blocking",
+        "workshop:item/qui-gon_jinn_lightsaber",
+        "workshop:item/qui-gon_jinn_lightsaber_hilt",
+        "workshop:item/qui-gon_jinn_lightsaber_blocking",
+        "workshop:item/asajj_ventress_yellow_lightsaber",
+        "workshop:item/asajj_ventress_yellow_lightsaber_hilt",
+        "workshop:item/asajj_ventress_yellow_lightsaber_blocking"
       ],
       "delivery": "Original unmodified ZIP sent from official CDN via addResourcePack; models are not redistributed."
     }

@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "mandomc:custom/materials/state_of_the_art_recoil_dampener"
+  }
+}
