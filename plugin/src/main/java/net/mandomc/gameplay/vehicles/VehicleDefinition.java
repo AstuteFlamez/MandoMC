@@ -20,7 +20,8 @@ public record VehicleDefinition(
         int boostCooldown,
         String sound,
         int soundTicks,
-        List<String> passengers) {
+        List<String> passengers,
+        List<String> gunners) {
     public VehicleDefinition {
         if (!id.matches("[a-z0-9_]+")
                 || name.isBlank()
@@ -38,11 +39,13 @@ public record VehicleDefinition(
                 || boostCooldown > 1200
                 || soundTicks < 1
                 || soundTicks > 1200
-                || passengers.size() > 8) {
+                || passengers.size() + gunners.size() > 8
+                || passengers.stream().anyMatch(gunners::contains)) {
             throw new IllegalArgumentException(
                     "vehicles/" + id + ".yml: invalid vehicle parameters");
         }
         passengers = List.copyOf(passengers);
+        gunners = List.copyOf(gunners);
     }
 
     private static boolean finite(double v, double min, double max) {
@@ -71,6 +74,7 @@ public record VehicleDefinition(
                 c.getInt("boost.cooldown-ticks"),
                 c.getString("sound", ""),
                 c.getInt("sound-ticks"),
-                c.getStringList("passenger-seats"));
+                c.getStringList("passenger-seats"),
+                c.getStringList("gunner-seats"));
     }
 }

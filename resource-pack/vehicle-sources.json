@@ -66,6 +66,12 @@
       "sha256": "7f91c05e430e6c7254eac68bcba024750119e2235c151ae38031fbbbbe8e5912",
       "destination": "assets/mandomc/sounds/vehicles/xwing_fly.ogg",
       "changes": "Unchanged legacy transport sound."
+    },
+    {
+      "source": "assets/minecraft/textures/default/vehicle.png",
+      "destination": "assets/mandomc/textures/font/item_labels/vehicle.png",
+      "sha256": "c1e33ab6f18ed39d3d6f785a46e6e869cb8cb5ef3ee37221d8081039d0c04c1c",
+      "changes": "Original VEHICLE category badge, unchanged pixels and legacy glyph/ascent/height."
     }
   ]
 }

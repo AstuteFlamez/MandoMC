@@ -90,6 +90,7 @@ public class VehicleMotionTest {
             assertFalse(c.contains("skins"));
             assertEquals(id, definition(id).id());
         }
-        assertEquals(java.util.List.of("seatone"), definition("uwing").passengers());
+        assertTrue(definition("uwing").passengers().isEmpty());
+        assertEquals(java.util.List.of("seatone"), definition("uwing").gunners());
     }
 }

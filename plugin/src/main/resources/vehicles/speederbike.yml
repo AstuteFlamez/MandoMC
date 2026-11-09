@@ -15,3 +15,4 @@ boost:
 sound: 'mandomc:vehicles.speederbike_drive'
 sound-ticks: 300
 passenger-seats: []
+gunner-seats: []

@@ -7,8 +7,16 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public interface VehicleModels extends AutoCloseable {
+    enum Seat {
+        PILOT,
+        GUNNER,
+        PASSENGER
+    }
+
     interface Handle {
-        boolean mount(Player player, boolean driver);
+        boolean mount(Player player, Seat seat);
+
+        boolean mayShoot(Player player);
 
         List<Player> riders();
 

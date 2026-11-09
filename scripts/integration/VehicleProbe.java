@@ -150,8 +150,12 @@ public final class VehicleProbe extends JavaPlugin {
         var uwing = plugin.vehicles().entity(ids.get(3));
         var passenger = player(uwing.getLocation().add(0, 1, 10));
         check(
-                plugin.vehicles().mount(passenger, ids.get(3), false),
-                "unrelated passenger can board U-Wing");
+                plugin.vehicles()
+                        .mount(
+                                passenger,
+                                ids.get(3),
+                                net.mandomc.gameplay.vehicles.VehicleModels.Seat.GUNNER),
+                "unrelated gunner can board U-Wing");
         var mount =
                 ModelEngineAPI.getModeledEntity(uwing)
                         .getModels()
@@ -160,7 +164,7 @@ public final class VehicleProbe extends JavaPlugin {
                         .next()
                         .getMountManager()
                         .orElseThrow();
-        check(mount.getDriver() == null, "passenger does not become pilot");
+        check(mount.getDriver() == null, "gunner does not become pilot");
         mount.dismountAll();
         check(
                 plugin.vehicles().mount(players.get(3), ids.get(3), true),

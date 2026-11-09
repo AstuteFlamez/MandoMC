@@ -134,6 +134,9 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                         if (!presentation.contains(path)) presentation.set(path, defaults.get(path));
                     }
                 }
+                if ("<gold>VEHICLE".equals(presentation.getString("categories.vehicles"))) {
+                    presentation.set("categories.vehicles", defaults.get("categories.vehicles"));
+                }
             }
             presentation.save(presentationFile);
             items = new net.mandomc.gameplay.items.ItemCatalog(getDataFolder().toPath(),

@@ -30,6 +30,29 @@ public final class VehicleWeapons implements Listener {
         if (vendor == null || !vendor.isEnabled())
             throw new IllegalStateException("Vehicles require WeaponMechanics");
         var loader = vendor.getClass().getClassLoader();
+        var shoot =
+                (Class<? extends Event>)
+                        Class.forName(
+                                "me.deecaad.weaponmechanics.weapon.weaponevents.WeaponPreShootEvent",
+                                true,
+                                loader);
+        Bukkit.getPluginManager()
+                .registerEvent(
+                        shoot,
+                        this,
+                        EventPriority.HIGHEST,
+                        (listener, event) -> {
+                            try {
+                                if (call(event, "getShooter")
+                                                instanceof org.bukkit.entity.Player player
+                                        && !vehicles.mayShoot(player))
+                                    ((Cancellable) event).setCancelled(true);
+                            } catch (ReflectiveOperationException error) {
+                                fail(event, error);
+                            }
+                        },
+                        plugin,
+                        true);
         var damage =
                 (Class<? extends Event>)
                         Class.forName(

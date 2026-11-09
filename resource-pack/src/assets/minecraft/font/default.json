@@ -89,6 +89,15 @@
       "chars": [
         "\u0121"
       ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/vehicle.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u010f"
+      ]
     }
   ]
 }

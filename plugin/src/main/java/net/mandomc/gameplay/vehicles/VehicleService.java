@@ -95,6 +95,14 @@ public final class VehicleService implements Listener, AutoCloseable {
                 plugin.saveResource(path, false);
             var data = new YamlConfiguration();
             data.load(new java.io.File(plugin.getDataFolder(), path));
+            if (id.equals("uwing") && !data.contains("gunner-seats")) {
+                var seats = new ArrayList<>(data.getStringList("passenger-seats"));
+                if (seats.remove("seatone")) {
+                    data.set("passenger-seats", seats);
+                    data.set("gunner-seats", List.of("seatone"));
+                    data.save(new java.io.File(plugin.getDataFolder(), path));
+                }
+            }
             definitions.put(id, VehicleDefinition.read(id, data));
         }
         String settingsPath = "vehicles/settings.yml";
@@ -446,7 +454,24 @@ public final class VehicleService implements Listener, AutoCloseable {
     }
 
     public boolean mount(Player p, UUID id, boolean driver) {
+        return mount(p, id, driver ? VehicleModels.Seat.PILOT : VehicleModels.Seat.PASSENGER);
+    }
+
+    public boolean mayShoot(Player player) {
+        for (Live live : active.values()) {
+            if (live.model.riders().contains(player)) return live.model.mayShoot(player);
+        }
+        return true;
+    }
+
+    public boolean mount(Player p, UUID id, VehicleModels.Seat seat) {
+        boolean driver = seat == VehicleModels.Seat.PILOT;
         var live = active.get(id);
+        // ModelEngine seats are virtual: Bukkit's isInsideVehicle alone cannot detect them.
+        if (active.values().stream().anyMatch(v -> v.model.riders().contains(p))) {
+            message(p, "occupied");
+            return false;
+        }
         if (live == null
                 || p.isDead()
                 || p.isInsideVehicle()
@@ -464,13 +489,17 @@ public final class VehicleService implements Listener, AutoCloseable {
             message(p, "combat");
             return false;
         }
-        boolean mounted = live.model.mount(p, driver);
+        boolean mounted = live.model.mount(p, seat);
         message(
                 p,
                 mounted
-                        ? (definitions.get(live.record.type).aerial()
-                                ? "flight-controls"
-                                : "ground-controls")
+                        ? (seat == VehicleModels.Seat.GUNNER
+                                ? "gunner-controls"
+                                : seat == VehicleModels.Seat.PASSENGER
+                                        ? "passenger-controls"
+                                        : definitions.get(live.record.type).aerial()
+                                                ? "flight-controls"
+                                                : "ground-controls")
                         : "occupied");
         return mounted;
     }
@@ -689,9 +718,15 @@ public final class VehicleService implements Listener, AutoCloseable {
     private final class Seats implements InventoryHolder {
         final UUID id;
         final Inventory inventory;
+        final boolean hasPassenger;
+        final boolean hasGunner;
 
         Seats(UUID id) {
             this.id = id;
+            var live = active.get(id);
+            hasPassenger =
+                    live != null && !definitions.get(live.record.type).passengers().isEmpty();
+            hasGunner = live != null && !definitions.get(live.record.type).gunners().isEmpty();
             inventory =
                     Bukkit.createInventory(
                             this,
@@ -700,7 +735,8 @@ public final class VehicleService implements Listener, AutoCloseable {
                                     .deserialize(messages.getString("menu-title")));
             MenuItems.fill(inventory);
             inventory.setItem(11, button(Material.SADDLE, "pilot"));
-            inventory.setItem(15, button(Material.OAK_BOAT, "passenger"));
+            if (hasPassenger) inventory.setItem(13, button(Material.OAK_BOAT, "passenger"));
+            if (hasGunner) inventory.setItem(15, button(Material.CROSSBOW, "gunner"));
         }
 
         @Override
@@ -722,9 +758,18 @@ public final class VehicleService implements Listener, AutoCloseable {
         if (!(e.getView().getTopInventory().getHolder() instanceof Seats seats)) return;
         e.setCancelled(true);
         if (!(e.getWhoClicked() instanceof Player p)
-                || (e.getRawSlot() != 11 && e.getRawSlot() != 15)) return;
+                || (e.getRawSlot() != 11 && e.getRawSlot() != 13 && e.getRawSlot() != 15)) return;
+        if (e.getRawSlot() == 13 && !seats.hasPassenger) return;
+        if (e.getRawSlot() == 15 && !seats.hasGunner) return;
         p.closeInventory();
-        mount(p, seats.id, e.getRawSlot() == 11);
+        mount(
+                p,
+                seats.id,
+                e.getRawSlot() == 11
+                        ? VehicleModels.Seat.PILOT
+                        : e.getRawSlot() == 15
+                                ? VehicleModels.Seat.GUNNER
+                                : VehicleModels.Seat.PASSENGER);
     }
 
     @EventHandler
