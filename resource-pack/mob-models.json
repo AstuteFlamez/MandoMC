@@ -2,6 +2,7 @@
   "generator": "ModelEngine R4.1.1",
   "models": [
     "bantha",
+    "bossk",
     "dewback",
     "gamorrean_guard",
     "massiff",
@@ -46,6 +47,34 @@
     {
       "path": "assets/modelengine/items/bantha/tail.json",
       "sha256": "dae1f127b3c896396fa454aa9c7fd25942f739c2b392358d11b20c5719af6171"
+    },
+    {
+      "path": "assets/modelengine/items/bossk/head.json",
+      "sha256": "cd3dc23912d10b58a96f36ec10918c16288d467db84aa70714c383b98ba80da0"
+    },
+    {
+      "path": "assets/modelengine/items/bossk/left_arm.json",
+      "sha256": "9fa8edc2335c29d36d22a911d33c67054e0559b9f9affae58c368d4df8ad6120"
+    },
+    {
+      "path": "assets/modelengine/items/bossk/left_leg.json",
+      "sha256": "eb53c6f5b74954511d72243f012a8622d4d7d7db36a4968191a9082226d4507f"
+    },
+    {
+      "path": "assets/modelengine/items/bossk/rifle.json",
+      "sha256": "58c80942e4a15a83c1f4fc25c53cb57377a7a0b1b99ee70ab607837d46c6be10"
+    },
+    {
+      "path": "assets/modelengine/items/bossk/right_arm.json",
+      "sha256": "a3fd8cdabc8208d480c74677831ed15d5708fdfcacdc9659f1b1b991b201ffcf"
+    },
+    {
+      "path": "assets/modelengine/items/bossk/right_leg.json",
+      "sha256": "0331fd33c4f334251422447fdc8e77caa8f43b043b5622348eff4502af39301e"
+    },
+    {
+      "path": "assets/modelengine/items/bossk/torso.json",
+      "sha256": "cbbf2e181f7fe4c24cca852fed7967b5c65872eecc28f7b3d28c89f9762637c8"
     },
     {
       "path": "assets/modelengine/items/dewback/back_body.json",
@@ -358,6 +387,34 @@
     {
       "path": "assets/modelengine/models/bantha/tail.json",
       "sha256": "a0df366a3ce5dda3c16d95c0edaa5f37fc8efa8259ef66454c21b97aea4415c7"
+    },
+    {
+      "path": "assets/modelengine/models/bossk/head.json",
+      "sha256": "0f726dc4447b5f685e87f5b6633452836f6d1c243d2ac789a40a3d8601aa667d"
+    },
+    {
+      "path": "assets/modelengine/models/bossk/left_arm.json",
+      "sha256": "58077ccf1013c45438a5f5204a343eaced9cac76fa49dc26cd8a8c3b9d8f928a"
+    },
+    {
+      "path": "assets/modelengine/models/bossk/left_leg.json",
+      "sha256": "733ab2789eb54ab89dfaf50cffd21befd7af53bf1dcbcb42f41cb564acfb2faa"
+    },
+    {
+      "path": "assets/modelengine/models/bossk/rifle.json",
+      "sha256": "5ba8cd4715fa15036c3f4ccdf7c23b0371460630012619a6728e7f360db5b7db"
+    },
+    {
+      "path": "assets/modelengine/models/bossk/right_arm.json",
+      "sha256": "5bc21212603cc666803a70de1171d4c2a64e3c22ad16c0d734f3e321f357d81b"
+    },
+    {
+      "path": "assets/modelengine/models/bossk/right_leg.json",
+      "sha256": "f0f675c8a3a8e48ec5b2691ec9715b88953b4b596581d216adee738b0a63e046"
+    },
+    {
+      "path": "assets/modelengine/models/bossk/torso.json",
+      "sha256": "9ad3b2e5bf4f37743a7891220c1a6fe927b7ed6d248b84c78c159ec244d71505"
     },
     {
       "path": "assets/modelengine/models/custom/entities/player/head.json",
@@ -702,6 +759,10 @@
     {
       "path": "assets/modelengine/textures/entity/models/bantha.png",
       "sha256": "408e6873ace2e126e39b7dfb382b807454538b37434e117319ce0b5e0768aba7"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/bossk.png",
+      "sha256": "9957350cfde6ebac157d6d180a8c40f7910b271983b5974d10a7e0e2cca9f9d4"
     },
     {
       "path": "assets/modelengine/textures/entity/models/dewback.png",

@@ -163,5 +163,29 @@
       }
     ],
     "subtitle": "Blaster fires"
+  },
+  "mobs.bossk_trophy": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/bossk_trophy"
+      }
+    ],
+    "subtitle": "Rancor snarls"
+  },
+  "mobs.bossk_slay": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/bossk_slay"
+      }
+    ],
+    "subtitle": "Rancor snarls"
+  },
+  "mobs.bossk_profit": {
+    "sounds": [
+      {
+        "name": "mandomc:mobs/bossk_profit"
+      }
+    ],
+    "subtitle": "Rancor snarls"
   }
 }
