@@ -241,6 +241,17 @@
         "workshop:item/yoda_lightsaber_hilt"
       ],
       "delivery": "Original unmodified ZIP sent from official CDN via addResourcePack; models are not redistributed."
+    },
+    {
+      "id": "faithful-32x",
+      "version": "26.1-june-2026",
+      "project": "https://modrinth.com/resourcepack/faithful-32x",
+      "website": "https://faithfulpack.net/",
+      "url": "https://cdn.modrinth.com/data/w0TnApzs/versions/Fj5GKJnf/Faithful%2032x%20-%2026.1.zip",
+      "sha1": "9447e84ee7121c86304e467a0f8d5b095872e1e6",
+      "sha512": "edc5ad465d302ecd0da3a64b2358b5b8fcbef673ca21ca560695b6716bf60805e041c643b7051f688322cdcbd03a538bed3a44f07f02298d18b88af3fa8f07cb",
+      "models": [],
+      "delivery": "Original unmodified official Modrinth ZIP, bottom priority. Modified block textures are credited separately in metal-block-sources.json."
     }
   ]
 }

@@ -1,0 +1,76 @@
+{
+  "schema-version": 1,
+  "source": "Faithful 32x 26.1 June 2026, official unmodified Modrinth version Fj5GKJnf",
+  "website": "https://faithfulpack.net/",
+  "license": "src/faithful-license.txt",
+  "scope": "Block textures only. Native block IDs, world generation, drops, armor and tool textures are unchanged. Ore rock backgrounds are byte-for-byte Faithful; only cyan mineral pixels are recolored.",
+  "blocks": [
+    {
+      "name": "durasteel_block",
+      "source": "assets/minecraft/textures/block/diamond_block.png",
+      "sourceSha256": "3595cd124795772ce0e87838217257955341d6d798dac6435971618a6ead01e3",
+      "palette": "durasteel",
+      "replaces": [
+        "diamond_block"
+      ],
+      "recoloredPixels": 1024,
+      "outputSha256": "eb8b3d501644d68beccf1141bc49e64d8b1e2cacfcb78b5a2e5e6d80265eeb38"
+    },
+    {
+      "name": "stone_durasteel_ore",
+      "source": "assets/minecraft/textures/block/diamond_ore.png",
+      "sourceSha256": "6c1fa6f862457b0ea0a1c934af884b0761771da166cba4160fbb772436deb055",
+      "palette": "durasteel",
+      "replaces": [
+        "diamond_ore"
+      ],
+      "recoloredPixels": 199,
+      "outputSha256": "6fa0b6a88073d1c4bbc58f2694f66252dee02437a0191a989c8281b472889ae1"
+    },
+    {
+      "name": "deepslate_durasteel_ore",
+      "source": "assets/minecraft/textures/block/deepslate_diamond_ore.png",
+      "sourceSha256": "d52620c3d8d2f942e3d91ed517a4d22fdaf03e1571e65412f4b522412ad46c63",
+      "palette": "durasteel",
+      "replaces": [
+        "deepslate_diamond_ore"
+      ],
+      "recoloredPixels": 244,
+      "outputSha256": "e621d54b2cb2fb654179f8c15b4984e2ced5880bd42693ef240ffab0a8a3ea73"
+    },
+    {
+      "name": "beskar_block",
+      "source": "assets/minecraft/textures/block/netherite_block.png",
+      "sourceSha256": "cbb0735bca8521feb0162c70768d554457222e8a68fbe89b0708ccaf39037b3f",
+      "palette": "beskar",
+      "replaces": [
+        "netherite_block"
+      ],
+      "recoloredPixels": 1024,
+      "outputSha256": "a3976d246c6e3e360c4dd27025864ebbf66bd6c144cf5db49a20c4eb4d3a1c91"
+    },
+    {
+      "name": "stone_beskar_ore",
+      "source": "assets/minecraft/textures/block/diamond_ore.png",
+      "sourceSha256": "6c1fa6f862457b0ea0a1c934af884b0761771da166cba4160fbb772436deb055",
+      "palette": "beskar",
+      "replaces": [
+        "nether_gold_ore"
+      ],
+      "recoloredPixels": 199,
+      "outputSha256": "7dc9ee315e448bdc2c43727944167d7d45b1b0bdc14455fcb78343dd21088a4e"
+    },
+    {
+      "name": "deepslate_beskar_ore",
+      "source": "assets/minecraft/textures/block/deepslate_diamond_ore.png",
+      "sourceSha256": "d52620c3d8d2f942e3d91ed517a4d22fdaf03e1571e65412f4b522412ad46c63",
+      "palette": "beskar",
+      "replaces": [
+        "ancient_debris_side",
+        "ancient_debris_top"
+      ],
+      "recoloredPixels": 244,
+      "outputSha256": "582252f58bb135ff097908d6b4b19cdeee24fb281c602db49e0677d208de045a"
+    }
+  ]
+}
