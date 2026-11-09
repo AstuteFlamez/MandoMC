@@ -33,3 +33,10 @@ Client mouse placement and visible 3D fit, worn equipment, tool icons and all re
 
 ## Pause note
 Implementation and isolated verification complete. Next action: reconnect with the published pack, open `/recipes`, and wear all three armor sets in a matching client.
+
+## Development rollout (2026-11-09)
+Published asset-only release `resource-pack-26.1.2-4f8f6f4d77fc` (952 entries; SHA-1 `c932a8ad4a96e3ccb085e74f920472983ed33363`). Anonymous download matches both hashes. All 515 prior entries remain present and byte-identical except the expanded shared font. Published asset history is merged into the feature branch.
+
+The final immutable combined HUD/vehicle/armor JAR passed all 137 current unit tests and the complete 462-assertion isolated Paper probe again. Its SHA-256 is `cbf9f2a00d713408fb87edb90169b78629d8257cc8dc109757ea65dae13a4951`. The normal development server restarted cleanly at 17:21 local with that exact JAR and pack, 174 catalog entries, no startup errors and no temporary probes. Existing runtime overrides were preserved through additive configuration merges. Catalog reload also succeeds. The previously active Jabba event was restarted. Backup is retained in the feature worktree's ignored `.local/rollout-backup-20261109-172059`.
+
+Armor implementation is also applied in the active HUD worktree, preserving its concurrent unrelated edits and future build path. Further vehicle-weapon edits after the immutable tested build are outside this rollout. Next action: reconnect and visually check helmet fit, equipment textures and `/recipes`.
