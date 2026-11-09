@@ -15,3 +15,4 @@ boost:
 sound: 'mandomc:vehicles.tie_fighter_fly'
 sound-ticks: 420
 passenger-seats: []
+gunner-seats: []

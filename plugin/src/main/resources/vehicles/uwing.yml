@@ -14,4 +14,5 @@ boost:
   cooldown-ticks: 80
 sound: 'mandomc:vehicles.tie_fighter_fly'
 sound-ticks: 420
-passenger-seats: ["seatone"]
+passenger-seats: []
+gunner-seats: ["seatone"]

@@ -23,8 +23,10 @@ import java.util.*;
 /** ModelEngine renders the legacy blueprints and supplies native-sized hitboxes and mount input. */
 public final class ModelEngineVehicles implements VehicleModels, Listener {
     private final Map<UUID, Model> models = new HashMap<>();
+    private final JavaPlugin plugin;
 
     public ModelEngineVehicles(JavaPlugin plugin) {
+        this.plugin = plugin;
         if (!Bukkit.getPluginManager().isPluginEnabled("ModelEngine"))
             throw new IllegalStateException("Vehicles require ModelEngine");
         Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -35,6 +37,8 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
         if (ModelEngineAPI.getBlueprint(d.id()) == null)
             throw new IllegalStateException("Missing vehicle blueprint: " + d.id());
         var modeled = ModelEngineAPI.getOrCreateModeledEntity(entity);
+        // Preserve the recovered mount's native one-block climbing behavior.
+        modeled.getBase().setMaxStepHeight(1.0);
         modeled.setSaved(false);
         modeled.setBaseEntityVisible(false);
         var active = ModelEngineAPI.createActiveModel(d.id());
@@ -63,6 +67,20 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void dismount(ModelDismountEvent e) {
         var model = models.get(e.getVehicle().getModeledEntity().getBase().getUUID());
+        if (model != null && plugin.isEnabled() && e.getPassenger() instanceof Player player) {
+            // The vendor fires before clearing its pair. Clear any residual seat after completion,
+            // but leave a newly created mount controller alone if the player boards again.
+            Bukkit.getScheduler()
+                    .runTask(
+                            plugin,
+                            () -> {
+                                if (ModelEngineAPI.getMountPairManager()
+                                                .getController(player.getUniqueId())
+                                        == null) {
+                                    model.eject(player);
+                                }
+                            });
+        }
         if (model != null && e.isDriver()) {
             model.entity.setAI(true);
             model.entity.setGravity(true);
@@ -109,18 +127,33 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
         }
 
         @Override
-        public boolean mount(Player player, boolean driver) {
+        public boolean mount(Player player, Seat seat) {
             var seats = active.getMountManager().orElseThrow();
+            boolean driver = seat == Seat.PILOT;
             boolean mounted =
                     driver
                             ? seats.mountDriver(player, controller)
-                            : seats.mountAvailable(player, definition.passengers(), controller);
+                            : seats.mountAvailable(
+                                    player,
+                                    seat == Seat.GUNNER
+                                            ? definition.gunners()
+                                            : definition.passengers(),
+                                    controller);
             if (mounted && driver) {
                 entity.setAI(true);
                 entity.setGravity(!definition.aerial());
                 animate(true);
             }
             return mounted;
+        }
+
+        @Override
+        public boolean mayShoot(Player player) {
+            var seats = active.getMountManager().orElseThrow();
+            var occupied = seats.getPassengerSeatMap().get(player);
+            return occupied != null
+                    && definition.gunners().stream()
+                            .anyMatch(id -> seats.getSeat(id).orElse(null) == occupied);
         }
 
         @Override
@@ -141,7 +174,12 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
 
         @Override
         public void eject(Player p) {
-            active.getMountManager().ifPresent(m -> m.dismountRider(p));
+            active.getMountManager()
+                    .ifPresent(
+                            m -> {
+                                if (p.equals(m.getDriver())) m.dismountDriver();
+                                m.dismountPassenger(p);
+                            });
         }
 
         @Override
