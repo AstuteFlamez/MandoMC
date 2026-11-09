@@ -1,0 +1,33 @@
+schema-version: 1
+scheduler:
+  enabled: true
+  timezone: America/Chicago
+  announcements:
+    end-warning-minute: 50
+    end-minute: 55
+    start-warning-minute: 55
+    start-minute: 0
+gui:
+  title: '<dark_gray>Server Events'
+messages:
+  current: '<gold>Current event: <event>'
+  next: '<yellow>Next event: <event>'
+  chances: '<aqua>Selection chances'
+  chance-entry: '<gray><event>: <white><chance>%'
+  none: None
+  idle: '<gray>No event is running.'
+  click: '<yellow>Click to travel to the event.'
+  starts-in: '<gray>Next scheduled start in <time>.'
+  ending: '<yellow><event> ends in five minutes.'
+  starting: '<yellow><event> starts at the next hour. Use /events.'
+  denied: '<red>You cannot manage server events.'
+  players-only: '<red>Open this menu in game.'
+  busy: '<red>Stop the current event before reloading event settings.'
+  reloaded: '<green>Event settings reloaded.'
+  invalid: '<red>Event action unavailable. Check the event ID or server log.'
+  started: '<green>Event started.'
+  stopped: '<yellow>Event stopped.'
+  queued: '<green>Next event selected.'
+  enabled: '<green>Event enabled.'
+  disabled: '<yellow>Event disabled.'
+  usage: '<yellow>/event [start <id>|stop|next <id>|reroll|status|list|reload|enable <id>|disable <id>]'

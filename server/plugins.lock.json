@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "checkedOn": "2026-11-05",
+  "checkedOn": "2026-11-09",
   "minecraftVersion": "26.1.2",
   "artifacts": [
     {
@@ -28,18 +28,6 @@
       "version": "7.0.18"
     },
     {
-      "id": "multiverse-core",
-      "name": "multiverse-core-5.8.2.jar",
-      "url": "https://cdn.modrinth.com/data/3wmN97b8/versions/de7TbcZG/multiverse-core-5.8.2.jar",
-      "sha256": "792252b6bbcf17c94ab8385e595281c830d7a40c946aea1832d8a010702bb630",
-      "verifiedPublishedHashes": [
-        "sha512",
-        "sha1"
-      ],
-      "bytes": 4631727,
-      "version": "5.8.2"
-    },
-    {
       "id": "mythicmobs",
       "name": "MythicMobs-5.14.0.jar",
       "url": "https://cdn.modrinth.com/data/NLuc7Jjh/versions/ionz4v5c/MythicMobs-5.14.0.jar",
@@ -51,17 +39,6 @@
       "bytes": 21836163,
       "version": "5.14.0",
       "descriptorVersion": "5.14.0-SNAPSHOT-local"
-    },
-    {
-      "id": "essentialsx",
-      "name": "EssentialsX-2.22.0.jar",
-      "url": "https://github.com/EssentialsX/Essentials/releases/download/2.22.0/EssentialsX-2.22.0.jar",
-      "sha256": "bda4685105977fca2e209820a9f0ad24275bd103390a03236f38e59bfdac58e6",
-      "verifiedPublishedHashes": [
-        "sha256"
-      ],
-      "bytes": 4861125,
-      "version": "2.22.0"
     },
     {
       "id": "packetevents",
@@ -128,5 +105,5 @@
   ],
   "pending": [],
   "runtimeTested": true,
-  "verificationScope": "All 11 vendor plugins and MandoMC enabled together; console commands, economy bridge, clean restart and loopback status checked. Gameplay and client rendering remain untested."
+  "verificationScope": "Nine vendor plugins and MandoMC enable without EssentialsX or Multiverse-Core. 99 Java tests, 170 utility and 54 arrival/WorldGuard Paper assertions pass. Clean normal restart, exact world spawns, command ownership and permission defaults verified. Credits/economy provider deferred; Vault retained without a provider. Client playtest remains."
 }

@@ -48,7 +48,8 @@ public final class ArrivalProbe extends JavaPlugin {
     private void verify() throws Exception {
         var settings = new ArrivalSettings("minecraft:spawnworld", "minecraft:overworld");
         var protection = new WorldGuardArrivalProtection();
-        var destinations = new ArrivalDestinations(settings, protection);
+        var destinations = new ArrivalDestinations(settings, protection,
+                ((net.mandomc.bootstrap.MandoPlugin) Bukkit.getPluginManager().getPlugin("MandoMC")).worlds()::spawn);
         destinations.validate();
         check(true, "both real arrivals have safe footing and loaded protection");
         check(Bukkit.getPluginCommand("survival").getPlugin().getName().equals("MandoMC"),

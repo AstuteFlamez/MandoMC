@@ -4,8 +4,18 @@ main: net.mandomc.bootstrap.MandoPlugin
 api-version: '26.1.2'
 author: AstuteFlamez
 description: MandoMC gameplay
-softdepend: [Multiverse-Core, WorldGuard, WeaponMechanics, MythicMobs, ModelEngine]
+softdepend: [ WorldGuard, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
+  warp:
+    description: Choose Batuu, Earth or Hoth
+    usage: /warp [batuu|earth|hoth]
+    aliases: [warps, travel]
+    permission: mandomc.travel.warp
+  event:
+    description: View server events or manage the event rotation
+    usage: /event [gui|start koth|stop|next koth|reroll|status|list|reload|enable koth|disable koth]
+    aliases: [events]
+    permission: mandomc.event
   recipes:
     description: Browse crafting recipes and ingredient sources
     usage: /recipes [item]
@@ -27,7 +37,155 @@ commands:
     description: Travel to SurvivalWorld after standing still
     usage: /survival
     permission: mandomc.travel.survival
+  flyspeed:
+    description: Set flight speed
+    usage: '/flyspeed <0-10> [player]'
+    permission: mandomc.admin.flyspeed
+  fly:
+    description: Toggle flight
+    usage: '/fly [on|off] [player]'
+    permission: mandomc.admin.fly
+  speed:
+    description: Set flight or walking speed
+    usage: '/speed [fly|walk] <0-10> [player]'
+    permission: mandomc.admin.speed
+  gm:
+    description: Change game mode
+    usage: '/gm <0|1|2|3|survival|creative|adventure|spectator> [player]'
+    permission: mandomc.admin.gamemode
+    aliases: [gamemode]
+  gm0:
+    description: Use survival mode
+    usage: '/gm0 [player]'
+    permission: mandomc.admin.gamemode
+    aliases: [gms]
+  gm1:
+    description: Use creative mode
+    usage: '/gm1 [player]'
+    permission: mandomc.admin.gamemode
+    aliases: [gmc]
+  gm2:
+    description: Use adventure mode
+    usage: '/gm2 [player]'
+    permission: mandomc.admin.gamemode
+    aliases: [gma]
+  gm3:
+    description: Use spectator mode
+    usage: '/gm3 [player]'
+    permission: mandomc.admin.gamemode
+    aliases: [gmsp]
+  heal:
+    description: Restore health and food
+    usage: '/heal [player]'
+    permission: mandomc.admin.heal
+  feed:
+    description: Restore food
+    usage: '/feed [player]'
+    permission: mandomc.admin.feed
+  god:
+    description: Toggle invulnerability
+    usage: '/god [on|off] [player]'
+    permission: mandomc.admin.god
+  vanish:
+    description: Hide from ordinary players
+    usage: '/vanish [on|off] [player]'
+    permission: mandomc.admin.vanish
+    aliases: [v]
+  invsee:
+    description: Inspect and edit an online inventory
+    usage: '/invsee <player>'
+    permission: mandomc.admin.invsee
+  enderchest:
+    description: Inspect and edit an online ender chest
+    usage: '/enderchest [player]'
+    permission: mandomc.admin.enderchest
+    aliases: [ec, echest]
+  mvtp:
+    description: Teleport to a configured world spawn
+    usage: '/mvtp [player] <world>'
+    permission: mandomc.admin.mvtp
+  tp:
+    description: Teleport directly
+    usage: '/tp <player> | /tp <player> <destination-player> | /tp [player] <x> <y> <z> [yaw pitch]'
+    permission: mandomc.admin.tp
+    aliases: [teleport]
+  tppos:
+    description: Teleport to coordinates
+    usage: '/tppos [player] <x> <y> <z> [yaw pitch]'
+    permission: mandomc.admin.tppos
+  tphere:
+    description: Bring a player to you
+    usage: '/tphere <player>'
+    permission: mandomc.admin.tphere
+    aliases: [s]
+  tpall:
+    description: Bring players to one location
+    usage: '/tpall [destination-player]'
+    permission: mandomc.admin.tpall
+  time:
+    description: Set or inspect world time
+    usage: '/time [set|add|query] <day|noon|night|midnight|ticks> [world]'
+    permission: mandomc.admin.time
+  weather:
+    description: Change world weather
+    usage: '/weather <clear|rain|thunder> [seconds] [world]'
+    permission: mandomc.admin.weather
+  home:
+    description: Return to your saved home
+    usage: '/home [name]'
+    permission: mandomc.travel.home
+  homes:
+    description: List your homes
+    usage: '/homes'
+    permission: mandomc.travel.homes
+  sethome:
+    description: Save your current location as a home
+    usage: '/sethome [name]'
+    permission: mandomc.travel.sethome
+  delhome:
+    description: Delete a personal home
+    usage: '/delhome [name]'
+    permission: mandomc.travel.delhome
+    aliases: [remhome]
+  back:
+    description: Return to your previous teleport or death location
+    usage: '/back'
+    permission: mandomc.travel.back
+    aliases: [return]
+  tpa:
+    description: Request to teleport to a player
+    usage: '/tpa <player>'
+    permission: mandomc.travel.tpa
+    aliases: [call]
+  tpahere:
+    description: Request that a player teleport to you
+    usage: '/tpahere <player>'
+    permission: mandomc.travel.tpahere
+  tpaccept:
+    description: Accept a teleport request
+    usage: '/tpaccept [player]'
+    permission: mandomc.travel.tpaccept
+    aliases: [tpyes]
+  tpdeny:
+    description: Decline a teleport request
+    usage: '/tpdeny [player]'
+    permission: mandomc.travel.tpdeny
+    aliases: [tpno]
+  tpacancel:
+    description: Cancel your outgoing teleport request
+    usage: '/tpacancel'
+    permission: mandomc.travel.tpacancel
+  tpcancel:
+    description: Cancel your current teleport countdown
+    usage: '/tpcancel'
+    permission: mandomc.travel.tpcancel
 permissions:
+  mandomc.travel.warp:
+    default: true
+  mandomc.event:
+    default: true
+  mandomc.event.admin:
+    default: op
   mandomc.recipes:
     description: Browse the recipe guide
     default: true
@@ -45,3 +203,65 @@ permissions:
     default: op
   mandomc.arrival:
     default: true
+  mandomc.admin.flyspeed:
+    default: op
+  mandomc.admin.fly:
+    default: op
+  mandomc.admin.speed:
+    default: op
+  mandomc.admin.gamemode:
+    default: op
+  mandomc.admin.heal:
+    default: op
+  mandomc.admin.feed:
+    default: op
+  mandomc.admin.god:
+    default: op
+  mandomc.admin.vanish:
+    default: op
+  mandomc.admin.invsee:
+    default: op
+  mandomc.admin.enderchest:
+    default: op
+  mandomc.admin.mvtp:
+    default: op
+  mandomc.admin.tp:
+    default: op
+  mandomc.admin.tppos:
+    default: op
+  mandomc.admin.tphere:
+    default: op
+  mandomc.admin.tpall:
+    default: op
+  mandomc.admin.time:
+    default: op
+  mandomc.admin.weather:
+    default: op
+  mandomc.travel.home:
+    default: true
+  mandomc.travel.homes:
+    default: true
+  mandomc.travel.sethome:
+    default: true
+  mandomc.travel.delhome:
+    default: true
+  mandomc.travel.back:
+    default: true
+  mandomc.travel.tpa:
+    default: true
+  mandomc.travel.tpahere:
+    default: true
+  mandomc.travel.tpaccept:
+    default: true
+  mandomc.travel.tpdeny:
+    default: true
+  mandomc.travel.tpacancel:
+    default: true
+  mandomc.travel.tpcancel:
+    default: true
+  mandomc.admin.others:
+    default: op
+  mandomc.admin.vanish.see:
+    default: op
+  mandomc.travel.homes.unlimited:
+    default: op

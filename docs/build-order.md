@@ -1,5 +1,5 @@
 # Proposed build order
-Status: revised 2026-11-08; user deferred clan/FactionsUUID work. Remaining ordering is an advisor recommendation. Gameplay rules in [player-experience.md](player-experience.md) remain authoritative; this sequence does not add new rules.
+Status: revised 2026-11-08; user selected KOTH next, followed by Jabba, vehicles, crafting/progression and shops; clan/FactionsUUID work remains deferred. Remaining ordering is an advisor recommendation. Gameplay rules in [player-experience.md](player-experience.md) remain authoritative; this sequence does not add new rules.
 
 The first friends playtest brings all currently in-scope systems together. Each row is an internal checkpoint that can be split into small commits and paused with a working build. Begin with one content example per system; expand variants after that example works.
 
@@ -7,16 +7,17 @@ The first friends playtest brings all currently in-scope systems together. Each 
 | --- | --- | --- |
 | 1. Arrival and protection | Join SpawnWorld with the pack, reach a safe survival landing and build outside it | Restore SpawnWorld; load one survival world; verify protected boundaries with a non-op account. Use the [first brief](features/arrival-and-protection.md). |
 | 2. Combat and loss | Use a blaster and shield-based saber, lose carried gear on death | One blaster, one armor set and one saber with block/reflection/throw/overheat. Start with one working E-11: firing, ammo/reloading, sounds and safe-zone enforcement. Then armor/saber, survival restrictions, repair, loss and starter kit; first blaster-shooting mob before blocking/reflection and throw stamina work. Preserve player kill attribution; clan relations and pairwise warpoints await the deferred clan integration. Raids stay disabled. |
-| 3. Supplies and progression | Recover from losing everything through ordinary play | One resource sale, basic blaster/ammo shop, basic armor recipe and advanced-equipment recipe. Introduce a second configured item variant to prove parameters work. Event components become earnable in the KOTH/Jabba stages; staff-issued components are development fixtures only. |
-| 4. KOTH | Contest a shared objective as a group or solo player | One hill, continuous capture, configured credits/component reward and death/re-entry. Decide reward delivery in its brief. Event PvP updates pairwise scores. |
-| 5. Jabba | Enter the scheduled shared dungeon, fight mobs/rivals and take open loot | Recover the existing map and mob configs; prove one room/door/boss/loot path, then restore the agreed room sequence. Validate cleanup, repeat runs and unlimited re-entry while active. |
-| 6. Vehicles | Buy transport, pilot it, carry passengers and risk losing it | Speeder first, one aircraft second. Test placer-only pilot, open passenger access, destruction, packing, restart and no duplicate item/entity copies. |
+| 3. KOTH | Contest a shared objective as a group or solo player | One hill, continuous capture, configured credits/component reward and death/re-entry. Decide reward delivery in its brief. Event PvP pairwise scoring waits for the deferred clan integration. |
+| 4. Jabba | Enter the scheduled shared dungeon, fight mobs/rivals and take open loot | Recover the existing map and mob configs; prove one room/door/boss/loot path, then restore the agreed room sequence. Validate cleanup, repeat runs and unlimited re-entry while active. |
+| 5. Vehicles | Buy transport, pilot it, carry passengers and risk losing it | Speeder first, one aircraft second. Test placer-only pilot, open passenger access, destruction, packing, restart and no duplicate item/entity copies. |
+| 6. Crafting and progression | Recover from losing everything through ordinary play | Basic armor recipe and advanced-equipment recipe. Implement after vehicles and before shops. Resource selling and purchase shops belong to the following milestone. Introduce a second configured item variant to prove parameters work. Event components become earnable in the KOTH/Jabba stages; staff-issued components are development fixtures only. |
+| 7. Shops | Sell resources and buy basic equipment and transport with credits | One resource sale, basic blaster/ammo shop and vehicle purchases. Implement after vehicles, as requested by the user. |
 | Later. Raids | Use earned rivalry advantage to breach and loot one rival's base | One approved explosive and limited block set. Test offline defenders, score-drop continuation, preserved ownership and third-party ground-loot-only access. |
 
 At each stage, test the new system against the protections and persisted state already present. New damage paths must pass safe-zone and claim checks before the stage is complete. Add vendors only as a stage needs them, recording exact versions and compatibility evidence.
 
 ## Why this sequence
-A working arrival makes combat testable now. Clan/base integration is explicitly deferred. Combat establishes loss and kill attribution; acquisition makes that loss recoverable. KOTH exercises the event lifecycle with a smaller content dependency than Jabba. Vehicles then have useful routes, and raids come last because they combine combat, claim permissions, loot and persistent rivalry state.
+A working arrival makes combat testable now. Clan/base integration is explicitly deferred. Combat establishes loss and kill attribution. KOTH is the user-selected next milestone and exercises the event lifecycle with a smaller content dependency than Jabba. Vehicles then have useful routes. Crafting/progression follows vehicles, then shops; vehicle development checks may use staff-issued fixtures until purchases are implemented. Raids come last because they combine combat, claim permissions, loot and persistent rivalry state.
 
 This order does not defer checking whether a difficult integration is possible. Before building a feature around an uncertain hook—especially claim overrides, projectile reflection or aircraft control—run a small disposable compatibility experiment. Keep that experiment separate from finished gameplay.
 
@@ -39,3 +40,9 @@ Current content: [levelled sandy-biome encounters](features/sandy-biome-mobs.md)
 
 ## Late pre-release animation polish
 User-requested, deferred until the end of the todo list: fix skirt animations on **both ranged and melee Tuskens** before release. Do not change those keyframes during the current aiming, shot-timing and locomotion fixes.
+
+## Current KOTH checkpoint
+The user-selected next slice is now implemented: legacy event rotation/menu/admin lifecycle, three-minute solo KOTH on recovered Hoth, and a warp menu limited to Black Spire Outpost, Earth and Hoth. Rewards are explicitly deferred. Unit and live server checks pass; client playtest comes next. Jabba remains the next feature after this check; clan ownership/warpoints remain deferred.
+
+## Late pre-release KOTH build
+User-requested later task: add a small build/platform for KOTH inside its Hoth canyon. Keep the event name KOTH. Design placement and shape when this task is reached; preserve the protected map and validate the capture zone afterward.

@@ -102,12 +102,15 @@ public final class TeleportService implements Listener, AutoCloseable {
             return false;
         }
         try {
-            destination.get(); // Resolve/validate now, and again at completion; never cache a stale world.
+            if (destination.get() == null) throw new IllegalStateException("Missing destination");
         } catch (IllegalStateException error) {
             unavailable(player, error);
             return false;
         }
         spirals.remove(player.getUniqueId());
+        if (player.getGameMode() == org.bukkit.GameMode.CREATIVE) {
+            return complete(player, destination);
+        }
         pending.put(player.getUniqueId(), new Pending(player, player.getLocation().clone(), destination,
                 clock + seconds * 20L));
         countdown(player, seconds);
@@ -141,26 +144,14 @@ public final class TeleportService implements Listener, AutoCloseable {
             String refusal = refusal(player);
             if (refusal != null) {
                 cancel(player, refusal, player.isOnline());
+            } else if (player.getGameMode() == org.bukkit.GameMode.CREATIVE) {
+                pending.remove(player.getUniqueId());
+                complete(player, request.destination());
             } else if (hasMoved(request.origin(), player.getLocation())) {
                 cancel(player, "moved", true);
             } else if (clock >= request.due()) {
                 pending.remove(player.getUniqueId()); // Own teleport must not cancel its own request.
-                player.clearTitle();
-                try {
-                    var destination = request.destination().get();
-                    if (player.teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN)) {
-                        player.showTitle(Title.title(message("success-title"), message("success-subtitle"),
-                                Title.Times.times(Duration.ofMillis(100), Duration.ofMillis(700), Duration.ofMillis(350))));
-                        if (effects) {
-                            player.getWorld().playSound(player.getLocation(), arrivalSound, volume, 1.2f);
-                            spirals.put(player.getUniqueId(), new Spiral(player, player.getLocation().clone(), clock));
-                        }
-                    } else {
-                        player.sendMessage(message("unavailable"));
-                    }
-                } catch (IllegalStateException error) {
-                    unavailable(player, error);
-                }
+                complete(player, request.destination());
             } else if ((request.due() - clock) % 20 == 0) {
                 countdown(player, (int) ((request.due() - clock) / 20));
             }
@@ -186,6 +177,29 @@ public final class TeleportService implements Listener, AutoCloseable {
         }
     }
 
+    /** Creative skips only the countdown; validation, consent and cancellable teleport events still apply. */
+    private boolean complete(Player player, Supplier<Location> destination) {
+        player.clearTitle();
+        try {
+            var location = destination.get();
+            if (location == null) throw new IllegalStateException("Missing destination");
+            if (!player.teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN)) {
+                player.sendMessage(message("unavailable"));
+                return false;
+            }
+            player.showTitle(Title.title(message("success-title"), message("success-subtitle"),
+                    Title.Times.times(Duration.ofMillis(100), Duration.ofMillis(700), Duration.ofMillis(350))));
+            if (effects) {
+                player.getWorld().playSound(player.getLocation(), arrivalSound, volume, 1.2f);
+                spirals.put(player.getUniqueId(), new Spiral(player, player.getLocation().clone(), clock));
+            }
+            return true;
+        } catch (IllegalStateException error) {
+            unavailable(player, error);
+            return false;
+        }
+    }
+
     /** Position only: camera yaw/pitch are intentionally ignored. A tiny tolerance absorbs coordinate noise. */
     public static boolean hasMoved(Location from, Location to) {
         double dx = from.getX() - to.getX();
@@ -198,6 +212,8 @@ public final class TeleportService implements Listener, AutoCloseable {
         player.sendMessage(message("unavailable"));
         plugin.getLogger().warning("Teleport refused: " + error.getMessage());
     }
+
+    public void cancelRequest(Player player) { cancel(player, "interrupted", true); }
 
     private void cancel(Player player, String reason, boolean notify) {
         if (pending.remove(player.getUniqueId()) != null && notify) {

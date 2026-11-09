@@ -19,6 +19,7 @@ public final class SaberProjectiles implements Listener {
     private final Constructor<?> constructor;
     private final Object spawner;
     private final Method spawn;
+    private final Class<?> projectileDamageSource;
     private static final String REFLECTIONS="mandomc_saber_reflections";
 
     @SuppressWarnings("unchecked")
@@ -32,10 +33,34 @@ public final class SaberProjectiles implements Listener {
         spawner=vendor.getClass().getMethod("getProjectileSpawner").invoke(vendor);
         spawn=Class.forName("me.deecaad.weaponmechanics.weapon.projectile.ProjectileSpawner",true,loader)
                 .getMethod("spawn",Class.forName("me.deecaad.weaponmechanics.weapon.projectile.AProjectile",true,loader));
-        var event=(Class<? extends Event>)Class.forName("me.deecaad.weaponmechanics.weapon.weaponevents.ProjectileHitEntityEvent",true,loader);
+        projectileDamageSource=Class.forName("me.deecaad.weaponmechanics.weapon.damage.ProjectileDamageSource",true,loader);
+        // HIGH listeners apply mob level scaling; the vendor then calculates hit-location/armor modifiers.
+        var event=(Class<? extends Event>)Class.forName("me.deecaad.weaponmechanics.weapon.weaponevents.WeaponDamageEntityEvent",true,loader);
         Bukkit.getPluginManager().registerEvent(event,this,EventPriority.HIGHEST,(listener,e)->hit(e),plugin,true);
     }
     private static Object call(Object o,String method) throws ReflectiveOperationException {return o.getClass().getMethod(method).invoke(o);}
+    private double unblockedDamage(Event event) throws ReflectiveOperationException {
+        @SuppressWarnings("unchecked") var modifiers = (java.util.List<Object>)call(event, "getDamageModifiers");
+        var originals = new java.util.ArrayList<>(modifiers);
+        try {
+            for (int i = 0; i < modifiers.size(); i++) {
+                Object m = modifiers.get(i);
+                var copy = java.util.Arrays.stream(m.getClass().getConstructors())
+                        .filter(c -> c.getParameterCount() == 19).findFirst().orElseThrow();
+                // Copy this hit's modifiers without Shielding (-500% in the installed config).
+                // Keep armor, location, movement, dropoff, crit and NPC scaling in the vendor calculation.
+                modifiers.set(i, copy.newInstance(call(m,"getMin"), call(m,"getMax"), call(m,"getPerArmorPoint"),
+                        call(m,"getArmorModifiers"), call(m,"getEnchantmentModifiers"), call(m,"getHeadModifier"),
+                        call(m,"getBodyModifier"), call(m,"getArmsModifier"), call(m,"getLegsModifier"),
+                        call(m,"getFeetModifier"), call(m,"getBackModifier"), call(m,"getSneakingModifier"),
+                        call(m,"getWalkingModifier"), call(m,"getSwimmingModifier"), call(m,"getSprintingModifier"),
+                        call(m,"getInMidairModifier"), 0d, call(m,"getEntityTypeModifiers"), call(m,"getPotionEffectModifiers")));
+            }
+            return ((Number)call(event,"getFinalDamage")).doubleValue();
+        } finally {
+            modifiers.clear();modifiers.addAll(originals);
+        }
+    }
     /** Creates, but does not schedule, a new bolt with the defender as its immutable shooter. */
     public Object createReflection(Object bolt,Player player) throws ReflectiveOperationException {
         Vector direction=player.getEyeLocation().getDirection();
@@ -53,8 +78,11 @@ public final class SaberProjectiles implements Listener {
     }
     public void hit(Event event) {
         try {
-            Object bolt=call(event,"getProjectile");
-            var victim=(LivingEntity)call(event,"getEntity");
+            if (((Cancellable)event).isCancelled()) return;
+            Object source=call(event,"getSource");
+            if (!projectileDamageSource.isInstance(source)) return;
+            Object bolt=call(source,"getProjectile");
+            var victim=(LivingEntity)call(event,"getVictim");
             var shooter=(LivingEntity)call(bolt,"getShooter");
             int count=(int)bolt.getClass().getMethod("getIntTag",String.class).invoke(bolt,REFLECTIONS);
             if(count>0 && (!sabers.allowed(victim.getLocation()) || shooter==null || !sabers.allowed(shooter.getLocation()))) {
@@ -63,9 +91,10 @@ public final class SaberProjectiles implements Listener {
             Vector incoming=(Vector)call(bolt,"getMotion");
             if(!(victim instanceof Player player)||!sabers.canReflect(player,incoming)) return;
             if(shooter!=null && !sabers.allowed(shooter.getLocation())) {((Cancellable)event).setCancelled(true);call(bolt,"remove");return;}
+            double damage=unblockedDamage(event);
             ((Cancellable)event).setCancelled(true);
             Object reflected = count < sabers.settings().reflectionLimit() ? createReflection(bolt,player) : null;
-            call(bolt,"remove");sabers.reflected(player);
+            call(bolt,"remove");sabers.reflected(player,damage);
             if(reflected==null)return;
             Location location=player.getEyeLocation();
             Bukkit.getScheduler().runTask(plugin,()-> {

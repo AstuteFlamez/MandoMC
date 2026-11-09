@@ -62,3 +62,6 @@ Prefer tests for rules and failure paths. Use in-server checks for event orderin
 - All player-facing custom inventory menus, including command menus, fill unused slots with gray stained glass panes named exactly one space and hidden tooltip. Use `MenuItems.fill` for this shared background; controls and content replace the panes.
 - Recipe grid slots are the exception: unused positions must remain actually empty (air), including unused rows and columns of the 3x3 grid. Do not put filler panes or labels in these cells.
 - Filler panes are decorative and cannot be taken. Preserve cancellation of click/shift/hotbar/drag transfer paths.
+
+## Hostile mob attack facing
+Every hostile mob must face its current living target before its attack animation starts. Keep native body/head rotation and the ModelEngine model aligned, and track the target through the wind-up. Preserve animation-relative hit/projectile cues. Do not turn a caster toward its own projectile/particle origins. Verify visible facing at attack onset. The shared facing implementation developed with Jabba remains on the excluded development work and must be integrated with that feature.

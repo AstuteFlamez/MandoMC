@@ -1,7 +1,17 @@
 # Resume here
-Updated: 2026-11-08
+Updated: 2026-11-09
 
 ## Milestone
+Completed-feature integration (2026-11-09): main now combines the completed arrival/travel, E-11, robes and original icons, Vader saber, combat barriers/rules, sandy mobs/food/crafting presentation, galaxy warp assets, KOTH, native world/admin/personal-travel commands, saber durability tuning, global natural-slime restriction and server-list settings. Historical feature and pack branches are merged with their history preserved. KOTH/native utilities/saber follow-ups were extracted from a snapshot of the shared development checkout because those completed changes were still uncommitted there.
+
+Jabba-specific work is excluded: generic guards and dungeon operation, Bossk/Boba/Rancor/dioxis assets and gameplay, Tatooine access and the shared facing implementation developed with those mobs. All legacy recovery branches remain reference-only. Main has exactly Batuu, Earth and Hoth public warps, four configured existing dimensions and KOTH as its only registered event. The separate active Jabba checkout and its uncommitted files are preserved. Its old branch tip shares the already-completed Tusken history; no Jabba-specific commits are merged.
+
+Integration verification: 81 Java tests and 14 pack/tooling tests pass. The rebuilt 220-file resource pack matches the previously published pre-Jabba galaxy pack byte-for-byte (SHA-1 cc3e6022cadcfa690b04530a81f32f982af61587). An isolated Paper copy passes 168 native-utility assertions, 67 KOTH assertions and 54 arrival/WorldGuard assertions; the development server is not restarted or redeployed. The same JAR also passes 162 isolated saber assertions, for 451 live integration assertions total. The test server was stopped cleanly; the verified JAR SHA-256 is 0f1a60051815ae9638b69d61c2ad07fafd25568d1aef4bfed61ffe5a7413cb6a. This integration intentionally skips automatic pack publication so the active Jabba development server keeps its newer pack.
+
+## Next action
+Finish and validate the excluded Jabba work, then integrate that completed slice into main. Existing client-rendering and multiplayer feel limitations remain documented in each feature brief.
+
+## Earlier development record (historical)
 Client check accepted: user confirmed the latest robe icons/worn textures, gray one-space menu panes with empty recipe cells, food behavior and drops pass. These presentation/food checks are closed for this iteration. Next: balance saber blocking/reflection against ranged Tuskens, then add a substantial saber-throw stamina cost. Clans and both Tusken skirt fixes remain deferred.
 
 Food integration complete: Dewback Leg restores 8 hunger points (four icons) and drops once per Dewback death; Massiff Ribs restore 4 points (two icons), retaining their existing drop chance. Existing owned stacks refresh food metadata without losing quantity. Combined build passes 52 Java tests and 1,921 live assertions, including actual native eating and one real collectible Dewback death drop. The currently published 211-file pack already includes all food textures and the accepted robe/icon fixes; its verified hash is unchanged. Temporary FoodProbe removed; normal server restarted successfully at 17:37:52 with no startup errors. Deployed plugin hash matches the combined verified build. Next: client-check the combined food behavior and presentation.
@@ -146,7 +156,7 @@ The pack builds without downloads, has root pack.mcmeta, and validates JSON plus
 
 Earlier recovery verification remains valid: all 294 legacy feature files matched their original Git blobs across 16 recovery branches; the full snapshot preserves obsolete docs and old main. FigJam diagrams were reviewed during the design checkpoint.
 
-## Next action
+## Historical next action before integration
 Balance saber blocking/reflection against the ranged Tuskens, then implement the planned saber-throw stamina cost. Both Tusken skirt fixes remain deferred until late pre-release polish.
 
 ## Open

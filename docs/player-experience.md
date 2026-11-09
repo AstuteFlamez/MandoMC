@@ -38,7 +38,7 @@ Resource planets are deferred. The initial supply loop must work with ordinary s
 Use [the feature brief](templates/feature.md). Record unresolved gameplay choices as unresolved; infrastructure work must not silently decide them.
 
 ## Proposed development slices
-The [build order](build-order.md) proposes: arrival/protection → group base/travel → combat → supplies/progression → KOTH → Jabba → vehicles → raids. These are small internal checkpoints toward the integrated friends playtest, not separate launch promises. Both KOTH and Jabba remain in scope.
+The [build order](build-order.md) proposes: arrival/protection → combat → KOTH → Jabba → vehicles → crafting/progression → shops → later raids (clan integration deferred). These are small internal checkpoints toward the integrated friends playtest, not separate launch promises. Both KOTH and Jabba remain in scope.
 
 Record pairwise kills when combat lands; enable explosive raiding only after claim and damage permissions have been verified. Begin with the [arrival/protection brief](features/arrival-and-protection.md). The order is an advisor recommendation awaiting review, not a new accepted gameplay decision.
 
@@ -105,44 +105,16 @@ An unrelated group may enter through an existing breach and pick up dropped item
 
 Still open for the raid feature brief: the threshold and continuation duration, active-raid detection, timer refresh/retrigger behavior, explosive/block limits, and attribution/handling for unaffiliated players or deaths without an opposing group. These choices must not be inferred from the old generic faction-power behavior.
 
-## Travel recommendation — awaiting user acceptance
-Use free commands and a destination menu for routine travel, with optional themed transport terminals that open the same menu. The proposed first version has:
+## Public world travel
+The legacy warp/menu system is adapted for exactly Batuu / Black Spire Outpost (SpawnWorld), Earth (the existing survival world) and Hoth. `/warp` (`/warps`, `/travel`) opens the menu; `/warp batuu|earth|hoth` selects directly. `/spawn` and temporary `/survival` retain the same shared three-second stationary warmup. Movement, damage, mounts and combat prevent travel. All public arrivals are safe and protected, using MandoMC worlds.yml as their exact arrival authority. Other legacy planets are excluded.
 
-- `/spawn`: return to SpawnWorld.
-- `/travel`: select a public destination; survival always arrives at its fixed protected landing zone. Future planets use their own public arrival points, rather than teleports directly onto objectives.
-- Group-home command: return to the home set inside the group's own eligible claims. The command root follows the naming decision above; `/f` is not the proposed player-facing root.
-- A five-second stationary warmup, cancelled by movement or damage. All entry points enforce the same combat restrictions. Five seconds is a suggested initial tuning value, not an accepted rule.
-- No death-return `/back` and no network of arbitrary personal homes initially. Exploration, journeys from landing zones to activities, and reaching other bases provide routes for walking, speeders and aircraft. Teleporting to other players remains a separate open choice.
+The recovered Hoth map is protected against edits/explosions, with the old warzone's PvP boundary and a safe arrival. KOTH/events use the recovered hourly framework. Current capture is solo while clan integration is deferred; the accepted three-minute continuous hold and removal-based reset apply. Rewards are explicitly deferred by the user: no chest, credits, key or item is granted yet. The event menu shows current/next/selection chances and routes travel through the same service. See [KOTH and warps](features/koth-and-warps.md).
 
-A shuttle terminal in SpawnWorld can teach first-time travel while returning players use commands. Routine travel should be free initially; vehicle fuel and other economy costs are separate decisions. Combat tagging is now fixed at 15 seconds for mob and player combat; see the combat-basics brief.
-
-Research checked 2026-11-05: [Minecadia's published faction guide](https://wiki.minecadia.com/index.php?title=Faction_Commands) documents `/f home` and menu-based faction warps (page last edited March 2023). [Complex's October 2026 guide](https://www.mc-complex.com/forums/vanilla/wiki-page/56/factions-commands-full-f-command-list-2026/) documents faction-home travel with a warmup and restricted activity areas. [PirateCraft's getting-started guide](https://piratemc.com/guides/getting-started/) combines ships with free public warps, portals and home teleports; the guide contains older version references. These are examples of published designs, not live-server tests or a player-preference survey.
-
-Advisor prediction: this audience will probably favor convenient routine travel with Star Wars presentation over mandatory walks to transport points for every trip. Limited destinations preserve reasons to explore and use vehicles, though easy home travel reduces transport risk. Validate that tradeoff in playtests instead of claiming a measured majority preference.
-
-## Configuration-driven systems
-Use explicit schemas and stable IDs. YAML declares content and tuning; Java implements behavior, validation, lifecycle and integration.
-
-- Items: ID, presentation/model reference, category, recipe and acquisition.
-- Sabers: item reference, damage, stamina costs, block/deflect rules and supported behavior type.
-- Vehicles: model reference, movement type, seats, speed/acceleration, fuel, health and supported weapons.
-- Events: location, schedule, participant rules, objectives and rewards.
-- Resources: location/node type, yields, regeneration and access rules.
-
-Only add parameters when the implemented feature uses them. First prove one item/saber/vehicle and a second configuration variant; generalize the variation we actually need. Avoid inventing a scripting language or a universal effect system.
-
-Validate bounds and cross-references at load time. Errors name the file and key. Editing a price or speed should not require Java changes; adding a new behavior may. Reload only where active-state handling is defined. Schema changes require migrations for saved data and clear compatibility notes.
-
-Temporary interface note (2026-11-07): `/tutorial` and `/survival` are development-only commands. Their behavior is available for testing; the final onboarding/travel interface is undecided.
-
-## Spawn travel follow-up
-`/spawn` now goes to SpawnWorld; temporary `/survival` goes to SurvivalWorld (the existing dev_world under that Multiverse alias). Both use the shared three-second countdown in `teleport.yml`, replacing the earlier five-second, one-way-only departure. Looking around is allowed; changing position cancels. See [command documentation](commands.md).
-
-Future tutorial direction: `/tutorial` will show short text and take the player to a library building in SpawnWorld with takeable, feature-specific guidebooks. This is deferred; current tutorial text is temporary.
+Group-home travel and themed terminals remain deferred. Personal homes and death-return were approved on 2026-11-09 and use the shared public travel policy.
 
 ## Survival mob content
 Use existing Tusken Raider, bantha, dewback and massiff models in Desert, Badlands and Eroded Badlands in SurvivalWorld. Beaches and Wooded Badlands remain unchanged. Random encounter levels are 1–5; group members remain within one level of the leader. No distance-from-spawn or player-dependent scaling.
 
 Tusken patrols have 2–4 ranged/melee raiders, 0–2 banthas and 0–2 massiffs, with six total at most. Separate wildlife groups contain 1–3 of exactly one species: bantha, dewback or massiff. Natural vanilla spawns are replaced within the selected biomes, preserving player breeding/spawners and existing animals. Custom wildlife cannot use vanilla pig feeding, saddling, breeding or mounting. Banthas/dewbacks wander; Tuskens/massiffs are hostile.
 
-The first cycler-shooting Tusken and bounded spawning are implemented. Playtest density/combat before the drop pass: cycler rifle, bantha hide and species-specific materials. Rates, quantities and crafting uses are undecided. Blocking/reflection balance and later throw stamina may now be tested against ranged mobs. See [the mob brief](features/sandy-biome-mobs.md) for parameters and verification.
+The first cycler-shooting Tusken and bounded spawning are implemented. Playtest density/combat before the drop pass: cycler rifle, bantha hide and species-specific materials. Rates, quantities and crafting uses are undecided. Saber blocking/reflection spends regenerating durability at 5× incoming damage. Throws require and spend 75% over one second. Zero charge stuns all saber actions; recharge starts after five seconds without charge use or positive damage dealt/taken, then restores 10% per second. Exhausted actions say “You are too tired to …”. Balance and rendered feedback can now be tested against ranged mobs. See [the mob brief](features/sandy-biome-mobs.md) for parameters and verification.

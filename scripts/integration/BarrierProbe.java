@@ -143,9 +143,7 @@ public final class BarrierProbe extends JavaPlugin {
         barrier.vehicle(new VehicleMoveEvent(boat,outside,inside));
         check(boat.getLocation().distanceSquared(outside) < .01,"tagged boat is returned outside safe zone");
         check(boat.getPassengers().contains(rider),"boat correction keeps passenger mounted");
-        var essentials = Bukkit.getPluginManager().getPlugin("Essentials");
-        Object user = essentials.getClass().getMethod("getUser",Player.class).invoke(essentials,rider);
-        check(!(boolean) user.getClass().getMethod("hasInvulnerabilityAfterTeleport").invoke(user),"boat correction does not grant teleport invulnerability");
+        check(!rider.isInvulnerable(),"boat correction does not grant teleport invulnerability");
         rider.leaveVehicle();boat.remove();boat=null;
         horse = world.spawn(outside,Horse.class,h -> {h.setPersistent(false);h.setAI(false);h.setGravity(false);});
         check(horse.addPassenger(rider),"native test rider mounts horse");

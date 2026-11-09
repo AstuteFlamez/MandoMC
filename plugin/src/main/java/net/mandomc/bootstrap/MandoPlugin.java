@@ -25,6 +25,20 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     public net.mandomc.gameplay.rules.SurvivalRules rules() { return rules; }
     private net.mandomc.gameplay.mobs.SandySpawns mobs;
     public net.mandomc.gameplay.mobs.SandySpawns mobs() { return mobs; }
+    private net.mandomc.gameplay.events.EventManager events;
+    private net.mandomc.gameplay.travel.WarpService warps;
+    public net.mandomc.gameplay.events.EventManager events() { return events; }
+    public net.mandomc.gameplay.travel.WarpService warps() { return warps; }
+    public net.mandomc.gameplay.travel.TeleportService travel() { return travel; }
+    private net.mandomc.gameplay.worlds.WorldService worlds;
+    private net.mandomc.commands.CommandBindings commandBindings;
+    private net.mandomc.gameplay.admin.AdminService admin;
+    private net.mandomc.gameplay.travel.TeleportRequests requests;
+    private net.mandomc.gameplay.travel.PersonalTravel personal;
+    public net.mandomc.gameplay.worlds.WorldService worlds() { return worlds; }
+    public net.mandomc.gameplay.admin.AdminService admin() { return admin; }
+    public net.mandomc.gameplay.travel.TeleportRequests requests() { return requests; }
+    public net.mandomc.gameplay.travel.PersonalTravel personal() { return personal; }
     private ArrivalListener arrival;
     private ArrivalDestinations destinations;
     private boolean failed;
@@ -66,6 +80,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                     java.nio.charset.StandardCharsets.UTF_8)) {
                 language.setDefaults(YamlConfiguration.loadConfiguration(reader));
             }
+            worlds = new net.mandomc.gameplay.worlds.WorldService(this, loadFeature("worlds.yml"));
             var root = new net.mandomc.commands.RootCommand(this, sender -> {
                 try {
                     if (failed) {
@@ -86,16 +101,16 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             for (var resource : new String[] {"items.yml", "items/robes.yml", "items/materials.yml", "items/sabers.yml", "items/tusken.yml", "items/massiff.yml", "massiff-drops.yml", "items/dewback.yml", "dewback-drops.yml", "sabers.yml"}) {
                 if (!new File(getDataFolder(), resource).isFile()) saveResource(resource, false);
             }
-            // Add only missing presentation badges when new bundled item families arrive.
+            // Add only missing badges and vendor registrations; preserve local overrides.
             var presentation = new YamlConfiguration();
             var presentationFile = new File(getDataFolder(), "items.yml");
             presentation.load(presentationFile);
             try (var reader = new java.io.InputStreamReader(Objects.requireNonNull(getResource("items.yml")), java.nio.charset.StandardCharsets.UTF_8)) {
                 var defaults = YamlConfiguration.loadConfiguration(reader);
-                for (String group : new String[] {"rarities", "categories"}) {
+                for (String group : new String[] {"rarities", "categories", "external-items"}) {
                     for (String key : Objects.requireNonNull(defaults.getConfigurationSection(group)).getKeys(false)) {
                         String path = group + "." + key;
-                        if (!presentation.contains(path)) presentation.set(path, defaults.getString(path));
+                        if (!presentation.contains(path)) presentation.set(path, defaults.get(path));
                     }
                 }
             }
@@ -146,6 +161,17 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 mobs = new net.mandomc.gameplay.mobs.SandySpawns(this, settings, mythic);
                 getLogger().info("Sandy mobs ready: five types, levelled encounters and shared population limits.");
             }
+            var utilityConfig = loadFeature("utilities.yml");
+            if (utilityConfig.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("utilities.yml: expected schema-version 1");
+            var utilityMessages = new net.mandomc.commands.CommandMessages(language);
+            travel = new net.mandomc.gameplay.travel.TeleportService(this, loadFeature("teleport.yml"), language, combat);
+            getServer().getPluginManager().registerEvents(travel, this);
+            personal = new net.mandomc.gameplay.travel.PersonalTravel(this, utilityConfig.getInt("homes-limit"), combat::tagged);
+            requests = new net.mandomc.gameplay.travel.TeleportRequests(this, travel, combat, utilityMessages, utilityConfig);
+            admin = new net.mandomc.gameplay.admin.AdminService(this, combat, utilityMessages);
+            new net.mandomc.commands.TravelCommands(this, travel, personal, requests, utilityMessages);
+            new net.mandomc.commands.AdminCommands(this, admin, worlds, utilityMessages);
+            commandBindings = new net.mandomc.commands.CommandBindings(this);
             if (!getConfig().getBoolean("arrival.enabled", false)) {
                 getLogger().info("Foundation enabled; arrival is disabled.");
                 return;
@@ -155,16 +181,14 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             }
             var settings = new ArrivalSettings(getConfig().getString("arrival.spawn-world"),
                     getConfig().getString("arrival.survival-world"));
-            destinations = new ArrivalDestinations(settings, new WorldGuardArrivalProtection());
+            destinations = new ArrivalDestinations(settings, new WorldGuardArrivalProtection(), worlds::spawn);
             destinations.validate();
             arrival = new ArrivalListener(this, settings, destinations, language);
             getServer().getPluginManager().registerEvents(arrival, this);
-            if (!new File(getDataFolder(), "teleport.yml").isFile()) saveResource("teleport.yml", false);
-            var teleportConfig = new YamlConfiguration();
-            teleportConfig.load(new File(getDataFolder(), "teleport.yml"));
-            travel = new net.mandomc.gameplay.travel.TeleportService(this, teleportConfig, language, combat);
-            getServer().getPluginManager().registerEvents(travel, this);
             net.mandomc.commands.ArrivalCommands.register(this, arrival, destinations, travel);
+            warps = new net.mandomc.gameplay.travel.WarpService(this, travel, destinations, loadFeature("warps.yml"));
+            events = new net.mandomc.gameplay.events.EventManager(this, warps);
+            getLogger().info("Legacy events and public warps ready: KOTH, Black Spire Outpost, Earth and Hoth; rewards disabled.");
             getLogger().info("Arrival enabled: protected SpawnWorld -> survival; /spawn, /survival and temporary /tutorial ready.");
         } catch (Exception | LinkageError error) {
             failed = true;
@@ -189,6 +213,11 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (commandBindings != null) commandBindings.close();
+        if (requests != null) requests.close();
+        if (admin != null) admin.close();
+        if (events != null) events.close();
+        if (warps != null) warps.close();
         if (recipeGuide != null) recipeGuide.close();
         if (craftingRecipes != null) craftingRecipes.close();
         if (barrier != null) barrier.close();

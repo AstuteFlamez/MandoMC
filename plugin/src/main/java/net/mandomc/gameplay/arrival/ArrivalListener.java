@@ -24,11 +24,13 @@ public final class ArrivalListener implements Listener {
     private final NamespacedKey tutorialSeen;
     private final List<Component> tutorial;
     private final Map<String, Component> messages = new HashMap<>();
+    private final org.bukkit.Location firstSpawn;
 
     public ArrivalListener(JavaPlugin plugin, ArrivalSettings settings, ArrivalDestinations destinations,
             YamlConfiguration language) {
         this.plugin = plugin;
         this.destinations = destinations;
+        this.firstSpawn = destinations.spawn(); // Snapshot on the main thread for the async connection event.
         this.tutorialSeen = new NamespacedKey(plugin, "arrival_tutorial_v1");
         var mini = MiniMessage.miniMessage();
         this.tutorial = language.getStringList("tutorial").stream().map(mini::deserialize).toList();
@@ -61,6 +63,19 @@ public final class ArrivalListener implements Listener {
                 && !player.getPersistentDataContainer().has(tutorialSeen, PersistentDataType.BYTE)) {
             showTutorial(player);
             player.getPersistentDataContainer().set(tutorialSeen, PersistentDataType.BYTE, (byte) 1);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void firstSpawn(io.papermc.paper.event.player.AsyncPlayerSpawnLocationEvent event) {
+        if (event.isNewPlayer()) event.setSpawnLocation(firstSpawn.clone());
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void respawn(org.bukkit.event.player.PlayerRespawnEvent event) {
+        if (!event.isBedSpawn() && !event.isAnchorSpawn()
+                && event.getRespawnReason() == org.bukkit.event.player.PlayerRespawnEvent.RespawnReason.DEATH) {
+            event.setRespawnLocation(destinations.spawn());
         }
     }
 

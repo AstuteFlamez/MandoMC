@@ -1,0 +1,4 @@
+schema-version: 1
+# Import existing Paper dimensions and configure exact arrivals before enabling arrival.
+# See server/config/common/worlds.yml for this server's deployed worlds.
+worlds: {}

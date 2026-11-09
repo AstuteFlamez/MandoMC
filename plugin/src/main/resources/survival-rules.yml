@@ -5,3 +5,6 @@ disable-enchanting: true
 disable-potions: true
 disable-vanilla-weapons: true
 disable-nether-and-end: true
+
+# All worlds and biomes; spawners, eggs, commands and custom summons remain available.
+disabled-natural-mobs: [SLIME]

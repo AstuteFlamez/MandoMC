@@ -2,7 +2,6 @@ package net.mandomc.gameplay.saber;
 
 import java.util.*;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.mandomc.gameplay.items.ItemCatalog;
 import net.mandomc.integrations.regions.SaberProtection;
 import org.bukkit.*;
@@ -10,10 +9,13 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.*;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
@@ -23,7 +25,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import io.papermc.paper.event.entity.EntityKnockbackEvent;
 import io.papermc.paper.event.entity.EntityPushedByEntityAttackEvent;
 
-/** One main-thread scheduler owns bounded throws and guard heat. The airborne item is held for its owner until catch or cleanup. */
+/** One scheduler owns throws and regenerating charge, displayed as native saber durability. */
 public final class SaberService implements Listener {
     private final JavaPlugin plugin;
     private final ItemCatalog catalog;
@@ -111,12 +113,52 @@ public final class SaberService implements Listener {
                 || !allowed(p.getLocation()) || incoming.lengthSquared()<1e-8) return false;
         return GuardState.facing(p.getEyeLocation().getDirection().dot(incoming.clone().normalize().multiply(-1)),settings.halfAngle());
     }
-    public void reflected(Player p) { consumeGuard(p); sound(p.getLocation(),"hit"); }
-    private void consumeGuard(Player p) {
-        if(guard(p).hit(tick,settings)) {
-            p.clearActiveItem();p.setCooldown(Material.SHIELD,settings.overheat());message(p,"overheated");
-            p.playSound(p.getLocation(),Sound.BLOCK_FIRE_EXTINGUISH,0.7f,1.4f);
+    public void reflected(Player p, double damage) { consumeGuard(p, damage); sound(p.getLocation(),"hit"); }
+    private void consumeGuard(Player p, double damage) {
+        if(guard(p).hit(tick,settings,damage)) stun(p);
+        syncDurability(p);
+    }
+    private void stun(Player player) {
+        player.clearActiveItem();
+        player.setCooldown(Material.SHIELD, guard(player).stunTicks(tick));
+        finish(player.getUniqueId());
+        message(player, "tired-use");
+        player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.7f, 1.4f);
+    }
+    private void updateGuard(UUID owner, GuardState state) {
+        if (!state.cool(tick, settings)) return;
+        Flight flight = flights.get(owner);
+        Player player = flight == null ? Bukkit.getPlayer(owner) : flight.owner;
+        if (player != null) stun(player);
+    }
+    private void syncDurability(Player player) {
+        GuardState state = guards.get(player.getUniqueId());
+        double used = state == null ? 0 : state.heat() / settings.capacity();
+        var inventory = player.getInventory();
+        for (int slot = 0; slot < inventory.getSize(); slot++) {
+            ItemStack item = inventory.getItem(slot);
+            if (durability(item, used)) inventory.setItem(slot, item);
         }
+        Flight flight = flights.get(player.getUniqueId());
+        if (flight != null && durability(flight.item, used)) {
+            flight.display.setItemStack(flight.item);
+            player.getPersistentDataContainer().set(storedItem, PersistentDataType.BYTE_ARRAY,
+                    flight.item.serializeAsBytes());
+        }
+    }
+    private boolean durability(ItemStack item, double used) {
+        if (!isSaber(item) || !(item.getItemMeta() instanceof Damageable meta)) return false;
+        int maximum = meta.hasMaxDamage() ? meta.getMaxDamage() : item.getType().getMaxDurability();
+        // Keep the actual item intact even when its displayed charge reaches empty.
+        int damage = Math.clamp((int)Math.round(used * maximum), 0, maximum - 1);
+        if (meta.getDamage() == damage) return false;
+        meta.setDamage(damage);
+        item.setItemMeta(meta);
+        return true;
+    }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void wear(PlayerItemDamageEvent event) {
+        if (isSaber(event.getItem())) event.setCancelled(true);
     }
     private void message(Player p,String key) {
         p.sendActionBar(MiniMessage.miniMessage().deserialize(Objects.requireNonNull(messages.getString(key))));
@@ -125,17 +167,33 @@ public final class SaberService implements Listener {
     private void model(ItemStack i,String key) { if(i==null)return;var m=i.getItemMeta();m.setItemModel(NamespacedKey.fromString(key));i.setItemMeta(m); }
 
     @EventHandler public void swing(PlayerAnimationEvent e) {
-        if(isSaber(e.getPlayer().getInventory().getItemInMainHand()) && !busy(e.getPlayer()) && !guard(e.getPlayer()).disabled(tick)) sound(e.getPlayer().getLocation(),"swing-1");
+        Player p = e.getPlayer();
+        if (busy(p)) {e.setCancelled(true);return;}
+        if (!isSaber(p.getInventory().getItemInMainHand())) return;
+        if (guard(p).disabled(tick)) {e.setCancelled(true);message(p,"tired-attack");return;}
+        sound(p.getLocation(),"swing-1");
     }
     @EventHandler public void interact(PlayerInteractEvent e) {
         if(!isSaber(e.getItem())) return;
         if(e.getHand()!=EquipmentSlot.HAND) {e.setUseItemInHand(Event.Result.DENY);return;}
         var p=e.getPlayer();
+        if (guard(p).disabled(tick)) {
+            e.setCancelled(true);p.clearActiveItem();
+            boolean attack = e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK;
+            message(p, attack ? (p.isSneaking() ? "tired-throw" : "tired-attack") : "tired-block");
+            return;
+        }
         if(e.getAction()==Action.LEFT_CLICK_AIR || e.getAction()==Action.LEFT_CLICK_BLOCK) {
             if(p.isSneaking()) { e.setCancelled(true);launch(p); }
-        } else if(busy(p)||guard(p).disabled(tick)) {
-            e.setUseItemInHand(Event.Result.DENY);p.clearActiveItem();message(p,busy(p)?"in-flight":"overheated");
+        } else if(busy(p)) {
+            e.setUseItemInHand(Event.Result.DENY);p.clearActiveItem();message(p,"in-flight");
         }
+    }
+    @EventHandler(ignoreCancelled=true) public void mine(BlockDamageEvent e) {
+        if (isSaber(e.getItemInHand()) && guard(e.getPlayer()).disabled(tick)) e.setCancelled(true);
+    }
+    @EventHandler(ignoreCancelled=true) public void breakBlock(BlockBreakEvent e) {
+        if (isSaber(e.getPlayer().getInventory().getItemInMainHand()) && guard(e.getPlayer()).disabled(tick)) e.setCancelled(true);
     }
     @EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
     public void attack(EntityDamageByEntityEvent e) {
@@ -144,18 +202,32 @@ public final class SaberService implements Listener {
         if(!isSaber(p.getInventory().getItemInMainHand())) return;
         if(p.isSneaking()) {e.setCancelled(true);launch(p);return;}
         if(busy(p)||guard(p).disabled(tick)||!allowed(p.getLocation())||!allowed(e.getEntity().getLocation())) {
-            e.setCancelled(true);message(p,busy(p)?"in-flight":guard(p).disabled(tick)?"overheated":"safe-zone");
+            e.setCancelled(true);message(p,busy(p)?"in-flight":guard(p).disabled(tick)?"tired-attack":"safe-zone");
         }
     }
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
     public void damaged(EntityDamageByEntityEvent e) {
+        if (e.getFinalDamage() > 0) {
+            if (e.getDamager() instanceof Player p) activity(p);
+            else if (e.getDamager() instanceof Projectile projectile && projectile.getShooter() instanceof Player p)
+                activity(p);
+        }
         if (e.getDamager() instanceof Player p && e.getFinalDamage() > 0) {
             if (impact != null && impact.owner.equals(p.getUniqueId()) && impact.victim.equals(e.getEntity().getUniqueId())) {
                 impact.accepted = true;
             } else if (isSaber(p.getInventory().getItemInMainHand())) sound(e.getEntity().getLocation(), "hit");
         }
         if(e.getEntity() instanceof Player p && isSaber(p.getInventory().getItemInMainHand())
-                && e.isApplicable(EntityDamageEvent.DamageModifier.BLOCKING) && e.getDamage(EntityDamageEvent.DamageModifier.BLOCKING)<0) consumeGuard(p);
+                && e.isApplicable(EntityDamageEvent.DamageModifier.BLOCKING) && e.getDamage(EntityDamageEvent.DamageModifier.BLOCKING)<0)
+            consumeGuard(p, -e.getDamage(EntityDamageEvent.DamageModifier.BLOCKING));
+    }
+    @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
+    public void hurt(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Player player && event.getFinalDamage() > 0) activity(player);
+    }
+    private void activity(Player player) {
+        GuardState state = guards.get(player.getUniqueId());
+        if (state != null) state.activity(tick);
     }
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void knockback(EntityKnockbackEvent event) {
@@ -170,14 +242,14 @@ public final class SaberService implements Listener {
         event.setKnockback(push);
     }
 
-    @EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
-    public void projectile(ProjectileHitEvent e) {
-        if(!(e.getHitEntity() instanceof Player p)||!canReflect(p,e.getEntity().getVelocity())) return;
-        var projectile=e.getEntity();
-        if(!(projectile instanceof AbstractArrow)) return; // Other projectile effects need their own compatibility checks.
+    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+    public void projectile(EntityDamageByEntityEvent e) {
+        // Wait for native speed/critical damage calculation rather than estimating at collision time.
+        if (!(e.getEntity() instanceof Player p) || !(e.getDamager() instanceof AbstractArrow projectile)
+                || !canReflect(p, projectile.getVelocity())) return;
         if(projectile.getShooter() instanceof Entity shooter && !allowed(shooter.getLocation())) {e.setCancelled(true);projectile.remove();return;}
         int count=projectile.getPersistentDataContainer().getOrDefault(new NamespacedKey(plugin,"reflections"),org.bukkit.persistence.PersistentDataType.INTEGER,0);
-        e.setCancelled(true);reflected(p);
+        e.setCancelled(true);reflected(p, e.getDamage());
         if(count>=settings.reflectionLimit()) {projectile.remove();return;}
         var motion=p.getEyeLocation().getDirection().multiply(Math.max(0.5,projectile.getVelocity().length()));
         projectile.setShooter(p);
@@ -191,8 +263,8 @@ public final class SaberService implements Listener {
     public boolean launch(Player p) {
         if(!isSaber(p.getInventory().getItemInMainHand())||busy(p)) return false;
         if(!allowed(p.getLocation())) {message(p,"safe-zone");return false;}
-        if(guard(p).disabled(tick)) {message(p,"overheated");return false;}
-        if(cooldowns.getOrDefault(p.getUniqueId(),0)>tick) {message(p,"throw-cooldown");return false;}
+        if(!guard(p).canThrow(tick, settings)) {message(p,"tired-throw");return false;}
+        if(cooldowns.getOrDefault(p.getUniqueId(),0)>tick) {message(p,"tired-throw");return false;}
         ItemStack real=p.getInventory().getItemInMainHand();
         var display=p.getWorld().spawn(p.getEyeLocation(),ItemDisplay.class,d->{
             d.setPersistent(false);d.setInvulnerable(true);d.setGravity(false);
@@ -203,21 +275,28 @@ public final class SaberService implements Listener {
         var flight=new Flight(p,display,findTarget(p),settings);flights.put(p.getUniqueId(),flight);
         display.setTransformation(flight.blade.transformation());
         reserve(flight);p.clearActiveItem();
+        guard(p).thrown(settings);
         cooldowns.put(p.getUniqueId(),tick+settings.cooldown());sound(p.getLocation(),"throw");return true;
     }
     private void tick() {
         tick++;
-        guards.values().forEach(g->g.cool(tick,settings));
-        guards.entrySet().removeIf(e->e.getValue().heat()==0&&!e.getValue().disabled(tick));
+        guards.forEach(this::updateGuard);
+        guards.entrySet().removeIf(e->!e.getValue().recovering()&&!e.getValue().disabled(tick));
         cooldowns.entrySet().removeIf(e->e.getValue()<=tick);
         for(Player p:Bukkit.getOnlinePlayers()) {
+            GuardState state = guards.get(p.getUniqueId());
+            if (state != null && state.disabled(tick)) {
+                if (isSaber(p.getActiveItem())) p.clearActiveItem();
+                if (p.getCooldown(Material.SHIELD) < state.stunTicks(tick))
+                    p.setCooldown(Material.SHIELD, state.stunTicks(tick));
+            }
             boolean held=isSaber(p.getInventory().getItemInMainHand()) || busy(p);
             if(held && selected.add(p.getUniqueId())) sound(p.getLocation(),"on");
             else if(!held && selected.remove(p.getUniqueId())) sound(p.getLocation(),"off");
-            if(held && tick%5==0 && guards.containsKey(p.getUniqueId())) p.sendActionBar(MiniMessage.miniMessage().deserialize(
-                    Objects.requireNonNull(messages.getString("heat")),Placeholder.unparsed("heat",Integer.toString((int)Math.ceil(guard(p).heat()*100/settings.capacity())))));
+            syncDurability(p);
         }
         for(var f:new ArrayList<>(flights.values())) {
+            syncDurability(f.owner);
             try {step(f);} catch(RuntimeException error) {plugin.getLogger().warning("Saber throw stopped: "+error.getMessage());finish(f.owner.getUniqueId());}
         }
     }
@@ -294,6 +373,7 @@ public final class SaberService implements Listener {
 
     private void step(Flight flight) {
         Player player = flight.owner;
+        if (guard(player).disabled(tick)) {finish(player.getUniqueId());return;}
         if (!player.isOnline() || player.isDead() || !player.getWorld().equals(flight.location.getWorld())
                 || !flight.display.isValid() || player.getInventory().getHeldItemSlot() != flight.slot
                 || !empty(player.getInventory().getItem(flight.slot)) || ++flight.age > 100
@@ -424,6 +504,8 @@ public final class SaberService implements Listener {
     }
 
     private void returnItem(Player player, ItemStack item, int slot) {
+        GuardState state = guards.get(player.getUniqueId());
+        durability(item, state == null ? 0 : state.heat() / settings.capacity());
         if (empty(player.getInventory().getItem(slot))) player.getInventory().setItem(slot, item);
         else {
             // A command or another plugin may fill the reserved slot. Never overwrite that item.
@@ -470,6 +552,8 @@ public final class SaberService implements Listener {
     @EventHandler(priority=EventPriority.HIGHEST) public void death(PlayerDeathEvent event) {
         Flight flight = flights.remove(event.getEntity().getUniqueId());
         if (flight != null) {
+            GuardState state = guards.get(flight.owner.getUniqueId());
+            durability(flight.item, state == null ? 0 : state.heat() / settings.capacity());
             flight.display.remove();
             if (event.getKeepInventory()) returnItem(flight.owner, flight.item, flight.slot);
             else {

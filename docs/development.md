@@ -31,3 +31,6 @@ Defaults: plugin/src/main/resources. Sanitized server overrides: server/config/c
 Track latest stable Minecraft through an upgrade branch and pin the tested Paper/API/JDK/plugin/pack tuple. Back up player/world state before upgrades; older JARs alone cannot safely downgrade worlds.
 
 Replace a public plugin for a concrete benefit with an explicit content/data migration plan.
+
+## Resource-pack publication authorization
+The user explicitly grants ongoing permission (2026-11-08) to update and publish MandoMC resource packs through the existing public `AstuteFlamez/MandoMC` GitHub release destination and apply them to the development server. Do not ask again for routine pack updates within this workflow. Validate the concrete pack, publish its versioned ZIP/manifest, verify the anonymous download and apply the matching URL/hash through normal server startup.

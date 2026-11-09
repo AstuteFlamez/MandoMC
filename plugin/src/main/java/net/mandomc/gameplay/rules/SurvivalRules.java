@@ -1,11 +1,15 @@
 package net.mandomc.gameplay.rules;
 
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.mandomc.gameplay.items.ItemCatalog;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.EventHandler;
@@ -13,6 +17,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
@@ -38,6 +43,7 @@ public final class SurvivalRules implements Listener {
     private final boolean potions;
     private final boolean vanillaWeapons;
     private final boolean dimensions;
+    private final Set<EntityType> disabledNaturalMobs = EnumSet.noneOf(EntityType.class);
     private final Predicate<ItemStack> saber;
     private final ItemCatalog items;
     private final ConfigurationSection language;
@@ -53,7 +59,26 @@ public final class SurvivalRules implements Listener {
         potions = config.getBoolean("disable-potions", true);
         vanillaWeapons = config.getBoolean("disable-vanilla-weapons", true);
         dimensions = config.getBoolean("disable-nether-and-end", true);
+        var disabled = config.contains("disabled-natural-mobs")
+                ? config.getStringList("disabled-natural-mobs") : List.of("SLIME");
+        for (String type : disabled) {
+            try {
+                disabledNaturalMobs.add(EntityType.valueOf(type));
+            } catch (IllegalArgumentException error) {
+                throw new IllegalArgumentException("survival-rules.yml: invalid disabled-natural-mobs entry " + type, error);
+            }
+        }
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void naturalSpawn(CreatureSpawnEvent event) {
+        var reason = event.getSpawnReason();
+        if (disabledNaturalMobs.contains(event.getEntityType())
+                && (reason == CreatureSpawnEvent.SpawnReason.NATURAL
+                || reason == CreatureSpawnEvent.SpawnReason.CHUNK_GEN)) {
+            event.setCancelled(true);
+        }
     }
 
     public boolean banned(ItemStack item) {

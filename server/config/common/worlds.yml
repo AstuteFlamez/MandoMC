@@ -1,0 +1,51 @@
+schema-version: 1
+# Existing dimensions only. Coordinates and facing migrated from Multiverse.
+worlds:
+  devworld:
+    key: minecraft:devworld
+    aliases: [DevWorld]
+    weather: true
+    pvp: true
+    difficulty: normal
+    spawn:
+      x: 0.0
+      y: -60.0
+      z: 0.0
+      yaw: 0.0
+      pitch: 0.0
+  hoth:
+    key: minecraft:hoth
+    aliases: [Hoth]
+    weather: false
+    pvp: true
+    difficulty: normal
+    spawn:
+      x: -47.0
+      y: 80.0
+      z: -153.0
+      yaw: -18.75
+      pitch: -1.65
+  overworld:
+    key: minecraft:overworld
+    aliases: [dev_world, SurvivalWorld, earth, survival]
+    weather: true
+    pvp: true
+    difficulty: normal
+    spawn:
+      x: -135.5
+      y: 73.0
+      z: -135.5
+      yaw: 0.0
+      pitch: 0.0
+  spawnworld:
+    key: minecraft:spawnworld
+    aliases: [SpawnWorld, batuu, spawn]
+    weather: false
+    pvp: false
+    difficulty: normal
+    spawn:
+      x: -0.25
+      y: 93.0
+      z: -16.25
+      yaw: -9.0
+      pitch: -0.9

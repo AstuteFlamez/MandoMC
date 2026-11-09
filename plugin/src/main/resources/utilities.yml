@@ -1,0 +1,5 @@
+schema-version: 1
+homes-limit: 3
+request-expiry-seconds: 60
+request-cooldown-seconds: 5
+max-incoming-requests: 10

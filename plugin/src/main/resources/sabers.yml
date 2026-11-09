@@ -5,6 +5,9 @@ item-model: mandomc:sabers/vader
 hilt-model: mandomc:sabers/vader_hilt
 throw-damage: 8.0
 throw-cooldown-ticks: 40
+# Drain 75% of a full charge over one second; use the same recovery as reflection.
+throw-cost-percent: 75.0
+throw-drain-ticks: 20
 throw-range: 18.0
 throw-speed: 1.0
 throw-return-speed: 1.5
@@ -19,10 +22,14 @@ throw-lock-correction: 1.5
 throw-return-height: 2.4
 throw-variation: 1.0
 guard-capacity: 100.0
-guard-cost-per-hit: 20.0
+# The native durability bar displays remaining guard; sabers cannot break from wear.
+# Each incoming damage point consumes five guard points; throws require their full cost available.
+guard-damage-multiplier: 5.0
 guard-cooling-per-tick: 0.5
-guard-recovery-delay-ticks: 30
+# Five seconds without charge use or positive damage dealt/taken before repair starts.
+guard-recovery-delay-ticks: 100
 overheat-ticks: 80
+# At zero, stun all saber actions for this duration and immediately end any throw.
 block-half-angle-degrees: 80.0
 reflection-limit: 4
 # Official upstream delivery: do not copy/rehost JustTimm's artwork.

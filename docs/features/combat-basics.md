@@ -38,3 +38,5 @@ Blocking, reflection tuning/testing and substantial throw stamina cost wait unti
 
 ## Deployment result
 Installed build SHA-256: `5b7e8258436e44941ffa67dd1762557f9765e4f6e2e779f32184ebfa7d70b8d9`. The temporary probe is removed. Normal 12-plugin startup and automated restart pass through `scripts/server-control.py`; five controller safety tests also pass. No manual restart step is needed.
+
+Global natural-spawn restriction: `survival-rules.yml` lists `disabled-natural-mobs: [SLIME]`. This cancels NATURAL and CHUNK_GEN spawns in every world and biome, including DevWorld. It preserves spawners, eggs, commands, custom summons, slime splitting and existing entities.

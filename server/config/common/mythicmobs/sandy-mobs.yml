@@ -138,27 +138,30 @@ Dewback:
     - sound{s=mandomc:mobs.dewback_idle;v=1.5;p=1} @self ~onTimer:220 0.2
     - sound{s=mandomc:mobs.dewback_death;v=2;p=1} @self ~onDeath
 
+# Legacy behavior; group levels remain labels, with the original fixed combat stats.
 Massiff:
   Type: ZOMBIE
-  Display: '&6Massiff &7[Lv. <caster.level>]'
-  Health: 24
-  Damage: 4
+  Display: '&6&lMassiff &7[Lv. <caster.level>]'
+  Health: 50
+  Damage: 0
   Faction: Tusken
-  LevelModifiers:
-    Health: 4
-    Damage: 0.5
+  Model:
+    Id: massiff
+    ViewRadius: 64
+    Drive: false
+    DamageTint: true
   Options:
+    Silent: true
+    PreventOtherDrops: true
+    MovementSpeed: 0.12
+    MaxCombatDistance: 24
     PreventSunburn: true
     PreventJockeyMounts: true
     PreventRandomEquipment: true
-    PreventOtherDrops: true
     PreventItemPickup: true
     PreventTransformation: true
     Despawn: true
-    Silent: true
-    MovementSpeed: 0.29
     FollowRange: 24
-    AlwaysShowName: false
   AIGoalSelectors:
     - clear
     - meleeattack
@@ -167,9 +170,14 @@ Massiff:
   AITargetSelectors:
     - clear
     - players
+  Modules:
+    ThreatTable: true
   Skills:
     - model{mid=massiff} @self ~onSpawn
+    - state{mid=massiff;s=idle;lerpin=5} @self ~onSpawn
     - model{mid=massiff} @self ~onLoad
-    - state{mid=massiff;s=attack} @self ~onAttack
-    - sound{s=entity.wolf.growl;v=1;p=0.8} @self ~onTimer:160 0.2
+    - skill{s=Massif_Combat} @self ~onTimer:35
+    - skill{s=Massif_Idle} @self ~onTimer:35
+    - sound{s=entity.hoglin.death;v=1;p=0.7} @self ~onDeath
+    # MassiffDrops supplies catalog food through Mythic's death-drop list (75%).
     - sound{s=entity.zoglin.hurt;v=1;p=0.8} @self ~onDamaged 0.5

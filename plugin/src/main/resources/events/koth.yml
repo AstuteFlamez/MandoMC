@@ -1,0 +1,26 @@
+schema-version: 1
+id: koth
+enabled: true
+display-name: KOTH
+weight: 30
+cooldown-cycles: 1
+settings:
+  world: minecraft:hoth
+  x: -148.0
+  y: 27.0
+  z: 141.0
+  radius: 8.0
+  y-tolerance: 4.0
+  capture-seconds: 180
+  maximum-seconds: 3300
+rewards:
+  enabled: false
+messages:
+  start: '<gold><bold>KOTH</bold> has started on Hoth! Hold the canyon at -148, 27, 141. Use /warp hoth.'
+  capturing: '<yellow><player> is capturing the canyon!'
+  winner: '<green><player> captured the canyon!'
+  timeout: '<yellow>KOTH ended with no winner.'
+  stopped: '<yellow>KOTH was stopped.'
+  waiting: '<gold>KOTH <gray>— Hold the canyon!'
+  contested: '<red>KOTH <gray>— Clear the canyon to take control!'
+  progress: '<gold>KOTH <gray>— <yellow><player> <white><seconds>s remaining'

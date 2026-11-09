@@ -109,42 +109,16 @@
       "installed": true
     },
     {
-      "id": "multiverse-core",
-      "name": "Multiverse-Core",
-      "status": "boot-verified-gameplay-pending",
-      "owns": "World imports, loading and settings",
-      "source": "https://mvplugins.org/core/reference/configuration-file/",
-      "version": "5.8.2",
-      "sha256": "792252b6bbcf17c94ab8385e595281c830d7a40c946aea1832d8a010702bb630",
-      "knownDependencies": [],
-      "dependencyListComplete": true,
-      "admissionCheck": "Shared inventory, respawn and travel restrictions",
-      "installed": true
-    },
-    {
       "id": "vault",
       "name": "Vault",
-      "status": "boot-verified-gameplay-pending",
+      "status": "boot-verified-provider-deferred",
       "owns": "Economy API bridge",
       "source": "https://github.com/MilkBowl/Vault",
       "version": "1.7.3-b131",
       "sha256": "a6b5ed97f43a5cf5bbaf00a7c8cd23c5afc9bd003f849875af8b36e6cf77d01d",
       "knownDependencies": [],
       "dependencyListComplete": true,
-      "admissionCheck": "Discover exactly one compatible economy provider",
-      "installed": true
-    },
-    {
-      "id": "essentialsx",
-      "name": "EssentialsX Core",
-      "status": "boot-verified-gameplay-pending",
-      "owns": "Initial economy provider through Vault",
-      "source": "https://essentialsx.net/wiki/modules",
-      "version": "2.22.0",
-      "sha256": "bda4685105977fca2e209820a9f0ad24275bd103390a03236f38e59bfdac58e6",
-      "knownDependencies": [],
-      "dependencyListComplete": true,
-      "admissionCheck": "One persistent credit balance and no unintended travel/kit/command behavior",
+      "admissionCheck": "Bridge retained without a provider; credits and shops are deferred by the user.",
       "installed": true
     },
     {
@@ -160,5 +134,6 @@
       "status": "boot-verified-gameplay-pending",
       "dependencyListComplete": true
     }
-  ]
+  ],
+  "checkedOn": "2026-11-09"
 }

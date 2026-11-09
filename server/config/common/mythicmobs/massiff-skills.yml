@@ -1,0 +1,52 @@
+Massif_Combat:
+  Conditions:
+    - incombat true
+  Skills:
+    - skill{s=Massiff_Combat_Brain} @target
+
+Massif_Idle:
+  Conditions:
+    - incombat false
+  Skills:
+    - state{mid=massiff;s=run;r=true} @self
+    - setspeed{speed=1;type=walking} @self
+    - state{mid=massiff;s=idle;lerpin=5} @self
+    - randomskill{s=Massiff_IdleGrowl,Massiff_None}
+
+Massiff_IdleGrowl:
+  Skills:
+    - sound{s=entity.wolf.growl;v=1;p=0.8} @self
+
+Massiff_None:
+  Skills: []
+
+
+Massiff_Combat_Brain:
+  TargetConditions:
+    - distance{d=0to3} castinstead Massiff_Attack
+
+    - distance{d=>3} castinstead Massiff_Run
+
+
+Massiff_Run:
+  Skills:
+    - state{mid=massiff;s=run} @self
+
+    - setspeed{speed=3;type=walking} @self
+
+
+Massiff_Attack:
+  TargetConditions:
+    - distance{d=0to3}
+  Skills:
+    - state{mid=massiff;s=run;r=true} @self
+    - sound{s=entity.zoglin.attack;v=1;p=0.8} @self
+    - state{mid=massiff;s=attack} @self
+
+    - setspeed{speed=0.33;type=walking} @self
+
+    - delay 10
+    - damage{a=6} @target
+    - throw{velocity=2;velocityY=0.3} @target
+
+    - delay 20

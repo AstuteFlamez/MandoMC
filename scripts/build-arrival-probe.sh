@@ -18,7 +18,7 @@ name: MandoArrivalProbe
 version: '1'
 main: net.mandomc.verification.ArrivalProbe
 api-version: '26.1.2'
-depend: [MandoMC, WorldGuard, Multiverse-Core]
+depend: [MandoMC, WorldGuard]
 YAML
 "$JAVA_HOME/bin/jar" --create --file "$probe_dir/ArrivalProbe.jar" -C "$probe_dir/classes" .
 echo "Built .local/arrival-probe/ArrivalProbe.jar. Install only while the local server is stopped."
