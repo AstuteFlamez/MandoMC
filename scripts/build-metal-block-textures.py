@@ -17,7 +17,7 @@ module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 
 
-def tint(source, palette, ore=False, soften_stone=False, mineral_hue=(0.40, 0.61), shadow_floor=None):
+def tint(source, palette, ore=False, soften_stone=False, mineral_hue=(0.40, 0.61), shadow_floor=None, rock_base=None):
     source = source.convert('RGBA')
     mask = []
     for pixel in source.get_flattened_data():
@@ -47,8 +47,16 @@ def tint(source, palette, ore=False, soften_stone=False, mineral_hue=(0.40, 0.61
         def lift(pixel):
             delta = max(0, shadow_floor - module.luminance(pixel))
             return (*tuple(max(48, min(255, round(channel + delta))) for channel in pixel[:3]), pixel[3])
-        output.putdata([lift(pixel) for pixel in output.get_flattened_data()])
-        assert all(module.luminance(pixel) >= shadow_floor - 0.6 and min(pixel[:3]) >= 48
+        if rock_base is None:
+            output.putdata([lift(pixel) for pixel in output.get_flattened_data()])
+        else:
+            # Preserve the accepted mineral and recess pixels, while the rock
+            # background stays pixel-identical to the normal pinned deepslate.
+            base=list(rock_base.convert('RGBA').get_flattened_data())
+            original=list(source.get_flattened_data())
+            output.putdata([lift(pixel) if before!=background else background
+                            for pixel,before,background in zip(output.get_flattened_data(),original,base)])
+        assert rock_base is not None or all(module.luminance(pixel) >= shadow_floor - 0.6 and min(pixel[:3]) >= 48
                    for pixel in output.get_flattened_data())
     return output, sum(mask)
 
@@ -72,14 +80,14 @@ def main():
             image=Image.open(io.BytesIO(faithful.read(member)))
             palette=Image.open(ASSETS/'mandomc/textures/item/legacy/metals/ingots'/f'{metal}.png')
             hue = (0.25, 0.49) if 'emerald' in source else (0.40, 0.61)
-            result,pixels=tint(image,palette,ore,soften_stone=(ore and not source.startswith('deepslate_')), mineral_hue=hue, shadow_floor=80 if ore and source.startswith("deepslate_") else None)
+            result,pixels=tint(image,palette,ore,soften_stone=(ore and not source.startswith('deepslate_')), mineral_hue=hue, shadow_floor=80 if ore and source.startswith("deepslate_") else None, rock_base=Image.open(io.BytesIO(faithful.read("assets/minecraft/textures/block/deepslate.png"))) if ore and source.startswith("deepslate_") else None)
             assert result.size == (32,32)
             path=ASSETS/'mandomc/textures/block/metals'/f'{name}.png';path.parent.mkdir(parents=True,exist_ok=True);result.save(path)
             for target in replacements:
                 dest=ASSETS/'minecraft/textures/block'/f'{target}.png';dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(path.read_bytes())
             model=ASSETS/'mandomc/models/block/metals'/f'{name}.json';model.parent.mkdir(parents=True,exist_ok=True);model.write_text(json.dumps({'parent':'minecraft:block/cube_all','textures':{'all':'mandomc:block/metals/'+name}},indent=2)+'\n')
             records.append({'name':name,'source':member,'sourceSha256':hashlib.sha256(faithful.read(member)).hexdigest(),'palette':metal,'replaces':replacements,'recoloredPixels':pixels,'softStoneShadows':ore and not source.startswith('deepslate_'),'mineralHue':list(hue),'shadowFloorLuma':80 if ore and source.startswith('deepslate_') else None,'outputSha256':hashlib.sha256(path.read_bytes()).hexdigest()})
-    (PACK/'metal-block-sources.json').write_text(json.dumps({'schema-version':1,'source':'Faithful 32x 26.1 June 2026, official unmodified Modrinth version Fj5GKJnf','website':'https://faithfulpack.net/','license':'src/faithful-license.txt','scope':'Block textures only. Native block IDs, world generation, drops, armor and tool textures are unchanged. Ore rock backgrounds retain Faithful pixels except the requested deepslate dark-tone floor; only each source ore’s saturated mineral pixels are recolored. Distinct Faithful diamond and emerald mineral geometries distinguish Durasteel and Beskar.','blocks':records},indent=2)+'\n')
+    (PACK/'metal-block-sources.json').write_text(json.dumps({'schema-version':1,'source':'Faithful 32x 26.1 June 2026, official unmodified Modrinth version Fj5GKJnf','website':'https://faithfulpack.net/','license':'src/faithful-license.txt','scope':'Block textures only. Native block IDs, world generation, drops, armor and tool textures are unchanged. Ore rock backgrounds retain the exact normal Faithful rock pixels. The deepslate tone floor is restricted to mineral/recess pixels; saturated mineral pixels retain the accepted recoloring. Distinct Faithful diamond and emerald mineral geometries distinguish Durasteel and Beskar.','blocks':records},indent=2)+'\n')
     print('Built six 32px metal block candidates and seven native block texture replacements.')
 
 
