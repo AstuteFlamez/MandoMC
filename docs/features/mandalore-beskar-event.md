@@ -1,8 +1,19 @@
 # Mandalore and the beskar cave
-Status: original standalone build study available; event/protection implementation and live import remain deferred.
+Status: separate in-game review world installed; final event/protection implementation remains deferred.
 Updated: 2026-11-10
 
 ## Current build study
+A subsequent user-authorized deployment installed the original study as the separate
+`minecraft:mandalore_review` dimension. `/mvtp MandaloreReview` goes to its small
+arrival camp; `/tppos 0 8 -45` reaches the hall entrance after changing world.
+Existing worlds, the deployed plugin JAR and resource-pack settings were retained.
+A full stopped-runtime backup is private. Native Paper readback passed 79,557
+assertions across 1,024 chunks and sixteen Beskar samples; the temporary checker
+was removed and a normal restart confirmed world loading. The previous Jabba event
+was restored. Review settings are peaceful difficulty, PvP disabled, fixed daylight
+and a 500-block border. This is a disposable visual-review dimension; the final
+one-safezone/one-warzone reservations, wilderness claims and event are not active.
+
 The user subsequently requested an original standalone chamber, surrounding caves and
 a 500 x 500 landscape inspired by the nuked-map atmosphere. The local Ashen Reach
 export is an independently generated schematic, not an import or modification of
@@ -28,8 +39,9 @@ existing deepslate Beskar identity. Constructed components all connect to geolog
 under a six-face voxel check. Renders use the configured MandoMC ZIP (SHA-1
 `c2969c0df635574f85e777c7adba4b3ba1c9253e`), preserve its 32px Beskar textures,
 and use client models for non-cube geometry. These are offline renders/checks;
-Minecraft-client import/playtesting, actual protection, claims, mobs and event
-regeneration are not implemented by this study. No runtime world or pack changed.
+The initial study preceded deployment; its offline renders are not client screenshots.
+Actual protection, claims, mobs and event regeneration are not implemented. The
+subsequent native import is recorded above; no resource-pack assets changed.
 
 Visual/technique references: the LeonisBuilds listing below and official WorldEdit
 [brushes](https://worldedit.enginehub.org/en/latest/usage/tools/brushes/),
