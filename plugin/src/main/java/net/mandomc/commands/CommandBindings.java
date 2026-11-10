@@ -11,6 +11,7 @@ public final class CommandBindings implements AutoCloseable {
     private final Map<String, Command> previous = new HashMap<>();
     private final Map<String, Command> owned = new HashMap<>();
     public CommandBindings(JavaPlugin plugin) {
+        new net.mandomc.gameplay.territory.ClanMapCommand(plugin);
         known = plugin.getServer().getCommandMap().getKnownCommands();
         plugin.getDescription().getCommands().forEach((name, description) -> {
             var command = plugin.getCommand(name);

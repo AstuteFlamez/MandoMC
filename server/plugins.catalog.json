@@ -68,19 +68,6 @@
       "installed": true
     },
     {
-      "id": "factionsuuid",
-      "name": "FactionsUUID",
-      "status": "boot-verified-gameplay-pending",
-      "owns": "Membership, relations and claims",
-      "source": "https://factions.support/developers/",
-      "version": "4.6.0",
-      "sha256": "907ce30a607342e178a905669bb859f481626347fc7379ddf35a00dbecd14091",
-      "knownDependencies": [],
-      "dependencyListComplete": true,
-      "admissionCheck": "Narrow custom breach hook and disabled conflicting raid/power mechanics",
-      "installed": true
-    },
-    {
       "id": "worldguard",
       "name": "WorldGuard",
       "status": "boot-verified-gameplay-pending",

@@ -6,6 +6,11 @@ author: AstuteFlamez
 description: MandoMC gameplay
 softdepend: [ WorldEdit, WorldGuard, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
+  c:
+    description: View the planet chunk map
+    usage: /c map
+    aliases: [clan, cl]
+    permission: mandomc.clan.map
   auctionhouse:
     description: Buy and sell items with other players
     usage: /ah [sell <price> [amount]|selling|collect]
@@ -204,6 +209,8 @@ commands:
     usage: '/tpcancel'
     permission: mandomc.travel.tpcancel
 permissions:
+  mandomc.clan.map:
+    default: true
   mandomc.auction:
     default: true
   mandomc.ranks.manage:

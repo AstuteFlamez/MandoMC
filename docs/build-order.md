@@ -1,5 +1,5 @@
 # Proposed build order
-Status: revised 2026-11-09; current acquisition is crafting-first for all equipment; NPC equipment shops and resource-selling shops are removed from the roadmap; clan/FactionsUUID work remains deferred. Remaining ordering is an advisor recommendation. Gameplay rules in [player-experience.md](player-experience.md) remain authoritative; this sequence does not add new rules.
+Status: revised 2026-11-09; current acquisition is crafting-first for all equipment; NPC equipment shops and resource-selling shops are removed from the roadmap; native clans start with the chunk map; membership and claims remain deferred. Remaining ordering is an advisor recommendation. Gameplay rules in [player-experience.md](player-experience.md) remain authoritative; this sequence does not add new rules.
 
 The first friends playtest brings all currently in-scope systems together. Each row is an internal checkpoint that can be split into small commits and paused with a working build. Begin with one content example per system; expand variants after that example works.
 
@@ -30,13 +30,13 @@ All equipment should have crafting recipes, including blasters, ammunition and v
 Finish each work session with a buildable checkpoint, the relevant verification result and one next action in [status.md](status.md). An unfinished feature can stay on its branch; a pause does not require inventing another project direction.
 
 ## Deferred clan milestone
-The accepted player-facing name is **Clans**. Creation/joining, claims, clan homes, clan respawn priority and FactionsUUID customization wait until the user returns to them. Do not build a parallel custom membership system. Group-specific KOTH ownership, clan damage rules, pairwise warpoints and raids cannot be considered complete before that integration.
+The accepted player-facing name is **Clans**. Creation/joining, claims, clan homes, and clan respawn priority remain deferred. User update 2026-11-10 supersedes the vendor direction: FactionsUUID is removed and native clans start with `/c map`; membership and claims remain deferred. Group-specific KOTH ownership, clan damage rules, pairwise warpoints and raids cannot be considered complete before that integration.
 
 Desert Robes and the admin browser are implemented and the corrected icons confirmed. The Vader throw was accepted on 2026-11-08. Current slice: [combat basics](features/combat-basics.md) — restrictions, native repairs, 15-second mob/PvP tag and decimal sidebar, logout death/drops, and a first-join kit including 64 E-11 ammo. WeaponMechanics owns ammo consumption.
 
 Game-mode reset fixed: Multiverse enforcement is disabled; live login/world-change event checks preserve Creative and Spectator.
 
-Current content: [levelled sandy-biome encounters](features/sandy-biome-mobs.md) are implemented and server-verified: ranged/melee Tuskens, cycler rifle, separate wildlife groups, random levels 1–5, shared spawn budgets and vanilla natural-spawn replacement. Next playtest models, density and combat; then define drops (cycler rifle, bantha hide, species materials). A first ranged mob now exists for deferred saber defense testing and later throw stamina. Clan/FactionsUUID work remains deferred.
+Current content: [levelled sandy-biome encounters](features/sandy-biome-mobs.md) are implemented and server-verified: ranged/melee Tuskens, cycler rifle, separate wildlife groups, random levels 1–5, shared spawn budgets and vanilla natural-spawn replacement. Next playtest models, density and combat; then define drops (cycler rifle, bantha hide, species materials). A first ranged mob now exists for deferred saber defense testing and later throw stamina. Native clan membership and claims remain deferred.
 
 ## Late pre-release animation polish
 User-requested, deferred until the end of the todo list: fix skirt animations on **both ranged and melee Tuskens** before release. Do not change those keyframes during the current aiming, shot-timing and locomotion fixes.

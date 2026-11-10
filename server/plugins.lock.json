@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "checkedOn": "2026-11-09",
+  "checkedOn": "2026-11-10",
   "minecraftVersion": "26.1.2",
   "artifacts": [
     {
@@ -91,19 +91,9 @@
       "version": "R4.1.1",
       "verifiedPublishedHashes": [],
       "distribution": "Licensed Premium R4.1.1 supplied by the server owner; obtain through the official account. The JAR is not redistributed."
-    },
-    {
-      "id": "factionsuuid",
-      "name": "FactionsUUID-4.6.0.jar",
-      "version": "4.6.0",
-      "url": "https://dependency.download/releases/dev/kitteh/factions/4.6.0/factions-4.6.0.jar",
-      "sha256": "907ce30a607342e178a905669bb859f481626347fc7379ddf35a00dbecd14091",
-      "bytes": 3467403,
-      "verifiedPublishedHashes": [],
-      "distribution": "Official public Maven shadowJar; latest artifact listed in this repository at setup time."
     }
   ],
   "pending": [],
   "runtimeTested": true,
-  "verificationScope": "Nine vendor plugins and MandoMC enable without EssentialsX or Multiverse-Core. 99 Java tests, 170 utility and 54 arrival/WorldGuard Paper assertions pass. Clean normal restart, exact world spawns, command ownership and permission defaults verified. Credits/economy provider deferred; Vault retained without a provider. Client playtest remains."
+  "verificationScope": "Eight vendor plugins and MandoMC enable without FactionsUUID, EssentialsX or Multiverse-Core. Native /c map passes 2102 focused Paper assertions; 170 Java tests pass. Normal restart is clean and the temporary checker is removed. Chunk labels are presentation only; existing WorldGuard enforcement is unchanged. Client review remains."
 }

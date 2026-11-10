@@ -1,0 +1,44 @@
+# Mandalore blocks X/Z -250..249; edge chunks include six blocks outside the border.
+# Rows north to south; columns west to east. S safezone, W warzone, . wilderness.
+# Surface builds win over caves where their full-height chunk columns overlap.
+# This first slice visualizes zones only; WorldGuard remains protection authority.
+schema-version: 1
+world: minecraft:mandalore_review
+name: Mandalore (500×500)
+min-chunk-x: -16
+max-chunk-x: 15
+min-chunk-z: -16
+max-chunk-z: 15
+rows:
+  - '................................'
+  - '................................'
+  - '..........SSSSSSS...............'
+  - '..........SSSSSSS...............'
+  - '..........SSSSSSS...............'
+  - '..........SSSSSSS...............'
+  - '.........SSSSSWW................'
+  - '.........SSSSSWW................'
+  - '.........SSSSSWW..SSSSSS........'
+  - '..........SSS.WW..SSSSSSS.......'
+  - '.............WWW..SSSSSSS.......'
+  - '............WWWWWWSSSSSSS.......'
+  - '...........WWWWWWWSSSSSSS.......'
+  - '...........WWWWWWWSSSSSSS.......'
+  - '...........WWWWWWWWSSSSS........'
+  - '....SSS...WWWWWWWWWWWW..........'
+  - '....SSSSSSWWWWWWWWWWW...........'
+  - '....SSSSSSWWWWWWWWWWW...........'
+  - '....SSSSSSSWWWWWWWWWW...........'
+  - '....SSSSSSSSWWWWWWWWW...........'
+  - '....SSSSSSSS.WWWWWWWSSSS........'
+  - '....SSSSSSSS....WW..SSSS........'
+  - '....SSSSSSSS....WW..SSSSSSSS....'
+  - '.....SSSSSSSS...WWW.SSSSSSSS....'
+  - '......SSSS.......WW...SSSSSS....'
+  - '.................WWW..SSSSS.....'
+  - '..................WW..SSSSS.....'
+  - '..................WW............'
+  - '..................WW............'
+  - '................................'
+  - '................................'
+  - '................................'

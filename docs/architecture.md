@@ -10,7 +10,7 @@ The user accepted this division on 2026-11-05. The pinned versions boot together
 
 Design the [player experience](player-experience.md) first, choose the playable order, implement parameterized systems, then configure content.
 
-Player-facing group naming and commands must replace Factions and `/f`; the final identity is pending. FactionsUUID remains the selected state owner. Verify its supported command and language customization or an adapter when implementing the group interface, including help and menu output. A display-name change alone does not complete the requirement.
+MandoMC owns the native Clans direction selected on 2026-11-10. FactionsUUID is removed. The first command is `/c map` (aliases `/clan map`, `/cl map`); the chunk atlas is read-only presentation data. Membership, claims and related gameplay remain deferred.
 
 Resource planets are deferred. Initial gathering and credit income use ordinary survival resources plus activity rewards. Keep future resource-planet support outside the current milestone; the ownership table below records responsibilities, not a requirement to build every capability now.
 
@@ -35,7 +35,7 @@ The new pack lives in `resource-pack/` in this repository. Its build targets the
 | Blasters and grenades | WeaponMechanics and dependencies | Acquisition, saber interaction, combat policy |
 | Animated models | ModelEngine | Vehicle controls, ownership, seats, health |
 | Dungeon mobs | MythicMobs | Runs, objectives, doors, cleanup, completion rewards |
-| Factions | FactionsUUID | Warpoints, vulnerability, controlled breaches |
+| Clans | Paper APIs | Native membership/claims when implemented; chunk atlas, warpoints and raids |
 | Protected regions | WorldGuard with WorldEdit | Enforcement for every custom action |
 | Worlds | Paper APIs | Existing dimension loading, exact arrivals, aliases and travel |
 | Credits | MandoMC native ledger | Atomic balances, payments and admin adjustments; auction-house/reward integration deferred |
@@ -45,7 +45,7 @@ The new pack lives in `resource-pack/` in this repository. Its build targets the
 The catalog in server/plugins.catalog.json records admission status. Installed versions and artifact hashes are in server/plugins.lock.json. Boot validation does not establish gameplay compatibility. EssentialsX and Multiverse-Core are removed. MandoMC owns the selected utility commands and migration; their old runtime data is retained for rollback. Native rank badges now format tab, nameplates and the existing chat renderer; voting remains deferred.
 
 ## Contracts
-- FactionsUUID owns membership, relations and claims. MandoMC owns pairwise warpoints keyed by stable group IDs; vendor faction power is not the raid authority. Do not mirror claims into WorldGuard.
+- MandoMC owns clan state when implemented. The first atlas stores static chunk labels, not membership or claims. WorldGuard retains protection authority; the atlas does not change enforcement. Pairwise warpoints remain keyed by stable group IDs.
 - WorldGuard owns static regions. Raids never override spawn/adventure-map protection.
 - The native CreditLedger owns current credit balances. Future auction currency/integration details require approval; do not introduce a second balance writer or restore the old SQL mirror.
 - WeaponMechanics generates its weapons and handles projectiles. MandoMC references vendor IDs instead of duplicating weapon definitions.
@@ -81,7 +81,7 @@ Do not unclaim a base, grant broad bypass, or indiscriminately uncancel another 
 ## Dependency verification
 For each enabled slice, record exact JAR/API versions, hashes, sources and transitive dependencies. Test boot, a non-op account, restart persistence and protection boundaries. Pin versions between intentional upgrades.
 
-Current FactionsUUID changed names, packages and coordinates from the old source. Port that boundary deliberately.
+FactionsUUID runtime data is archived outside Git for rollback; it is not read by the native atlas.
 
 ## References
 - [WeaponMechanics API](https://cjcrafter.gitbook.io/weaponmechanics/developer-api)

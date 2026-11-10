@@ -95,3 +95,6 @@ Quantity update: `/mmc give <item> [quantity]` and `/mmc give <player> <item> [q
 
 ## Retired standalone Survival — 2026-11-09
 `/survival`, `/warp earth`, `/warp survival` and `/warp SurvivalWorld` are retired. Galaxy Map and `/warp` completion offer Batuu, Hoth and Tatooine. `/spawn` still returns to protected Batuu. This supersedes earlier Survival travel examples above.
+
+## Native clan map
+`/c map` (`/clan map`, `/cl map`) shows every Mandalore chunk in a north-up chat grid. Green is safezone, red is warzone, gray is wilderness and yellow `+` marks your current chunk. Hover for zone, chunk coordinates and block bounds. Requires `mandomc.clan.map` (default true). Other worlds show a clear unmapped message. This command does not load terrain or change protection, claims or membership.

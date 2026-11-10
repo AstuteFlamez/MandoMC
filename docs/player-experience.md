@@ -5,9 +5,9 @@ Status: working design, not a finalized feature order.
 Players use Java Minecraft and a required resource pack. They form player groups, build in claimable wilderness on Tatooine and Hoth, and encounter PvP outside designated safe areas. Death drops carried items, weapons and armor. KOTH and Jabba are proven activities. A base can be vulnerable, including offline, to a rival group that has earned the required pairwise net-kill lead. Force powers and resource planets are deferred.
 
 ## Player-facing group identity
-Clans is the accepted name (2026-11-08). `/clan` and `/cl` remain proposed command names. Player-facing commands, help, menus and messages must replace Factions and `/f` consistently when implemented.
+Clans is the accepted name. `/c map` is the first native command, with `/clan map` and `/cl map` aliases.
 
-The user has deferred FactionsUUID-dependent work: clan creation/membership, claims, clan homes and group-aware respawn. FactionsUUID remains the intended state owner. Do not replace this deferral with a custom clan implementation. Clan relations, pairwise warpoints and group event ownership must be integrated when clan work resumes.
+The user replaced the FactionsUUID direction on 2026-11-10: remove the vendor and implement clans in MandoMC. The current slice is a read-only chunk map; membership, claims, relations, clan homes and group-aware respawn remain deferred. Mandalore's surface builds are safezone, central caves and approaches are warzone, and all remaining chunks are wilderness. These labels are the proposed chunk projection; existing WorldGuard enforcement is unchanged in this slice.
 
 ## Confirmed first session and recovery
 New players arrive in SpawnWorld, an existing map file the user already has. The arrival slice uses a short replayable chat tutorial, shown after the required pack loads. Batuu stays the protected spawn hub. Players use /warp to visit Tatooine or Hoth. Each planet will have safe zones, warzones and claimable wilderness; the user will supply the boundaries. The standalone Survival/Earth route is retired.

@@ -7,7 +7,7 @@ Batuu remains the protected spawn hub. Public travel offers Batuu, Tatooine and 
 There is no standalone Survival/Earth destination, /survival command or tutorial link.
 Tatooine and Hoth will each contain safe zones, warzones and claimable wilderness.
 The user will supply the boundaries; do not invent zone dimensions or apply new regions yet.
-Claims remain owned by FactionsUUID and require the deferred clan/territory integration.
+User update 2026-11-10: native MandoMC clans replace FactionsUUID. Claims remain deferred; `/c map` visualizes the first Mandalore chunk zones.
 
 ## Current slice
 Remove Survival/Earth from warp resolution, completion, menu entries and command registration.
