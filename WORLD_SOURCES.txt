@@ -14,11 +14,12 @@ SpawnWorld (BlackSpireOutpost)
   Initial import: server/runtime/SpawnWorld/ then mv import SpawnWorld normal
   Replacement: Build a small original outpost or use a permitted free lobby; update spawn coordinates and protection.
 
-SurvivalWorld (Multiverse alias; existing dev_world)
-  Source: Generated locally by Paper; no map purchase needed. Permanent survival terrain is not selected.
+Internal overworld (former SurvivalWorld / Earth destination; retired 2026-11-09)
+  Source: Generated locally by Paper. Retained as internal Paper data, not a public destination.
   Installation: server/runtime/dev_world/dimensions/minecraft/overworld/
-  Initial import: generated under server/runtime/dev_world/
-  Replacement: Generate a disposable vanilla survival world; for permanent terrain first decide structure exclusions.
+  Public /survival and Earth/Survival warps are removed. Do not delete the data.
+  Elarion was downloaded/evaluated privately, then the user cancelled its import before replacement.
+  Future building/claiming is planned for Tatooine/Hoth wilderness; boundaries await the user.
 
 dev_world_nether
   Source: Generated locally by Paper; no map purchase needed.

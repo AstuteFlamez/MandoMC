@@ -35,8 +35,8 @@ commands:
     usage: /credits <give|take|set> <player|UUID> <amount>
     permission: mandomc.credits.admin
   warp:
-    description: Choose Batuu, Earth, Hoth or Tatooine
-    usage: /warp [batuu|earth|hoth|tatooine]
+    description: Choose Batuu, Hoth or Tatooine
+    usage: /warp [batuu|hoth|tatooine]
     aliases: [warps, travel]
     permission: mandomc.travel.warp
   event:
@@ -61,10 +61,6 @@ commands:
     description: Read the MandoMC introduction
     usage: /tutorial
     permission: mandomc.arrival
-  survival:
-    description: Travel to SurvivalWorld after standing still
-    usage: /survival
-    permission: mandomc.travel.survival
   flyspeed:
     description: Set flight speed
     usage: '/flyspeed <0-10> [player]'
@@ -238,8 +234,6 @@ permissions:
     description: Reload custom item definitions
     default: op
   mandomc.travel.spawn:
-    default: true
-  mandomc.travel.survival:
     default: true
   mandomc.admin.status:
     default: op

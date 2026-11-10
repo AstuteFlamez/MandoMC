@@ -17,7 +17,6 @@ public final class ArrivalCommands {
             TeleportService travel) {
         bind(plugin, "tutorial", tutorial::tutorial);
         bind(plugin, "spawn", sender -> teleport(sender, travel, destinations::spawn));
-        bind(plugin, "survival", sender -> teleport(sender, travel, destinations::survival));
     }
 
     private static boolean teleport(CommandSender sender, TeleportService travel,

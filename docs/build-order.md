@@ -56,3 +56,6 @@ Continue the current [ordered progression queue](features/progression-crafting.m
 - [ ] Apply the subsequently requested vanilla desert-themed natural-spawn blacklist while preserving custom encounters; see the progression queue for scope and checks.
 
 Final-world ore-generation exclusions and finished-lightsaber recipe deferral remain durable unchecked requirements in the progression brief. Current maps must not be regenerated or stripped to satisfy the future generation requirement.
+
+## Deferred planet expansion — 2026-11-09
+Batuu stays protected spawn. Tatooine/Hoth zoning waits for user boundaries. Hoth tauntauns, wampas and krykna; Mandalore with Mandalorian warriors and a regenerating beskar-ore event; and possible snow/sand/stormtroopers are deferred. See [planet wilderness](features/planet-wilderness.md).

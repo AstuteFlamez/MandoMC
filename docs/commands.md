@@ -92,3 +92,6 @@ Rank IDs: `mandostudios`, `mod`, `builder`, `creator`, `mandalore`, `marshal`, `
 Native auction house: `/ah` (`/auctionhouse`, `/auction`) browses player listings; `/ah sell <price> [amount]` lists the held quantity for a total stack price; `/ah selling` manages your listings; `/ah collect` reclaims items; `/ah search <name>` filters item or seller names. Price/newest sorting is in the menu. Normal players have `mandomc.auction`; Creative, Spectator and combat-tagged actions are denied. Eight listings, 48 hours, no fees/tax, permanent claims. No new plugin or currency.
 
 Quantity update: `/mmc give <item> [quantity]` and `/mmc give <player> <item> [quantity]` accept a trailing whole number from 1 to 2304. Default remains one. Console uses the target form. Factory-generated items split into valid stacks; insufficient storage refuses the whole grant. Existing permission/browser behavior remains.
+
+## Retired standalone Survival — 2026-11-09
+`/survival`, `/warp earth`, `/warp survival` and `/warp SurvivalWorld` are retired. Galaxy Map and `/warp` completion offer Batuu, Hoth and Tatooine. `/spawn` still returns to protected Batuu. This supersedes earlier Survival travel examples above.

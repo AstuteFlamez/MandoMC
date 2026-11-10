@@ -27,7 +27,7 @@ worlds:
       pitch: -1.65
   overworld:
     key: minecraft:overworld
-    aliases: [dev_world, SurvivalWorld, earth, survival]
+    aliases: [dev_world]
     weather: true
     pvp: true
     difficulty: normal

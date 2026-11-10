@@ -1,4 +1,11 @@
 # Gameplay architecture
+
+## Planet direction — 2026-11-09
+Batuu remains protected spawn. Tatooine and Hoth replace the standalone Survival world
+as the future safe-zone/warzone/claimable-wilderness planets. Boundaries come from the
+user. FactionsUUID remains the claim owner; no new claim system or regions are activated
+by the travel removal. See [planet wilderness](features/planet-wilderness.md).
+
 The user accepted this division on 2026-11-05. The pinned versions boot together; gameplay integration hooks still need runtime verification. Components may be replaced while preserving player behavior and content contracts.
 
 Design the [player experience](player-experience.md) first, choose the playable order, implement parameterized systems, then configure content.

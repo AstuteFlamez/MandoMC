@@ -6,6 +6,12 @@ import static org.junit.Assert.assertThrows;
 
 public class ArrivalSettingsTest {
     @Test
+    public void acceptsSpawnOnlyWithoutSurvivalWorld() {
+        var settings = new ArrivalSettings("minecraft:spawnworld", null);
+        org.junit.Assert.assertNull(settings.survivalWorld());
+    }
+
+    @Test
     public void acceptsDistinctNamespacedWorlds() {
         var settings = new ArrivalSettings("minecraft:spawnworld", "minecraft:overworld");
         assertEquals("minecraft:overworld", settings.survivalWorld());
