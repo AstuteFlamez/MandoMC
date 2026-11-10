@@ -19,14 +19,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /** Full-map chat grid, deliberately independent of world/chunk loading and vendor claims. */
 public final class ClanMapCommand implements CommandExecutor, TabCompleter {
-    private final ChunkAtlas atlas;
+    private final TerritoryPolicy policy;
     private final YamlConfiguration language;
 
     public ClanMapCommand(JavaPlugin plugin) {
         for (String resource : List.of("territory/maps.yml", "language/territory.yml")) {
             if (!new File(plugin.getDataFolder(), resource).exists()) plugin.saveResource(resource, false);
         }
-        atlas = ChunkAtlas.read(YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "territory/maps.yml")));
+        policy = Objects.requireNonNull(net.mandomc.integrations.regions.NativeTerritoryAccess.current()).policy();
         language = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "language/territory.yml"));
         try (var reader = new InputStreamReader(Objects.requireNonNull(plugin.getResource("language/territory.yml")),
                 StandardCharsets.UTF_8)) {
@@ -49,11 +49,13 @@ public final class ClanMapCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage(message("usage")); return true;
         }
         if (!(sender instanceof Player player)) { sender.sendMessage(message("players-only")); return true; }
-        if (!player.getWorld().getKey().toString().equals(atlas.world())) {
-            sender.sendMessage(message("unmapped")); return true;
-        }
         int playerX = Math.floorDiv(player.getLocation().getBlockX(), 16);
         int playerZ = Math.floorDiv(player.getLocation().getBlockZ(), 16);
+        String world = player.getWorld().getKey().toString();
+        ChunkAtlas atlas = policy.map(world, playerX, playerZ);
+        if (atlas == null) {
+            sender.sendMessage(message("unmapped")); return true;
+        }
         player.sendMessage(message("title").append(Component.text(" " + atlas.name(), NamedTextColor.WHITE)));
         player.sendMessage(message("orientation"));
         for (int z = atlas.minZ(); z <= atlas.maxZ(); z++) {
@@ -62,8 +64,8 @@ public final class ClanMapCommand implements CommandExecutor, TabCompleter {
                 char zone = atlas.zone(x, z);
                 boolean here = x == playerX && z == playerZ;
                 var color = here ? NamedTextColor.YELLOW : switch (zone) {
-                    case 'S' -> NamedTextColor.GREEN;
-                    case 'W' -> NamedTextColor.RED;
+                    case 'S' -> net.kyori.adventure.text.format.TextColor.color(0xFFAA00);
+                    case 'W' -> NamedTextColor.DARK_RED;
                     default -> NamedTextColor.DARK_GRAY;
                 };
                 String zoneKey = switch (zone) { case 'S' -> "safezone"; case 'W' -> "warzone"; default -> "wilderness"; };
@@ -77,6 +79,7 @@ public final class ClanMapCommand implements CommandExecutor, TabCompleter {
         player.sendMessage(message("legend"));
         player.sendMessage(message("position").append(Component.text(" " + playerX + ", " + playerZ
                 + " | X " + atlas.minX() + ".." + atlas.maxX() + " | Z " + atlas.minZ() + ".." + atlas.maxZ(), NamedTextColor.WHITE)));
+        if (policy.wholeWorldSafe(world)) player.sendMessage(message("whole-world-safezone"));
         if (!atlas.contains(playerX, playerZ)) player.sendMessage(message("outside"));
         return true;
     }

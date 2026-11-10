@@ -4,7 +4,7 @@ main: net.mandomc.bootstrap.MandoPlugin
 api-version: '26.1.2'
 author: AstuteFlamez
 description: MandoMC gameplay
-softdepend: [ WorldEdit, WorldGuard, WeaponMechanics, MythicMobs, ModelEngine]
+softdepend: [ WorldEdit, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
   c:
     description: View the planet chunk map
@@ -209,6 +209,9 @@ commands:
     usage: '/tpcancel'
     permission: mandomc.travel.tpcancel
 permissions:
+  mandomc.territory.edit:
+    description: Edit protected terrain while in Creative mode
+    default: op
   mandomc.clan.map:
     default: true
   mandomc.auction:

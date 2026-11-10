@@ -10,7 +10,7 @@ The user accepted this division on 2026-11-05. The pinned versions boot together
 
 Design the [player experience](player-experience.md) first, choose the playable order, implement parameterized systems, then configure content.
 
-MandoMC owns the native Clans direction selected on 2026-11-10. FactionsUUID is removed. The first command is `/c map` (aliases `/clan map`, `/cl map`); the chunk atlas is read-only presentation data. Membership, claims and related gameplay remain deferred.
+MandoMC owns the native Clans direction selected on 2026-11-10. FactionsUUID is removed. The first command is `/c map` (aliases `/clan map`, `/cl map`); the chunk atlas is shared by native map/protection rules. Membership, claims and related gameplay remain deferred.
 
 Resource planets are deferred. Initial gathering and credit income use ordinary survival resources plus activity rewards. Keep future resource-planet support outside the current milestone; the ownership table below records responsibilities, not a requirement to build every capability now.
 
@@ -36,7 +36,7 @@ The new pack lives in `resource-pack/` in this repository. Its build targets the
 | Animated models | ModelEngine | Vehicle controls, ownership, seats, health |
 | Dungeon mobs | MythicMobs | Runs, objectives, doors, cleanup, completion rewards |
 | Clans | Paper APIs | Native membership/claims when implemented; chunk atlas, warpoints and raids |
-| Protected regions | WorldGuard with WorldEdit | Enforcement for every custom action |
+| Protected territories | Paper APIs; WorldEdit retained for staff tools | Native classification, enforcement, titles and every custom action |
 | Worlds | Paper APIs | Existing dimension loading, exact arrivals, aliases and travel |
 | Credits | MandoMC native ledger | Atomic balances, payments and admin adjustments; auction-house/reward integration deferred |
 | Items, armor, crafting | Paper APIs and resource-pack/ | Stable IDs, recipes, custom behavior |
@@ -45,8 +45,8 @@ The new pack lives in `resource-pack/` in this repository. Its build targets the
 The catalog in server/plugins.catalog.json records admission status. Installed versions and artifact hashes are in server/plugins.lock.json. Boot validation does not establish gameplay compatibility. EssentialsX and Multiverse-Core are removed. MandoMC owns the selected utility commands and migration; their old runtime data is retained for rollback. Native rank badges now format tab, nameplates and the existing chat renderer; voting remains deferred.
 
 ## Contracts
-- MandoMC owns clan state when implemented. The first atlas stores static chunk labels, not membership or claims. WorldGuard retains protection authority; the atlas does not change enforcement. Pairwise warpoints remain keyed by stable group IDs.
-- WorldGuard owns static regions. Raids never override spawn/adventure-map protection.
+- MandoMC owns clan state when implemented. The atlas stores native static chunk zones, not membership or claims. TerritoryPolicy/TerritoryService own classification and enforcement; Bukkit services expose one authority to existing attack, vehicle, mob and arrival adapters. Pairwise warpoints remain keyed by stable group IDs.
+- MandoMC owns static territory protection. Raids never override safezone/warzone terrain rules. WorldGuard is removed; its local data is archived.
 - The native CreditLedger owns current credit balances. Future auction currency/integration details require approval; do not introduce a second balance writer or restore the old SQL mirror.
 - WeaponMechanics generates its weapons and handles projectiles. MandoMC references vendor IDs instead of duplicating weapon definitions.
 - MythicMobs owns mob definitions/AI. MandoMC tracks run-owned instances. Each reward has exactly one writer.
@@ -104,3 +104,5 @@ WorldService owns the existing dimension registry and exact arrivals in worlds.y
 
 ## Native ranks, HUD and credits
 RankService owns UUID memberships and Bukkit permission attachments. WorldEdit/WorldGuard query the same native grants through the supported WEPIF provider; no LuckPerms or Vault permission fallback. PlayerHud owns one sidebar per viewer while mirroring existing gameplay teams. CreditLedger commits integer-cent account changes on one IO worker with atomic durable replacement; the HUD reads only committed balances. The user requested fresh accounts on 2026-11-09: everyone defaults to Default and zero credits; only AstuteFlamez is explicitly MandoStudios. No legacy account import runs at startup. See [feature brief](features/native-hud-ranks-credits.md).
+
+Native territory rules are configured in territory/maps.yml. Safezone blocks damage, firing, edits and creature spawning; Warzone permits combat but protects terrain/containers. Wilderness permits ordinary combat and building. Explicit Creative staff edit permission never bypasses combat protection. Hoth retains its exact legacy PvP cuboid and protected outer arrival; Batuu is safe at every position. Native title transitions are deduplicated per player and cleared on quit.

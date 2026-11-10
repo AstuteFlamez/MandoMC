@@ -29,7 +29,7 @@ Exact official download URLs, versions and locally verified hashes are in `plugi
 | PacketEvents | 2.14.0 |
 | ModelEngine | R4.1.1, owner-supplied Premium |
 | MythicMobs | 5.14.0 official Modrinth release |
-| WorldEdit / WorldGuard | 7.4.6 / 7.0.18 |
+| WorldEdit | 7.4.6 |
 | Vault (inactive economy bridge) | 1.7.3-b131 |
 | MandoMC | 0.1.0-SNAPSHOT, built locally |
 
@@ -110,3 +110,5 @@ See [native utilities](../docs/features/native-utilities.md) for commands and pe
 
 ## Native Jabba operation
 The nine-room operation uses `events/jabba.yml`, original loot items in `items/definitions/jabba-loot.yml`, and the current plugin. Supply private gate panels with `scripts/import-jabba-doors.py LEGACY_ROOT server/runtime/plugins/MandoMC/jabba/doors.yml`; retain the private closed-state checkpoints and map backups. BigDoors is not installed or required. `/event start jabba` begins the run; `/event stop` resets it. See [operation details](../docs/features/jabba-dungeon.md) for the latest kills-only progression, cache timing, native door animation and recovery.
+
+WorldGuard was replaced on 2026-11-10 by native territory protection and its local JAR/data archived. Keep WorldEdit installed for staff tools. `/c map` uses the same native zone policy as combat, edits, spawning and protected arrival validation.

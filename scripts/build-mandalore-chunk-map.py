@@ -2,7 +2,7 @@
 """Project the private Mandalore review map onto explicit chunk zones; no runtime scans.
 
 Usage: build-mandalore-chunk-map.py <render/scene.json> <render/blocks.bin> <output.yml>
-Safe zones use authored surface build footprints. Cave interiors/decor stay warzone.
+Only the spawn outpost footprint is safe. Cave interiors/decor stay warzone.
 Chunk zoning spans the full vertical column; surface safezone wins at overlaps.
 """
 import json
@@ -23,21 +23,10 @@ def generate(scene, blocks):
             for x in range(x1, x2 + 1):
                 target.add((x // 16, z // 16))
 
-    # Dome cities: footprint includes the fused base ring and grounded breach debris.
-    for dome in scene['domes']:
-        cx, _, cz = dome['center']
-        radius = dome['radius'] + 6
-        for z in range(cz - radius, cz + radius + 1):
-            for x in range(cx - radius, cx + radius + 1):
-                if (x - cx) ** 2 + (z - cz) ** 2 <= radius ** 2:
-                    safe.add((x // 16, z // 16))
-    # Authored ruin terraces, arrival outpost/causeway and northern gateway.
-    for cx, cz, rx, rz in [(-69, -188, 17, 21), (94, 92, 21, 25), (-164, 14, 15, 19),
-                            (-18, -192, 24, 19), (-44, -192, 26, 4), (-18, -176, 12, 5)]:
-        mark_rect(safe, cx - rx, cz - rz, cx + rx, cz + rz)
-    # The six isolated ruined wall sites also count as surface builds.
-    for cx, cz in [(-120, 14), (-72, 121), (52, -112), (131, -39), (115, 165), (175, 108)]:
-        mark_rect(safe, cx - 12, cz - 6, cx + 12, cz + 6)
+    # Cover the whole arrival terrace, shelter, fixtures and mine gateway shoulders.
+    # The terrace extends beyond the fence; include every intersecting chunk.
+    # The causeway's distant ruin and surrounding cities remain wilderness.
+    mark_rect(safe, -42, -211, 6, -173)
     # Detect carved central cave air in the authored low-level interior, including
     # the central hall, loop and side chambers. Ignore surface air and outside void.
     air = scene['names'].index('air')
@@ -62,8 +51,8 @@ if __name__ == '__main__':
     rows = generate(json.loads(Path(sys.argv[1]).read_text()), Path(sys.argv[2]).read_bytes())
     output = '''# Mandalore blocks X/Z -250..249; edge chunks include six blocks outside the border.
 # Rows north to south; columns west to east. S safezone, W warzone, . wilderness.
-# Surface builds win over caves where their full-height chunk columns overlap.
-# This first slice visualizes zones only; WorldGuard remains protection authority.
+# The spawn outpost wins over caves where their full-height chunk columns overlap.
+# The atlas is the native territory authority for map and protection.
 schema-version: 1
 world: minecraft:mandalore_review
 name: Mandalore (500×500)
@@ -74,6 +63,19 @@ max-chunk-z: 15
 rows:
 '''
     output += ''.join(f"  - '{row}'\n" for row in rows)
+    output += """# Entire world policy; the map shows a moving 32x32 view in these worlds.
+safezone-worlds:
+  minecraft:spawnworld: Batuu
+# Existing Hoth safe arrival/warzone and retired survival landing are preserved.
+hoth:
+  world: minecraft:hoth
+  warzone-min: [-237, -64, -121]
+  warzone-max: [237, 319, 237]
+legacy-landing:
+  world: minecraft:overworld
+  min: [-144, -64, -144]
+  max: [-129, 319, -129]
+"""
     Path(sys.argv[3]).parent.mkdir(parents=True, exist_ok=True)
     Path(sys.argv[3]).write_text(output)
     print({c: ''.join(rows).count(c) for c in 'SW.'})

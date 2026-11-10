@@ -31,3 +31,5 @@ The proposed Mandalore cave layout and event architecture are in [Mandalore and 
 
 ## Next action
 Receive the user's safe-zone and warzone boundaries for Tatooine and Hoth.
+
+2026-11-10 update: WorldGuard is replaced by native protection. Mandalore has only the spawn outpost as safezone (16 chunks including the full terrace and gateway); central caves/approaches are warzone and other land/builds are wilderness. All Batuu positions are safezone. Hoth keeps its exact previous safe/war boundaries.

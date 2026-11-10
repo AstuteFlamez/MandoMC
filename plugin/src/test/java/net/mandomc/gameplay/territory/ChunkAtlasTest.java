@@ -22,15 +22,27 @@ public class ChunkAtlasTest {
     }
     @Test public void authoredLandmarksHaveExpectedZones() {
         var a = atlas();
-        for (int[] point : new int[][] {{-18,-192},{87,-76},{-126,79},{141,137},{-73,-139},
-                {-69,-188},{94,92},{-164,14}}) {
+        for (int[] point : new int[][] {{-18,-192},{-27,-201},{-9,-197}}) {
             assertEquals("surface build", 'S', a.zone(Math.floorDiv(point[0],16),Math.floorDiv(point[1],16)));
         }
+        for (int[] point : new int[][] {{87,-76},{-126,79},{141,137},{-73,-139},{-69,-188},{94,92},{-164,14}}) {
+            assertNotEquals("Other build is not safezone", 'S', a.zone(Math.floorDiv(point[0],16),Math.floorDiv(point[1],16)));
+        }
+        assertEquals(16, a.rows().stream().mapToLong(row->row.chars().filter(c->c=='S').count()).sum());
         assertEquals('W', a.zone(0,0));
         assertEquals('W', a.zone(-2,-7));
         assertEquals('W', a.zone(1,7));
         assertEquals('.', a.zone(-16,-16));
         assertEquals('.', a.zone(15,15));
+    }
+    @Test public void entireSpawnTerraceAndGatewayAreSafeAtChunkEdges() {
+        var a=atlas();
+        for(int x=-42;x<=6;x++)for(int z=-211;z<=-173;z++)
+            assertEquals("Spawn footprint "+x+","+z,'S',a.zone(Math.floorDiv(x,16),Math.floorDiv(z,16)));
+        assertEquals('S',a.zone(0,-14));
+        assertEquals('S',a.zone(0,-11));
+        assertEquals('W',a.zone(-2,-10));
+        assertEquals('.',a.zone(-5,-12));
     }
     @Test public void malformedRowsAndOversizedBoundsAreRejected() {
         for (List<String> rows : List.of(List.of("?"), List.of("SS"), List.<String>of())) {

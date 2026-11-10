@@ -16,18 +16,6 @@
       "version": "7.4.6"
     },
     {
-      "id": "worldguard",
-      "name": "worldguard-bukkit-7.0.18.jar",
-      "url": "https://cdn.modrinth.com/data/DKY9btbd/versions/btHBavWa/worldguard-bukkit-7.0.18.jar",
-      "sha256": "08f3ef58bc521c635d8c78aedaca96f151d2d397e7cd8018584955dd7468eb05",
-      "verifiedPublishedHashes": [
-        "sha1",
-        "sha512"
-      ],
-      "bytes": 1198472,
-      "version": "7.0.18"
-    },
-    {
       "id": "mythicmobs",
       "name": "MythicMobs-5.14.0.jar",
       "url": "https://cdn.modrinth.com/data/NLuc7Jjh/versions/ionz4v5c/MythicMobs-5.14.0.jar",
@@ -95,5 +83,5 @@
   ],
   "pending": [],
   "runtimeTested": true,
-  "verificationScope": "Eight vendor plugins and MandoMC enable without FactionsUUID, EssentialsX or Multiverse-Core. Native /c map passes 2102 focused Paper assertions; 170 Java tests pass. Normal restart is clean and the temporary checker is removed. Chunk labels are presentation only; existing WorldGuard enforcement is unchanged. Client review remains."
+  "verificationScope": "Seven vendor plugins and MandoMC enable without WorldGuard, FactionsUUID, EssentialsX or Multiverse-Core. Native territory protection passes 5179 focused Paper assertions; 175 Java tests pass. Normal restart removes the checker, preserves existing worlds/pack and restores KOTH. Client title/protection playtest remains."
 }

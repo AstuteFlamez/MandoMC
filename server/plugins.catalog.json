@@ -68,21 +68,6 @@
       "installed": true
     },
     {
-      "id": "worldguard",
-      "name": "WorldGuard",
-      "status": "boot-verified-gameplay-pending",
-      "owns": "Static region protection",
-      "source": "https://worldguard.enginehub.org/en/latest/developer/regions/",
-      "version": "7.0.18",
-      "sha256": "08f3ef58bc521c635d8c78aedaca96f151d2d397e7cd8018584955dd7468eb05",
-      "knownDependencies": [
-        "worldedit"
-      ],
-      "dependencyListComplete": true,
-      "admissionCheck": "Custom damage and block edits respect protected regions",
-      "installed": true
-    },
-    {
       "id": "worldedit",
       "name": "WorldEdit",
       "status": "boot-verified-gameplay-pending",

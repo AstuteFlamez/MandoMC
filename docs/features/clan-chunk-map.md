@@ -1,26 +1,29 @@
-# Feature: Native clan chunk map
-Status: deployed; client boundary review pending
+# Feature: Native territories and clan chunk map
+Status: deployed; client playtest pending
 Branch: bilal/clan-chunk-map
 
 ## Player experience
-`/c map` displays all 1,024 chunks intersecting Mandalore's 500×500 block map, with aliases `/clan map` and `/cl map`. North is up, west left. Hover cells for zone/chunk/block coordinates; yellow + marks the viewer. The full grid is chat output and may require scrolling.
+`/c map` (`/clan map`, `/cl map`) shows a north-up grid with hover chunk/block coordinates and a yellow + for the viewer. Mandalore displays all 1,024 chunks intersecting its 500×500 map; Batuu shows a moving 32×32 nearby view and explains that the entire world is safezone. Chat output may require scrolling.
+
+Crossing into a different territory category shows a title: orange Safezone (#FFAA00), dark red Warzone (#AA0000), or gray Wilderness. Join, teleport, world change and respawn update the title; movement within the same category does not repeat it. Cancelled movement/teleports do not announce a destination.
 
 ## Rules
-Green safezone covers authored surface cities, ruin terraces, isolated ruin walls and the arrival camp/causeway/gateway. Red warzone covers the carved central cave system and both approaches; all other chunks are wilderness. Safezone wins if a full-height chunk contains both a surface build and caves. Underground furnishings remain part of the cave warzone. The outer row/column chunks extend six blocks beyond the map border. Chunk coordinates use floor division, including negatives.
+Mandalore's only safezone is the full spawn outpost, terrace and connected mine gateway (authored footprint X -42..6, Z -211..-173), projected onto 16 full-height chunks. Nearby cities and ruins no longer get safezone status. Central caves and both approaches are warzone. Counts: 16 safezone, 127 warzone, 881 wilderness. The outpost takes priority at overlaps; underground furnishings remain part of the cave warzone. Edge chunks include six blocks outside the authored border.
 
-This first command is visualization only. Existing WorldGuard protection remains unchanged; chunk labels grant no claim/edit/combat permissions. FactionsUUID is removed from catalog, lock and runtime, with its local JAR/data archived for rollback. No native membership or claim migration is implemented yet.
+All of Batuu, at every coordinate and height, is safezone. Hoth preserves its exact existing warzone cuboid X -237..237, Y -64..319, Z -121..237; outside it remains safezone. The retired overworld landing retains its old safe cuboid. Other worlds, including Tatooine, retain wilderness behavior.
 
-## Smallest playable version
-One immutable Mandalore atlas, read once at startup. Unknown worlds, console, bad syntax and denied permissions receive clear messages. No per-command disk access, terrain scan, chunk loading, tasks or persistent player state.
+Safezone denies damage in either direction, blaster firing, building, creature spawning and protected container access. Warzone permits combat while protecting terrain/containers from ordinary edits and explosions. Wilderness allows ordinary combat and edits. Native protection covers bucket/tool/physical interactions, entities/armor stands/hanging items, fire/liquids, pistons, dispensers, inventory automation and explosion block lists. Existing cancellations remain cancelled. Staff may maintain protected builds only in Creative with mandomc.territory.edit (default op); this never bypasses combat protection. Native custom-attack/vehicle/mob adapters fail closed without the territory service.
 
 ## Ownership and integrations
-MandoMC owns the atlas and command. WorldGuard remains protection authority. CommandBindings registers the executor and reclaims bare command labels. A narrowly verified runtime JAR overlay preserves concurrent deployed content byte-for-byte.
+MandoMC TerritoryPolicy is the sole zone authority used by map, TerritoryProtection listeners, title transitions, saber/mob/vehicle adapters and arrival validation. Bukkit services share the plugin-owned instance. Supported pinned WeaponMechanics pre-shoot and damage events enforce safezone boundaries; Paper damage events cover ordinary/projectile/environmental damage. Mandalore world PvP is enabled so native warzone/wilderness PvP can work; safezone remains protected by the native policy.
+
+FactionsUUID and WorldGuard are removed from active runtime and catalog/lock. Their JARs/data are archived privately for rollback. Old WorldGuard templates are under server/config/common/archive/worldguard and must not be deployed. WorldEdit remains for staff tools. Native membership, claims and ownership migration remain deferred. Existing vendor-specific historical probes predate this replacement; use NativeTerritoryProbe for the current protection boundary.
 
 ## Parameters
-`territory/maps.yml` schema-version 1 stores the world key, title, explicit chunk bounds and north-to-south rows (S/W/.). Maximum 64×64 chunks; row count/width and symbols are validated. Configuration and language/territory.yml require restart. The generator accepts private authored scene/blocks files as arguments and emits the sanitized atlas; private map payloads stay untracked.
+territory/maps.yml schema-version 1 stores the Mandalore atlas (S/W/.), whole-world safezone names and preserved legacy cuboids. Atlas max 64×64; rows, keys and cuboid bounds validate at startup. language/territory.yml holds labels, colors, titles and protection feedback. Configuration changes require restart. The reproducible atlas generator takes private scene/blocks paths as arguments; no map payload is tracked.
 
 ## Verification
-170 Java tests pass, including complete grid coverage, negative/edge coordinates, landmark classifications and malformed configuration. 2,102 focused native Paper assertions pass against the deployed JAR: command ownership/aliases/default permission, every cell/hover, marker and negative coordinates, unchanged loaded-chunk count, unmapped/outside/usage cases, completion and console dispatch. Normal server restarted without the checker or FactionsUUID; no startup errors. Runtime overlay preserves every unrelated entry from the exact deployed baseline.
+175 Java tests pass, covering complete/negative/edge chunk coverage, complete 16-chunk spawn coverage, distant Batuu positions, permissions and exact legacy cuboid boundaries. 5,179 focused native Paper assertions pass against the installed JAR: vendor absence, native listener/authority registration, arrival validation, adapters, staff/edit rules, placement, fall/attack protection, explosion filtering, liquid/piston borders, dispenser buckets/piston heads/tree growth across borders, decorative armor stand protection, every one of the 1,911 spawn-footprint columns, exact titles/colors/deduplication, complete Mandalore/Batuu grids, and actual pinned weapon pre-shoot hooks. Constructed action events do not edit terrain or damage real players. Normal server restart removes the probe; KOTH is restored. No resource-pack change.
 
 ## Pause note
-Next action: verify `/warp mandalore` then `/c map` in a real client and review the projected boundaries before implementing zone enforcement or clan state.
+Next action: walk from Mandalore spawn into the caves/wilderness, then visit Batuu, and client-check the titles, colors and non-op protection behavior.

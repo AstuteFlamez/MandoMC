@@ -11,7 +11,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.mandomc.gameplay.arrival.ArrivalDestinations;
 import net.mandomc.gameplay.ui.MenuItems;
-import net.mandomc.integrations.regions.WorldGuardArrivalProtection;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;

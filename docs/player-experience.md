@@ -7,7 +7,7 @@ Players use Java Minecraft and a required resource pack. They form player groups
 ## Player-facing group identity
 Clans is the accepted name. `/c map` is the first native command, with `/clan map` and `/cl map` aliases.
 
-The user replaced the FactionsUUID direction on 2026-11-10: remove the vendor and implement clans in MandoMC. The current slice is a read-only chunk map; membership, claims, relations, clan homes and group-aware respawn remain deferred. Mandalore's surface builds are safezone, central caves and approaches are warzone, and all remaining chunks are wilderness. These labels are the proposed chunk projection; existing WorldGuard enforcement is unchanged in this slice.
+The user replaced the FactionsUUID direction on 2026-11-10: remove the vendor and implement clans in MandoMC. The current slice is a read-only chunk map; membership, claims, relations, clan homes and group-aware respawn remain deferred. Mandalore's single spawn outpost is safezone, central caves and approaches are warzone, and the remaining land/builds are wilderness. All of Batuu is safezone. MandoMC now enforces zones natively, replacing WorldGuard. Entering a different zone shows a title: orange Safezone, dark red Warzone or gray Wilderness.
 
 ## Confirmed first session and recovery
 New players arrive in SpawnWorld, an existing map file the user already has. The arrival slice uses a short replayable chat tutorial, shown after the required pack loads. Batuu stays the protected spawn hub. Players use /warp to visit Tatooine or Hoth. Each planet will have safe zones, warzones and claimable wilderness; the user will supply the boundaries. The standalone Survival/Earth route is retired.
