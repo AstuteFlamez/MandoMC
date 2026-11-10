@@ -17,7 +17,7 @@ module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 
 
-def tint(source, palette, ore=False):
+def tint(source, palette, ore=False, soften_stone=False):
     source = source.convert('RGBA')
     mask = []
     for pixel in source.get_flattened_data():
@@ -26,6 +26,17 @@ def tint(source, palette, ore=False):
     layer = source.copy()
     layer.putdata([pixel if keep else (*pixel[:3], 0) for pixel, keep in zip(source.get_flattened_data(), mask)])
     colored, _ = module.recolor(palette.convert('RGBA'), layer)
+    if soften_stone:
+        # Lift recessed mineral shadows toward the surrounding stone's ambient gray.
+        # The taper leaves highlights alone and never changes a rock/background pixel.
+        rock = [p for p, keep in zip(source.get_flattened_data(), mask) if not keep]
+        ambient = tuple(sum(p[channel] for p in rock) / len(rock) for channel in range(3))
+        lifted = []
+        for pixel, keep in zip(colored.get_flattened_data(), mask):
+            weight = 0.65 * max(0.0, 1.0 - module.luminance(pixel) / 100.0) if keep else 0.0
+            lifted.append((*tuple(round(pixel[channel] * (1 - weight) + ambient[channel] * weight)
+                                   for channel in range(3)), pixel[3]))
+        colored.putdata(lifted)
     output = source.copy()
     output.putdata([(*color[:3], original[3]) if keep else original for original, color, keep in zip(source.get_flattened_data(), colored.get_flattened_data(), mask)])
     if ore:
@@ -52,13 +63,13 @@ def main():
             import io
             image=Image.open(io.BytesIO(faithful.read(member)))
             palette=Image.open(ASSETS/'mandomc/textures/item/legacy/metals/ingots'/f'{metal}.png')
-            result,pixels=tint(image,palette,ore)
+            result,pixels=tint(image,palette,ore,soften_stone=(source == 'diamond_ore'))
             assert result.size == (32,32)
             path=ASSETS/'mandomc/textures/block/metals'/f'{name}.png';path.parent.mkdir(parents=True,exist_ok=True);result.save(path)
             for target in replacements:
                 dest=ASSETS/'minecraft/textures/block'/f'{target}.png';dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(path.read_bytes())
             model=ASSETS/'mandomc/models/block/metals'/f'{name}.json';model.parent.mkdir(parents=True,exist_ok=True);model.write_text(json.dumps({'parent':'minecraft:block/cube_all','textures':{'all':'mandomc:block/metals/'+name}},indent=2)+'\n')
-            records.append({'name':name,'source':member,'sourceSha256':hashlib.sha256(faithful.read(member)).hexdigest(),'palette':metal,'replaces':replacements,'recoloredPixels':pixels,'outputSha256':hashlib.sha256(path.read_bytes()).hexdigest()})
+            records.append({'name':name,'source':member,'sourceSha256':hashlib.sha256(faithful.read(member)).hexdigest(),'palette':metal,'replaces':replacements,'recoloredPixels':pixels,'softStoneShadows':source == 'diamond_ore','outputSha256':hashlib.sha256(path.read_bytes()).hexdigest()})
     (PACK/'metal-block-sources.json').write_text(json.dumps({'schema-version':1,'source':'Faithful 32x 26.1 June 2026, official unmodified Modrinth version Fj5GKJnf','website':'https://faithfulpack.net/','license':'src/faithful-license.txt','scope':'Block textures only. Native block IDs, world generation, drops, armor and tool textures are unchanged. Ore rock backgrounds are byte-for-byte Faithful; only cyan mineral pixels are recolored.','blocks':records},indent=2)+'\n')
     print('Built six 32px metal block candidates and seven native block texture replacements.')
 

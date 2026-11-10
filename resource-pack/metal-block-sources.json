@@ -14,6 +14,7 @@
         "diamond_block"
       ],
       "recoloredPixels": 1024,
+      "softStoneShadows": false,
       "outputSha256": "eb8b3d501644d68beccf1141bc49e64d8b1e2cacfcb78b5a2e5e6d80265eeb38"
     },
     {
@@ -25,7 +26,8 @@
         "diamond_ore"
       ],
       "recoloredPixels": 199,
-      "outputSha256": "6fa0b6a88073d1c4bbc58f2694f66252dee02437a0191a989c8281b472889ae1"
+      "softStoneShadows": true,
+      "outputSha256": "e650e3901e93c2259d2e72a33239cf1f70c0de7e38ba3b2a90297999fb76a0a1"
     },
     {
       "name": "deepslate_durasteel_ore",
@@ -36,6 +38,7 @@
         "deepslate_diamond_ore"
       ],
       "recoloredPixels": 244,
+      "softStoneShadows": false,
       "outputSha256": "e621d54b2cb2fb654179f8c15b4984e2ced5880bd42693ef240ffab0a8a3ea73"
     },
     {
@@ -47,6 +50,7 @@
         "netherite_block"
       ],
       "recoloredPixels": 1024,
+      "softStoneShadows": false,
       "outputSha256": "a3976d246c6e3e360c4dd27025864ebbf66bd6c144cf5db49a20c4eb4d3a1c91"
     },
     {
@@ -58,7 +62,8 @@
         "nether_gold_ore"
       ],
       "recoloredPixels": 199,
-      "outputSha256": "7dc9ee315e448bdc2c43727944167d7d45b1b0bdc14455fcb78343dd21088a4e"
+      "softStoneShadows": true,
+      "outputSha256": "f71d29453e7a48ed00977059f6e22e4e919a41af59ac659055924786e8655695"
     },
     {
       "name": "deepslate_beskar_ore",
@@ -70,6 +75,7 @@
         "ancient_debris_top"
       ],
       "recoloredPixels": 244,
+      "softStoneShadows": false,
       "outputSha256": "582252f58bb135ff097908d6b4b19cdeee24fb281c602db49e0677d208de045a"
     }
   ]
