@@ -64,6 +64,7 @@ public final class SaberProbe extends JavaPlugin {
         check(reflected.getIntTag("mandomc_saber_reflections")==1,"reflection count survives new projectile");
         check(reflected.getWeaponTitle().equals("E11"),"reflection retains weapon damage configuration");
         shooter.remove();
+        verifyVariants(plugin, world);
         verifyDurability(plugin, world);
         verifyDamageBasedReflection(plugin, world);
         verifyNativeBlocking(plugin, world);
@@ -92,6 +93,54 @@ public final class SaberProbe extends JavaPlugin {
             }catch(Throwable e){getLogger().log(java.util.logging.Level.SEVERE,"SABER PROBE FAILED",e);cleanup();}
         },340);
     }
+    private void verifyVariants(MandoPlugin plugin, World world) throws Exception {
+        var expected = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
+                new java.io.File(plugin.getDataFolder(), "items/definitions/sabers.yml"));
+        var ids = expected.getConfigurationSection("items").getKeys(false);
+        check(ids.size() == 78, "every named upstream saber is registered");
+        for (String id : ids) {
+            var actor = new TestPlayer("VariantTest", new Location(world, -150, 300, -150));
+            var item = plugin.items().create(id);
+            check(sabers.isSaber(item), id + " is recognized by combat and shield exemption");
+            check(item.getItemMeta().displayName().decoration(net.kyori.adventure.text.format.TextDecoration.BOLD)
+                    == net.kyori.adventure.text.format.TextDecoration.State.FALSE, id + " title is explicitly non-bold");
+            var presentation = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
+                    new java.io.File(plugin.getDataFolder(), "items/catalog.yml"));
+            String badge = presentation.getString("rarities." + expected.getString("items." + id + ".rarity"));
+            check(net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
+                    .serialize(item.getItemMeta().lore().getFirst()).startsWith(badge), id + " displays assigned rarity");
+            actor.storage.setItem(0, item);
+            actor.blocking = true;
+            check(sabers.canReflect(actor.player, new Vector(0, 0, -1)), id + " supports directional blocking");
+            check(sabers.launch(actor.player), id + " can throw");
+            check(actor.storage.getItem(0) == null || actor.storage.getItem(0).getType().isAir(), id + " reserves real item");
+            sabers.finish(actor.id);
+            check(actor.storage.getItem(0).isSimilar(item), id + " returns same variant and metadata");
+            sabers.join(new org.bukkit.event.player.PlayerJoinEvent(actor.player, net.kyori.adventure.text.Component.empty()));
+            check(actor.storage.getItem(0).getItemMeta().getItemModel().equals(item.getItemMeta().getItemModel()),
+                    id + " login normalization never converts to Vader");
+        }
+        var actor = new TestPlayer("SharedVariantCharge", new Location(world, -150, 300, -150));
+        actor.storage.setItem(0, plugin.items().create("vader"));
+        actor.storage.setItem(1, plugin.items().create("yoda_lightsaber"));
+        sabers.reflected(actor.player, 10);
+        var first = (org.bukkit.inventory.meta.Damageable) actor.storage.getItem(0).getItemMeta();
+        var second = (org.bukkit.inventory.meta.Damageable) actor.storage.getItem(1).getItemMeta();
+        check(first.getDamage() == second.getDamage() && first.getDamage() > 0, "different saber variants share player charge");
+        actor.storage.setItem(0, actor.storage.getItem(1));
+        check(!sabers.launch(actor.player), "switching variants cannot bypass the throw charge requirement");
+        check(!sabers.isSaber(new ItemStack(Material.SHIELD)), "ordinary shields never become sabers");
+        var legacy = plugin.items().create("obiwan");
+        var meta = legacy.getItemMeta();
+        meta.displayName(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage()
+                .deserialize("<blue><bold>Obi-Wan's Lightsaber"));legacy.setItemMeta(meta);
+        actor.storage.setItem(0, legacy);
+        sabers.join(new org.bukkit.event.player.PlayerJoinEvent(actor.player, net.kyori.adventure.text.Component.empty()));
+        check(actor.storage.getItem(0).getItemMeta().displayName().decoration(net.kyori.adventure.text.format.TextDecoration.BOLD)
+                == net.kyori.adventure.text.format.TextDecoration.State.FALSE, "older legacy saber titles lose bold without losing their text");
+
+    }
+
     private void verifyDurability(MandoPlugin plugin, World world) throws Exception {
         var actor = new TestPlayer("SaberDurabilityTest", new Location(world, -150, 300, -150));
         var item = plugin.items().create("vader");
@@ -358,7 +407,7 @@ public final class SaberProbe extends JavaPlugin {
             check(find.invoke(sabers, owner) == other, "single target favors crosshair alignment over nearest mob");
             other.remove();
             check(find.invoke(sabers, owner) == cow, "visible mob inside aim cone acquires lock");
-            Object flight = constructor.newInstance(owner, display, cow, sabers.settings());
+            Object flight = constructor.newInstance(owner, display, cow, sabers.settings(), sabers.settings().variants().get("vader"));
             flights.put(owner.getUniqueId(), flight);reserve.invoke(sabers, flight);
             cow.teleport(cow.getLocation().add(.5, 0, 0));
             track.invoke(sabers, flight);
@@ -398,7 +447,7 @@ public final class SaberProbe extends JavaPlugin {
             // Both endpoints can be outside the protected landing while the segment crosses it.
             display = world.spawn(new Location(world, -145, 301, -135), ItemDisplay.class,
                     entity -> {entity.setPersistent(false);entity.setGravity(false);});
-            flight = constructor.newInstance(owner, display, null, sabers.settings());
+            flight = constructor.newInstance(owner, display, null, sabers.settings(), sabers.settings().variants().get("vader"));
             flights.put(owner.getUniqueId(), flight);reserve.invoke(sabers, flight);
             move.invoke(sabers, flight, new Vector(18, 0, 0));
             check(((Location) locationField.get(flight)).getX() < -144 && (boolean) recallingField.get(flight),
@@ -412,7 +461,7 @@ public final class SaberProbe extends JavaPlugin {
             });
             display = world.spawn(point.clone().add(-3, 1, 0), ItemDisplay.class,
                     entity -> {entity.setPersistent(false);entity.setGravity(false);});
-            flight = constructor.newInstance(owner, display, null, sabers.settings());
+            flight = constructor.newInstance(owner, display, null, sabers.settings(), sabers.settings().variants().get("vader"));
             flights.put(owner.getUniqueId(), flight);reserve.invoke(sabers, flight);
             final Vector[] knockback = {null};
             Bukkit.getPluginManager().registerEvent(io.papermc.paper.event.entity.EntityKnockbackEvent.class, listener,
@@ -466,7 +515,7 @@ public final class SaberProbe extends JavaPlugin {
                     entity.setPersistent(false);entity.setGravity(false);
                 });
                 try {
-                    Object flight = constructor.newInstance(actor.player, display, null, sabers.settings());
+                    Object flight = constructor.newInstance(actor.player, display, null, sabers.settings(), sabers.settings().variants().get("vader"));
                     flights.put(actor.id, flight);reserve.invoke(sabers, flight);
                     Location previous = (Location) locationField.get(flight);
                     double farthest = 0, largestStep = 0;
@@ -510,7 +559,7 @@ public final class SaberProbe extends JavaPlugin {
                 entity.setPersistent(false);entity.setGravity(false);
             });
             try {
-                Object flight = constructor.newInstance(actor.player, display, null, sabers.settings());
+                Object flight = constructor.newInstance(actor.player, display, null, sabers.settings(), sabers.settings().variants().get("vader"));
                 flights.put(actor.id, flight);reserve.invoke(sabers, flight);
                 switch (mode) {
                     case "catch" -> {

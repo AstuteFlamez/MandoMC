@@ -1,49 +1,361 @@
-{
-  "schema-version": 1,
-  "item-id": "vader",
-  "item-model": "mandomc:sabers/vader",
-  "hilt-model": "mandomc:sabers/vader_hilt",
-  "throw-damage": 8.0,
-  "throw-cooldown-ticks": 40,
-  "throw-cost-percent": 75.0,
-  "throw-drain-ticks": 20,
-  "throw-range": 18.0,
-  "throw-speed": 1.0,
-  "throw-return-speed": 1.5,
-  "throw-hit-radius": 0.22,
-  "throw-arc-width": 1.8,
-  "throw-arc-height": 0.65,
-  "throw-bank-degrees": 25.0,
-  "throw-spin-degrees": 38.0,
-  "throw-lock-half-angle": 18.0,
-  "throw-lock-correction": 1.5,
-  "throw-return-height": 2.4,
-  "throw-variation": 1.0,
-  "guard-capacity": 100.0,
-  "guard-damage-multiplier": 5.0,
-  "guard-cooling-per-tick": 0.5,
-  "guard-recovery-delay-ticks": 100,
-  "overheat-ticks": 80,
-  "block-half-angle-degrees": 80.0,
-  "reflection-limit": 4,
-  "upstream-pack": {
-    "main-pack-id": "a3feb494-6a5c-5495-8f33-efdd5783633f",
-    "id": "20a340e6-9abc-481d-8878-312e26ca08e8",
-    "version": "3.2.2",
-    "url": "https://cdn.modrinth.com/data/HVjHFmDU/versions/heHnARk2/JustTimm%27s%20Lightsaber%20Workshop%203.2.2.zip",
-    "sha1": "0f1a11ab321d5d4ac39ed2659ddbdf207a82f5dc",
-    "base-pack": {
-      "id": "c7431f86-b798-586f-819f-e863f0c9e1e9",
-      "url": "https://cdn.modrinth.com/data/w0TnApzs/versions/Fj5GKJnf/Faithful%2032x%20-%2026.1.zip",
-      "sha1": "9447e84ee7121c86304e467a0f8d5b095872e1e6",
-      "version": "26.1-june-2026"
-    }
-  },
-  "additional-item-ids": [
-    "obiwan",
-    "cal_survivor_crossguard",
-    "windu",
-    "quigon",
-    "ventress_yellow"
-  ]
-}
+schema-version: 1
+# Provisional tuning; all durations are server ticks (20 = one second).
+item-id: vader
+item-model: mandomc:sabers/vader
+hilt-model: mandomc:sabers/vader_hilt
+throw-damage: 8.0
+throw-cooldown-ticks: 40
+# Drain 75% of a full charge over one second; use the same recovery as reflection.
+throw-cost-percent: 75.0
+throw-drain-ticks: 20
+throw-range: 18.0
+throw-speed: 1.0
+throw-return-speed: 1.5
+throw-hit-radius: 0.22
+# Each throw samples a coherent curve, bank and spin. 0 disables variation; 1 uses the full range.
+throw-arc-width: 1.8
+throw-arc-height: 0.65
+throw-bank-degrees: 25.0
+throw-spin-degrees: 38.0
+throw-lock-half-angle: 18.0
+throw-lock-correction: 1.5
+throw-return-height: 2.4
+throw-variation: 1.0
+guard-capacity: 100.0
+# The native durability bar displays remaining guard; sabers cannot break from wear.
+# Each incoming damage point consumes five guard points; throws require their full cost available.
+guard-damage-multiplier: 5.0
+guard-cooling-per-tick: 0.5
+# Five seconds without charge use or positive damage dealt/taken before repair starts.
+guard-recovery-delay-ticks: 100
+overheat-ticks: 80
+# At zero, stun all saber actions for this duration and immediately end any throw.
+block-half-angle-degrees: 80.0
+reflection-limit: 4
+# Official upstream delivery: do not copy/rehost JustTimm's artwork.
+upstream-pack:
+  main-pack-id: a3feb494-6a5c-5495-8f33-efdd5783633f
+  id: 20a340e6-9abc-481d-8878-312e26ca08e8
+  version: 3.2.2
+  url: "https://cdn.modrinth.com/data/HVjHFmDU/versions/heHnARk2/JustTimm%27s%20Lightsaber%20Workshop%203.2.2.zip"
+  sha1: 0f1a11ab321d5d4ac39ed2659ddbdf207a82f5dc
+  base-pack:
+    id: "c7431f86-b798-586f-819f-e863f0c9e1e9"
+    url: "https://cdn.modrinth.com/data/w0TnApzs/versions/Fj5GKJnf/Faithful%2032x%20-%2026.1.zip"
+    sha1: "9447e84ee7121c86304e467a0f8d5b095872e1e6"
+    version: "26.1-june-2026"
+# Explicit catalog identities; all variants share player-owned charge and tuning.
+# Explicit catalog identities; all variants share player-owned charge and tuning.
+variants:
+  ahsoka_tano_blue_lightsaber:
+    item-model: mandomc:sabers/ahsoka_tano_blue_lightsaber
+    blade-center: [0.00625, 1.375, -0.09375]
+    blade-half-length: 0.96875
+  ahsoka_tano_blue_shoto_lightsaber:
+    item-model: mandomc:sabers/ahsoka_tano_blue_shoto_lightsaber
+    blade-center: [0.00625, 1.15625, -0.09375]
+    blade-half-length: 0.75
+  ahsoka_tano_green_lightsaber:
+    item-model: mandomc:sabers/ahsoka_tano_green_lightsaber
+    blade-center: [0.00625, 1.375, -0.09375]
+    blade-half-length: 0.96875
+  ahsoka_tano_green_shoto_lightsaber:
+    item-model: mandomc:sabers/ahsoka_tano_green_shoto_lightsaber
+    blade-center: [0.00625, 1.15625, -0.09375]
+    blade-half-length: 0.75
+  ahsoka_tano_white_lightsaber:
+    item-model: mandomc:sabers/ahsoka_tano_white_lightsaber
+    blade-center: [0.00625, 1.5625, -0.09375]
+    blade-half-length: 0.9375
+  ahsoka_tano_white_shoto_lightsaber:
+    item-model: mandomc:sabers/ahsoka_tano_white_shoto_lightsaber
+    blade-center: [0.00625, 1.21875, -0.09375]
+    blade-half-length: 0.71875
+  anakin_skywalker_jedi_knight_lightsaber:
+    item-model: mandomc:sabers/anakin_skywalker_jedi_knight_lightsaber
+    blade-center: [0.00625, 1.40625, -0.09375]
+    blade-half-length: 0.96875
+  anakin_skywalker_padawan_lightsaber:
+    item-model: mandomc:sabers/anakin_skywalker_padawan_lightsaber
+    blade-center: [0.00625, 1.34375, -0.09375]
+    blade-half-length: 1.0
+  anakin_skywalker_red_lightsaber:
+    item-model: mandomc:sabers/anakin_skywalker_red_lightsaber
+    blade-center: [0.00625, 1.40625, -0.09375]
+    blade-half-length: 0.96875
+  asajj_ventress_assassin_lightsaber:
+    item-model: mandomc:sabers/asajj_ventress_assassin_lightsaber
+    blade-center: [-0.03125, 1.3890625, -0.09375]
+    blade-half-length: 0.875
+  asajj_ventress_assassin_shoto_lightsaber:
+    item-model: mandomc:sabers/asajj_ventress_assassin_shoto_lightsaber
+    blade-center: [-0.03125, 1.3890625, -0.09375]
+    blade-half-length: 0.875
+  asajj_ventress_double_blade_lightsaber:
+    item-model: mandomc:sabers/asajj_ventress_double_blade_lightsaber
+    blade-center: [0.03046875, 0.00703125, -0.09375]
+    blade-half-length: 2.74765625
+  ventress_yellow:
+    item-model: mandomc:sabers/ventress_yellow
+    blade-center: [-0.03125, 1.3890625, -0.09375]
+    blade-half-length: 0.875
+  baylan_skoll_lightsaber:
+    item-model: mandomc:sabers/baylan_skoll_lightsaber
+    blade-center: [0.00625, 1.65625, -0.09375]
+    blade-half-length: 0.9375
+  blue_training_lightsaber:
+    item-model: mandomc:sabers/blue_training_lightsaber
+    blade-center: [0.00625, 1.40625, -0.09375]
+    blade-half-length: 0.9375
+  cal_kestis_inquisitor_lightsaber:
+    item-model: mandomc:sabers/cal_kestis_inquisitor_lightsaber
+    blade-center: [0.00625, -0.109375, -0.09375]
+    blade-half-length: 2.71875
+  cal_kestis_merged_lightsaber:
+    item-model: mandomc:sabers/cal_kestis_merged_lightsaber
+    blade-center: [0.00625, 1.375, -0.09375]
+    blade-half-length: 0.9375
+  cal_kestis_merged_shoto_lightsaber:
+    item-model: mandomc:sabers/cal_kestis_merged_shoto_lightsaber
+    blade-center: [0.00625, 1.3125, -0.09375]
+    blade-half-length: 0.9375
+  cal_kestis_merged_split_lightsaber:
+    item-model: mandomc:sabers/cal_kestis_merged_split_lightsaber
+    blade-center: [0.00625, -0.109375, -0.09375]
+    blade-half-length: 2.71875
+  cal_kestis_padawan_lightsaber:
+    item-model: mandomc:sabers/cal_kestis_padawan_lightsaber
+    blade-center: [0.00625, 1.46875, -0.09375]
+    blade-half-length: 0.9375
+  cal_kestis_rebuild_lightsaber:
+    item-model: mandomc:sabers/cal_kestis_rebuild_lightsaber
+    blade-center: [0.00625, 0.015625, -0.09375]
+    blade-half-length: 2.53125
+  cal_survivor_crossguard:
+    item-model: mandomc:sabers/cal_survivor_crossguard
+    blade-center: [0.00625, 1.8125, -0.09375]
+    blade-half-length: 1.34375
+  cal_kestis_survivor_lightsaber:
+    item-model: mandomc:sabers/cal_kestis_survivor_lightsaber
+    blade-center: [0.00625, 1.46875, -0.09375]
+    blade-half-length: 0.9375
+  cal_kestis_survivor_shoto_lightsaber:
+    item-model: mandomc:sabers/cal_kestis_survivor_shoto_lightsaber
+    blade-center: [0.00625, 1.1875, -0.09375]
+    blade-half-length: 0.75
+  cal_kestis_survivor_split_lightsaber:
+    item-model: mandomc:sabers/cal_kestis_survivor_split_lightsaber
+    blade-center: [0.00625, 0.0, -0.09375]
+    blade-half-length: 2.65625
+  caleb_dume_lightsaber:
+    item-model: mandomc:sabers/caleb_dume_lightsaber
+    blade-center: [0.0, 1.4375, -0.0875]
+    blade-half-length: 0.9375
+  cere_junda_jedi_knight_lightsaber:
+    item-model: mandomc:sabers/cere_junda_jedi_knight_lightsaber
+    blade-center: [0.00625, 1.46875, -0.09375]
+    blade-half-length: 0.9375
+  count_dooku_lightsaber:
+    item-model: mandomc:sabers/count_dooku_lightsaber
+    blade-center: [0.1, 1.209375, -0.09375]
+    blade-half-length: 0.9375
+  dark_saber:
+    item-model: mandomc:sabers/dark_saber
+    blade-center: [-0.05625, 1.375, -0.09375]
+    blade-half-length: 0.90625
+  darth_maul_apprentice_lightsaber:
+    item-model: mandomc:sabers/darth_maul_apprentice_lightsaber
+    blade-center: [-0.009375, 0.0, -0.09375]
+    blade-half-length: 2.90625
+  darth_maul_reforged_lightsaber:
+    item-model: mandomc:sabers/darth_maul_reforged_lightsaber
+    blade-center: [0.00625, 1.34375, -0.09375]
+    blade-half-length: 0.9375
+  darth_maul_reforged_shoto_lightsaber:
+    item-model: mandomc:sabers/darth_maul_reforged_shoto_lightsaber
+    blade-center: [-0.009375, 1.5625, -0.09375]
+    blade-half-length: 0.90625
+  darth_maul_reforged_split_lightsaber:
+    item-model: mandomc:sabers/darth_maul_reforged_split_lightsaber
+    blade-center: [-0.009375, 0.0, -0.09375]
+    blade-half-length: 2.96875
+  darth_maul_vengeance_lightsaber:
+    item-model: mandomc:sabers/darth_maul_vengeance_lightsaber
+    blade-center: [0.00625, 1.34375, -0.09375]
+    blade-half-length: 0.9375
+  vader:
+    item-model: mandomc:sabers/vader
+    blade-center: [0.00625, 1.34375, -0.09375]
+    blade-half-length: 1.0
+  devon_izara_lightsaber:
+    item-model: mandomc:sabers/devon_izara_lightsaber
+    blade-center: [0.00625, 1.5, -0.09375]
+    blade-half-length: 0.9375
+  ezra_bridger_green_lightsaber:
+    item-model: mandomc:sabers/ezra_bridger_green_lightsaber
+    blade-center: [0.0068125, 1.453125, -0.0943125]
+    blade-half-length: 0.9375
+  ezra_bridger_nomad_lightsaber:
+    item-model: mandomc:sabers/ezra_bridger_nomad_lightsaber
+    blade-center: [0.00625, 1.484375, -0.09375]
+    blade-half-length: 0.9375
+  ezra_bridger_padawan_lightsaber:
+    item-model: mandomc:sabers/ezra_bridger_padawan_lightsaber
+    blade-center: [-0.18125, 1.40625, -0.09375]
+    blade-half-length: 0.9375
+  grand_inquisitor_crescent_lightsaber:
+    item-model: mandomc:sabers/grand_inquisitor_crescent_lightsaber
+    blade-center: [-0.009375, 1.53125, -0.09375]
+    blade-half-length: 0.9375
+  grand_inquisitor_full_ring_lightsaber:
+    item-model: mandomc:sabers/grand_inquisitor_full_ring_lightsaber
+    blade-center: [-0.009375, 0.0, -0.09375]
+    blade-half-length: 2.46875
+  green_training_lightsaber:
+    item-model: mandomc:sabers/green_training_lightsaber
+    blade-center: [0.00625, 1.40625, -0.09375]
+    blade-half-length: 0.9375
+  indara_lightsaber:
+    item-model: mandomc:sabers/indara_lightsaber
+    blade-center: [0.00625, 1.375, -0.09375]
+    blade-half-length: 0.9375
+  jaro_tapal_lightsaber:
+    item-model: mandomc:sabers/jaro_tapal_lightsaber
+    blade-center: [0.00625, 0.015625, -0.09375]
+    blade-half-length: 2.53125
+  jecki_lon_lightsaber:
+    item-model: mandomc:sabers/jecki_lon_lightsaber
+    blade-center: [0.00625, 1.40625, -0.09375]
+    blade-half-length: 0.9375
+  jod_na_nawood_discovered_lightsaber:
+    item-model: mandomc:sabers/jod_na_nawood_discovered_lightsaber
+    blade-center: [0.00625, 1.46875, -0.09375]
+    blade-half-length: 0.9375
+  ki_adi_mundi_lightsaber:
+    item-model: mandomc:sabers/ki_adi_mundi_lightsaber
+    blade-center: [0.00625, 1.5, -0.09375]
+    blade-half-length: 0.9375
+  kylo_ren_lightsaber:
+    item-model: mandomc:sabers/kylo_ren_lightsaber
+    blade-center: [0.0, 1.3125625, -0.096875]
+    blade-half-length: 1.0311875
+  leia_organa_lightsaber:
+    item-model: mandomc:sabers/leia_organa_lightsaber
+    blade-center: [0.00625, 1.5625, -0.09375]
+    blade-half-length: 0.9375
+  luke_skywalker_episode_4_lightsaber:
+    item-model: mandomc:sabers/luke_skywalker_episode_4_lightsaber
+    blade-center: [0.00625, 1.40625, -0.09375]
+    blade-half-length: 0.96875
+  luke_skywalker_episode_5_lightsaber:
+    item-model: mandomc:sabers/luke_skywalker_episode_5_lightsaber
+    blade-center: [0.00625, 1.40625, -0.09375]
+    blade-half-length: 0.96875
+  luke_skywalker_jedi_knight_lightsaber:
+    item-model: mandomc:sabers/luke_skywalker_jedi_knight_lightsaber
+    blade-center: [0.00625, 1.515625, -0.09375]
+    blade-half-length: 0.9375
+  windu:
+    item-model: mandomc:sabers/windu
+    blade-center: [0.00625, 1.5625, -0.09375]
+    blade-half-length: 0.9375
+  obi_wan_kenobi_jedi_knight_lightsaber:
+    item-model: mandomc:sabers/obi_wan_kenobi_jedi_knight_lightsaber
+    blade-center: [0.00625, 1.5, -0.09375]
+    blade-half-length: 0.9375
+  obiwan:
+    item-model: mandomc:sabers/obiwan
+    blade-center: [0.00625, 1.515625, -0.09375]
+    blade-half-length: 0.9375
+  obi_wan_kenobi_padawan_lightsaber:
+    item-model: mandomc:sabers/obi_wan_kenobi_padawan_lightsaber
+    blade-center: [0.00625, 1.53125, -0.09375]
+    blade-half-length: 0.9375
+  pong_krell_blue_lightsaber:
+    item-model: mandomc:sabers/pong_krell_blue_lightsaber
+    blade-center: [-0.009375, -0.09375, -0.09375]
+    blade-half-length: 2.9375
+  pong_krell_green_lightsaber:
+    item-model: mandomc:sabers/pong_krell_green_lightsaber
+    blade-center: [-0.009375, -0.09375, -0.09375]
+    blade-half-length: 2.9375
+  qimir_dagger_lightsaber:
+    item-model: mandomc:sabers/qimir_dagger_lightsaber
+    blade-center: [0.00625, 0.96875, -0.09375]
+    blade-half-length: 0.71875
+  qimir_lightsaber:
+    item-model: mandomc:sabers/qimir_lightsaber
+    blade-center: [0.00625, 1.21875, -0.09375]
+    blade-half-length: 0.9375
+  qimir_split_lightsaber:
+    item-model: mandomc:sabers/qimir_split_lightsaber
+    blade-center: [0.00625, 1.46875, -0.09375]
+    blade-half-length: 0.9375
+  quigon:
+    item-model: mandomc:sabers/quigon
+    blade-center: [0.00625, 1.53125, -0.09375]
+    blade-half-length: 0.9375
+  quinlan_vos_lightsaber:
+    item-model: mandomc:sabers/quinlan_vos_lightsaber
+    blade-center: [0.00625, 1.46875, -0.09375]
+    blade-half-length: 0.9375
+  revan_fallen_lightsaber:
+    item-model: mandomc:sabers/revan_fallen_lightsaber
+    blade-center: [0.00625, 1.59375, -0.09375]
+    blade-half-length: 0.9375
+  revan_redeemed_lightsaber:
+    item-model: mandomc:sabers/revan_redeemed_lightsaber
+    blade-center: [0.0, 1.46875, -0.09375]
+    blade-half-length: 0.9375
+  rey_blue_lightsaber:
+    item-model: mandomc:sabers/rey_blue_lightsaber
+    blade-center: [0.00625, 1.40625, -0.09375]
+    blade-half-length: 0.96875
+  rey_reforged_lightsaber:
+    item-model: mandomc:sabers/rey_reforged_lightsaber
+    blade-center: [0.00625, 1.40625, -0.09375]
+    blade-half-length: 0.96875
+  sabine_wren_lightsaber:
+    item-model: mandomc:sabers/sabine_wren_lightsaber
+    blade-center: [0.0068125, 1.40625, -0.0943125]
+    blade-half-length: 0.9375
+  savage_opress_lightsaber:
+    item-model: mandomc:sabers/savage_opress_lightsaber
+    blade-center: [-0.009375, 0.0, -0.09375]
+    blade-half-length: 2.90625
+  second_sister_crescent_lightsaber:
+    item-model: mandomc:sabers/second_sister_crescent_lightsaber
+    blade-center: [-0.009375, 1.53125, -0.09375]
+    blade-half-length: 0.9375
+  second_sister_full_ring_lightsaber:
+    item-model: mandomc:sabers/second_sister_full_ring_lightsaber
+    blade-center: [-0.009375, 0.0, -0.09375]
+    blade-half-length: 2.46875
+  tak_rennod_discovered_lightsaber:
+    item-model: mandomc:sabers/tak_rennod_discovered_lightsaber
+    blade-center: [0.00625, 1.46875, -0.09375]
+    blade-half-length: 0.9375
+  taron_malicos_lightsaber:
+    item-model: mandomc:sabers/taron_malicos_lightsaber
+    blade-center: [0.00625, 1.53125, -0.09375]
+    blade-half-length: 0.9375
+  taron_malicos_shoto_lightsaber:
+    item-model: mandomc:sabers/taron_malicos_shoto_lightsaber
+    blade-center: [0.00625, 1.53125, -0.09375]
+    blade-half-length: 0.9375
+  torbin_lightsaber:
+    item-model: mandomc:sabers/torbin_lightsaber
+    blade-center: [0.00625, 1.40625, -0.09375]
+    blade-half-length: 0.9375
+  vernestra_rwoh_lightsaber:
+    item-model: mandomc:sabers/vernestra_rwoh_lightsaber
+    blade-center: [0.00625, 1.515625, -0.09375]
+    blade-half-length: 0.9375
+  wim_discovered_lightsaber:
+    item-model: mandomc:sabers/wim_discovered_lightsaber
+    blade-center: [0.00625, 1.46875, -0.09375]
+    blade-half-length: 0.9375
+  yoda_lightsaber:
+    item-model: mandomc:sabers/yoda_lightsaber
+    blade-center: [0.00625, 1.03125, -0.093875]
+    blade-half-length: 0.75

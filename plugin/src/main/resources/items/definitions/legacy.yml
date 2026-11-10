@@ -1083,7 +1083,7 @@
       "category": "keys",
       "lore": [
         "<gray>Belonging to seasoned travelers",
-        "<gray>who traverse the galaxy’s edges."
+        "<gray>who traverse the galaxy\u2019s edges."
       ],
       "item-model": "mandomc:legacy/wayfarer_crate_key"
     },
@@ -1545,96 +1545,6 @@
         "<gray>Refined songsteel sheet."
       ],
       "item-model": "mandomc:legacy/songsteel_sheet"
-    },
-    "obiwan": {
-      "material": "SHIELD",
-      "name": "<blue><bold>Obi-Wan's Lightsaber",
-      "custom-model-data": 1,
-      "rarity": "rare",
-      "category": "weapons",
-      "lore": [
-        "<gray>A refined weapon once wielded",
-        "<gray>by the legendary Jedi Master.",
-        "",
-        "<yellow>[<key:key.attack>] Attack",
-        "<yellow>[<key:key.use>] Block / Reflect",
-        "<yellow>[<key:key.sneak> + <key:key.attack>] Throw"
-      ],
-      "attack-damage": 9.5,
-      "attack-speed": 1.0,
-      "item-model": "mandomc:legacy/obiwan"
-    },
-    "cal_survivor_crossguard": {
-      "material": "SHIELD",
-      "name": "<aqua><bold>Cal Kestis's Lightsaber",
-      "custom-model-data": 3,
-      "rarity": "rare",
-      "category": "weapons",
-      "lore": [
-        "<gray>A unique crossguard saber",
-        "<gray>rebuilt during the dark times.",
-        "",
-        "<yellow>[<key:key.attack>] Attack",
-        "<yellow>[<key:key.use>] Block / Reflect",
-        "<yellow>[<key:key.sneak> + <key:key.attack>] Throw"
-      ],
-      "attack-damage": 9.5,
-      "attack-speed": 1.0,
-      "item-model": "mandomc:legacy/cal_survivor_crossguard"
-    },
-    "windu": {
-      "material": "SHIELD",
-      "name": "<dark_purple><bold>Mace Windu's Lightsaber",
-      "custom-model-data": 5,
-      "rarity": "epic",
-      "category": "weapons",
-      "lore": [
-        "<gray>A powerful blade wielded by",
-        "<gray>one of the greatest Jedi Masters.",
-        "",
-        "<yellow>[<key:key.attack>] Attack",
-        "<yellow>[<key:key.use>] Block / Reflect",
-        "<yellow>[<key:key.sneak> + <key:key.attack>] Throw"
-      ],
-      "attack-damage": 10.5,
-      "attack-speed": 1.05,
-      "item-model": "mandomc:legacy/windu"
-    },
-    "quigon": {
-      "material": "SHIELD",
-      "name": "<green><bold>Qui-Gon Jinn's Lightsaber",
-      "custom-model-data": 7,
-      "rarity": "rare",
-      "category": "weapons",
-      "lore": [
-        "<gray>A calm yet powerful weapon",
-        "<gray>guided by the living Force.",
-        "",
-        "<yellow>[<key:key.attack>] Attack",
-        "<yellow>[<key:key.use>] Block / Reflect",
-        "<yellow>[<key:key.sneak> + <key:key.attack>] Throw"
-      ],
-      "attack-damage": 9,
-      "attack-speed": 1.0,
-      "item-model": "mandomc:legacy/quigon"
-    },
-    "ventress_yellow": {
-      "material": "SHIELD",
-      "name": "<yellow><bold>Asajj Ventress's Lightsaber",
-      "custom-model-data": 9,
-      "rarity": "epic",
-      "category": "weapons",
-      "lore": [
-        "<gray>A curved saber used by the",
-        "<gray>deadly assassin Asajj Ventress.",
-        "",
-        "<yellow>[<key:key.attack>] Attack",
-        "<yellow>[<key:key.use>] Block / Reflect",
-        "<yellow>[<key:key.sneak> + <key:key.attack>] Throw"
-      ],
-      "attack-damage": 10,
-      "attack-speed": 1.05,
-      "item-model": "mandomc:legacy/ventress_yellow"
     },
     "durasteel_helmet": {
       "material": "DIAMOND_HELMET",

@@ -15,10 +15,14 @@ public class BlastSettingsTest {
         assertEquals(4, settings.radius());
         assertEquals(64, settings.maxBlocks());
         assertEquals(60, settings.restoreSeconds());
+        assertEquals(4, settings.restoreBlocksPerStep());
+        assertEquals(2, settings.restoreIntervalTicks());
     }
 
     @Test
     public void invalidSettingsCannotCreateUnboundedWork() {
+        assertThrows(IllegalArgumentException.class, () -> new BlastSettings(4, 64, 60, 4096, 0, 2));
+        assertThrows(IllegalArgumentException.class, () -> new BlastSettings(4, 64, 60, 4096, 4, 0));
         assertThrows(IllegalArgumentException.class, () -> new BlastSettings(0, 64, 60, 4096));
         assertThrows(IllegalArgumentException.class, () -> new BlastSettings(4, 100000, 60, 4096));
         assertThrows(IllegalArgumentException.class, () -> new BlastSettings(4, 64, -1, 4096));

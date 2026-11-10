@@ -68,7 +68,9 @@ public final class VehicleService implements Listener, AutoCloseable {
 
     private final Set<Ticket> tickets = new HashSet<>();
     private final Path journal;
-    private final BukkitTask task, restoreTask;
+    private final BukkitTask task, restoreTask, menuTask;
+    private final Map<String, ItemStack> emptySeatHeads = new HashMap<>();
+    private final Map<String, String> emptySeatTitles = new HashMap<>();
     private boolean closed;
     private final int maxActive, combatSeconds;
     private final double packSpeedSquared;
@@ -123,11 +125,32 @@ public final class VehicleService implements Listener, AutoCloseable {
                 || packSpeed < 0
                 || packSpeed > .2)
             throw new IllegalArgumentException("vehicles/settings.yml: invalid limits");
+        String menuPath = "vehicles/menu.yml";
+        if (!new java.io.File(plugin.getDataFolder(), menuPath).exists()) plugin.saveResource(menuPath, false);
+        var menu = YamlConfiguration.loadConfiguration(new java.io.File(plugin.getDataFolder(), menuPath));
+        if (menu.getInt("schema-version") != 1) throw new IllegalArgumentException("vehicles/menu.yml: expected schema 1");
+        for (String key : List.of("rebel-pilot", "tie-pilot", "speeder-pilot", "rebel-gunner")) {
+            String texture = menu.getString("heads." + key + ".texture", "");
+            String title = menu.getString("heads." + key + ".title", "");
+            if (!texture.matches("[0-9a-f]{32,64}") || title.isBlank())
+                throw new IllegalArgumentException("vehicles/menu.yml: invalid head " + key);
+            var head = new ItemStack(Material.PLAYER_HEAD);
+            var meta = (org.bukkit.inventory.meta.SkullMeta) head.getItemMeta();
+            var profile = Bukkit.createProfile(UUID.nameUUIDFromBytes(texture.getBytes(java.nio.charset.StandardCharsets.UTF_8)));
+            String json = "{\"textures\":{\"SKIN\":{\"url\":\"https://textures.minecraft.net/texture/" + texture + "\"}}}";
+            profile.setProperty(new com.destroystokyo.paper.profile.ProfileProperty("textures",
+                    Base64.getEncoder().encodeToString(json.getBytes(java.nio.charset.StandardCharsets.UTF_8))));
+            meta.setPlayerProfile(profile);
+            head.setItemMeta(meta);
+            emptySeatHeads.put(key, head);
+            emptySeatTitles.put(key, title);
+        }
         journal = plugin.getDataFolder().toPath().resolve("data/vehicles.yml");
         load();
         Bukkit.getPluginManager().registerEvents(this, plugin);
         restoreTask = Bukkit.getScheduler().runTaskLater(plugin, this::restore, 20);
         task = Bukkit.getScheduler().runTaskTimer(plugin, this::tick, 20, 20);
+        menuTask = Bukkit.getScheduler().runTaskTimer(plugin, this::refreshSeatMenus, 2, 2);
     }
 
     public Set<String> types() {
@@ -267,7 +290,7 @@ public final class VehicleService implements Listener, AutoCloseable {
                                     p.setSilent(true);
                                     p.setPersistent(false);
                                     p.setRemoveWhenFarAway(false);
-                                    p.setCollidable(true);
+                                    p.setCollidable(false);
                                     p.getAttribute(Attribute.MAX_HEALTH).setBaseValue(d.health());
                                     p.setHealth(r.health);
                                     p.getAttribute(Attribute.MOVEMENT_SPEED)
@@ -457,6 +480,44 @@ public final class VehicleService implements Listener, AutoCloseable {
         return mount(p, id, driver ? VehicleModels.Seat.PILOT : VehicleModels.Seat.PASSENGER);
     }
 
+    public record FiringPlatform(UUID id, String type, LivingEntity entity, List<Location> muzzles,
+            org.bukkit.util.Vector direction, Set<UUID> excluded) {}
+
+    public String mountedType(Player player) {
+        for (Live live : active.values()) if (live.model.riders().contains(player)) return live.record.type;
+        return null;
+    }
+
+    public FiringPlatform firingPlatform(Player player, List<String> bones) {
+        for (Live live : active.values()) {
+            if (!live.entity.isValid() || live.entity.isDead() || !live.model.riders().contains(player)) continue;
+            if (!player.equals(live.model.driver()) && !live.model.mayShoot(player)) return null;
+            var excluded = new HashSet<UUID>();
+            live.model.riders().forEach(p -> excluded.add(p.getUniqueId()));
+            excluded.add(live.entity.getUniqueId());
+            excluded.add(live.record.owner);
+            var muzzles = new ArrayList<Location>();
+            for (String bone : bones) {
+                var location = live.model.muzzle(bone);
+                if (location == null) return null; // Missing cannon bones fail closed.
+                muzzles.add(location);
+            }
+            return new FiringPlatform(live.record.id, live.record.type, live.entity,
+                    List.copyOf(muzzles), live.model.aim(), Set.copyOf(excluded));
+        }
+        return null;
+    }
+
+    public boolean occupant(UUID id, UUID player) {
+        var live = active.get(id);
+        return live != null && live.model.riders().stream().anyMatch(p -> p.getUniqueId().equals(player));
+    }
+
+    public UUID id(Entity entity) {
+        var live = live(entity);
+        return live == null ? null : live.record.id;
+    }
+
     public boolean mayShoot(Player player) {
         for (Live live : active.values()) {
             if (live.model.riders().contains(player)) return live.model.mayShoot(player);
@@ -465,16 +526,20 @@ public final class VehicleService implements Listener, AutoCloseable {
     }
 
     public boolean mount(Player p, UUID id, VehicleModels.Seat seat) {
+        return mount(p, id, seat, null);
+    }
+
+    private boolean mount(Player p, UUID id, VehicleModels.Seat seat, String seatId) {
         boolean driver = seat == VehicleModels.Seat.PILOT;
         var live = active.get(id);
         // ModelEngine seats are virtual: Bukkit's isInsideVehicle alone cannot detect them.
-        if (active.values().stream().anyMatch(v -> v.model.riders().contains(p))) {
+        if (active.values().stream().anyMatch(v -> v != live && v.model.riders().contains(p))) {
             message(p, "occupied");
             return false;
         }
         if (live == null
                 || p.isDead()
-                || p.isInsideVehicle()
+                || (p.isInsideVehicle() && !live.model.riders().contains(p))
                 || p.getWorld() != live.entity.getWorld()
                 || p.getLocation().distanceSquared(live.entity.getLocation()) > 400) return false;
         if (driver && !live.record.owner.equals(p.getUniqueId())) {
@@ -489,7 +554,7 @@ public final class VehicleService implements Listener, AutoCloseable {
             message(p, "combat");
             return false;
         }
-        boolean mounted = live.model.mount(p, seat);
+        boolean mounted = live.model.mount(p, seat, seatId);
         message(
                 p,
                 mounted
@@ -501,6 +566,7 @@ public final class VehicleService implements Listener, AutoCloseable {
                                                 ? "flight-controls"
                                                 : "ground-controls")
                         : "occupied");
+        if (mounted && seat != VehicleModels.Seat.PASSENGER) message(p, "cannon-controls");
         return mounted;
     }
 
@@ -513,7 +579,7 @@ public final class VehicleService implements Listener, AutoCloseable {
         }
         if (!live.model.riders().isEmpty()
                 || live.entity.getVelocity().setY(0).lengthSquared() > packSpeedSquared
-                || !live.entity.isOnGround()) {
+                || !VehicleModels.grounded(live.entity)) {
             message(p, "pack-stationary");
             return false;
         }
@@ -685,6 +751,13 @@ public final class VehicleService implements Listener, AutoCloseable {
             e.setCancelled(true);
     }
 
+    private void refreshSeatMenus() {
+        if (closed) return;
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (player.getOpenInventory().getTopInventory().getHolder() instanceof Seats seats) seats.refresh();
+        }
+    }
+
     private void tick() {
         if (closed) return;
         refreshTickets();
@@ -718,58 +791,63 @@ public final class VehicleService implements Listener, AutoCloseable {
     private final class Seats implements InventoryHolder {
         final UUID id;
         final Inventory inventory;
-        final boolean hasPassenger;
-        final boolean hasGunner;
+        final Map<Integer, VehicleModels.SeatStatus> entries = new HashMap<>();
+        List<VehicleModels.SeatStatus> displayed;
 
         Seats(UUID id) {
             this.id = id;
+            inventory = Bukkit.createInventory(this, 27,
+                    MiniMessage.miniMessage().deserialize(messages.getString("menu-title")));
+            refresh();
+        }
+
+        void refresh() {
             var live = active.get(id);
-            hasPassenger =
-                    live != null && !definitions.get(live.record.type).passengers().isEmpty();
-            hasGunner = live != null && !definitions.get(live.record.type).gunners().isEmpty();
-            inventory =
-                    Bukkit.createInventory(
-                            this,
-                            27,
-                            MiniMessage.miniMessage()
-                                    .deserialize(messages.getString("menu-title")));
+            var seats = live == null ? List.<VehicleModels.SeatStatus>of() : live.model.seats();
+            if (seats.equals(displayed)) return;
+            displayed = seats;
             MenuItems.fill(inventory);
-            inventory.setItem(11, button(Material.SADDLE, "pilot"));
-            if (hasPassenger) inventory.setItem(13, button(Material.OAK_BOAT, "passenger"));
-            if (hasGunner) inventory.setItem(15, button(Material.CROSSBOW, "gunner"));
+            entries.clear();
+            int spacing = seats.size() <= 5 ? 2 : 1;
+            int start = seats.size() <= 5 ? 13 - (seats.size() - 1) : 9 + (9 - seats.size()) / 2;
+            for (int i = 0; i < seats.size(); i++) {
+                var seat = seats.get(i);
+                int slot = start + i * spacing;
+                entries.put(slot, seat);
+                String headKey = seat.role() != VehicleModels.Seat.PILOT ? "rebel-gunner"
+                        : live.record.type.equals("tiefighter") ? "tie-pilot"
+                        : live.record.type.equals("speederbike") ? "speeder-pilot" : "rebel-pilot";
+                var item = seat.occupant() == null ? emptySeatHeads.get(headKey).clone() : new ItemStack(Material.PLAYER_HEAD);
+                var meta = item.getItemMeta();
+                if (meta instanceof org.bukkit.inventory.meta.SkullMeta skull && seat.occupant() != null)
+                    skull.setPlayerProfile(seat.occupant().getPlayerProfile());
+                meta.displayName(MiniMessage.miniMessage().deserialize(
+                        messages.getString(seat.occupant() == null ? "seat-open" : "seat-occupied"),
+                        Placeholder.component("role", seat.occupant() == null && seat.role() != VehicleModels.Seat.PASSENGER
+                                ? net.kyori.adventure.text.Component.text(emptySeatTitles.get(headKey), net.kyori.adventure.text.format.NamedTextColor.YELLOW)
+                                : MiniMessage.miniMessage().deserialize(messages.getString(seat.role().name().toLowerCase(Locale.ROOT)))),
+                        Placeholder.unparsed("player", seat.occupant() == null ? "" : seat.occupant().getName())));
+                item.setItemMeta(meta);
+                inventory.setItem(slot, item);
+            }
         }
 
         @Override
-        public Inventory getInventory() {
-            return inventory;
-        }
-    }
-
-    private ItemStack button(Material material, String key) {
-        var item = new ItemStack(material);
-        var meta = item.getItemMeta();
-        meta.displayName(MiniMessage.miniMessage().deserialize(messages.getString(key)));
-        item.setItemMeta(meta);
-        return item;
+        public Inventory getInventory() { return inventory; }
     }
 
     @EventHandler
     public void click(InventoryClickEvent e) {
         if (!(e.getView().getTopInventory().getHolder() instanceof Seats seats)) return;
         e.setCancelled(true);
-        if (!(e.getWhoClicked() instanceof Player p)
-                || (e.getRawSlot() != 11 && e.getRawSlot() != 13 && e.getRawSlot() != 15)) return;
-        if (e.getRawSlot() == 13 && !seats.hasPassenger) return;
-        if (e.getRawSlot() == 15 && !seats.hasGunner) return;
-        p.closeInventory();
-        mount(
-                p,
-                seats.id,
-                e.getRawSlot() == 11
-                        ? VehicleModels.Seat.PILOT
-                        : e.getRawSlot() == 15
-                                ? VehicleModels.Seat.GUNNER
-                                : VehicleModels.Seat.PASSENGER);
+        if (!(e.getWhoClicked() instanceof Player p)) return;
+        // Re-read occupancy so a stale menu cannot board a different or already occupied seat.
+        seats.refresh();
+        var seat = seats.entries.get(e.getRawSlot());
+        if (seat == null) return;
+        if (seat.occupant() != null) { message(p, "occupied"); return; }
+        if (mount(p, seats.id, seat.role(), seat.id())) p.closeInventory();
+        seats.refresh();
     }
 
     @EventHandler
@@ -782,6 +860,7 @@ public final class VehicleService implements Listener, AutoCloseable {
         closed = true;
         task.cancel();
         restoreTask.cancel();
+        menuTask.cancel();
         for (Live live : active.values()) {
             live.record.location = live.entity.getLocation();
             live.record.health = live.entity.getHealth();

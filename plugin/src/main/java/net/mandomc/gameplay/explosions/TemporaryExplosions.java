@@ -62,7 +62,7 @@ public final class TemporaryExplosions implements Listener, AutoCloseable {
             }
         }
         Bukkit.getPluginManager().registerEvents(this, plugin);
-        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> restore(false), 20, 20);
+        task = Bukkit.getScheduler().runTaskTimer(plugin, () -> restore(false), settings.restoreIntervalTicks(), settings.restoreIntervalTicks());
     }
 
     public int pendingCount() {
@@ -272,8 +272,13 @@ public final class TemporaryExplosions implements Listener, AutoCloseable {
                 pending.values().stream()
                         .sorted(Comparator.comparingInt(s -> s.position.y))
                         .toList()) {
+            if (!all && restored.size() >= settings.restoreBlocksPerStep()) break;
             if (!all && saved.due > now) continue;
             var p = saved.position;
+            // Keep support below a waiting block, including when a player delays the lower cell.
+            if (!all && pending.containsKey(new Position(p.world, p.x, p.y - 1, p.z))
+                    && restored.stream().noneMatch(s -> s.position.equals(
+                            new Position(p.world, p.x, p.y - 1, p.z)))) continue;
             World world = Bukkit.getWorld(p.world);
             if (world == null) continue;
             // A bounded journal can safely load an old blast chunk; unloaded worlds remain

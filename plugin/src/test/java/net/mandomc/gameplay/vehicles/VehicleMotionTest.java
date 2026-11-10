@@ -56,6 +56,22 @@ public class VehicleMotionTest {
     }
 
     @Test
+    public void landingCutsLatchedThrustAndSettlesBeforeExit() {
+        var d = definition("xwing");
+        var motion = new VehicleMotion();
+        for (int i = 0; i < 80; i++) motion.tick(d, input(1, false, false), false, 0);
+        VehicleMotion.Step step = null;
+        for (int i = 0; i < 80; i++) step = motion.tick(d, input(0, false, true), false, 0);
+        assertEquals(0, step.z(), 0);
+        assertTrue(step.y() < 0);
+        assertTrue(motion.tick(d, input(0, false, true), true, 0).dismount());
+        step = motion.tick(d, input(0, false, false), true, 0);
+        assertEquals(0, step.z(), 0);
+        assertEquals(-.04, step.y(), 0);
+        assertTrue(motion.tick(d, input(0, true, false), true, 0).y() > 0);
+    }
+
+    @Test
     public void speederStopsWhenReleasedAndCannotJumpInAir() {
         var d = definition("speederbike");
         var motion = new VehicleMotion();

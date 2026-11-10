@@ -120,8 +120,9 @@ public final class PlayerHud implements Listener, AutoCloseable {
                 Placeholder.unparsed("deaths", String.valueOf(view.deaths)),
                 Placeholder.unparsed("balance", CreditLedger.format(credits.ledger().balance(view.player.getUniqueId()))));
         if (!view.objective.displayName().equals(logo)) view.objective.displayName(logo);
-        if (!view.hidden) for (int i = 0; i < settings.lines().size(); i++) {
-            var line = MiniMessage.miniMessage().deserialize(settings.lines().get(i), placeholders);
+        var lines = tenths > 0 ? settings.combatLines() : settings.lines();
+        if (!view.hidden) for (int i = 0; i < lines.size(); i++) {
+            var line = MiniMessage.miniMessage().deserialize(lines.get(i), placeholders);
             var score = view.objective.getScore("mmc_line_" + i);
             if (!score.isScoreSet()) score.setScore(settings.lines().size() - i);
             if (!line.equals(score.customName())) score.customName(line);
