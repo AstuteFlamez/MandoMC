@@ -1,44 +1,49 @@
-schema-version: 1
-# Provisional tuning; all durations are server ticks (20 = one second).
-item-id: vader
-item-model: mandomc:sabers/vader
-hilt-model: mandomc:sabers/vader_hilt
-throw-damage: 8.0
-throw-cooldown-ticks: 40
-# Drain 75% of a full charge over one second; use the same recovery as reflection.
-throw-cost-percent: 75.0
-throw-drain-ticks: 20
-throw-range: 18.0
-throw-speed: 1.0
-throw-return-speed: 1.5
-throw-hit-radius: 0.22
-# Each throw samples a coherent curve, bank and spin. 0 disables variation; 1 uses the full range.
-throw-arc-width: 1.8
-throw-arc-height: 0.65
-throw-bank-degrees: 25.0
-throw-spin-degrees: 38.0
-throw-lock-half-angle: 18.0
-throw-lock-correction: 1.5
-throw-return-height: 2.4
-throw-variation: 1.0
-guard-capacity: 100.0
-# The native durability bar displays remaining guard; sabers cannot break from wear.
-# Each incoming damage point consumes five guard points; throws require their full cost available.
-guard-damage-multiplier: 5.0
-guard-cooling-per-tick: 0.5
-# Five seconds without charge use or positive damage dealt/taken before repair starts.
-guard-recovery-delay-ticks: 100
-overheat-ticks: 80
-# At zero, stun all saber actions for this duration and immediately end any throw.
-block-half-angle-degrees: 80.0
-reflection-limit: 4
-# Official upstream delivery: do not copy/rehost JustTimm's artwork.
-upstream-pack:
-  main-pack-id: a3feb494-6a5c-5495-8f33-efdd5783633f
-  id: 20a340e6-9abc-481d-8878-312e26ca08e8
-  version: 3.2.2
-  url: "https://cdn.modrinth.com/data/HVjHFmDU/versions/heHnARk2/JustTimm%27s%20Lightsaber%20Workshop%203.2.2.zip"
-  sha1: 0f1a11ab321d5d4ac39ed2659ddbdf207a82f5dc
-
-# Recovered sabers use the shared guard/throw rules and their own native melee stats/models.
-additional-item-ids: [obiwan, cal_survivor_crossguard, windu, quigon, ventress_yellow]
+{
+  "schema-version": 1,
+  "item-id": "vader",
+  "item-model": "mandomc:sabers/vader",
+  "hilt-model": "mandomc:sabers/vader_hilt",
+  "throw-damage": 8.0,
+  "throw-cooldown-ticks": 40,
+  "throw-cost-percent": 75.0,
+  "throw-drain-ticks": 20,
+  "throw-range": 18.0,
+  "throw-speed": 1.0,
+  "throw-return-speed": 1.5,
+  "throw-hit-radius": 0.22,
+  "throw-arc-width": 1.8,
+  "throw-arc-height": 0.65,
+  "throw-bank-degrees": 25.0,
+  "throw-spin-degrees": 38.0,
+  "throw-lock-half-angle": 18.0,
+  "throw-lock-correction": 1.5,
+  "throw-return-height": 2.4,
+  "throw-variation": 1.0,
+  "guard-capacity": 100.0,
+  "guard-damage-multiplier": 5.0,
+  "guard-cooling-per-tick": 0.5,
+  "guard-recovery-delay-ticks": 100,
+  "overheat-ticks": 80,
+  "block-half-angle-degrees": 80.0,
+  "reflection-limit": 4,
+  "upstream-pack": {
+    "main-pack-id": "a3feb494-6a5c-5495-8f33-efdd5783633f",
+    "id": "20a340e6-9abc-481d-8878-312e26ca08e8",
+    "version": "3.2.2",
+    "url": "https://cdn.modrinth.com/data/HVjHFmDU/versions/heHnARk2/JustTimm%27s%20Lightsaber%20Workshop%203.2.2.zip",
+    "sha1": "0f1a11ab321d5d4ac39ed2659ddbdf207a82f5dc",
+    "base-pack": {
+      "id": "c7431f86-b798-586f-819f-e863f0c9e1e9",
+      "url": "https://cdn.modrinth.com/data/w0TnApzs/versions/Fj5GKJnf/Faithful%2032x%20-%2026.1.zip",
+      "sha1": "9447e84ee7121c86304e467a0f8d5b095872e1e6",
+      "version": "26.1-june-2026"
+    }
+  },
+  "additional-item-ids": [
+    "obiwan",
+    "cal_survivor_crossguard",
+    "windu",
+    "quigon",
+    "ventress_yellow"
+  ]
+}

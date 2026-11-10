@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "mandomc:block/metals/deepslate_beskar_ore"
+  }
+}
