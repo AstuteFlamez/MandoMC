@@ -45,7 +45,7 @@ public final class ProgressionProbe extends JavaPlugin implements Listener {
         if (event.getPlayer() != actor) return;
         lastOreLit = event.getBlockState().getBlockData() instanceof org.bukkit.block.data.Lightable light && light.isLit();
         nativeDiamonds = event.getItems().stream().map(Item::getItemStack)
-                .filter(i -> i.getType()==Material.DIAMOND || i.getType()==Material.REDSTONE).mapToInt(ItemStack::getAmount).sum();
+                .filter(i -> java.util.Set.of(Material.DIAMOND,Material.REDSTONE,Material.RAW_IRON,Material.GOLD_NUGGET,Material.ANCIENT_DEBRIS).contains(i.getType())).mapToInt(ItemStack::getAmount).sum();
         if (denyDrops) event.setCancelled(true);
     }
     private void verify() throws Exception {
@@ -79,8 +79,36 @@ public final class ProgressionProbe extends JavaPlugin implements Listener {
         mine(Material.EMERALD_ORE,new ItemStack(Material.IRON_PICKAXE),null,false);
         check(drops().size()==1 && drops().getFirst().getItemStack().getType()==Material.EMERALD,"other ores unaffected");
         check(mando.items().create("durasteel_scrap").getItemMeta().getItemModel().toString().equals("mandomc:legacy/durasteel_scrap"),"scrap uses existing model");
-        recipes(); armor(); metalChain(); approvedRecipes(); electrumMining(); guide(); desertSpawns();
+        recipes(); armor(); metalChain(); approvedRecipes(); electrumMining(); guide(); desertSpawns(); saberRecipes(); expandedMetals(); utilities();
         drops().forEach(Entity::remove);block.setType(Material.AIR,false);
+    }
+    private void saberRecipes() throws Exception {
+        var field=MandoPlugin.class.getDeclaredField("craftingRecipes");field.setAccessible(true);var recipes=(CraftingRecipes)field.get(mando);
+        int assembled=0, styles=0;
+        for(var recipe:recipes.definitions()) {
+            if(recipe.stonecutting()) {
+                var nativeRecipe=Bukkit.getRecipe(new NamespacedKey("mandomc","refinish_"+recipe.id()));
+                check(nativeRecipe instanceof StonecuttingRecipe,"native stonecutter recipe "+recipe.id());
+                var stone=(StonecuttingRecipe)nativeRecipe;var input=recipes.ingredient(recipe.ingredients().get('I'));
+                check(stone.getInputChoice().test(input) && recipe.result().equals(mando.items().identify(stone.getResult())),"exact saber input/style output "+recipe.id());
+                var worn=input.clone();var meta=(Damageable)worn.getItemMeta();meta.setDamage(10);worn.setItemMeta(meta);
+                check(!stone.getInputChoice().test(worn),"worn saber cannot receive free repair "+recipe.id());styles++;
+            } else if(recipe.ingredients().values().stream().anyMatch(i->i.endsWith("_kyber")) && recipe.category().equals("weapons")
+                    || recipe.id().endsWith("_kyber") || recipe.id().equals("precision_emitter_coil")) {
+                var matrix=new ItemStack[9];
+                for(int y=0;y<recipe.shape().size();y++)for(int x=0;x<recipe.shape().get(y).length();x++) {
+                    char symbol=recipe.shape().get(y).charAt(x);if(symbol!=' ')matrix[y*3+x]=recipes.ingredient(recipe.ingredients().get(symbol));
+                }
+                var actual=Bukkit.craftItemResult(matrix,world,actor);
+                check(recipe.result().equals(mando.items().identify(actual.getResult())),"native saber-chain crafting "+recipe.id());
+                check(Arrays.stream(actual.getResultingMatrix()).allMatch(i->i==null||i.isEmpty()),"saber chain costs consumed "+recipe.id());
+                if(recipe.category().equals("weapons"))assembled++;
+            }
+        }
+        check(assembled==7 && styles==71,"all 78 saber identities have an assembly or style route");
+        var viewer=new TestPlayer("SaberGuide");Bukkit.getPluginCommand("recipes").execute(viewer.player,"recipes",new String[]{"yoda_lightsaber"});
+        check(viewer.view.getTopInventory().getItem(23).getType()==Material.STONECUTTER,"guide names actual saber workstation");
+        check("yoda_lightsaber".equals(mando.items().identify(viewer.view.getTopInventory().getItem(25))),"guide style output remains genuine saber");
     }
     private List<Item> drops() { return new ArrayList<>(world.getNearbyEntitiesByType(Item.class,block.getLocation(),4)); }
     private void mine(Material material, ItemStack tool, String id, boolean cancelled) {
@@ -181,7 +209,7 @@ public final class ProgressionProbe extends JavaPlugin implements Listener {
         check(recipes.guideDefinitions().stream().noneMatch(r->Set.of("aurodium","cortosis","phrik","songsteel","lommite","neuranium","mandalorian_iron").contains(r.result())),"unused metals hidden from recipe guide");
         for(String id:List.of("agrinium","agrinium_sheet","durasteel","durasteel_sheet","electrum_sheet","beskar","beskar_sheet"))check(recipes.guideDefinitions().stream().anyMatch(r->r.result().equals(id)),"used metal route visible " + id);
         Bukkit.getPluginCommand("recipes").execute(viewer.player,"recipes",new String[]{"barrel_liner"});activate(viewer,10);inventory=viewer.view.getTopInventory();
-        check(inventory.getItem(23).getType()==Material.FURNACE && inventory.getItem(10).getType()==Material.RAW_IRON,"ingredient navigation opens actual raw Agrinium smelting route");
+        check(inventory.getItem(23).getType()==Material.CRAFTING_TABLE && "agrinium_scrap".equals(mando.items().identify(inventory.getItem(10))),"ingredient navigation opens actual Agrinium scrap refining route");
         activate(viewer,45);check("barrel_liner".equals(mando.items().identify(viewer.view.getTopInventory().getItem(25))),"ingredient navigation returns to parent recipe");
         for (String id : List.of("agrinium_pickaxe","agrinium_shovel")) {
             var item=mando.items().create(id);check(item.getType()==(id.endsWith("pickaxe")?Material.IRON_PICKAXE:Material.IRON_SHOVEL),"Agrinium tools use native iron behavior " + id);
@@ -202,7 +230,7 @@ public final class ProgressionProbe extends JavaPlugin implements Listener {
             var old=mando.items().create(pair.getValue());old.setType(Material.ECHO_SHARD);
             check(materials.canonical(old).getType()==pair.getKey(),"old catalog base migrates " + pair.getValue());
         }
-        for (Material ore:List.of(Material.IRON_ORE,Material.DEEPSLATE_IRON_ORE,Material.COPPER_ORE,Material.DEEPSLATE_COPPER_ORE)) {
+        for (Material ore:List.of(Material.COPPER_ORE,Material.DEEPSLATE_COPPER_ORE)) {
             mine(ore,new ItemStack(Material.IRON_PICKAXE),null,false);
             Material raw=ore.name().contains("IRON")?Material.RAW_IRON:Material.RAW_COPPER;
             check(drops().stream().allMatch(i->i.getItemStack().getType()==raw),"native raw material mining retained " + ore);
@@ -214,7 +242,7 @@ public final class ProgressionProbe extends JavaPlugin implements Listener {
             var ingot=mando.items().create(pair.getValue());var matrix=new ItemStack[9];Arrays.setAll(matrix,i->ingot.clone());
             var packed=Bukkit.craftItemResult(matrix,world,actor);
             check(packed.getResult().getType()==pair.getKey(),"nine ingots retain storage route " + pair.getValue());
-            matrix=new ItemStack[9];matrix[4]=new ItemStack(pair.getKey());var unpacked=Bukkit.craftItemResult(matrix,world,actor).getResult();
+            matrix=new ItemStack[9];matrix[4]=mando.items().create(pair.getValue()+"_block");var unpacked=Bukkit.craftItemResult(matrix,world,actor).getResult();
             check(unpacked.getAmount()==9 && pair.getValue().equals(mando.items().identify(unpacked)),"storage unpacks nine canonical ingots " + pair.getValue());
         }
     }
@@ -256,13 +284,13 @@ public final class ProgressionProbe extends JavaPlugin implements Listener {
     private void electrumMining() {
         for(Material ore:List.of(Material.REDSTONE_ORE,Material.DEEPSLATE_REDSTONE_ORE)) {
             for(boolean lit:List.of(false,true)) {
-                litOre=lit;mine(ore,new ItemStack(Material.IRON_PICKAXE),"electrum",false);
+                litOre=lit;mine(ore,new ItemStack(Material.IRON_PICKAXE),"electrum_scrap",false);
                 check(lastOreLit==lit && nativeDiamonds>=4 && nativeDiamonds<=5,"lit/unlit Electrum retains native quantity " + lit);
             }
             litOre=false;
             for(int i=0;i<12;i++) {
                 var pickaxe=new ItemStack(Material.IRON_PICKAXE);pickaxe.addUnsafeEnchantment(Enchantment.FORTUNE,3);
-                mine(ore,pickaxe,"electrum",false);check(nativeDiamonds>=4 && nativeDiamonds<=8,"native redstone Fortune quantity retained");
+                mine(ore,pickaxe,"electrum_scrap",false);check(nativeDiamonds>=4 && nativeDiamonds<=8,"native redstone Fortune quantity retained");
             }
             var silk=new ItemStack(Material.IRON_PICKAXE);silk.addUnsafeEnchantment(Enchantment.SILK_TOUCH,1);mine(ore,silk,null,false);
             check(drops().size()==1 && drops().getFirst().getItemStack().getType()==ore,"Electrum Silk Touch retains ore");
@@ -272,6 +300,92 @@ public final class ProgressionProbe extends JavaPlugin implements Listener {
             actor.setGameMode(GameMode.CREATIVE);mine(ore,new ItemStack(Material.IRON_PICKAXE),null,false);check(drops().isEmpty(),"Creative Electrum no loot");actor.setGameMode(GameMode.SURVIVAL);
         }
         var copper=new ItemStack(Material.COPPER_INGOT);check(new MetalMaterials(mando.items()).canonical(copper)==copper,"ordinary copper is no longer Electrum");
+    }
+    private void expandedMetals() throws Exception {
+        for(Material ore:List.of(Material.IRON_ORE,Material.DEEPSLATE_IRON_ORE,Material.NETHER_GOLD_ORE,Material.ANCIENT_DEBRIS)) {
+            String id=ore==Material.IRON_ORE||ore==Material.DEEPSLATE_IRON_ORE?"agrinium_scrap":"beskar_scrap";
+            Material right=ore==Material.ANCIENT_DEBRIS?Material.DIAMOND_PICKAXE:ore==Material.NETHER_GOLD_ORE?Material.WOODEN_PICKAXE:Material.STONE_PICKAXE;
+            mine(ore,new ItemStack(right),id,false);
+            check(nativeDiamonds>0,"native ordinary loot exists for "+ore);
+            check(ore!=Material.ANCIENT_DEBRIS||nativeDiamonds==1,"ordinary debris self-drop becomes one scrap, not mistaken for Silk Touch");
+            for(int n=0;n<16;n++) {
+                var fortune=new ItemStack(right);fortune.addUnsafeEnchantment(Enchantment.FORTUNE,3);mine(ore,fortune,id,false);
+                int min=ore==Material.NETHER_GOLD_ORE?2:1,max=ore==Material.NETHER_GOLD_ORE?24:ore==Material.ANCIENT_DEBRIS?1:4;
+                check(nativeDiamonds>=min&&nativeDiamonds<=max,"native Fortune quantity "+ore+" count="+nativeDiamonds);
+            }
+            var silk=new ItemStack(right);silk.addUnsafeEnchantment(Enchantment.SILK_TOUCH,1);mine(ore,silk,null,false);
+            check(drops().size()==1 && drops().getFirst().getItemStack().getType()==ore,"Silk Touch keeps correct ore "+ore);
+            check(MetalMaterials.FORMS.get(ore).equals(mando.items().identify(drops().getFirst().getItemStack())),"Silk ore gains standard catalog tooltip "+ore);
+            var wrong=new ItemStack(ore==Material.ANCIENT_DEBRIS?Material.IRON_PICKAXE:ore==Material.NETHER_GOLD_ORE?Material.WOODEN_SHOVEL:Material.WOODEN_PICKAXE);
+            mine(ore,wrong,null,false);check(drops().isEmpty(),"wrong native tool still yields no scrap "+ore);
+            denyBreak=true;mine(ore,new ItemStack(right),null,true);check(drops().isEmpty(),"cancelled break gives no scrap "+ore);denyBreak=false;
+            denyDrops=true;mine(ore,new ItemStack(right),null,false);check(drops().isEmpty(),"cancelled native drop gives no scrap "+ore);denyDrops=false;
+            actor.setGameMode(GameMode.CREATIVE);mine(ore,new ItemStack(right),null,false);check(drops().isEmpty(),"Creative gives no scrap "+ore);actor.setGameMode(GameMode.SURVIVAL);
+        }
+        var canonical=new MetalMaterials(mando.items());
+        for(var form:MetalMaterials.FORMS.entrySet()) {
+            var item=canonical.canonical(new ItemStack(form.getKey(),2));
+            check(form.getValue().equals(mando.items().identify(item))&&item.getAmount()==2,"native themed form normalizes without quantity change "+form.getValue());
+            check(item.getItemMeta().lore().size()>=4,"form has badge/spacing/functional lore "+form.getValue());
+            var named=new ItemStack(form.getKey());var meta=named.getItemMeta();meta.displayName(Component.text("Third party"));named.setItemMeta(meta);check(canonical.canonical(named)==named,"named form preserved "+form.getValue());
+        }
+        for(String metal:List.of("agrinium","durasteel","electrum","beskar")) {
+            var matrix=new ItemStack[9];Arrays.setAll(matrix,i->mando.items().create(metal));
+            var packed=Bukkit.craftItemResult(matrix,world,actor);check((metal+"_block").equals(mando.items().identify(packed.getResult()))&&packed.getResult().getAmount()==1,"nine canonical ingots yield one standard storage block "+metal);
+            check(Arrays.stream(packed.getResultingMatrix()).allMatch(i->i==null||i.isEmpty()),"nine ingots consumed "+metal);
+            matrix=new ItemStack[9];matrix[4]=packed.getResult();var unpacked=Bukkit.craftItemResult(matrix,world,actor);
+            check(metal.equals(mando.items().identify(unpacked.getResult()))&&unpacked.getResult().getAmount()==9,"storage round trip returns exactly nine matching ingots "+metal);
+            placedBlock(metal+"_block");
+            shiftStorage(metal);
+            mine(mando.items().create(metal+"_block").getType(),new ItemStack(Material.NETHERITE_PICKAXE),null,false);
+            check(drops().size()==1&&(metal+"_block").equals(mando.items().identify(drops().getFirst().getItemStack())),"placed native block mining restores correct catalog form "+metal);
+        }
+        var viewer=new TestPlayer("StorageGuide");Bukkit.getPluginCommand("recipes").execute(viewer.player,"recipes",new String[]{"beskar_from_block"});
+        check(viewer.view.getTopInventory().getItem(25).getAmount()==9&&"beskar_block".equals(mando.items().identify(viewer.view.getTopInventory().getItem(10))),"guide shows block-to-nine conversion");
+        activate(viewer,10);check("beskar_block".equals(mando.items().identify(viewer.view.getTopInventory().getItem(25))),"clicking block opens reciprocal packing recipe");
+    }
+    private void placedBlock(String id) throws Exception {
+        var base=block.getRelative(0,-1,0);base.setType(Material.STONE,false);block.setType(Material.AIR,false);
+        var held=mando.items().create(id);held.setAmount(2);actor.getInventory().setItemInMainHand(held);
+        var handle=actor.getClass().getMethod("getHandle").invoke(actor);var mode=handle.getClass().getField("gameMode").get(handle);
+        var level=world.getClass().getMethod("getHandle").invoke(world);
+        var vecType=Class.forName("net.minecraft.world.phys.Vec3");var vec=vecType.getConstructor(double.class,double.class,double.class).newInstance(block.getX()+.5,(double)block.getY(),block.getZ()+.5);
+        var posType=Class.forName("net.minecraft.core.BlockPos");var pos=posType.getConstructor(int.class,int.class,int.class).newInstance(base.getX(),base.getY(),base.getZ());
+        var direction=Class.forName("net.minecraft.core.Direction");var hitType=Class.forName("net.minecraft.world.phys.BlockHitResult");
+        var hit=hitType.getConstructor(vecType,direction,posType,boolean.class).newInstance(vec,direction.getField("UP").get(null),pos,false);
+        var handType=Class.forName("net.minecraft.world.InteractionHand");var nativeItem=handle.getClass().getMethod("getMainHandItem").invoke(handle);
+        mode.getClass().getMethod("useItemOn",Class.forName("net.minecraft.server.level.ServerPlayer"),Class.forName("net.minecraft.world.level.Level"),Class.forName("net.minecraft.world.item.ItemStack"),handType,hitType).invoke(mode,handle,level,nativeItem,handType.getField("MAIN_HAND").get(null),hit);
+        check(block.getType()==held.getType(),"native use places catalog storage block "+id);
+        check(actor.getInventory().getItemInMainHand().getAmount()==1,"native placement consumes exactly one catalog block "+id);
+        actor.getInventory().clear();
+    }
+    private void shiftStorage(String metal) throws Exception {
+        actor.getInventory().clear();
+        var table=block.getRelative(3,0,0);table.setType(Material.CRAFTING_TABLE,false);
+        var view=actor.openWorkbench(table.getLocation(),false);var crafting=(CraftingInventory)view.getTopInventory();
+        var matrix=new ItemStack[9];Arrays.setAll(matrix,i->{var item=mando.items().create(metal);item.setAmount(3);return item;});crafting.setMatrix(matrix);
+        var menu=view.getClass().getMethod("getHandle").invoke(view);var handle=actor.getClass().getMethod("getHandle").invoke(actor);
+        menu.getClass().getMethod("slotsChanged",Class.forName("net.minecraft.world.Container")).invoke(menu,menu.getClass().getField("craftSlots").get(menu));
+        menu.getClass().getMethod("clicked",int.class,int.class,Class.forName("net.minecraft.world.inventory.ContainerInput"),Class.forName("net.minecraft.world.entity.player.Player")).invoke(menu,0,0,Class.forName("net.minecraft.world.inventory.ContainerInput").getField("QUICK_MOVE").get(null),handle);
+        check(Arrays.stream(actor.getInventory().getStorageContents()).filter(Objects::nonNull).filter(i->(metal+"_block").equals(mando.items().identify(i))).mapToInt(ItemStack::getAmount).sum()==3,"native shift craft packs 27 ingots into three blocks "+metal);
+        check(Arrays.stream(crafting.getMatrix()).allMatch(i->i==null||i.isEmpty()),"shift packing consumes all 27 inputs "+metal);
+        actor.getInventory().clear();matrix=new ItemStack[9];var blocks=mando.items().create(metal+"_block");blocks.setAmount(3);matrix[4]=blocks;crafting.setMatrix(matrix);
+        menu.getClass().getMethod("slotsChanged",Class.forName("net.minecraft.world.Container")).invoke(menu,menu.getClass().getField("craftSlots").get(menu));
+        menu.getClass().getMethod("clicked",int.class,int.class,Class.forName("net.minecraft.world.inventory.ContainerInput"),Class.forName("net.minecraft.world.entity.player.Player")).invoke(menu,0,0,Class.forName("net.minecraft.world.inventory.ContainerInput").getField("QUICK_MOVE").get(null),handle);
+        check(Arrays.stream(actor.getInventory().getStorageContents()).filter(Objects::nonNull).filter(i->metal.equals(mando.items().identify(i))).mapToInt(ItemStack::getAmount).sum()==27,"native shift craft unpacks three blocks into exactly 27 ingots "+metal);
+        actor.closeInventory();actor.getInventory().clear();
+    }
+    private void utilities() throws Exception {
+        var field=MandoPlugin.class.getDeclaredField("craftingRecipes");field.setAccessible(true);var recipes=(CraftingRecipes)field.get(mando);int count=0;
+        for(var recipe:recipes.definitions())if(recipe.category().equals("utilities")) {
+            var matrix=new ItemStack[9];
+            for(int y=0;y<recipe.shape().size();y++)for(int x=0;x<recipe.shape().get(y).length();x++){char c=recipe.shape().get(y).charAt(x);if(c!=' ')matrix[y*3+x]=recipes.ingredient(recipe.ingredients().get(c));}
+            var result=Bukkit.craftItemResult(matrix,world,actor);check(result.getResult().getType()==Material.matchMaterial(recipe.result())&&result.getResult().getAmount()==recipe.amount(),"native sheet utility matching/output "+recipe.id());
+            check(Arrays.stream(result.getResultingMatrix()).allMatch(i->i==null||i.isEmpty()),"sheet utility exact slot costs consumed "+recipe.id());
+            for(int i=0;i<9;i++)if(matrix[i]!=null&&"agrinium_sheet".equals(mando.items().identify(matrix[i])))matrix[i]=mando.items().create("agrinium");
+            check(Bukkit.getCraftingRecipe(matrix,world)==null,"old ingot shortcut absent "+recipe.id());count++;
+        }
+        check(count==26,"all 26 iron utility recipes use Agrinium sheets");
     }
     private void desertSpawns() throws Exception {
         var location=Bukkit.getWorld(NamespacedKey.minecraft("devworld")).getBlockAt(1000,280,1000).getLocation();

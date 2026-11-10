@@ -6,6 +6,11 @@ author: AstuteFlamez
 description: MandoMC gameplay
 softdepend: [ WorldEdit, WorldGuard, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
+  auctionhouse:
+    description: Buy and sell items with other players
+    usage: /ah [sell <price> [amount]|selling|collect]
+    aliases: [ah, auction]
+    permission: mandomc.auction
   scoreboard:
     description: Toggle your sidebar
     usage: /scoreboard
@@ -46,7 +51,7 @@ commands:
     permission: mandomc.recipes
   mandomc:
     description: MandoMC administration and custom items
-    usage: /mandomc [give [player] [item] | items reload]
+    usage: /mandomc [give [player] [item] [quantity] | items reload]
     aliases: [mmc]
   spawn:
     description: Return to SpawnWorld after standing still
@@ -203,6 +208,8 @@ commands:
     usage: '/tpcancel'
     permission: mandomc.travel.tpcancel
 permissions:
+  mandomc.auction:
+    default: true
   mandomc.ranks.manage:
     default: op
   mandomc.hud:

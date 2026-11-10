@@ -52,8 +52,16 @@ public final class ItemCommand implements ItemBrowser.Feedback {
             }
         } else if (args.length == 2) {
             Player target = Bukkit.getPlayerExact(args[0]);
-            if (target == null) message(sender, "player-required", "", "");
+            if (catalog.ids().contains(args[0].toLowerCase(Locale.ROOT))
+                    && !(target != null && catalog.ids().contains(args[1].toLowerCase(Locale.ROOT)))) {
+                if (sender instanceof Player player) quantity(sender, player, args[0].toLowerCase(Locale.ROOT), args[1]);
+                else message(sender, "player-required", "", "");
+            } else if (target == null) message(sender, "player-required", "", "");
             else grant(sender, target, args[1].toLowerCase(Locale.ROOT), false);
+        } else if (args.length == 3) {
+            Player target = Bukkit.getPlayerExact(args[0]);
+            if (target == null) message(sender, "player-required", "", "");
+            else quantity(sender, target, args[1].toLowerCase(Locale.ROOT), args[2]);
         } else message(sender, "usage", "", "");
     }
 
@@ -77,40 +85,46 @@ public final class ItemCommand implements ItemBrowser.Feedback {
         grant(sender, target, id, stack);
     }
 
+    public static int quantity(String input) {
+        if (!input.matches("[0-9]{1,4}")) throw new IllegalArgumentException("quantity");
+        int result = Integer.parseInt(input);
+        if (result < 1 || result > 2304) throw new IllegalArgumentException("quantity");
+        return result;
+    }
+    private void quantity(CommandSender sender, Player target, String id, String input) {
+        try { grant(sender, target, id, quantity(input)); }
+        catch (IllegalArgumentException error) { message(sender, "quantity", "", ""); }
+    }
     private void grant(CommandSender sender, Player target, String id, boolean stack) {
-        if (!sender.hasPermission("mandomc.items.give")) {
-            message(sender, "denied", "", "");
-            return;
-        }
-        if (!target.isOnline()) {
-            message(sender, "player-required", "", "");
-            return;
-        }
-        ItemStack item;
+        grant(sender, target, id, stack ? null : Integer.valueOf(1));
+    }
+    private void grant(CommandSender sender, Player target, String id, Integer requested) {
+        if (!sender.hasPermission("mandomc.items.give")) { message(sender, "denied", "", ""); return; }
+        if (!target.isOnline()) { message(sender, "player-required", "", ""); return; }
+        var generated = new ArrayList<ItemStack>(); int amount;
         try {
-            item = catalog.create(id);
+            var item = catalog.create(id);
+            if (item == null) { message(sender, "unknown", id, ""); return; }
+            amount = requested == null ? item.getMaxStackSize() : requested;
+            int remaining = amount;
+            while (remaining > 0) {
+                if (!generated.isEmpty()) item = Objects.requireNonNull(catalog.create(id));
+                int units = Math.min(remaining, Math.min(item.getMaxStackSize(), target.getInventory().getMaxStackSize()));
+                if (units < 1) throw new IllegalStateException("Invalid item stack limit");
+                item.setAmount(units); generated.add(item); remaining -= units;
+            }
         } catch (RuntimeException error) {
             plugin.getLogger().warning("Cannot give " + id + ": " + error.getMessage());
-            message(sender, "unavailable", id, "");
-            return;
+            message(sender, "unavailable", id, ""); return;
         }
-        if (item == null) {
-            message(sender, "unknown", id, "");
-            return;
+        // Generate each stack independently before mutation, preserving vendor/unique-item factories.
+        var before = java.util.Arrays.stream(target.getInventory().getStorageContents())
+                .map(item -> item == null ? null : item.clone()).toArray(ItemStack[]::new);
+        var scratch = Bukkit.createInventory(null, before.length); scratch.setMaxStackSize(target.getInventory().getMaxStackSize()); scratch.setContents(before);
+        for (var item : generated) if (!scratch.addItem(item.clone()).isEmpty()) { message(sender, "full", "", target.getName()); return; }
+        for (var item : generated) if (!target.getInventory().addItem(item).isEmpty()) {
+            target.getInventory().setStorageContents(before); message(sender, "full", "", target.getName()); return;
         }
-        int amount = stack ? item.getMaxStackSize() : 1;
-        int capacity = 0;
-        for (var slot : target.getInventory().getStorageContents()) {
-            int limit = Math.min(item.getMaxStackSize(), target.getInventory().getMaxStackSize());
-            if (slot == null || slot.getType().isAir()) capacity += limit;
-            else if (slot.isSimilar(item)) capacity += Math.max(0, limit - slot.getAmount());
-        }
-        if (capacity < amount) {
-            message(sender, "full", "", target.getName());
-            return;
-        }
-        item.setAmount(amount);
-        target.getInventory().addItem(item);
         message(sender, "given", amount + " × " + id, target.getName());
     }
 
@@ -130,7 +144,10 @@ public final class ItemCommand implements ItemBrowser.Feedback {
         if (args.length == 1) {
             options.addAll(catalog.ids());
             Bukkit.getOnlinePlayers().stream().map(Player::getName).forEach(options::add);
-        } else if (args.length == 2 && Bukkit.getPlayerExact(args[0]) != null) options.addAll(catalog.ids());
+        } else if (args.length == 2) {
+            if (Bukkit.getPlayerExact(args[0]) != null) options.addAll(catalog.ids());
+            if (catalog.ids().contains(args[0].toLowerCase(Locale.ROOT))) options.addAll(List.of("1", "16", "64", "128"));
+        } else if (args.length == 3 && Bukkit.getPlayerExact(args[0]) != null) options.addAll(List.of("1", "16", "64", "128"));
         String prefix = args.length == 0 ? "" : args[args.length - 1].toLowerCase(Locale.ROOT);
         return options.stream().filter(s -> s.toLowerCase(Locale.ROOT).startsWith(prefix)).distinct().sorted().toList();
     }

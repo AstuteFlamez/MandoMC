@@ -15,6 +15,20 @@ public record RecipeDefinition(String id, String result, int amount, String cate
     }
 
     public boolean smelting() { return cookTime > 0; }
+    public boolean stonecutting() { return cookTime == -1; }
+
+    public static RecipeDefinition parseStonecutting(String id, ConfigurationSection config) {
+        String path = "items/recipes.yml: stonecutting." + id;
+        if (!id.matches("[a-z0-9_]+") || config == null) throw new IllegalArgumentException(path + ": invalid recipe");
+        if (!Set.of("result", "input", "category").containsAll(config.getKeys(false)))
+            throw new IllegalArgumentException(path + ": unsupported key");
+        String result = config.getString("result", "");
+        String input = config.getString("input", "");
+        String category = config.getString("category", "");
+        if (!result.matches("(?:minecraft:)?[a-z0-9_]+") || !input.matches("[a-z0-9_]+") || input.equals(result)
+                || !category.matches("[a-z0-9_]+")) throw new IllegalArgumentException(path + ": invalid result/input/category");
+        return new RecipeDefinition(id, result, 1, category, List.of("I"), Map.of('I', input), -1, 0, false, 0, false);
+    }
 
     public static RecipeDefinition parseSmelting(String id, ConfigurationSection config) {
         String path = "items/recipes.yml: smelting." + id;
@@ -29,7 +43,7 @@ public record RecipeDefinition(String id, String result, int amount, String cate
         String category = config.getString("category", "");
         int time = config.getInt("cook-time", -1);
         double experience = config.getDouble("experience", Double.NaN);
-        if (!result.matches("[a-z0-9_]+") || !input.matches("(?:minecraft:)?[a-z0-9_]+")
+        if (!result.matches("(?:minecraft:)?[a-z0-9_]+") || !input.matches("(?:minecraft:)?[a-z0-9_]+")
                 || !category.matches("[a-z0-9_]+") || !Set.of("blast", "furnace").contains(config.getString("furnace", ""))
                 || !config.isInt("cook-time") || time < 1 || time > 72000
                 || !Double.isFinite(experience) || experience < 0 || experience > 100) {
@@ -49,7 +63,7 @@ public record RecipeDefinition(String id, String result, int amount, String cate
         String result = config.getString("result", "");
         String category = config.getString("category", "");
         int amount = config.getInt("amount", 1);
-        if (!result.matches("[a-z0-9_]+") || !category.matches("[a-z0-9_]+")
+        if (!result.matches("(?:minecraft:)?[a-z0-9_]+") || !category.matches("[a-z0-9_]+")
                 || (config.contains("amount") && !config.isInt("amount")) || amount < 1 || amount > 64) {
             throw new IllegalArgumentException(path + ": invalid result, category or amount");
         }
@@ -62,7 +76,7 @@ public record RecipeDefinition(String id, String result, int amount, String cate
             var units = config.getList("ingredients");
             if (config.contains("shape") || units == null || units.isEmpty() || units.size() > 9
                     || units.stream().anyMatch(unit -> !(unit instanceof String value)
-                    || !value.matches("(?:minecraft:)?[a-z0-9_]+"))) {
+                    || !value.matches("(?:#?minecraft:)?[a-z0-9_]+"))) {
                 throw new IllegalArgumentException(path + ": shapeless ingredients must be 1–9 item IDs, one per slot");
             }
             var ingredients = new LinkedHashMap<Character, String>();
@@ -93,7 +107,7 @@ public record RecipeDefinition(String id, String result, int amount, String cate
         var ingredients = new LinkedHashMap<Character, String>();
         for (String symbol : section.getKeys(false)) {
             String value = section.getString(symbol, "");
-            if (symbol.length() != 1 || symbol.equals(" ") || !value.matches("(?:minecraft:)?[a-z0-9_]+")) {
+            if (symbol.length() != 1 || symbol.equals(" ") || !value.matches("(?:#?minecraft:)?[a-z0-9_]+")) {
                 throw new IllegalArgumentException(path + ": invalid ingredient " + symbol);
             }
             ingredients.put(symbol.charAt(0), value);

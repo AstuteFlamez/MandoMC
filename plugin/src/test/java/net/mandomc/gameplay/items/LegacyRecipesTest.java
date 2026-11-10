@@ -29,25 +29,27 @@ public class LegacyRecipesTest {
         }
         var config = resource("items/recipes.yml");
         var shapes = new HashSet<String>();
-        for (String section : java.util.List.of("recipes", "smelting")) {
+        for (String section : java.util.List.of("recipes", "smelting", "stonecutting")) {
             var recipes = config.getConfigurationSection(section);
             for (String id : recipes.getKeys(false)) {
                 var recipe = section.equals("recipes") ? RecipeDefinition.parse(id, recipes.getConfigurationSection(id))
-                        : RecipeDefinition.parseSmelting(id, recipes.getConfigurationSection(id));
-                assertTrue("Missing result " + id, ids.contains(recipe.result()));
-                if (!recipe.smelting()) {
+                        : section.equals("smelting") ? RecipeDefinition.parseSmelting(id, recipes.getConfigurationSection(id))
+                        : RecipeDefinition.parseStonecutting(id, recipes.getConfigurationSection(id));
+                assertTrue("Missing result " + id, recipe.result().startsWith("minecraft:") ? Material.matchMaterial(recipe.result()) != null : ids.contains(recipe.result()));
+                if (!recipe.smelting() && !recipe.stonecutting()) {
                     String normal = pattern(recipe, false), mirrored = pattern(recipe, true);
                     String canonical = normal.compareTo(mirrored) <= 0 ? normal : mirrored;
                     assertTrue("Ambiguous native recipe " + id, shapes.add(canonical));
                 }
                 for (String ingredient : recipe.ingredients().values()) {
-                    assertTrue("Missing ingredient " + ingredient, ingredient.startsWith("minecraft:")
-                            ? Material.matchMaterial(ingredient) != null : ids.contains(ingredient));
+                    assertTrue("Missing ingredient " + ingredient, ingredient.startsWith("#minecraft:") || (ingredient.startsWith("minecraft:")
+                            ? Material.matchMaterial(ingredient) != null : ids.contains(ingredient)));
                 }
             }
         }
-        assertEquals(70, config.getConfigurationSection("recipes").getKeys(false).size());
+        assertEquals(116, config.getConfigurationSection("recipes").getKeys(false).size());
         assertEquals(11, config.getConfigurationSection("smelting").getKeys(false).size());
+        assertEquals(71, config.getConfigurationSection("stonecutting").getKeys(false).size());
     }
 
     private String pattern(RecipeDefinition recipe, boolean mirror) {

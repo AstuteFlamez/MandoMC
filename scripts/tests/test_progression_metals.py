@@ -28,6 +28,20 @@ class ProgressionMetalTests(unittest.TestCase):
         self.assertEqual('Electrum Block', labels['block.minecraft.redstone_block'])
         self.assertNotIn('block.minecraft.copper_block', labels)
 
+    def test_metals_use_four_distinct_native_mineral_patterns(self):
+        base = json.loads((ROOT / 'resource-pack/metal-block-sources.json').read_text())['blocks']
+        progression = json.loads((ROOT / 'resource-pack/progression-metal-sources.json').read_text())['textures']
+        sources = {row['palette']: row['source'] for row in base if row['name'].startswith('stone_')}
+        sources.update({row['palette']: row['source'] for row in progression if row['target'] in (
+            'minecraft/textures/block/iron_ore.png', 'minecraft/textures/block/redstone_ore.png')})
+        self.assertEqual(len(set(sources.values())), 4)
+        self.assertIn('iron_ore', sources['agrinium'])
+        self.assertIn('gold_ore', sources['electrum'])
+        self.assertIn('diamond_ore', sources['durasteel'])
+        self.assertIn('emerald_ore', sources['beskar'])
+        block = next(row for row in progression if row['target'].endswith('/redstone_block.png'))
+        self.assertEqual(block['generatedSource'], 'art-sources/electrum-block-32.png')
+
     def test_no_item_lore_or_recipe_source_points_to_jabba(self):
         recipes = json.loads((ROOT / 'plugin/src/main/resources/items/recipes.yml').read_text())
         self.assertNotIn('jabba', json.dumps(recipes['sources']).lower())

@@ -2,27 +2,35 @@
   "schema-version": 1,
   "source": "Official Faithful 32x 26.1-june-2026 Fj5GKJnf",
   "license": "src/faithful-license.txt",
-  "scope": "Native iron/Agrinium and redstone/Electrum presentation. Electrum replaces nonoxidizing redstone; lit/unlit ores share native texture aliases. Geometry, alpha, block states and placed shapes remain native.",
+  "scope": "Native iron/Agrinium and redstone/Electrum presentation. Electrum replaces nonoxidizing redstone; lit/unlit ores share native texture aliases. Agrinium uses Faithful iron mineral clusters; Electrum uses gold clusters. The Electrum storage face is an original generated metal plate. Block states and placed shapes remain native.",
   "textures": [
     {
       "target": "minecraft/textures/block/iron_ore.png",
-      "source": "assets/minecraft/textures/block/diamond_ore.png",
-      "sourceSha256": "6c1fa6f862457b0ea0a1c934af884b0761771da166cba4160fbb772436deb055",
+      "source": "assets/minecraft/textures/block/iron_ore.png",
+      "sourceSha256": "7ce1c6a83f766f6033c66c010ca299f41e7d8591cff86c3ebc1474a83cba85dd",
       "palette": "agrinium",
       "oreMask": true,
       "softStoneShadows": true,
-      "recoloredPixels": 199,
-      "outputSha256": "cddf0c43a3b80e8303ffee4eea7a1968c0f356f1c762ee5a540cb5d35e190a42"
+      "recoloredPixels": 201,
+      "mineralHue": [
+        0.0,
+        0.18
+      ],
+      "outputSha256": "94c8f766b0893aa35d6d993bb18a44d0c2ff36d556b45a20dcbb59e70878ecc3"
     },
     {
       "target": "minecraft/textures/block/deepslate_iron_ore.png",
-      "source": "assets/minecraft/textures/block/deepslate_diamond_ore.png",
-      "sourceSha256": "d52620c3d8d2f942e3d91ed517a4d22fdaf03e1571e65412f4b522412ad46c63",
+      "source": "assets/minecraft/textures/block/deepslate_iron_ore.png",
+      "sourceSha256": "495b1e8d4862758979f11b814fcc93630f3a2092a728ac99eb45243c2456cdd0",
       "palette": "agrinium",
       "oreMask": true,
       "softStoneShadows": false,
-      "recoloredPixels": 244,
-      "outputSha256": "82074d4180d84a5491fc45a103e26b9a35df309930a3d2fd0b119c9bf7c344b2"
+      "recoloredPixels": 201,
+      "mineralHue": [
+        0.0,
+        0.18
+      ],
+      "outputSha256": "c2f4f70825e66d5aeb89da27ca2f559308ec7aa45868d6204c640abbb09e63bc"
     },
     {
       "target": "minecraft/textures/block/iron_block.png",
@@ -32,6 +40,10 @@
       "oreMask": false,
       "softStoneShadows": false,
       "recoloredPixels": 1024,
+      "mineralHue": [
+        0.4,
+        0.61
+      ],
       "outputSha256": "d3e43ef2edea2f7c3964dd889748216cb99d74ee3462e36ab04b297438cee385"
     },
     {
@@ -42,6 +54,10 @@
       "oreMask": false,
       "softStoneShadows": false,
       "recoloredPixels": 1024,
+      "mineralHue": [
+        0.4,
+        0.61
+      ],
       "outputSha256": "d17fe8cbfff0dde75d6e06a4bc9ad3f454feec9a1150d9900e9428ca9111fbfa"
     },
     {
@@ -62,37 +78,45 @@
       "oreMask": false,
       "softStoneShadows": false,
       "recoloredPixels": 1024,
+      "mineralHue": [
+        0.4,
+        0.61
+      ],
       "outputSha256": "ff6fbfe4ad9969674912eeb6864b87d6f7f54008396a77a9000219176f4de4a2"
     },
     {
       "target": "minecraft/textures/block/redstone_ore.png",
-      "source": "assets/minecraft/textures/block/diamond_ore.png",
-      "sourceSha256": "6c1fa6f862457b0ea0a1c934af884b0761771da166cba4160fbb772436deb055",
+      "source": "assets/minecraft/textures/block/gold_ore.png",
+      "sourceSha256": "bb2004bc8e9d9a41ebc5808173c744d136cdfe2dbbcc60aa19c0e812c1b42b52",
       "palette": "electrum",
       "oreMask": true,
       "softStoneShadows": true,
-      "recoloredPixels": 199,
-      "outputSha256": "76d59ca65b6da9d64bef7e71fe7d991f848c099a74bc21c830e2d919b0f3a17e"
+      "recoloredPixels": 242,
+      "mineralHue": [
+        0.05,
+        0.23
+      ],
+      "outputSha256": "140a64718f92a35000fac52a2e2dc87175ab3598f9141ac3e6523e23f615cd08"
     },
     {
       "target": "minecraft/textures/block/deepslate_redstone_ore.png",
-      "source": "assets/minecraft/textures/block/deepslate_diamond_ore.png",
-      "sourceSha256": "d52620c3d8d2f942e3d91ed517a4d22fdaf03e1571e65412f4b522412ad46c63",
+      "source": "assets/minecraft/textures/block/deepslate_gold_ore.png",
+      "sourceSha256": "a9f124fed608b33cff600200dfa6a5799aa926381beb7e1d6c8ebfcd63bad674",
       "palette": "electrum",
       "oreMask": true,
       "softStoneShadows": false,
-      "recoloredPixels": 244,
-      "outputSha256": "029c32d1f9d147e6b45f5a72466c60fb7818ac69318338f11bbe0f29417d5957"
+      "recoloredPixels": 242,
+      "mineralHue": [
+        0.05,
+        0.23
+      ],
+      "outputSha256": "af4d8c7032a7e741ec6d16c81c9910af6baf52f968c004b1e53f463d2ba36a95"
     },
     {
       "target": "minecraft/textures/block/redstone_block.png",
-      "source": "assets/minecraft/textures/block/redstone_block.png",
-      "sourceSha256": "cc827c915b40fdfae17aff01c1e232b5d3bea8d956fe534b507803b3d3f4b98e",
-      "palette": "electrum",
-      "oreMask": false,
-      "softStoneShadows": false,
-      "recoloredPixels": 1024,
-      "outputSha256": "c1830d9d12f31594c815abce9bd45912c12bf7e4fa6dbd773deac0a71ea42460"
+      "generatedSource": "art-sources/electrum-block-32.png",
+      "sourceSha256": "c7f1e908551dfd07f275c44cf4c7923ca29c338e3f0e07bb1a594bee4a91d136",
+      "outputSha256": "c7f1e908551dfd07f275c44cf4c7923ca29c338e3f0e07bb1a594bee4a91d136"
     },
     {
       "target": "minecraft/textures/item/redstone.png",

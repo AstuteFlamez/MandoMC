@@ -102,7 +102,7 @@ public class ProgressionRecipesTest {
 
     private boolean reachable(String id, java.util.Map<String, java.util.List<RecipeDefinition>> recipes,
                               java.util.Set<String> path) {
-        if (id.startsWith("minecraft:") || id.equals("durasteel_scrap") || id.equals("electrum")) return true;
+        if (id.startsWith("minecraft:") || java.util.Set.of("durasteel_scrap", "electrum_scrap", "agrinium_scrap", "beskar_scrap").contains(id)) return true;
         if (!path.add(id)) return false;
         for (var recipe : recipes.getOrDefault(id, List.of())) {
             if (recipe.ingredients().values().stream().allMatch(input -> reachable(input, recipes, new java.util.HashSet<>(path)))) {

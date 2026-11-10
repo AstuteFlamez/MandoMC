@@ -150,8 +150,10 @@ public final class RecipeGuide implements Listener, AutoCloseable {
             }
         }
         menu.inventory.setItem(25, recipes.result(recipe));
-        button(menu, 23, recipe.smelting() ? recipe.blasting() ? Material.BLAST_FURNACE : Material.FURNACE : Material.CRAFTING_TABLE,
-                recipe.smelting() ? recipe.blasting() ? "smelting" : "furnace" : recipe.shapeless() ? "shapeless" : "crafting", "", p -> {});
+        button(menu, 23, recipe.stonecutting() ? Material.STONECUTTER : recipe.smelting()
+                        ? recipe.blasting() ? Material.BLAST_FURNACE : Material.FURNACE : Material.CRAFTING_TABLE,
+                recipe.stonecutting() ? "stonecutting" : recipe.smelting() ? recipe.blasting() ? "smelting" : "furnace"
+                        : recipe.shapeless() ? "shapeless" : "crafting", "", p -> {});
         if (recipe.smelting()) button(menu, 32, Material.CLOCK, "smelting-time",
                 String.format(java.util.Locale.ROOT, "%.1f", recipe.cookTime() / 20.0), p -> {});
         button(menu, 49, Material.BOOK, "ingredient-hint", "", p -> {});
@@ -182,13 +184,14 @@ public final class RecipeGuide implements Listener, AutoCloseable {
 
     private List<RecipeDefinition> recipesFor(String itemId) {
         String preferred = config.getString("guide.preferred-recipes." + itemId, "");
-        return recipes.guideDefinitions().stream().filter(recipe -> recipe.result().equals(itemId))
+        return recipes.guideDefinitions().stream().filter(recipe -> recipe.result().equals(itemId) || recipe.id().equals(itemId))
                 .sorted(java.util.Comparator.comparing(recipe -> !recipe.id().equals(preferred))).toList();
     }
 
     private Component text(String key, String value) {
         return render(Objects.requireNonNull(config.getString("guide." + key,
                 key.equals("shapeless") ? "<yellow>Craft in any arrangement"
+                        : key.equals("stonecutting") ? "<yellow>Choose a saber style at a stonecutter"
                         : key.equals("furnace") ? "<yellow>Smelt in a furnace"
                         : key.equals("obtain-hint") ? "<yellow>Click to see how to obtain." : null), "items/recipes.yml: guide." + key)
                 .replace("<value>", value));

@@ -22,6 +22,8 @@ public final class SandySpawns implements Listener, AutoCloseable {
     private final MythicMobAccess mobs;
     private final MobProtection protection = new MobProtection();
     private final NamespacedKey encounter;
+    private final NamespacedKey patrol;
+    private final PatrolState patrols = new PatrolState();
     private final Random random = new Random();
     private final BukkitTask task;
     private boolean healthy = true;
@@ -31,6 +33,7 @@ public final class SandySpawns implements Listener, AutoCloseable {
         this.settings = settings;
         this.mobs = mobs;
         encounter = new NamespacedKey(plugin, "sandy_encounter_v1");
+        patrol = new NamespacedKey(plugin, "sandy_patrol_v1");
         if (Bukkit.getWorld(NamespacedKey.fromString(settings.world())) == null) {
             throw new IllegalArgumentException("mobs/spawning.yml: configured survival world is not loaded: " + settings.world());
         }
@@ -103,7 +106,8 @@ public final class SandySpawns implements Listener, AutoCloseable {
         try {
             World world = Bukkit.getWorld(NamespacedKey.fromString(settings.world()));
             if (world == null) return;
-            var population = new ArrayList<>(world.getLivingEntities().stream().filter(mobs::managed).toList());
+            var population = new ArrayList<>(world.getLivingEntities().stream().filter(entity -> mobs.managed(entity)
+                    || entity.getPersistentDataContainer().has(encounter, PersistentDataType.STRING)).toList());
             var players = new ArrayList<>(world.getPlayers());
             // Remove only our natural encounters after all players leave their vicinity; no death/drop pipeline.
             for (var entity : List.copyOf(population)) {
@@ -113,29 +117,14 @@ public final class SandySpawns implements Listener, AutoCloseable {
                     population.remove(entity);
                 }
             }
+            refreshPatrols(population, players);
             Collections.shuffle(players, random);
             for (Player player : players) {
                 if (player.isDead() || !eligible(player.getGameMode())
-                        || !biome(player.getLocation()) || random.nextDouble() >= settings.chance()) continue;
-                var kind = EncounterPlan.Kind.values()[random.nextInt(EncounterPlan.Kind.values().length)];
-                var plan = EncounterPlan.roll(kind, random, settings);
-                if (population.size() + plan.members().size() > settings.worldCap()) break;
-                for (int attempt = 0; attempt < settings.attempts(); attempt++) {
-                    double angle = random.nextDouble() * Math.PI * 2;
-                    double distance = random.nextDouble(settings.minDistance(), settings.maxDistance());
-                    int x = (int) Math.floor(player.getX() + Math.cos(angle) * distance);
-                    int z = (int) Math.floor(player.getZ() + Math.sin(angle) * distance);
-                    Location center = surface(world, x, z);
-                    if (center == null || population.stream().anyMatch(e -> horizontal(e.getLocation(), center)
-                            < settings.separation() * settings.separation())) continue;
-                    var sites = sites(center, plan.members().size(), players);
-                    if (sites.size() != plan.members().size()) continue;
-                    boolean fits = sites.stream().allMatch(site -> plan.fits((int) population.stream()
-                            .filter(e -> horizontal(e.getLocation(), site) <= settings.radius() * settings.radius()).count(),
-                            population.size(), settings));
-                    if (!fits) continue;
-                    population.addAll(spawn(plan, sites));
-                    break;
+                        || !biome(player.getLocation())) continue;
+                claimNearby(player, population.stream().collect(java.util.stream.Collectors.toMap(Entity::getUniqueId, e -> e)));
+                for (var kind : EncounterPlan.opportunities(random, settings, patrols.playerGroup(player.getUniqueId()) == null)) {
+                    tryEncounter(player, kind, population, players);
                 }
             }
         } catch (RuntimeException error) {
@@ -143,6 +132,152 @@ public final class SandySpawns implements Listener, AutoCloseable {
             plugin.getLogger().log(java.util.logging.Level.SEVERE,
                     "Sandy spawning stopped; natural suppression disabled until repaired and restarted", error);
         }
+    }
+
+    private void tryEncounter(Player player, EncounterPlan.Kind kind, List<LivingEntity> population, List<Player> players) {
+        var plan = EncounterPlan.roll(kind, random, settings);
+        if (population.size() + plan.members().size() > settings.worldCap()) return;
+        if (!plan.fits((int) population.stream().filter(entity -> horizontal(entity.getLocation(), player.getLocation())
+                <= settings.radius() * settings.radius()).count(), population.size(), settings)) return;
+        World world = player.getWorld();
+        for (int attempt = 0; attempt < settings.attempts(); attempt++) {
+            double angle = random.nextDouble() * Math.PI * 2;
+            double distance = random.nextDouble(settings.minDistance(), settings.maxDistance());
+            int x = (int) Math.floor(player.getX() + Math.cos(angle) * distance);
+            int z = (int) Math.floor(player.getZ() + Math.sin(angle) * distance);
+            Location center = surface(world, x, z);
+            if (center == null || population.stream().anyMatch(e -> horizontal(e.getLocation(), center)
+                    < settings.separation() * settings.separation())) continue;
+            var sites = sites(center, plan.members().size(), players);
+            if (sites.size() != plan.members().size()) continue;
+            boolean fits = sites.stream().allMatch(site -> plan.fits((int) population.stream()
+                    .filter(e -> horizontal(e.getLocation(), site) <= settings.radius() * settings.radius()).count(),
+                    population.size(), settings));
+            if (!fits) continue;
+            population.addAll(spawn(plan, sites, kind == EncounterPlan.Kind.PATROL ? player : null));
+            break;
+        }
+    }
+
+    private boolean hostile(LivingEntity entity) {
+        String type = mobs.type(entity);
+        return type.startsWith("TuskenRaider") || type.equals("Massiff")
+                || type.isEmpty() && entity.getPersistentDataContainer().has(patrol) && entity.getType() == EntityType.ZOMBIE;
+    }
+
+    private void refreshPatrols(List<LivingEntity> population, List<Player> players) {
+        var byGroup = new HashMap<String, List<LivingEntity>>();
+        var byId = new HashMap<UUID, LivingEntity>();
+        for (var entity : population) {
+            byId.put(entity.getUniqueId(), entity);
+            String id = entity.getPersistentDataContainer().get(encounter, PersistentDataType.STRING);
+            if (id != null) byGroup.computeIfAbsent(id, ignored -> new ArrayList<>()).add(entity);
+        }
+        var active = new HashSet<String>();
+        for (var entry : byGroup.entrySet()) {
+            boolean isPatrol = patrols.groups().contains(entry.getKey()) || entry.getValue().stream().anyMatch(entity ->
+                    entity.getPersistentDataContainer().has(patrol) || mobs.type(entity).startsWith("TuskenRaider"));
+            if (!isPatrol) continue;
+            var members = new HashSet<UUID>();
+            var hostiles = new HashSet<UUID>();
+            for (var entity : entry.getValue()) {
+                members.add(entity.getUniqueId());
+                if (hostile(entity)) hostiles.add(entity.getUniqueId());
+                entity.getPersistentDataContainer().set(patrol, PersistentDataType.BYTE, (byte) 1);
+            }
+            patrols.update(entry.getKey(), members, hostiles);
+            if (!hostiles.isEmpty()) active.add(entry.getKey());
+        }
+        patrols.retainGroups(active);
+        var eligiblePlayers = players.stream().filter(player -> !player.isDead() && eligible(player.getGameMode())).toList();
+        patrols.retainPlayers(eligiblePlayers.stream().map(Player::getUniqueId).collect(java.util.stream.Collectors.toSet()));
+        long now = System.nanoTime() / 1_000_000;
+        for (Player player : eligiblePlayers) {
+            String id = patrols.playerGroup(player.getUniqueId());
+            if (id == null) continue;
+            if (distance(id, player, byId) <= settings.radius() * settings.radius()
+                    || patrols.hostiles(id).stream().map(byId::get).filter(Objects::nonNull)
+                    .anyMatch(entity -> entity instanceof Mob mob && player.equals(mob.getTarget()))) {
+                patrols.touch(player.getUniqueId(), now);
+            }
+        }
+        patrols.expire(now, settings.patrolDisengageSeconds() * 1000L);
+        // Nearby unassigned players share an existing patrol instead of receiving overlapping fresh groups.
+        for (Player player : eligiblePlayers) claimNearby(player, byId);
+        enforceTargets(population);
+    }
+
+    private void claimNearby(Player player, Map<UUID, LivingEntity> entities) {
+        if (patrols.playerGroup(player.getUniqueId()) != null) return;
+        String nearest = null;
+        double best = settings.radius() * settings.radius();
+        boolean engaged = false;
+        for (String id : patrols.groups()) {
+            double distance = distance(id, player, entities);
+            boolean targetsPlayer = patrols.hostiles(id).stream().map(entities::get).filter(Objects::nonNull)
+                    .anyMatch(entity -> entity instanceof Mob mob && player.equals(mob.getTarget()));
+            if (targetsPlayer && (!engaged || distance <= best) || !engaged && distance <= best) {
+                best = distance;
+                nearest = id;
+                engaged = targetsPlayer;
+            }
+        }
+        if (nearest != null) patrols.claim(player.getUniqueId(), nearest, System.nanoTime() / 1_000_000);
+    }
+
+    private double distance(String id, Player player, Map<UUID, LivingEntity> entities) {
+        return patrols.hostiles(id).stream().map(entities::get).filter(Objects::nonNull)
+                .mapToDouble(entity -> horizontal(entity.getLocation(), player.getLocation())).min().orElse(Double.MAX_VALUE);
+    }
+
+    private void enforceTargets(Collection<LivingEntity> population) {
+        for (var entity : population) {
+            if (!(entity instanceof Mob mob) || !(mob.getTarget() instanceof Player player)) continue;
+            String group = patrols.memberGroup(entity.getUniqueId());
+            String assigned = patrols.playerGroup(player.getUniqueId());
+            if (group != null && assigned != null && !group.equals(assigned)) mob.setTarget(null);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void patrolTarget(EntityTargetLivingEntityEvent event) {
+        if (!(event.getEntity() instanceof LivingEntity entity) || !(event.getTarget() instanceof Player player)) return;
+        if (!entity.getWorld().getKey().toString().equals(settings.world())) return;
+        if (player.isDead() || !eligible(player.getGameMode())) return;
+        String id = entity.getPersistentDataContainer().get(encounter, PersistentDataType.STRING);
+        if (id == null || !mobs.managed(entity)) return;
+        if (!entity.getPersistentDataContainer().has(patrol) && !mobs.type(entity).startsWith("TuskenRaider")) return;
+        patrols.track(id, entity.getUniqueId(), hostile(entity));
+        // Mythic may cancel the native request while selecting its own target. Inspect that side
+        // effect even for an already-cancelled event, without claiming its rejected requested target.
+        if (event.isCancelled()) { enforceTargets(List.of(entity)); return; }
+        if (!player.getWorld().equals(entity.getWorld())
+                || !patrols.claimMember(player.getUniqueId(), entity.getUniqueId(), System.nanoTime() / 1_000_000)) {
+            event.setCancelled(true);
+            event.setTarget(null);
+            // Mythic's earlier target listener can already have changed the host's native target.
+            // Cancelling the outer request alone does not roll that side effect back.
+            if (entity instanceof Mob mob && player.equals(mob.getTarget())) mob.setTarget(null);
+        }
+        enforceTargets(List.of(entity));
+    }
+
+    @EventHandler public void patrolDeath(EntityDeathEvent event) { patrols.memberGone(event.getEntity().getUniqueId()); }
+    @EventHandler public void patrolRemoved(org.bukkit.event.entity.EntityRemoveEvent event) {
+        patrols.memberGone(event.getEntity().getUniqueId());
+    }
+    @EventHandler public void patrolQuit(org.bukkit.event.player.PlayerQuitEvent event) {
+        patrols.release(event.getPlayer().getUniqueId());
+    }
+    @EventHandler public void patrolPlayerDeath(PlayerDeathEvent event) {
+        patrols.release(event.getEntity().getUniqueId());
+    }
+    @EventHandler public void patrolWorldChange(org.bukkit.event.player.PlayerChangedWorldEvent event) {
+        patrols.release(event.getPlayer().getUniqueId());
+    }
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void patrolMode(org.bukkit.event.player.PlayerGameModeChangeEvent event) {
+        if (!eligible(event.getNewGameMode())) patrols.release(event.getPlayer().getUniqueId());
     }
 
     private List<Location> sites(Location center, int count, List<Player> players) {
@@ -178,9 +313,14 @@ public final class SandySpawns implements Listener, AutoCloseable {
 
     /** All-or-nothing creation: a cancelled member rolls back the group without loot. */
     public List<LivingEntity> spawn(EncounterPlan plan, List<Location> sites) {
+        return spawn(plan, sites, null);
+    }
+
+    private List<LivingEntity> spawn(EncounterPlan plan, List<Location> sites, Player focus) {
         if (sites.size() != plan.members().size()) throw new IllegalArgumentException("One site is required per mob");
         var spawned = new ArrayList<LivingEntity>();
         String group = UUID.randomUUID().toString();
+        boolean isPatrol = plan.members().stream().anyMatch(member -> member.type().startsWith("TuskenRaider"));
         try {
             for (int i = 0; i < sites.size(); i++) {
                 if (!biome(sites.get(i)) || !protection.allowed(sites.get(i))) throw new IllegalStateException("Encounter site denied");
@@ -189,9 +329,23 @@ public final class SandySpawns implements Listener, AutoCloseable {
                 if (entity == null || !entity.isValid()) throw new IllegalStateException("Encounter member spawn cancelled");
                 spawned.add(entity);
                 entity.getPersistentDataContainer().set(encounter, PersistentDataType.STRING, group);
+                if (isPatrol) entity.getPersistentDataContainer().set(patrol, PersistentDataType.BYTE, (byte) 1);
+            }
+            if (isPatrol) {
+                var members = spawned.stream().map(Entity::getUniqueId).collect(java.util.stream.Collectors.toSet());
+                var hostiles = spawned.stream().filter(this::hostile).map(Entity::getUniqueId)
+                        .collect(java.util.stream.Collectors.toSet());
+                patrols.update(group, members, hostiles);
+                if (focus != null && !patrols.claim(focus.getUniqueId(), group, System.nanoTime() / 1_000_000)) {
+                    spawned.forEach(mobs::remove);
+                    patrols.remove(group);
+                    return List.of();
+                }
+                enforceTargets(spawned);
             }
             return spawned;
         } catch (RuntimeException error) {
+            patrols.remove(group);
             for (var entity : spawned) mobs.remove(entity);
             throw error;
         }

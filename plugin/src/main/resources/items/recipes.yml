@@ -472,91 +472,6 @@
         "D": "songsteel_scrap"
       }
     },
-    "obiwan": {
-      "result": "obiwan",
-      "amount": 1,
-      "category": "weapons",
-      "shape": [
-        " PE",
-        " SH",
-        " C "
-      ],
-      "ingredients": {
-        "P": "plasma_capacitor_array",
-        "E": "precision_emitter_coil",
-        "S": "durasteel_sheet",
-        "H": "straight_hilt",
-        "C": "blue_kyber"
-      }
-    },
-    "cal_survivor_crossguard": {
-      "result": "cal_survivor_crossguard",
-      "amount": 1,
-      "category": "weapons",
-      "shape": [
-        "PEP",
-        "SHS",
-        " C "
-      ],
-      "ingredients": {
-        "P": "plasma_capacitor_array",
-        "E": "precision_emitter_coil",
-        "S": "phrik_sheet",
-        "H": "great_hilt",
-        "C": "blue_kyber"
-      }
-    },
-    "windu": {
-      "result": "windu",
-      "amount": 1,
-      "category": "weapons",
-      "shape": [
-        "PE ",
-        "SHS",
-        " C "
-      ],
-      "ingredients": {
-        "P": "plasma_capacitor_array",
-        "E": "precision_emitter_coil",
-        "S": "electrum_sheet",
-        "H": "great_hilt",
-        "C": "purple_kyber"
-      }
-    },
-    "quigon": {
-      "result": "quigon",
-      "amount": 1,
-      "category": "weapons",
-      "shape": [
-        " PE",
-        " SH",
-        " C "
-      ],
-      "ingredients": {
-        "P": "plasma_capacitor_array",
-        "E": "precision_emitter_coil",
-        "S": "durasteel_sheet",
-        "H": "straight_hilt",
-        "C": "green_kyber"
-      }
-    },
-    "ventress_yellow": {
-      "result": "ventress_yellow",
-      "amount": 1,
-      "category": "weapons",
-      "shape": [
-        " PE",
-        " SH",
-        " C "
-      ],
-      "ingredients": {
-        "P": "plasma_capacitor_array",
-        "E": "precision_emitter_coil",
-        "S": "phrik_sheet",
-        "H": "whip_hilt",
-        "C": "yellow_kyber"
-      }
-    },
     "xwing": {
       "result": "xwing",
       "amount": 1,
@@ -963,6 +878,676 @@
         "M": "agrinium_sheet",
         "S": "minecraft:stick"
       }
+    },
+    "white_kyber": {
+      "result": "white_kyber",
+      "amount": 1,
+      "category": "materials",
+      "shape": [
+        "ADA",
+        "DGD",
+        "ADA"
+      ],
+      "ingredients": {
+        "A": "minecraft:amethyst_shard",
+        "D": "durasteel_scrap",
+        "G": "minecraft:glass"
+      }
+    },
+    "blue_kyber": {
+      "result": "blue_kyber",
+      "amount": 1,
+      "category": "materials",
+      "type": "shapeless",
+      "ingredients": [
+        "white_kyber",
+        "minecraft:blue_dye"
+      ]
+    },
+    "green_kyber": {
+      "result": "green_kyber",
+      "amount": 1,
+      "category": "materials",
+      "type": "shapeless",
+      "ingredients": [
+        "white_kyber",
+        "minecraft:green_dye"
+      ]
+    },
+    "red_kyber": {
+      "result": "red_kyber",
+      "amount": 1,
+      "category": "materials",
+      "type": "shapeless",
+      "ingredients": [
+        "white_kyber",
+        "minecraft:red_dye"
+      ]
+    },
+    "orange_kyber": {
+      "result": "orange_kyber",
+      "amount": 1,
+      "category": "materials",
+      "type": "shapeless",
+      "ingredients": [
+        "white_kyber",
+        "minecraft:orange_dye"
+      ]
+    },
+    "purple_kyber": {
+      "result": "purple_kyber",
+      "amount": 1,
+      "category": "materials",
+      "type": "shapeless",
+      "ingredients": [
+        "white_kyber",
+        "minecraft:purple_dye"
+      ]
+    },
+    "yellow_kyber": {
+      "result": "yellow_kyber",
+      "amount": 1,
+      "category": "materials",
+      "type": "shapeless",
+      "ingredients": [
+        "white_kyber",
+        "minecraft:yellow_dye"
+      ]
+    },
+    "precision_emitter_coil": {
+      "result": "precision_emitter_coil",
+      "amount": 1,
+      "category": "components",
+      "shape": [
+        " E ",
+        "TCT",
+        " E "
+      ],
+      "ingredients": {
+        "E": "electrum_sheet",
+        "T": "transparisteel_shard",
+        "C": "circuit_board"
+      }
+    },
+    "obiwan": {
+      "result": "obiwan",
+      "amount": 1,
+      "category": "weapons",
+      "shape": [
+        " EC",
+        " SH",
+        " P "
+      ],
+      "ingredients": {
+        "E": "precision_emitter_coil",
+        "C": "blue_kyber",
+        "S": "durasteel_sheet",
+        "H": "straight_hilt",
+        "P": "plasma_capacitor_array"
+      }
+    },
+    "quigon": {
+      "result": "quigon",
+      "amount": 1,
+      "category": "weapons",
+      "shape": [
+        " EC",
+        " SH",
+        " P "
+      ],
+      "ingredients": {
+        "E": "precision_emitter_coil",
+        "C": "green_kyber",
+        "S": "durasteel_sheet",
+        "H": "pike_hilt",
+        "P": "plasma_capacitor_array"
+      }
+    },
+    "vader": {
+      "result": "vader",
+      "amount": 1,
+      "category": "weapons",
+      "shape": [
+        " EC",
+        " SH",
+        " P "
+      ],
+      "ingredients": {
+        "E": "precision_emitter_coil",
+        "C": "red_kyber",
+        "S": "durasteel_sheet",
+        "H": "straight_hilt",
+        "P": "plasma_capacitor_array"
+      }
+    },
+    "baylan_skoll_lightsaber": {
+      "result": "baylan_skoll_lightsaber",
+      "amount": 1,
+      "category": "weapons",
+      "shape": [
+        " EC",
+        " SH",
+        " P "
+      ],
+      "ingredients": {
+        "E": "precision_emitter_coil",
+        "C": "orange_kyber",
+        "S": "durasteel_sheet",
+        "H": "great_hilt",
+        "P": "plasma_capacitor_array"
+      }
+    },
+    "windu": {
+      "result": "windu",
+      "amount": 1,
+      "category": "weapons",
+      "shape": [
+        " EC",
+        " SH",
+        " P "
+      ],
+      "ingredients": {
+        "E": "precision_emitter_coil",
+        "C": "purple_kyber",
+        "S": "durasteel_sheet",
+        "H": "great_hilt",
+        "P": "plasma_capacitor_array"
+      }
+    },
+    "ventress_yellow": {
+      "result": "ventress_yellow",
+      "amount": 1,
+      "category": "weapons",
+      "shape": [
+        " EC",
+        " SH",
+        " P "
+      ],
+      "ingredients": {
+        "E": "precision_emitter_coil",
+        "C": "yellow_kyber",
+        "S": "durasteel_sheet",
+        "H": "whip_hilt",
+        "P": "plasma_capacitor_array"
+      }
+    },
+    "ahsoka_tano_white_lightsaber": {
+      "result": "ahsoka_tano_white_lightsaber",
+      "amount": 1,
+      "category": "weapons",
+      "shape": [
+        " EC",
+        " SH",
+        " P "
+      ],
+      "ingredients": {
+        "E": "precision_emitter_coil",
+        "C": "white_kyber",
+        "S": "durasteel_sheet",
+        "H": "fang_hilt",
+        "P": "plasma_capacitor_array"
+      }
+    },
+    "agrinium_activator_rail": {
+      "result": "minecraft:activator_rail",
+      "amount": 6,
+      "category": "utilities",
+      "shape": [
+        "XSX",
+        "X#X",
+        "XSX"
+      ],
+      "ingredients": {
+        "#": "minecraft:redstone_torch",
+        "S": "minecraft:stick",
+        "X": "agrinium_sheet"
+      }
+    },
+    "agrinium_anvil": {
+      "result": "minecraft:anvil",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "III",
+        " i ",
+        "iii"
+      ],
+      "ingredients": {
+        "I": "minecraft:iron_block",
+        "i": "agrinium_sheet"
+      }
+    },
+    "agrinium_blast_furnace": {
+      "result": "minecraft:blast_furnace",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "III",
+        "IXI",
+        "###"
+      ],
+      "ingredients": {
+        "#": "minecraft:smooth_stone",
+        "I": "agrinium_sheet",
+        "X": "minecraft:furnace"
+      }
+    },
+    "agrinium_bucket": {
+      "result": "minecraft:bucket",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "# #",
+        " # "
+      ],
+      "ingredients": {
+        "#": "agrinium_sheet"
+      }
+    },
+    "agrinium_cauldron": {
+      "result": "minecraft:cauldron",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "# #",
+        "# #",
+        "###"
+      ],
+      "ingredients": {
+        "#": "agrinium_sheet"
+      }
+    },
+    "agrinium_compass": {
+      "result": "minecraft:compass",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        " # ",
+        "#X#",
+        " # "
+      ],
+      "ingredients": {
+        "#": "agrinium_sheet",
+        "X": "electrum"
+      }
+    },
+    "agrinium_crafter": {
+      "result": "minecraft:crafter",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "###",
+        "#C#",
+        "RDR"
+      ],
+      "ingredients": {
+        "#": "agrinium_sheet",
+        "C": "minecraft:crafting_table",
+        "D": "minecraft:dropper",
+        "R": "electrum"
+      }
+    },
+    "agrinium_detector_rail": {
+      "result": "minecraft:detector_rail",
+      "amount": 6,
+      "category": "utilities",
+      "shape": [
+        "X X",
+        "X#X",
+        "XRX"
+      ],
+      "ingredients": {
+        "#": "minecraft:stone_pressure_plate",
+        "R": "electrum",
+        "X": "agrinium_sheet"
+      }
+    },
+    "agrinium_flint_and_steel": {
+      "result": "minecraft:flint_and_steel",
+      "amount": 1,
+      "category": "utilities",
+      "type": "shapeless",
+      "ingredients": [
+        "agrinium_sheet",
+        "minecraft:flint"
+      ]
+    },
+    "agrinium_pressure_plate": {
+      "result": "minecraft:heavy_weighted_pressure_plate",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "##"
+      ],
+      "ingredients": {
+        "#": "agrinium_sheet"
+      }
+    },
+    "agrinium_hopper": {
+      "result": "minecraft:hopper",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "I I",
+        "ICI",
+        " I "
+      ],
+      "ingredients": {
+        "C": "minecraft:chest",
+        "I": "agrinium_sheet"
+      }
+    },
+    "agrinium_bars": {
+      "result": "minecraft:iron_bars",
+      "amount": 16,
+      "category": "utilities",
+      "shape": [
+        "###",
+        "###"
+      ],
+      "ingredients": {
+        "#": "agrinium_sheet"
+      }
+    },
+    "agrinium_chain": {
+      "result": "minecraft:iron_chain",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "N",
+        "I",
+        "N"
+      ],
+      "ingredients": {
+        "I": "agrinium_sheet",
+        "N": "agrinium_sheet"
+      }
+    },
+    "agrinium_door": {
+      "result": "minecraft:iron_door",
+      "amount": 3,
+      "category": "utilities",
+      "shape": [
+        "##",
+        "##",
+        "##"
+      ],
+      "ingredients": {
+        "#": "agrinium_sheet"
+      }
+    },
+    "agrinium_trapdoor": {
+      "result": "minecraft:iron_trapdoor",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "##",
+        "##"
+      ],
+      "ingredients": {
+        "#": "agrinium_sheet"
+      }
+    },
+    "agrinium_lantern": {
+      "result": "minecraft:lantern",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "XXX",
+        "X#X",
+        "XXX"
+      ],
+      "ingredients": {
+        "#": "minecraft:torch",
+        "X": "agrinium_sheet"
+      }
+    },
+    "agrinium_lodestone": {
+      "result": "minecraft:lodestone",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "SSS",
+        "S#S",
+        "SSS"
+      ],
+      "ingredients": {
+        "#": "agrinium_sheet",
+        "S": "minecraft:chiseled_stone_bricks"
+      }
+    },
+    "agrinium_minecart": {
+      "result": "minecraft:minecart",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "# #",
+        "###"
+      ],
+      "ingredients": {
+        "#": "agrinium_sheet"
+      }
+    },
+    "agrinium_piston": {
+      "result": "minecraft:piston",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "TTT",
+        "#X#",
+        "#R#"
+      ],
+      "ingredients": {
+        "#": "minecraft:cobblestone",
+        "R": "electrum",
+        "T": "#minecraft:planks",
+        "X": "agrinium_sheet"
+      }
+    },
+    "agrinium_rail": {
+      "result": "minecraft:rail",
+      "amount": 16,
+      "category": "utilities",
+      "shape": [
+        "X X",
+        "X#X",
+        "X X"
+      ],
+      "ingredients": {
+        "#": "minecraft:stick",
+        "X": "agrinium_sheet"
+      }
+    },
+    "agrinium_saddle": {
+      "result": "minecraft:saddle",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        " X ",
+        "X#X"
+      ],
+      "ingredients": {
+        "#": "agrinium_sheet",
+        "X": "minecraft:leather"
+      }
+    },
+    "agrinium_shears": {
+      "result": "minecraft:shears",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        " #",
+        "# "
+      ],
+      "ingredients": {
+        "#": "agrinium_sheet"
+      }
+    },
+    "agrinium_smithing_table": {
+      "result": "minecraft:smithing_table",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "@@",
+        "##",
+        "##"
+      ],
+      "ingredients": {
+        "#": "#minecraft:planks",
+        "@": "agrinium_sheet"
+      }
+    },
+    "agrinium_soul_lantern": {
+      "result": "minecraft:soul_lantern",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "XXX",
+        "X#X",
+        "XXX"
+      ],
+      "ingredients": {
+        "#": "minecraft:soul_torch",
+        "X": "agrinium_sheet"
+      }
+    },
+    "agrinium_stonecutter": {
+      "result": "minecraft:stonecutter",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        " I ",
+        "###"
+      ],
+      "ingredients": {
+        "#": "minecraft:stone",
+        "I": "agrinium_sheet"
+      }
+    },
+    "agrinium_tripwire_hook": {
+      "result": "minecraft:tripwire_hook",
+      "amount": 2,
+      "category": "utilities",
+      "shape": [
+        "I",
+        "S",
+        "#"
+      ],
+      "ingredients": {
+        "#": "#minecraft:planks",
+        "I": "agrinium_sheet",
+        "S": "minecraft:stick"
+      }
+    },
+    "agrinium_block": {
+      "result": "agrinium_block",
+      "amount": 1,
+      "category": "materials",
+      "shape": [
+        "III",
+        "III",
+        "III"
+      ],
+      "ingredients": {
+        "I": "agrinium"
+      }
+    },
+    "agrinium_from_block": {
+      "result": "agrinium",
+      "amount": 9,
+      "category": "materials",
+      "type": "shapeless",
+      "ingredients": [
+        "agrinium_block"
+      ]
+    },
+    "electrum_block": {
+      "result": "electrum_block",
+      "amount": 1,
+      "category": "materials",
+      "shape": [
+        "III",
+        "III",
+        "III"
+      ],
+      "ingredients": {
+        "I": "electrum"
+      }
+    },
+    "electrum_from_block": {
+      "result": "electrum",
+      "amount": 9,
+      "category": "materials",
+      "type": "shapeless",
+      "ingredients": [
+        "electrum_block"
+      ]
+    },
+    "durasteel_block": {
+      "result": "durasteel_block",
+      "amount": 1,
+      "category": "materials",
+      "shape": [
+        "III",
+        "III",
+        "III"
+      ],
+      "ingredients": {
+        "I": "durasteel"
+      }
+    },
+    "durasteel_from_block": {
+      "result": "durasteel",
+      "amount": 9,
+      "category": "materials",
+      "type": "shapeless",
+      "ingredients": [
+        "durasteel_block"
+      ]
+    },
+    "beskar_block": {
+      "result": "beskar_block",
+      "amount": 1,
+      "category": "materials",
+      "shape": [
+        "III",
+        "III",
+        "III"
+      ],
+      "ingredients": {
+        "I": "beskar"
+      }
+    },
+    "beskar_from_block": {
+      "result": "beskar",
+      "amount": 9,
+      "category": "materials",
+      "type": "shapeless",
+      "ingredients": [
+        "beskar_block"
+      ]
+    },
+    "raw_agrinium_block": {
+      "result": "raw_agrinium_block",
+      "amount": 1,
+      "category": "materials",
+      "shape": [
+        "RRR",
+        "RRR",
+        "RRR"
+      ],
+      "ingredients": {
+        "R": "raw_agrinium"
+      }
+    },
+    "raw_agrinium_from_block": {
+      "result": "raw_agrinium",
+      "amount": 9,
+      "category": "materials",
+      "type": "shapeless",
+      "ingredients": [
+        "raw_agrinium_block"
+      ]
     }
   },
   "sources": {
@@ -991,7 +1576,6 @@
     "enhanced_ion_chamber": "<gray>Not currently obtainable through crafting or loot.",
     "finely_tuned_emitter_coil": "<gray>Not currently obtainable through crafting or loot.",
     "modular_recoil_buffer": "<gray>Not currently obtainable through crafting or loot.",
-    "precision_emitter_coil": "<gray>Not currently obtainable through crafting or loot.",
     "recoil_reduction_system": "<gray>Not currently obtainable through crafting or loot.",
     "reinforced_barrel_liner": "<gray>Not currently obtainable through crafting or loot.",
     "reinforced_ion_chamber": "<gray>Not currently obtainable through crafting or loot.",
@@ -1035,30 +1619,33 @@
     "pathfinder_crate_key": "<gray>Not currently obtainable through crafting or loot.",
     "voyager_crate_key": "<gray>Not currently obtainable through crafting or loot.",
     "wayfarer_crate_key": "<gray>Not currently obtainable through crafting or loot.",
-    "red_kyber": "<gray>Not currently obtainable through crafting or loot.",
-    "orange_kyber": "<gray>Not currently obtainable through crafting or loot.",
-    "yellow_kyber": "<gray>Not currently obtainable through crafting or loot.",
-    "green_kyber": "<gray>Not currently obtainable through crafting or loot.",
-    "purple_kyber": "<gray>Not currently obtainable through crafting or loot.",
-    "white_kyber": "<gray>Not currently obtainable through crafting or loot.",
-    "blue_kyber": "<gray>Not currently obtainable through crafting or loot.",
-    "agrinium_scrap": "<gray>Legacy refining material; not currently obtainable through survival gathering.",
+    "agrinium_scrap": "<gray>Mine Agrinium Ore with a suitable pickaxe. Native Fortune quantities are preserved; Silk Touch keeps the ore.",
     "aurodium_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "beskar_scrap": "<gray>Not currently obtainable through crafting or loot.",
+    "beskar_scrap": "<gray>Mine either Beskar ore variant: gold-backed ore accepts any pickaxe; debris-backed ore requires diamond or netherite. Native quantities/Fortune apply; Silk Touch keeps the ore.",
     "cortosis_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "durasteel_scrap": "<gray>Mine Durasteel Ore with an iron pickaxe or better. Fortune increases scrap; Silk Touch keeps the ore.",
-    "electrum_scrap": "<gray>Legacy refining material; not currently obtainable through survival gathering.",
+    "durasteel_scrap": "<gray>Mine Durasteel Ore with a suitable pickaxe. Native Fortune quantities are preserved; Silk Touch keeps the ore.",
+    "electrum_scrap": "<gray>Mine Electrum Ore with a suitable pickaxe. Native Fortune quantities are preserved; Silk Touch keeps the ore.",
     "lommite_scrap": "<gray>Not currently obtainable through crafting or loot.",
     "mandalorian_iron_scrap": "<gray>Not currently obtainable through crafting or loot.",
     "neuranium_scrap": "<gray>Not currently obtainable through crafting or loot.",
     "phrik_scrap": "<gray>Not currently obtainable through crafting or loot.",
     "songsteel_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "minecraft:raw_iron": "<gray>Mine Agrinium Ore with a suitable pickaxe.",
+    "minecraft:raw_iron": "<gray>Retained legacy raw metal. Current Agrinium ores drop Agrinium Scraps.",
     "minecraft:clay_ball": "<gray>Break clay blocks to gather clay balls. Use two separate slots for Plastoid.",
     "minecraft:sand": "<gray>Gather ordinary sand. Red sand does not work for Plastoid.",
     "minecraft:coal": "<gray>Mine coal ore with a pickaxe. Charcoal does not work for Plastoid.",
     "minecraft:glass": "<gray>Smelt sand in a furnace.",
-    "electrum": "<gray>Mine Electrum Ore with an iron pickaxe or better. Fortune increases ingots; Silk Touch keeps the ore."
+    "#minecraft:planks": "<gray>Use any matching native wood/planks.",
+    "agrinium_ore": "<gray>Mine matching Agrinium Ore with a suitable Silk Touch pickaxe.",
+    "deepslate_agrinium_ore": "<gray>Mine matching Agrinium Ore with a suitable Silk Touch pickaxe.",
+    "electrum_ore": "<gray>Mine matching Electrum Ore with a suitable Silk Touch pickaxe.",
+    "deepslate_electrum_ore": "<gray>Mine matching Electrum Ore with a suitable Silk Touch pickaxe.",
+    "durasteel_ore": "<gray>Mine matching Durasteel Ore with a suitable Silk Touch pickaxe.",
+    "deepslate_durasteel_ore": "<gray>Mine matching Durasteel Ore with a suitable Silk Touch pickaxe.",
+    "beskar_ore": "<gray>Mine matching Beskar Ore with a suitable Silk Touch pickaxe.",
+    "deepslate_beskar_ore": "<gray>Mine matching Beskar Ore with a suitable Silk Touch pickaxe.",
+    "raw_agrinium": "<gray>Retained legacy raw metal, still valid for native smelting.",
+    "minecraft:iron_block": "<gray>Craft nine Agrinium ingots into an Agrinium Block."
   },
   "guide": {
     "title": "<gold>Recipes",
@@ -1101,11 +1688,15 @@
       "rhydonium_canister"
     ],
     "hidden-recipes": [
-      "electrum"
+      "agrinium_from_raw"
     ],
     "preferred-recipes": {
-      "agrinium": "agrinium_from_raw"
-    }
+      "agrinium": "agrinium",
+      "electrum": "electrum",
+      "durasteel": "durasteel",
+      "beskar": "beskar"
+    },
+    "stonecutting": "<yellow>Choose a saber style at a stonecutter"
   },
   "smelting": {
     "agrinium_from_raw": {
@@ -1196,5 +1787,400 @@
       "cook-time": 320,
       "category": "metals"
     }
-  }
+  },
+  "stonecutting": {
+    "ahsoka_tano_blue_lightsaber": {
+      "input": "obiwan",
+      "result": "ahsoka_tano_blue_lightsaber",
+      "category": "weapons"
+    },
+    "ahsoka_tano_blue_shoto_lightsaber": {
+      "input": "obiwan",
+      "result": "ahsoka_tano_blue_shoto_lightsaber",
+      "category": "weapons"
+    },
+    "ahsoka_tano_green_lightsaber": {
+      "input": "quigon",
+      "result": "ahsoka_tano_green_lightsaber",
+      "category": "weapons"
+    },
+    "ahsoka_tano_green_shoto_lightsaber": {
+      "input": "quigon",
+      "result": "ahsoka_tano_green_shoto_lightsaber",
+      "category": "weapons"
+    },
+    "ahsoka_tano_white_shoto_lightsaber": {
+      "input": "ahsoka_tano_white_lightsaber",
+      "result": "ahsoka_tano_white_shoto_lightsaber",
+      "category": "weapons"
+    },
+    "anakin_skywalker_jedi_knight_lightsaber": {
+      "input": "obiwan",
+      "result": "anakin_skywalker_jedi_knight_lightsaber",
+      "category": "weapons"
+    },
+    "anakin_skywalker_padawan_lightsaber": {
+      "input": "obiwan",
+      "result": "anakin_skywalker_padawan_lightsaber",
+      "category": "weapons"
+    },
+    "anakin_skywalker_red_lightsaber": {
+      "input": "vader",
+      "result": "anakin_skywalker_red_lightsaber",
+      "category": "weapons"
+    },
+    "asajj_ventress_assassin_lightsaber": {
+      "input": "vader",
+      "result": "asajj_ventress_assassin_lightsaber",
+      "category": "weapons"
+    },
+    "asajj_ventress_assassin_shoto_lightsaber": {
+      "input": "vader",
+      "result": "asajj_ventress_assassin_shoto_lightsaber",
+      "category": "weapons"
+    },
+    "asajj_ventress_double_blade_lightsaber": {
+      "input": "vader",
+      "result": "asajj_ventress_double_blade_lightsaber",
+      "category": "weapons"
+    },
+    "blue_training_lightsaber": {
+      "input": "obiwan",
+      "result": "blue_training_lightsaber",
+      "category": "weapons"
+    },
+    "cal_kestis_inquisitor_lightsaber": {
+      "input": "vader",
+      "result": "cal_kestis_inquisitor_lightsaber",
+      "category": "weapons"
+    },
+    "cal_kestis_merged_lightsaber": {
+      "input": "obiwan",
+      "result": "cal_kestis_merged_lightsaber",
+      "category": "weapons"
+    },
+    "cal_kestis_merged_shoto_lightsaber": {
+      "input": "obiwan",
+      "result": "cal_kestis_merged_shoto_lightsaber",
+      "category": "weapons"
+    },
+    "cal_kestis_merged_split_lightsaber": {
+      "input": "obiwan",
+      "result": "cal_kestis_merged_split_lightsaber",
+      "category": "weapons"
+    },
+    "cal_kestis_padawan_lightsaber": {
+      "input": "obiwan",
+      "result": "cal_kestis_padawan_lightsaber",
+      "category": "weapons"
+    },
+    "cal_kestis_rebuild_lightsaber": {
+      "input": "obiwan",
+      "result": "cal_kestis_rebuild_lightsaber",
+      "category": "weapons"
+    },
+    "cal_survivor_crossguard": {
+      "input": "obiwan",
+      "result": "cal_survivor_crossguard",
+      "category": "weapons"
+    },
+    "cal_kestis_survivor_lightsaber": {
+      "input": "obiwan",
+      "result": "cal_kestis_survivor_lightsaber",
+      "category": "weapons"
+    },
+    "cal_kestis_survivor_shoto_lightsaber": {
+      "input": "obiwan",
+      "result": "cal_kestis_survivor_shoto_lightsaber",
+      "category": "weapons"
+    },
+    "cal_kestis_survivor_split_lightsaber": {
+      "input": "obiwan",
+      "result": "cal_kestis_survivor_split_lightsaber",
+      "category": "weapons"
+    },
+    "caleb_dume_lightsaber": {
+      "input": "obiwan",
+      "result": "caleb_dume_lightsaber",
+      "category": "weapons"
+    },
+    "cere_junda_jedi_knight_lightsaber": {
+      "input": "quigon",
+      "result": "cere_junda_jedi_knight_lightsaber",
+      "category": "weapons"
+    },
+    "count_dooku_lightsaber": {
+      "input": "vader",
+      "result": "count_dooku_lightsaber",
+      "category": "weapons"
+    },
+    "dark_saber": {
+      "input": "ahsoka_tano_white_lightsaber",
+      "result": "dark_saber",
+      "category": "weapons"
+    },
+    "darth_maul_apprentice_lightsaber": {
+      "input": "vader",
+      "result": "darth_maul_apprentice_lightsaber",
+      "category": "weapons"
+    },
+    "darth_maul_reforged_lightsaber": {
+      "input": "vader",
+      "result": "darth_maul_reforged_lightsaber",
+      "category": "weapons"
+    },
+    "darth_maul_reforged_shoto_lightsaber": {
+      "input": "vader",
+      "result": "darth_maul_reforged_shoto_lightsaber",
+      "category": "weapons"
+    },
+    "darth_maul_reforged_split_lightsaber": {
+      "input": "vader",
+      "result": "darth_maul_reforged_split_lightsaber",
+      "category": "weapons"
+    },
+    "darth_maul_vengeance_lightsaber": {
+      "input": "vader",
+      "result": "darth_maul_vengeance_lightsaber",
+      "category": "weapons"
+    },
+    "devon_izara_lightsaber": {
+      "input": "obiwan",
+      "result": "devon_izara_lightsaber",
+      "category": "weapons"
+    },
+    "ezra_bridger_green_lightsaber": {
+      "input": "quigon",
+      "result": "ezra_bridger_green_lightsaber",
+      "category": "weapons"
+    },
+    "ezra_bridger_nomad_lightsaber": {
+      "input": "obiwan",
+      "result": "ezra_bridger_nomad_lightsaber",
+      "category": "weapons"
+    },
+    "ezra_bridger_padawan_lightsaber": {
+      "input": "obiwan",
+      "result": "ezra_bridger_padawan_lightsaber",
+      "category": "weapons"
+    },
+    "grand_inquisitor_crescent_lightsaber": {
+      "input": "vader",
+      "result": "grand_inquisitor_crescent_lightsaber",
+      "category": "weapons"
+    },
+    "grand_inquisitor_full_ring_lightsaber": {
+      "input": "vader",
+      "result": "grand_inquisitor_full_ring_lightsaber",
+      "category": "weapons"
+    },
+    "green_training_lightsaber": {
+      "input": "quigon",
+      "result": "green_training_lightsaber",
+      "category": "weapons"
+    },
+    "indara_lightsaber": {
+      "input": "quigon",
+      "result": "indara_lightsaber",
+      "category": "weapons"
+    },
+    "jaro_tapal_lightsaber": {
+      "input": "obiwan",
+      "result": "jaro_tapal_lightsaber",
+      "category": "weapons"
+    },
+    "jecki_lon_lightsaber": {
+      "input": "quigon",
+      "result": "jecki_lon_lightsaber",
+      "category": "weapons"
+    },
+    "jod_na_nawood_discovered_lightsaber": {
+      "input": "obiwan",
+      "result": "jod_na_nawood_discovered_lightsaber",
+      "category": "weapons"
+    },
+    "ki_adi_mundi_lightsaber": {
+      "input": "obiwan",
+      "result": "ki_adi_mundi_lightsaber",
+      "category": "weapons"
+    },
+    "kylo_ren_lightsaber": {
+      "input": "vader",
+      "result": "kylo_ren_lightsaber",
+      "category": "weapons"
+    },
+    "leia_organa_lightsaber": {
+      "input": "obiwan",
+      "result": "leia_organa_lightsaber",
+      "category": "weapons"
+    },
+    "luke_skywalker_episode_4_lightsaber": {
+      "input": "obiwan",
+      "result": "luke_skywalker_episode_4_lightsaber",
+      "category": "weapons"
+    },
+    "luke_skywalker_episode_5_lightsaber": {
+      "input": "obiwan",
+      "result": "luke_skywalker_episode_5_lightsaber",
+      "category": "weapons"
+    },
+    "luke_skywalker_jedi_knight_lightsaber": {
+      "input": "quigon",
+      "result": "luke_skywalker_jedi_knight_lightsaber",
+      "category": "weapons"
+    },
+    "obi_wan_kenobi_jedi_knight_lightsaber": {
+      "input": "obiwan",
+      "result": "obi_wan_kenobi_jedi_knight_lightsaber",
+      "category": "weapons"
+    },
+    "obi_wan_kenobi_padawan_lightsaber": {
+      "input": "obiwan",
+      "result": "obi_wan_kenobi_padawan_lightsaber",
+      "category": "weapons"
+    },
+    "pong_krell_blue_lightsaber": {
+      "input": "obiwan",
+      "result": "pong_krell_blue_lightsaber",
+      "category": "weapons"
+    },
+    "pong_krell_green_lightsaber": {
+      "input": "quigon",
+      "result": "pong_krell_green_lightsaber",
+      "category": "weapons"
+    },
+    "qimir_dagger_lightsaber": {
+      "input": "vader",
+      "result": "qimir_dagger_lightsaber",
+      "category": "weapons"
+    },
+    "qimir_lightsaber": {
+      "input": "vader",
+      "result": "qimir_lightsaber",
+      "category": "weapons"
+    },
+    "qimir_split_lightsaber": {
+      "input": "vader",
+      "result": "qimir_split_lightsaber",
+      "category": "weapons"
+    },
+    "quinlan_vos_lightsaber": {
+      "input": "quigon",
+      "result": "quinlan_vos_lightsaber",
+      "category": "weapons"
+    },
+    "revan_fallen_lightsaber": {
+      "input": "vader",
+      "result": "revan_fallen_lightsaber",
+      "category": "weapons"
+    },
+    "revan_redeemed_lightsaber": {
+      "input": "windu",
+      "result": "revan_redeemed_lightsaber",
+      "category": "weapons"
+    },
+    "rey_blue_lightsaber": {
+      "input": "obiwan",
+      "result": "rey_blue_lightsaber",
+      "category": "weapons"
+    },
+    "rey_reforged_lightsaber": {
+      "input": "obiwan",
+      "result": "rey_reforged_lightsaber",
+      "category": "weapons"
+    },
+    "sabine_wren_lightsaber": {
+      "input": "quigon",
+      "result": "sabine_wren_lightsaber",
+      "category": "weapons"
+    },
+    "savage_opress_lightsaber": {
+      "input": "vader",
+      "result": "savage_opress_lightsaber",
+      "category": "weapons"
+    },
+    "second_sister_crescent_lightsaber": {
+      "input": "vader",
+      "result": "second_sister_crescent_lightsaber",
+      "category": "weapons"
+    },
+    "second_sister_full_ring_lightsaber": {
+      "input": "vader",
+      "result": "second_sister_full_ring_lightsaber",
+      "category": "weapons"
+    },
+    "tak_rennod_discovered_lightsaber": {
+      "input": "obiwan",
+      "result": "tak_rennod_discovered_lightsaber",
+      "category": "weapons"
+    },
+    "taron_malicos_lightsaber": {
+      "input": "vader",
+      "result": "taron_malicos_lightsaber",
+      "category": "weapons"
+    },
+    "taron_malicos_shoto_lightsaber": {
+      "input": "vader",
+      "result": "taron_malicos_shoto_lightsaber",
+      "category": "weapons"
+    },
+    "torbin_lightsaber": {
+      "input": "ventress_yellow",
+      "result": "torbin_lightsaber",
+      "category": "weapons"
+    },
+    "vernestra_rwoh_lightsaber": {
+      "input": "windu",
+      "result": "vernestra_rwoh_lightsaber",
+      "category": "weapons"
+    },
+    "wim_discovered_lightsaber": {
+      "input": "obiwan",
+      "result": "wim_discovered_lightsaber",
+      "category": "weapons"
+    },
+    "yoda_lightsaber": {
+      "input": "quigon",
+      "result": "yoda_lightsaber",
+      "category": "weapons"
+    }
+  },
+  "replace-native": [
+    "minecraft:activator_rail",
+    "minecraft:anvil",
+    "minecraft:blast_furnace",
+    "minecraft:bucket",
+    "minecraft:cauldron",
+    "minecraft:compass",
+    "minecraft:crafter",
+    "minecraft:detector_rail",
+    "minecraft:flint_and_steel",
+    "minecraft:heavy_weighted_pressure_plate",
+    "minecraft:hopper",
+    "minecraft:iron_bars",
+    "minecraft:iron_chain",
+    "minecraft:iron_door",
+    "minecraft:iron_trapdoor",
+    "minecraft:lantern",
+    "minecraft:lodestone",
+    "minecraft:minecart",
+    "minecraft:piston",
+    "minecraft:rail",
+    "minecraft:saddle",
+    "minecraft:shears",
+    "minecraft:smithing_table",
+    "minecraft:soul_lantern",
+    "minecraft:stonecutter",
+    "minecraft:tripwire_hook",
+    "minecraft:diamond",
+    "minecraft:diamond_block",
+    "minecraft:iron_block",
+    "minecraft:iron_ingot_from_iron_block",
+    "minecraft:netherite_block",
+    "minecraft:netherite_ingot_from_netherite_block",
+    "minecraft:raw_iron",
+    "minecraft:raw_iron_block",
+    "minecraft:redstone",
+    "minecraft:redstone_block"
+  ]
 }

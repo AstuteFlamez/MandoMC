@@ -18,13 +18,19 @@ public final class CreditService implements AutoCloseable {
     private final ExecutorService writer = Executors.newSingleThreadExecutor();
     private final Set<UUID> pending = new HashSet<>();
     private volatile boolean closed;
+    private net.mandomc.gameplay.auction.AuctionHouse auctions;
     public CreditService(JavaPlugin plugin, ConfigurationSection config) throws Exception {
         this.plugin = plugin;
         if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("credits.yml: expected schema-version 1");
+        try (var reader = new java.io.InputStreamReader(Objects.requireNonNull(plugin.getResource("economy/credits.yml")),
+                java.nio.charset.StandardCharsets.UTF_8)) {
+            config.getRoot().setDefaults(org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(reader));
+        }
         messages = Objects.requireNonNull(config.getConfigurationSection("messages"), "credits.yml: missing messages");
         for (String key : List.of("balance", "paid", "received", "adjusted", "top-title", "top-row", "top-empty", "amount", "self-pay", "insufficient", "limit", "usage", "player-missing", "players-only", "denied", "saving", "save-failed"))
             if (!messages.isString(key)) throw new IllegalArgumentException("credits.yml: missing messages." + key);
         ledger = new CreditLedger(plugin.getDataFolder().toPath().resolve("data/credits-data.yml"));
+        auctions = new net.mandomc.gameplay.auction.AuctionHouse(plugin, this);
         for (String command : List.of("balance", "pay", "balancetop", "credits")) {
             var binding = Objects.requireNonNull(plugin.getCommand(command));
             binding.setExecutor((sender, cmd, label, args) -> { execute(sender, cmd.getName(), args); return true; });
@@ -40,6 +46,17 @@ public final class CreditService implements AutoCloseable {
         }
     }
     public CreditLedger ledger() { return ledger; }
+    public net.mandomc.gameplay.auction.AuctionHouse auctions() { return auctions; }
+    /** All credit and market mutations share this one writer; callbacks run on the server thread. */
+    public <T> void auctionTask(java.util.concurrent.Callable<T> work, java.util.function.BiConsumer<T, Throwable> done) {
+        if (closed) { done.accept(null, new IllegalStateException("closed")); return; }
+        writer.submit(() -> {
+            T value = null; Throwable failure = null;
+            try { value = work.call(); } catch (Exception error) { failure = error; }
+            T result = value; Throwable error = failure;
+            if (!closed && plugin.isEnabled()) Bukkit.getScheduler().runTask(plugin, () -> done.accept(result, error));
+        });
+    }
     private void send(CommandSender sender, String key, String name, String amount) {
         sender.sendMessage(MiniMessage.miniMessage().deserialize(messages.getString(key),
                 Placeholder.unparsed("player", name), Placeholder.unparsed("amount", amount)));
@@ -110,6 +127,7 @@ public final class CreditService implements AutoCloseable {
         });
     }
     @Override public void close() {
+        if (auctions != null) auctions.close();
         closed = true; writer.shutdown();
         try { if (!writer.awaitTermination(10, TimeUnit.SECONDS)) plugin.getLogger().severe("Credits save is still finishing."); }
         catch (InterruptedException error) { Thread.currentThread().interrupt(); }

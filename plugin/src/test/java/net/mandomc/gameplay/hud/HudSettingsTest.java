@@ -17,10 +17,10 @@ public class HudSettingsTest {
     @Test public void combatReplacesStatsDeathsKillsAndBalance() {
         var settings = HudSettings.read(config());
         assertEquals(settings.lines().size(), settings.combatLines().size());
-        assertTrue(settings.combatLines().get(7).contains("Combat"));
-        assertTrue(settings.combatLines().get(8).contains("DO NOT LOG OUT"));
+        assertTrue(settings.combatLines().get(7).contains("ᴄᴏᴍʙᴀᴛ"));
+        assertTrue(settings.combatLines().get(8).contains("ᴅᴏ ɴᴏᴛ ʟᴏɢ ᴏᴜᴛ"));
         assertEquals("<combat-or-kills>", settings.combatLines().get(9));
-        assertTrue(settings.combatLines().get(10).contains("DO NOT LOG OUT"));
+        assertTrue(settings.combatLines().get(10).contains("ᴅᴏ ɴᴏᴛ ʟᴏɢ ᴏᴜᴛ"));
         var legacy = config(); legacy.set("combat-lines", null);
         assertEquals(settings.combatLines(), HudSettings.read(legacy).combatLines());
     }

@@ -124,3 +124,6 @@ The user requested importing legacy Tatooine before implementing Boba, to test f
 
 ## Jabba operation flow (2026-11-09)
 The latest user decision supersedes earlier chest-gated proposals: spawn every cache at event start, open each next door on the final owned room enemy's death, and remove remaining caches at event end. Caches use legacy one-click randomized loot and disappear when claimed. After Rancor dies the palace stays open until the scheduled end. Nearby palace players receive `Room [x] unlocked » blast doors opening`. Native MandoMC gates replace BigDoors.
+
+## Accepted progression follow-up (2026-11-09)
+The user delegated finished-saber recipes and a conventional player auction house, then required the auction implementation inside MandoMC with no additional plugin. Native `/ah` uses existing credits, eight 48-hour fixed-price listings, no fees/tax, confirmation and permanent item claims. All themed ores yield catalog scraps before ingot refining. Four-metal storage has visible reciprocal 9:1 conversions; iron utility recipes use Agrinium Sheets. Blaster/ammo recipes and final-world generation are explicitly deferred. These decisions supersede the earlier undecided auction/saber holds above. See the ordered progression queue for verification and rollout state.

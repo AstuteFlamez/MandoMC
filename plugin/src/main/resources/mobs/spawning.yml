@@ -7,6 +7,7 @@ levels:
   minimum: 1
   maximum: 5
 patrol:
+  disengage-seconds: 30
   raiders-min: 2
   raiders-max: 4
   banthas-max: 2
@@ -22,6 +23,8 @@ population:
 spawn:
   interval-seconds: 20
   chance: 0.25
+  # Relative to the legacy one-in-four patrol share; wildlife opportunity rate is unchanged.
+  patrol-frequency-multiplier: 3.0
   minimum-player-distance: 32
   maximum-player-distance: 64
   encounter-separation: 32

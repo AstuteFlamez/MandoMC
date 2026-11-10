@@ -27,16 +27,17 @@ def main():
         def write(target, source, name, ore=False, soften=False):
             data = faithful.read(source)
             image = Image.open(io.BytesIO(data))
-            result, pixels = metal.tint(image, palettes[name], ore, soften)
+            hue = (0.0, 0.18) if "iron_ore" in source else (0.05, 0.23) if "gold_ore" in source else (0.40, 0.61)
+            result, pixels = metal.tint(image, palettes[name], ore, soften, mineral_hue=hue)
             path = ASSETS / target
             path.parent.mkdir(parents=True, exist_ok=True)
             result.save(path)
             records.append({'target': target, 'source': source, 'sourceSha256': hashlib.sha256(data).hexdigest(),
                             'palette': name, 'oreMask': ore, 'softStoneShadows': soften, 'recoloredPixels': pixels,
-                            'outputSha256': hashlib.sha256(path.read_bytes()).hexdigest()})
+                            'mineralHue': list(hue), 'outputSha256': hashlib.sha256(path.read_bytes()).hexdigest()})
 
         for name, native in [('agrinium', 'iron')]:
-            for rock, template in [('', 'diamond_ore'), ('deepslate_', 'deepslate_diamond_ore')]:
+            for rock, template in [('', 'iron_ore'), ('deepslate_', 'deepslate_iron_ore')]:
                 write(f'minecraft/textures/block/{rock}{native}_ore.png',
                       f'assets/minecraft/textures/block/{template}.png', name, True, not rock)
             for texture in (f'{native}_block', f'raw_{native}_block'):
@@ -51,11 +52,16 @@ def main():
                                 'outputSha256': hashlib.sha256(dest.read_bytes()).hexdigest()})
             write(f'minecraft/textures/item/{native}_nugget.png', f'assets/minecraft/textures/item/{native}_nugget.png', name)
 
-        for rock, template in [('', 'diamond_ore'), ('deepslate_', 'deepslate_diamond_ore')]:
+        for rock, template in [('', 'gold_ore'), ('deepslate_', 'deepslate_gold_ore')]:
             write(f'minecraft/textures/block/{rock}redstone_ore.png',
                   f'assets/minecraft/textures/block/{template}.png', 'electrum', True, not rock)
-        write('minecraft/textures/block/redstone_block.png',
-              'assets/minecraft/textures/block/redstone_block.png', 'electrum')
+        source = ROOT / 'resource-pack/art-sources/electrum-block-32.png'
+        dest = ASSETS / 'minecraft/textures/block/redstone_block.png'
+        assert Image.open(source).size == (32, 32)
+        dest.write_bytes(source.read_bytes())
+        records.append({'target': str(dest.relative_to(ASSETS)), 'generatedSource': 'art-sources/electrum-block-32.png',
+                        'sourceSha256': hashlib.sha256(source.read_bytes()).hexdigest(),
+                        'outputSha256': hashlib.sha256(dest.read_bytes()).hexdigest()})
         source = ASSETS / 'mandomc/textures/item/legacy/metals/ingots/electrum.png'
         dest = ASSETS / 'minecraft/textures/item/redstone.png'
         dest.parent.mkdir(parents=True, exist_ok=True)
@@ -90,7 +96,7 @@ def main():
     output = ROOT / 'resource-pack/progression-metal-sources.json'
     output.write_text(json.dumps({'schema-version': 1, 'source': 'Official Faithful 32x 26.1-june-2026 Fj5GKJnf',
         'license': 'src/faithful-license.txt', 'scope': 'Native iron/Agrinium and redstone/Electrum presentation. '
-        'Electrum replaces nonoxidizing redstone; lit/unlit ores share native texture aliases. Geometry, alpha, block states and placed shapes remain native.',
+        'Electrum replaces nonoxidizing redstone; lit/unlit ores share native texture aliases. Agrinium uses Faithful iron mineral clusters; Electrum uses gold clusters. The Electrum storage face is an original generated metal plate. Block states and placed shapes remain native.',
         'textures': records}, indent=2) + '\n')
     print(f'Built {len(records)} Agrinium/Electrum texture aliases without changing prior metal art.')
 

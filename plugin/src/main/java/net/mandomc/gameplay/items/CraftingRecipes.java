@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class CraftingRecipes implements AutoCloseable {
     private final ItemCatalog items;
     private final List<NamespacedKey> keys = new ArrayList<>();
+    private final List<org.bukkit.inventory.Recipe> displaced = new ArrayList<>();
     private final List<RecipeDefinition> definitions;
     private final java.util.Set<String> hiddenResults;
     private final java.util.Set<String> hiddenRecipes;
@@ -30,7 +31,7 @@ public final class CraftingRecipes implements AutoCloseable {
         var parsed = new ArrayList<RecipeDefinition>();
         for (String id : section.getKeys(false)) {
             var definition = RecipeDefinition.parse(id, section.getConfigurationSection(id));
-            var result = Objects.requireNonNull(items.create(definition.result()), "Unknown recipe result: " + definition.result());
+            var result = ingredient(definition.result());
             if (definition.amount() > result.getMaxStackSize()) throw new IllegalArgumentException("Recipe output exceeds stack limit: " + id);
             result.setAmount(definition.amount());
             var key = new NamespacedKey(plugin, "craft_" + id);
@@ -39,8 +40,7 @@ public final class CraftingRecipes implements AutoCloseable {
             if (shaped != null) shaped.shape(definition.shape().toArray(String[]::new));
             for (var entry : definition.ingredients().entrySet()) {
                 var ingredient = ingredient(entry.getValue());
-                RecipeChoice choice = entry.getValue().startsWith("minecraft:")
-                        ? new RecipeChoice.MaterialChoice(ingredient.getType()) : new RecipeChoice.ExactChoice(ingredient);
+                RecipeChoice choice = choice(entry.getValue());
                 if (shaped != null) shaped.setIngredient(entry.getKey(), choice);
                 else shapeless.addIngredient(choice);
             }
@@ -63,8 +63,26 @@ public final class CraftingRecipes implements AutoCloseable {
                 parsed.add(definition);
             }
         }
+        var stonecutting = config.getConfigurationSection("stonecutting");
+        if (stonecutting != null) {
+            for (String id : stonecutting.getKeys(false)) {
+                var definition = RecipeDefinition.parseStonecutting(id, stonecutting.getConfigurationSection(id));
+                var input = ingredient(definition.ingredients().get('I'));
+                var result = Objects.requireNonNull(items.create(definition.result()), "Unknown stonecutting result: " + id);
+                pending.add(new org.bukkit.inventory.StonecuttingRecipe(new NamespacedKey(plugin, "refinish_" + id),
+                        result, new RecipeChoice.ExactChoice(input)));
+                parsed.add(definition);
+            }
+        }
         definitions = List.copyOf(parsed);
         try {
+            for (String id : config.getStringList("replace-native")) {
+                var key = org.bukkit.NamespacedKey.fromString(id);
+                if (key == null || !key.getNamespace().equals("minecraft")) throw new IllegalArgumentException("Invalid replaced recipe: " + id);
+                var previous = Bukkit.getRecipe(key);
+                if (previous == null || !Bukkit.removeRecipe(key)) throw new IllegalArgumentException("Missing replaced recipe: " + id);
+                displaced.add(previous);
+            }
             for (var recipe : pending) {
                 if (!Bukkit.addRecipe(recipe)) throw new IllegalStateException("Duplicate recipe: " + ((org.bukkit.Keyed) recipe).getKey());
                 keys.add(((org.bukkit.Keyed) recipe).getKey());
@@ -83,14 +101,27 @@ public final class CraftingRecipes implements AutoCloseable {
     }
 
     public ItemStack ingredient(String id) {
+        if (id.startsWith("#minecraft:")) {
+            var tag = Objects.requireNonNull(Bukkit.getTag(org.bukkit.Tag.REGISTRY_ITEMS,
+                    NamespacedKey.fromString(id.substring(1)), Material.class), "Unknown item tag: " + id);
+            return new ItemStack(tag.isTagged(Material.OAK_PLANKS) ? Material.OAK_PLANKS
+                    : tag.getValues().stream().sorted().findFirst().orElseThrow());
+        }
         if (!id.startsWith("minecraft:")) return Objects.requireNonNull(items.create(id), "Unknown recipe ingredient: " + id);
         Material material = Material.matchMaterial(id);
         if (material == null || material.isAir() || !material.isItem()) throw new IllegalArgumentException("Invalid recipe material: " + id);
         return new ItemStack(material);
     }
 
+    private RecipeChoice choice(String id) {
+        if (id.startsWith("#minecraft:")) return new RecipeChoice.MaterialChoice(Objects.requireNonNull(
+                Bukkit.getTag(org.bukkit.Tag.REGISTRY_ITEMS, NamespacedKey.fromString(id.substring(1)), Material.class)));
+        var ingredient = ingredient(id);
+        return id.startsWith("minecraft:") ? new RecipeChoice.MaterialChoice(ingredient.getType()) : new RecipeChoice.ExactChoice(ingredient);
+    }
+
     public ItemStack result(RecipeDefinition recipe) {
-        var result = Objects.requireNonNull(items.create(recipe.result()), "Missing recipe result: " + recipe.result());
+        var result = ingredient(recipe.result());
         result.setAmount(recipe.amount());
         return result;
     }
@@ -98,5 +129,7 @@ public final class CraftingRecipes implements AutoCloseable {
     @Override public void close() {
         keys.forEach(Bukkit::removeRecipe);
         keys.clear();
+        displaced.forEach(Bukkit::addRecipe);
+        displaced.clear();
     }
 }

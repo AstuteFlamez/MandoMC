@@ -29,10 +29,11 @@ teleport:
 
 items:
   denied: '<red>You cannot manage custom items.'
-  usage: '<yellow>/mandomc give [player] [item]'
+  usage: '<yellow>/mmc give [player] [item] [quantity]'
+  quantity: '<red>Use a whole-item quantity from 1 to 2304.'
   usage-reload: '<yellow>/mandomc items reload'
   player-required: '<red>Specify an online player, or use this command in game.'
-  console-item-required: '<yellow>Console usage: /mandomc give <player> <item>'
+  console-item-required: '<yellow>Console usage: /mandomc give <player> <item> [quantity]'
   unknown: '<red>Unknown item: <value>.'
   unknown-player-item: '<red>No custom item or online player named <value>.'
   unavailable: '<red>Item unavailable: <value>. Check the console.'

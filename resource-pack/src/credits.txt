@@ -22,3 +22,5 @@ Faithful 32x by the Faithful team — https://faithfulpack.net/
 Official base pack delivered unmodified from Modrinth. Diamond/netherite block and diamond-ore texture layouts in the MandoMC metal previews derive from Faithful 32x 26.1 (June 2026); metal palette edits by MandoMC. See faithful-license.txt for the unmodified license.
 
 Original animated green laser: recovered unchanged from the pinned MandoPack archive; namespaced model references only.
+
+Electrum storage-block plate: original AI-generated artwork, created with OpenAI imagegen for MandoMC (2026-11-09), normalized to 32px.

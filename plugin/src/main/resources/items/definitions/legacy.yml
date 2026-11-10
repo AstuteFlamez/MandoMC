@@ -1612,7 +1612,10 @@
       "rarity": "rare",
       "category": "tools",
       "lore": [
-        "<gray>A durable tool forged for field work."
+        "<gray>Repairs damaged, parked vehicles.",
+        "",
+        "<yellow>[<key:key.sneak>] + [<key:key.use>] Start repairing",
+        "<gray>Keep crouching nearby with this wrench held."
       ]
     },
     "beskar_pickaxe": {
@@ -1702,6 +1705,174 @@
       "lore": [
         "<gray>A durable tool forged for field work."
       ]
+    },
+    "agrinium_block": {
+      "material": "IRON_BLOCK",
+      "name": "<gray>Agrinium Block",
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Stores nine Agrinium ingots.",
+        "<gray>Craft back into nine matching ingots."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:iron_block"
+    },
+    "agrinium_ore": {
+      "material": "IRON_ORE",
+      "name": "<gray>Agrinium Ore",
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Agrinium Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:iron_ore"
+    },
+    "deepslate_agrinium_ore": {
+      "material": "DEEPSLATE_IRON_ORE",
+      "name": "<gray>Deepslate Agrinium Ore",
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Agrinium Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:deepslate_iron_ore"
+    },
+    "durasteel_block": {
+      "material": "DIAMOND_BLOCK",
+      "name": "<gray>Durasteel Block",
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Stores nine Durasteel ingots.",
+        "<gray>Craft back into nine matching ingots."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:diamond_block"
+    },
+    "durasteel_ore": {
+      "material": "DIAMOND_ORE",
+      "name": "<gray>Durasteel Ore",
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Durasteel Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:diamond_ore"
+    },
+    "deepslate_durasteel_ore": {
+      "material": "DEEPSLATE_DIAMOND_ORE",
+      "name": "<gray>Deepslate Durasteel Ore",
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Durasteel Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:deepslate_diamond_ore"
+    },
+    "electrum_block": {
+      "material": "REDSTONE_BLOCK",
+      "name": "<gray>Electrum Block",
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Stores nine Electrum ingots.",
+        "<gray>Craft back into nine matching ingots."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:redstone_block"
+    },
+    "electrum_ore": {
+      "material": "REDSTONE_ORE",
+      "name": "<gray>Electrum Ore",
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Electrum Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:redstone_ore"
+    },
+    "deepslate_electrum_ore": {
+      "material": "DEEPSLATE_REDSTONE_ORE",
+      "name": "<gray>Deepslate Electrum Ore",
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Electrum Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:deepslate_redstone_ore"
+    },
+    "beskar_block": {
+      "material": "NETHERITE_BLOCK",
+      "name": "<gray>Beskar Block",
+      "rarity": "legendary",
+      "category": "materials",
+      "lore": [
+        "<gray>Stores nine Beskar ingots.",
+        "<gray>Craft back into nine matching ingots."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:netherite_block"
+    },
+    "beskar_ore": {
+      "material": "NETHER_GOLD_ORE",
+      "name": "<gray>Beskar Ore",
+      "rarity": "legendary",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Beskar Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:nether_gold_ore"
+    },
+    "deepslate_beskar_ore": {
+      "material": "ANCIENT_DEBRIS",
+      "name": "<gray>Deepslate Beskar Ore",
+      "rarity": "legendary",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Beskar Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:ancient_debris"
+    },
+    "raw_agrinium": {
+      "material": "RAW_IRON",
+      "name": "<gray>Raw Agrinium",
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Retained raw metal for native refining.",
+        "<gray>Current Agrinium ores yield scraps."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:raw_iron"
+    },
+    "raw_agrinium_block": {
+      "material": "RAW_IRON_BLOCK",
+      "name": "<gray>Raw Agrinium Block",
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Retained raw metal for native refining.",
+        "<gray>Current Agrinium ores yield scraps."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:raw_iron_block"
     }
   }
 }
