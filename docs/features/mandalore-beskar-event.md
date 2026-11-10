@@ -1,6 +1,40 @@
 # Mandalore and the beskar cave
-Status: proposed design; implementation and import remain deferred.
-Updated: 2026-11-09
+Status: original standalone build study available; event/protection implementation and live import remain deferred.
+Updated: 2026-11-10
+
+## Current build study
+The user subsequently requested an original standalone chamber, surrounding caves and
+a 500 x 500 landscape inspired by the nuked-map atmosphere. The local Ashen Reach
+export is an independently generated schematic, not an import or modification of
+LeonisBuilds' commercial payload. The earlier chamber export is retained separately.
+Binary maps, render assets and machine-specific build scripts stay outside Git.
+
+The latest direction is authoritative: one small safezone at the main arrival,
+connected to one continuous Beskar event warzone encompassing the caves and mining
+chambers, with the remaining land intended as claimable wilderness. Surface city
+ruins do not introduce additional safezones or events. Boundaries remain pending
+user review; the dimensions and dual-entrance reservation described below are older
+proposals, not active settings or final boundaries for this larger cave study.
+
+The study contains four shattered glass half-domes over city ruins (the earlier
+mistaken mineral spires were removed), an ash-grey surface, a connected cave loop,
+two mining galleries and the Living Forge hall. Material patches use coherent
+volumetric blobs; the cave has no isolated single tuff voxels. Actual stairs, slabs,
+walls, chains, lanterns and dripstone replace cube-only detailing.
+
+Offline checks pass for schematic/render parity, both surface-to-cave routes,
+all eight pillar foundations and sixteen exposed ANCIENT_DEBRIS samples using the
+existing deepslate Beskar identity. Constructed components all connect to geology
+under a six-face voxel check. Renders use the configured MandoMC ZIP (SHA-1
+`c2969c0df635574f85e777c7adba4b3ba1c9253e`), preserve its 32px Beskar textures,
+and use client models for non-cube geometry. These are offline renders/checks;
+Minecraft-client import/playtesting, actual protection, claims, mobs and event
+regeneration are not implemented by this study. No runtime world or pack changed.
+
+Visual/technique references: the LeonisBuilds listing below and official WorldEdit
+[brushes](https://worldedit.enginehub.org/en/latest/usage/tools/brushes/),
+[masks](https://worldedit.enginehub.org/en/latest/usage/general/masks/) and
+[patterns](https://worldedit.enginehub.org/en/latest/usage/general/patterns/).
 
 ## Player experience
 Mandalore has three land types: a protected spawn safe zone, a small event warzone,
