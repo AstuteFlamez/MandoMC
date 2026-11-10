@@ -1,5 +1,5 @@
 # Native player auction house
-Status: verified native implementation; deployment pending
+Status: deployed; client playtest pending
 Branch: bilal/durasteel-progression
 
 ## Player experience

@@ -1,12 +1,12 @@
 # Progression and crafting
-Status: expanded gameplay follow-up deployed; latest asset-only shading correction ready for publication.
+Status: deployed; client playtest pending.
 Branch: bilal/durasteel-progression
 
 ## Player experience
 Mine themed metals into catalog scraps, refine ingots, make sheets/components, and craft equipment and vehicles. Native tools, Fortune, Silk Touch, XP, protection and repairs remain authoritative. `/recipes` explains actual acquisition/workstations and reciprocal storage. Player trading is inside MandoMC through `/ah`; no additional plugin or NPC equipment/resource shop is introduced.
 
 ## Ordered queue
-Requests retain arrival order; corrections supersede their original item. Checked entries have implementation and relevant verification. Gameplay follow-up is deployed; the latest shading pack still requires publication/startup and client playtesting.
+Requests retain arrival order; corrections supersede their original item. Checked entries have implementation and relevant verification. Gameplay and the latest shading pack are deployed; client playtesting remains.
 
 1. [x] Durasteel: diamond/deepslate-diamond mining -> durasteel_scrap, native counts/tools/XP/Silk/Creative/protection preserved.
 2. [x] Disable vanilla armor crafting and smithing creation; preserve custom armor and normal repairs, including automated crafting.
@@ -63,6 +63,6 @@ First release: deployed at 20:35 on 2026-11-09, matching verified published pack
 
 Follow-up: 166 Java checks and 32 current script checks pass. Isolated Paper passed 29 patrol assertions and 33 native auction/quantity assertions. Expanded mining, utility, saber, storage and tooltip pass reached 1,721 assertions; all final native shift/placement and give-quantity additions pass. Prior 140 real cannon and 11 independent periodic Creative assertions remain relevant; preserved class/resource entries are compared against the tested deployed baseline. No test plugin is installed live.
 
-The combined gameplay candidate was deployed at 22:00 with a full stopped backup and the verified matching pack. Next action: publish/verify and apply the latest asset-only shading pack, start the stopped server and promote the KOTH round whose scheduled hour crossed the rollout. Blaster/ammo recipes and final generation remain deferred by explicit user instruction.
+The combined gameplay candidate was deployed at 22:00 with a full stopped backup and the verified matching pack. Latest shading pack `resource-pack-26.1.2-bc1d5c9d474a` is anonymously verified and active; server running and KOTH restored. Next action: reconnect for the pack and client-playtest recipes, ore shading and `/ah`. Blaster/ammo recipes and final generation remain deferred by explicit user instruction.
 
-36. [x] Verified latest user art correction: deepslate themed ores and stone Electrum (`redstone_ore`) must have no black painted shading. Lift dark mineral recesses and neutral outlines/rock to visible gray tone floors (80 deepslate, 96 Electrum stone), preserve ore geometry/palettes/alpha and all unrelated textures. Rebuild/verify/publish the asset-only pack after the gameplay restart; preserve the deployed JAR and active event.
+36. [x] Verified latest user art correction: deepslate themed ores and stone Electrum (`redstone_ore`) must have no black painted shading. Lift dark mineral recesses and neutral outlines/rock to visible gray tone floors (80 deepslate, 96 Electrum stone), preserve ore geometry/palettes/alpha and all unrelated textures. Rebuilt, verified, published and applied the asset-only pack. All progression classes and the concurrent travel update are preserved; the missed KOTH round was restored.

@@ -1,5 +1,5 @@
 # Finished lightsaber crafting
-Status: verified implementation; coordinated deployment pending
+Status: deployed; client playtest pending
 Branch: bilal/durasteel-progression
 
 ## Player experience
