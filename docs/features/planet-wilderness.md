@@ -17,11 +17,13 @@ and event behavior are unchanged until boundaries are supplied. Elarion import i
 
 ## Deferred content, approved direction (2026-11-09)
 - Hoth: tauntauns, wampas and krykna.
-- Add a Mandalore map with Mandalorian warriors.
+- Add a Mandalore map with Mandalorian warriors. Mandalore also uses a spawn safe zone, a small event warzone and claimable wilderness (user clarification, 2026-11-09).
 - Add a Mandalore beskar-zone event with regenerating ore; bounds, cadence, rewards,
   reset behavior and claim/protection interactions remain to be designed.
 - Possible enemies: snowtroopers, sandtroopers and stormtroopers.
 These are planning notes only; do not implement or activate this content now.
+
+The proposed Mandalore cave layout and event architecture are in [Mandalore and the beskar cave](mandalore-beskar-event.md). Sizes, ore budget and timers remain proposals.
 
 ## Verification
 167 Java tests pass, including rejection of removed warp aliases and spawn-only settings.
