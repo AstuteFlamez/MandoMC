@@ -72,6 +72,9 @@ public final class VehicleService implements Listener, AutoCloseable {
     private final Map<String, ItemStack> emptySeatHeads = new HashMap<>();
     private final Map<String, String> emptySeatTitles = new HashMap<>();
     private boolean closed;
+    private VehicleRepairs repairs;
+
+    public void repairs(VehicleRepairs repairs) { this.repairs = repairs; }
     private final int maxActive, combatSeconds;
     private final double packSpeedSquared;
 
@@ -97,6 +100,10 @@ public final class VehicleService implements Listener, AutoCloseable {
                 plugin.saveResource(path, false);
             var data = new YamlConfiguration();
             data.load(new java.io.File(plugin.getDataFolder(), path));
+            if (id.equals("speederbike") && data.getDouble("health") == 400) {
+                data.set("health", 50);
+                data.save(new java.io.File(plugin.getDataFolder(), path));
+            }
             if (id.equals("uwing") && !data.contains("gunner-seats")) {
                 var seats = new ArrayList<>(data.getStringList("passenger-seats"));
                 if (seats.remove("seatone")) {
@@ -228,6 +235,7 @@ public final class VehicleService implements Listener, AutoCloseable {
             throw new IllegalArgumentException("Invalid vehicle journal schema");
         var section = data.getConfigurationSection("vehicles");
         if (section == null) return;
+        boolean cappedHealth = false;
         for (String id : section.getKeys(false)) {
             var c = section.getConfigurationSection(id);
             var r = new Record();
@@ -239,6 +247,11 @@ public final class VehicleService implements Listener, AutoCloseable {
             r.health = c.getDouble("health");
             r.hitUntil = c.getLong("hit-until");
             var d = definitions.get(r.type);
+            if (d != null && r.type.equals("speederbike") && Double.isFinite(r.health)
+                    && r.health > d.health() && r.health <= 400) {
+                r.health = d.health();
+                cappedHealth = true;
+            }
             if (d == null || !Double.isFinite(r.health) || r.health < 0 || r.health > d.health())
                 throw new IllegalArgumentException("Invalid vehicle record: " + id);
             if (c.contains("world")) {
@@ -259,6 +272,8 @@ public final class VehicleService implements Listener, AutoCloseable {
                 throw new IllegalArgumentException("Invalid deployed vehicle " + id);
             records.put(r.id, r);
         }
+        // Packed-only fleets do not run the active-vehicle checkpoint tick.
+        if (cappedHealth) save();
     }
 
     private void restore() {
@@ -469,6 +484,10 @@ public final class VehicleService implements Listener, AutoCloseable {
                 || p.getLocation().distanceSquared(entity.getLocation()) > 400) return;
         if (interactions.getOrDefault(p.getUniqueId(), -1) == Bukkit.getCurrentTick()) return;
         interactions.put(p.getUniqueId(), Bukkit.getCurrentTick());
+        if (p.isSneaking() && repairs != null && repairs.isWrench(p.getInventory().getItemInMainHand())) {
+            repairs.start(p, live.record.id);
+            return;
+        }
         if (p.isSneaking()) {
             pack(p, live.record.id);
             return;
@@ -511,6 +530,38 @@ public final class VehicleService implements Listener, AutoCloseable {
     public boolean occupant(UUID id, UUID player) {
         var live = active.get(id);
         return live != null && live.model.riders().stream().anyMatch(p -> p.getUniqueId().equals(player));
+    }
+
+    public boolean repairable(Player player, UUID id, double reach) {
+        var live = active.get(id);
+        if (live == null || !live.entity.isValid() || live.entity.isDead() || player.isDead() || player.isInsideVehicle()
+                || mountedType(player) != null || combat.tagged(player)
+                || live.record.hitUntil > System.currentTimeMillis()
+                || player.getWorld() != live.entity.getWorld() || !live.model.riders().isEmpty()
+                || !VehicleModels.grounded(live.entity)
+                || live.entity.getVelocity().clone().setY(0).lengthSquared() > packSpeedSquared) return false;
+        var box = live.entity.getBoundingBox();
+        var point = player.getLocation().toVector();
+        double dx = Math.max(0, Math.max(box.getMinX() - point.getX(), point.getX() - box.getMaxX()));
+        double dy = Math.max(0, Math.max(box.getMinY() - point.getY(), point.getY() - box.getMaxY()));
+        double dz = Math.max(0, Math.max(box.getMinZ() - point.getZ(), point.getZ() - box.getMaxZ()));
+        return dx * dx + dy * dy + dz * dz <= reach * reach;
+    }
+
+    public double repair(UUID id, double amount) {
+        var live = active.get(id);
+        if (live == null || !live.entity.isValid() || live.entity.isDead() || !Double.isFinite(amount) || amount <= 0) return 0;
+        double before = live.entity.getHealth();
+        double after = Math.min(definitions.get(live.record.type).health(), before + amount);
+        if (after == before) return 0;
+        live.entity.setHealth(after);
+        live.record.health = after;
+        return after - before;
+    }
+
+    public double maxHealth(UUID id) {
+        var live = active.get(id);
+        return live == null ? 0 : definitions.get(live.record.type).health();
     }
 
     public UUID id(Entity entity) {
@@ -607,6 +658,41 @@ public final class VehicleService implements Listener, AutoCloseable {
         p.saveData();
         message(p, "packed");
         return true;
+    }
+
+    public boolean refreshPackedHealth(ItemStack item) {
+        if (!"speederbike".equals(items.identify(item))) return false;
+        var meta = item.getItemMeta();
+        var tags = meta.getPersistentDataContainer();
+        Record record;
+        try { record = records.get(UUID.fromString(tags.get(ID, PersistentDataType.STRING))); }
+        catch (IllegalArgumentException | NullPointerException ignored) { return false; }
+        if (record == null || record.state != State.PACKED
+                || !record.token.toString().equals(tags.get(TOKEN, PersistentDataType.STRING))) return false;
+        var lore = meta.lore();
+        if (lore == null || lore.isEmpty()) return false;
+        var line = MiniMessage.miniMessage().deserialize(messages.getString("packed-health"),
+                Placeholder.unparsed("health", Integer.toString((int) Math.ceil(record.health))),
+                Placeholder.unparsed("max", Integer.toString((int) definitions.get(record.type).health())));
+        if (line.equals(lore.getLast())) return false;
+        var updated = new ArrayList<>(lore); updated.set(updated.size() - 1, line);
+        meta.lore(updated); item.setItemMeta(meta); return true;
+    }
+
+    private void refreshPackedInventory(org.bukkit.inventory.Inventory inventory) {
+        for (int slot = 0; slot < inventory.getSize(); slot++) {
+            var item = inventory.getItem(slot);
+            if (item != null && refreshPackedHealth(item)) inventory.setItem(slot, item);
+        }
+    }
+
+    @EventHandler public void joinPackedHealth(PlayerJoinEvent event) {
+        refreshPackedInventory(event.getPlayer().getInventory());
+    }
+
+    @EventHandler public void openPackedHealth(InventoryOpenEvent event) {
+        refreshPackedInventory(event.getInventory());
+        refreshPackedInventory(event.getPlayer().getInventory());
     }
 
     private ItemStack packed(Record r) {

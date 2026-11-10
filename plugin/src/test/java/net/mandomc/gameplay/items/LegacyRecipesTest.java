@@ -46,7 +46,7 @@ public class LegacyRecipesTest {
                 }
             }
         }
-        assertEquals(51, config.getConfigurationSection("recipes").getKeys(false).size());
+        assertEquals(70, config.getConfigurationSection("recipes").getKeys(false).size());
         assertEquals(11, config.getConfigurationSection("smelting").getKeys(false).size());
     }
 

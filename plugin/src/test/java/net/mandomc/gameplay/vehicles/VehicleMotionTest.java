@@ -20,6 +20,11 @@ public class VehicleMotionTest {
     }
 
     @Test
+    public void speederHealthUsesTheNewFiftyPointCap() {
+        assertEquals(50, definition("speederbike").health(), 0);
+    }
+
+    @Test
     public void flightLatchesThrustThenBrakesWithoutNeedingFuel() {
         var d = definition("xwing");
         var motion = new VehicleMotion();

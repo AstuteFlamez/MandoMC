@@ -1,0 +1,64 @@
+{
+  "schema-version": 1,
+  "vehicles": {
+    "speederbike": {
+      "damage": 5,
+      "speed": 2.5,
+      "cooldown-ms": 0,
+      "ammo": "standard_plasma_cells",
+      "ammo-per-projectile": 1,
+      "bones": [
+        "weapon_one",
+        "weapon_two"
+      ],
+      "range": 100,
+      "damage-radius": 8,
+      "sound": "mandomc:vehicles.speederbike_shoot"
+    },
+    "tiefighter": {
+      "damage": 6,
+      "speed": 4,
+      "cooldown-ms": 0,
+      "ammo": "tibanna_gas_cells",
+      "ammo-per-projectile": 1,
+      "bones": [
+        "weapon_one",
+        "weapon_two"
+      ],
+      "range": 100,
+      "damage-radius": 8,
+      "sound": "mandomc:vehicles.tie_fighter_shoot"
+    },
+    "uwing": {
+      "damage": 7,
+      "speed": 3.5,
+      "cooldown-ms": 0,
+      "ammo": "standard_plasma_cells",
+      "ammo-per-projectile": 1,
+      "bones": [
+        "weapon_one",
+        "weapon_two"
+      ],
+      "range": 100,
+      "damage-radius": 8,
+      "sound": "mandomc:vehicles.tie_fighter_shoot"
+    },
+    "xwing": {
+      "damage": 10,
+      "speed": 4,
+      "cooldown-ms": 2000,
+      "ammo": "proton_torpedo",
+      "ammo-per-projectile": 1,
+      "bones": [
+        "weapon_one",
+        "weapon_two",
+        "weapon_three",
+        "weapon_four"
+      ],
+      "range": 100,
+      "damage-radius": 8,
+      "sound": "mandomc:vehicles.xwing_shoot",
+      "terrain-explosion": true
+    }
+  }
+}

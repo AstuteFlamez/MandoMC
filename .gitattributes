@@ -1,2 +1,5 @@
 * text=auto eol=lf
 *.cmd text eol=crlf
+
+# Preserve original animation metadata bytes recorded in asset provenance.
+resource-pack/src/assets/mandomc/textures/item/projectiles/energy_green.png.mcmeta binary

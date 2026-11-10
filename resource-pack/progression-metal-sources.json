@@ -1,0 +1,119 @@
+{
+  "schema-version": 1,
+  "source": "Official Faithful 32x 26.1-june-2026 Fj5GKJnf",
+  "license": "src/faithful-license.txt",
+  "scope": "Native iron/Agrinium and redstone/Electrum presentation. Electrum replaces nonoxidizing redstone; lit/unlit ores share native texture aliases. Geometry, alpha, block states and placed shapes remain native.",
+  "textures": [
+    {
+      "target": "minecraft/textures/block/iron_ore.png",
+      "source": "assets/minecraft/textures/block/diamond_ore.png",
+      "sourceSha256": "6c1fa6f862457b0ea0a1c934af884b0761771da166cba4160fbb772436deb055",
+      "palette": "agrinium",
+      "oreMask": true,
+      "softStoneShadows": true,
+      "recoloredPixels": 199,
+      "outputSha256": "cddf0c43a3b80e8303ffee4eea7a1968c0f356f1c762ee5a540cb5d35e190a42"
+    },
+    {
+      "target": "minecraft/textures/block/deepslate_iron_ore.png",
+      "source": "assets/minecraft/textures/block/deepslate_diamond_ore.png",
+      "sourceSha256": "d52620c3d8d2f942e3d91ed517a4d22fdaf03e1571e65412f4b522412ad46c63",
+      "palette": "agrinium",
+      "oreMask": true,
+      "softStoneShadows": false,
+      "recoloredPixels": 244,
+      "outputSha256": "82074d4180d84a5491fc45a103e26b9a35df309930a3d2fd0b119c9bf7c344b2"
+    },
+    {
+      "target": "minecraft/textures/block/iron_block.png",
+      "source": "assets/minecraft/textures/block/iron_block.png",
+      "sourceSha256": "ac2ebf4bf1641d2b2be299de9ea6f87f17eb15e0eb5f8ec44bcc54cab1880824",
+      "palette": "agrinium",
+      "oreMask": false,
+      "softStoneShadows": false,
+      "recoloredPixels": 1024,
+      "outputSha256": "d3e43ef2edea2f7c3964dd889748216cb99d74ee3462e36ab04b297438cee385"
+    },
+    {
+      "target": "minecraft/textures/block/raw_iron_block.png",
+      "source": "assets/minecraft/textures/block/raw_iron_block.png",
+      "sourceSha256": "5df60641a8c635d17f82069e0f1a1f327d4c914da43bca711225a7c5bc1c141c",
+      "palette": "agrinium",
+      "oreMask": false,
+      "softStoneShadows": false,
+      "recoloredPixels": 1024,
+      "outputSha256": "d17fe8cbfff0dde75d6e06a4bc9ad3f454feec9a1150d9900e9428ca9111fbfa"
+    },
+    {
+      "target": "minecraft/textures/item/iron_ingot.png",
+      "localSource": "mandomc/textures/item/legacy/metals/ingots/agrinium.png",
+      "outputSha256": "8d8ac6e367282e20843c9cd0aa3b39b669161120ccdbe547db513f6389b956a7"
+    },
+    {
+      "target": "minecraft/textures/item/raw_iron.png",
+      "localSource": "mandomc/textures/item/legacy/metals/scraps/agrinium_scrap.png",
+      "outputSha256": "1ea2fdfa4eb89cd5bd73902e1f18922a21dee82e7361300cc4df5034e960531b"
+    },
+    {
+      "target": "minecraft/textures/item/iron_nugget.png",
+      "source": "assets/minecraft/textures/item/iron_nugget.png",
+      "sourceSha256": "44a2beff50ec960711025f63e97a20eb02724ef6aca96c49447046fdada84371",
+      "palette": "agrinium",
+      "oreMask": false,
+      "softStoneShadows": false,
+      "recoloredPixels": 1024,
+      "outputSha256": "ff6fbfe4ad9969674912eeb6864b87d6f7f54008396a77a9000219176f4de4a2"
+    },
+    {
+      "target": "minecraft/textures/block/redstone_ore.png",
+      "source": "assets/minecraft/textures/block/diamond_ore.png",
+      "sourceSha256": "6c1fa6f862457b0ea0a1c934af884b0761771da166cba4160fbb772436deb055",
+      "palette": "electrum",
+      "oreMask": true,
+      "softStoneShadows": true,
+      "recoloredPixels": 199,
+      "outputSha256": "76d59ca65b6da9d64bef7e71fe7d991f848c099a74bc21c830e2d919b0f3a17e"
+    },
+    {
+      "target": "minecraft/textures/block/deepslate_redstone_ore.png",
+      "source": "assets/minecraft/textures/block/deepslate_diamond_ore.png",
+      "sourceSha256": "d52620c3d8d2f942e3d91ed517a4d22fdaf03e1571e65412f4b522412ad46c63",
+      "palette": "electrum",
+      "oreMask": true,
+      "softStoneShadows": false,
+      "recoloredPixels": 244,
+      "outputSha256": "029c32d1f9d147e6b45f5a72466c60fb7818ac69318338f11bbe0f29417d5957"
+    },
+    {
+      "target": "minecraft/textures/block/redstone_block.png",
+      "source": "assets/minecraft/textures/block/redstone_block.png",
+      "sourceSha256": "cc827c915b40fdfae17aff01c1e232b5d3bea8d956fe534b507803b3d3f4b98e",
+      "palette": "electrum",
+      "oreMask": false,
+      "softStoneShadows": false,
+      "recoloredPixels": 1024,
+      "outputSha256": "c1830d9d12f31594c815abce9bd45912c12bf7e4fa6dbd773deac0a71ea42460"
+    },
+    {
+      "target": "minecraft/textures/item/redstone.png",
+      "localSource": "mandomc/textures/item/legacy/metals/ingots/electrum.png",
+      "outputSha256": "a63707f74a4ad2e703ea4410755d51ce46b4bd11da1136ec15d87b68bef0c741"
+    },
+    {
+      "target": "mandomc/textures/item/tools/agrinium_pickaxe.png",
+      "recoloredLocalSource": "mandomc/textures/item/legacy/tools/durasteel_pickaxe.png",
+      "palette": "agrinium",
+      "recoloredPixels": 138,
+      "sourceSha256": "41f95bfbad45244427bbd6a20bbcc75668c4897cbc4bc5a7d502d675faa77646",
+      "outputSha256": "97a79c1a52366db091636169c4f2abe4b39b7f05e3960292af80917186144693"
+    },
+    {
+      "target": "mandomc/textures/item/tools/agrinium_shovel.png",
+      "recoloredLocalSource": "mandomc/textures/item/legacy/tools/durasteel_shovel.png",
+      "palette": "agrinium",
+      "recoloredPixels": 215,
+      "sourceSha256": "d38c8ec37f53c8f35e2f1c3cdca33b6604ca00c92d61dde22b9b6f4fee154fd8",
+      "outputSha256": "55c0e392275186a6edf4b6d2e48aaeafdca62ec8833ff44d463957911fa73442"
+    }
+  ]
+}

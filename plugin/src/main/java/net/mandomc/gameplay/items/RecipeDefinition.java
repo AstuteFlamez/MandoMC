@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.Set;
 import org.bukkit.configuration.ConfigurationSection;
 
-/** Validated, immutable legacy-style shaped recipe shared by crafting and the guide. */
+/** Validated recipe shared by native registration and the guide; shapeless lists retain duplicate units. */
 public record RecipeDefinition(String id, String result, int amount, String category,
-        List<String> shape, Map<Character, String> ingredients, int cookTime, float experience) {
+        List<String> shape, Map<Character, String> ingredients, int cookTime, float experience, boolean shapeless, int guideRowOffset, boolean blasting) {
     public RecipeDefinition {
         shape = List.copyOf(shape);
         ingredients = Map.copyOf(ingredients);
@@ -30,19 +30,19 @@ public record RecipeDefinition(String id, String result, int amount, String cate
         int time = config.getInt("cook-time", -1);
         double experience = config.getDouble("experience", Double.NaN);
         if (!result.matches("[a-z0-9_]+") || !input.matches("(?:minecraft:)?[a-z0-9_]+")
-                || !category.matches("[a-z0-9_]+") || !"blast".equals(config.getString("furnace"))
+                || !category.matches("[a-z0-9_]+") || !Set.of("blast", "furnace").contains(config.getString("furnace", ""))
                 || !config.isInt("cook-time") || time < 1 || time > 72000
                 || !Double.isFinite(experience) || experience < 0 || experience > 100) {
             throw new IllegalArgumentException(path + ": invalid blast-furnace recipe");
         }
-        return new RecipeDefinition(id, result, 1, category, List.of("I"), Map.of('I', input), time, (float) experience);
+        return new RecipeDefinition(id, result, 1, category, List.of("I"), Map.of('I', input), time, (float) experience, false, 0, "blast".equals(config.getString("furnace")));
     }
 
     public static RecipeDefinition parse(String id, ConfigurationSection config) {
         String path = "items/recipes.yml: recipes." + id;
         if (!id.matches("[a-z0-9_]+") || config == null) throw new IllegalArgumentException(path + ": invalid recipe");
         for (String key : config.getKeys(false)) {
-            if (!Set.of("result", "amount", "category", "shape", "ingredients").contains(key)) {
+            if (!Set.of("result", "amount", "category", "shape", "ingredients", "type", "guide-row-offset").contains(key)) {
                 throw new IllegalArgumentException(path + ": unsupported key " + key);
             }
         }
@@ -53,6 +53,32 @@ public record RecipeDefinition(String id, String result, int amount, String cate
                 || (config.contains("amount") && !config.isInt("amount")) || amount < 1 || amount > 64) {
             throw new IllegalArgumentException(path + ": invalid result, category or amount");
         }
+        int offset = config.getInt("guide-row-offset", 0);
+        if (config.contains("guide-row-offset") && !config.isInt("guide-row-offset") || offset < 0 || offset > 2) {
+            throw new IllegalArgumentException(path + ": invalid guide-row-offset");
+        }
+        String type = config.getString("type", "shaped");
+        if (type.equals("shapeless")) {
+            var units = config.getList("ingredients");
+            if (config.contains("shape") || units == null || units.isEmpty() || units.size() > 9
+                    || units.stream().anyMatch(unit -> !(unit instanceof String value)
+                    || !value.matches("(?:minecraft:)?[a-z0-9_]+"))) {
+                throw new IllegalArgumentException(path + ": shapeless ingredients must be 1–9 item IDs, one per slot");
+            }
+            var ingredients = new LinkedHashMap<Character, String>();
+            var cells = new StringBuilder();
+            for (int i = 0; i < units.size(); i++) {
+                char symbol = (char) ('A' + i);
+                ingredients.put(symbol, (String) units.get(i));
+                cells.append(symbol);
+            }
+            var shape = new java.util.ArrayList<String>();
+            while (cells.length() % 3 != 0) cells.append(' ');
+            for (int i = 0; i < cells.length(); i += 3) shape.add(cells.substring(i, i + 3));
+            if (offset + shape.size() > 3) throw new IllegalArgumentException(path + ": preview exceeds grid");
+            return new RecipeDefinition(id, result, amount, category, shape, ingredients, 0, 0, true, offset, false);
+        }
+        if (!type.equals("shaped")) throw new IllegalArgumentException(path + ": unknown recipe type " + type);
         var raw = config.getList("shape");
         if (raw == null || raw.stream().anyMatch(row -> !(row instanceof String))) {
             throw new IllegalArgumentException(path + ": shape must contain strings");
@@ -77,6 +103,7 @@ public record RecipeDefinition(String id, String result, int amount, String cate
         if (used.isEmpty() || !used.equals(ingredients.keySet())) {
             throw new IllegalArgumentException(path + ": ingredient symbols must exactly match the shape");
         }
-        return new RecipeDefinition(id, result, amount, category, shape, ingredients, 0, 0);
+        if (offset + shape.size() > 3) throw new IllegalArgumentException(path + ": preview exceeds grid");
+        return new RecipeDefinition(id, result, amount, category, shape, ingredients, 0, 0, false, offset, false);
     }
 }

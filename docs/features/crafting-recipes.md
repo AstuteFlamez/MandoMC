@@ -16,3 +16,12 @@ Deployment update: deployed locally and cleanly restarted Paper at 17:12:42 on 2
 
 ## Legacy expansion (2026-11-09)
 The shared guide now opens category cards and includes 51 shaped recipes plus 11 blast-furnace recipes, with visible page numbers, nested input navigation and exact workstation/timing. See [legacy items and armor](legacy-items-and-armor.md) for recovered content, repaired aliases and verification.
+
+## Current progression candidate (2026-11-09)
+The current [ordered progression brief](progression-crafting.md) supersedes the early four-robe/shape-only slice above. Shared definitions now support shaped recipes, shapeless ingredient lists (one entry per consumed slot, including duplicates), and normal/blast-furnace previews. `type: shapeless` accepts one to nine item IDs and forbids a shape. Custom ingredients remain exact catalog choices; ordinary `minecraft:` inputs use native material choices. Native crafting owns quantities and transfer. `guide-row-offset` changes only preview placement, never native matching.
+
+Materials occupies slot 11 between All Categories and Armor and combines materials, components and metals. Obtain-hint lore is added only to cloned clickable list/ingredient previews; templates, native outputs and exact choices remain pristine. Ingredient navigation prefers the configured `guide.preferred-recipes` entry where supplied (Agrinium uses its raw-iron furnace route). Directly gathered Electrum shows its accurate ore source. `guide.hidden-results`/`hidden-recipes` hide unused/deferred metal/fuel or obsolete acquisition entries from `/recipes` without deleting IDs, loot or owned items/native registrations.
+
+All equipment acquisition is crafting-first; no NPC equipment/resource-selling shops are planned. Remaining blaster and concrete ammo recipes require approval. Finished lightsaber recipes remain explicitly deferred. Player-to-player auction-house trading is queued separately with rules/implementation undecided.
+
+Current candidate verification: 601 isolated Paper assertions for native mining, exact ingredient identity, consumption, storage, repairs, smithing and recipe-guide metadata/navigation; native vehicle ammunition and green-projectile regression separately passes 140 assertions. This pass is not yet deployed; client art review remains pending.

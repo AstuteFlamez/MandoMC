@@ -10,10 +10,7 @@
       "item-model": "mandomc:materials/fusion_coil_stabilizer",
       "lore": [
         "<gray>Stabilizes volatile fusion output",
-        "<gray>for consistent performance.",
-        "",
-        "<dark_green><italic>Recovered from the depths of",
-        "<dark_green><bold>Jabba's Palace"
+        "<gray>for consistent performance."
       ]
     },
     "plasma_capacitor_array": {
@@ -25,10 +22,7 @@
       "item-model": "mandomc:materials/plasma_capacitor_array",
       "lore": [
         "<gray>Stores and stabilizes plasma",
-        "<gray>for rapid discharge.",
-        "",
-        "<dark_green><italic>Recovered from the depths of",
-        "<dark_green><bold>Jabba's Palace"
+        "<gray>for rapid discharge."
       ]
     },
     "precision_crafted_lens": {
@@ -51,10 +45,7 @@
       "custom-model-data": 130,
       "item-model": "mandomc:materials/alloy_plating",
       "lore": [
-        "<gray>Durable plating used in advanced builds.",
-        "",
-        "<dark_green><italic>Recovered from the depths of",
-        "<dark_green><bold>Jabba's Palace"
+        "<gray>Durable plating used in advanced builds."
       ]
     },
     "energy_conduits": {
@@ -65,10 +56,7 @@
       "custom-model-data": 140,
       "item-model": "mandomc:materials/energy_conduits",
       "lore": [
-        "<gray>Transfers energy efficiently.",
-        "",
-        "<dark_green><italic>Recovered from the depths of",
-        "<dark_green><bold>Jabba's Palace"
+        "<gray>Transfers energy efficiently."
       ]
     },
     "transparisteel_shard": {
@@ -80,10 +68,7 @@
       "item-model": "mandomc:materials/transparisteel_shard",
       "lore": [
         "<gray>A fragment of transparent yet",
-        "<gray>incredibly durable material.",
-        "",
-        "<dark_green><italic>Recovered from the depths of",
-        "<dark_green><bold>Jabba's Palace"
+        "<gray>incredibly durable material."
       ]
     },
     "wiring_coil": {
@@ -95,10 +80,7 @@
       "item-model": "mandomc:materials/wiring_coil",
       "lore": [
         "<gray>Coiled wiring used to connect",
-        "<gray>electrical components.",
-        "",
-        "<dark_green><italic>Recovered from the depths of",
-        "<dark_green><bold>Jabba's Palace"
+        "<gray>electrical components."
       ]
     }
   }

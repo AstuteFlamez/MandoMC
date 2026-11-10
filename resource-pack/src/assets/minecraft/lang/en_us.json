@@ -4,5 +4,16 @@
   "block.minecraft.deepslate_diamond_ore": "Deepslate Durasteel Ore",
   "block.minecraft.netherite_block": "Beskar Block",
   "block.minecraft.nether_gold_ore": "Beskar Ore",
-  "block.minecraft.ancient_debris": "Deepslate Beskar Ore"
+  "block.minecraft.ancient_debris": "Deepslate Beskar Ore",
+  "block.minecraft.iron_ore": "Agrinium Ore",
+  "block.minecraft.deepslate_iron_ore": "Deepslate Agrinium Ore",
+  "block.minecraft.iron_block": "Agrinium Block",
+  "block.minecraft.raw_iron_block": "Raw Agrinium Block",
+  "block.minecraft.redstone_ore": "Electrum Ore",
+  "block.minecraft.deepslate_redstone_ore": "Deepslate Electrum Ore",
+  "block.minecraft.redstone_block": "Electrum Block",
+  "item.minecraft.iron_ingot": "Agrinium",
+  "item.minecraft.raw_iron": "Raw Agrinium",
+  "item.minecraft.iron_nugget": "Agrinium Nugget",
+  "item.minecraft.redstone": "Electrum"
 }

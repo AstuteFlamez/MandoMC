@@ -1,0 +1,213 @@
+{
+  "credit": "Made with Blockbench",
+  "texture_size": [
+    128,
+    128
+  ],
+  "textures": {
+    "3": "mandomc:item/projectiles/energy_green",
+    "particle": "#3"
+  },
+  "elements": [
+    {
+      "from": [
+        6.52204,
+        5.22978,
+        8.43682
+      ],
+      "to": [
+        8.52204,
+        7.22978,
+        20.56318
+      ],
+      "rotation": {
+        "angle": 45,
+        "axis": "y",
+        "origin": [
+          1.95361,
+          1.07875,
+          10.05141
+        ]
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            2.5,
+            10.5,
+            3.375,
+            11.4375
+          ],
+          "rotation": 180,
+          "texture": "#3"
+        },
+        "east": {
+          "uv": [
+            4.25,
+            10.5,
+            5.125,
+            11.4375
+          ],
+          "rotation": 180,
+          "texture": "#3"
+        },
+        "south": {
+          "uv": [
+            10.5,
+            4,
+            11.375,
+            4.9375
+          ],
+          "rotation": 180,
+          "texture": "#3"
+        },
+        "west": {
+          "uv": [
+            3.375,
+            10.5,
+            4.25,
+            11.4375
+          ],
+          "rotation": 180,
+          "texture": "#3"
+        },
+        "up": {
+          "uv": [
+            6,
+            10.5,
+            5.125,
+            11.375
+          ],
+          "rotation": 180,
+          "texture": "#3"
+        },
+        "down": {
+          "uv": [
+            11.375,
+            5.875,
+            10.5,
+            5
+          ],
+          "rotation": 180,
+          "texture": "#3"
+        }
+      }
+    }
+  ],
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [
+        -6.67,
+        -16.19,
+        -44.47
+      ],
+      "scale": [
+        0.16,
+        0.14,
+        0.15
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        -6.67,
+        -16.19,
+        -44.47
+      ],
+      "scale": [
+        0.16,
+        0.14,
+        0.15
+      ]
+    },
+    "firstperson_righthand": {
+      "translation": [
+        2.5,
+        1.5,
+        0
+      ],
+      "scale": [
+        0.11,
+        0.11,
+        0.11
+      ]
+    },
+    "firstperson_lefthand": {
+      "translation": [
+        2.5,
+        1.5,
+        0
+      ],
+      "scale": [
+        0.11,
+        0.11,
+        0.11
+      ]
+    },
+    "ground": {
+      "scale": [
+        0.1,
+        0.07,
+        0.06
+      ]
+    },
+    "gui": {
+      "rotation": [
+        -132,
+        -36,
+        -180
+      ],
+      "scale": [
+        0.27,
+        0.27,
+        0.27
+      ]
+    },
+    "head": {
+      "rotation": [
+        0,
+        -29.5,
+        0
+      ],
+      "translation": [
+        0.75,
+        -5.5,
+        -28
+      ],
+      "scale": [
+        0.97,
+        0.95,
+        1.78
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        -90,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        -41.5
+      ],
+      "scale": [
+        4,
+        4,
+        4
+      ]
+    }
+  },
+  "groups": [
+    {
+      "name": "group",
+      "origin": [
+        8,
+        8,
+        8
+      ],
+      "color": 0,
+      "children": [
+        0
+      ]
+    }
+  ]
+}

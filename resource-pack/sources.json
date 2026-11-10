@@ -143,6 +143,24 @@
       "sourceSha256": "25d58925ff553f70b029c3c4caa5ff736d5de0438cee0bbe2416409a0b28ce6e",
       "destination": "assets/mandomc/textures/item/armor/robes_boots.png",
       "changes": "Copied unchanged into the Desert Robes namespace; no global vanilla replacement."
+    },
+    {
+      "sourcePath": "assets/minecraft/models/item/projectiles/greenlaser.json",
+      "sourceSha256": "4a4126d739198b90f9aa48c72e27df274d393566c0dde0b54446de531bf6274b",
+      "destination": "assets/mandomc/models/item/projectiles/greenlaser.json",
+      "changes": "Original green laser geometry/animation; namespaced texture references and particle alias only."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/custom/projectiles/energy_green.png",
+      "sourceSha256": "6ab2ba04efdb9136e0eddb726bb3afd36ca841c7a8628d2dd027853bdb06ca6d",
+      "destination": "assets/mandomc/textures/item/projectiles/energy_green.png",
+      "changes": "Original bytes unchanged."
+    },
+    {
+      "sourcePath": "assets/minecraft/textures/custom/projectiles/energy_green.png.mcmeta",
+      "sourceSha256": "02bdebde45d2386f34b0627fd415154b5040b816352a971259ff445f6652129e",
+      "destination": "assets/mandomc/textures/item/projectiles/energy_green.png.mcmeta",
+      "changes": "Original bytes unchanged."
     }
   ],
   "status": "E-11 and Desert Robes. User accepted the new worn robe textures; original inventory icons restored unchanged at their request.",

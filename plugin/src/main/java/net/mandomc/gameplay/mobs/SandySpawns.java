@@ -47,6 +47,10 @@ public final class SandySpawns implements Listener, AutoCloseable {
 
     public SandySettings settings() { return settings; }
 
+    public static boolean eligible(GameMode mode) {
+        return mode == GameMode.SURVIVAL || mode == GameMode.ADVENTURE || mode == GameMode.CREATIVE;
+    }
+
     public boolean biome(Location location) {
         return location.getWorld() != null && location.getWorld().getKey().toString().equals(settings.world())
                 && settings.biomes().contains(location.getBlock().getBiome().getKey().toString());
@@ -111,7 +115,7 @@ public final class SandySpawns implements Listener, AutoCloseable {
             }
             Collections.shuffle(players, random);
             for (Player player : players) {
-                if (player.isDead() || (player.getGameMode() != GameMode.SURVIVAL && player.getGameMode() != GameMode.ADVENTURE)
+                if (player.isDead() || !eligible(player.getGameMode())
                         || !biome(player.getLocation()) || random.nextDouble() >= settings.chance()) continue;
                 var kind = EncounterPlan.Kind.values()[random.nextInt(EncounterPlan.Kind.values().length)];
                 var plan = EncounterPlan.roll(kind, random, settings);

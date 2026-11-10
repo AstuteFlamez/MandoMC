@@ -23,7 +23,7 @@ The first join grants a stone pickaxe, axe, shovel and hoe, 64 steak, four Deser
 The first friends playtest should bring the in-scope gameplay systems together in a rough, integrated version. The development slices below are incremental building and checking steps toward that target. The precise content depth for each system still needs agreement; force powers and resource planets are excluded for now.
 
 ## Proposed everyday loop
-Establish a base, gather supplies, prepare equipment, venture out, fight or complete an activity, return with loot, and fund the next expedition. Building gives the group a home and stockpile. Credits come from a mixture of resource selling and activity rewards. Specific equipment variants, recipes and prices still need decisions.
+Establish a base, gather supplies, prepare equipment, venture out, fight or complete an activity, return with loot, and fund the next expedition. Building gives the group a home and stockpile. Equipment acquisition is crafting-first. NPC equipment shops and resource-selling shops are excluded. Existing credits/balances/payments remain; player-to-player auction-house trading is planned, with its rules and currency integration undecided. Specific unapproved recipes and event rewards still need decisions.
 
 Resource planets are deferred. The initial supply loop must work with ordinary survival resources and in-scope activities. Revisit special resource planets only when the user brings them back into scope.
 
@@ -38,7 +38,7 @@ Resource planets are deferred. The initial supply loop must work with ordinary s
 Use [the feature brief](templates/feature.md). Record unresolved gameplay choices as unresolved; infrastructure work must not silently decide them.
 
 ## Proposed development slices
-The [build order](build-order.md) proposes: arrival/protection → combat → KOTH → Jabba → vehicles → crafting/progression → shops → later raids (clan integration deferred). These are small internal checkpoints toward the integrated friends playtest, not separate launch promises. Both KOTH and Jabba remain in scope.
+The [build order](build-order.md) proposes: arrival/protection → combat → KOTH → Jabba → vehicles → crafting/progression → remaining equipment recipes → later raids (clan integration deferred). These are small internal checkpoints toward the integrated friends playtest, not separate launch promises. Both KOTH and Jabba remain in scope.
 
 Record pairwise kills when combat lands; enable explosive raiding only after claim and damage permissions have been verified. Begin with the [arrival/protection brief](features/arrival-and-protection.md). The order is an advisor recommendation awaiting review, not a new accepted gameplay decision.
 
@@ -49,18 +49,18 @@ Record pairwise kills when combat lands; enable explosive raiding only after cla
 Clans naming is accepted; clan integration is deferred. Travel beyond the implemented spawn/survival routes remains open. Combat tagging and initial equipment quantities are defined in the combat-basics brief.
 
 ## Vehicle baseline
-Aircraft carry players in the first integrated playtest; built-in aerial weapons remain deferred. Speeders and aircraft are initially bought with credits. The long-term direction is crafting for all equipment, including blasters and vehicles. The accepted initial shop/crafting mix remains the first playable version; the later transition must preserve item identities and existing ownership.
+Aircraft carry players in the first integrated playtest; recovered built-in cannons use their configured ammunition. Speeders, aircraft, blasters and ammunition are part of the current all-equipment crafting direction. Preserve stable item identities and existing ownership as recipes land; do not add an initial purchase phase.
 
 Only the player who placed a vehicle can pilot it. Membership in the same group does not grant pilot access. Anyone, including an opposing player, may use an available passenger seat. The U-wing currently has one open-access gunner seat; it is the only role allowed to fire held blasters. Its actual passenger seats will be added later. Pilots and passengers cannot fire held blasters, and menus hide seat roles absent from the vehicle.
 
 Outside protected areas, enemies may destroy vehicles but cannot steal them by taking the pilot seat. Destruction permanently removes the vehicle; the player must obtain another. The placing player can pack a vehicle back into an inventory item only when it is stationary, empty and out of combat. Packing must not repair or duplicate it for free. Damage permission, piloting and other seat access are separate rules; do not infer one from another.
 
 ## Accepted acquisition loop
-Sell ordinary survival resources to buy basic blasters and ammunition; craft basic armor from survival materials; earn credits and rare components from KOTH/Jabba; use those components to craft lightsabers and advanced equipment.
+Gather ordinary survival materials and craft equipment, including armor, blasters, ammunition and vehicles. Existing event components/loot remain alternate acquisition routes where implemented. Finished lightsaber recipes remain deferred until that implementation is ready.
 
-The user accepted this loop on 2026-11-05. It also supplies the normal route for replacing lost equipment. Specific recipes, equipment variants, prices, drop rates and grind duration remain open. Resource planets are not required.
+The user revised acquisition on 2026-11-09: all equipment should have recipes. Crafting also supplies the normal route for replacing lost equipment. Remaining recipes, equipment variants, drop rates and grind duration require approval. Resource planets are not required.
 
-Longer term, all equipment acquisition shifts toward crafting, including blasters and vehicles. This is a later progression change, not a prerequisite for the initial integrated playtest.
+No NPC/server equipment shops or resource-selling shops are planned. A player-to-player auction house replaces shops as future trading; rules, fees, listing duration, implementation choice and currency details are undecided. Existing credits, ranks and payment commands remain.
 
 ## Saber baseline and equipment power
 The user uses shield-based models for lightsabers, taking advantage of shield blocking. Their earlier implementation included reflection and saber throwing. Recover that approach as the starting point; a new timed-parry requirement has not been accepted. Separate Force powers remain deferred.

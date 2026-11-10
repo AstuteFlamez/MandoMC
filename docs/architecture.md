@@ -31,7 +31,7 @@ The new pack lives in `resource-pack/` in this repository. Its build targets the
 | Factions | FactionsUUID | Warpoints, vulnerability, controlled breaches |
 | Protected regions | WorldGuard with WorldEdit | Enforcement for every custom action |
 | Worlds | Paper APIs | Existing dimension loading, exact arrivals, aliases and travel |
-| Credits | MandoMC native ledger | Atomic balances, payments and admin adjustments; shops/rewards deferred |
+| Credits | MandoMC native ledger | Atomic balances, payments and admin adjustments; auction-house/reward integration deferred |
 | Items, armor, crafting | Paper APIs and resource-pack/ | Stable IDs, recipes, custom behavior |
 | KOTH and resource regeneration | Paper APIs | Event rules, bounded regeneration |
 
@@ -40,7 +40,7 @@ The catalog in server/plugins.catalog.json records admission status. Installed v
 ## Contracts
 - FactionsUUID owns membership, relations and claims. MandoMC owns pairwise warpoints keyed by stable group IDs; vendor faction power is not the raid authority. Do not mirror claims into WorldGuard.
 - WorldGuard owns static regions. Raids never override spawn/adventure-map protection.
-- The economy provider owns balances; Vault is the bridge. Do not restore the old SQL balance mirror.
+- The native CreditLedger owns current credit balances. Future auction currency/integration details require approval; do not introduce a second balance writer or restore the old SQL mirror.
 - WeaponMechanics generates its weapons and handles projectiles. MandoMC references vendor IDs instead of duplicating weapon definitions.
 - MythicMobs owns mob definitions/AI. MandoMC tracks run-owned instances. Each reward has exactly one writer.
 - ModelEngine owns rendering/animation; MandoMC owns vehicle gameplay.
@@ -52,7 +52,7 @@ The catalog in server/plugins.catalog.json records admission status. Installed v
 ## Vehicles
 Built-in aircraft weapons remain deferred; the U-wing gunner may fire held blasters. MandoMC owns vehicle state and seat access, while ModelEngine owns visuals. Persist the placing player's UUID as the pilot authority for a deployed vehicle. Group membership and passenger access do not grant piloting rights.
 
-Passenger and gunner seats are available to any player. The existing U-wing secondary mount is Gunner, its only firing role; actual passenger seats are deferred until added to the model/config. Absent roles are hidden in the riding menu. Evaluate mounting, pilot-seat switching and vehicle damage separately: enemies can destroy vehicles outside protected areas, but cannot take over piloting. Destruction is permanent loss. The placer may pack a vehicle into an item only while stationary, unoccupied and out of combat. Use one authoritative identity across deployed/packed/destroyed states; preserve remaining health and prevent simultaneous item/entity copies. Acquisition starts with credit purchases and later moves to crafting for all equipment; do not encode the purchase route into runtime item or vehicle identity. Redeployment/transfer details belong in the vehicle feature brief.
+Passenger and gunner seats are available to any player. The existing U-wing secondary mount is Gunner, its only firing role; actual passenger seats are deferred until added to the model/config. Absent roles are hidden in the riding menu. Evaluate mounting, pilot-seat switching and vehicle damage separately: enemies can destroy vehicles outside protected areas, but cannot take over piloting. Destruction is permanent loss. The placer may pack a vehicle into an item only while stationary, unoccupied and out of combat. Use one authoritative identity across deployed/packed/destroyed states; preserve remaining health and prevent simultaneous item/entity copies. Acquisition is crafting-first for all equipment. NPC/server equipment shops and resource-selling shops are excluded; preserve runtime item/vehicle identity independently of acquisition. Future player-to-player auction-house rules and implementation remain undecided. Redeployment/transfer details belong in the vehicle feature brief.
 
 ## Events and warpoints
 Jabba uses one scheduled shared dungeon with PvP and open loot. Private copies per group are outside the current design. MandoMC owns event state, progression and cleanup; MythicMobs owns mob definitions and AI.

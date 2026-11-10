@@ -48,6 +48,10 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     public net.mandomc.gameplay.travel.PersonalTravel personal() { return personal; }
     private net.mandomc.gameplay.vehicles.VehicleService vehicles;
     private net.mandomc.gameplay.explosions.TemporaryExplosions explosions;
+    private net.mandomc.gameplay.vehicles.VehicleCannons vehicleCannons;
+    private net.mandomc.gameplay.vehicles.VehicleRepairs vehicleRepairs;
+    public net.mandomc.gameplay.vehicles.VehicleCannons vehicleCannons() { return vehicleCannons; }
+    public net.mandomc.gameplay.vehicles.VehicleRepairs vehicleRepairs() { return vehicleRepairs; }
     public net.mandomc.gameplay.vehicles.VehicleService vehicles() { return vehicles; }
     public net.mandomc.gameplay.explosions.TemporaryExplosions explosions() { return explosions; }
     private ArrivalListener arrival;
@@ -119,7 +123,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 worldEditRanks = new net.mandomc.integrations.permissions.WorldEditRanks(this, ranks);
             new net.mandomc.commands.RankCommands(root, ranks, language.getConfigurationSection("ranks"));
             credits = new net.mandomc.gameplay.credits.CreditService(this, loadFeature("economy/credits.yml"));
-            for (var resource : new String[] {"items/catalog.yml", "items/definitions/vehicles.yml", "items/definitions/legacy.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/jabba.yml", "items/definitions/jabba-loot.yml", "items/definitions/dioxis.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
+            for (var resource : new String[] {"items/catalog.yml", "items/definitions/vehicles.yml", "items/definitions/vehicle-ammo.yml", "items/definitions/legacy.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/jabba.yml", "items/definitions/jabba-loot.yml", "items/definitions/dioxis.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
                 if (!new File(getDataFolder(), resource).isFile()) saveResource(resource, false);
             }
             // Add only missing badges and vendor registrations; preserve local overrides.
@@ -221,6 +225,10 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                     new net.mandomc.integrations.models.ModelEngineVehicles(this), vehicleProtection, explosions,
                     language.getConfigurationSection("vehicles"));
             new net.mandomc.integrations.weapons.VehicleWeapons(this, vehicles, explosions);
+            vehicleCannons = new net.mandomc.gameplay.vehicles.VehicleCannons(this, vehicles, items,
+                    vehicleProtection, explosions, loadFeature("vehicles/weapons.yml"), language.getConfigurationSection("vehicles"));
+            vehicleRepairs = new net.mandomc.gameplay.vehicles.VehicleRepairs(this, vehicles, items,
+                    loadFeature("vehicles/repairs.yml"), language.getConfigurationSection("vehicles"));
             getLogger().info("Vehicles ready: speederbike, X-Wing, TIE Fighter and U-Wing; temporary explosions enabled.");
             var utilityConfig = loadFeature("admin/utilities.yml");
             if (utilityConfig.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("admin/utilities.yml: expected schema-version 1");
@@ -278,6 +286,8 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
         if (credits != null) credits.close();
         if (worldEditRanks != null) worldEditRanks.close();
         if (ranks != null) ranks.close();
+        if (vehicleRepairs != null) vehicleRepairs.close();
+        if (vehicleCannons != null) vehicleCannons.close();
         if (vehicles != null) vehicles.close();
         if (explosions != null) explosions.close();
         if (commandBindings != null) commandBindings.close();

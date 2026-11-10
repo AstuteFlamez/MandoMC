@@ -1119,10 +1119,7 @@
       "category": "crystals",
       "lore": [
         "<gray>Favored by temple guards",
-        "<gray>of the Jedi Order.",
-        "",
-        "<blue><italic>Discovered within the crystal caves of",
-        "<blue><bold>Ilum"
+        "<gray>of the Jedi Order."
       ],
       "item-model": "mandomc:legacy/yellow_kyber"
     },
@@ -1134,10 +1131,7 @@
       "category": "crystals",
       "lore": [
         "<gray>A crystal often wielded by",
-        "<gray>Jedi deeply connected to the Force.",
-        "",
-        "<blue><italic>Discovered within the crystal caves of",
-        "<blue><bold>Ilum"
+        "<gray>Jedi deeply connected to the Force."
       ],
       "item-model": "mandomc:legacy/green_kyber"
     },
@@ -1149,10 +1143,7 @@
       "category": "crystals",
       "lore": [
         "<gray>A rare crystal associated",
-        "<gray>with balance between light and dark.",
-        "",
-        "<blue><italic>Discovered within the crystal caves of",
-        "<blue><bold>Ilum"
+        "<gray>with balance between light and dark."
       ],
       "item-model": "mandomc:legacy/purple_kyber"
     },
@@ -1176,10 +1167,7 @@
       "category": "crystals",
       "lore": [
         "<gray>The most common crystal",
-        "<gray>used by Jedi guardians.",
-        "",
-        "<blue><italic>Discovered within the crystal caves of",
-        "<blue><bold>Ilum"
+        "<gray>used by Jedi guardians."
       ],
       "item-model": "mandomc:legacy/blue_kyber"
     },
@@ -1195,7 +1183,7 @@
       "item-model": "mandomc:legacy/agrinium_scrap"
     },
     "agrinium": {
-      "material": "ECHO_SHARD",
+      "material": "IRON_INGOT",
       "name": "<gray>Agrinium",
       "custom-model-data": 200,
       "rarity": "common",
@@ -1360,7 +1348,7 @@
       "item-model": "mandomc:legacy/electrum_scrap"
     },
     "electrum": {
-      "material": "ECHO_SHARD",
+      "material": "REDSTONE",
       "name": "<gold>Electrum",
       "custom-model-data": 205,
       "rarity": "uncommon",
@@ -1644,6 +1632,72 @@
       "custom-model-data": 1,
       "item-model": "mandomc:tools/beskar_shovel",
       "rarity": "legendary",
+      "category": "tools",
+      "lore": [
+        "<gray>A durable tool forged for field work."
+      ]
+    },
+    "speederbike_chassis": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Speeder Bike Chassis",
+      "custom-model-data": 910,
+      "rarity": "rare",
+      "category": "components",
+      "lore": [
+        "<gray>A dedicated vehicle assembly component."
+      ],
+      "item-model": "mandomc:vehicles/components/speederbike_chassis"
+    },
+    "speederbike_repulsor": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Speeder Bike Repulsor",
+      "custom-model-data": 911,
+      "rarity": "rare",
+      "category": "components",
+      "lore": [
+        "<gray>A dedicated vehicle assembly component."
+      ],
+      "item-model": "mandomc:vehicles/components/speederbike_repulsor"
+    },
+    "uwing_cockpit": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>U-Wing Cockpit",
+      "custom-model-data": 912,
+      "rarity": "rare",
+      "category": "components",
+      "lore": [
+        "<gray>A dedicated vehicle assembly component."
+      ],
+      "item-model": "mandomc:vehicles/components/uwing_cockpit"
+    },
+    "uwing_wing": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>U-Wing Wing",
+      "custom-model-data": 913,
+      "rarity": "rare",
+      "category": "components",
+      "lore": [
+        "<gray>A dedicated vehicle assembly component."
+      ],
+      "item-model": "mandomc:vehicles/components/uwing_wing"
+    },
+    "agrinium_pickaxe": {
+      "material": "IRON_PICKAXE",
+      "name": "<green>Agrinium Pickaxe",
+      "custom-model-data": 1,
+      "item-model": "mandomc:tools/agrinium_pickaxe",
+      "rarity": "uncommon",
+      "category": "tools",
+      "lore": [
+        "<gray>A durable tool forged for field work."
+      ]
+    },
+    "agrinium_shovel": {
+      "material": "IRON_SHOVEL",
+      "name": "<green>Agrinium Shovel",
+      "custom-model-data": 1,
+      "item-model": "mandomc:tools/agrinium_shovel",
+      "rarity": "uncommon",
       "category": "tools",
       "lore": [
         "<gray>A durable tool forged for field work."

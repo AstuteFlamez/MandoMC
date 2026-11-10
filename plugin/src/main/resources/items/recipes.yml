@@ -266,12 +266,13 @@
       "amount": 1,
       "category": "components",
       "shape": [
-        "DD ",
-        "DC "
+        "D",
+        "P",
+        "D"
       ],
       "ingredients": {
         "D": "durasteel",
-        "C": "energy_conduits"
+        "P": "plastoid"
       }
     },
     "great_hilt": {
@@ -279,12 +280,13 @@
       "amount": 1,
       "category": "components",
       "shape": [
-        "PPP",
-        "PCP"
+        " D ",
+        "DHD",
+        " D "
       ],
       "ingredients": {
-        "P": "phrik",
-        "C": "energy_conduits"
+        "D": "durasteel",
+        "H": "straight_hilt"
       }
     },
     "whip_hilt": {
@@ -292,13 +294,13 @@
       "amount": 1,
       "category": "components",
       "shape": [
-        "DP ",
-        "PC "
+        " E ",
+        " HD"
       ],
       "ingredients": {
-        "D": "durasteel",
-        "P": "phrik",
-        "C": "energy_conduits"
+        "E": "electrum",
+        "H": "straight_hilt",
+        "D": "durasteel"
       }
     },
     "pike_hilt": {
@@ -306,13 +308,13 @@
       "amount": 1,
       "category": "components",
       "shape": [
-        "PDP",
-        "PCP"
+        "D",
+        "D",
+        "H"
       ],
       "ingredients": {
         "D": "durasteel",
-        "P": "phrik",
-        "C": "energy_conduits"
+        "H": "straight_hilt"
       }
     },
     "fang_hilt": {
@@ -320,14 +322,11 @@
       "amount": 1,
       "category": "components",
       "shape": [
-        " P ",
-        "PCP",
-        " D "
+        "AHA"
       ],
       "ingredients": {
-        "D": "durasteel",
-        "P": "phrik",
-        "C": "energy_conduits"
+        "A": "agrinium",
+        "H": "straight_hilt"
       }
     },
     "agrinium": {
@@ -585,7 +584,8 @@
       "ingredients": {
         "C": "tiefighter_cockpit",
         "W": "tiefighter_wing"
-      }
+      },
+      "guide-row-offset": 1
     },
     "durasteel_helmet": {
       "result": "durasteel_helmet",
@@ -697,10 +697,276 @@
         "M": "beskar_sheet",
         "S": "minecraft:stick"
       }
+    },
+    "plastoid": {
+      "type": "shapeless",
+      "result": "plastoid",
+      "amount": 2,
+      "category": "materials",
+      "ingredients": [
+        "minecraft:clay_ball",
+        "minecraft:clay_ball",
+        "minecraft:sand",
+        "minecraft:coal"
+      ]
+    },
+    "speederbike_chassis": {
+      "result": "speederbike_chassis",
+      "amount": 1,
+      "category": "components",
+      "shape": [
+        "D D",
+        "DAD",
+        "DDD"
+      ],
+      "ingredients": {
+        "D": "durasteel_sheet",
+        "A": "alloy_plating"
+      }
+    },
+    "speederbike_repulsor": {
+      "result": "speederbike_repulsor",
+      "amount": 1,
+      "category": "components",
+      "shape": [
+        " E ",
+        "WCW",
+        " D "
+      ],
+      "ingredients": {
+        "E": "energy_conduits",
+        "W": "wiring_coil",
+        "C": "circuit_board",
+        "D": "durasteel_sheet"
+      }
+    },
+    "uwing_cockpit": {
+      "result": "uwing_cockpit",
+      "amount": 1,
+      "category": "components",
+      "shape": [
+        "DWD",
+        "TCT",
+        "DLD"
+      ],
+      "ingredients": {
+        "D": "durasteel_sheet",
+        "W": "wiring_coil",
+        "T": "transparisteel_shard",
+        "C": "circuit_board",
+        "L": "precision_crafted_lens"
+      }
+    },
+    "uwing_wing": {
+      "result": "uwing_wing",
+      "amount": 1,
+      "category": "components",
+      "shape": [
+        "DDD",
+        "EAE",
+        "SPS"
+      ],
+      "ingredients": {
+        "D": "durasteel_sheet",
+        "E": "energy_conduits",
+        "A": "alloy_plating",
+        "S": "fusion_coil_stabilizer",
+        "P": "plasma_capacitor_array"
+      }
+    },
+    "speederbike": {
+      "result": "speederbike",
+      "amount": 1,
+      "category": "vehicles",
+      "shape": [
+        " R ",
+        "WCW",
+        " D "
+      ],
+      "ingredients": {
+        "R": "speederbike_repulsor",
+        "C": "speederbike_chassis",
+        "W": "wiring_coil",
+        "D": "durasteel_sheet"
+      }
+    },
+    "uwing": {
+      "result": "uwing",
+      "amount": 1,
+      "category": "vehicles",
+      "shape": [
+        "W W",
+        " C ",
+        " A "
+      ],
+      "ingredients": {
+        "W": "uwing_wing",
+        "C": "uwing_cockpit",
+        "A": "alloy_plating"
+      }
+    },
+    "barrel_liner": {
+      "result": "barrel_liner",
+      "amount": 1,
+      "category": "components",
+      "shape": [
+        "A A",
+        "A A",
+        "A A"
+      ],
+      "ingredients": {
+        "A": "agrinium"
+      }
+    },
+    "alloy_plating": {
+      "result": "alloy_plating",
+      "amount": 1,
+      "category": "components",
+      "shape": [
+        "AAA"
+      ],
+      "ingredients": {
+        "A": "agrinium"
+      }
+    },
+    "wiring_coil": {
+      "result": "wiring_coil",
+      "amount": 2,
+      "category": "components",
+      "shape": [
+        " E ",
+        "EPE",
+        " E "
+      ],
+      "ingredients": {
+        "E": "electrum",
+        "P": "plastoid"
+      }
+    },
+    "energy_conduits": {
+      "result": "energy_conduits",
+      "amount": 2,
+      "category": "components",
+      "shape": [
+        "E",
+        "P",
+        "E"
+      ],
+      "ingredients": {
+        "E": "electrum",
+        "P": "plastoid"
+      }
+    },
+    "fusion_coil_stabilizer": {
+      "result": "fusion_coil_stabilizer",
+      "amount": 1,
+      "category": "components",
+      "shape": [
+        " D ",
+        "DWD",
+        " D "
+      ],
+      "ingredients": {
+        "D": "durasteel",
+        "W": "wiring_coil"
+      }
+    },
+    "plasma_capacitor_array": {
+      "result": "plasma_capacitor_array",
+      "amount": 1,
+      "category": "components",
+      "shape": [
+        " E ",
+        "WEW",
+        " E "
+      ],
+      "ingredients": {
+        "E": "electrum",
+        "W": "wiring_coil"
+      }
+    },
+    "electrum_sheet": {
+      "result": "electrum_sheet",
+      "amount": 1,
+      "category": "components",
+      "shape": [
+        "EEE"
+      ],
+      "ingredients": {
+        "E": "electrum"
+      }
+    },
+    "transparisteel_shard": {
+      "result": "transparisteel_shard",
+      "amount": 4,
+      "category": "components",
+      "shape": [
+        " A ",
+        "AGA",
+        " A "
+      ],
+      "ingredients": {
+        "A": "agrinium",
+        "G": "minecraft:glass"
+      }
+    },
+    "circuit_board": {
+      "result": "circuit_board",
+      "amount": 1,
+      "category": "components",
+      "shape": [
+        "WW",
+        "EP"
+      ],
+      "ingredients": {
+        "W": "wiring_coil",
+        "E": "electrum",
+        "P": "plastoid"
+      }
+    },
+    "precision_crafted_lens": {
+      "result": "precision_crafted_lens",
+      "amount": 1,
+      "category": "components",
+      "shape": [
+        " E ",
+        "ETE",
+        " E "
+      ],
+      "ingredients": {
+        "E": "electrum",
+        "T": "transparisteel_shard"
+      }
+    },
+    "agrinium_pickaxe": {
+      "result": "agrinium_pickaxe",
+      "category": "tools",
+      "shape": [
+        "MMM",
+        " S ",
+        " S "
+      ],
+      "ingredients": {
+        "M": "agrinium_sheet",
+        "S": "minecraft:stick"
+      }
+    },
+    "agrinium_shovel": {
+      "result": "agrinium_shovel",
+      "category": "tools",
+      "shape": [
+        "M",
+        "S",
+        "S"
+      ],
+      "ingredients": {
+        "M": "agrinium_sheet",
+        "S": "minecraft:stick"
+      }
     }
   },
   "sources": {
-    "bantha_hide": "<gray>Dropped by banthas: 1–3 hides per kill.",
+    "bantha_hide": "<gray>Dropped by banthas: 1\u20133 hides per kill.",
     "purple_xwing": "<gray>Not currently obtainable through crafting or loot.",
     "money_note": "<gray>Not currently obtainable through crafting or loot.",
     "cortosis_alloy_frame": "<gray>Not currently obtainable through crafting or loot.",
@@ -720,7 +986,6 @@
     "rough_power_cell": "<gray>Not currently obtainable through crafting or loot.",
     "simple_emitter_coil": "<gray>Not currently obtainable through crafting or loot.",
     "worn_barrel_liner": "<gray>Not currently obtainable through crafting or loot.",
-    "barrel_liner": "<gray>Not currently obtainable through crafting or loot.",
     "durable_mid_grade_power_core": "<gray>Not currently obtainable through crafting or loot.",
     "durasteel_power_core": "<gray>Not currently obtainable through crafting or loot.",
     "enhanced_ion_chamber": "<gray>Not currently obtainable through crafting or loot.",
@@ -732,7 +997,6 @@
     "reinforced_ion_chamber": "<gray>Not currently obtainable through crafting or loot.",
     "batteries": "<gray>Not currently obtainable through crafting or loot.",
     "biosample": "<gray>Not currently obtainable through crafting or loot.",
-    "circuit_board": "<gray>Not currently obtainable through crafting or loot.",
     "coaxium_fragment": "<gray>Not currently obtainable through crafting or loot.",
     "cryo_gel": "<gray>Not currently obtainable through crafting or loot.",
     "detonator": "<gray>Not currently obtainable through crafting or loot.",
@@ -749,7 +1013,6 @@
     "micro_servo_motor": "<gray>Not currently obtainable through crafting or loot.",
     "myocaine_gel": "<gray>Not currently obtainable through crafting or loot.",
     "nova_crystal_dust": "<gray>Not currently obtainable through crafting or loot.",
-    "plastoid": "<gray>Not currently obtainable through crafting or loot.",
     "quadanium_steel": "<gray>Not currently obtainable through crafting or loot.",
     "refined_coaxium": "<gray>Not currently obtainable through crafting or loot.",
     "refined_kolto": "<gray>Not currently obtainable through crafting or loot.",
@@ -779,24 +1042,23 @@
     "purple_kyber": "<gray>Not currently obtainable through crafting or loot.",
     "white_kyber": "<gray>Not currently obtainable through crafting or loot.",
     "blue_kyber": "<gray>Not currently obtainable through crafting or loot.",
-    "agrinium_scrap": "<gray>Not currently obtainable through crafting or loot.",
+    "agrinium_scrap": "<gray>Legacy refining material; not currently obtainable through survival gathering.",
     "aurodium_scrap": "<gray>Not currently obtainable through crafting or loot.",
     "beskar_scrap": "<gray>Not currently obtainable through crafting or loot.",
     "cortosis_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "durasteel_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "electrum_scrap": "<gray>Not currently obtainable through crafting or loot.",
+    "durasteel_scrap": "<gray>Mine Durasteel Ore with an iron pickaxe or better. Fortune increases scrap; Silk Touch keeps the ore.",
+    "electrum_scrap": "<gray>Legacy refining material; not currently obtainable through survival gathering.",
     "lommite_scrap": "<gray>Not currently obtainable through crafting or loot.",
     "mandalorian_iron_scrap": "<gray>Not currently obtainable through crafting or loot.",
     "neuranium_scrap": "<gray>Not currently obtainable through crafting or loot.",
     "phrik_scrap": "<gray>Not currently obtainable through crafting or loot.",
     "songsteel_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "fusion_coil_stabilizer": "<gray>Found in caches during the Jabba palace event.",
-    "plasma_capacitor_array": "<gray>Found in caches during the Jabba palace event.",
-    "precision_crafted_lens": "<gray>Found in caches during the Jabba palace event.",
-    "alloy_plating": "<gray>Found in caches during the Jabba palace event.",
-    "energy_conduits": "<gray>Found in caches during the Jabba palace event.",
-    "transparisteel_shard": "<gray>Found in caches during the Jabba palace event.",
-    "wiring_coil": "<gray>Found in caches during the Jabba palace event."
+    "minecraft:raw_iron": "<gray>Mine Agrinium Ore with a suitable pickaxe.",
+    "minecraft:clay_ball": "<gray>Break clay blocks to gather clay balls. Use two separate slots for Plastoid.",
+    "minecraft:sand": "<gray>Gather ordinary sand. Red sand does not work for Plastoid.",
+    "minecraft:coal": "<gray>Mine coal ore with a pickaxe. Charcoal does not work for Plastoid.",
+    "minecraft:glass": "<gray>Smelt sand in a furnace.",
+    "electrum": "<gray>Mine Electrum Ore with an iron pickaxe or better. Fortune increases ingots; Silk Touch keeps the ore."
   },
   "guide": {
     "title": "<gold>Recipes",
@@ -813,12 +1075,47 @@
     "unavailable": "<gray>No crafting recipe is available for this ingredient.",
     "player-only": "<red>Open this guide in-game.",
     "smelting": "<yellow>Refine in a blast furnace",
-    "smelting-time": "<gray><value> seconds per item",
+    "smelting-time": "<gray>Cooking time: <value> seconds",
     "categories": "<yellow>Categories",
-    "category-hint": "<gray><value> recipes — click to browse",
-    "page": "<gray>Page <value>"
+    "category-hint": "<gray><value> recipes \u2014 click to browse",
+    "page": "<gray>Page <value>",
+    "shapeless": "<yellow>Craft in any arrangement",
+    "furnace": "<yellow>Smelt in a furnace",
+    "obtain-hint": "<yellow>Click to see how to obtain.",
+    "hidden-results": [
+      "aurodium",
+      "aurodium_sheet",
+      "cortosis",
+      "cortosis_sheet",
+      "lommite",
+      "lommite_sheet",
+      "mandalorian_iron",
+      "mandalorian_sheet",
+      "neuranium",
+      "neuranium_sheet",
+      "phrik",
+      "phrik_sheet",
+      "songsteel",
+      "songsteel_sheet",
+      "rhydonium_barrel",
+      "rhydonium_canister"
+    ],
+    "hidden-recipes": [
+      "electrum"
+    ],
+    "preferred-recipes": {
+      "agrinium": "agrinium_from_raw"
+    }
   },
   "smelting": {
+    "agrinium_from_raw": {
+      "result": "agrinium",
+      "input": "minecraft:raw_iron",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
+      "category": "metals"
+    },
     "agrinium_sheet": {
       "result": "agrinium_sheet",
       "input": "agrinium",
@@ -854,14 +1151,6 @@
     "durasteel_sheet": {
       "result": "durasteel_sheet",
       "input": "durasteel",
-      "furnace": "blast",
-      "experience": 0.8,
-      "cook-time": 200,
-      "category": "metals"
-    },
-    "electrum_sheet": {
-      "result": "electrum_sheet",
-      "input": "electrum",
       "furnace": "blast",
       "experience": 0.8,
       "cook-time": 200,

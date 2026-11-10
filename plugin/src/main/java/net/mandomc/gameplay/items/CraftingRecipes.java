@@ -17,9 +17,13 @@ public final class CraftingRecipes implements AutoCloseable {
     private final ItemCatalog items;
     private final List<NamespacedKey> keys = new ArrayList<>();
     private final List<RecipeDefinition> definitions;
+    private final java.util.Set<String> hiddenResults;
+    private final java.util.Set<String> hiddenRecipes;
 
     public CraftingRecipes(JavaPlugin plugin, ItemCatalog items, ConfigurationSection config) {
         this.items = items;
+        hiddenResults = java.util.Set.copyOf(config.getStringList("guide.hidden-results"));
+        hiddenRecipes = java.util.Set.copyOf(config.getStringList("guide.hidden-recipes"));
         if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("items/recipes.yml: unsupported schema-version");
         var section = Objects.requireNonNull(config.getConfigurationSection("recipes"), "items/recipes.yml: recipes missing");
         var pending = new ArrayList<org.bukkit.inventory.Recipe>();
@@ -29,15 +33,18 @@ public final class CraftingRecipes implements AutoCloseable {
             var result = Objects.requireNonNull(items.create(definition.result()), "Unknown recipe result: " + definition.result());
             if (definition.amount() > result.getMaxStackSize()) throw new IllegalArgumentException("Recipe output exceeds stack limit: " + id);
             result.setAmount(definition.amount());
-            var recipe = new ShapedRecipe(new NamespacedKey(plugin, "craft_" + id), result);
-            recipe.shape(definition.shape().toArray(String[]::new));
+            var key = new NamespacedKey(plugin, "craft_" + id);
+            var shaped = definition.shapeless() ? null : new ShapedRecipe(key, result);
+            var shapeless = definition.shapeless() ? new org.bukkit.inventory.ShapelessRecipe(key, result) : null;
+            if (shaped != null) shaped.shape(definition.shape().toArray(String[]::new));
             for (var entry : definition.ingredients().entrySet()) {
                 var ingredient = ingredient(entry.getValue());
                 RecipeChoice choice = entry.getValue().startsWith("minecraft:")
                         ? new RecipeChoice.MaterialChoice(ingredient.getType()) : new RecipeChoice.ExactChoice(ingredient);
-                recipe.setIngredient(entry.getKey(), choice);
+                if (shaped != null) shaped.setIngredient(entry.getKey(), choice);
+                else shapeless.addIngredient(choice);
             }
-            pending.add(recipe);
+            pending.add(shaped != null ? shaped : shapeless);
             parsed.add(definition);
         }
         var smelting = config.getConfigurationSection("smelting");
@@ -49,8 +56,10 @@ public final class CraftingRecipes implements AutoCloseable {
                 var ingredient = ingredient(input);
                 RecipeChoice choice = input.startsWith("minecraft:") ? new RecipeChoice.MaterialChoice(ingredient.getType())
                         : new RecipeChoice.ExactChoice(ingredient);
-                pending.add(new org.bukkit.inventory.BlastingRecipe(new NamespacedKey(plugin, "smelt_" + id), result,
-                        choice, definition.experience(), definition.cookTime()));
+                var key = new NamespacedKey(plugin, "smelt_" + id);
+                pending.add(definition.blasting()
+                        ? new org.bukkit.inventory.BlastingRecipe(key, result, choice, definition.experience(), definition.cookTime())
+                        : new org.bukkit.inventory.FurnaceRecipe(key, result, choice, definition.experience(), definition.cookTime()));
                 parsed.add(definition);
             }
         }
@@ -67,6 +76,11 @@ public final class CraftingRecipes implements AutoCloseable {
     }
 
     public List<RecipeDefinition> definitions() { return definitions; }
+
+    public List<RecipeDefinition> guideDefinitions() {
+        return definitions.stream().filter(recipe -> !hiddenResults.contains(recipe.result())
+                && !hiddenRecipes.contains(recipe.id())).toList();
+    }
 
     public ItemStack ingredient(String id) {
         if (!id.startsWith("minecraft:")) return Objects.requireNonNull(items.create(id), "Unknown recipe ingredient: " + id);
