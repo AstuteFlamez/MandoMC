@@ -27,3 +27,6 @@ Faithful pin: official project faithful-32x, Modrinth version Fj5GKJnf, 26.1-jun
 
 ## Next action
 Apply the verified pack/JAR, verify the actual client's final three-pack order, and review the six block candidates in game before extending other blocks.
+
+## Deployment verification
+Published and anonymously verified resource-pack-26.1.2-d772599bf5de (1064 entries, SHA-1 0245e2984db2875b4aa2ad7a0b12aee6ad80896c). Clean deployment at 18:02 retained all unrelated gameplay classes; JAR SHA-256 2be26b956dd9f449e906408ea011053a3f27cdd731293f1a66582b8bc64dd4e7. At 18:03 the actual client accepted, downloaded and successfully loaded all three packs. Its resource manager lists bottom-to-top Faithful UUID c7431f86-b798-586f-819f-e863f0c9e1e9, JustTimm UUID 20a340e6-9abc-481d-8878-312e26ca08e8, MandoMC UUID a3feb494-6a5c-5495-8f33-efdd5783633f; no MandoMC missing-resource warnings remain. No probes are deployed. Next action: user reviews the six metal block candidates in game before extending other block families.
