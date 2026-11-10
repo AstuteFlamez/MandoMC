@@ -28,13 +28,13 @@ def main():
             data = faithful.read(source)
             image = Image.open(io.BytesIO(data))
             hue = (0.0, 0.18) if "iron_ore" in source else (0.05, 0.23) if "gold_ore" in source else (0.40, 0.61)
-            result, pixels = metal.tint(image, palettes[name], ore, soften, mineral_hue=hue)
+            result, pixels = metal.tint(image, palettes[name], ore, soften, mineral_hue=hue, shadow_floor=(96 if name == "electrum" and "deepslate_" not in source else 80) if ore and ("deepslate_" in source or name == "electrum") else None)
             path = ASSETS / target
             path.parent.mkdir(parents=True, exist_ok=True)
             result.save(path)
             records.append({'target': target, 'source': source, 'sourceSha256': hashlib.sha256(data).hexdigest(),
                             'palette': name, 'oreMask': ore, 'softStoneShadows': soften, 'recoloredPixels': pixels,
-                            'mineralHue': list(hue), 'outputSha256': hashlib.sha256(path.read_bytes()).hexdigest()})
+                            'mineralHue': list(hue), 'shadowFloorLuma': (96 if name == 'electrum' and 'deepslate_' not in source else 80) if ore and ('deepslate_' in source or name == 'electrum') else None, 'outputSha256': hashlib.sha256(path.read_bytes()).hexdigest()})
 
         for name, native in [('agrinium', 'iron')]:
             for rock, template in [('', 'iron_ore'), ('deepslate_', 'deepslate_iron_ore')]:

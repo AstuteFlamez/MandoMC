@@ -42,6 +42,19 @@ class ProgressionMetalTests(unittest.TestCase):
         block = next(row for row in progression if row['target'].endswith('/redstone_block.png'))
         self.assertEqual(block['generatedSource'], 'art-sources/electrum-block-32.png')
 
+    def test_deepslate_and_electrum_stone_shadows_use_visible_gray_floor(self):
+        base = json.loads((ROOT / 'resource-pack/metal-block-sources.json').read_text())['blocks']
+        for row in base:
+            if row['name'].startswith('deepslate_'):
+                self.assertEqual(row['shadowFloorLuma'], 80)
+        progression = json.loads((ROOT / 'resource-pack/progression-metal-sources.json').read_text())['textures']
+        wanted = {'minecraft/textures/block/deepslate_iron_ore.png',
+                  'minecraft/textures/block/deepslate_redstone_ore.png',
+                  'minecraft/textures/block/redstone_ore.png'}
+        for row in progression:
+            if row['target'] in wanted:
+                self.assertEqual(row['shadowFloorLuma'], 96 if row['target'].endswith('/redstone_ore.png') else 80)
+
     def test_no_item_lore_or_recipe_source_points_to_jabba(self):
         recipes = json.loads((ROOT / 'plugin/src/main/resources/items/recipes.yml').read_text())
         self.assertNotIn('jabba', json.dumps(recipes['sources']).lower())

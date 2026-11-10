@@ -16,6 +16,7 @@
         0.0,
         0.18
       ],
+      "shadowFloorLuma": null,
       "outputSha256": "94c8f766b0893aa35d6d993bb18a44d0c2ff36d556b45a20dcbb59e70878ecc3"
     },
     {
@@ -30,7 +31,8 @@
         0.0,
         0.18
       ],
-      "outputSha256": "c2f4f70825e66d5aeb89da27ca2f559308ec7aa45868d6204c640abbb09e63bc"
+      "shadowFloorLuma": 80,
+      "outputSha256": "28c669797de5f061e1bcce21169177a4c949cfa049ae2a3608151dfd4b37476f"
     },
     {
       "target": "minecraft/textures/block/iron_block.png",
@@ -44,6 +46,7 @@
         0.4,
         0.61
       ],
+      "shadowFloorLuma": null,
       "outputSha256": "d3e43ef2edea2f7c3964dd889748216cb99d74ee3462e36ab04b297438cee385"
     },
     {
@@ -58,6 +61,7 @@
         0.4,
         0.61
       ],
+      "shadowFloorLuma": null,
       "outputSha256": "d17fe8cbfff0dde75d6e06a4bc9ad3f454feec9a1150d9900e9428ca9111fbfa"
     },
     {
@@ -82,6 +86,7 @@
         0.4,
         0.61
       ],
+      "shadowFloorLuma": null,
       "outputSha256": "ff6fbfe4ad9969674912eeb6864b87d6f7f54008396a77a9000219176f4de4a2"
     },
     {
@@ -96,7 +101,8 @@
         0.05,
         0.23
       ],
-      "outputSha256": "140a64718f92a35000fac52a2e2dc87175ab3598f9141ac3e6523e23f615cd08"
+      "shadowFloorLuma": 96,
+      "outputSha256": "933f736f2b19198bd3faa8a2390b25e7059e31c04fe6ba3a92d92b0f08daa3f4"
     },
     {
       "target": "minecraft/textures/block/deepslate_redstone_ore.png",
@@ -110,7 +116,8 @@
         0.05,
         0.23
       ],
-      "outputSha256": "af4d8c7032a7e741ec6d16c81c9910af6baf52f968c004b1e53f463d2ba36a95"
+      "shadowFloorLuma": 80,
+      "outputSha256": "042acbd4a7f9b4c88457bba4dbb18afc7b476b0ce836e1fe34939c137aa2978a"
     },
     {
       "target": "minecraft/textures/block/redstone_block.png",
