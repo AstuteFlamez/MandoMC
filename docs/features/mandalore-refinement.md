@@ -26,3 +26,6 @@ Main map remains 500x500, with a fixed 500-block review border. The main descent
 
 ## Pause note
 Deployed pack resource-pack-26.1.2-ce6954e7809b (SHA-1 833cffaa161e9f1d24eb1684b9f046a5444b32f3), anonymously hash- and PNG-size-verified. Deployed plugin SHA-256 28bd568b26a4931f750bbb4f60c66a4898241c1f4cab88c55b93dbb0eaabf70a preserves every unrelated prior JAR entry. Full stopped-runtime backup and prior review-region snapshots are private. Normal server restarted, no checkers remain, KOTH was restored. Next action: user reviews /warp mandalore and the updated planet icons after reconnecting.
+
+## Connected natural caves follow-up
+The user requested Tatooine-style natural caves on Mandalore. Six connected vaults and six descents are now deployed with a deepslate/tuff/basalt palette, retaining the existing event mine and arrival. Native verification passes 961,846 assertions. See [natural caves](mandalore-natural-caves.md).
