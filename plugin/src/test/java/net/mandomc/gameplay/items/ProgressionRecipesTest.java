@@ -101,6 +101,32 @@ public class ProgressionRecipesTest {
         }
     }
 
+    @Test public void everyVisibleIngredientWithoutARecipeExplainsItsSource() throws Exception {
+        var config = recipes();
+        var hiddenResults = config.getStringList("guide.hidden-results");
+        var hiddenRecipes = config.getStringList("guide.hidden-recipes");
+        var visible = new java.util.ArrayList<RecipeDefinition>();
+        for (String kind : List.of("recipes", "smelting", "stonecutting")) {
+            var section = config.getConfigurationSection(kind);
+            if (section == null) continue;
+            for (String id : section.getKeys(false)) {
+                var entry = section.getConfigurationSection(id);
+                var recipe = kind.equals("recipes") ? RecipeDefinition.parse(id, entry)
+                        : kind.equals("smelting") ? RecipeDefinition.parseSmelting(id, entry)
+                        : RecipeDefinition.parseStonecutting(id, entry);
+                if (!hiddenResults.contains(recipe.result()) && !hiddenRecipes.contains(id)) visible.add(recipe);
+            }
+        }
+        var results = visible.stream().map(RecipeDefinition::result).collect(java.util.stream.Collectors.toSet());
+        for (var recipe : visible) for (String input : recipe.ingredients().values()) {
+            if (results.contains(input)) continue;
+            String source = config.getString("sources." + input, "");
+            assertFalse("Missing acquisition instructions: " + input, source.isBlank());
+            assertFalse("Unobtainable ingredient in visible recipe: " + input,
+                    source.contains("Not currently obtainable") || source.contains("No crafting recipe"));
+        }
+    }
+
     private boolean reachable(String id, java.util.Map<String, java.util.List<RecipeDefinition>> recipes,
                               java.util.Set<String> path) {
         if (id.startsWith("minecraft:") || java.util.Set.of("durasteel_scrap", "electrum_scrap", "agrinium_scrap", "beskar_scrap").contains(id)) return true;

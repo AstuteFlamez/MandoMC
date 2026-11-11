@@ -25,3 +25,6 @@ Java tests cover exact charge thresholds/reservations, exhaustion/recovery, reci
 
 ## Pause note
 Work is deployed; integrate `bilal/e11-ammo-recipes` before future full builds to retain the changes. Next action: open `/recipes e11` and craft an E-11 plus the three ammo types in the client.
+
+## Ingredient acquisition help
+November 10 follow-up: every currently visible ingredient without a guide recipe has an explicit source description. Clicking it explains gathering, native crafting/smelting or stocked brown Jawa supplies instead of the generic no-recipe response. Added/completed 29 native descriptions, including glass bottles, gunpowder, amethyst, dyes, utility blocks and soul torches. Ordinary-material restrictions and all actual acquisition rules are unchanged. A coverage test checks every visible recipe/smelting/stonecutting dependency and rejects missing/unobtainable source notes at acquisition leaves. All 167 Java tests pass. The source-only config update is deployed, with startup and all 29 actual runtime descriptions verified. Restart window released.
