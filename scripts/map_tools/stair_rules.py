@@ -18,7 +18,7 @@ def properties(state):
 
 
 def full_cube(state):
-    return base(state) not in EMPTY and not any(t in base(state) for t in ('stairs', 'slab', 'fence', 'wall', 'door', 'lantern', 'torch', 'carpet', 'chain', 'barrel'))
+    return base(state) not in EMPTY and not any(t in base(state) for t in ('stairs', 'slab', 'fence', 'wall', 'door', 'lantern', 'torch', 'carpet', 'chain'))
 
 
 def low_face_blocked(get, position, state):
