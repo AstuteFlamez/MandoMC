@@ -9,6 +9,7 @@ import org.bukkit.configuration.ConfigurationSection;
 public final class TerritoryPolicy {
     public enum Zone { SAFEZONE, WARZONE, WILDERNESS }
     private final ChunkAtlas mandalore;
+    private final Map<String, ChunkAtlas> additionalMaps;
     private final Map<String, String> safeWorlds;
     private final String hoth;
     private final String landing;
@@ -16,6 +17,14 @@ public final class TerritoryPolicy {
 
     public TerritoryPolicy(ConfigurationSection config) {
         mandalore = ChunkAtlas.read(config);
+        Map<String, ChunkAtlas> maps = new HashMap<>();
+        var additional = config.getConfigurationSection("additional-maps");
+        if (additional != null) for (String key : additional.getKeys(false)) {
+            var atlas = ChunkAtlas.read(additional.getConfigurationSection(key));
+            if (atlas.world().equals(mandalore.world()) || maps.putIfAbsent(atlas.world(), atlas) != null)
+                throw new IllegalArgumentException("territory/maps.yml: duplicate atlas world " + atlas.world());
+        }
+        additionalMaps = Map.copyOf(maps);
         Map<String,String> safe = new HashMap<>();
         var section = config.getConfigurationSection("safezone-worlds");
         if (section == null) throw new IllegalArgumentException("territory/maps.yml: safezone-worlds required");
@@ -54,6 +63,10 @@ public final class TerritoryPolicy {
         if (world.equals(mandalore.world())) return switch(mandalore.zone(Math.floorDiv(x,16),Math.floorDiv(z,16))) {
             case 'S' -> Zone.SAFEZONE; case 'W' -> Zone.WARZONE; default -> Zone.WILDERNESS;
         };
+        var atlas = additionalMaps.get(world);
+        if (atlas != null) return switch (atlas.zone(Math.floorDiv(x,16), Math.floorDiv(z,16))) {
+            case 'S' -> Zone.SAFEZONE; case 'W' -> Zone.WARZONE; default -> Zone.WILDERNESS;
+        };
         if (world.equals(hoth)) return inside(x,y,z,hothMin,hothMax) ? Zone.WARZONE : Zone.SAFEZONE;
         if (world.equals(landing) && inside(x,y,z,landingMin,landingMax)) return Zone.SAFEZONE;
         return Zone.WILDERNESS;
@@ -61,8 +74,17 @@ public final class TerritoryPolicy {
     public boolean edits(String world,int x,int y,int z) { return zone(world,x,y,z)==Zone.WILDERNESS; }
     public boolean combat(String world,int x,int y,int z) { return zone(world,x,y,z)!=Zone.SAFEZONE; }
     public boolean spawning(String world,int x,int y,int z) { return combat(world,x,y,z) && !world.equals(hoth); }
+    public boolean wildernessChunk(String world,int x,int z) {
+        if (safeWorlds.containsKey(world) || world.equals(hoth)) return false;
+        var atlas = world.equals(mandalore.world()) ? mandalore : additionalMaps.get(world);
+        if (atlas != null) return atlas.zone(x,z)=='.';
+        if (world.equals(landing)) return (long)x*16+15<landingMin.get(0) || (long)x*16>landingMax.get(0)
+                || (long)z*16+15<landingMin.get(2) || (long)z*16>landingMax.get(2);
+        return true;
+    }
     public ChunkAtlas map(String world,int chunkX,int chunkZ) {
         if (world.equals(mandalore.world())) return mandalore;
+        if (additionalMaps.containsKey(world)) return additionalMaps.get(world);
         String name=safeWorlds.get(world);
         if (name!=null) return new ChunkAtlas(world,name,chunkX-16,chunkZ-16,chunkX+15,chunkZ+15,
                 java.util.Collections.nCopies(32,"S".repeat(32)));

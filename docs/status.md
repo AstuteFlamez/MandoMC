@@ -1,6 +1,9 @@
 # Resume here
 Updated: 2026-11-10
 
+## Tatooine roads, zones and sandy encounters (2026-11-10)
+On bilal/tatooine-access, prepared a sparse road repair and optional Tatooine territory atlas. Spawn town plus shortest existing road are safezone, palace footprint is warzone, all remaining chunks wilderness (79/169/776). Sandy encounter world moves to TatooineReview, with a dedicated wilderness-only encounter check that preserves general warzone event spawning. No manual palace wall/terrain changes. 178 Java tests and three stair-rule tests pass; the 929-block trial preserves all unrelated blocks/entities and connects every sampled route at half-block collision resolution. Native deployment/checks remain pending. The clans chat owns the combined code/config rollout; road patch/checker can be included in the same stopped window. See [feature brief](features/tatooine-access.md). Next action: apply the fresh scoped delta during the coordinated stop and verify native collision/spawning before releasing the server.
+
 ## Native protection and corrected zones (2026-11-10)
 On bilal/clan-chunk-map, user corrections are deployed: only Mandalore's full spawn outpost/terrace/gateway is safezone (16 chunks); central caves/approaches are 127 warzone chunks; the remaining 881 chunks are wilderness. The initial fenced-shelter-only boundary missed terrace/gateway blocks; the final footprint is X -42..6, Z -211..-173, checked across all 1,911 columns. All of Batuu is safezone, including outside the nearby map window. `/c map` now uses orange Safezone (#FFAA00) and dark red Warzone (#AA0000). Category changes show matching Safezone/Warzone/Wilderness titles, with join/teleport/respawn coverage and deduplication.
 

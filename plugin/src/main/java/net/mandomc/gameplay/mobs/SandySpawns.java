@@ -285,7 +285,7 @@ public final class SandySpawns implements Listener, AutoCloseable {
         for (int attempt = 0; attempt < count * 12 && result.size() < count; attempt++) {
             Location site = surface(center.getWorld(), center.getBlockX() + random.nextInt(-7, 8),
                     center.getBlockZ() + random.nextInt(-7, 8));
-            if (site == null || Math.abs(site.getY() - center.getY()) > 2 || !protection.allowed(site)
+            if (site == null || Math.abs(site.getY() - center.getY()) > 2 || !protection.encounter(site)
                     || players.stream().anyMatch(p -> horizontal(p.getLocation(), site) < settings.minDistance() * settings.minDistance())
                     || result.stream().anyMatch(p -> horizontal(p, site) < 9)) continue;
             result.add(site);
@@ -305,7 +305,7 @@ public final class SandySpawns implements Listener, AutoCloseable {
             if (!world.getBlockAt(x + dx, y, z + dz).getType().isSolid()) return null;
             for (int dy = 1; dy <= 3; dy++) {
                 if (!world.getBlockAt(x + dx, y + dy, z + dz).getType().isAir()) return null;
-                if (!protection.allowed(new Location(world, x + dx + 0.5, y + dy, z + dz + 0.5))) return null;
+                if (!protection.encounter(new Location(world, x + dx + 0.5, y + dy, z + dz + 0.5))) return null;
             }
         }
         return site;
@@ -323,7 +323,7 @@ public final class SandySpawns implements Listener, AutoCloseable {
         boolean isPatrol = plan.members().stream().anyMatch(member -> member.type().startsWith("TuskenRaider"));
         try {
             for (int i = 0; i < sites.size(); i++) {
-                if (!biome(sites.get(i)) || !protection.allowed(sites.get(i))) throw new IllegalStateException("Encounter site denied");
+                if (!biome(sites.get(i)) || !protection.encounter(sites.get(i))) throw new IllegalStateException("Encounter site denied");
                 var member = plan.members().get(i);
                 LivingEntity entity = mobs.spawn(member.type(), sites.get(i), member.level());
                 if (entity == null || !entity.isValid()) throw new IllegalStateException("Encounter member spawn cancelled");
