@@ -96,7 +96,7 @@ public class ProgressionRecipesTest {
             }
         }
         for (String id : List.of("speederbike", "uwing", "xwing", "tiefighter", "e11", "standard_plasma_cells",
-                "tibanna_gas_vial", "tibanna_gas_cells", "proton_torpedo")) {
+                "tibanna_gas_vial", "tibanna_gas_cells", "proton_torpedo", "ionized_energy_cells")) {
             assertTrue(id + " must be obtainable without event loot", reachable(id, byResult, new java.util.HashSet<>()));
         }
     }

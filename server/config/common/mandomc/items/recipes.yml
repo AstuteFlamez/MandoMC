@@ -1625,6 +1625,20 @@
         "P": "plasma_capacitor_array",
         "W": "wiring_coil"
       }
+    },
+    "ionized_energy_cells": {
+      "result": "ionized_energy_cells",
+      "amount": 32,
+      "category": "ammo",
+      "shape": [
+        " A ",
+        "EWE"
+      ],
+      "ingredients": {
+        "A": "agrinium_sheet",
+        "E": "electrum",
+        "W": "wiring_coil"
+      }
     }
   },
   "sources": {

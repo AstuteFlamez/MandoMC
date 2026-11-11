@@ -57,6 +57,11 @@
       "kind": "weapon",
       "vendor-id": "EE3",
       "category": "weapons"
+    },
+    "ionized_energy_cells": {
+      "kind": "ammo",
+      "vendor-id": "Ionized_Energy_Cells",
+      "category": "ammo"
     }
   }
 }
