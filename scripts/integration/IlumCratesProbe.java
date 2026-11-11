@@ -58,6 +58,18 @@ public final class IlumCratesProbe extends JavaPlugin implements Listener {
         check(mando.warps().destination("ilum").getWorld()==world,"Public Ilum warp resolves original world");
         check(mando.warps().destination("mandalore").getWorld().getKey().getKey().equals("mandalore_review"),"Existing Mandalore route preserved");
         for(String command:List.of("crates","parkour","parkourfinish","c","auctionhouse","warp"))check(mando.getCommand(command)!=null,"Command preserved/registered "+command);
+        if(new java.io.File(getDataFolder(),"check-handbook").exists()){
+            var arrival=Arrays.stream(PlayerLoginEvent.getHandlerList().getRegisteredListeners()).map(org.bukkit.plugin.RegisteredListener::getListener)
+                    .filter(listener->listener.getClass().getName().equals("net.mandomc.gameplay.arrival.ArrivalListener")).findFirst().orElseThrow();
+            var field=arrival.getClass().getDeclaredField("handbook");field.setAccessible(true);var book=field.get(arrival);
+            var item=(ItemStack)book.getClass().getMethod("create").invoke(book);
+            var meta=(org.bukkit.inventory.meta.BookMeta)item.getItemMeta();
+            var plain=net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText();
+            check(meta.getPageCount()==11,"Bound tutorial owner serves the validated eleven-page handbook");
+            check(plain.serialize(meta.page(3)).contains("Jawa Shops"),"Jawa Shops is page three");
+            check(plain.serialize(meta.page(9)).contains("Events"),"Combined Events is page nine");
+            check(meta.pages().stream().noneMatch(page->plain.serialize(page).startsWith("Armor")),"Removed armor page is absent");
+        }
         if(!new java.io.File(getDataFolder(),"full-suite").exists()){success();return;}
         Bukkit.getPluginManager().registerEvents(this,this);
         var server=Bukkit.getServer().getClass().getMethod("getServer").invoke(Bukkit.getServer());

@@ -156,6 +156,14 @@ and clicks use visible slots. All five planet entries retain their slots. The sa
 crate containers and holograms remain unchanged.
 
 183 Java tests and 212 native checks pass, including the actual menu inventory and both command
-aliases. Deployment is pending the coordinated recipe/Jawa window. The `--warp-menu` overlay replaces
+aliases. Deployment completed in the coordinated window over the latest recipe-cleanup baseline. The `--warp-menu` overlay replaces
 only WarpService.class; `deploy-warp-menu.py` verifies that exact class against the native-tested one
 and preserves every unrelated live JAR entry/config value.
+
+39 live assertions passed, including the current warp menu bindings and the same-window validated
+eleven-page handbook config. The first optional handbook check used the wrong event registry; the
+fixture was corrected to the actual PlayerLoginEvent registration and all checks passed. No production
+code changed for that correction. Temporary checker removed, normal server restarted cleanly, prior
+KOTH restored and window released. Final JAR SHA-256
+`9823a51866cf241951ca11f52670ea5292fd0cf703e6ace073d7a089d0c012f7`.
+Next action: client-check the planet-only `/warp` menu and direct `/warp crates` alias.
