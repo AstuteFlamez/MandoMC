@@ -1,5 +1,5 @@
 # E-11 and ammunition crafting
-Status: implementation; native verification in progress.
+Status: deployed and pushed; client crafting walkthrough is the next action.
 Branch: bilal/e11-ammo-recipes
 
 ## Player experience
@@ -21,7 +21,7 @@ MandoMC owns recipe definitions and the guide. WeaponMechanics generates genuine
 Sabers are accepted as done. Their sole requested balance adjustment is `throw-cost-percent: 51.0` on the 100-charge bar, for both activation and consumption. Drain/recovery timing, motion and other combat tuning remain as accepted. Fractional drain clamps exhaustion within floating-point tolerance so exactly 51 charge behaves correctly.
 
 ## Verification
-Java tests cover exact charge thresholds/reservations, exhaustion/recovery, recipe identity resolution, mirrored-pattern ambiguity, and complete survival dependency routes. Disposable Paper probe verifies all five native outputs, quantities, mirrored crafting, missing ingredients, lookalike rejection, guide visibility, genuine vendor weapon/ammo identity, and the deployed 51-charge settings. Deployment must preserve every unrelated entry of the current live JAR and merge only the new recipes/cost into current runtime configuration.
+Java tests cover exact charge thresholds/reservations, exhaustion/recovery, recipe identity resolution, mirrored-pattern ambiguity, and complete survival dependency routes. Disposable Paper probe verifies all five native outputs, quantities, mirrored crafting, missing ingredients, lookalike rejection, guide visibility, genuine vendor weapon/ammo identity, and the deployed 51-charge settings. All 166 Java tests and 74 native assertions passed. Deployed at 18:12 local on November 10 after the coordinated Jawa handoff; all unrelated entries of its final JAR are byte-identical, with only the scoped crafting/charge changes and two merged config resources replaced/added. Normal startup registered both vendor recipes; pack unchanged, no test plugin installed, queued KOTH restored and stopped-runtime backup retained. Source commit `33e420d` is pushed.
 
 ## Pause note
-Await native verification, scoped deployment and source publication. Next action: finish the disposable Paper check.
+Work is deployed; integrate `bilal/e11-ammo-recipes` before future full builds to retain the changes. Next action: open `/recipes e11` and craft an E-11 plus the three ammo types in the client.
