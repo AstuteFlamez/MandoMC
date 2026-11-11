@@ -122,6 +122,7 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
             labels.add(world.spawn(at,org.bukkit.entity.TextDisplay.class,entity->{
                 entity.text(text(crates.get(id).name()).append(Component.newline()).append(message("block-hint")));
                 entity.setBillboard(org.bukkit.entity.Display.Billboard.CENTER);entity.setShadowed(true);
+                entity.setDefaultBackground(false);entity.setBackgroundColor(org.bukkit.Color.fromARGB(0));
                 entity.setPersistent(false);entity.setViewRange(.5f);
             }));
         }

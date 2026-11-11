@@ -43,7 +43,16 @@ public final class IlumCratesProbe extends JavaPlugin implements Listener {
         check(world.getEntitiesByClass(TextDisplay.class).size()>=10,"Recovered hints and leaderboard render natively");
         check(Bukkit.getWorld(NamespacedKey.minecraft("ilumreview"))==null,"Generated review map retired");
         var entry=mando.items().create("ilum_kyber_crate_key");check(entry!=null&&entry.getItemMeta().getItemModel().toString().equals("mandomc:keys/ilum_kyber_crate_key"),"Original key artwork wired into catalog");
-        var spawn=Bukkit.getWorld(NamespacedKey.minecraft("spawnworld"));check(spawn.getBlockAt(3,93,-16).getType()==Material.ENDER_CHEST,"Kyber crate installed beside Batuu spawn");
+        var spawn=Bukkit.getWorld(NamespacedKey.minecraft("spawnworld"));
+        check(spawn.getBlockAt(3,93,-16).getType()==Material.AIR,"Unwanted original spawn crate removed");
+        check(spawn.getBlockAt(-24,97,20).getState() instanceof org.bukkit.block.Container||spawn.getBlockAt(-24,97,20).getType()==Material.ENDER_CHEST,"User's chosen Kyber crate retained");
+        var labels=spawn.getEntitiesByClass(TextDisplay.class).stream().filter(e->e.text()!=null&&net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(e.text()).contains("Crate")).toList();
+        check(labels.size()==2,"Only the selected Kyber and KOTH crate holograms exist");
+        for(var label:labels)check(!label.isDefaultBackground()&&label.getBackgroundColor()!=null&&label.getBackgroundColor().getAlpha()==0&&label.isShadowed(),"Crate hologram background transparent with text shadow retained");
+        var crateWarp=mando.warps().destination("crates");
+        check(crateWarp.getWorld()==spawn&&Math.abs(crateWarp.getX()+32.522060072695176)<1e-10&&crateWarp.getY()==96&&Math.abs(crateWarp.getZ()-16.540950565404483)<1e-10,"Exact captured crate warp position");
+        check(Math.abs(crateWarp.getYaw()+89.548004f)<.00001&&Math.abs(crateWarp.getPitch()-.59998304f)<.00001,"Exact captured crate warp facing");
+        check("crates".equals(net.mandomc.gameplay.travel.WarpService.canonical("crate"))&&"crates".equals(net.mandomc.gameplay.travel.WarpService.canonical("crates")),"Both crate warp aliases resolve");
         check(mando.warps().destination("ilum").getWorld()==world,"Public Ilum warp resolves original world");
         check(mando.warps().destination("mandalore").getWorld().getKey().getKey().equals("mandalore_review"),"Existing Mandalore route preserved");
         for(String command:List.of("crates","parkour","parkourfinish","c","auctionhouse","warp"))check(mando.getCommand(command)!=null,"Command preserved/registered "+command);
@@ -85,9 +94,16 @@ public final class IlumCratesProbe extends JavaPlugin implements Listener {
         check(!parkour.active(alice),"Obi-Wan completes session");check(!ParkourInventory.stored(alice),"Escrow cleared after restoration");
         preservedOriginal(originalAlice,alice.getInventory().getContents());
         check(alice.getGameMode()==GameMode.CREATIVE&&alice.getHealth()==17&&alice.getFoodLevel()==13,"Original game mode, health and food restored");
-        check(alice.getWorld()==world&&alice.getLocation().distanceSquared(parkour.start())<.1,"Completion returns to the Ilum start");
+        var destination=mando.warps().destination("spawn");
+        check(alice.getWorld()==destination.getWorld()&&alice.getLocation().distanceSquared(destination)<.1,"Completion returns to the actual spawn command destination");
         check(alice.getPersistentDataContainer().has(new NamespacedKey("mandomc","ilum_last_key"),PersistentDataType.LONG),"Completion cooldown persisted");
         check(crates.keys(alice,crates.definitions().get("kyber"))==1,"Successful run awards one physical key");
+        for(String alias:List.of("crate","crates")){
+            Bukkit.dispatchCommand(alice,"warp "+alias);
+            var target=mando.warps().destination("crates");
+            check(alice.getWorld()==target.getWorld()&&alice.getLocation().distanceSquared(target)<.000001,"Actual warp command travels using "+alias);
+            check(alice.getLocation().getYaw()==target.getYaw()&&alice.getLocation().getPitch()==target.getPitch(),"Actual warp command preserves facing using "+alias);
+        }
         check(parkour.active(bob)&&parkour.run(bob).checkpoint()==0,"Other runner remains active");
         parkour.leave(bob,true,false);equalGear(originalBob,bob.getInventory().getContents(),"Leaving restores other runner's exact gear");
         var crate=crates.definitions().get("kyber");crates.preview(alice,crate);

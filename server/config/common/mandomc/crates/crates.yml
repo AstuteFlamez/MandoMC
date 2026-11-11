@@ -1,46 +1,64 @@
 schema-version: 1
 crates:
   kyber:
-    name: '<aqua>Kyber Crate'
+    name: <aqua>Kyber Crate
     key-item: ilum_kyber_crate_key
     key-mode: physical
     blocks:
-      - world: minecraft:spawnworld
-        x: 3
-        y: 93
-        z: -16
-        place-if-air: true
+    - world: minecraft:spawnworld
+      x: -24
+      y: 97
+      z: 20
     rewards:
-      - {item: blue_kyber, amount: 1, weight: 60}
-      - {item: green_kyber, amount: 1, weight: 60}
-      - {item: yellow_kyber, amount: 1, weight: 40}
-      - {item: purple_kyber, amount: 1, weight: 30}
-      - {item: orange_kyber, amount: 1, weight: 7}
-      - {item: red_kyber, amount: 1, weight: 2}
-      - {item: white_kyber, amount: 1, weight: 1}
+    - item: blue_kyber
+      amount: 1
+      weight: 60
+    - item: green_kyber
+      amount: 1
+      weight: 60
+    - item: yellow_kyber
+      amount: 1
+      weight: 40
+    - item: purple_kyber
+      amount: 1
+      weight: 30
+    - item: orange_kyber
+      amount: 1
+      weight: 7
+    - item: red_kyber
+      amount: 1
+      weight: 2
+    - item: white_kyber
+      amount: 1
+      weight: 1
 messages:
   block-hint: '<gray>Left-click: Preview <dark_gray>• <aqua>Right-click: Open'
-  denied: '<red>You cannot manage crate keys.'
-  players-only: '<gray>Use this command in game.'
-  no-key: '<yellow>You need a matching crate key. Use /crates keys to check your keys.'
-  full: '<yellow>Free an inventory slot before opening the crate. Your key has not been used.'
-  mail-full: '<yellow>Your reward is saved. Free inventory space, then use /crates claim.'
-  parkour: '<yellow>Finish or leave parkour before opening a crate.'
-  unsafe: '<yellow>Leave combat and dismount before opening a crate.'
-  claimed: '<aqua>Claimed {amount} saved crate item(s).'
-  won: '<aqua>Crate reward » </aqua>'
-  opening-title: '<dark_gray>Opening {crate}…'
-  preview-title: '<dark_gray>{crate} • Rewards'
+  denied: <red>You cannot manage crate keys.
+  players-only: <gray>Use this command in game.
+  no-key: <yellow>You need a matching crate key. Use /crates keys to check your keys.
+  full: <yellow>Free an inventory slot before opening the crate. Your key has not
+    been used.
+  mail-full: <yellow>Your reward is saved. Free inventory space, then use /crates
+    claim.
+  parkour: <yellow>Finish or leave parkour before opening a crate.
+  unsafe: <yellow>Leave combat and dismount before opening a crate.
+  claimed: <aqua>Claimed {amount} saved crate item(s).
+  won: <aqua>Crate reward » </aqua>
+  opening-title: <dark_gray>Opening {crate}…
+  preview-title: <dark_gray>{crate} • Rewards
   chance: '<gray>Chance: <yellow>{chance}%'
-  winner: '<aqua>↓ Your reward ↓'
-  skip: '<yellow>Skip animation • keep the same reward'
+  winner: <aqua>↓ Your reward ↓
+  skip: <yellow>Skip animation • keep the same reward
   key-count: '<gray>Available keys: <aqua>{amount}'
-  open-hint: '<yellow>Click to open • consumes one key'
-  list: '<aqua>Crates: {crates}</aqua> <gray>Use /crates preview kyber or /crates open kyber. At a crate block: left-click to preview, right-click to open.'
+  open-hint: <yellow>Click to open • consumes one key
+  list: '<aqua>Crates: {crates}</aqua> <gray>Use /crates preview kyber or /crates
+    open kyber. At a crate block: left-click to preview, right-click to open.'
   keys: '<gray>{crate} keys: <aqua>{amount}'
-  usage: '<gray>/crates preview|open <crate> • /crates keys • /crates claim'
-  admin-usage: '<gray>/crates key give <crate> <player> [amount] • /crates setblock <crate>'
-  key-given: '<aqua>Gave {amount} crate key(s) to {player}.'
-  offline: '<yellow>That player must be online to receive keys.'
-  container: '<yellow>Look at a chest, barrel, shulker box, or ender chest within five blocks.'
-  bound: '<aqua>Container registered as a crate. Existing contents were preserved.'
+  usage: <gray>/crates preview|open <crate> • /crates keys • /crates claim
+  admin-usage: <gray>/crates key give <crate> <player> [amount] • /crates setblock
+    <crate>
+  key-given: <aqua>Gave {amount} crate key(s) to {player}.
+  offline: <yellow>That player must be online to receive keys.
+  container: <yellow>Look at a chest, barrel, shulker box, or ender chest within five
+    blocks.
+  bound: <aqua>Container registered as a crate. Existing contents were preserved.

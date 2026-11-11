@@ -163,7 +163,7 @@ messages:
   npc-interrupted: <yellow>Stay near the Jedi until the conversation finishes. Speak to them again to continue.
   busy: <yellow>Listen to the current conversation first.
   retry: <aqua>Returned to your last checkpoint.
-  finished: '<aqua>Ilum complete!</aqua> <gray>You are back at the Ilum start.</gray> <gray>Time: {time} • Personal best: {best}.'
+  finished: '<aqua>Ilum complete!</aqua> <gray>You are back at spawn.</gray> <gray>Time: {time} • Personal best: {best}.'
   key-earned: <aqua>You earned one Kyber Crate Key!</aqua> <gray>Open the crate beside Batuu spawn, or use /crates
     open kyber.
   reward-cooldown: <gray>Your next Ilum key is available in {hours} hour(s). You can still replay for a faster time.

@@ -1,6 +1,11 @@
 # Resume here
 Updated: 2026-11-10
 
+## User-selected crate area and normal spawn return (2026-11-10)
+On `bilal/legacy-ilum-crates`, saved AstuteFlamez's live location before movement: `minecraft:spawnworld`, (-32.522060072695176, 96, 16.540950565404483), yaw -89.548004, pitch 0.59998304. `/warp crate` and `/warp crates` share that exact validated destination/facing, with the existing travel policy. Per the user's correction, Ilum completion now uses the same destination as `/spawn`; leaving/recovery remains unchanged. The user's Kyber crate at (-24,97,20) and KOTH crate at (-19,97,14) remain; only the original Kyber container/binding at (3,93,-16) is removed. Existing/new crate holograms refresh with zero-alpha backgrounds, unchanged text/placement and retained shadows.
+
+183 Java tests and 210 native assertions pass, including actual warp commands, exact facing, NPC completion to spawn, inventory/key cooldown recovery, selected crate preservation and transparent holograms. Scoped overlay changes only Ilum completion, crate display and warp owners/defaults, preserving concurrent feature bytes. 34 live assertions passed; the checker is removed and the normal server restarted cleanly. Deployed SHA-256 `6947e5499e5cc381f4fa9ad85011f5534b28905f0cb236c9a61ef35d71e766e8`. Private backups retained; restart window released. Remaining: player visual feedback. Next action: reconnect and test `/warp crates`, crate holograms and Ilum completion to `/spawn`.
+
 ## Obi-Wan completion correction (2026-11-10)
 On `bilal/legacy-ilum-crates`, reproduced the playtest failure through native client interaction packets: the player could remain seven blocks from Obi-Wan inside the ten-block dialogue range, then fail the narrower six-block finish check. Completion now uses the same ten-block range and runs on the final dialogue line, removing the extra silent 2.5-second wait. Moving outside that range shows a retry message. Successful completion returns to Ilum's start as requested; leaving/recovery still returns to Batuu. Existing checkpoint, practice, cooldown and inventory rules remain enforced.
 

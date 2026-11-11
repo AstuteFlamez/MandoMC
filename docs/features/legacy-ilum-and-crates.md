@@ -19,11 +19,15 @@ Ahsoka requires checkpoint two and teleports only the speaking player to the upp
 recovered dialogue. Obi-Wan requires all four checkpoints and proximity to the original finish location.
 The conversation and final reward use the same ten-block range, and the final dialogue line completes
 the run immediately. Walking farther away shows an explicit retry message.
-Finishing returns the player to the Ilum start and awards one Kyber Crate Key, with a rolling 24-hour cooldown.
+Finishing returns the player to the normal `/spawn` destination and awards one Kyber Crate Key, with a rolling 24-hour cooldown.
 The old hologram already advertised this limit; it is now enforced. Replays can improve the best time
 without granting another key. The old placeholder economy/diamond commands are replaced by this key.
 
-The Kyber Crate stands beside Batuu spawn at (3, 93, -16). Left-click previews the actual weighted pool;
+The Kyber Crate uses the user-selected container in Batuu at (-24, 97, 20).
+The initial automatically placed crate at (3, 93, -16) has been removed.
+`/warp crate` and `/warp crates` share the exact captured arrival (-32.522060072695176, 96,
+16.540950565404483), yaw -89.548004, pitch 0.59998304. Crate holograms have fully transparent
+backgrounds and retain their text shadows. Left-click previews the actual weighted pool;
 right-click spends one matching key and starts a short roll. `/crates preview kyber` and `/crates open kyber`
 provide the same flow. The matching Ilum planet icon is in Galaxy Map slot 20. Both its artwork and the
 key artwork reuse the original user-provided PNGs, without changing their pixels.
@@ -128,3 +132,17 @@ player/config backups and actor-free live smoke checks.
 Completion fix deployed SHA-256 `09cd9cc0626958f39aaaad35af45071ffd6097e8d58f2fa4f6dafeec5970d338`.
 All 27 live smoke assertions passed; temporary checker removed, normal server restarted cleanly,
 shared restart window released. Next action: player retests Obi-Wan’s finish conversation.
+
+## Crate area and spawn correction (2026-11-10)
+
+The user superseded the Ilum-start return: completion now resolves the same ArrivalDestinations.spawn
+used by `/spawn`, via the native warp owner. Leave and recovery behavior are unchanged. Both crate warp
+aliases preserve the live capture's exact world, doubles and float facing; they use the normal shared
+travel permission/combat/warmup policy and safe-arrival validation. The user's Kyber binding and KOTH
+binding remain unchanged; only the unwanted original Kyber binding/container is removed.
+
+All 183 Java tests and 210 native assertions pass, including actual command travel for both aliases,
+exact yaw/pitch, NPC finish to spawn, selected container preservation, old container removal and both
+holograms' zero-alpha background with retained text shadows. 34 live assertions passed; checker removed and normal server restarted cleanly.
+Deployed SHA-256 `6947e5499e5cc381f4fa9ad85011f5534b28905f0cb236c9a61ef35d71e766e8`.
+Next action: player client review of `/warp crates` and the refreshed holograms.

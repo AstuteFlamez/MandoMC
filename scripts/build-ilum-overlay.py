@@ -9,6 +9,7 @@ p.add_argument('--baseline',type=Path,required=True)
 p.add_argument('--built',type=Path,required=True)
 p.add_argument('--output',type=Path,required=True)
 p.add_argument('--finish-only',action='store_true',help='Patch the existing Ilum completion owner without replacing shared integration classes')
+p.add_argument('--crate-area',action='store_true',help='Patch completion, crate holograms and explicit crate warp support')
 a=p.parse_args()
 with zipfile.ZipFile(a.baseline) as src,zipfile.ZipFile(a.built) as built:
     old={n:src.read(n) for n in src.namelist()}
@@ -18,13 +19,16 @@ with zipfile.ZipFile(a.baseline) as src,zipfile.ZipFile(a.built) as built:
               'net/mandomc/gameplay/territory/TerritoryProtection','net/mandomc/gameplay/travel/WarpService')
     resources=('net/mandomc/commands/CommandBindings.class','crates/crates.yml','parkour/ilum.yml',
                'items/definitions/crates.yml','territory/maps.yml')
-    if a.finish_only:
+    if a.finish_only or a.crate_area:
         assert 'net/mandomc/gameplay/ilum/ParkourService.class' in old,'Existing Ilum owner required'
         prefixes=('net/mandomc/gameplay/ilum/ParkourService',)
         resources=('parkour/ilum.yml',)
+        if a.crate_area:
+            prefixes+=('net/mandomc/gameplay/crates/CrateService','net/mandomc/gameplay/travel/WarpService')
+            resources+=('crates/crates.yml',)
     for name in built.namelist():
         if name.startswith(prefixes) or name in resources:new[name]=built.read(name)
-    if not a.finish_only:
+    if not (a.finish_only or a.crate_area):
         descriptor=yaml.safe_load(old['plugin.yml'])
         extra=yaml.safe_load(built.read('plugin.yml'))
         for command in ('parkour','parkourfinish','crates'):

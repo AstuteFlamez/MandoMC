@@ -280,7 +280,7 @@ public final class ParkourService implements Listener, AutoCloseable {
         if(reward)send(player,"key-earned");
         else if(!run.ranked())send(player,"practice");
         else send(player,"reward-cooldown","hours",Long.toString(Math.max(1,(last+cooldown-now+3_599_999)/3_600_000)));
-        teleport(player,start);crates.claim(player);
+        teleport(player,plugin.warps().destination("spawn"));crates.claim(player);
         plugin.getLogger().info("Ilum completed: "+player.getUniqueId()+" ranked="+run.ranked()+" key="+reward);
     }
 
