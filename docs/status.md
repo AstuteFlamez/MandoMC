@@ -1,6 +1,11 @@
 # Resume here
 Updated: 2026-11-10
 
+## Obi-Wan completion correction (2026-11-10)
+On `bilal/legacy-ilum-crates`, reproduced the playtest failure through native client interaction packets: the player could remain seven blocks from Obi-Wan inside the ten-block dialogue range, then fail the narrower six-block finish check. Completion now uses the same ten-block range and runs on the final dialogue line, removing the extra silent 2.5-second wait. Moving outside that range shows a retry message. Successful completion returns to Ilum's start as requested; leaving/recovery still returns to Batuu. Existing checkpoint, practice, cooldown and inventory rules remain enforced.
+
+183 Java tests and 199 native integration assertions passed, including both actual NPC packet interactions, the regression distance, restored gear, one delivered key, persisted cooldown, independent multiplayer progress and crate recovery. Scoped completion overlay preserves all other deployed classes/resources, including shared crate ownership, clan-aware bindings, Jawas and recipes. Live smoke checks passed 27 assertions; the temporary checker was removed and the normal server restarted cleanly. Deployed SHA-256 `09cd9cc0626958f39aaaad35af45071ffd6097e8d58f2fa4f6dafeec5970d338`. Private player/config backups are retained and the restart window is released. Remaining: player client confirmation. Next action: retest Obi-Wan after four checkpoints and confirm the key and Ilum-start return.
+
 ## Original Ilum and native Kyber Crate (2026-11-10)
 On `bilal/legacy-ilum-crates`, the user superseded the generated map: original Ilum terrain, four ordered pressure-plate checkpoints, nine hints, Ahsoka teleport and Obi-Wan finish are deployed. The generated review world and its plugin are archived. `/warp ilum`, `/ilum` and `/parkour` use the original course. Native skinned NPCs replace old NPC dependencies. Each player has independent checkpoint/dialogue/timing state and inventory escrow; native whole-world safezone protection allows the original mechanisms. Finishing grants one Kyber Crate Key per rolling 24 hours; replays can improve times.
 

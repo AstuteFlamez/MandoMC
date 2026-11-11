@@ -17,7 +17,9 @@ control selected. The current time, personal best and checkpoint appear in the a
 
 Ahsoka requires checkpoint two and teleports only the speaking player to the upper course after the
 recovered dialogue. Obi-Wan requires all four checkpoints and proximity to the original finish location.
-Finishing returns the player to Batuu and awards one Kyber Crate Key, with a rolling 24-hour cooldown.
+The conversation and final reward use the same ten-block range, and the final dialogue line completes
+the run immediately. Walking farther away shows an explicit retry message.
+Finishing returns the player to the Ilum start and awards one Kyber Crate Key, with a rolling 24-hour cooldown.
 The old hologram already advertised this limit; it is now enforced. Replays can improve the best time
 without granting another key. The old placeholder economy/diamond commands are replaced by this key.
 
@@ -99,7 +101,10 @@ validation checks all four original plates and records SHA-256 for every staged 
 on the cloned test server, exercises both conversations, inventory snapshots/restoration, independent
 checkpoints, daily reward limits, crate preview protections, rapid clicks, fixed outcomes, full inventories
 and pending-claim recovery. Production smoke mode creates no actors and checks actual content/services.
-The final isolated suite passes 198 native assertions, including actual skip clicks. The deployment receipt records the exact deployed JAR hash and live smoke result.
+The original suite passed 198 native assertions. The completion-fix suite passes 199 native assertions
+through actual native client interaction packets, including moving seven blocks away during Obi-Wan’s
+conversation, immediate completion on the final line, inventory recovery, key/cooldown persistence
+and crate controls. The deployment receipt records the exact deployed JAR hash and live smoke result.
 
 Live smoke verification passed 27 native assertions. The temporary probe was removed and the normal
 server restarted cleanly. Deployed JAR SHA-256 is
@@ -108,3 +113,18 @@ The active newer Jawa pack `resource-pack-26.1.2-38232778f1ab` preserves all six
 byte-identically. Runtime world/config/player backups and deployment receipts remain private.
 
 Next action: reconnect with the updated resource pack and playtest the original course with two clients.
+
+## Completion playtest correction (2026-11-10)
+
+The player reported that Obi-Wan spoke after all four checkpoints but did not reward or return them.
+The old conversation accepted a ten-block radius, then independently required six blocks for completion
+after an extra silent 2.5-second delay. A native packet replay reproduces the failure at seven blocks.
+Completion now uses the same radius as the conversation, runs on its final line and returns to Ilum’s
+start as requested. Leave/recovery still use Batuu. No reward eligibility or inventory guarantees change.
+`scripts/build-ilum-overlay.py --finish-only` preserves all concurrent clan, crate, Jawa and recipe bytes.
+`scripts/deploy-ilum-finish.py` verifies that exact tested candidate before installing with private
+player/config backups and actor-free live smoke checks.
+
+Completion fix deployed SHA-256 `09cd9cc0626958f39aaaad35af45071ffd6097e8d58f2fa4f6dafeec5970d338`.
+All 27 live smoke assertions passed; temporary checker removed, normal server restarted cleanly,
+shared restart window released. Next action: player retests Obi-Wan’s finish conversation.

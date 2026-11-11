@@ -64,7 +64,7 @@ public final class IlumCratesProbe extends JavaPlugin implements Listener {
         reach(alice,1);reach(alice,2);check(parkour.run(bob).checkpoint()==0,"Other player's checkpoint unaffected");
         parkour.retry(alice);check(alice.getLocation().distanceSquared(parkour.checkpoints().get(2))<.1,"Retry returns to original second checkpoint");
         Mannequin ahsoka=npc("Ahsoka");position(alice,ahsoka.getLocation().clone().add(1,0,1));
-        parkour.npc(new PlayerInteractEntityEvent(alice,ahsoka,EquipmentSlot.HAND));
+        interactPacket(alice,ahsoka);
         later(210,this::afterAhsoka);
     }
     private void afterAhsoka()throws Exception{
@@ -75,13 +75,18 @@ public final class IlumCratesProbe extends JavaPlugin implements Listener {
         var before=alice.getLocation();Bukkit.getPluginManager().callEvent(hit);check(hit.isCancelled(),"PvP denied without resetting another runner");
         check(alice.getLocation().distanceSquared(before)<.01,"Punching cannot return another runner to checkpoint");
         Mannequin obi=npc("Obi-Wan");position(alice,obi.getLocation().clone().add(1,0,1));
-        parkour.npc(new PlayerInteractEntityEvent(alice,obi,EquipmentSlot.HAND));later(310,this::afterFinish);
+        interactPacket(alice,obi);
+        // The live player stood roughly seven blocks from Obi-Wan after the dialogue.
+        // Stay inside its advertised ten-block conversation radius throughout completion.
+        position(alice,obi.getLocation().clone().add(1,0,-7));
+        later(260,this::afterFinish);
     }
     private void afterFinish()throws Exception{
         check(!parkour.active(alice),"Obi-Wan completes session");check(!ParkourInventory.stored(alice),"Escrow cleared after restoration");
         preservedOriginal(originalAlice,alice.getInventory().getContents());
         check(alice.getGameMode()==GameMode.CREATIVE&&alice.getHealth()==17&&alice.getFoodLevel()==13,"Original game mode, health and food restored");
-        check(alice.getWorld().getKey().getKey().equals("spawnworld"),"Legacy return goes to Batuu");
+        check(alice.getWorld()==world&&alice.getLocation().distanceSquared(parkour.start())<.1,"Completion returns to the Ilum start");
+        check(alice.getPersistentDataContainer().has(new NamespacedKey("mandomc","ilum_last_key"),PersistentDataType.LONG),"Completion cooldown persisted");
         check(crates.keys(alice,crates.definitions().get("kyber"))==1,"Successful run awards one physical key");
         check(parkour.active(bob)&&parkour.run(bob).checkpoint()==0,"Other runner remains active");
         parkour.leave(bob,true,false);equalGear(originalBob,bob.getInventory().getContents(),"Leaving restores other runner's exact gear");
@@ -159,6 +164,15 @@ public final class IlumCratesProbe extends JavaPlugin implements Listener {
         var event=new PlayerMoveEvent(player,before,to);Bukkit.getPluginManager().callEvent(event);position(player,event.getTo());
     }
     private void position(Player player,Location at)throws Exception{Object handle=handles.get(player.getUniqueId());handle.getClass().getMethod("setPos",double.class,double.class,double.class).invoke(handle,at.getX(),at.getY(),at.getZ());}
+    private void interactPacket(Player player,Entity target)throws Exception{
+        Class<?> hand=Class.forName("net.minecraft.world.InteractionHand");
+        Class<?> vec=Class.forName("net.minecraft.world.phys.Vec3");
+        Class<?> packetType=Class.forName("net.minecraft.network.protocol.game.ServerboundInteractPacket");
+        Object packet=packetType.getConstructor(int.class,hand,vec,boolean.class).newInstance(target.getEntityId(),
+                hand.getField("MAIN_HAND").get(null),vec.getConstructor(double.class,double.class,double.class).newInstance(0,1,0),false);
+        Object listener=handles.get(player.getUniqueId()).getClass().getField("connection").get(handles.get(player.getUniqueId()));
+        listener.getClass().getMethod("handleInteract",packetType).invoke(listener,packet);
+    }
     private void click(Player player,int slot){var event=new InventoryClickEvent(player.getOpenInventory(),InventoryType.SlotType.CONTAINER,slot,ClickType.LEFT,InventoryAction.PICKUP_ALL);Bukkit.getPluginManager().callEvent(event);check(event.isCancelled(),"Menu click intercepted");}
     @SuppressWarnings("unchecked") private Player actor(Location at)throws Exception{
         var player=nativeTestPlayer(at.getWorld(),at);actors.add(player);player.setGravity(false);

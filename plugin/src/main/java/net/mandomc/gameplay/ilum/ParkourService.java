@@ -51,6 +51,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 /** The recovered Ilum course, with native NPCs and restart-safe temporary inventories. */
 public final class ParkourService implements Listener, AutoCloseable {
+    private static final double CONVERSATION_DISTANCE_SQUARED = 100;
     private static final NamespacedKey RUN = new NamespacedKey("mandomc","ilum_run");
     private static final NamespacedKey CHECKPOINT = new NamespacedKey("mandomc","ilum_checkpoint");
     private static final NamespacedKey YAW = new NamespacedKey("mandomc","ilum_checkpoint_yaw");
@@ -258,7 +259,9 @@ public final class ParkourService implements Listener, AutoCloseable {
         if (!active(player) || !player.getWorld().equals(world) || !run(player).canFinish()) {send(player,"need-checkpoints");return;}
         Location finish=null;
         for (var npc:config.getMapList("npcs"))if(Boolean.TRUE.equals(npc.get("finish")))finish=location((List<?>)npc.get("location"));
-        if (finish==null || player.getLocation().distanceSquared(finish)>36) {send(player,"need-checkpoints");return;}
+        if (finish==null || player.getLocation().distanceSquared(finish)>CONVERSATION_DISTANCE_SQUARED) {
+            send(player,"npc-interrupted");return;
+        }
         var run=run(player);long millis=Math.max(1,elapsed(player));long now=System.currentTimeMillis();
         var data=player.getPersistentDataContainer();
         long last=data.getOrDefault(LAST_REWARD,PersistentDataType.LONG,0L);
@@ -277,7 +280,8 @@ public final class ParkourService implements Listener, AutoCloseable {
         if(reward)send(player,"key-earned");
         else if(!run.ranked())send(player,"practice");
         else send(player,"reward-cooldown","hours",Long.toString(Math.max(1,(last+cooldown-now+3_599_999)/3_600_000)));
-        teleport(player,exit());crates.claim(player);
+        teleport(player,start);crates.claim(player);
+        plugin.getLogger().info("Ilum completed: "+player.getUniqueId()+" ranked="+run.ranked()+" key="+reward);
     }
 
     private void collision(Player player,boolean inside) {
@@ -455,15 +459,18 @@ public final class ParkourService implements Listener, AutoCloseable {
         var player=event.getPlayer();
         if(!active(player)||run(player).checkpoint()<((Number)data.get("requires-checkpoint")).intValue()){send(player,"need-checkpoints");return;}
         if(player.getLocation().distanceSquared(event.getRightClicked().getLocation())>36)return;
-        if(!conversations.add(player.getUniqueId()))return;
+        if(!conversations.add(player.getUniqueId())){send(player,"busy");return;}
         UUID runId=run(player).id();List<?> lines=(List<?>)data.get("dialogue");
-        for(int i=0;i<=lines.size();i++){
+        for(int i=0;i<Math.max(1,lines.size());i++){
             int line=i;
             dialogues.add(Bukkit.getScheduler().runTaskLater(plugin,()->{
                 if(!player.isOnline()||!active(player)||!run(player).id().equals(runId)||!conversations.contains(player.getUniqueId()))return;
                 Location at=location((List<?>)data.get("location"));
-                if(!player.getWorld().equals(world)||player.getLocation().distanceSquared(at)>100){conversations.remove(player.getUniqueId());return;}
-                if(line<lines.size()){send(player,"npc-line","npc",data.get("name").toString(),"line",lines.get(line).toString());return;}
+                if(!player.getWorld().equals(world)||player.getLocation().distanceSquared(at)>CONVERSATION_DISTANCE_SQUARED){
+                    conversations.remove(player.getUniqueId());send(player,"npc-interrupted");return;
+                }
+                if(line<lines.size())send(player,"npc-line","npc",data.get("name").toString(),"line",lines.get(line).toString());
+                if(line<lines.size()-1)return;
                 conversations.remove(player.getUniqueId());
                 if(Boolean.TRUE.equals(data.get("finish")))finish(player);else teleport(player,location((List<?>)data.get("teleport")));
             },i*50L));

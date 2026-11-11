@@ -8,6 +8,7 @@ p=argparse.ArgumentParser()
 p.add_argument('--baseline',type=Path,required=True)
 p.add_argument('--built',type=Path,required=True)
 p.add_argument('--output',type=Path,required=True)
+p.add_argument('--finish-only',action='store_true',help='Patch the existing Ilum completion owner without replacing shared integration classes')
 a=p.parse_args()
 with zipfile.ZipFile(a.baseline) as src,zipfile.ZipFile(a.built) as built:
     old={n:src.read(n) for n in src.namelist()}
@@ -17,17 +18,22 @@ with zipfile.ZipFile(a.baseline) as src,zipfile.ZipFile(a.built) as built:
               'net/mandomc/gameplay/territory/TerritoryProtection','net/mandomc/gameplay/travel/WarpService')
     resources=('net/mandomc/commands/CommandBindings.class','crates/crates.yml','parkour/ilum.yml',
                'items/definitions/crates.yml','territory/maps.yml')
+    if a.finish_only:
+        assert 'net/mandomc/gameplay/ilum/ParkourService.class' in old,'Existing Ilum owner required'
+        prefixes=('net/mandomc/gameplay/ilum/ParkourService',)
+        resources=('parkour/ilum.yml',)
     for name in built.namelist():
         if name.startswith(prefixes) or name in resources:new[name]=built.read(name)
-    descriptor=yaml.safe_load(old['plugin.yml'])
-    extra=yaml.safe_load(built.read('plugin.yml'))
-    for command in ('parkour','parkourfinish','crates'):
-        assert command not in descriptor['commands'],f'{command} already exists; review baseline'
-        descriptor['commands'][command]=extra['commands'][command]
-    for permission in ('mandomc.parkour.play','mandomc.parkour.admin','mandomc.crates.play','mandomc.crates.admin'):
-        assert permission not in descriptor['permissions']
-        descriptor['permissions'][permission]=extra['permissions'][permission]
-    new['plugin.yml']=yaml.safe_dump(descriptor,sort_keys=False).encode()
+    if not a.finish_only:
+        descriptor=yaml.safe_load(old['plugin.yml'])
+        extra=yaml.safe_load(built.read('plugin.yml'))
+        for command in ('parkour','parkourfinish','crates'):
+            assert command not in descriptor['commands'],f'{command} already exists; review baseline'
+            descriptor['commands'][command]=extra['commands'][command]
+        for permission in ('mandomc.parkour.play','mandomc.parkour.admin','mandomc.crates.play','mandomc.crates.admin'):
+            assert permission not in descriptor['permissions']
+            descriptor['permissions'][permission]=extra['permissions'][permission]
+        new['plugin.yml']=yaml.safe_dump(descriptor,sort_keys=False).encode()
     with zipfile.ZipFile(a.output,'w',zipfile.ZIP_DEFLATED) as dst:
         for name,data in sorted(new.items()):dst.writestr(name,data)
     changed=[n for n in new if old.get(n)!=new[n]]
