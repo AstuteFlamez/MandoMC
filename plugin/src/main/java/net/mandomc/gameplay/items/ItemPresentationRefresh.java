@@ -9,7 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/** Refresh known presentation fields on older hide/food stacks without replacing their other metadata. */
+/** Refresh known presentation fields on older catalog stacks without replacing their other metadata. */
 public final class ItemPresentationRefresh implements Listener {
     private final ItemCatalog items;
 
@@ -21,6 +21,15 @@ public final class ItemPresentationRefresh implements Listener {
 
     public static boolean refresh(ItemCatalog items, ItemStack item) {
         String id = items.identify(item);
+        if (LegacyFacilityLore.affected(id)) {
+            var meta = item.getItemMeta();
+            var before = meta.lore();
+            var after = LegacyFacilityLore.clean(before);
+            if (after == before) return false;
+            meta.lore(after);
+            item.setItemMeta(meta);
+            return true;
+        }
         if (id != null && Set.of("speederbike", "xwing", "tiefighter", "uwing").contains(id)) {
             // Change only the badge row: packed health, identity tokens and other lore stay intact.
             var meta = item.getItemMeta();
@@ -33,7 +42,7 @@ public final class ItemPresentationRefresh implements Listener {
             item.setItemMeta(meta);
             return true;
         }
-        if (id == null || !Set.of("bantha_hide", "massiff_ribs", "dewback_leg").contains(id)) return false;
+        if (id == null || !Set.of("bantha_hide", "massiff_ribs", "dewback_leg", "durasteel_wrench").contains(id)) return false;
         var template = items.create(id);
         var current = template.getItemMeta();
         var food = template.getData(io.papermc.paper.datacomponent.DataComponentTypes.FOOD);
@@ -60,4 +69,12 @@ public final class ItemPresentationRefresh implements Listener {
         refresh(event.getInventory());
         refresh(event.getPlayer().getInventory());
     }
+    @EventHandler(priority = org.bukkit.event.EventPriority.HIGHEST, ignoreCancelled = true)
+    public void pickup(org.bukkit.event.entity.EntityPickupItemEvent event) {
+        if (!(event.getEntity() instanceof org.bukkit.entity.Player)) return;
+        var stack = event.getItem().getItemStack();
+        if (LegacyFacilityLore.affected(items.identify(stack)) && refresh(items, stack))
+            event.getItem().setItemStack(stack);
+    }
+
 }

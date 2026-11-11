@@ -321,10 +321,7 @@
       "category": "materials",
       "lore": [
         "<gray>Low-capacity energy source",
-        "<gray>for simple machinery.",
-        "",
-        "<gold><italic>Extracted from a secured facility on",
-        "<gold><bold>Tatooine"
+        "<gray>for simple machinery."
       ],
       "item-model": "mandomc:legacy/basic_power_cell"
     },
@@ -432,10 +429,7 @@
       "category": "materials",
       "lore": [
         "<gray>Reliable energy core used in",
-        "<gray>mid-tier equipment.",
-        "",
-        "<gold><italic>Extracted from a secured facility on",
-        "<gold><bold>Tatooine"
+        "<gray>mid-tier equipment."
       ],
       "item-model": "mandomc:legacy/durable_mid_grade_power_core"
     },
@@ -542,10 +536,7 @@
       "rarity": "rare",
       "category": "materials",
       "lore": [
-        "<gray>Portable energy storage units.",
-        "",
-        "<gold><italic>Extracted from a secured facility on",
-        "<gold><bold>Tatooine"
+        "<gray>Portable energy storage units."
       ],
       "item-model": "mandomc:legacy/batteries"
     },
@@ -833,10 +824,7 @@
       "category": "materials",
       "lore": [
         "<gray>A basic control component",
-        "<gray>used in simple circuits.",
-        "",
-        "<gold><italic>Extracted from a secured facility on",
-        "<gold><bold>Tatooine"
+        "<gray>used in simple circuits."
       ],
       "item-model": "mandomc:legacy/switch"
     },
@@ -1083,7 +1071,7 @@
       "category": "keys",
       "lore": [
         "<gray>Belonging to seasoned travelers",
-        "<gray>who traverse the galaxy\u2019s edges."
+        "<gray>who traverse the galaxy’s edges."
       ],
       "item-model": "mandomc:legacy/wayfarer_crate_key"
     },
