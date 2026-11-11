@@ -14,7 +14,7 @@ lines:
   - ''
   - '<aqua><bold>Stats'
   - '<combat-or-kills>'
-  - '<dark_gray>| <gray>ᴛᴇʀʀɪᴛᴏʀʏ<dark_gray>: <#75CDA9><territory>'
+  - '<dark_gray>⚑ <gray>ᴛᴇʀʀɪᴛᴏʀʏ<dark_gray>: <#75CDA9><territory>'
   - '<dark_gray>¤ <gray>ʙᴀʟᴀɴᴄᴇ<dark_gray>: <#FCD05C>$<balance>'
   - ''
   - '<serverinfo>'

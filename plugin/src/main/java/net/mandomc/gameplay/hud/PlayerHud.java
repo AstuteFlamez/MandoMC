@@ -120,7 +120,7 @@ public final class PlayerHud implements Listener, AutoCloseable {
                 Placeholder.unparsed("date", settings.date().format(Instant.now())), Placeholder.unparsed("ping", String.valueOf(view.ping)),
                 Placeholder.component("rank", ranks.rank(view.player).badge(false)), Placeholder.component("combat-or-kills", timer),
                 Placeholder.unparsed("deaths", String.valueOf(view.deaths)),
-                Placeholder.unparsed("territory", territory(view.player)),
+                Placeholder.component("territory", territory(view.player)),
                 Placeholder.unparsed("balance", CreditLedger.format(credits.ledger().balance(view.player.getUniqueId()))));
         if (!view.objective.displayName().equals(logo)) view.objective.displayName(logo);
         var lines = tenths > 0 ? settings.combatLines() : settings.lines();
@@ -136,10 +136,11 @@ public final class PlayerHud implements Listener, AutoCloseable {
             view.player.sendPlayerListHeaderAndFooter(header, footer); view.header = header; view.footer = footer;
         }
     }
-    private String territory(Player player) {
+    private Component territory(Player player) {
         // Services retain authority; resolving at render also handles same-chunk claim/disband changes.
         var zones = Bukkit.getServicesManager().load(TerritoryService.class);
-        return zones == null ? "Wilderness" : zones.identity(player, player.getLocation()).name();
+        return zones == null ? Component.text("Wilderness",net.kyori.adventure.text.format.NamedTextColor.GRAY)
+                : zones.label(player);
     }
 
     private void mirrorTeams(View view, List<? extends Player> online) {

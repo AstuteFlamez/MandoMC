@@ -53,14 +53,18 @@ public final class TerritoryService implements Listener, AutoCloseable {
                 clans == null ? null : clans.member(player), clans == null ? null : clans.state(),
                 System.currentTimeMillis());
     }
-    public void announce(Player player) {
-        var identity=identity(player,player.getLocation());
-        if(identity.equals(shown.put(player.getUniqueId(),identity)))return;
+    public Component label(Player player) { return label(identity(player,player.getLocation())); }
+    private Component label(TerritoryIdentity identity) {
         String key = identity.relation() == TerritoryIdentity.Relation.NONE
                 ? "titles." + identity.zone().name().toLowerCase(java.util.Locale.ROOT)
                 : "titles.claim-" + identity.relation().name().toLowerCase(java.util.Locale.ROOT);
-        var title = MiniMessage.miniMessage().deserialize(language.getString(key,key),
+        return MiniMessage.miniMessage().deserialize(language.getString(key,key),
                 Placeholder.unparsed("clan",identity.name()));
+    }
+    public void announce(Player player) {
+        var identity=identity(player,player.getLocation());
+        if(identity.equals(shown.put(player.getUniqueId(),identity)))return;
+        var title = label(identity);
         player.showTitle(Title.title(title,Component.empty(),
                 Title.Times.times(java.time.Duration.ofMillis(200),java.time.Duration.ofMillis(1500),java.time.Duration.ofMillis(400))));
     }
