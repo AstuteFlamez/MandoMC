@@ -302,10 +302,6 @@ shop:
       item: minecraft:string
       amount: 16
       price: '6'
-    leather:
-      item: minecraft:leather
-      amount: 8
-      price: '8'
     feather:
       item: minecraft:feather
       amount: 16
@@ -314,14 +310,6 @@ shop:
       item: minecraft:ink_sac
       amount: 8
       price: '4'
-    iron_ingot:
-      item: minecraft:iron_ingot
-      amount: 8
-      price: '12'
-    diamond:
-      item: minecraft:diamond
-      amount: 1
-      price: '12'
     coal:
       item: minecraft:coal
       amount: 16
@@ -334,6 +322,50 @@ shop:
       item: durasteel
       amount: 1
       price: '12'
+    bantha_hide:
+      item: bantha_hide
+      amount: 8
+      price: '8'
+    raw_agrinium:
+      item: raw_agrinium
+      amount: 8
+      price: '6'
+    agrinium_scrap:
+      item: agrinium_scrap
+      amount: 8
+      price: '6'
+    durasteel_scrap:
+      item: durasteel_scrap
+      amount: 4
+      price: '8'
+    electrum_scrap:
+      item: electrum_scrap
+      amount: 8
+      price: '6'
+    electrum:
+      item: electrum
+      amount: 8
+      price: '12'
+    wiring_coil:
+      item: wiring_coil
+      amount: 1
+      price: '4'
+    basic_power_cell:
+      item: basic_power_cell
+      amount: 1
+      price: '4'
+    rough_power_cell:
+      item: rough_power_cell
+      amount: 1
+      price: '4'
+    basic_emitter_coil:
+      item: basic_emitter_coil
+      amount: 1
+      price: '4'
+    makeshift_recoil_buffer:
+      item: makeshift_recoil_buffer
+      amount: 1
+      price: '4'
 npcs: {}
 text:
   brown-title: <gold>Jawa offworld supplies

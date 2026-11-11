@@ -16,6 +16,11 @@ public class JawaSettingsTest {
         }
         var config=config();config.set("shop.supplies.oak.price","-1");assertThrows(IllegalArgumentException.class,()->JawaSettings.read(config));
     }
+    @Test public void grayBuysCanonicalMetalsHideAndPartsInsteadOfReplacedVanillaMaterials(){
+        var settings=JawaSettings.read(config());var items=settings.purchases().stream().map(JawaSettings.Offer::item).toList();
+        assertTrue(items.containsAll(List.of("bantha_hide","agrinium","durasteel","wiring_coil")));
+        for(String item:List.of("minecraft:iron_ore","minecraft:iron_ingot","minecraft:diamond","minecraft:leather"))assertFalse(items.contains(item));
+    }
     @Test public void grayBuybackCannotProfitFromTheSameBrownBundle(){
         var settings=JawaSettings.read(config());
         for(var sell:settings.supplies())for(var buy:settings.purchases())if(sell.item().equals(buy.item()))

@@ -11,7 +11,7 @@ JawaVoice3:
   Skills:
   - sound{s=mandomc:mobs.jawa3;v=2;p=1} @self
 JawaAttack:
-  Cooldown: 2.5
+  Cooldown: 3
   Conditions:
   - incombat true
   TargetConditions:
@@ -20,13 +20,13 @@ JawaAttack:
   Skills:
   - skill{s=MandoFaceTarget;repeat=5;repeatInterval=1} @target
   - delay 6
-  - aura{auraName=JawaAiming;duration=40} @self
+  - aura{auraName=JawaAiming;duration=45} @self
   - setspeed{speed=0;type=walking} @self
-  - state{mid=jawa_brown;s=attack} @self
-  - skill{s=MandoFaceTarget;repeat=19;repeatInterval=1} @target
-  - delay 20
+  - state{mid=jawa_brown;s=attack;li=0;lo=0} @self
+  - skill{s=MandoFaceTarget;repeat=21;repeatInterval=1} @target
+  - delay 22
   - weaponMechanicsShoot{weapon=Jawa_Ionization_Blaster;spread=1;head=false;repeat=1;repeatInterval=1}
     @target
-  - delay 20
+  - delay 23
   - state{mid=jawa_brown;s=attack;r=true} @self
   - setspeed{speed=1;type=walking} @self

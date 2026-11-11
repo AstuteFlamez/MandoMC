@@ -21,7 +21,8 @@ public final class JabbaDrops implements Listener {
             throw new IllegalStateException("jabba-mobs.enabled requires MythicMobs");
         }
         for (var rule : settings.mobs().values()) {
-            if (!items.ids().contains(rule.weapon()) || (rule.ammoRolls() > 0 && !items.ids().contains(rule.ammo()))) {
+            if (!items.ids().contains(rule.weapon()) || (rule.ammoRolls() > 0 && !items.ids().contains(rule.ammo()))
+                    || !items.ids().containsAll(rule.salvage().pool())) {
                 throw new IllegalArgumentException("mobs/drops/jabba.yml: unknown catalog weapon or ammo item");
             }
         }

@@ -30,8 +30,10 @@ public final class JawaTraders implements Listener, AutoCloseable {
     private final JawaSettings settings;
     private final JawaMobs vendor;
     private final ModelFacing facing;
-    private final NamespacedKey group, born, npc;
+    private final NamespacedKey group, born, npc, paused;
     private final Map<String, UUID> anchors=new HashMap<>();
+    private record Conversation(Mob entity, boolean hadAI, Set<UUID> viewers) { }
+    private final Map<UUID,Conversation> conversations=new HashMap<>();
     private final Random random=new Random();
     private final BukkitTask population, idle;
     private boolean healthy=true;
@@ -53,7 +55,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
         }
         settings=JawaSettings.read(config);
         vendor=new JawaMobs();facing=new ModelFacing();
-        group=new NamespacedKey(plugin,"jawa_group_v1");born=new NamespacedKey(plugin,"jawa_born_v1");npc=new NamespacedKey(plugin,"jawa_npc_v1");
+        group=new NamespacedKey(plugin,"jawa_group_v1");born=new NamespacedKey(plugin,"jawa_born_v1");npc=new NamespacedKey(plugin,"jawa_npc_v1");paused=new NamespacedKey(plugin,"jawa_conversation_ai_v1");
         for(String key:List.of("brown-title","gray-title","buy-price","sell-price","buy-hint","sell-hint","balance","too-far","angry","missing-items","inventory-full","placed","usage"))
             if(!config.isString("text."+key))throw new IllegalArgumentException("mobs/jawas.yml: missing text."+key);
         for(var offer:settings.supplies()) item(offer);
@@ -100,7 +102,43 @@ public final class JawaTraders implements Listener, AutoCloseable {
         var balance=new ItemStack(Material.GOLD_NUGGET);var meta=balance.getItemMeta();
         meta.displayName(text("balance","balance",CreditLedger.format(plugin.credits().ledger().balance(player.getUniqueId()))));balance.setItemMeta(meta);
         menu.inventory.setItem(31,balance);player.openInventory(menu.inventory);
+        if(buying && player.getOpenInventory().getTopInventory().getHolder()==menu && entity instanceof Mob mob) {
+            var conversation=conversations.computeIfAbsent(entity.getUniqueId(),id->{
+                mob.getPersistentDataContainer().set(paused,PersistentDataType.BYTE,(byte)(mob.hasAI()?1:0));
+                return new Conversation(mob,mob.hasAI(),new HashSet<>());
+            });
+            conversation.viewers().add(player.getUniqueId());
+            mob.getPathfinder().stopPathfinding();mob.setAI(false);mob.setVelocity(new org.bukkit.util.Vector());
+            facing.face(mob,player.getEyeLocation(),15);
+        }
     }
+    private void resume(UUID id) {
+        var conversation=conversations.remove(id);
+        if(conversation!=null) {
+            if(conversation.entity().isValid() && !conversation.entity().isDead())conversation.entity().setAI(conversation.hadAI());
+            conversation.entity().getPersistentDataContainer().remove(paused);
+        }
+    }
+    private void endConversation(UUID id) {
+        var conversation=conversations.get(id);
+        if(conversation!=null)for(UUID viewer:List.copyOf(conversation.viewers())) {
+            var player=Bukkit.getPlayer(viewer);
+            if(player!=null && player.getOpenInventory().getTopInventory().getHolder() instanceof Menu menu && menu.jawa.equals(id))player.closeInventory();
+        }
+        resume(id);
+    }
+    @EventHandler public void closed(InventoryCloseEvent event) {
+        if(!(event.getInventory().getHolder() instanceof Menu menu))return;
+        var conversation=conversations.get(menu.jawa);
+        if(conversation!=null){conversation.viewers().remove(event.getPlayer().getUniqueId());if(conversation.viewers().isEmpty())resume(menu.jawa);}
+    }
+    @EventHandler public void quit(PlayerQuitEvent event) {
+        for(UUID id:List.copyOf(conversations.keySet())) {
+            var conversation=conversations.get(id);conversation.viewers().remove(event.getPlayer().getUniqueId());
+            if(conversation.viewers().isEmpty())resume(id);
+        }
+    }
+    @EventHandler public void died(EntityDeathEvent event){endConversation(event.getEntity().getUniqueId());}
     private boolean canTrade(Player player,LivingEntity entity) {
         if(!entity.isValid() || entity.isDead() || player.getWorld()!=entity.getWorld() || player.getLocation().distanceSquared(entity.getLocation())>36) {
             send(player,"too-far");return false;
@@ -156,7 +194,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
         var members=new ArrayList<LivingEntity>();members.add((LivingEntity)event.getEntity());
         if(id!=null)for(var entity:event.getEntity().getNearbyEntities(32,16,32))
             if(entity instanceof LivingEntity living && brown(entity) && id.equals(entity.getPersistentDataContainer().get(group,PersistentDataType.STRING)))members.add(living);
-        for(var member:members){vendor.retaliate(member,attacker);if(member instanceof Mob mob)mob.setTarget(attacker);}
+        for(var member:members){endConversation(member.getUniqueId());vendor.retaliate(member,attacker);if(member instanceof Mob mob)mob.setTarget(attacker);}
         for(var player:event.getEntity().getWorld().getPlayers())
             if(player.getOpenInventory().getTopInventory().getHolder() instanceof Menu menu && members.stream().anyMatch(m->m.getUniqueId().equals(menu.jawa)))player.closeInventory();
     }
@@ -223,6 +261,10 @@ public final class JawaTraders implements Listener, AutoCloseable {
     /** A removed/replaced distant NPC may only become available when its chunk loads again. */
     private void removeOrphans(List<Entity> entities) {
         for(var entity:entities) {
+            Byte previous=entity.getPersistentDataContainer().get(paused,PersistentDataType.BYTE);
+            if(previous!=null && entity instanceof LivingEntity living) {
+                living.setAI(previous==1);entity.getPersistentDataContainer().remove(paused);
+            }
             String id=entity.getPersistentDataContainer().get(npc,PersistentDataType.STRING);
             if(id!=null && !config.isConfigurationSection("npcs."+id))vendor.access().remove(entity);
         }
@@ -234,6 +276,16 @@ public final class JawaTraders implements Listener, AutoCloseable {
     }
     private void idle() {
         clock++;
+        for(UUID id:List.copyOf(conversations.keySet())) {
+            var conversation=conversations.get(id);
+            if(!conversation.entity().isValid() || conversation.entity().isDead()){endConversation(id);continue;}
+            conversation.viewers().removeIf(viewer->{var player=Bukkit.getPlayer(viewer);return player==null || !player.isOnline()
+                    || !(player.getOpenInventory().getTopInventory().getHolder() instanceof Menu menu) || !menu.jawa.equals(id);});
+            if(conversation.viewers().isEmpty()){resume(id);continue;}
+            var mob=conversation.entity();mob.getPathfinder().stopPathfinding();mob.setAI(false);mob.setVelocity(new org.bukkit.util.Vector());
+            var player=Bukkit.getPlayer(conversation.viewers().iterator().next());
+            if(player!=null && player.getWorld()==mob.getWorld())facing.face(mob,player.getEyeLocation(),10);
+        }
         var entries=config.getConfigurationSection("npcs");if(entries==null)return;
         for(String id:entries.getKeys(false)) {
             var home=anchor(id);if(home==null || !home.getWorld().isChunkLoaded(home.getBlockX()>>4,home.getBlockZ()>>4))continue;
@@ -294,7 +346,9 @@ public final class JawaTraders implements Listener, AutoCloseable {
         player.sendMessage(text("usage"));
     }
     @Override public void close() {
-        population.cancel();idle.cancel();HandlerList.unregisterAll(this);
+        population.cancel();idle.cancel();
+        for(UUID id:List.copyOf(conversations.keySet()))endConversation(id);
+        HandlerList.unregisterAll(this);
         for(var player:Bukkit.getOnlinePlayers())if(player.getOpenInventory().getTopInventory().getHolder() instanceof Menu)player.closeInventory();
     }
 }

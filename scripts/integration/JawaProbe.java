@@ -22,6 +22,7 @@ public final class JawaProbe extends JavaPlugin {
     private final List<LivingEntity> entities=new ArrayList<>();private final List<Chunk> chunks=new ArrayList<>();
     private List<Object> worldPlayers;private Map<UUID,Object> online;private MandoPlugin mando;private World world;
     private Player buyer;private LivingEntity gray;private List<LivingEntity> group;private Cow attacker;private int checks,shots;
+    private int castTick;private final List<Integer> shotTicks=new ArrayList<>();private final List<Double> shotTimes=new ArrayList<>();
     private InventoryView stale;private ItemStack bought;private long balance;private final Listener observer=new Listener(){};
     @Override public void onEnable(){later(120,this::begin);}
     @SuppressWarnings("unchecked") private void begin()throws Exception {
@@ -40,7 +41,10 @@ public final class JawaProbe extends JavaPlugin {
         attacker=world.spawn(new Location(world,68.5,200,77.5),Cow.class,c->{c.setAI(false);c.setGravity(false);c.setInvulnerable(true);});entities.add(attacker);
         for(var e:entities){e.setGravity(false);e.setVelocity(new org.bukkit.util.Vector());}
         gray.setAI(false);
-        Bukkit.getPluginManager().registerEvent(WeaponShootEvent.class,observer,EventPriority.MONITOR,(l,e)->{var event=(WeaponShootEvent)e;if(group.stream().anyMatch(m->m==event.getShooter())){shots++;event.getProjectile().remove();}},this,true);
+        Bukkit.getPluginManager().registerEvent(WeaponShootEvent.class,observer,EventPriority.MONITOR,(l,e)->{var event=(WeaponShootEvent)e;if(event.getShooter()==group.getFirst()){
+            shots++;shotTicks.add(Bukkit.getCurrentTick()-castTick);
+            var pose=ModelEngineAPI.getModeledEntity(group.getFirst()).getModel("jawa_brown").orElseThrow().getAnimationHandler().getAnimation("attack");
+            shotTimes.add(pose==null?-1:pose.getTime());event.getProjectile().remove();}},this,true);
         later(20,()->{
             check(group.stream().allMatch(e->((Mob)e).getTarget()==null),"brown group starts neutral beside player");
             for(var entity:group){var modeled=ModelEngineAPI.getModeledEntity(entity);check(modeled!=null && modeled.getModel("jawa_brown").isPresent(),"brown rig attaches to native mob");}
@@ -56,12 +60,24 @@ public final class JawaProbe extends JavaPlugin {
     private void buy(){
         mando.jawas().open(buyer,group.getFirst());stale=buyer.getOpenInventory();
         check(stale.getTopInventory().getSize()==36,"brown supply menu opens");
+        check(!group.getFirst().hasAI(),"talking pauses Jawa navigation immediately");
+        try {
+            var second=actor(new Location(world,67.5,200,67.5));mando.jawas().open(second,group.getFirst());
+            buyer.closeInventory();check(!group.getFirst().hasAI(),"Jawa stays still while a second customer is browsing");
+            second.closeInventory();check(group.getFirst().hasAI(),"last customer closing restores previous AI");
+            var marker=new NamespacedKey("mandomc","jawa_conversation_ai_v1");
+            group.getFirst().getPersistentDataContainer().set(marker,org.bukkit.persistence.PersistentDataType.BYTE,(byte)1);group.getFirst().setAI(false);
+            mando.jawas().loaded(new org.bukkit.event.world.EntitiesLoadEvent(group.getFirst().getLocation().getChunk(),List.of(group.getFirst())));
+            check(group.getFirst().hasAI() && !group.getFirst().getPersistentDataContainer().has(marker),"saved conversation pause recovers after chunk/server reload");
+            mando.jawas().open(buyer,group.getFirst());stale=buyer.getOpenInventory();
+        }catch(Exception error){throw new IllegalStateException(error);}
         check(stale.getTopInventory().getItem(30).getType()==Material.GRAY_STAINED_GLASS_PANE && stale.getTopInventory().getItem(30).getItemMeta().isHideTooltip(),"unused menu slots use protected hidden filler");
         var preview=stale.getTopInventory().getItem(0);var offer=mando.jawas().settings().stock(group.getFirst().getUniqueId().getMostSignificantBits()^group.getFirst().getUniqueId().getLeastSignificantBits()).getFirst();
         bought=new ItemStack(preview.getType(),offer.amount());balance=100000-offer.price();
         var shift=new InventoryClickEvent(stale,InventoryType.SlotType.CONTAINER,0,ClickType.SHIFT_LEFT,InventoryAction.MOVE_TO_OTHER_INVENTORY);Bukkit.getPluginManager().callEvent(shift);check(shift.isCancelled(),"shift transfer cannot extract shop previews");
         click(buyer,0);click(buyer,0);
         later(30,()->{
+            check(group.getFirst().hasAI(),"successful trade releases conversation movement pause");
             check(mando.credits().ledger().balance(buyer.getUniqueId())==balance,"purchase debits exactly once despite rapid repeated click");
             check(buyer.getInventory().containsAtLeast(bought,bought.getAmount()),"purchase delivers genuine stack without shop lore");
             check(mando.credits().ledger().auctions().claims().values().stream().noneMatch(c->c.owner().equals(buyer.getUniqueId())),"delivered supply claim acknowledged");
@@ -81,38 +97,45 @@ public final class JawaProbe extends JavaPlugin {
                 mando.jawas().open(buyer,gray);
                 var menu=buyer.getOpenInventory().getTopInventory();int nativeIron=-1;
                 for(int i=0;i<28;i++){var stack=menu.getItem(i);if(stack!=null&&stack.getType()==Material.IRON_INGOT && mando.items().identify(stack)==null){nativeIron=i;break;}}
-                if(nativeIron>=0)click(buyer,nativeIron);
+                check(nativeIron<0,"gray buyer has no ordinary iron offer");
                 later(5,()->{check(mando.credits().ledger().balance(buyer.getUniqueId())==balance,"custom metal cannot be sold as ordinary iron");buyer.closeInventory();aggression();});
             });
         });
     }
     private void aggression(){
+        mando.jawas().open(buyer,group.getFirst());check(!group.getFirst().hasAI(),"conversation is paused before attack");
         var denied=new EntityDamageByEntityEvent(attacker,group.getFirst(),EntityDamageEvent.DamageCause.ENTITY_ATTACK,1);denied.setCancelled(true);Bukkit.getPluginManager().callEvent(denied);
         check(group.stream().allMatch(e->((Mob)e).getTarget()==null),"cancelled damage cannot provoke group");
         group.getFirst().damage(1,buyer);
+        check(group.getFirst().hasAI(),"attack releases conversation pause before retaliation");
         getLogger().info("Retaliation diagnostic: " + group.stream().map(e->e.getUniqueId()+" valid="+e.isValid()+" type="+mando.jawas().brown(e)+" target="+((Mob)e).getTarget()).toList());
         check(group.stream().allMatch(e->((Mob)e).getTarget()==buyer),"attacking one brown Jawa provokes its group");
         for(var e:group){e.setAI(false);var active=MythicBukkit.inst().getAPIHelper().getMythicMobInstance(e);check(active.getThreatTable().getThreat(BukkitAdapter.adapt(buyer))>0,"retaliation adds attacker to Mythic threat table");}
         var first=(Mob)group.getFirst();var active=MythicBukkit.inst().getAPIHelper().getMythicMobInstance(first);
         Bukkit.getScheduler().runTaskTimer(this,()->{first.setTarget(attacker);active.setTarget(BukkitAdapter.adapt(attacker));active.getThreatTable().threatGain(BukkitAdapter.adapt(attacker),100);},1,1);
         later(10,()->{
-            active.clearSkillCooldowns();
+            active.clearSkillCooldowns();shots=0;shotTicks.clear();shotTimes.clear();castTick=Bukkit.getCurrentTick();
             getLogger().info("Attack diagnostic: combat="+active.getThreatTable().inCombat()+" target="+active.hasTarget()+" los="+first.hasLineOfSight(attacker)+" distance="+first.getLocation().distance(attacker.getLocation()));
             check(MythicBukkit.inst().getAPIHelper().castSkill(first,"JawaAttack",first.getLocation(),List.of(attacker),List.of(),1),"Jawa blaster attack skill casts");
-            later(50,()->{check(shots>=2,"retaliating Jawa fires paired ionization shots: "+shots);check(((Mob)gray).getTarget()==null,"gray buyer stays passive");drops();
+            later(54,()->{
+                getLogger().info("Shot phase evidence: ticks="+shotTicks+" animation seconds="+shotTimes);
+                check(shotTicks.size()>=2 && shotTicks.getFirst()>=27 && shotTicks.getFirst()<=30 && shotTicks.get(1)-shotTicks.getFirst()==1,"paired shots occur 22 ticks into the attack pose");
+                check(shotTimes.size()>=2 && shotTimes.getFirst()>=1.0 && shotTimes.getFirst()<=1.25,"actual model recoil and projectile timing agree");
+                check(shots>=2,"retaliating Jawa fires paired ionization shots: "+shots);check(((Mob)gray).getTarget()==null,"gray buyer stays passive");drops();
                 getLogger().info("JAWA PROBE PASSED: "+checks+" assertions");cleanup();});
         });
     }
 
     private void drops(){
-        var active=MythicBukkit.inst().getAPIHelper().getMythicMobInstance(group.getFirst());int guns=0,cells=0;
+        var active=MythicBukkit.inst().getAPIHelper().getMythicMobInstance(group.getFirst());int guns=0,cells=0,parts=0;var distinct=new HashSet<String>();
+        var pool=Set.of("wiring_coil","basic_power_cell","rough_power_cell","basic_emitter_coil","makeshift_recoil_buffer");
         var ammo=mando.items().create("ionized_energy_cells");
         for(int i=0;i<1000;i++){
-            var event=new io.lumine.mythic.bukkit.events.MythicMobDeathEvent(active,null,new ArrayList<>());Bukkit.getPluginManager().callEvent(event);int g=0,c=0;
-            for(var item:event.getDrops())if("Jawa_Ionization_Blaster".equals(WeaponMechanicsAPI.getWeaponTitle(item)))g+=item.getAmount();else if(item.isSimilar(ammo))c+=item.getAmount();else throw new AssertionError("Unexpected Jawa loot");
-            if(g>1||c>3)throw new AssertionError("Jawa loot exceeded legacy bounds");guns+=g;cells+=c;
+            var event=new io.lumine.mythic.bukkit.events.MythicMobDeathEvent(active,null,new ArrayList<>());Bukkit.getPluginManager().callEvent(event);int g=0,c=0,p=0;
+            for(var item:event.getDrops())if("Jawa_Ionization_Blaster".equals(WeaponMechanicsAPI.getWeaponTitle(item)))g+=item.getAmount();else if(item.isSimilar(ammo))c+=item.getAmount();else if(pool.contains(mando.items().identify(item))){p+=item.getAmount();distinct.add(mando.items().identify(item));}else throw new AssertionError("Unexpected Jawa loot");
+            if(g>1||c>3||p<1||p>2)throw new AssertionError("Jawa loot exceeded legacy bounds");guns+=g;cells+=c;parts+=p;
         }
-        check(guns>60&&guns<180,"actual Mythic death adapter preserves 12% blaster roll");check(cells>1300&&cells<1700,"actual Mythic death adapter preserves three 50% cell rolls");
+        check(guns>60&&guns<180,"actual Mythic death adapter preserves 12% blaster roll");check(cells>1300&&cells<1700,"actual Mythic death adapter preserves three 50% cell rolls");check(parts>=1000&&parts<=2000&&distinct.equals(pool),"actual deaths roll 1–2 genuine parts across the full electrical pool");
     }
     private Player actor(Location point)throws Exception{var p=nativeTestPlayer(world,point);actors.add(p);p.setGameMode(GameMode.SURVIVAL);var h=p.getClass().getMethod("getHandle").invoke(p);handles.put(p.getUniqueId(),h);worldPlayers.add(h);online.put(p.getUniqueId(),h);return p;}
     private void click(Player player,int slot){if(!(player.getOpenInventory().getTopInventory().getHolder().getClass().getName().contains("JawaTraders")))return;var event=new InventoryClickEvent(player.getOpenInventory(),InventoryType.SlotType.CONTAINER,slot,ClickType.LEFT,InventoryAction.PICKUP_ALL);Bukkit.getPluginManager().callEvent(event);check(event.isCancelled(),"Jawa menu blocks inventory transfer");}
