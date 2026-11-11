@@ -54,6 +54,10 @@ public final class ClanState {
         if (claims.containsKey(chunk)) throw new IllegalArgumentException("already-claimed");
         if (claims.values().stream().filter(clan.id::equals).count() >= limit)
             throw new IllegalArgumentException("claim-limit");
+        var owned = claims.entrySet().stream().filter(entry -> entry.getValue().equals(clan.id))
+                .map(Map.Entry::getKey).toList();
+        if (!owned.isEmpty() && owned.stream().noneMatch(existing -> adjacent(existing,chunk)))
+            throw new IllegalArgumentException("claim-adjacent");
         for (int dx = -1; dx <= 1; dx++) for (int dz = -1; dz <= 1; dz++) {
             var nearby = new Chunk(chunk.world, chunk.x + dx, chunk.z + dz);
             if (!wilderness.test(nearby)) throw new IllegalArgumentException("zone-buffer");
@@ -62,6 +66,32 @@ public final class ClanState {
         }
         claims.put(chunk, clan.id);
     }
+    private static boolean adjacent(Chunk left, Chunk right) {
+        return left.world.equals(right.world)
+                && Math.abs((long)left.x-right.x)+Math.abs((long)left.z-right.z)==1;
+    }
+    private static int components(Set<Chunk> chunks) {
+        var remaining=new HashSet<>(chunks);int count=0;
+        while(!remaining.isEmpty()) {
+            count++;var queue=new ArrayDeque<Chunk>();var first=remaining.iterator().next();
+            remaining.remove(first);queue.add(first);
+            while(!queue.isEmpty()) {
+                var current=queue.removeFirst();
+                var neighbors=remaining.stream().filter(other->adjacent(current,other)).toList();
+                remaining.removeAll(neighbors);queue.addAll(neighbors);
+            }
+        }
+        return count;
+    }
+    /** Legacy islands remain; ordinary removal must not create additional disconnected components. */
+    public void checkUnclaim(Clan clan, Chunk chunk) {
+        if(owner(chunk)!=clan)throw new IllegalArgumentException("not-owner");
+        var owned=new HashSet<Chunk>();
+        claims.forEach((key,id)->{if(id.equals(clan.id))owned.add(key);});
+        int before=components(owned);owned.remove(chunk);
+        if(components(owned)>before)throw new IllegalArgumentException("unclaim-splits");
+    }
+    public void unclaim(Clan clan, Chunk chunk) { checkUnclaim(clan,chunk);claims.remove(chunk); }
     public int score(UUID a, UUID b) {
         if (a.equals(b)) return 0;
         var pair = Pair.of(a,b); var rivalry = rivalries.get(pair);

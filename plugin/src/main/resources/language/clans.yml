@@ -1,4 +1,4 @@
-usage: '<gray>/c create <name> | invite <player> | join <clan> | leave | kick <player> | leader <player> | disband | claim | unclaim | sethome | home | info [clan] | warpoints <clan> | map'
+usage: '<gray>/c create <name> | invite <player> | join <clan> | leave | kick <player> | leader <player> | disband | claim | unclaim | unclaimall | sethome | home | info [clan] | warpoints <clan> | map'
 players-only: '<red>Use this command in game.'
 invalid-name: '<red>Clan names need 3–16 letters, numbers or underscores.'
 already-member: '<red>You already belong to a clan.'
@@ -41,3 +41,7 @@ raid-started: '<red><clan> has begun a one-hour raid against <rival>! Their warp
 raid-ended: '<yellow>The raid between <clan> and <rival> has ended. Warpoints can be earned again.'
 
 unprepared: '<yellow>This chunk has no completed frozen wilderness backup. Building and claiming are unavailable here.'
+
+claim-adjacent: '<yellow>New claims must share an edge with your clan land in this world.'
+unclaim-splits: '<yellow>That would split your clan land. Remove an edge claim or use /c unclaimall.'
+unclaimed-all: '<yellow>All clan land unclaimed. It restores after 24 hours without edits.'

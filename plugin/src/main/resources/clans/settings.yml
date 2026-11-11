@@ -1,5 +1,5 @@
 schema-version: 1
-max-members: 5
+max-members: 4
 max-claims: 4
 raid-warpoints: 10
 raid-seconds: 3600

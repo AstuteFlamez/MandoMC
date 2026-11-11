@@ -44,7 +44,7 @@ public final class ClanFeature implements AutoCloseable {
                     crates=ownedCrates;
                 }
                 if(!crates.definitions().containsKey("koth"))throw new IllegalStateException("Shared crate service lacks KOTH");
-                plugin.getLogger().info("Native clans ready: five members, four claims, one-hour raids and shared KOTH crate.");
+                plugin.getLogger().info("Native clans ready: four members, four claims, one-hour raids and shared KOTH crate.");
             }catch(Exception error){plugin.getLogger().log(java.util.logging.Level.SEVERE,"Clan crate startup failed",error);}
         });
     }

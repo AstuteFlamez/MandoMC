@@ -72,7 +72,7 @@ pages:
   topic: Clans & Claims
   heading: Clans & Claims
   body: |-
-    Max 5 players; 4 chunks.
+    Max 4 players; 4 chunks.
     /c create <name>
     /c invite <player>
     /c join <clan>

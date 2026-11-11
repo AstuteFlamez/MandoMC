@@ -89,11 +89,19 @@ public final class ClanCommands implements CommandExecutor, TabCompleter {
                 }
                 case "unclaim" -> {
                     length(args,1);var chunk=LandRestoration.chunk(p.getLocation());
-                    if(state.owner(chunk)!=clan)throw new IllegalArgumentException("not-owner");
-                    clans.land().release(chunk,false);state.claims.remove(chunk);
+                    state.checkUnclaim(clan,chunk);
+                    clans.land().release(chunk,false);state.unclaim(clan,chunk);
                     if(clan.home!=null&&chunk.equals(new ClanState.Chunk(clan.home.world(),((int)Math.floor(clan.home.x()))>>4,
                             ((int)Math.floor(clan.home.z()))>>4)))clan.home=null;
                     clans.saved(p,"unclaimed");
+                }
+                case "unclaimall" -> {
+                    length(args,1);
+                    var owned=state.claims.entrySet().stream().filter(entry->entry.getValue().equals(clan.id))
+                            .map(Map.Entry::getKey).toList();
+                    for(var chunk:owned)if(!clans.land().hasBaseline(chunk))throw new IllegalArgumentException("failed");
+                    for(var chunk:owned){clans.land().release(chunk,false);state.claims.remove(chunk);}
+                    clan.home=null;clans.saved(p,"unclaimed-all");
                 }
                 case "sethome" -> {
                     length(args,1);if(clans.owner(p.getLocation())!=clan)throw new IllegalArgumentException("not-owner");
@@ -115,7 +123,7 @@ public final class ClanCommands implements CommandExecutor, TabCompleter {
     private static void length(String[] args,int count){if(args.length!=count)throw new IllegalArgumentException("usage");}
     @Override public List<String> onTabComplete(CommandSender sender,Command cmd,String label,String[] args) {
         List<String> choices=args.length==1?List.of("map","create","invite","join","leave","kick","leader","disband",
-                "claim","unclaim","sethome","home","info","warpoints"):args.length==2?
+                "claim","unclaim","unclaimall","sethome","home","info","warpoints"):args.length==2?
                 Set.of("join","info","warpoints").contains(args[0].toLowerCase(Locale.ROOT))?
                         clans.state().clans.values().stream().map(c->c.name).toList():
                         Bukkit.getOnlinePlayers().stream().filter(p->!(sender instanceof Player viewer)||viewer.canSee(p)).map(Player::getName).toList():List.of();

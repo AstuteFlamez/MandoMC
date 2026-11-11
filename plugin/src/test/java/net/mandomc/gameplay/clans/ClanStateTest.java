@@ -8,11 +8,11 @@ import static org.junit.Assert.*;
 public class ClanStateTest {
     private final ClanState state=new ClanState();
     private ClanState.Clan clan(String name){return state.create(name,UUID.randomUUID(),1000);}
-    @Test public void invitationsCannotExceedFiveMembersOrDuplicateMembership() {
-        var a=clan("Alpha");for(int i=0;i<4;i++)state.join(a,UUID.randomUUID(),5,1000);
-        assertEquals(5,a.members.size());
-        assertThrows(IllegalArgumentException.class,()->state.join(a,UUID.randomUUID(),5,1000));
-        var b=clan("Bravo");assertThrows(IllegalArgumentException.class,()->state.join(b,a.leader,5,1000));
+    @Test public void invitationsCannotExceedFourMembersOrDuplicateMembership() {
+        var a=clan("Alpha");for(int i=0;i<3;i++)state.join(a,UUID.randomUUID(),4,1000);
+        assertEquals(4,a.members.size());
+        assertThrows(IllegalArgumentException.class,()->state.join(a,UUID.randomUUID(),4,1000));
+        var b=clan("Bravo");assertThrows(IllegalArgumentException.class,()->state.join(b,a.leader,4,1000));
     }
     @Test public void namesAreBoundedUniqueAndCaseInsensitive() {
         clan("Alpha");assertThrows(IllegalArgumentException.class,()->clan("alpha"));
@@ -20,7 +20,7 @@ public class ClanStateTest {
         assertThrows(IllegalArgumentException.class,()->clan("ab"));
     }
     @Test public void fourClaimsMaximumIncludingAcrossWorlds() {
-        var a=clan("Alpha");for(int i=0;i<4;i++)state.claim(a,new ClanState.Chunk("world"+i,0,0),4,c->true);
+        var a=clan("Alpha");for(int i=0;i<4;i++)state.claims.put(new ClanState.Chunk("world"+i,0,0),a.id);
         assertThrows(IllegalArgumentException.class,()->state.claim(a,new ClanState.Chunk("fifth",0,0),4,c->true));
     }
     @Test public void rivalClaimsNeedOneWholeChunkIncludingDiagonalsAndNegativeCoordinates() {
@@ -36,6 +36,46 @@ public class ClanStateTest {
         var a=clan("Alpha");state.claim(a,new ClanState.Chunk("world",0,0),4,c->true);
         state.claim(a,new ClanState.Chunk("world",1,0),4,c->true);
         assertThrows(IllegalArgumentException.class,()->state.claim(a,new ClanState.Chunk("world",2,0),4,c->c.x()!=3));
+    }
+    @Test public void claimsRequireAnEdgeInTheSameWorldAfterTheFirst() {
+        for(int[] step:List.of(new int[]{1,0},new int[]{-1,0},new int[]{0,1},new int[]{0,-1})) {
+            var local=new ClanState();var a=local.create("Alpha",UUID.randomUUID(),0);
+            local.claim(a,new ClanState.Chunk("world",-4,-7),4,c->true);
+            local.claim(a,new ClanState.Chunk("world",-4+step[0],-7+step[1]),4,c->true);
+            assertEquals(2,local.claims.size());
+        }
+        var a=clan("Alpha");state.claim(a,new ClanState.Chunk("world",0,0),4,c->true);
+        for(var chunk:List.of(new ClanState.Chunk("world",1,1),new ClanState.Chunk("world",-1,-1),
+                new ClanState.Chunk("world",2,0),new ClanState.Chunk("other",1,0)))
+            assertThrows(IllegalArgumentException.class,()->state.claim(a,chunk,4,c->true));
+        assertEquals(1,state.claims.size());
+    }
+    @Test public void cardinalConnectedClaimsStillStopAtFour() {
+        var a=clan("Alpha");for(int x=0;x<4;x++)state.claim(a,new ClanState.Chunk("world",x,0),4,c->true);
+        assertThrows(IllegalArgumentException.class,()->state.claim(a,new ClanState.Chunk("world",4,0),4,c->true));
+    }
+    @Test public void unclaimCannotRemoveABridgeButEdgesAndLastChunkAreAllowed() {
+        var a=clan("Alpha");for(int x=0;x<3;x++)state.claim(a,new ClanState.Chunk("world",x,0),4,c->true);
+        assertThrows(IllegalArgumentException.class,()->state.unclaim(a,new ClanState.Chunk("world",1,0)));
+        assertEquals(3,state.claims.size());state.unclaim(a,new ClanState.Chunk("world",0,0));
+        state.unclaim(a,new ClanState.Chunk("world",1,0));state.unclaim(a,new ClanState.Chunk("world",2,0));assertTrue(state.claims.isEmpty());
+    }
+    @Test public void diagonalRemaindersDoNotCountAsConnectedAndSquaresCanLoseACorner() {
+        var a=clan("Alpha");for(var c:List.of(new ClanState.Chunk("world",0,0),new ClanState.Chunk("world",1,0),new ClanState.Chunk("world",1,1)))state.claim(a,c,4,ignored->true);
+        assertThrows(IllegalArgumentException.class,()->state.unclaim(a,new ClanState.Chunk("world",1,0)));
+        state.claim(a,new ClanState.Chunk("world",0,1),4,c->true);state.unclaim(a,new ClanState.Chunk("world",1,0));assertEquals(3,state.claims.size());
+    }
+    @Test public void grandfatheredIslandsMayShrinkOrGrowButCannotBeSplitFurther() {
+        var a=clan("Alpha");for(int x:List.of(0,1,2,10))state.claims.put(new ClanState.Chunk("world",x,0),a.id);
+        assertThrows(IllegalArgumentException.class,()->state.unclaim(a,new ClanState.Chunk("world",1,0)));
+        state.unclaim(a,new ClanState.Chunk("world",10,0));state.claim(a,new ClanState.Chunk("world",3,0),4,c->true);
+        assertEquals(4,state.claims.size());
+    }
+    @Test public void sequentialAcceptancesAndLegacyOverLimitClansCannotExceedFour() {
+        var a=clan("Alpha");for(int i=0;i<2;i++)state.join(a,UUID.randomUUID(),4,0);
+        state.join(a,UUID.randomUUID(),4,0);assertThrows(IllegalArgumentException.class,()->state.join(a,UUID.randomUUID(),4,0));
+        a.members.add(UUID.randomUUID());var retained=Set.copyOf(a.members);
+        assertThrows(IllegalArgumentException.class,()->state.join(a,UUID.randomUUID(),4,0));assertEquals(retained,a.members);
     }
     @Test public void pairwiseKillsAreAntisymmetricAndUnrelatedClansStayAtZero() {
         var a=clan("Alpha");var b=clan("Bravo");var c=clan("Charlie");
