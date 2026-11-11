@@ -39,3 +39,5 @@ abandonment: '<gold><clan> has been inactive for seven days. Its base at <locati
 reclaimed: '<yellow><clan> has disbanded. Its abandoned land is returning to wilderness.'
 raid-started: '<red><clan> has begun a one-hour raid against <rival>! Their warpoints reset to zero and are frozen for this raid.'
 raid-ended: '<yellow>The raid between <clan> and <rival> has ended. Warpoints can be earned again.'
+
+unprepared: '<yellow>This chunk has no completed frozen wilderness backup. Building and claiming are unavailable here.'

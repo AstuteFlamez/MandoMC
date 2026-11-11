@@ -81,9 +81,9 @@ public final class ClanCommands implements CommandExecutor, TabCompleter {
                 }
                 case "claim" -> {
                     length(args,1);var chunk=LandRestoration.chunk(p.getLocation());
-                    // Validate before preparing terrain; roll back the temporary in-memory validation claim.
+                    // Validate without allocating or refreshing a terrain snapshot.
                     state.claim(clan,chunk,clans.settings().chunks(),clans::wilderness);state.claims.remove(chunk);
-                    if(!clans.land().prepare(p.getWorld(),chunk.x(),chunk.z()))throw new IllegalArgumentException("preparing");
+                    if(!clans.land().supported(chunk)||!clans.land().ready(chunk))throw new IllegalArgumentException("unprepared");
                     state.claim(clan,chunk,clans.settings().chunks(),clans::wilderness);
                     clans.saved(p,"claimed","clan",clan.name);
                 }

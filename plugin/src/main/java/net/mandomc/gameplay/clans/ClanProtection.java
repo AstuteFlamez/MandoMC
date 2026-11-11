@@ -23,7 +23,7 @@ final class ClanProtection implements Listener {
         if(!clans.canEdit(p,block.getLocation())){p.sendActionBar(clans.message("protected"));return false;}
         if(p.getGameMode()!=GameMode.SURVIVAL)return true;
         if(!clans.land().prepare(block.getWorld(),block.getX()>>4,block.getZ()>>4)) {
-            p.sendActionBar(clans.message("preparing"));return false;
+            p.sendActionBar(clans.message("unprepared"));return false;
         }
         return true;
     }
@@ -31,21 +31,9 @@ final class ClanProtection implements Listener {
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void breakBlock(BlockBreakEvent e){if(!edit(e.getPlayer(),e.getBlock()))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void place(BlockPlaceEvent e){preparePlacement(e);if(!edit(e.getPlayer(),e.getBlock()))e.setCancelled(true);}
-    private void preparePlacement(BlockPlaceEvent e) {
-        if(e.getPlayer().getGameMode()!=GameMode.SURVIVAL)return;
-        List<BlockState> states=e instanceof BlockMultiPlaceEvent multi?multi.getReplacedBlockStates():List.of(e.getBlockReplacedState());
-        var groups=new HashMap<ClanState.Chunk,Map<Integer,String>>();
-        for(var state:states) {
-            if(!clans.canEdit(e.getPlayer(),state.getLocation()))continue;
-            int min=state.getWorld().getMinHeight();
-            groups.computeIfAbsent(LandRestoration.chunk(state.getBlock()),k->new HashMap<>()).put(
-                    (state.getY()-min)*256+(state.getZ()&15)*16+(state.getX()&15),state.getBlockData().getAsString());
-        }
-        groups.forEach((c,originals)->clans.land().prepare(e.getBlock().getWorld(),c.x(),c.z(),Map.copyOf(originals)));
-    }
+    public void place(BlockPlaceEvent e){if(!edit(e.getPlayer(),e.getBlock()))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void multi(BlockMultiPlaceEvent e){preparePlacement(e);for(var s:e.getReplacedBlockStates())if(!edit(e.getPlayer(),s.getBlock()))e.setCancelled(true);}
+    public void multi(BlockMultiPlaceEvent e){for(var s:e.getReplacedBlockStates())if(!edit(e.getPlayer(),s.getBlock()))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
     public void broke(BlockBreakEvent e){touch(e.getPlayer(),e.getBlock());}
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)

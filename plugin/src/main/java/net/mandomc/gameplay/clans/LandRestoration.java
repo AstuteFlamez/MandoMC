@@ -40,6 +40,7 @@ public final class LandRestoration implements AutoCloseable {
     private final Predicate<ClanState.Chunk> claimed;
     private final Map<ClanState.Chunk,Land> lands = new LinkedHashMap<>();
     private final BukkitTask task;
+    private Set<ClanState.Chunk> preparedScope = Set.of();
     private boolean failed;
     private volatile boolean closed;
 
@@ -75,13 +76,24 @@ public final class LandRestoration implements AutoCloseable {
     private Path path(ClanState.Chunk c) {
         return folder.resolve(c.world().replace(':','_').replace('/','_')+"_"+c.x()+"_"+c.z()+".gz");
     }
-    /** First attempt waits for the durable baseline. Retry after the preparation message. */
-    public boolean prepare(World world, int x, int z) { return prepare(world,x,z,Map.of()); }
+    /** Player actions only use durable originals; they never sample or refresh the world. */
+    public boolean prepare(World world, int x, int z) {
+        return ready(new ClanState.Chunk(world.getKey().toString(),x,z));
+    }
     public boolean prepare(World world, int x, int z, Map<Integer,String> originals) {
+        return prepare(world,x,z);
+    }
+    public void preparedScope(Set<ClanState.Chunk> chunks) { preparedScope = Set.copyOf(chunks); }
+    public boolean supported(ClanState.Chunk chunk) { return preparedScope.contains(chunk); }
+    public boolean failed() { return failed; }
+    public Path baselinePath(ClanState.Chunk chunk) { return path(chunk); }
+    /** Explicit batch preparation only. Caller must have loaded an existing chunk without generation. */
+    public boolean capture(World world, int x, int z) {
         var key=new ClanState.Chunk(world.getKey().toString(),x,z);
         var old=lands.get(key);
         if (failed) return false;
         if (old!=null) return old.ready && old.cursor==0 && !old.forced;
+        if (!preparedScope.contains(key) || !world.isChunkLoaded(x,z)) return false;
         var snapshot=world.getChunkAt(x,z).getChunkSnapshot(true,false,false);
         int min=world.getMinHeight(), max=world.getMaxHeight();
         // ChunkSnapshot is safe to read on the worker; no live world access occurs there.
@@ -91,7 +103,7 @@ public final class LandRestoration implements AutoCloseable {
             try {
                 var palette=new HashMap<String,String>();
                 for(int y=min;y<max;y++) for(int z1=0;z1<16;z1++) for(int x1=0;x1<16;x1++) {
-                    String data=originals.getOrDefault((y-min)*256+z1*16+x1,snapshot.getBlockData(x1,y,z1).getAsString());
+                    String data=snapshot.getBlockData(x1,y,z1).getAsString();
                     land.blocks[(y-min)*256+z1*16+x1]=palette.computeIfAbsent(data,k->k);
                 }
                 write(land,0,0,new BitSet());
