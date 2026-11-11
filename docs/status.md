@@ -1,6 +1,11 @@
 # Resume here
 Updated: 2026-11-10
 
+## Territory compatibility repair deployed (2026-11-11)
+The earlier HUD overlay used older TerritoryService source and dropped spawnNpc/approvedNpcSpawn/mechanisms despite retaining unrelated class bytes. A live NPC NoSuchMethodError exposed the missing public API during follow-on integration. Restored all original method bodies and NpcSpawn record; javap confirms the original public signatures are a subset of the repaired API. A dedicated Java API regression and127native tests cover actual one-use protected spawning, Ilum-only mechanisms and all HUD/claim/color behavior.
+
+Scoped2-class repair deployed on Beskarffc39d70, finalJAR9f6166f840484bb2a0c3f4b75d1870c847e2104dab5de307d2f2c692988fed48. Full stopped backup, zero config changes, no live probes; clean startup with no missing-method/errors. Live read-only smoke finds2Ilum mannequin NPCs and7gray Jawas; frozen1434completion and original hashes remain intact. Restart window released. **Next action:** finish role/menu integration against exact deployed Beskar protection sources, preserving these APIs.
+
 ## Connected claims and four members verified (2026-11-11)
 Cardinal adjacency in the same world is required after the first claim. Ordinary unclaim cannot increase connected components; grandfathered islands are preserved. `/c unclaimall` intentionally clears territory. Default/configured member limit becomes4, while claim cap stays4; existing over-limit members remain and no further joins are allowed. Invitation and acceptance checks share the live configured cap. Handbook changes only5players to4 in its existing11pages.208Java tests and50native command assertions pass, including stale invite competition, fourth accepted/fifth rejected, over-limit persistence, diagonal/cardinal/bridge rules, unclaimall and existing-guide refresh. Not deployed; role/menu follow-on now being implemented before combined rollout. No restart owned. **Next action:** add persistent roles and secure /c menu, validate migration/storage/permissions, then coordinate after Beskar window.
 
