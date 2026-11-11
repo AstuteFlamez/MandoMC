@@ -10,7 +10,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-/** Replaces successful native ore loot with catalog scraps, retaining native quantities, tools, XP and cancellation. */
+/** Replaces successful native ore loot with catalog scraps, using one final 1–5 roll while retaining native tools, Silk Touch, XP and cancellation. */
 public final class OreDrops implements Listener {
     private record Tool(UUID world, int x, int y, int z, boolean silk) {
         boolean matches(org.bukkit.block.Block block) { return world.equals(block.getWorld().getUID())
@@ -26,7 +26,7 @@ public final class OreDrops implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void tool(BlockBreakEvent event) {
         // Debris normally drops itself too; remember the actual tool before native durability can break it.
-        if (event.getBlock().getType() != Material.ANCIENT_DEBRIS) return;
+        if (!event.isDropItems() || event.getBlock().getType() != Material.ANCIENT_DEBRIS) return;
         var block = event.getBlock();
         tools.put(event.getPlayer().getUniqueId(), new Tool(block.getWorld().getUID(), block.getX(), block.getY(), block.getZ(),
                 event.getPlayer().getInventory().getItemInMainHand().containsEnchantment(Enchantment.SILK_TOUCH)));
@@ -46,9 +46,20 @@ public final class OreDrops implements Listener {
             if (silk) return;
             expected = Material.ANCIENT_DEBRIS; id = "beskar_scrap";
         } else return;
-        for (var entity : event.getItems()) {
-            var vanilla = entity.getItemStack(); if (vanilla.getType() != expected) continue;
-            var scrap = Objects.requireNonNull(items.create(id)); scrap.setAmount(vanilla.getAmount()); entity.setItemStack(scrap);
+        org.bukkit.entity.Item first = null;
+        for (var iterator = event.getItems().iterator(); iterator.hasNext();) {
+            var entity = iterator.next();
+            if (entity.getItemStack().getType() != expected) continue;
+            if (first == null) {
+                first = entity;
+                var scrap = Objects.requireNonNull(items.create(id));
+                scrap.setAmount(OreDropQuantity.roll(java.util.concurrent.ThreadLocalRandom.current()));
+                entity.setItemStack(scrap);
+            } else {
+                // Fortune can split native loot over several entities; it must not multiply this final roll.
+                iterator.remove();
+                entity.remove();
+            }
         }
     }
     public static boolean durasteelOre(Material material) { return material == Material.DIAMOND_ORE || material == Material.DEEPSLATE_DIAMOND_ORE; }

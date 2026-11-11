@@ -120,7 +120,7 @@ public final class ProgressionProbe extends JavaPlugin implements Listener {
         if (id!=null) {
             var loot=drops();check(!loot.isEmpty(),"native mining produced loot");
             check(loot.stream().allMatch(i -> id.equals(mando.items().identify(i.getItemStack()))),"all native material drops replaced exactly once");
-            check(loot.stream().mapToInt(i->i.getItemStack().getAmount()).sum()==nativeDiamonds,"scrap count equals native loot roll");
+            check(loot.size()==1 && loot.getFirst().getItemStack().getAmount()>=1 && loot.getFirst().getItemStack().getAmount()<=5,"one final 1–5 scrap stack regardless of native/Fortune quantity");
         }
     }
     private void recipes() {
@@ -307,7 +307,7 @@ public final class ProgressionProbe extends JavaPlugin implements Listener {
             Material right=ore==Material.ANCIENT_DEBRIS?Material.DIAMOND_PICKAXE:ore==Material.NETHER_GOLD_ORE?Material.WOODEN_PICKAXE:Material.STONE_PICKAXE;
             mine(ore,new ItemStack(right),id,false);
             check(nativeDiamonds>0,"native ordinary loot exists for "+ore);
-            check(ore!=Material.ANCIENT_DEBRIS||nativeDiamonds==1,"ordinary debris self-drop becomes one scrap, not mistaken for Silk Touch");
+            check(ore!=Material.ANCIENT_DEBRIS||nativeDiamonds==1,"ordinary debris native self-drop recognized without mistaking it for Silk Touch");
             for(int n=0;n<16;n++) {
                 var fortune=new ItemStack(right);fortune.addUnsafeEnchantment(Enchantment.FORTUNE,3);mine(ore,fortune,id,false);
                 int min=ore==Material.NETHER_GOLD_ORE?2:1,max=ore==Material.NETHER_GOLD_ORE?24:ore==Material.ANCIENT_DEBRIS?1:4;
