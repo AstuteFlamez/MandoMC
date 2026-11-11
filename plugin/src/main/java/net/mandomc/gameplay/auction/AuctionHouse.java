@@ -174,6 +174,16 @@ public final class AuctionHouse implements Listener, AutoCloseable {
         });
         return true;
     }
+    /** The GUI handoff removes its accepted stacks and updates its journal before this player-data save. */
+    public boolean sellDeposit(Player player, List<ItemStack> stacks, long price, Runnable handoff) {
+        if(!allowed(player) || stacks.isEmpty() || price<=0)return false;
+        UUID owner=player.getUniqueId();var receipt=receipts(player,escrow);var ids=new HashSet<UUID>();
+        for(var stack:stacks){var id=UUID.randomUUID();ids.add(id);receipt.put(id,encode(stack));}
+        receipts(player,escrow,receipt);handoff.run();player.saveData();
+        work(player,()->{credits.ledger().sellSupplies(owner,ids,price);return null;},online->
+                recover(online,p->p.sendMessage(text("supply-sold","price",CreditLedger.format(price)))));
+        return true;
+    }
     private void deliver(Player player, UUID id) { deliver(player, id, true); }
     private void deliver(Player player, UUID id, boolean showClaims) {
         var row = credits.ledger().auctions().claims().get(id);

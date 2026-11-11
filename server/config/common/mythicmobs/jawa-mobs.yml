@@ -65,3 +65,7 @@ JawaGray:
   Skills:
   - model{mid=jawa_black;h=false} @self ~onSpawn
   - model{mid=jawa_black;h=false} @self ~onLoad
+  - tint{mid=jawa_black;part=face;exactmatch=true;color=FF0000} @self ~onSpawn
+  - brightness{mid=jawa_black;part=face;block=15;sky=15} @self ~onSpawn
+  - tint{mid=jawa_black;part=face;exactmatch=true;color=FF0000} @self ~onLoad
+  - brightness{mid=jawa_black;part=face;block=15;sky=15} @self ~onLoad

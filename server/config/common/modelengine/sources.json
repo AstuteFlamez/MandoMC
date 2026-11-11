@@ -77,7 +77,7 @@
       "source": "ModelEngine/blueprints/jawa_black.bbmodel",
       "sha256": "a6d5c0f86e0f5dc4831f374bde97690c4d3ee3b9710c4d078a7e8ef40382a125",
       "destination": "server/config/common/modelengine/blueprints/jawa_black.bbmodel",
-      "changes": "Preserve original rig, embedded texture and keyframes. Strip local texture paths; enable animation override; attack/death finish once."
+      "changes": "Rebuilt with the working brown Jawa geometry, full bone hierarchy and unchanged animations. Preserve original gray robe atlas; use the brown face atlas on the restored face bone only. Runtime face-only red tint and full brightness produce red eyes without tinting the gray hood."
     }
   ]
 }

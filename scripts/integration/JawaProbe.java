@@ -87,18 +87,16 @@ public final class JawaProbe extends JavaPlugin {
     }
     private void sell(){
         buyer.getInventory().clear();buyer.getInventory().setItem(0,new ItemStack(Material.SAND,64));
-        mando.jawas().open(buyer,gray);check(buyer.getOpenInventory().getTopInventory().getSize()==36,"gray buyer opens resource menu");click(buyer,0);
+        mando.jawas().open(buyer,gray);check(buyer.getOpenInventory().getTopInventory().getSize()==36,"gray buyer opens deposit menu");depositSlot(0);click(buyer,31);
         later(30,()->{
             check(buyer.getInventory().isEmpty(),"sold bundle is removed exactly once");
             check(mando.credits().ledger().balance(buyer.getUniqueId())==balance+200,"gray buyer pays existing credit account");balance+=200;
-            mando.jawas().open(buyer,gray);click(buyer,0);later(5,()->{
+            mando.jawas().open(buyer,gray);click(buyer,31);later(5,()->{
                 check(mando.credits().ledger().balance(buyer.getUniqueId())==balance,"missing bundle cannot create credits");
-                var custom=mando.items().create("agrinium");custom.setAmount(8);buyer.getInventory().setItem(0,custom);
+                buyer.getInventory().setItem(0,new ItemStack(Material.IRON_INGOT,8));
                 mando.jawas().open(buyer,gray);
-                var menu=buyer.getOpenInventory().getTopInventory();int nativeIron=-1;
-                for(int i=0;i<28;i++){var stack=menu.getItem(i);if(stack!=null&&stack.getType()==Material.IRON_INGOT && mando.items().identify(stack)==null){nativeIron=i;break;}}
-                check(nativeIron<0,"gray buyer has no ordinary iron offer");
-                later(5,()->{check(mando.credits().ledger().balance(buyer.getUniqueId())==balance,"custom metal cannot be sold as ordinary iron");buyer.closeInventory();aggression();});
+                depositSlot(0);click(buyer,31);
+                later(5,()->{check(mando.credits().ledger().balance(buyer.getUniqueId())==balance,"plain iron cannot be sold through canonical resource buyback");buyer.closeInventory();aggression();});
             });
         });
     }
@@ -138,7 +136,11 @@ public final class JawaProbe extends JavaPlugin {
         check(guns>60&&guns<180,"actual Mythic death adapter preserves 12% blaster roll");check(cells>1300&&cells<1700,"actual Mythic death adapter preserves three 50% cell rolls");check(parts>=1000&&parts<=2000&&distinct.equals(pool),"actual deaths roll 1–2 genuine parts across the full electrical pool");
     }
     private Player actor(Location point)throws Exception{var p=nativeTestPlayer(world,point);actors.add(p);p.setGameMode(GameMode.SURVIVAL);var h=p.getClass().getMethod("getHandle").invoke(p);handles.put(p.getUniqueId(),h);worldPlayers.add(h);online.put(p.getUniqueId(),h);return p;}
-    private void click(Player player,int slot){if(!(player.getOpenInventory().getTopInventory().getHolder().getClass().getName().contains("JawaTraders")))return;var event=new InventoryClickEvent(player.getOpenInventory(),InventoryType.SlotType.CONTAINER,slot,ClickType.LEFT,InventoryAction.PICKUP_ALL);Bukkit.getPluginManager().callEvent(event);check(event.isCancelled(),"Jawa menu blocks inventory transfer");}
+    private void click(Player player,int slot){if(!(player.getOpenInventory().getTopInventory().getHolder().getClass().getName().contains("JawaTraders")) && !(player.getOpenInventory().getTopInventory().getHolder() instanceof net.mandomc.gameplay.jawa.JawaSellInventory.Tray))return;var event=new InventoryClickEvent(player.getOpenInventory(),InventoryType.SlotType.CONTAINER,slot,ClickType.LEFT,InventoryAction.PICKUP_ALL);Bukkit.getPluginManager().callEvent(event);check(event.isCancelled(),"Jawa menu blocks inventory transfer");}
+    private void depositSlot(int slot){
+        var view=buyer.getOpenInventory();int raw=-1;for(int i=36;i<72;i++)if(view.convertSlot(i)==slot){raw=i;break;}
+        var event=new InventoryClickEvent(view,InventoryType.SlotType.CONTAINER,raw,ClickType.SHIFT_LEFT,InventoryAction.MOVE_TO_OTHER_INVENTORY);Bukkit.getPluginManager().callEvent(event);check(event.isCancelled(),"deposit inventory controls transfers");
+    }
     private interface Check{void run()throws Exception;}
     private void later(long ticks,Check action){Bukkit.getScheduler().runTaskLater(this,()->{try{action.run();}catch(Throwable error){fail(error);}},ticks);}
     private void check(boolean value,String message){if(!value)throw new AssertionError(message);checks++;getLogger().info("PASS "+message);}

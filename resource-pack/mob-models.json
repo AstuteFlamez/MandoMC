@@ -261,6 +261,10 @@
       "sha256": "179f85d820deeda475aa9826029d6409d262a362964f0b0a9e64ccbe4a6e4192"
     },
     {
+      "path": "assets/modelengine/items/jawa_black/face.json",
+      "sha256": "bd32162b995a42ad3b35e9e9abe09ea8186d0b1746fe143fb08c034ee152181b"
+    },
+    {
       "path": "assets/modelengine/items/jawa_black/head.json",
       "sha256": "cdb53e34b244b3df21dd805f34071ad54642ee4549fa415db759ac015f742ebf"
     },
@@ -271,6 +275,10 @@
     {
       "path": "assets/modelengine/items/jawa_black/right_arm.json",
       "sha256": "e8a3f09fe86911097d7bcb3977a7d589a29589327cb5698f11e3aeccecc632f0"
+    },
+    {
+      "path": "assets/modelengine/items/jawa_black/tip.json",
+      "sha256": "9c6bb17cf36359650b5ecc09a9fc36874c032f61e503d5c1ceeb67ef2c308f1d"
     },
     {
       "path": "assets/modelengine/items/jawa_brown/blaster.json",
@@ -929,8 +937,12 @@
       "sha256": "abbdd6b7b5685ed714b1d5708906c2870c9a0364222070c68b87f16dac05cf4a"
     },
     {
+      "path": "assets/modelengine/models/jawa_black/face.json",
+      "sha256": "59c0b325a94ad107009f4886ec68f85cfe10dcd41305f96699abcc86d54edce3"
+    },
+    {
       "path": "assets/modelengine/models/jawa_black/head.json",
-      "sha256": "01150df367cdb1391cdf762f2104dbcadedf9889b4505d25dd8c4ce20dd187ac"
+      "sha256": "a05c6d9edd6fa9d97ed4d1ebd27600ff0d6a6b2a3276c0ce0ce6afec6da08a01"
     },
     {
       "path": "assets/modelengine/models/jawa_black/left_arm.json",
@@ -939,6 +951,10 @@
     {
       "path": "assets/modelengine/models/jawa_black/right_arm.json",
       "sha256": "cf1958dec4289e27cabe6e8852537db5393255a9adfba3992d55b50e9a4fb43b"
+    },
+    {
+      "path": "assets/modelengine/models/jawa_black/tip.json",
+      "sha256": "cecafc41223e3e4ade53f58eed40a179a4c13b1dd3027d39e991051416faf067"
     },
     {
       "path": "assets/modelengine/models/jawa_brown/blaster.json",
@@ -1310,6 +1326,10 @@
     },
     {
       "path": "assets/modelengine/textures/entity/models/jawa_brown.png",
+      "sha256": "7762f2fd5e10a72275f5b0c5e579710f23911428206d390044612939c328c66f"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/jawa_face.png",
       "sha256": "7762f2fd5e10a72275f5b0c5e579710f23911428206d390044612939c328c66f"
     },
     {

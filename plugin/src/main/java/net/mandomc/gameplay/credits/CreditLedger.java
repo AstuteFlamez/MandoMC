@@ -79,6 +79,15 @@ public final class CreditLedger {
         }
         save(updated, new net.mandomc.gameplay.auction.AuctionBook(auctions.listings(), claims, accepted));
     }
+    /** Every deposited stack is accepted in the same durable snapshot as the one total payout. */
+    public synchronized void sellSupplies(UUID owner, Set<UUID> receipts, long price) throws Exception {
+        validate(price);
+        if(price==0 || receipts.isEmpty() || !Collections.disjoint(auctions.accepted(),receipts))throw new IllegalArgumentException("stale");
+        if(balance(owner)>MAX-price)throw new IllegalArgumentException("limit");
+        var updated=new HashMap<>(balances);updated.put(owner,balance(owner)+price);
+        var accepted=new HashSet<>(auctions.accepted());accepted.addAll(receipts);
+        save(updated,new net.mandomc.gameplay.auction.AuctionBook(auctions.listings(),auctions.claims(),accepted));
+    }
     public synchronized void listAuction(net.mandomc.gameplay.auction.AuctionBook.Listing row, int limit, long now) throws Exception {
         validate(row.price());
         if (row.price() == 0 || row.expires() <= now) throw new IllegalArgumentException("amount");

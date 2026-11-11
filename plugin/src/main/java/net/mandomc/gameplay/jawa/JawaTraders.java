@@ -30,6 +30,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
     private final JawaSettings settings;
     private final JawaMobs vendor;
     private final ModelFacing facing;
+    private final JawaSellInventory buyer;
     private final NamespacedKey group, born, npc, paused;
     private final Map<String, UUID> anchors=new HashMap<>();
     private record Conversation(Mob entity, boolean hadAI, Set<UUID> viewers) { }
@@ -60,6 +61,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
             if(!config.isString("text."+key))throw new IllegalArgumentException("mobs/jawas.yml: missing text."+key);
         for(var offer:settings.supplies()) item(offer);
         for(var offer:settings.purchases()) item(offer);
+        buyer=new JawaSellInventory(plugin,config,settings,this::canTrade);
         Bukkit.getPluginManager().registerEvents(this,plugin);
         for(var world:Bukkit.getWorlds()) removeOrphans(world.getEntities());
         root.register("jawa","mandomc.admin.status",this::command,(s,a)->a.length==1?List.of("gray","brown","remove","status"):List.of());
@@ -89,6 +91,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
     public void open(Player player,LivingEntity entity) {
         boolean buying=brown(entity);
         if(!buying && !gray(entity))return;
+        if(!buying){buyer.open(player,entity);return;}
         if(!canTrade(player,entity))return;
         var menu=new Menu(player,entity,buying,text(buying?"brown-title":"gray-title"));
         var offers=buying?settings.stock(entity.getUniqueId().getMostSignificantBits()^entity.getUniqueId().getLeastSignificantBits()):settings.purchases();
@@ -346,7 +349,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
         player.sendMessage(text("usage"));
     }
     @Override public void close() {
-        population.cancel();idle.cancel();
+        population.cancel();idle.cancel();buyer.close();
         for(UUID id:List.copyOf(conversations.keySet()))endConversation(id);
         HandlerList.unregisterAll(this);
         for(var player:Bukkit.getOnlinePlayers())if(player.getOpenInventory().getTopInventory().getHolder() instanceof Menu)player.closeInventory();

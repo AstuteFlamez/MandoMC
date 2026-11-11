@@ -384,3 +384,27 @@ text:
     jawa status
   saving: <yellow>A Jawa placement is being saved. Try again in a moment.
   save-failed: <red>The Jawa placement could not be saved.
+  buyer-info-title: <gold>How to sell
+  buyer-info-lines:
+  - <gray>Place items in the empty slots above.
+  - <gray>Click <green>Sell items <gray>to confirm the sale.
+  - ''
+  - <gray>The total updates as you add items.
+  - <gray>Only items this Jawa buys are sold.
+  - <gray>Other items are returned unchanged.
+  - ''
+  - <gray>Closing this window cancels the sale
+  - <gray>and returns everything still inside.
+  - <gray>If your inventory is full, make room
+  - <gray>and speak to a buyer to collect returns.
+  buyer-sell: <green>Sell items <dark_gray>» <gold>$<price>
+  buyer-quote: <gray><count> sellable · <returned> to return
+  buyer-close: <red>Return items & close
+  buyer-empty: <yellow>Place items in the empty slots first.
+  buyer-mode: <red>Switch to Survival or Adventure to sell items.
+  buyer-pending: <yellow>Some returned items are saved. Make room and speak to a buyer
+    Jawa to collect them.
+  buyer-returned: <gray>Unsold items were returned to your inventory.
+  buyer-invalid: <yellow>This Jawa does not buy those items. They have been returned.
+  buyer-limit: <red>That sale exceeds the credit limit. Remove some items and try
+    again.
