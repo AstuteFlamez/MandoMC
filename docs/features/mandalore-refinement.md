@@ -29,3 +29,6 @@ Deployed pack resource-pack-26.1.2-ce6954e7809b (SHA-1 833cffaa161e9f1d24eb1684b
 
 ## Connected natural caves follow-up
 The user requested Tatooine-style natural caves on Mandalore. Six connected vaults and six descents are now deployed with a deepslate/tuff/basalt palette, retaining the existing event mine and arrival. Native verification passes 961,846 assertions. See [natural caves](mandalore-natural-caves.md).
+
+## Wilderness-cave rollback
+The user reversed the optional natural-cave expansion. Only that recorded delta is rolled back; the original event mine, arrival and builds remain. Native rollback passes 956,474 assertions and all 396 original fixtures retain saved light 15. See [rollback record](mandalore-natural-caves.md).
