@@ -1,5 +1,5 @@
 # Feature: Native clans, raids and land restoration
-Status: implemented; isolated Paper verification; shared-server integration pending
+Status: deployed; client playtest pending
 Branch: bilal/native-clans
 
 ## Player experience
@@ -34,5 +34,9 @@ Bootstrap adds the missing `crates.koth` definition to an existing crate file in
 ## Verification
 Unit tests cover membership/claim bounds, negative and diagonal spacing, full-height static protection, pairwise antisymmetry, unrelated clans, +10 eligibility, score reset, one-hour freeze, non-extension, fresh-score requirement, abandonment restrictions, disband cleanup, persistent homes/claims/activity/raids, weighted crate boundaries and invalid definitions. 194 Java tests pass. The disposable Paper probe passes 48 native assertions covering actual listener ordering, claim edit denials, real explosion lists, temporary-journal exclusion, friendly fire, public loot, inactivity, KOTH clan continuity and key delivery, terrain restoration and lifecycle persistence. It never edits the shared server. See `scripts/build-clan-probe.sh` and `scripts/integration/ClanFeatureProbe.java`.
 
-## Pause note
-No live server change or restart window is owned yet. The user authorized deployment and direct Ilum/map coordination. Combined source merges the frozen Tatooine additional atlas, ambient-only encounter restriction, and world settings, while keeping palace event spawns valid. Next action: rebase the tested overlay on Ilum's final deployed engine, apply the scoped road patch during a backed-up stop, verify native smoke checks, remove probes and reopen for two-clan testing.
+## Deployment and next check
+Deployed 2026-11-10; normal restart 18:59:53 America/Chicago. JAR `07636182f76597df288b72a216a44f6ef3ad62bd759c7b4a702826802da54e50` overlays final Ilum `0ec9524b7835223a83f346b133af707db6960e10d3c382bce2aaf783f5f792d5`, preserving its bootstrap, crate engine, Jawa/recipe entries and pack properties. 194 Java tests, 1,081 combined rehearsal assertions and 1,049 read-only live clan assertions pass, alongside 42,303 live Tatooine assertions. Both verification plugins were removed; no actors or clans were created by live smoke checks. Full stopped backups and private receipts are retained. The coordinated restart window is released.
+
+The frozen Tatooine policy/encounter work derives from the map branch (0232948/d2fe3de); the final shared crate source derives from Ilum 9485dec. The scoped live road delta changed 929 blocks, preserved manual palace work and passed native geometry/lighting/mob checks. The map owner independently confirmed saved road/light persistence after the final restart.
+
+Next action: two players use Survival to test membership/claims, friendly fire, clan KOTH capture and its one random present-member key with public announcement; then opposing clans test ten net kills and explosive breach rights. KOTH is running on Hoth; `/crates preview koth` shows the material reward pool.

@@ -96,6 +96,19 @@ public final class ClanDeploymentProbe extends JavaPlugin {
         }
         command(a,"claim");command(b,"claim");
         check(clans.owner(a.getLocation())==alpha&&clans.owner(b.getLocation())==bravo,"Claim commands execute");
+        command(a,"sethome");check(clans.home(alpha)!=null,"Safe claimed clan home");
+        world.getBlockAt(2,69,2).setType(Material.MAGMA_BLOCK,false);
+        check(clans.home(alpha)==null,"Hazardous clan home rejected");world.getBlockAt(2,69,2).setType(Material.STONE,false);
+        var fallback=new Location(world,100,70,100);
+        var respawn=new org.bukkit.event.player.PlayerRespawnEvent(a,fallback,false,false,false,
+                org.bukkit.event.player.PlayerRespawnEvent.RespawnReason.DEATH);
+        clans.respawn(respawn);check(respawn.getRespawnLocation().distanceSquared(a.getLocation())<.01,"Clan home respawn priority");
+        var escrow=new NamespacedKey("mandomc","ilum_inventory");
+        a.getPersistentDataContainer().set(escrow,org.bukkit.persistence.PersistentDataType.BYTE_ARRAY,new byte[]{1});
+        respawn=new org.bukkit.event.player.PlayerRespawnEvent(a,fallback,false,false,false,
+                org.bukkit.event.player.PlayerRespawnEvent.RespawnReason.DEATH);
+        clans.respawn(respawn);check(respawn.getRespawnLocation().equals(fallback),"Ilum inventory escrow retains checkpoint respawn");
+        a.getPersistentDataContainer().remove(escrow);
         var wall=world.getBlockAt(34,70,2);wall.setType(Material.STONE,false);
         var breaking=new BlockBreakEvent(wall,a);Bukkit.getPluginManager().callEvent(breaking);check(breaking.isCancelled(),"Rival edits denied with all deployed listeners");
         check(!clans.canContainer(mate,wall.getLocation()),"Non-raider container denial");
@@ -135,13 +148,18 @@ public final class ClanDeploymentProbe extends JavaPlugin {
         var result="CLAN DEPLOYMENT PASSED: "+checks+" native assertions\n";
         Files.createDirectories(getDataFolder().toPath());Files.writeString(getDataFolder().toPath().resolve("PASSED.txt"),result);
         getLogger().info(result);cleanup();
-        if(getServer().getPort()==25589)later(40,()->{
+        if(getServer().getPort()==25589)awaitPeerChecker(0);
+    }
+    private void awaitPeerChecker(int attempts) {
+        later(10,()->{
             var checker=Bukkit.getPluginManager().getPlugin("TatooineAccessCheck");
-            if(checker!=null&&!new java.io.File(checker.getDataFolder(),"PASSED.txt").isFile())
-                throw new IllegalStateException("Tatooine checker did not pass");
-            Bukkit.shutdown();
+            if(checker==null||new java.io.File(checker.getDataFolder(),"PASSED.txt").isFile()) { Bukkit.shutdown();return; }
+            if(new java.io.File(checker.getDataFolder(),"FAILED.txt").isFile())throw new IllegalStateException("Tatooine checker failed");
+            if(attempts>=40)throw new IllegalStateException("Tatooine checker timed out");
+            awaitPeerChecker(attempts+1);
         });
     }
+
     private void fail(Throwable error){
         getLogger().log(java.util.logging.Level.SEVERE,"CLAN DEPLOYMENT FAILED",error);
         try{Files.createDirectories(getDataFolder().toPath());Files.writeString(getDataFolder().toPath().resolve("FAILED.txt"),error.toString());}catch(Exception ignored){}

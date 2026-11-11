@@ -36,7 +36,8 @@ public final class ClanService implements Listener, AutoCloseable {
         this.plugin=plugin;this.territory=territory;this.language=language;settings=ClanSettings.read(config);
         path=plugin.getDataFolder().toPath().resolve("data/clans.yml");
         state=ClanStorage.load(path);
-        land=new LandRestoration(plugin,io,settings.resetMillis(),settings.restoreBudget(),c->state.owner(c)!=null);
+        land=new LandRestoration(plugin,io,settings.resetMillis(),settings.restoreBudget(),
+                c->state.owner(c)!=null||!territory.policy().wildernessChunk(c.world(),c.x(),c.z()));
         for(var chunk:state.claims.keySet())if(!land.hasBaseline(chunk))
             throw new IllegalStateException("Claim has no original terrain baseline: "+chunk);
         Bukkit.getServicesManager().register(ClanService.class,this,plugin,ServicePriority.Normal);

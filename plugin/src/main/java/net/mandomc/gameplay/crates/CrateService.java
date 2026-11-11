@@ -367,7 +367,9 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
         if (!(event.getWhoClicked() instanceof Player player) || event.isShiftClick() || !event.isLeftClick()) return;
         if (event.getRawSlot()!=menu.inventory().getSize()-5) return;
         Bukkit.getScheduler().runTask(plugin,()->{
-            if (menus.get(player.getUniqueId())!=menu) return;
+            var current=menus.get(player.getUniqueId());
+            if(current==null||!current.inventory().equals(menu.inventory())
+                    ||!java.util.Objects.equals(current.transaction(),menu.transaction()))return;
             if (menu.rolling()) { menus.remove(player.getUniqueId()); player.closeInventory();finishTransaction(player,menu.transaction()); }
             else open(player,menu.crate());
         });
