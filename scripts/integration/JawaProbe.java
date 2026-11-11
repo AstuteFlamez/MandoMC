@@ -71,7 +71,7 @@ public final class JawaProbe extends JavaPlugin {
             check(group.getFirst().hasAI() && !group.getFirst().getPersistentDataContainer().has(marker),"saved conversation pause recovers after chunk/server reload");
             mando.jawas().open(buyer,group.getFirst());stale=buyer.getOpenInventory();
         }catch(Exception error){throw new IllegalStateException(error);}
-        check(stale.getTopInventory().getItem(30).getType()==Material.GRAY_STAINED_GLASS_PANE && stale.getTopInventory().getItem(30).getItemMeta().isHideTooltip(),"unused menu slots use protected hidden filler");
+        check(stale.getTopInventory().getItem(29).getType()==Material.GRAY_STAINED_GLASS_PANE && stale.getTopInventory().getItem(29).getItemMeta().isHideTooltip(),"unused menu slots use protected hidden filler");
         var preview=stale.getTopInventory().getItem(0);var offer=mando.jawas().settings().stock(group.getFirst().getUniqueId().getMostSignificantBits()^group.getFirst().getUniqueId().getLeastSignificantBits()).getFirst();
         bought=new ItemStack(preview.getType(),offer.amount());balance=100000-offer.price();
         var shift=new InventoryClickEvent(stale,InventoryType.SlotType.CONTAINER,0,ClickType.SHIFT_LEFT,InventoryAction.MOVE_TO_OTHER_INVENTORY);Bukkit.getPluginManager().callEvent(shift);check(shift.isCancelled(),"shift transfer cannot extract shop previews");

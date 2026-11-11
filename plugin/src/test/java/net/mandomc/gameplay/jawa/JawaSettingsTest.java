@@ -6,12 +6,25 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 public class JawaSettingsTest {
     private YamlConfiguration config(){return YamlConfiguration.loadConfiguration(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/mobs/jawas.yml"))));}
-    @Test public void stockStaysStablePerJawaAndDifferentJawaCanCarryDifferentSupplies(){
-        var settings=JawaSettings.read(config());assertEquals(settings.stock(7),settings.stock(7));
-        assertEquals(6,new HashSet<>(settings.stock(7)).size());assertNotEquals(settings.stock(7),settings.stock(8));
+    @Test public void eachJawaGetsOneCompleteStableCategory(){
+        var settings=JawaSettings.read(config());var random=new Random(17);var seen=new HashSet<String>();
+        for(int i=0;i<1000;i++) {
+            long seed=random.nextLong();var category=settings.category(seed);seen.add(category.id());
+            assertEquals(category.offers(),settings.stock(seed));assertEquals(settings.stock(seed),settings.stock(seed));
+            assertEquals(category.offers().size(),new HashSet<>(settings.stock(seed)).size());
+        }
+        assertEquals(settings.categories().size(),seen.size());
+        var all=settings.categories().stream().flatMap(c->c.offers().stream()).toList();
+        assertEquals(settings.supplies().size(),all.size());assertEquals(new HashSet<>(settings.supplies()),new HashSet<>(all));
+    }
+    @Test public void incompleteUnknownAndDuplicateCategoryAssignmentsAreRejected(){
+        for(List<String> ids:List.of(List.<String>of(),List.of("not_an_offer"),List.of("oak","oak"),List.of("wheat_seeds"))){
+            var config=config();config.set("shop.categories.saplings.items",ids);assertThrows(IllegalArgumentException.class,()->JawaSettings.read(config));
+        }
+        var config=config();config.set("shop.categories.end",null);assertThrows(IllegalArgumentException.class,()->JawaSettings.read(config));
     }
     @Test public void invalidPopulationAndPricesFailBeforeSpawning(){
-        for(String path:List.of("spawning.group-max","spawning.world-cap","spawning.min-distance","shop.offers-per-jawa")){
+        for(String path:List.of("spawning.group-max","spawning.world-cap","spawning.min-distance")){
             var config=config();config.set(path,0);assertThrows(IllegalArgumentException.class,()->JawaSettings.read(config));
         }
         var config=config();config.set("shop.supplies.oak.price","-1");assertThrows(IllegalArgumentException.class,()->JawaSettings.read(config));

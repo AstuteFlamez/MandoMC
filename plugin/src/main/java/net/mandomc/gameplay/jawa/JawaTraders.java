@@ -31,7 +31,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
     private final JawaMobs vendor;
     private final ModelFacing facing;
     private final JawaSellInventory buyer;
-    private final NamespacedKey group, born, npc, paused;
+    private final NamespacedKey group, born, npc, paused, categoryKey;
     private final Map<String, UUID> anchors=new HashMap<>();
     private record Conversation(Mob entity, boolean hadAI, Set<UUID> viewers) { }
     private final Map<UUID,Conversation> conversations=new HashMap<>();
@@ -56,7 +56,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
         }
         settings=JawaSettings.read(config);
         vendor=new JawaMobs();facing=new ModelFacing();
-        group=new NamespacedKey(plugin,"jawa_group_v1");born=new NamespacedKey(plugin,"jawa_born_v1");npc=new NamespacedKey(plugin,"jawa_npc_v1");paused=new NamespacedKey(plugin,"jawa_conversation_ai_v1");
+        group=new NamespacedKey(plugin,"jawa_group_v1");born=new NamespacedKey(plugin,"jawa_born_v1");npc=new NamespacedKey(plugin,"jawa_npc_v1");paused=new NamespacedKey(plugin,"jawa_conversation_ai_v1");categoryKey=new NamespacedKey(plugin,"jawa_category_v1");
         for(String key:List.of("brown-title","gray-title","buy-price","sell-price","buy-hint","sell-hint","balance","too-far","angry","missing-items","inventory-full","placed","usage"))
             if(!config.isString("text."+key))throw new IllegalArgumentException("mobs/jawas.yml: missing text."+key);
         for(var offer:settings.supplies()) item(offer);
@@ -88,13 +88,24 @@ public final class JawaTraders implements Listener, AutoCloseable {
         if(result==null || offer.amount()>result.getMaxStackSize())throw new IllegalArgumentException("Invalid Jawa bundle: "+offer.id());
         result.setAmount(offer.amount());return result;
     }
+    /** Persist the chosen category so catalog ordering changes cannot reroll a living trader. */
+    public JawaSettings.Category category(LivingEntity entity) {
+        String id=entity.getPersistentDataContainer().get(categoryKey,PersistentDataType.STRING);
+        var selected=id==null?null:settings.category(id);
+        if(selected==null) {
+            selected=settings.category(entity.getUniqueId().getMostSignificantBits()^entity.getUniqueId().getLeastSignificantBits());
+            entity.getPersistentDataContainer().set(categoryKey,PersistentDataType.STRING,selected.id());
+        }
+        return selected;
+    }
     public void open(Player player,LivingEntity entity) {
         boolean buying=brown(entity);
         if(!buying && !gray(entity))return;
         if(!buying){buyer.open(player,entity);return;}
         if(!canTrade(player,entity))return;
-        var menu=new Menu(player,entity,buying,text(buying?"brown-title":"gray-title"));
-        var offers=buying?settings.stock(entity.getUniqueId().getMostSignificantBits()^entity.getUniqueId().getLeastSignificantBits()):settings.purchases();
+        var category=category(entity);
+        var menu=new Menu(player,entity,true,text("brown-title","category",category.name()));
+        var offers=category.offers();
         for(int i=0;i<offers.size();i++) {
             var offer=offers.get(i);var preview=item(offer);var meta=preview.getItemMeta();
             var lore=new ArrayList<Component>(meta.hasLore()?meta.lore():List.of());lore.add(Component.empty());
@@ -102,6 +113,9 @@ public final class JawaTraders implements Listener, AutoCloseable {
             lore.add(text(buying?"buy-hint":"sell-hint"));meta.lore(lore);preview.setItemMeta(meta);
             menu.inventory.setItem(i,preview);menu.offers.put(i,offer);
         }
+        var info=new ItemStack(Material.BOOK);var infoMeta=info.getItemMeta();
+        infoMeta.displayName(text("category-title","category",category.name()));
+        infoMeta.lore(List.of(text("category-info","category",category.name())));info.setItemMeta(infoMeta);menu.inventory.setItem(30,info);
         var balance=new ItemStack(Material.GOLD_NUGGET);var meta=balance.getItemMeta();
         meta.displayName(text("balance","balance",CreditLedger.format(plugin.credits().ledger().balance(player.getUniqueId()))));balance.setItemMeta(meta);
         menu.inventory.setItem(31,balance);player.openInventory(menu.inventory);
@@ -220,6 +234,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
                 if(entity==null || !entity.isValid())throw new IllegalStateException("Jawa spawn denied");
                 created.add(entity);entity.getPersistentDataContainer().set(group,PersistentDataType.STRING,id);
                 entity.getPersistentDataContainer().set(born,PersistentDataType.LONG,System.currentTimeMillis());
+                category(entity);
             }
             return List.copyOf(created);
         }catch(RuntimeException error){created.forEach(vendor.access()::remove);throw error;}

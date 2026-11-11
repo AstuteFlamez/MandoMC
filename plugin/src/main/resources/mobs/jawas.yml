@@ -11,7 +11,6 @@ spawning:
   max-distance: 64
   lifetime-seconds: 1200
 shop:
-  offers-per-jawa: 6
   supplies:
     oak:
       item: minecraft:oak_sapling
@@ -366,9 +365,95 @@ shop:
       item: makeshift_recoil_buffer
       amount: 1
       price: '4'
+  categories:
+    saplings:
+      name: Saplings & plants
+      items:
+      - oak
+      - spruce
+      - birch
+      - jungle
+      - acacia
+      - dark_oak
+      - cherry
+      - pale_oak
+      - mangrove_propagule
+      - bamboo
+    farming:
+      name: Farming starters
+      items:
+      - wheat_seeds
+      - beetroot_seeds
+      - carrot
+      - potato
+      - melon_seeds
+      - pumpkin_seeds
+      - sugar_cane
+      - cocoa_beans
+      - dirt
+      - grass_block
+      - mud
+    greenery:
+      name: Greenery & dyes
+      items:
+      - moss_block
+      - vine
+      - lily_pad
+      - glow_berries
+      - azalea
+      - small_dripleaf
+      - dandelion
+      - poppy
+      - blue_orchid
+      - allium
+    ocean:
+      name: Ocean materials
+      items:
+      - prismarine
+      - sea_lantern
+      - sponge
+      - tube_coral_block
+      - sea_pickle
+      - kelp
+    nether:
+      name: Nether supplies
+      items:
+      - quartz
+      - glowstone
+      - blackstone
+      - basalt
+      - soul_sand
+      - magma_block
+      - crimson_nylium
+      - warped_nylium
+      - crimson_fungus
+      - warped_fungus
+      - shroomlight
+    end:
+      name: End materials
+      items:
+      - end_stone
+      - purpur_block
+      - chorus_flower
+    utility:
+      name: Utility supplies
+      items:
+      - slime_ball
+      - string
+      - leather
+      - feather
+      - bone
+      - ink_sac
+    minerals:
+      name: Mineral supplies
+      items:
+      - redstone
+      - lapis_lazuli
+      - gold_ingot
+      - copper_ingot
 npcs: {}
 text:
-  brown-title: <gold>Jawa offworld supplies
+  brown-title: <gold>Jawa · <category>
   gray-title: <gray>Jawa salvage buyer
   buy-price: <gray>Buy <white><amount> <gray>for <gold>$<price>
   sell-price: <gray>Sell <white><amount> <gray>for <gold>$<price>
@@ -408,3 +493,5 @@ text:
   buyer-invalid: <yellow>This Jawa does not buy those items. They have been returned.
   buyer-limit: <red>That sale exceeds the credit limit. Remove some items and try
     again.
+  category-title: <gold><category>
+  category-info: <gray>This Jawa sells the complete <category> selection.
