@@ -1,5 +1,10 @@
 # Resume here
-Updated: 2026-11-10
+Updated: 2026-11-11
+
+## Crate destination hidden from warp menu (2026-11-11)
+On `bilal/legacy-ilum-crates`, menu visibility is separate from destination availability. Crates default to hidden, explicitly configured by `warps.crates.show-in-menu: false`; `/warp crate` and `/warp crates` remain available with the exact saved position/facing and existing travel policy. The five planet entries retain their original slots. Crate containers, holograms, keys, Ilum completion and unrelated services are unchanged.
+
+183 Java tests and 212 isolated native assertions passed, including the actual inventory GUI, both direct warp commands and exact facing. The scoped deployment replaces only `WarpService.class` plus one live config visibility flag. Awaiting the active recipe/Jawa restart windows; no live changes yet. Next action: deploy in the next clear coordinated window and verify the live menu binding before removing the checker.
 
 ## User-selected crate area and normal spawn return (2026-11-10)
 On `bilal/legacy-ilum-crates`, saved AstuteFlamez's live location before movement: `minecraft:spawnworld`, (-32.522060072695176, 96, 16.540950565404483), yaw -89.548004, pitch 0.59998304. `/warp crate` and `/warp crates` share that exact validated destination/facing, with the existing travel policy. Per the user's correction, Ilum completion now uses the same destination as `/spawn`; leaving/recovery remains unchanged. The user's Kyber crate at (-24,97,20) and KOTH crate at (-19,97,14) remain; only the original Kyber container/binding at (3,93,-16) is removed. Existing/new crate holograms refresh with zero-alpha backgrounds, unchanged text/placement and retained shadows.

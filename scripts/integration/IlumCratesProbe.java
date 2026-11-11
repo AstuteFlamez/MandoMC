@@ -53,6 +53,8 @@ public final class IlumCratesProbe extends JavaPlugin implements Listener {
         check(crateWarp.getWorld()==spawn&&Math.abs(crateWarp.getX()+32.522060072695176)<1e-10&&crateWarp.getY()==96&&Math.abs(crateWarp.getZ()-16.540950565404483)<1e-10,"Exact captured crate warp position");
         check(Math.abs(crateWarp.getYaw()+89.548004f)<.00001&&Math.abs(crateWarp.getPitch()-.59998304f)<.00001,"Exact captured crate warp facing");
         check("crates".equals(net.mandomc.gameplay.travel.WarpService.canonical("crate"))&&"crates".equals(net.mandomc.gameplay.travel.WarpService.canonical("crates")),"Both crate warp aliases resolve");
+        var menuField=mando.warps().getClass().getDeclaredField("slots");menuField.setAccessible(true);
+        check(new HashSet<>(((Map<?,?>)menuField.get(mando.warps())).values()).equals(Set.of("spawn","hoth","tatooine","mandalore","ilum")),"Warp menu retains all planets and excludes crates");
         check(mando.warps().destination("ilum").getWorld()==world,"Public Ilum warp resolves original world");
         check(mando.warps().destination("mandalore").getWorld().getKey().getKey().equals("mandalore_review"),"Existing Mandalore route preserved");
         for(String command:List.of("crates","parkour","parkourfinish","c","auctionhouse","warp"))check(mando.getCommand(command)!=null,"Command preserved/registered "+command);
@@ -98,6 +100,10 @@ public final class IlumCratesProbe extends JavaPlugin implements Listener {
         check(alice.getWorld()==destination.getWorld()&&alice.getLocation().distanceSquared(destination)<.1,"Completion returns to the actual spawn command destination");
         check(alice.getPersistentDataContainer().has(new NamespacedKey("mandomc","ilum_last_key"),PersistentDataType.LONG),"Completion cooldown persisted");
         check(crates.keys(alice,crates.definitions().get("kyber"))==1,"Successful run awards one physical key");
+        mando.warps().open(alice);
+        var menu=alice.getOpenInventory().getTopInventory();
+        check(menu.getItem(24).getType()==Material.GRAY_STAINED_GLASS_PANE&&List.of(20,28,32,39,43).stream().allMatch(slot->menu.getItem(slot).getType()==Material.STICK),"Actual warp GUI replaces only crate entry with filler");
+        alice.closeInventory();
         for(String alias:List.of("crate","crates")){
             Bukkit.dispatchCommand(alice,"warp "+alias);
             var target=mando.warps().destination("crates");

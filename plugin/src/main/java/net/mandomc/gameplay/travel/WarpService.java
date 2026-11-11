@@ -46,7 +46,8 @@ public final class WarpService implements Listener, AutoCloseable {
         for(String id:section.getKeys(false)) {
             int slot=config.getInt("warps."+id+".slot",-1);
             Material material=Material.matchMaterial(config.getString("warps."+id+".material",""));
-            if(slot<0 || slot>=size || slots.put(slot,id)!=null || material==null || !material.isItem() || material.isAir())
+            boolean visible=config.getBoolean("warps."+id+".show-in-menu",!id.equals("crates"));
+            if(slot<0 || slot>=size || (visible&&slots.put(slot,id)!=null) || material==null || !material.isItem() || material.isAir())
                 throw new IllegalArgumentException("travel/warps.yml: invalid/duplicate slot or material for "+id);
             String model=config.getString("warps."+id+".item-model","");
             if(!model.isEmpty() && org.bukkit.NamespacedKey.fromString(model)==null) throw new IllegalArgumentException("travel/warps.yml: missing/invalid item-model for "+id);
@@ -64,7 +65,7 @@ public final class WarpService implements Listener, AutoCloseable {
             return true;
         });
         command.setTabCompleter((sender,ignored,label,args)->args.length==1
-                ?List.of("batuu","hoth","tatooine","mandalore","ilum","crate","crates").stream().filter(id->slots.containsValue(canonical(id)))
+                ?List.of("batuu","hoth","tatooine","mandalore","ilum","crate","crates").stream().filter(id->configured(canonical(id)))
                     .filter(id->id.startsWith(args[0].toLowerCase(Locale.ROOT))).toList():List.of());
         plugin.getServer().getPluginManager().registerEvents(this,plugin);
     }
@@ -85,6 +86,7 @@ public final class WarpService implements Listener, AutoCloseable {
     }
     private Component text(String path) {return MiniMessage.miniMessage().deserialize(config.getString(path)).decoration(TextDecoration.ITALIC,false);}
     private Component message(String key) {return text("messages."+key);}
+    private boolean configured(String id) {return config.isConfigurationSection("warps."+id);}
     public Location destination(String id) {
         return switch(id) {case "spawn"->arrivals.spawn();case "hoth"->arrivals.protectedWorld("minecraft:hoth");
             case "tatooine"->arrivals.adventureWorld("minecraft:tatooine");
@@ -104,7 +106,7 @@ public final class WarpService implements Listener, AutoCloseable {
     }
     public boolean request(Player player,String input) {
         String id=canonical(input);
-        if(id==null || !slots.containsValue(id)) {player.sendMessage(message("unknown"));return false;}
+        if(id==null || !configured(id)) {player.sendMessage(message("unknown"));return false;}
         if(!player.hasPermission("mandomc.travel.warp")) {player.sendMessage(message("unavailable"));return false;}
         return travel.request(player,()->destination(id));
     }

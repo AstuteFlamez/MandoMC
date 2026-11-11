@@ -146,3 +146,16 @@ exact yaw/pitch, NPC finish to spawn, selected container preservation, old conta
 holograms' zero-alpha background with retained text shadows. 34 live assertions passed; checker removed and normal server restarted cleanly.
 Deployed SHA-256 `6947e5499e5cc381f4fa9ad85011f5534b28905f0cb236c9a61ef35d71e766e8`.
 Next action: player client review of `/warp crates` and the refreshed holograms.
+
+## Warp menu visibility (2026-11-11)
+
+The user requested removing crates from the Galaxy Map menu only. WarpService separates configured
+destinations from visible slots: `show-in-menu` defaults to false for crates, true for planets. Direct
+`/warp crate` and `/warp crates` requests and tab completion use configured destinations; menu rendering
+and clicks use visible slots. All five planet entries retain their slots. The saved crate location/facing,
+crate containers and holograms remain unchanged.
+
+183 Java tests and 212 native checks pass, including the actual menu inventory and both command
+aliases. Deployment is pending the coordinated recipe/Jawa window. The `--warp-menu` overlay replaces
+only WarpService.class; `deploy-warp-menu.py` verifies that exact class against the native-tested one
+and preserves every unrelated live JAR entry/config value.
