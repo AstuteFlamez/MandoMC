@@ -11,7 +11,7 @@ JawaVoice3:
   Skills:
   - sound{s=mandomc:mobs.jawa3;v=2;p=1} @self
 JawaAttack:
-  Cooldown: 3
+  Cooldown: 2.5
   Conditions:
   - incombat true
   TargetConditions:

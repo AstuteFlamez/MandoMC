@@ -40,6 +40,7 @@ public record JawaSettings(List<String> worlds, int interval, int cap, int minim
             categories.add(new Category(id,name,members));
         }
         if(categories.isEmpty() || !assigned.equals(byId.keySet()))throw new IllegalArgumentException("mobs/jawas.yml: every supply must belong to exactly one category");
+        if(maximum>categories.size())throw new IllegalArgumentException("mobs/jawas.yml: group-max exceeds category count; each group member needs a different category");
         int offers=categories.stream().mapToInt(c->c.offers().size()).max().orElseThrow();
         return new JawaSettings(List.copyOf(worlds),interval,cap,minimum,maximum,near,far,lifetime,offers,supplies,purchases,List.copyOf(categories));
     }

@@ -23,7 +23,7 @@ import org.bukkit.inventory.*;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
 
-/** Encounter placement, neutral group policy and NPC shops. Mythic owns rig, locomotion and blaster attacks. */
+/** Encounter placement, neutral group policy and NPC shops. Mythic owns rig, locomotion and the blaster attack pose. */
 public final class JawaTraders implements Listener, AutoCloseable {
     private final MandoPlugin plugin;
     private final YamlConfiguration config;
@@ -31,6 +31,14 @@ public final class JawaTraders implements Listener, AutoCloseable {
     private final JawaMobs vendor;
     private final ModelFacing facing;
     private final JawaSellInventory buyer;
+    private final JawaCategoryGroups categoryGroups;
+    private final Set<String> pendingGroups=new HashSet<>(), failedGroups=new HashSet<>();
+    private final Map<UUID,Mob> combatants=new HashMap<>();
+    private final JawaAttackClock attackClock;
+    private final JawaIonization ionization;
+    private final net.mandomc.integrations.weapons.IonizationHits ionizationHits;
+    public JawaIonization ionization(){return ionization;}
+    private final BukkitTask attackTask;
     private final NamespacedKey group, born, npc, paused, categoryKey;
     private final Map<String, UUID> anchors=new HashMap<>();
     private record Conversation(Mob entity, boolean hadAI, Set<UUID> viewers) { }
@@ -39,6 +47,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
     private final BukkitTask population, idle;
     private boolean healthy=true;
     private boolean placing;
+    private boolean reconcileScheduled;
     private int clock;
     private static final class Menu implements InventoryHolder {
         final UUID viewer, jawa; final boolean buying; final Inventory inventory;
@@ -56,17 +65,23 @@ public final class JawaTraders implements Listener, AutoCloseable {
         }
         settings=JawaSettings.read(config);
         vendor=new JawaMobs();facing=new ModelFacing();
+        categoryGroups=new JawaCategoryGroups(plugin.getDataFolder().toPath().resolve("data/jawa-category-groups.yml"));
+        attackClock=new JawaAttackClock(JawaAttackClock.Settings.read(Objects.requireNonNull(config.getConfigurationSection("combat-timing"))),random);
         group=new NamespacedKey(plugin,"jawa_group_v1");born=new NamespacedKey(plugin,"jawa_born_v1");npc=new NamespacedKey(plugin,"jawa_npc_v1");paused=new NamespacedKey(plugin,"jawa_conversation_ai_v1");categoryKey=new NamespacedKey(plugin,"jawa_category_v1");
         for(String key:List.of("brown-title","gray-title","buy-price","sell-price","buy-hint","sell-hint","balance","too-far","angry","missing-items","inventory-full","placed","usage"))
             if(!config.isString("text."+key))throw new IllegalArgumentException("mobs/jawas.yml: missing text."+key);
         for(var offer:settings.supplies()) item(offer);
         for(var offer:settings.purchases()) item(offer);
+        ionization=new JawaIonization(plugin,Objects.requireNonNull(config.getConfigurationSection("ionization")));
+        ionizationHits=new net.mandomc.integrations.weapons.IonizationHits(plugin,ionization);
         buyer=new JawaSellInventory(plugin,config,settings,this::canTrade);
         Bukkit.getPluginManager().registerEvents(this,plugin);
         for(var world:Bukkit.getWorlds()) removeOrphans(world.getEntities());
         root.register("jawa","mandomc.admin.status",this::command,(s,a)->a.length==1?List.of("gray","brown","remove","status"):List.of());
         population=Bukkit.getScheduler().runTaskTimer(plugin,this::population,100,settings.interval()*20L);
         idle=Bukkit.getScheduler().runTaskTimer(plugin,this::idle,100,5);
+        attackTask=Bukkit.getScheduler().runTaskTimer(plugin,this::combatTick,100,1);
+        Bukkit.getScheduler().runTaskLater(plugin,this::reconcileGroups,2);
     }
     public JawaSettings settings(){return settings;}
     private Component text(String key,String... values) {
@@ -88,15 +103,68 @@ public final class JawaTraders implements Listener, AutoCloseable {
         if(result==null || offer.amount()>result.getMaxStackSize())throw new IllegalArgumentException("Invalid Jawa bundle: "+offer.id());
         result.setAmount(offer.amount());return result;
     }
-    /** Persist the chosen category so catalog ordering changes cannot reroll a living trader. */
+    /** The durable group ledger reserves categories even for members in unloaded chunks. */
     public JawaSettings.Category category(LivingEntity entity) {
-        String id=entity.getPersistentDataContainer().get(categoryKey,PersistentDataType.STRING);
+        String groupId=entity.getPersistentDataContainer().get(group,PersistentDataType.STRING);
+        String id=groupId==null?entity.getPersistentDataContainer().get(categoryKey,PersistentDataType.STRING):categoryGroups.category(groupId,entity.getUniqueId());
         var selected=id==null?null:settings.category(id);
-        if(selected==null) {
-            selected=settings.category(entity.getUniqueId().getMostSignificantBits()^entity.getUniqueId().getLeastSignificantBits());
-            entity.getPersistentDataContainer().set(categoryKey,PersistentDataType.STRING,selected.id());
+        if(selected==null && groupId!=null){ensureGroup(groupId);return null;}
+        if(selected==null)selected=settings.category(entity.getUniqueId().getMostSignificantBits()^entity.getUniqueId().getLeastSignificantBits());
+        entity.getPersistentDataContainer().set(categoryKey,PersistentDataType.STRING,selected.id());return selected;
+    }
+    private List<LivingEntity> groupMembers(String id) {
+        var members=new ArrayList<LivingEntity>();
+        for(var world:Bukkit.getWorlds())for(var entity:world.getLivingEntities())
+            if(id.equals(entity.getPersistentDataContainer().get(group,PersistentDataType.STRING)) && brown(entity))members.add(entity);
+        return members;
+    }
+    private void ensureGroup(String id) {
+        if(pendingGroups.contains(id) || failedGroups.contains(id))return;
+        try {UUID.fromString(id);}catch(IllegalArgumentException invalid){failedGroups.add(id);plugin.getLogger().warning("Invalid saved Jawa group ID; group shops are unavailable: "+id);return;}
+        var observed=new HashMap<UUID,String>();for(var entity:groupMembers(id))observed.put(entity.getUniqueId(),entity.getPersistentDataContainer().get(categoryKey,PersistentDataType.STRING));
+        if(observed.isEmpty())return;
+        if(observed.keySet().stream().allMatch(member->settings.category(Objects.toString(categoryGroups.category(id,member),""))!=null)) {
+            for(var entity:groupMembers(id))entity.getPersistentDataContainer().set(categoryKey,PersistentDataType.STRING,categoryGroups.category(id,entity.getUniqueId()));return;
         }
-        return selected;
+        pendingGroups.add(id);
+        plugin.credits().auctionTask(()->{categoryGroups.assign(id,observed,settings.categories().stream().map(JawaSettings.Category::id).toList());return null;},(ignored,error)->{
+            pendingGroups.remove(id);
+            if(error!=null){failedGroups.add(id);plugin.getLogger().log(java.util.logging.Level.SEVERE,"Jawa category assignment rejected; duplicate/excess group shops remain unavailable: "+id,error);return;}
+            for(var entity:groupMembers(id)) {
+                String assigned=categoryGroups.category(id,entity.getUniqueId());
+                if(assigned==null){ensureGroup(id);continue;}
+                String previous=entity.getPersistentDataContainer().get(categoryKey,PersistentDataType.STRING);
+                entity.getPersistentDataContainer().set(categoryKey,PersistentDataType.STRING,assigned);
+                if(!Objects.equals(previous,assigned))endConversation(entity.getUniqueId());
+            }
+        });
+    }
+    private void reconcileGroups() {
+        var groups=new HashSet<String>();
+        for(var world:Bukkit.getWorlds())for(var entity:world.getLivingEntities())if(brown(entity)) {
+            if(entity instanceof Mob mob)combatants.put(entity.getUniqueId(),mob);
+            String id=entity.getPersistentDataContainer().get(group,PersistentDataType.STRING);if(id!=null)groups.add(id);
+        }
+        groups.forEach(this::ensureGroup);
+    }
+    private void combatTick() {
+        long now=Bukkit.getCurrentTick();
+        for(var entry:List.copyOf(combatants.entrySet())) {
+            var mob=entry.getValue();var target=vendor.target(mob);
+            if(!mob.isValid() || mob.isDead()){combatants.remove(entry.getKey());attackClock.disengage(entry.getKey());continue;}
+            if(target==null || !target.isValid() || target.isDead() || target.getWorld()!=mob.getWorld()
+                    || target.getLocation().distanceSquared(mob.getLocation())>32*32
+                    || target instanceof Player p && (p.getGameMode()==GameMode.CREATIVE || p.getGameMode()==GameMode.SPECTATOR)
+                    || !plugin.territories().combat(mob.getLocation()) || !plugin.territories().combat(target.getLocation())) {
+                attackClock.disengage(entry.getKey());continue;
+            }
+            if(mob.hasLineOfSight(target) && attackClock.ready(entry.getKey(),target.getUniqueId(),now))vendor.attack(mob,target);
+        }
+    }
+    @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
+    public void spawned(CreatureSpawnEvent event) {
+        if(event.getEntityType()!=EntityType.PIG)return;
+        var entity=event.getEntity();Bukkit.getScheduler().runTask(plugin,()->{if(entity.isValid() && brown(entity) && entity instanceof Mob mob)combatants.put(entity.getUniqueId(),mob);});
     }
     public void open(Player player,LivingEntity entity) {
         boolean buying=brown(entity);
@@ -104,6 +172,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
         if(!buying){buyer.open(player,entity);return;}
         if(!canTrade(player,entity))return;
         var category=category(entity);
+        if(category==null){String id=entity.getPersistentDataContainer().get(group,PersistentDataType.STRING);send(player,failedGroups.contains(id)?"category-unavailable":"category-loading");return;}
         var menu=new Menu(player,entity,true,text("brown-title","category",category.name()));
         var offers=category.offers();
         for(int i=0;i<offers.size();i++) {
@@ -160,7 +229,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
         if(!entity.isValid() || entity.isDead() || player.getWorld()!=entity.getWorld() || player.getLocation().distanceSquared(entity.getLocation())>36) {
             send(player,"too-far");return false;
         }
-        if(plugin.combat().tagged(player) || entity instanceof Mob mob && mob.getTarget()!=null){send(player,"angry");return false;}
+        if(plugin.combat().tagged(player) || entity instanceof Mob mob && (brown(entity)?vendor.target(mob):mob.getTarget())!=null){send(player,"angry");return false;}
         return true;
     }
     @EventHandler(priority=EventPriority.HIGHEST)
@@ -227,16 +296,19 @@ public final class JawaTraders implements Listener, AutoCloseable {
     public void mount(EntityMountEvent event){if(brown(event.getMount())||gray(event.getMount()))event.setCancelled(true);}
     private List<LivingEntity> browns(World world){return world.getLivingEntities().stream().filter(this::brown).toList();}
     public List<LivingEntity> spawnGroup(List<Location> sites) {
+        if(sites.isEmpty() || sites.size()>settings.categories().size())throw new IllegalArgumentException("Jawa group must have 1–"+settings.categories().size()+" members for distinct categories");
         String id=UUID.randomUUID().toString();var created=new ArrayList<LivingEntity>();
+        var pool=new ArrayList<>(settings.categories());Collections.shuffle(pool,random);
         try {
             for(var site:sites) {
                 var entity=vendor.access().spawn("JawaBrown",site,1);
                 if(entity==null || !entity.isValid())throw new IllegalStateException("Jawa spawn denied");
                 created.add(entity);entity.getPersistentDataContainer().set(group,PersistentDataType.STRING,id);
                 entity.getPersistentDataContainer().set(born,PersistentDataType.LONG,System.currentTimeMillis());
-                category(entity);
+                entity.getPersistentDataContainer().set(categoryKey,PersistentDataType.STRING,pool.get(created.size()-1).id());
+                if(entity instanceof Mob mob)combatants.put(entity.getUniqueId(),mob);
             }
-            return List.copyOf(created);
+            ensureGroup(id);return List.copyOf(created);
         }catch(RuntimeException error){created.forEach(vendor.access()::remove);throw error;}
     }
     private Location surface(World world,int x,int z) {
@@ -287,7 +359,11 @@ public final class JawaTraders implements Listener, AutoCloseable {
             if(id!=null && !config.isConfigurationSection("npcs."+id))vendor.access().remove(entity);
         }
     }
-    @EventHandler public void loaded(org.bukkit.event.world.EntitiesLoadEvent event){removeOrphans(event.getEntities());}
+    @EventHandler public void loaded(org.bukkit.event.world.EntitiesLoadEvent event){
+        removeOrphans(event.getEntities());
+        if(!reconcileScheduled){reconcileScheduled=true;Bukkit.getScheduler().runTask(plugin,()->{reconcileScheduled=false;reconcileGroups();});}
+    }
+    @EventHandler public void unloaded(org.bukkit.event.world.EntitiesUnloadEvent event){for(var entity:event.getEntities()){combatants.remove(entity.getUniqueId());attackClock.disengage(entity.getUniqueId());}}
     private Location anchor(String id) {
         String p="npcs."+id;var key=NamespacedKey.fromString(config.getString(p+".world",""));var world=key==null?null:Bukkit.getWorld(key);
         return world==null?null:new Location(world,config.getDouble(p+".x"),config.getDouble(p+".y"),config.getDouble(p+".z"),(float)config.getDouble(p+".yaw"),(float)config.getDouble(p+".pitch"));
@@ -328,7 +404,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
             var source=Bukkit.getEntity(menu.jawa);
             if(!(source instanceof LivingEntity living) || !source.isValid() || source.getWorld()!=player.getWorld()
                     || source.getLocation().distanceSquared(player.getLocation())>36 || plugin.combat().tagged(player)
-                    || living instanceof Mob mob && mob.getTarget()!=null)player.closeInventory();
+                    || living instanceof Mob mob && (brown(living)?vendor.target(mob):mob.getTarget())!=null)player.closeInventory();
         }
     }
     private void command(org.bukkit.command.CommandSender sender,String[] args) {
@@ -364,7 +440,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
         player.sendMessage(text("usage"));
     }
     @Override public void close() {
-        population.cancel();idle.cancel();buyer.close();
+        population.cancel();idle.cancel();attackTask.cancel();attackClock.clear();combatants.clear();ionizationHits.close();ionization.close();buyer.close();
         for(UUID id:List.copyOf(conversations.keySet()))endConversation(id);
         HandlerList.unregisterAll(this);
         for(var player:Bukkit.getOnlinePlayers())if(player.getOpenInventory().getTopInventory().getHolder() instanceof Menu)player.closeInventory();

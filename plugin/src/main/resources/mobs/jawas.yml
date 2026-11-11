@@ -495,3 +495,19 @@ text:
     again.
   category-title: <gold><category>
   category-info: <gray>This Jawa sells the complete <category> selection.
+  category-loading: <yellow>This Jawa is sorting its supplies. Try again in a moment.
+  category-unavailable: <yellow>This Jawa cannot open its supplies right now. Please
+    contact staff.
+combat-timing:
+  initial-min-ticks: 6
+  initial-max-ticks: 36
+  cadence-min-ticks: 60
+  cadence-max-ticks: 80
+ionization:
+  duration-ticks: 40
+  particle-count: 24
+  particle-rgb:
+  - 45
+  - 120
+  - 255
+  particle-size: 1.2

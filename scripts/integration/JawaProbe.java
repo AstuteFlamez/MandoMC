@@ -72,7 +72,7 @@ public final class JawaProbe extends JavaPlugin {
             mando.jawas().open(buyer,group.getFirst());stale=buyer.getOpenInventory();
         }catch(Exception error){throw new IllegalStateException(error);}
         check(stale.getTopInventory().getItem(29).getType()==Material.GRAY_STAINED_GLASS_PANE && stale.getTopInventory().getItem(29).getItemMeta().isHideTooltip(),"unused menu slots use protected hidden filler");
-        var preview=stale.getTopInventory().getItem(0);var offer=mando.jawas().settings().stock(group.getFirst().getUniqueId().getMostSignificantBits()^group.getFirst().getUniqueId().getLeastSignificantBits()).getFirst();
+        var preview=stale.getTopInventory().getItem(0);var offer=mando.jawas().category(group.getFirst()).offers().getFirst();
         bought=new ItemStack(preview.getType(),offer.amount());balance=100000-offer.price();
         var shift=new InventoryClickEvent(stale,InventoryType.SlotType.CONTAINER,0,ClickType.SHIFT_LEFT,InventoryAction.MOVE_TO_OTHER_INVENTORY);Bukkit.getPluginManager().callEvent(shift);check(shift.isCancelled(),"shift transfer cannot extract shop previews");
         click(buyer,0);click(buyer,0);
@@ -100,7 +100,9 @@ public final class JawaProbe extends JavaPlugin {
             });
         });
     }
-    private void aggression(){
+    @SuppressWarnings("unchecked") private void aggression(){
+        try {var field=mando.jawas().getClass().getDeclaredField("combatants");field.setAccessible(true);var tracked=(Map<UUID,Mob>)field.get(mando.jawas());group.forEach(e->tracked.remove(e.getUniqueId()));}
+        catch(Exception error){throw new IllegalStateException(error);}
         mando.jawas().open(buyer,group.getFirst());check(!group.getFirst().hasAI(),"conversation is paused before attack");
         var denied=new EntityDamageByEntityEvent(attacker,group.getFirst(),EntityDamageEvent.DamageCause.ENTITY_ATTACK,1);denied.setCancelled(true);Bukkit.getPluginManager().callEvent(denied);
         check(group.stream().allMatch(e->((Mob)e).getTarget()==null),"cancelled damage cannot provoke group");

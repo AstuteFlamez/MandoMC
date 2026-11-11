@@ -23,6 +23,13 @@ public class JawaSettingsTest {
         }
         var config=config();config.set("shop.categories.end",null);assertThrows(IllegalArgumentException.class,()->JawaSettings.read(config));
     }
+    @Test public void configuredGroupsCannotOutnumberAvailableCategories(){
+        var config=config();config.set("spawning.group-max",8);
+        // All supplies still belong to a category, but only seven distinct categories remain.
+        var end=config.getStringList("shop.categories.end.items");var utility=new ArrayList<>(config.getStringList("shop.categories.utility.items"));utility.addAll(end);
+        config.set("shop.categories.utility.items",utility);config.set("shop.categories.end",null);
+        assertThrows(IllegalArgumentException.class,()->JawaSettings.read(config));
+    }
     @Test public void invalidPopulationAndPricesFailBeforeSpawning(){
         for(String path:List.of("spawning.group-max","spawning.world-cap","spawning.min-distance")){
             var config=config();config.set(path,0);assertThrows(IllegalArgumentException.class,()->JawaSettings.read(config));

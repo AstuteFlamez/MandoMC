@@ -34,7 +34,6 @@ JawaBrown:
   - model{mid=jawa_brown;h=false} @self ~onSpawn
   - model{mid=jawa_brown;h=false} @self ~onLoad
   - skill{s=JawaVoice} @self ~onTimer:150 0.75
-  - skill{s=JawaAttack} @target ~onTimer:60
 JawaGray:
   Type: PIG
   Display: '&7Jawa Salvage Buyer'
