@@ -1,0 +1,354 @@
+schema-version: 1
+spawning:
+  worlds:
+  - minecraft:tatooine
+  - minecraft:tatooine_review
+  interval-seconds: 45
+  world-cap: 16
+  group-min: 2
+  group-max: 4
+  min-distance: 24
+  max-distance: 64
+  lifetime-seconds: 1200
+shop:
+  offers-per-jawa: 6
+  supplies:
+    oak:
+      item: minecraft:oak_sapling
+      amount: 4
+      price: '40'
+    spruce:
+      item: minecraft:spruce_sapling
+      amount: 4
+      price: '40'
+    birch:
+      item: minecraft:birch_sapling
+      amount: 4
+      price: '40'
+    jungle:
+      item: minecraft:jungle_sapling
+      amount: 4
+      price: '40'
+    acacia:
+      item: minecraft:acacia_sapling
+      amount: 4
+      price: '40'
+    dark_oak:
+      item: minecraft:dark_oak_sapling
+      amount: 4
+      price: '40'
+    cherry:
+      item: minecraft:cherry_sapling
+      amount: 4
+      price: '40'
+    pale_oak:
+      item: minecraft:pale_oak_sapling
+      amount: 4
+      price: '40'
+    mangrove_propagule:
+      item: minecraft:mangrove_propagule
+      amount: 4
+      price: '40'
+    bamboo:
+      item: minecraft:bamboo
+      amount: 8
+      price: '20'
+    wheat_seeds:
+      item: minecraft:wheat_seeds
+      amount: 8
+      price: '12'
+    beetroot_seeds:
+      item: minecraft:beetroot_seeds
+      amount: 8
+      price: '12'
+    carrot:
+      item: minecraft:carrot
+      amount: 8
+      price: '16'
+    potato:
+      item: minecraft:potato
+      amount: 8
+      price: '16'
+    melon_seeds:
+      item: minecraft:melon_seeds
+      amount: 4
+      price: '16'
+    pumpkin_seeds:
+      item: minecraft:pumpkin_seeds
+      amount: 4
+      price: '16'
+    sugar_cane:
+      item: minecraft:sugar_cane
+      amount: 8
+      price: '20'
+    cocoa_beans:
+      item: minecraft:cocoa_beans
+      amount: 4
+      price: '20'
+    moss_block:
+      item: minecraft:moss_block
+      amount: 8
+      price: '24'
+    vine:
+      item: minecraft:vine
+      amount: 8
+      price: '16'
+    lily_pad:
+      item: minecraft:lily_pad
+      amount: 8
+      price: '24'
+    glow_berries:
+      item: minecraft:glow_berries
+      amount: 4
+      price: '20'
+    azalea:
+      item: minecraft:azalea
+      amount: 4
+      price: '24'
+    small_dripleaf:
+      item: minecraft:small_dripleaf
+      amount: 4
+      price: '24'
+    dandelion:
+      item: minecraft:dandelion
+      amount: 8
+      price: '8'
+    poppy:
+      item: minecraft:poppy
+      amount: 8
+      price: '8'
+    blue_orchid:
+      item: minecraft:blue_orchid
+      amount: 8
+      price: '16'
+    allium:
+      item: minecraft:allium
+      amount: 8
+      price: '16'
+    prismarine:
+      item: minecraft:prismarine
+      amount: 16
+      price: '48'
+    sea_lantern:
+      item: minecraft:sea_lantern
+      amount: 4
+      price: '60'
+    sponge:
+      item: minecraft:sponge
+      amount: 1
+      price: '120'
+    tube_coral_block:
+      item: minecraft:tube_coral_block
+      amount: 8
+      price: '32'
+    sea_pickle:
+      item: minecraft:sea_pickle
+      amount: 4
+      price: '24'
+    kelp:
+      item: minecraft:kelp
+      amount: 8
+      price: '16'
+    quartz:
+      item: minecraft:quartz
+      amount: 16
+      price: '40'
+    glowstone:
+      item: minecraft:glowstone
+      amount: 8
+      price: '40'
+    blackstone:
+      item: minecraft:blackstone
+      amount: 32
+      price: '24'
+    basalt:
+      item: minecraft:basalt
+      amount: 32
+      price: '24'
+    soul_sand:
+      item: minecraft:soul_sand
+      amount: 16
+      price: '32'
+    magma_block:
+      item: minecraft:magma_block
+      amount: 16
+      price: '32'
+    crimson_nylium:
+      item: minecraft:crimson_nylium
+      amount: 4
+      price: '32'
+    warped_nylium:
+      item: minecraft:warped_nylium
+      amount: 4
+      price: '32'
+    crimson_fungus:
+      item: minecraft:crimson_fungus
+      amount: 4
+      price: '24'
+    warped_fungus:
+      item: minecraft:warped_fungus
+      amount: 4
+      price: '24'
+    shroomlight:
+      item: minecraft:shroomlight
+      amount: 8
+      price: '48'
+    end_stone:
+      item: minecraft:end_stone
+      amount: 32
+      price: '32'
+    purpur_block:
+      item: minecraft:purpur_block
+      amount: 32
+      price: '48'
+    chorus_flower:
+      item: minecraft:chorus_flower
+      amount: 4
+      price: '40'
+    slime_ball:
+      item: minecraft:slime_ball
+      amount: 8
+      price: '32'
+    string:
+      item: minecraft:string
+      amount: 16
+      price: '24'
+    leather:
+      item: minecraft:leather
+      amount: 8
+      price: '32'
+    feather:
+      item: minecraft:feather
+      amount: 16
+      price: '16'
+    bone:
+      item: minecraft:bone
+      amount: 16
+      price: '24'
+    ink_sac:
+      item: minecraft:ink_sac
+      amount: 8
+      price: '16'
+    redstone:
+      item: minecraft:redstone
+      amount: 16
+      price: '24'
+    lapis_lazuli:
+      item: minecraft:lapis_lazuli
+      amount: 16
+      price: '32'
+    gold_ingot:
+      item: minecraft:gold_ingot
+      amount: 8
+      price: '64'
+    copper_ingot:
+      item: minecraft:copper_ingot
+      amount: 16
+      price: '32'
+    dirt:
+      item: minecraft:dirt
+      amount: 32
+      price: '8'
+    grass_block:
+      item: minecraft:grass_block
+      amount: 8
+      price: '16'
+    mud:
+      item: minecraft:mud
+      amount: 16
+      price: '12'
+  purchases:
+    sand:
+      item: minecraft:sand
+      amount: 64
+      price: '2'
+    sandstone:
+      item: minecraft:sandstone
+      amount: 64
+      price: '3'
+    cobblestone:
+      item: minecraft:cobblestone
+      amount: 64
+      price: '3'
+    cobbled_deepslate:
+      item: minecraft:cobbled_deepslate
+      amount: 64
+      price: '4'
+    gravel:
+      item: minecraft:gravel
+      amount: 64
+      price: '4'
+    clay_ball:
+      item: minecraft:clay_ball
+      amount: 32
+      price: '4'
+    snow_block:
+      item: minecraft:snow_block
+      amount: 32
+      price: '3'
+    ice:
+      item: minecraft:ice
+      amount: 32
+      price: '3'
+    rotten_flesh:
+      item: minecraft:rotten_flesh
+      amount: 16
+      price: '3'
+    bone:
+      item: minecraft:bone
+      amount: 16
+      price: '6'
+    string:
+      item: minecraft:string
+      amount: 16
+      price: '6'
+    leather:
+      item: minecraft:leather
+      amount: 8
+      price: '8'
+    feather:
+      item: minecraft:feather
+      amount: 16
+      price: '4'
+    ink_sac:
+      item: minecraft:ink_sac
+      amount: 8
+      price: '4'
+    iron_ingot:
+      item: minecraft:iron_ingot
+      amount: 8
+      price: '12'
+    diamond:
+      item: minecraft:diamond
+      amount: 1
+      price: '12'
+    coal:
+      item: minecraft:coal
+      amount: 16
+      price: '5'
+    agrinium:
+      item: agrinium
+      amount: 8
+      price: '12'
+    durasteel:
+      item: durasteel
+      amount: 1
+      price: '12'
+npcs: {}
+text:
+  brown-title: <gold>Jawa offworld supplies
+  gray-title: <gray>Jawa salvage buyer
+  buy-price: <gray>Buy <white><amount> <gray>for <gold>$<price>
+  sell-price: <gray>Sell <white><amount> <gray>for <gold>$<price>
+  buy-hint: <yellow>Left-click to buy one bundle.
+  sell-hint: <yellow>Left-click to sell one bundle.
+  balance: '<gray>Credits: <gold>$<balance>'
+  too-far: <red>Move closer to the Jawa.
+  angry: <red>Finish combat before trading.
+  missing-items: <red>You do not have that bundle to sell.
+  inventory-full: <red>Make room in your inventory first.
+  placed: <gray>Jawa placement saved.
+  usage: <gray>/mmc jawa gray <id> · /mmc jawa remove <id> · /mmc jawa brown · /mmc
+    jawa status
+  saving: <yellow>A Jawa placement is being saved. Try again in a moment.
+  save-failed: <red>The Jawa placement could not be saved.

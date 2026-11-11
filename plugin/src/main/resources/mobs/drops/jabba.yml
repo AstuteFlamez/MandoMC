@@ -25,3 +25,9 @@ drops:
     ammo: standard_plasma_cells
     ammo-chance: 0.50
     ammo-rolls: 3
+  JawaBrown:
+    weapon: jawa_ionization_blaster
+    weapon-chance: 0.12
+    ammo: ionized_energy_cells
+    ammo-chance: 0.50
+    ammo-rolls: 3

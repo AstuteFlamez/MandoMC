@@ -29,8 +29,8 @@ public record JabbaDropsSettings(Map<String, Drop> mobs) {
 
     public static JabbaDropsSettings read(ConfigurationSection config) {
         var section = config.getConfigurationSection("drops");
-        if (config.getInt("schema-version") != 1 || section == null || (!section.getKeys(false).containsAll(GUARDS) || !java.util.Set.of("GamorreanGuard", "QuarrenGuard", "TwilekGuard", "BobaFett").containsAll(section.getKeys(false)))) {
-            throw new IllegalArgumentException("mobs/drops/jabba.yml: expected schema 1 and all three generic guard drops and optional BobaFett");
+        if (config.getInt("schema-version") != 1 || section == null || (!section.getKeys(false).containsAll(GUARDS) || !java.util.Set.of("GamorreanGuard", "QuarrenGuard", "TwilekGuard", "BobaFett", "JawaBrown").containsAll(section.getKeys(false)))) {
+            throw new IllegalArgumentException("mobs/drops/jabba.yml: expected schema 1 and all three generic guard drops and optional BobaFett/JawaBrown");
         }
         var result = new LinkedHashMap<String, Drop>();
         for (String mob : section.getKeys(false)) {

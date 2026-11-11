@@ -1,0 +1,32 @@
+JawaVoice:
+  Skills:
+  - randomskill{skills=JawaVoice1,JawaVoice2,JawaVoice3} @self
+JawaVoice1:
+  Skills:
+  - sound{s=mandomc:mobs.jawa1;v=2;p=1} @self
+JawaVoice2:
+  Skills:
+  - sound{s=mandomc:mobs.jawa2;v=2;p=1} @self
+JawaVoice3:
+  Skills:
+  - sound{s=mandomc:mobs.jawa3;v=2;p=1} @self
+JawaAttack:
+  Cooldown: 2.5
+  Conditions:
+  - incombat true
+  TargetConditions:
+  - distance{d=0to32}
+  - lineofsight true
+  Skills:
+  - skill{s=MandoFaceTarget;repeat=5;repeatInterval=1} @target
+  - delay 6
+  - aura{auraName=JawaAiming;duration=40} @self
+  - setspeed{speed=0;type=walking} @self
+  - state{mid=jawa_brown;s=attack} @self
+  - skill{s=MandoFaceTarget;repeat=19;repeatInterval=1} @target
+  - delay 20
+  - weaponMechanicsShoot{weapon=Jawa_Ionization_Blaster;spread=1;head=false;repeat=1;repeatInterval=1}
+    @target
+  - delay 20
+  - state{mid=jawa_brown;s=attack;r=true} @self
+  - setspeed{speed=1;type=walking} @self

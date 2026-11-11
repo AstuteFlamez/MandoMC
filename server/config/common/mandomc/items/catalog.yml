@@ -1,0 +1,72 @@
+{
+  "schema-version": 1,
+  "rarities": {
+    "common": "\u0111",
+    "uncommon": "\u0116",
+    "rare": "\u0115",
+    "epic": "\u0112",
+    "legendary": "\u0113",
+    "mythic": "\u0114"
+  },
+  "categories": {
+    "vehicles": "\u010f",
+    "materials": "\u010c",
+    "armor": "\u0109",
+    "consumables": "\u010b",
+    "weapons": "\u0110",
+    "components": "\u010a",
+    "crystals": "\u010e",
+    "fuel": "\u0122",
+    "keys": "\u0124",
+    "metals": "\u010d",
+    "tokens": "<gray>[Tokens]",
+    "tools": "\u0138"
+  },
+  "external-items": {
+    "e11": {
+      "kind": "weapon",
+      "vendor-id": "E11",
+      "category": "weapons"
+    },
+    "standard_plasma_cells": {
+      "kind": "ammo",
+      "vendor-id": "Standard_Plasma_Cells",
+      "category": "ammo"
+    },
+    "cycler_rifle": {
+      "kind": "weapon",
+      "vendor-id": "CyclerRifle",
+      "category": "weapons"
+    },
+    "se14c": {
+      "kind": "weapon",
+      "vendor-id": "SE14C",
+      "category": "weapons"
+    },
+    "a280": {
+      "kind": "weapon",
+      "vendor-id": "A280",
+      "category": "weapons"
+    },
+    "relby_v10": {
+      "kind": "weapon",
+      "vendor-id": "RelbyV10",
+      "category": "weapons"
+    },
+    "ee3": {
+      "kind": "weapon",
+      "vendor-id": "EE3",
+      "category": "weapons"
+    },
+    "jawa_ionization_blaster": {
+      "kind": "weapon",
+      "vendor-id": "Jawa_Ionization_Blaster",
+      "category": "weapons"
+    },
+    "ionized_energy_cells": {
+      "kind": "ammo",
+      "vendor-id": "Ionized_Energy_Cells",
+      "category": "ammo"
+    }
+  }
+}

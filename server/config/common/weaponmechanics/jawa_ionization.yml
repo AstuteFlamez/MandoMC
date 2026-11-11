@@ -1,0 +1,127 @@
+Jawa_Ionization_Blaster:
+  Info:
+    Weapon_Item:
+      Type: DIAMOND_HOE
+      Custom_Model_Data: 22
+      Name: <gray>Jawa Ionization Blaster
+      Lore:
+      - <white>đĐ
+      - ''
+      - <gray>Improvised Jawa ionization blaster.
+      - <gray>Weak at distance; fast at close range.
+      - ''
+      - <yellow><!italic>[<key:key.drop>] Reload
+      - ''
+      - <gray>Takes <blue>Ionized Energy Cells<gray>.
+      Unbreakable: true
+      Hide_Flags: true
+      Attributes:
+      - movement_speed -0.0012
+      Deny_Use_In_Crafting: true
+      Item_Model: mandomc:blasters/jawa_ionization
+    Weapon_Info_Display:
+      Action_Bar:
+        Message: <gray>Ion Blaster<firearm_state> <gray>«<blue><ammo_left><gray>»<aqua><reload>
+    Weapon_Get_Mechanics:
+    - Sound{sound=item.armor.equip_chain, pitch=1.15, listeners=Source{}}
+    Weapon_Equip_Delay: 14
+    Cancel:
+      Drop_Item: true
+      Arm_Swing_Animation: true
+      Break_Blocks: true
+  Skin:
+    Default:
+      Custom_Model_Data: 22
+      Item_Model: mandomc:blasters/jawa_ionization
+    Scope:
+      Custom_Model_Data: 1022
+      Item_Model: mandomc:blasters/jawa_ionization_scope
+    Sprint:
+      Custom_Model_Data: 2022
+      Item_Model: mandomc:blasters/jawa_ionization_sprint
+  Projectile: jawabluelaser
+  Shoot:
+    Trigger:
+      Main_Hand: RIGHT_CLICK
+      Off_Hand: RIGHT_CLICK
+      Circumstance:
+        Swimming: DENY
+        Sprinting: DENY
+        Dual_Wielding: DENY
+    Projectile_Speed: 62
+    Fully_Automatic_Shots_Per_Second: 8
+    Spread:
+      Base_Spread: 6.0
+      Modify_Spread_When:
+        Zooming: 55%
+        Sneaking: 65%
+        In_Midair: 175%
+    Recoil:
+      Mean_X: 0.16
+      Mean_Y: 0.75
+      Variance_X: 0.4
+      Variance_Y: 0.25
+      Speed: 2.0
+      Damping: 0.12
+      Damping_Recovery: 0.18
+      Smoothing: 0.28
+      Max_Accumulation: 7.0
+    Mechanics:
+    - CustomSound{sound=mandomc:shoot.dc-15, volume=5, noise=0.2}
+  Reload:
+    Trigger:
+      Main_Hand: DROP_ITEM
+      Off_Hand: DROP_ITEM
+    Magazine_Size: 18
+    Reload_Duration: 32
+    Start_Mechanics:
+    - CustomSound{sound=mandomc:reload.start, volume=0.6, noise=0.15}
+    Finish_Mechanics:
+    - CustomSound{sound=mandomc:reload.complete, volume=0.6, noise=0.15}
+    Ammo:
+      Out_Of_Ammo_Mechanics:
+      - Message{message=<red><bold>ᴍᴀɴᴅᴏᴍᴄ</bold></red> <dark_gray>» <red>Out of energy
+        cells!}
+      Ammos:
+      - Ionized_Energy_Cells
+  Damage:
+    Base_Damage: 1.0
+    Armor_Damage: 1
+  Scope:
+    Trigger:
+      Main_Hand: LEFT_CLICK
+      Off_Hand: LEFT_CLICK
+    Zoom_Amount: 1.2
+    Shoot_Delay_After_Scope: 6
+    Mechanics:
+    - CustomSound{sound=mandomc:misc.zoomrifle, volume=0.5, noise=0.12, listeners=Source{}}
+    Zoom_Off:
+      Mechanics:
+      - CustomSound{sound=mandomc:misc.zoomrifle, volume=0.5, noise=0.12, listeners=Source{}}
+  Firearm_Action:
+    Type: SLIDE
+    Open:
+      Time: 4
+      Mechanics:
+      - Sound{sound=block.note_block.hat, volume=0.45, noise=0.15}
+      - Sound{sound=block.piston.contract, volume=0.45, noise=0.15, delayBeforePlay=2}
+    Close:
+      Time: 4
+      Mechanics:
+      - Sound{sound=block.piston.extend, volume=0.45, noise=0.15}
+  Show_Time:
+    Reload:
+      Item_Cooldown: true
+      Exp: true
+      Action_Bar: <gray>Reloading <bar> <gray><time>s
+      Action_Bar_Cancelled: <red>Reload Cancelled
+      Bar:
+        Left_Color: <gray>
+        Right_Color: <red>
+        Left_Symbol: '|'
+        Right_Symbol: '|'
+        Symbol_Amount: 25
+    Weapon_Equip_Delay:
+      Item_Cooldown: true
+    Shoot_Delay_After_Scope:
+      Item_Cooldown: true

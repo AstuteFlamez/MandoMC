@@ -16,6 +16,21 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /** Native territory lifecycle and transition presentation. No per-tick scans or region vendor. */
 public final class TerritoryService implements Listener, AutoCloseable {
+    private record NpcSpawn(org.bukkit.entity.EntityType type, Location location) { }
+    private NpcSpawn npcSpawn;
+    /** Permit exactly the base entity of an explicitly placed NPC; never uncancel another listener. */
+    public <T> T spawnNpc(org.bukkit.entity.EntityType type, Location location, java.util.function.Supplier<T> spawn) {
+        if (!org.bukkit.Bukkit.isPrimaryThread() || npcSpawn != null) throw new IllegalStateException("NPC spawn must be a single server-thread operation");
+        npcSpawn = new NpcSpawn(type, location.clone());
+        try { return spawn.get(); } finally { npcSpawn = null; }
+    }
+    public boolean approvedNpcSpawn(org.bukkit.event.entity.CreatureSpawnEvent event) {
+        if (npcSpawn == null || event.getSpawnReason() != org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.CUSTOM
+                || event.getEntityType() != npcSpawn.type() || event.getLocation().getWorld() != npcSpawn.location().getWorld()
+                || event.getLocation().distanceSquared(npcSpawn.location()) > .01) return false;
+        npcSpawn = null;
+        return true;
+    }
     private final JavaPlugin plugin;
     private final TerritoryPolicy policy;
     private final ConfigurationSection language;

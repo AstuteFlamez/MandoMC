@@ -45,3 +45,4 @@ text:
   remaining: '<gray>Time left: <white><minutes> min'
   sort-price: '<yellow>Sort by Price'
   sort-newest: '<yellow>Sort by Newest'
+  supply-sold: '<gray>Sold supplies for <gold>$<price><gray>.'

@@ -62,6 +62,23 @@ public final class CreditLedger {
         if (next > MAX) throw new IllegalArgumentException("limit");
         var updated = new HashMap<>(balances); updated.put(id, next); save(updated);
     }
+    /** Shop credit and inventory claims share the same atomic snapshot and receipt namespace as auctions. */
+    public synchronized void supply(UUID transaction, UUID owner, String item, long price, boolean buying) throws Exception {
+        validate(price);
+        if (price == 0 || auctions.accepted().contains(transaction)) throw new IllegalArgumentException("stale");
+        long balance = balance(owner);
+        if (buying && balance < price) throw new IllegalArgumentException("insufficient");
+        if (!buying && balance > MAX - price) throw new IllegalArgumentException("limit");
+        var updated = new HashMap<>(balances);
+        updated.put(owner, buying ? balance - price : balance + price);
+        var accepted = new HashSet<>(auctions.accepted()); accepted.add(transaction);
+        var claims = new HashMap<>(auctions.claims());
+        if (buying) {
+            if (item == null || Base64.getDecoder().decode(item).length == 0) throw new IllegalArgumentException("amount");
+            claims.put(transaction, new net.mandomc.gameplay.auction.AuctionBook.Claim(transaction, owner, item));
+        }
+        save(updated, new net.mandomc.gameplay.auction.AuctionBook(auctions.listings(), claims, accepted));
+    }
     public synchronized void listAuction(net.mandomc.gameplay.auction.AuctionBook.Listing row, int limit, long now) throws Exception {
         validate(row.price());
         if (row.price() == 0 || row.expires() <= now) throw new IllegalArgumentException("amount");

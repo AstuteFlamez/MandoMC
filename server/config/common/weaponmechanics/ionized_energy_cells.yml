@@ -1,0 +1,12 @@
+Ionized_Energy_Cells:
+  Symbol: ⬢
+  Item_Ammo:
+    Bullet_Item:
+      Type: ECHO_SHARD
+      Name: <blue>Ionized Energy Cells
+      Custom_Model_Data: 22
+      Lore:
+      - <white>đģ
+      - ''
+      - <gray>Ionized energy cells for Jawa blasters.
+      Item_Model: mandomc:ammo/ionized_energy_cells

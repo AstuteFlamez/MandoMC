@@ -17,6 +17,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class MandoPlugin extends JavaPlugin implements Listener {
     private net.mandomc.gameplay.ranks.RankService ranks;
     private net.mandomc.integrations.permissions.WorldEditRanks worldEditRanks;
+    private net.mandomc.gameplay.jawa.JawaTraders jawas;
+    public net.mandomc.gameplay.jawa.JawaTraders jawas() { return jawas; }
     private net.mandomc.gameplay.credits.CreditService credits;
     private net.mandomc.gameplay.hud.PlayerHud hud;
     public net.mandomc.gameplay.ranks.RankService ranks() { return ranks; }
@@ -37,6 +39,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     public net.mandomc.gameplay.events.EventManager events() { return events; }
     public net.mandomc.gameplay.travel.WarpService warps() { return warps; }
     public net.mandomc.gameplay.travel.TeleportService travel() { return travel; }
+    public net.mandomc.gameplay.territory.TerritoryService territories() { return territories; }
     private net.mandomc.gameplay.territory.TerritoryService territories;
     private net.mandomc.gameplay.worlds.WorldService worlds;
     private net.mandomc.commands.CommandBindings commandBindings;
@@ -209,6 +212,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                         net.mandomc.gameplay.mobs.JabbaDropsSettings.read(jabbaConfig));
                 getLogger().info("Jabba generic guard drops ready; dungeon spawning is not enabled.");
             }
+            jawas = new net.mandomc.gameplay.jawa.JawaTraders(this, loadFeature("mobs/jawas.yml"), root);
             var mobConfig = loadFeature("mobs/spawning.yml");
             if (mobConfig.getBoolean("enabled", false)) {
                 var settings = net.mandomc.gameplay.mobs.SandySettings.read(mobConfig);
@@ -284,6 +288,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         if (hud != null) hud.close();
+        if (jawas != null) jawas.close();
         if (credits != null) credits.close();
         if (worldEditRanks != null) worldEditRanks.close();
         if (ranks != null) ranks.close();

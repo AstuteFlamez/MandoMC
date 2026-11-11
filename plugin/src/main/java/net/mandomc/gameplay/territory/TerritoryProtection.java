@@ -71,7 +71,7 @@ public final class TerritoryProtection implements Listener {
     public void vehicleDestroy(VehicleDestroyEvent e){if(!territories.combat(e.getVehicle().getLocation())
             ||(e.getAttacker()!=null&&!territories.combat(e.getAttacker().getLocation())))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void spawn(CreatureSpawnEvent e){if(!territories.spawning(e.getLocation()))e.setCancelled(true);}
+    public void spawn(CreatureSpawnEvent e){if(!territories.spawning(e.getLocation())&&!territories.approvedNpcSpawn(e))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void entityChange(EntityChangeBlockEvent e){if(blocked(e.getBlock()))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)

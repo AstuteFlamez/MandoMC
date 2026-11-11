@@ -41,6 +41,9 @@ public final class AuctionHouse implements Listener, AutoCloseable {
         String file = "economy/auction-house.yml";
         if (!new File(plugin.getDataFolder(), file).isFile()) plugin.saveResource(file, false);
         settings = new YamlConfiguration(); settings.load(new File(plugin.getDataFolder(), file));
+        try (var reader = new java.io.InputStreamReader(Objects.requireNonNull(plugin.getResource(file)), java.nio.charset.StandardCharsets.UTF_8)) {
+            settings.setDefaults(YamlConfiguration.loadConfiguration(reader));
+        }
         if (settings.getInt("schema-version") != 1) throw new IllegalArgumentException(file + ": unsupported schema");
         limit = settings.getInt("listing-limit"); duration = settings.getLong("listing-hours") * 3_600_000L;
         minimum = CreditLedger.amount(settings.getString("minimum-price")); maximum = CreditLedger.amount(settings.getString("maximum-price"));
@@ -89,7 +92,7 @@ public final class AuctionHouse implements Listener, AutoCloseable {
             busy.remove(id); Player online = Bukkit.getPlayer(id);
             if (error != null) {
                 if (!(error instanceof IllegalArgumentException)) log(error);
-                if (online != null) { send(online, error instanceof IllegalArgumentException && settings.isString("text." + error.getMessage()) ? error.getMessage() : "save-failed"); if (!receipts(online, escrow).isEmpty()) send(online, "save-failed"); }
+                if (online != null) { send(online, error instanceof IllegalArgumentException && settings.isString("text." + error.getMessage()) ? error.getMessage() : "save-failed"); if (!receipts(online, escrow).isEmpty()) recover(online, p -> {}); }
             } else if (online != null) success.accept(online);
         });
     }
@@ -154,7 +157,25 @@ public final class AuctionHouse implements Listener, AutoCloseable {
             });
         });
     }
-    private void deliver(Player player, UUID id) {
+    /** Trade exact stacks through existing durable escrow. A failed sale is returned by recovery. */
+    public boolean supply(Player player, ItemStack item, long price, boolean buying, Runnable committed) {
+        if (!allowed(player)) return false;
+        if (price <= 0 || item == null || item.isEmpty()) return false;
+        UUID id = UUID.randomUUID(); UUID owner = player.getUniqueId(); String bytes = encode(item);
+        if (!buying) {
+            if (!player.getInventory().containsAtLeast(item, item.getAmount())) return false;
+            var receipt = receipts(player, escrow); receipt.put(id, bytes);
+            player.getInventory().removeItem(item.clone()); receipts(player, escrow, receipt); player.saveData();
+        }
+        work(player, () -> { credits.ledger().supply(id, owner, bytes, price, buying); return null; }, online -> {
+            committed.run();
+            if (buying) deliver(online, id, false);
+            else recover(online, p -> p.sendMessage(text("supply-sold", "price", CreditLedger.format(price))));
+        });
+        return true;
+    }
+    private void deliver(Player player, UUID id) { deliver(player, id, true); }
+    private void deliver(Player player, UUID id, boolean showClaims) {
         var row = credits.ledger().auctions().claims().get(id);
         if (row == null || !row.owner().equals(player.getUniqueId())) { send(player, "stale"); return; }
         var completed = receipts(player, delivered);
@@ -166,7 +187,7 @@ public final class AuctionHouse implements Listener, AutoCloseable {
         }
         work(player, () -> { credits.ledger().completeAuctionClaims(player.getUniqueId(), Set.of(id)); return null; }, online -> {
             var left = receipts(online, delivered); left.remove(id); receipts(online, delivered, left); online.saveData();
-            send(online, "claimed"); if (allowed(online)) claims(online, 0);
+            send(online, "claimed"); if (showClaims && allowed(online)) claims(online, 0);
         });
     }
     private ItemStack preview(String bytes, List<Component> extra) {

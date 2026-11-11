@@ -3,7 +3,7 @@
   "source": "Faithful 32x 26.1 June 2026, official unmodified Modrinth version Fj5GKJnf",
   "website": "https://faithfulpack.net/",
   "license": "src/faithful-license.txt",
-  "scope": "Block textures only. Native block IDs, world generation, drops, armor and tool textures are unchanged. Ore rock backgrounds are byte-for-byte Faithful; only each source ore\u2019s saturated mineral pixels are recolored. Distinct Faithful diamond and emerald mineral geometries distinguish Durasteel and Beskar.",
+  "scope": "Block textures only. Native block IDs, world generation, drops, armor and tool textures are unchanged. Ore rock backgrounds retain the exact normal Faithful rock pixels. The deepslate tone floor is restricted to mineral/recess pixels; saturated mineral pixels retain the accepted recoloring. Distinct Faithful diamond and emerald mineral geometries distinguish Durasteel and Beskar.",
   "blocks": [
     {
       "name": "durasteel_block",
@@ -19,6 +19,7 @@
         0.4,
         0.61
       ],
+      "shadowFloorLuma": null,
       "outputSha256": "eb8b3d501644d68beccf1141bc49e64d8b1e2cacfcb78b5a2e5e6d80265eeb38"
     },
     {
@@ -35,6 +36,7 @@
         0.4,
         0.61
       ],
+      "shadowFloorLuma": null,
       "outputSha256": "e650e3901e93c2259d2e72a33239cf1f70c0de7e38ba3b2a90297999fb76a0a1"
     },
     {
@@ -51,7 +53,8 @@
         0.4,
         0.61
       ],
-      "outputSha256": "e621d54b2cb2fb654179f8c15b4984e2ced5880bd42693ef240ffab0a8a3ea73"
+      "shadowFloorLuma": 80,
+      "outputSha256": "1d3fea5312a5518e96b148c5e55dee2a0f96bc53a096b856d63a7113a581325b"
     },
     {
       "name": "beskar_block",
@@ -67,6 +70,7 @@
         0.4,
         0.61
       ],
+      "shadowFloorLuma": null,
       "outputSha256": "a3976d246c6e3e360c4dd27025864ebbf66bd6c144cf5db49a20c4eb4d3a1c91"
     },
     {
@@ -83,6 +87,7 @@
         0.25,
         0.49
       ],
+      "shadowFloorLuma": null,
       "outputSha256": "f7425d79955a98aa1344d6bc5f096aa681072ffa6ca062104203472e4e49c468"
     },
     {
@@ -100,7 +105,8 @@
         0.25,
         0.49
       ],
-      "outputSha256": "b95c8e0c3df1f3c525f446108d7ab871c647153375ebd2a486049e8bc3352cc9"
+      "shadowFloorLuma": 80,
+      "outputSha256": "9491dad19b597a10af800664eb93a07e942f9ab6336c59d2c315dcb68b40f7a0"
     }
   ]
 }
