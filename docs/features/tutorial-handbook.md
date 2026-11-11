@@ -1,6 +1,9 @@
 # Feature: Tutorial handbook
-Status: deployed and natively verified
+Status: initial thirteen-page version deployed; eleven-page revision verified for coordinated rollout
 Branch: bilal/tutorial-handbook
+
+## November 11 revision
+User removed Armor & Repairs, moved the unchanged Jawa body to page three as Jawa Shops, and combined KOTH/Jabba into one concise Events page in the former KOTH slot. The result is eleven pages, with all other content and relative order unchanged. Native font bounds pass. 199 Java tests and 340 isolated native assertions pass, including refreshing a marked existing thirteen-page book via the actual command into eleven pages with Jawa Shops third. This revision changes only configuration; the current constructor loads it at startup. Coordinator owns the next restart and config application, preserving every live JAR change.
 
 ## Player experience
 `/tutorial` gives and opens a native signed MandoMC Handbook. The confirmed thirteen topics are Travel; combined Combat/Death/Blasters/Lightsabers; Armor/Repairs; Mining/Materials; Crafting/recipes; Credits/Auctions; Clans/Claims; Raids/Warpoints; KOTH; Jabba; Vehicles; Jawa Trading; Ilum/Crates. Each topic occupies exactly one book page. Titles are concise and dark/bold; text uses the normal black Minecraft book font.

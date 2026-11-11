@@ -30,11 +30,16 @@ public final class HandbookProbe extends JavaPlugin {
         mando=(MandoPlugin)Bukkit.getPluginManager().getPlugin("MandoMC");check(mando!=null&&mando.isEnabled(),"Main plugin enabled");
         full=new java.io.File(getDataFolder(),"full-suite").exists();
         if(full)check(getServer().getPort()==25590,"Full suite is isolated");
-        book=new TutorialHandbook(mando);check(book.definition().pages().size()==13,"Thirteen approved feature pages");
+        book=new TutorialHandbook(mando);check(book.definition().pages().size()==11,"Eleven approved feature pages");
+        check(book.definition().pages().get(2).heading().equals("Jawa Shops"),"Page three renamed Jawa Shops");
+        check(book.definition().pages().stream().filter(p->p.id().equals("jawas")).count()==1,"Only one Jawa page");
+        check(book.definition().pages().stream().noneMatch(p->p.id().equals("armor_repairs")),"Armor page removed");
+        check(book.definition().pages().get(8).heading().equals("Events"),"Combined events page nine");
+        check(book.definition().pages().get(8).body().contains("KOTH")&&book.definition().pages().get(8).body().contains("Jabba"),"Both event guides retained");
         ItemStack item=book.create();check(item.getType()==Material.WRITTEN_BOOK&&book.isHandbook(item),"Native signed handbook item");
-        BookMeta meta=(BookMeta)item.getItemMeta();check(meta.getPageCount()==13,"Written book retains all pages");
+        BookMeta meta=(BookMeta)item.getItemMeta();check(meta.getPageCount()==11,"Written book retains all pages");
         check(meta.getTitle().equals("MandoMC Handbook")&&meta.getAuthor().equals("MandoMC"),"Book title and author");
-        for(int i=1;i<=13;i++) {
+        for(int i=1;i<=11;i++) {
             String page=PlainTextComponentSerializer.plainText().serialize(meta.page(i));
             String[] lines=page.split("\n",-1);check(lines.length<=14,"Native page height "+i);
             int titleLines=BookPageLayout.wrap(book.definition().pages().get(i-1).heading(),true).size();
@@ -55,6 +60,11 @@ public final class HandbookProbe extends JavaPlugin {
         check(inventory.getHelmet().equals(before[39])&&inventory.getItemInOffHand().equals(before[40]),"Armor and offhand untouched");
         command();check(handbooks()==1,"Repeated command reuses existing book");
         int slot=0;while(!book.isHandbook(inventory.getItem(slot)))slot++;
+        var oldBook=inventory.getItem(slot);var oldMeta=(BookMeta)oldBook.getItemMeta();
+        oldMeta.pages(java.util.stream.IntStream.range(0,13).<net.kyori.adventure.text.Component>mapToObj(i->net.kyori.adventure.text.Component.text("Old page "+i)).toList());
+        oldBook.setItemMeta(oldMeta);inventory.setItem(slot,oldBook);
+        command();check(((BookMeta)inventory.getItem(slot).getItemMeta()).getPageCount()==11,"Issued thirteen-page book refreshes to eleven");
+        check(PlainTextComponentSerializer.plainText().serialize(((BookMeta)inventory.getItem(slot).getItemMeta()).page(3)).startsWith("Jawa Shops"),"Refreshed existing book has Jawa Shops on page three");
         inventory.getItem(slot).setAmount(4);command();check(inventory.getItem(slot).getAmount()==4,"Existing handbook stack count preserved");
         inventory.clear();
         for(int i=0;i<36;i++){var stack=new ItemStack(Material.DIAMOND,64);stack.editMeta(m->m.displayName(net.kyori.adventure.text.Component.text("Owned "+UUID.randomUUID())));inventory.setItem(i,stack);}
@@ -91,7 +101,7 @@ public final class HandbookProbe extends JavaPlugin {
     private ItemStack[] copy(ItemStack[] content){return Arrays.stream(content).map(i->i==null?null:i.clone()).toArray(ItemStack[]::new);}
     private void equal(ItemStack[] a,ItemStack[] b,String why){check(a.length==b.length,why+" length");for(int i=0;i<a.length;i++)check(Objects.equals(a[i],b[i]),why+" slot"+i);}
     private void success()throws Exception {
-        String result="HANDBOOK PASSED: "+checks+" native assertions;13 feature pages, command/inventory/first-join checks\n";
+        String result="HANDBOOK PASSED: "+checks+" native assertions;11 feature pages, command/inventory/first-join checks\n";
         Files.createDirectories(getDataFolder().toPath());Files.writeString(getDataFolder().toPath().resolve("PASSED.txt"),result);getLogger().info(result);cleanup();
         if(getServer().getPort()==25590)Bukkit.shutdown();
     }

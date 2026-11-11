@@ -1,7 +1,7 @@
 schema-version: 1
 title: MandoMC Handbook
 author: MandoMC
-page-count: 13
+page-count: 11
 lore:
 - A quick guide to life on the server.
 - Use /tutorial for a fresh copy.
@@ -33,15 +33,13 @@ pages:
     Blaster: use to fire; drop key reloads.
 
     Saber: hold use to guard; sneak + attack throws. Rest recovers charge.
-- id: armor_repairs
-  topic: Armor & Repairs
-  heading: Armor & Repairs
+- id: jawas
+  topic: Jawa Shops
+  heading: Jawa Shops
   body: |-
-    Wear armor for defense. Durasteel and Beskar give stronger tiers.
+    Brown Jawas sell supplies on Tatooine. Right-click to browse.
 
-    Use an anvil or normal crafting repairs. Enchanting is disabled.
-
-    /recipes shows armor and material recipes.
+    Gray buyers pay credits. Put salvage in the sell window, then Sell. Rejected items return; closing returns leftovers.
 - id: mining_materials
   topic: Mining & Materials
   heading: Mining & Materials
@@ -89,26 +87,15 @@ pages:
     +10 vs a rival: explosive raids and chest loot. First breach starts 1h; pair points reset/freeze. No hand-breaking.
 
     After 7d clan inactivity: 24h public loot, then gradual land reset.
-- id: koth
-  topic: KOTH
-  heading: King of the Hill
+- id: events
+  topic: Events
+  heading: Events
   body: |-
-    /warp hoth
+    KOTH: /warp hoth
     Hill: -148, 27, 141.
+    Clan holds 3min; clear all holders to reset. A random winner on hill gets a key.
 
-    Hold 3min. Clanmates share capture; clear all holders to reset.
-
-    A random winning member on the hill gets a key.
-    /crates open koth
-- id: jabba
-  topic: Jabba's Palace
-  heading: Jabba's Palace
-  body: |-
-    Watch /event for Jabba. Enter during its run.
-
-    Clear rooms to open blast doors. First-come caches and PvP.
-
-    After Rancor, loot until the event closes.
+    Jabba: watch /event. Clear rooms; caches and PvP. Beat Rancor, then loot before closing.
 - id: vehicles
   topic: Vehicles
   heading: Vehicles
@@ -116,13 +103,6 @@ pages:
     Place a vehicle on solid ground, then choose a seat. Only the placer pilots. See item hints for keys.
 
     Pack when stopped, empty and out of combat. Destroyed vehicles are lost.
-- id: jawas
-  topic: Jawa Trading
-  heading: Jawa Trading
-  body: |-
-    Brown Jawas sell supplies on Tatooine. Right-click to browse.
-
-    Gray buyers pay credits. Put salvage in the sell window, then Sell. Rejected items return; closing returns leftovers.
 - id: ilum_crates
   topic: Ilum & Crates
   heading: Ilum & Crates

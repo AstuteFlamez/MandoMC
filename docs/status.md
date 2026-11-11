@@ -1,6 +1,9 @@
 # Resume here
 Updated: 2026-11-10
 
+## Eleven-page handbook revision ready (2026-11-11)
+Armor/Repairs removed; Jawa Shops moved to page three; KOTH/Jabba combined into Events on page nine. All other page bodies and relative ordering are byte-identical. Defaults and sanitized override match. 199 Java tests and 340 disposable native assertions pass, including actual command refresh of an already issued thirteen-page book into eleven pages, layout, stack/offhand/full/cursor/crafting safety and first-join behavior. Runtime config-only handoff sent to coordinator for shared restart; no restart owned. Next action: verify the coordinated live config refresh; follow-on sidebar Kills/Deaths and Territory request is starting separately.
+
 ## Tutorial handbook deployed (2026-11-10)
 User confirmed thirteen pages, combining combat/death/blasters/lightsabers and retaining the other proposed feature topics. Isolated branch bilal/tutorial-handbook implements a native written book for the explicit `/tutorial` command; first-join chat/seen state and `/spawn` remain unchanged. Existing guide copies/offhand stacks are reused, full inventory opens a preview, and held cursor/crafting items defer without mutation or vanilla drops. The normal 26.1.2 font width and fourteen-line page constraints validate every topic, including combined combat.
 

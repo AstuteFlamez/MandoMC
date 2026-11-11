@@ -10,11 +10,21 @@ import static org.junit.Assert.*;
 public class HandbookDefinitionTest {
     private YamlConfiguration config(){return YamlConfiguration.loadConfiguration(new InputStreamReader(
             getClass().getResourceAsStream("/language/handbook.yml"),StandardCharsets.UTF_8));}
-    @Test public void approvedThirteenTopicsStayOnePageEachInTheConfirmedOrder() {
+    @Test public void approvedElevenTopicsKeepJawaShopsThirdAndCombineEvents() {
         var book=HandbookDefinition.read(config());
-        assertEquals(13,book.pages().size());
-        assertEquals(List.of("travel","combat_weapons","armor_repairs","mining_materials","crafting","credits_auctions",
-                "clans_claims","raids_warpoints","koth","jabba","vehicles","jawas","ilum_crates"),book.pages().stream().map(HandbookDefinition.Page::id).toList());
+        assertEquals(11,book.pages().size());
+        assertEquals(List.of("travel","combat_weapons","jawas","mining_materials","crafting","credits_auctions",
+                "clans_claims","raids_warpoints","events","vehicles","ilum_crates"),book.pages().stream().map(HandbookDefinition.Page::id).toList());
+        assertEquals("Jawa Shops",book.pages().get(2).heading());
+        assertEquals("Jawa Shops",book.pages().get(2).topic());
+        assertTrue(book.pages().get(2).body().contains("Brown Jawas sell supplies"));
+        assertTrue(book.pages().get(2).body().contains("Gray buyers pay credits"));
+        assertFalse(book.pages().stream().anyMatch(page->page.id().equals("armor_repairs")));
+        assertEquals(1,book.pages().stream().filter(page->page.id().equals("jawas")).count());
+        assertEquals("Events",book.pages().get(8).heading());
+        assertTrue(book.pages().get(8).body().contains("KOTH"));
+        assertTrue(book.pages().get(8).body().contains("Jabba"));
+        assertFalse(book.pages().stream().anyMatch(page->List.of("koth","jabba").contains(page.id())));
         for(var page:book.pages()) {
             int lines=BookPageLayout.wrap(page.heading(),true).size()+1+BookPageLayout.wrap(page.body(),false).size();
             assertTrue(page.id()+" overflows: "+lines,lines<=14);
@@ -36,7 +46,7 @@ public class HandbookDefinitionTest {
         assertThrows(IllegalArgumentException.class,()->BookPageLayout.wrap("W".repeat(40),false));
     }
     @Test public void versionAndTopicCountAreValidatedBeforeCreatingAnyBook() {
-        var count=config();count.set("page-count",12);
+        var count=config();count.set("page-count",13);
         assertThrows(IllegalArgumentException.class,()->HandbookDefinition.read(count));
         var version=config();version.set("schema-version",2);
         assertThrows(IllegalArgumentException.class,()->HandbookDefinition.read(version));
