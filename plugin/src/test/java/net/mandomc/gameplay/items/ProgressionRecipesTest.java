@@ -95,7 +95,8 @@ public class ProgressionRecipesTest {
                 byResult.computeIfAbsent(recipe.result(), ignored -> new java.util.ArrayList<>()).add(recipe);
             }
         }
-        for (String id : List.of("speederbike", "uwing", "xwing", "tiefighter")) {
+        for (String id : List.of("speederbike", "uwing", "xwing", "tiefighter", "e11", "standard_plasma_cells",
+                "tibanna_gas_vial", "tibanna_gas_cells", "proton_torpedo")) {
             assertTrue(id + " must be obtainable without event loot", reachable(id, byResult, new java.util.HashSet<>()));
         }
     }

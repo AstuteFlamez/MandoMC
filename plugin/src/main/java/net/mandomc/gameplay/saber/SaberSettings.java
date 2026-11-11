@@ -22,7 +22,7 @@ public record SaberSettings(String itemId, String model, String hilt, double thr
                 optional(c, "throw-lock-correction", 1.5, 0, 3),
                 optional(c, "throw-return-height", 2.4, 0, 4), optional(c, "throw-variation", 1, 0, 1),
                 optional(c, "throw-spin-degrees", 38, 1, 90),
-                optional(c, "throw-cost-percent", 75, 0, 100),
+                optional(c, "throw-cost-percent", 51, 0, 100),
                 (int)optional(c, "throw-drain-ticks", 20, 1, 100),
                 optional(c, "guard-damage-multiplier", 5, 0.01, 100),
                 SaberVariant.read(c, text(c, "item-id"), text(c, "item-model")));

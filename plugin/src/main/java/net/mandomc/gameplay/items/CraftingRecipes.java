@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 /** Owns native crafting registration and the recipe data displayed by the player guide. */
 public final class CraftingRecipes implements AutoCloseable {
     private final ItemCatalog items;
+    private org.bukkit.scheduler.BukkitTask vendorRegistration;
     private final List<NamespacedKey> keys = new ArrayList<>();
     private final List<org.bukkit.inventory.Recipe> displaced = new ArrayList<>();
     private final List<RecipeDefinition> definitions;
@@ -29,22 +30,11 @@ public final class CraftingRecipes implements AutoCloseable {
         var section = Objects.requireNonNull(config.getConfigurationSection("recipes"), "items/recipes.yml: recipes missing");
         var pending = new ArrayList<org.bukkit.inventory.Recipe>();
         var parsed = new ArrayList<RecipeDefinition>();
+        var vendorRecipes = new ArrayList<RecipeDefinition>();
         for (String id : section.getKeys(false)) {
             var definition = RecipeDefinition.parse(id, section.getConfigurationSection(id));
-            var result = ingredient(definition.result());
-            if (definition.amount() > result.getMaxStackSize()) throw new IllegalArgumentException("Recipe output exceeds stack limit: " + id);
-            result.setAmount(definition.amount());
-            var key = new NamespacedKey(plugin, "craft_" + id);
-            var shaped = definition.shapeless() ? null : new ShapedRecipe(key, result);
-            var shapeless = definition.shapeless() ? new org.bukkit.inventory.ShapelessRecipe(key, result) : null;
-            if (shaped != null) shaped.shape(definition.shape().toArray(String[]::new));
-            for (var entry : definition.ingredients().entrySet()) {
-                var ingredient = ingredient(entry.getValue());
-                RecipeChoice choice = choice(entry.getValue());
-                if (shaped != null) shaped.setIngredient(entry.getKey(), choice);
-                else shapeless.addIngredient(choice);
-            }
-            pending.add(shaped != null ? shaped : shapeless);
+            if (items.external(definition.result())) vendorRecipes.add(definition);
+            else pending.add(craftingRecipe(plugin, definition, ingredient(definition.result())));
             parsed.add(definition);
         }
         var smelting = config.getConfigurationSection("smelting");
@@ -91,6 +81,55 @@ public final class CraftingRecipes implements AutoCloseable {
             close();
             throw error;
         }
+        if (!vendorRecipes.isEmpty()) {
+            // WeaponMechanics loads its templates asynchronously after plugin onEnable.
+            // Resolve every genuine template before registering any vendor-output recipes.
+            vendorRegistration = new org.bukkit.scheduler.BukkitRunnable() {
+                private int attempts;
+                @Override public void run() {
+                    var templates = new ArrayList<ItemStack>();
+                    try {
+                        for (var definition : vendorRecipes) templates.add(ingredient(definition.result()));
+                    } catch (IllegalStateException error) {
+                        if (++attempts >= 200) {
+                            cancel();
+                            plugin.getLogger().severe("Vendor crafting unavailable after 200 ticks: " + error.getMessage());
+                        }
+                        return;
+                    }
+                    cancel();
+                    var added = new ArrayList<NamespacedKey>();
+                    try {
+                        for (int i = 0; i < vendorRecipes.size(); i++) {
+                            var recipe = craftingRecipe(plugin, vendorRecipes.get(i), templates.get(i));
+                            var key = ((org.bukkit.Keyed) recipe).getKey();
+                            if (!Bukkit.addRecipe(recipe)) throw new IllegalStateException("Duplicate recipe: " + key);
+                            added.add(key);
+                        }
+                        keys.addAll(added);
+                        plugin.getLogger().info("Registered " + added.size() + " vendor crafting recipes.");
+                    } catch (RuntimeException error) {
+                        added.forEach(Bukkit::removeRecipe);
+                        plugin.getLogger().log(java.util.logging.Level.SEVERE, "Vendor crafting registration failed", error);
+                    }
+                }
+            }.runTaskTimer(plugin, 1, 1);
+        }
+    }
+
+    private org.bukkit.inventory.Recipe craftingRecipe(JavaPlugin plugin, RecipeDefinition definition, ItemStack result) {
+        if (definition.amount() > result.getMaxStackSize()) throw new IllegalArgumentException("Recipe output exceeds stack limit: " + definition.id());
+        result.setAmount(definition.amount());
+        var key = new NamespacedKey(plugin, "craft_" + definition.id());
+        var shaped = definition.shapeless() ? null : new ShapedRecipe(key, result);
+        var shapeless = definition.shapeless() ? new org.bukkit.inventory.ShapelessRecipe(key, result) : null;
+        if (shaped != null) shaped.shape(definition.shape().toArray(String[]::new));
+        for (var entry : definition.ingredients().entrySet()) {
+            RecipeChoice ingredient = choice(entry.getValue());
+            if (shaped != null) shaped.setIngredient(entry.getKey(), ingredient);
+            else shapeless.addIngredient(ingredient);
+        }
+        return shaped != null ? shaped : shapeless;
     }
 
     public List<RecipeDefinition> definitions() { return definitions; }
@@ -127,6 +166,7 @@ public final class CraftingRecipes implements AutoCloseable {
     }
 
     @Override public void close() {
+        if (vendorRegistration != null) vendorRegistration.cancel();
         keys.forEach(Bukkit::removeRecipe);
         keys.clear();
         displaced.forEach(Bukkit::addRecipe);

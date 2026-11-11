@@ -20,12 +20,15 @@ public class LegacyRecipesTest {
     @Test public void allRecoveredRecipesResolveWithoutDuplicateItemIds() throws Exception {
         var ids = new HashSet<String>();
         for (String file : java.util.List.of("legacy", "vehicles", "robes", "materials", "sabers", "tusken",
-                "jabba", "jabba-loot", "dioxis", "massiff", "dewback")) {
+                "jabba", "jabba-loot", "dioxis", "massiff", "dewback", "vehicle-ammo")) {
             var items = resource("items/definitions/" + file + ".yml").getConfigurationSection("items");
             for (String id : items.getKeys(false)) {
                 assertTrue("Duplicate " + id, ids.add(id));
                 ItemDefinition.parse(id, items.getConfigurationSection(id), file);
             }
+        }
+        for (String id : resource("items/catalog.yml").getConfigurationSection("external-items").getKeys(false)) {
+            assertTrue("Duplicate external item " + id, ids.add(id));
         }
         var config = resource("items/recipes.yml");
         var shapes = new HashSet<String>();
@@ -47,7 +50,7 @@ public class LegacyRecipesTest {
                 }
             }
         }
-        assertEquals(116, config.getConfigurationSection("recipes").getKeys(false).size());
+        assertEquals(121, config.getConfigurationSection("recipes").getKeys(false).size());
         assertEquals(11, config.getConfigurationSection("smelting").getKeys(false).size());
         assertEquals(71, config.getConfigurationSection("stonecutting").getKeys(false).size());
     }

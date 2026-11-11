@@ -25,6 +25,7 @@ public final class ItemCatalog {
     private final MiniMessage mini = MiniMessage.miniMessage();
     private record Entry(String category, java.util.function.Supplier<ItemStack> factory) { }
     private Map<String, Entry> entries = Map.of();
+    private Set<String> externalIds = Set.of();
     private final java.util.function.BiFunction<String, String, ItemStack> externalFactory;
 
     public ItemCatalog(Path directory) {
@@ -78,7 +79,10 @@ public final class ItemCatalog {
             }
         }
         entries = Collections.unmodifiableMap(candidate);
+        externalIds = external == null ? Set.of() : Set.copyOf(external.getKeys(false));
     }
+
+    public boolean external(String id) { return externalIds.contains(id); }
 
     /** Returns an independent item. Callers never receive a cached mutable template. */
     public ItemStack create(String id) {

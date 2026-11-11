@@ -26,12 +26,12 @@ Requests retain arrival order; corrections supersede their original item. Checke
 16. [x] Cloned guide previews end with blank line + yellow nonitalic “Click to see how to obtain.” Real templates/outputs do not gain UI hints.
 17. [x] Hide unused aurodium/cortosis/lommite/mandalorian_iron/neuranium/phrik/songsteel families and rhydonium fuel results from the guide. Keep IDs, assets, inventories, loot and existing native legacy registrations. Used Beskar routes remain.
 18. [x] Agrinium pickaxe/shovel only, native iron bases, approved sheet/stick shapes and head-only recolors; preserve handles/alpha.
-19. [ ] DEFERRED BY USER: concrete standard/Tibanna/proton ammo recipes. Existing identities remain; no guessed ingredients.
+19. [x] November 10: standard/Tibanna/proton ammo recipes authorized and implemented; craftable Tibanna vials feed Tibanna cells. See [E-11 and ammo](e11-ammo-crafting.md).
 20. [x] U-wing and speeder use genuine standard plasma cells; TIE Tibanna; X-wing proton. Preserve damage, cooldowns, repairs and terrain policy.
 21. [ ] DEFERRED BY USER: final-world generation. Later exclude gold/copper/lapis/emerald ores and all deepslate/biome/vein variants; retain coal, Agrinium iron, Durasteel diamond and Electrum redstone. No current map stripping or generation migration.
 22. [x] Original legacy animated green laser for Tibanna weapons; standard/proton visuals unchanged. Original bytes/provenance and real cannon display/axis/ammo behavior verified.
 23. [x] Crafting-first acquisition roadmap; exclude NPC/server equipment shops and resource-selling shops. Preserve credits/ranks/payments.
-24. [ ] DEFERRED BY USER: remaining blaster recipes.
+24. [ ] E-11 recipe implemented November 10; recipes for the other blasters remain deferred.
 25. [x] Native auction house in MandoMC, with one credit/escrow authority and no new plugin. Fixed-price, eight listings, 48 hours, zero fees/tax, permanent claims and confirmation/recovery; see [auction house](auction-house.md).
 26. [x] Global natural-spawn blacklist: SLIME, HUSK, RABBIT, CAMEL, CAMEL_HUSK, PARCHED. Preserve custom encounters, existing creatures, breeding, spawner, admin and custom reasons.
 27. [x] Creative encounter eligibility alongside Survival/Adventure; Spectator remains excluded and Creative combat immunity remains native. Independent scheduler verified with vanilla spawning disabled.
@@ -63,6 +63,6 @@ First release: deployed at 20:35 on 2026-11-09, matching verified published pack
 
 Follow-up: 166 Java checks and 32 current script checks pass. Isolated Paper passed 29 patrol assertions and 33 native auction/quantity assertions. Expanded mining, utility, saber, storage and tooltip pass reached 1,721 assertions; all final native shift/placement and give-quantity additions pass. Prior 140 real cannon and 11 independent periodic Creative assertions remain relevant; preserved class/resource entries are compared against the tested deployed baseline. No test plugin is installed live.
 
-The combined gameplay candidate was deployed at 22:00 with a full stopped backup and the verified matching pack. Latest shading pack `resource-pack-26.1.2-bc1d5c9d474a` is anonymously verified and active; server running and KOTH restored. Next action: reconnect for the pack and client-playtest recipes, ore shading and `/ah`. Blaster/ammo recipes and final generation remain deferred by explicit user instruction.
+The combined gameplay candidate was deployed at 22:00 with a full stopped backup and the verified matching pack. Latest shading pack `resource-pack-26.1.2-bc1d5c9d474a` is anonymously verified and active; server running and KOTH restored. Next action: reconnect for the pack and client-playtest recipes, ore shading and `/ah`. E-11 and all three ammo recipes are now authorized; other blasters and final generation remain deferred.
 
 36. [x] Verified latest user art correction: deepslate themed ores and stone Electrum (`redstone_ore`) must have no black painted shading. Lift dark mineral recesses and neutral outlines/rock to visible gray tone floors (80 deepslate, 96 Electrum stone), preserve ore geometry/palettes/alpha and all unrelated textures. Rebuilt, verified, published and applied the asset-only pack. All progression classes and the concurrent travel update are preserved; the missed KOTH round was restored.

@@ -5,8 +5,8 @@ item-model: mandomc:sabers/vader
 hilt-model: mandomc:sabers/vader_hilt
 throw-damage: 8.0
 throw-cooldown-ticks: 40
-# Drain 75% of a full charge over one second; use the same recovery as reflection.
-throw-cost-percent: 75.0
+# Drain 51 of 100 charge over one second; require the same 51 charge to throw.
+throw-cost-percent: 51.0
 throw-drain-ticks: 20
 throw-range: 18.0
 throw-speed: 1.0

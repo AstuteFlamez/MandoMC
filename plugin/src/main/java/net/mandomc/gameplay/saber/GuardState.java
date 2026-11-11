@@ -27,6 +27,8 @@ public final class GuardState {
     private boolean drain(double amount, int tick, SaberSettings s) {
         double previous = heat;
         heat = Math.min(s.capacity(), heat + amount);
+        // Fractional per-tick drain must still exhaust an exactly funded throw.
+        if (s.capacity() - heat < 1e-9) heat = s.capacity();
         empty = heat >= s.capacity();
         lastHit = tick;
         if (previous < s.capacity() && heat >= s.capacity()) {
