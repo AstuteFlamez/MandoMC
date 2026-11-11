@@ -19,6 +19,7 @@ final class ClanProtection implements Listener {
     ClanProtection(ClanService clans,TerritoryService territory){this.clans=clans;this.territory=territory;}
     private boolean staff(Player p){return p.getGameMode()==GameMode.CREATIVE&&p.hasPermission("mandomc.territory.edit");}
     private boolean edit(Player p,Block block) {
+        if(net.mandomc.gameplay.events.EventMining.allowed(block,p))return true;
         if(staff(p)){clans.land().staffEdit(block);return true;}
         if(!clans.canEdit(p,block.getLocation())){p.sendActionBar(clans.message("protected"));return false;}
         if(p.getGameMode()!=GameMode.SURVIVAL)return true;
@@ -47,7 +48,7 @@ final class ClanProtection implements Listener {
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void multi(BlockMultiPlaceEvent e){preparePlacement(e);for(var s:e.getReplacedBlockStates())if(!edit(e.getPlayer(),s.getBlock()))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
-    public void broke(BlockBreakEvent e){touch(e.getPlayer(),e.getBlock());}
+    public void broke(BlockBreakEvent e){if(!net.mandomc.gameplay.events.EventMining.owns(e.getBlock()))touch(e.getPlayer(),e.getBlock());}
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
     public void placed(BlockPlaceEvent e){touch(e.getPlayer(),e.getBlock());}
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
