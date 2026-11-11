@@ -1,5 +1,5 @@
 # Feature: Tutorial handbook
-Status: verified implementation; coordinated deployment pending
+Status: deployed and natively verified
 Branch: bilal/tutorial-handbook
 
 ## Player experience
@@ -24,5 +24,8 @@ The scoped overlay replaces only ArrivalListener, new gameplay/tutorial classes 
 
 The native probe's full suite is restricted to a disposable localhost:25590 runtime; production mode only inspects metadata and binding. No fixture actors are created on the shared server. Client rendering still needs ordinary in-game feedback; font widths/serialized pages are checked natively.
 
+## Deployment
+The scoped release preserves every unrelated entry of the latest recipe/Ilum baseline (c464b5d2ec1dea987810944a2c4d46e8f545ae4353aeba9f4d5c7159ddbb1278). Deployed handbook JAR: c6dc725a9524d851955697a804ef1e06d1c3169fbdb33919704184a54d9819de. Live read-only verification passes 203 metadata, layout and command-binding assertions; inventory/first-join behavior was exercised only in the isolated 361-assertion suite. Full stopped backup and rollout receipt are private. The temporary checker is removed, normal startup completed, and the previously active Jabba event is restored. Other plugin JARs, server settings and first-join language are preserved.
+
 ## Next action
-Coordinate the shared restart window, rebase the scoped overlay on the latest deployed recipe/Ilum changes, then back up, deploy, run read-only smoke, remove the probe and restart normally.
+Read `/tutorial` in-game and report any wording or client-font layout feedback.
