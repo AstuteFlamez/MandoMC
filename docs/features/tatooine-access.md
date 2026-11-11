@@ -1,5 +1,5 @@
 # Feature: Tatooine roads and territory
-Status: implementation, awaiting combined native rollout
+Status: playable, deployed with combined clans rollout
 Branch: bilal/tatooine-access
 
 ## Player experience
@@ -19,7 +19,7 @@ TerritoryPolicy is the shared static authority. Optional additional-maps preserv
 The 32-by-32 Tatooine atlas has 79 safezone, 169 warzone and 776 wilderness chunks. The protected shortest road follows 607.5 blocks of existing connected routes. Chunk rounding includes the full road width and town assets. Existing mob population/frequency parameters are retained; only the target world changes from the retired overworld to TatooineReview. Configuration changes require a clean restart.
 
 ## Verification
-178 Java tests and three directional stair-rule tests pass. The sparse trial changes 929 road-floor blocks in 103 chunks. All 1,577 route points connect through the 5,533 sampled road tiles using half-block collision transitions. A native NBT roundtrip checks 10,125,312 voxels and preserves unrelated blocks, block entities, biome palettes, heightmaps and all separate entity region files. Live patching takes a fresh stopped-world snapshot and refuses unreviewed route conflicts. Native Paper verification and normal restart remain pending.
+178 Java tests and three directional stair-rule tests pass. The sparse trial changes 929 road-floor blocks in 103 chunks. All 1,577 route points connect through the 5,533 sampled road tiles using half-block collision transitions. A native NBT roundtrip checks 10,125,312 voxels and preserves unrelated blocks, block entities, biome palettes, heightmaps and all separate entity region files. Live patching takes a fresh stopped-world snapshot and refuses unreviewed route conflicts. Native Paper rehearsal passed 42,309 assertions; the fresh live patch passed 42,303. All 929 road changes and all 45 original light levels (15) persist after the normal restart; temporary checkers were removed. The combined clan smoke test separately passed 1,049 live assertions. Full runtime and pre-patch dimension backups are retained privately.
 
 ## Deferred
 No further palace wall sculpting. No new mob types, loot changes, public warp migration or wilderness-cave changes are included.
