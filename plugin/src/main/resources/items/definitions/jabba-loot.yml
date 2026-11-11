@@ -40,7 +40,7 @@
     "alloy_plating": {
       "material": "ECHO_SHARD",
       "name": "<aqua>Alloy Plating",
-      "rarity": "rare",
+      "rarity": "common",
       "category": "materials",
       "custom-model-data": 130,
       "item-model": "mandomc:materials/alloy_plating",
@@ -51,7 +51,7 @@
     "energy_conduits": {
       "material": "ECHO_SHARD",
       "name": "<aqua>Energy Conduits",
-      "rarity": "rare",
+      "rarity": "uncommon",
       "category": "materials",
       "custom-model-data": 140,
       "item-model": "mandomc:materials/energy_conduits",
@@ -62,7 +62,7 @@
     "transparisteel_shard": {
       "material": "ECHO_SHARD",
       "name": "<aqua>Transparisteel Shard",
-      "rarity": "rare",
+      "rarity": "common",
       "category": "materials",
       "custom-model-data": 162,
       "item-model": "mandomc:materials/transparisteel_shard",
@@ -74,7 +74,7 @@
     "wiring_coil": {
       "material": "ECHO_SHARD",
       "name": "<gray>Wiring Coil",
-      "rarity": "common",
+      "rarity": "uncommon",
       "category": "materials",
       "custom-model-data": 163,
       "item-model": "mandomc:materials/wiring_coil",

@@ -51,6 +51,11 @@ public final class MetalMaterials implements Listener {
             default -> null;
         };
         if (metal == null || original.hasItemMeta() && !metal.equals(id)) return original;
+        if (metal.equals(id)) {
+            var expected = items.create(metal).getType();
+            if (original.getType() == expected) return original;
+            var migrated = original.clone(); migrated.setType(expected); items.refreshMaterialBadge(migrated); return migrated;
+        }
         var result = items.create(metal);
         result.setAmount(original.getAmount());
         return result;

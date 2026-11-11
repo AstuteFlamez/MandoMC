@@ -162,7 +162,7 @@
       "material": "ECHO_SHARD",
       "name": "<red>X-Wing Cockpit",
       "custom-model-data": 352,
-      "rarity": "epic",
+      "rarity": "rare",
       "category": "components",
       "lore": [
         "<gray>Advanced cockpit system used in",
@@ -174,7 +174,7 @@
       "material": "ECHO_SHARD",
       "name": "<red>X-Wing Left Wing",
       "custom-model-data": 353,
-      "rarity": "epic",
+      "rarity": "rare",
       "category": "components",
       "lore": [
         "<gray>A precision-engineered wing for",
@@ -186,7 +186,7 @@
       "material": "ECHO_SHARD",
       "name": "<red>X-Wing Right Wing",
       "custom-model-data": 354,
-      "rarity": "epic",
+      "rarity": "rare",
       "category": "components",
       "lore": [
         "<gray>Mirrored counterpart of the left",
@@ -555,7 +555,7 @@
       "material": "ECHO_SHARD",
       "name": "<aqua>Circuit Board",
       "custom-model-data": 133,
-      "rarity": "rare",
+      "rarity": "uncommon",
       "category": "materials",
       "lore": [
         "<gray>Core component of electronic systems."
@@ -742,7 +742,7 @@
       "material": "ECHO_SHARD",
       "name": "<aqua>Plastoid",
       "custom-model-data": 151,
-      "rarity": "rare",
+      "rarity": "common",
       "category": "materials",
       "lore": [
         "<gray>Common armor material."
@@ -856,7 +856,7 @@
       "material": "ECHO_SHARD",
       "name": "<light_purple>Tibanna Gas Vial",
       "custom-model-data": 161,
-      "rarity": "epic",
+      "rarity": "uncommon",
       "category": "materials",
       "lore": [
         "<gray>A pressurized vial of tibanna gas",
@@ -961,7 +961,7 @@
       "material": "ECHO_SHARD",
       "name": "<gray>Straight Hilt",
       "custom-model-data": 168,
-      "rarity": "common",
+      "rarity": "uncommon",
       "category": "components",
       "lore": [
         "<gray>A classic hilt design,",
@@ -1079,7 +1079,7 @@
       "material": "NETHER_STAR",
       "name": "<red>Red Kyber Crystal",
       "custom-model-data": 1,
-      "rarity": "legendary",
+      "rarity": "rare",
       "category": "crystals",
       "lore": [
         "<gray>A corrupted kyber crystal",
@@ -1091,7 +1091,7 @@
       "material": "NETHER_STAR",
       "name": "<gold>Orange Kyber Crystal",
       "custom-model-data": 2,
-      "rarity": "epic",
+      "rarity": "rare",
       "category": "crystals",
       "lore": [
         "<gray>A rare kyber crystal with",
@@ -1139,7 +1139,7 @@
       "material": "NETHER_STAR",
       "name": "<white>White Kyber Crystal",
       "custom-model-data": 6,
-      "rarity": "mythic",
+      "rarity": "rare",
       "category": "crystals",
       "lore": [
         "<gray>A purified kyber crystal",
@@ -1229,7 +1229,7 @@
       "material": "ECHO_SHARD",
       "name": "<gray>Beskar Scrap",
       "custom-model-data": 252,
-      "rarity": "legendary",
+      "rarity": "epic",
       "category": "metals",
       "lore": [
         "<gray>Fragments of legendary Beskar."
@@ -1240,7 +1240,7 @@
       "material": "ECHO_SHARD",
       "name": "<gray>Raw Beskar",
       "custom-model-data": 202,
-      "rarity": "legendary",
+      "rarity": "epic",
       "category": "metals",
       "lore": [
         "<gray>The legendary Mandalorian metal."
@@ -1251,7 +1251,7 @@
       "material": "ECHO_SHARD",
       "name": "<gray>Beskar Sheet",
       "custom-model-data": 302,
-      "rarity": "legendary",
+      "rarity": "epic",
       "category": "metals",
       "lore": [
         "<gray>A refined sheet of Beskar."
@@ -1295,7 +1295,7 @@
       "material": "ECHO_SHARD",
       "name": "<gray>Durasteel Scrap",
       "custom-model-data": 254,
-      "rarity": "common",
+      "rarity": "uncommon",
       "category": "metals",
       "lore": [
         "<gray>Scraps of durasteel."
@@ -1306,7 +1306,7 @@
       "material": "ECHO_SHARD",
       "name": "<gray>Durasteel",
       "custom-model-data": 204,
-      "rarity": "common",
+      "rarity": "uncommon",
       "category": "metals",
       "lore": [
         "<gray>A strong industrial alloy."
@@ -1317,7 +1317,7 @@
       "material": "ECHO_SHARD",
       "name": "<gray>Durasteel Sheet",
       "custom-model-data": 304,
-      "rarity": "common",
+      "rarity": "uncommon",
       "category": "metals",
       "lore": [
         "<gray>A tough, durable metal sheet."
@@ -1733,7 +1733,7 @@
     "durasteel_block": {
       "material": "DIAMOND_BLOCK",
       "name": "<gray>Durasteel Block",
-      "rarity": "common",
+      "rarity": "uncommon",
       "category": "materials",
       "lore": [
         "<gray>Stores nine Durasteel ingots.",
@@ -1745,7 +1745,7 @@
     "durasteel_ore": {
       "material": "DIAMOND_ORE",
       "name": "<gray>Durasteel Ore",
-      "rarity": "common",
+      "rarity": "uncommon",
       "category": "materials",
       "lore": [
         "<gray>Mining yields Durasteel Scraps.",
@@ -1757,7 +1757,7 @@
     "deepslate_durasteel_ore": {
       "material": "DEEPSLATE_DIAMOND_ORE",
       "name": "<gray>Deepslate Durasteel Ore",
-      "rarity": "common",
+      "rarity": "uncommon",
       "category": "materials",
       "lore": [
         "<gray>Mining yields Durasteel Scraps.",
@@ -1805,7 +1805,7 @@
     "beskar_block": {
       "material": "NETHERITE_BLOCK",
       "name": "<gray>Beskar Block",
-      "rarity": "legendary",
+      "rarity": "epic",
       "category": "materials",
       "lore": [
         "<gray>Stores nine Beskar ingots.",
@@ -1817,7 +1817,7 @@
     "beskar_ore": {
       "material": "NETHER_GOLD_ORE",
       "name": "<gray>Beskar Ore",
-      "rarity": "legendary",
+      "rarity": "epic",
       "category": "materials",
       "lore": [
         "<gray>Mining yields Beskar Scraps.",
@@ -1829,7 +1829,7 @@
     "deepslate_beskar_ore": {
       "material": "ANCIENT_DEBRIS",
       "name": "<gray>Deepslate Beskar Ore",
-      "rarity": "legendary",
+      "rarity": "epic",
       "category": "materials",
       "lore": [
         "<gray>Mining yields Beskar Scraps.",

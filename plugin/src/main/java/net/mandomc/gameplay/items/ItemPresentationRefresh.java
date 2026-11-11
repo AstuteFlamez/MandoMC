@@ -15,12 +15,16 @@ public final class ItemPresentationRefresh implements Listener {
 
     public ItemPresentationRefresh(JavaPlugin plugin, ItemCatalog items) {
         this.items = items;
+        new BanthaHideMaterials(plugin, items);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         plugin.getServer().getOnlinePlayers().forEach(player -> refresh(player.getInventory()));
     }
 
     public static boolean refresh(ItemCatalog items, ItemStack item) {
+        if (BanthaHideMaterials.refresh(items, item)) return true;
         String id = items.identify(item);
+        if ("bantha_hide".equals(id)) return false;
+        if (items.refreshMaterialBadge(item)) return true;
         if (LegacyFacilityLore.affected(id)) {
             var meta = item.getItemMeta();
             var before = meta.lore();
@@ -42,7 +46,7 @@ public final class ItemPresentationRefresh implements Listener {
             item.setItemMeta(meta);
             return true;
         }
-        if (id == null || !Set.of("bantha_hide", "massiff_ribs", "dewback_leg", "durasteel_wrench").contains(id)) return false;
+        if (id == null || !Set.of("massiff_ribs", "dewback_leg", "durasteel_wrench").contains(id)) return false;
         var template = items.create(id);
         var current = template.getItemMeta();
         var food = template.getData(io.papermc.paper.datacomponent.DataComponentTypes.FOOD);
@@ -73,7 +77,7 @@ public final class ItemPresentationRefresh implements Listener {
     public void pickup(org.bukkit.event.entity.EntityPickupItemEvent event) {
         if (!(event.getEntity() instanceof org.bukkit.entity.Player)) return;
         var stack = event.getItem().getItemStack();
-        if (LegacyFacilityLore.affected(items.identify(stack)) && refresh(items, stack))
+        if ((LegacyFacilityLore.affected(items.identify(stack)) || items.material(stack)) && refresh(items, stack))
             event.getItem().setItemStack(stack);
     }
 

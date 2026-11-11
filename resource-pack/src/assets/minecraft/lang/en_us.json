@@ -43,5 +43,6 @@
   "block.minecraft.stonecutter": "Agrinium Stonecutter",
   "block.minecraft.tripwire_hook": "Agrinium Tripwire Hook",
   "block.minecraft.chipped_anvil": "Chipped Agrinium Anvil",
-  "block.minecraft.damaged_anvil": "Damaged Agrinium Anvil"
+  "block.minecraft.damaged_anvil": "Damaged Agrinium Anvil",
+  "item.minecraft.leather": "Bantha Hide"
 }

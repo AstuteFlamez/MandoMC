@@ -92,7 +92,15 @@ public final class ProgressionProbe extends JavaPlugin implements Listener {
                 var stone=(StonecuttingRecipe)nativeRecipe;var input=recipes.ingredient(recipe.ingredients().get('I'));
                 check(stone.getInputChoice().test(input) && recipe.result().equals(mando.items().identify(stone.getResult())),"exact saber input/style output "+recipe.id());
                 var worn=input.clone();var meta=(Damageable)worn.getItemMeta();meta.setDamage(10);worn.setItemMeta(meta);
-                check(!stone.getInputChoice().test(worn),"worn saber cannot receive free repair "+recipe.id());styles++;
+                var inventory=(org.bukkit.inventory.StonecutterInventory)java.lang.reflect.Proxy.newProxyInstance(
+                        getClassLoader(),new Class<?>[]{org.bukkit.inventory.StonecutterInventory.class},(proxy,method,args)-> {
+                            if(method.getName().equals("getInputItem"))return worn;
+                            if(method.getName().equals("setResult"))return null;
+                            throw new UnsupportedOperationException(method.getName());
+                        });
+                var selection=new io.papermc.paper.event.player.PlayerStonecutterRecipeSelectEvent(actor,inventory,stone);
+                Bukkit.getPluginManager().callEvent(selection);
+                check(selection.isCancelled(),"worn saber cannot receive free repair "+recipe.id());styles++;
             } else if(recipe.ingredients().values().stream().anyMatch(i->i.endsWith("_kyber")) && recipe.category().equals("weapons")
                     || recipe.id().endsWith("_kyber") || recipe.id().equals("precision_emitter_coil")) {
                 var matrix=new ItemStack[9];

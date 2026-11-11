@@ -26,6 +26,7 @@ public final class ItemCatalog {
     private record Entry(String category, java.util.function.Supplier<ItemStack> factory) { }
     private Map<String, Entry> entries = Map.of();
     private Set<String> externalIds = Set.of();
+    private Map<String, Set<String>> badgeTexts = Map.of();
     private final java.util.function.BiFunction<String, String, ItemStack> externalFactory;
 
     public ItemCatalog(Path directory) {
@@ -78,11 +79,37 @@ public final class ItemCatalog {
                 }
             }
         }
+        var badges = new java.util.HashMap<String, Set<String>>();
+        for (String category : presentation.getConfigurationSection("categories").getKeys(false)) {
+            var texts = new java.util.HashSet<String>();
+            for (String rarity : presentation.getConfigurationSection("rarities").getKeys(false))
+                texts.add(net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
+                        .serialize(text("<white>" + badge(presentation, "rarities", rarity) + badge(presentation, "categories", category))));
+            badges.put(category, Set.copyOf(texts));
+        }
+        badgeTexts = Map.copyOf(badges);
         entries = Collections.unmodifiableMap(candidate);
         externalIds = external == null ? Set.of() : Set.copyOf(external.getKeys(false));
     }
 
     public boolean external(String id) { return externalIds.contains(id); }
+
+    public boolean material(ItemStack item) {
+        var id = identify(item); var entry = id == null ? null : entries.get(id);
+        return entry != null && Set.of("materials", "metals", "components", "crystals").contains(entry.category());
+    }
+
+    public boolean refreshMaterialBadge(ItemStack item) {
+        if (!material(item)) return false;
+        String id = identify(item); var meta = item.getItemMeta(); var lore = meta.lore();
+        if (lore == null || lore.isEmpty()) return false;
+        String category = entries.get(id).category();
+        var plain = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText();
+        if (!badgeTexts.getOrDefault(category, Set.of()).contains(plain.serialize(lore.getFirst()))) return false;
+        var badge = create(id).getItemMeta().lore().getFirst();
+        if (lore.getFirst().equals(badge)) return false;
+        var updated = new ArrayList<>(lore); updated.set(0, badge); meta.lore(updated); item.setItemMeta(meta); return true;
+    }
 
     /** Returns an independent item. Callers never receive a cached mutable template. */
     public ItemStack create(String id) {

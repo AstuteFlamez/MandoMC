@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class CraftingRecipes implements AutoCloseable {
     private final ItemCatalog items;
     private org.bukkit.scheduler.BukkitTask vendorRegistration;
+    private StonecutterRules stonecutterRules;
     private final List<NamespacedKey> keys = new ArrayList<>();
     private final List<org.bukkit.inventory.Recipe> displaced = new ArrayList<>();
     private final List<RecipeDefinition> definitions;
@@ -60,11 +61,12 @@ public final class CraftingRecipes implements AutoCloseable {
                 var input = ingredient(definition.ingredients().get('I'));
                 var result = Objects.requireNonNull(items.create(definition.result()), "Unknown stonecutting result: " + id);
                 pending.add(new org.bukkit.inventory.StonecuttingRecipe(new NamespacedKey(plugin, "refinish_" + id),
-                        result, new RecipeChoice.ExactChoice(input)));
+                        result, new RecipeChoice.MaterialChoice(input.getType())));
                 parsed.add(definition);
             }
         }
         definitions = List.copyOf(parsed);
+        stonecutterRules = new StonecutterRules(plugin, items, definitions, config.getString("guide.stonecutter-denied", "<red>This style requires the original, undamaged <item>."));
         try {
             for (String id : config.getStringList("replace-native")) {
                 var key = org.bukkit.NamespacedKey.fromString(id);
@@ -140,6 +142,7 @@ public final class CraftingRecipes implements AutoCloseable {
     }
 
     public ItemStack ingredient(String id) {
+        if (id.equals("minecraft:leather")) return Objects.requireNonNull(items.create("bantha_hide"));
         if (id.startsWith("#minecraft:")) {
             var tag = Objects.requireNonNull(Bukkit.getTag(org.bukkit.Tag.REGISTRY_ITEMS,
                     NamespacedKey.fromString(id.substring(1)), Material.class), "Unknown item tag: " + id);
@@ -153,6 +156,7 @@ public final class CraftingRecipes implements AutoCloseable {
     }
 
     private RecipeChoice choice(String id) {
+        if (id.equals("bantha_hide")) return new RecipeChoice.MaterialChoice(Material.LEATHER);
         if (id.startsWith("#minecraft:")) return new RecipeChoice.MaterialChoice(Objects.requireNonNull(
                 Bukkit.getTag(org.bukkit.Tag.REGISTRY_ITEMS, NamespacedKey.fromString(id.substring(1)), Material.class)));
         var ingredient = ingredient(id);
@@ -167,6 +171,7 @@ public final class CraftingRecipes implements AutoCloseable {
 
     @Override public void close() {
         if (vendorRegistration != null) vendorRegistration.cancel();
+        if (stonecutterRules != null) stonecutterRules.close();
         keys.forEach(Bukkit::removeRecipe);
         keys.clear();
         displaced.forEach(Bukkit::addRecipe);
