@@ -16,6 +16,21 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /** Native territory lifecycle and transition presentation. No per-tick scans or region vendor. */
 public final class TerritoryService implements Listener, AutoCloseable {
+    private record NpcSpawn(org.bukkit.entity.EntityType type, Location location) { }
+    private NpcSpawn npcSpawn;
+    /** Permit only the explicitly placed NPC's base entity during this server-thread operation. */
+    public <T> T spawnNpc(org.bukkit.entity.EntityType type, Location location, java.util.function.Supplier<T> spawn) {
+        if (!org.bukkit.Bukkit.isPrimaryThread() || npcSpawn != null) throw new IllegalStateException("NPC spawn must be a single server-thread operation");
+        npcSpawn = new NpcSpawn(type, location.clone());
+        try { return spawn.get(); } finally { npcSpawn = null; }
+    }
+    public boolean approvedNpcSpawn(org.bukkit.event.entity.CreatureSpawnEvent event) {
+        if (npcSpawn == null || event.getSpawnReason() != org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.CUSTOM
+                || event.getEntityType() != npcSpawn.type() || event.getLocation().getWorld() != npcSpawn.location().getWorld()
+                || event.getLocation().distanceSquared(npcSpawn.location()) > .01) return false;
+        npcSpawn = null;
+        return true;
+    }
     private final JavaPlugin plugin;
     private final TerritoryPolicy policy;
     private final ConfigurationSection language;
@@ -33,6 +48,9 @@ public final class TerritoryService implements Listener, AutoCloseable {
         plugin.getServer().getOnlinePlayers().forEach(this::announce);
     }
     public TerritoryPolicy policy() { return policy; }
+    public boolean mechanisms(Location location) {
+        return location != null && location.getWorld() != null && policy.mechanisms(location.getWorld().getKey().toString());
+    }
     public TerritoryPolicy.Zone zone(Location location) {
         if(location==null || location.getWorld()==null) throw new IllegalArgumentException("Territory requires a world");
         return policy.zone(location.getWorld().getKey().toString(),location.getBlockX(),location.getBlockY(),location.getBlockZ());

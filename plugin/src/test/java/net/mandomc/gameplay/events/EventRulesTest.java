@@ -103,14 +103,16 @@ public class EventRulesTest {
         assertThrows(IllegalArgumentException.class,()->KothSettings.read(fraction));
     }
     @Test public void onlyCurrentWorldsAndTheirLegacyAliasesResolve() {
-        assertEquals(List.of("spawn","hoth","tatooine"),WarpService.ids());
+        assertEquals(List.of("spawn","hoth","tatooine","mandalore","ilum"),WarpService.ids());
         assertEquals("spawn",WarpService.canonical("BlackSpireOutpost"));
         assertEquals("spawn",WarpService.canonical("Batuu"));
         assertEquals("spawn",WarpService.canonical("SpawnWorld"));
         assertNull(WarpService.canonical("SurvivalWorld"));
         assertNull(WarpService.canonical("Earth"));assertEquals("hoth",WarpService.canonical("HOTH"));
         assertEquals("tatooine",WarpService.canonical("TATOOINE"));
-        for(String excluded:List.of("alderaan","ilum","endor","jabba","devworld","survival"))
+        assertEquals("ilum",WarpService.canonical("Ilum"));
+        assertEquals("mandalore",WarpService.canonical("MandaloreReview"));
+        for(String excluded:List.of("alderaan","endor","jabba","devworld","survival"))
             assertNull(WarpService.canonical(excluded));
     }
     @Test public void rewardsAreExplicitlyDisabled() {

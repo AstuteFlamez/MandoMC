@@ -31,4 +31,9 @@ public class TerritoryPolicyTest {
  @Test public void malformedNativePoliciesCannotStart(){
   var config=new YamlConfiguration();assertThrows(IllegalArgumentException.class,()->new TerritoryPolicy(config));
  }
+ @Test public void originalIlumAllowsItsMechanismsWhileRemainingProtected(){
+  var p=policy();assertTrue(p.wholeWorldSafe("minecraft:ilum"));assertTrue(p.mechanisms("minecraft:ilum"));
+  assertFalse(p.edits("minecraft:ilum",27,-51,-60));assertFalse(p.combat("minecraft:ilum",27,-51,-60));
+  assertFalse(p.mechanisms("minecraft:spawnworld"));assertFalse(p.mechanisms("minecraft:tatooine"));
+ }
 }

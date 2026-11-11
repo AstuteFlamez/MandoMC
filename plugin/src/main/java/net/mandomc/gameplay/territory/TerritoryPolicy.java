@@ -10,6 +10,7 @@ public final class TerritoryPolicy {
     public enum Zone { SAFEZONE, WARZONE, WILDERNESS }
     private final ChunkAtlas mandalore;
     private final Map<String, String> safeWorlds;
+    private final java.util.Set<String> mechanismWorlds;
     private final String hoth;
     private final String landing;
     private final List<Integer> hothMin, hothMax, landingMin, landingMax;
@@ -27,6 +28,9 @@ public final class TerritoryPolicy {
             safe.put(world, section.getString(world));
         }
         safeWorlds = Map.copyOf(safe);
+        mechanismWorlds = java.util.Set.copyOf(config.getStringList("mechanism-worlds"));
+        if (!safeWorlds.keySet().containsAll(mechanismWorlds))
+            throw new IllegalArgumentException("territory/maps.yml: mechanism-worlds must be whole safezone worlds");
         hoth = requiredWorld(config, "hoth.world");
         landing = requiredWorld(config, "legacy-landing.world");
         hothMin = point(config, "hoth.warzone-min"); hothMax = point(config, "hoth.warzone-max");
@@ -69,4 +73,5 @@ public final class TerritoryPolicy {
         return null;
     }
     public boolean wholeWorldSafe(String world) { return safeWorlds.containsKey(world); }
+    public boolean mechanisms(String world) { return mechanismWorlds.contains(world); }
 }

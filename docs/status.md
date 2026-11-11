@@ -1,6 +1,13 @@
 # Resume here
 Updated: 2026-11-10
 
+## Original Ilum and native Kyber Crate (2026-11-10)
+On `bilal/legacy-ilum-crates`, the user superseded the generated map: original Ilum terrain, four ordered pressure-plate checkpoints, nine hints, Ahsoka teleport and Obi-Wan finish are deployed. The generated review world and its plugin are archived. `/warp ilum`, `/ilum` and `/parkour` use the original course. Native skinned NPCs replace old NPC dependencies. Each player has independent checkpoint/dialogue/timing state and inventory escrow; native whole-world safezone protection allows the original mechanisms. Finishing grants one Kyber Crate Key per rolling 24 hours; replays can improve times.
+
+The reusable native crate owner provides protected preview/roll menus, physical or virtual keys, catalog reward weights and durable fixed outcomes/queued claims. Kyber Crate is beside Batuu spawn at (3, 93, -16), with the original key artwork and recovered Ilum planet icon. The user explicitly approved publication of the six Ilum assets; the active newer Jawa pack `resource-pack-26.1.2-38232778f1ab` retains them byte-identically.
+
+183 Java tests, eight pack tests, 198 isolated native assertions and 27 live smoke assertions passed. The normal server restarted cleanly without the temporary checker. Scoped overlay SHA-256 `0ec9524b7835223a83f346b133af707db6960e10d3c382bce2aaf783f5f792d5` preserves the installed bootstrap and unrelated Jawa/recipe classes byte-identically. Private backups/receipts are retained; restart window released to clans for its combined rollout. See [feature brief](features/legacy-ilum-and-crates.md). Remaining: real-client visual and multiplayer feedback. Next action: reconnect and playtest `/warp ilum` with two players, then open the Kyber Crate.
+
 ## Native protection and corrected zones (2026-11-10)
 On bilal/clan-chunk-map, user corrections are deployed: only Mandalore's full spawn outpost/terrace/gateway is safezone (16 chunks); central caves/approaches are 127 warzone chunks; the remaining 881 chunks are wilderness. The initial fenced-shelter-only boundary missed terrace/gateway blocks; the final footprint is X -42..6, Z -211..-173, checked across all 1,911 columns. All of Batuu is safezone, including outside the nearby map window. `/c map` now uses orange Safezone (#FFAA00) and dark red Warzone (#AA0000). Category changes show matching Safezone/Warzone/Wilderness titles, with join/teleport/respawn coverage and deduplication.
 

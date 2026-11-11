@@ -6,6 +6,20 @@ author: AstuteFlamez
 description: MandoMC gameplay
 softdepend: [ WorldEdit, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
+  crates:
+    description: Preview and open crates
+    usage: /crates [preview|open|keys|claim|key|setblock]
+    aliases: [crate]
+    permission: mandomc.crates.play
+  parkour:
+    description: Enter the original Ilum trials
+    usage: /parkour [start|leave|checkpoint|restart|status|top]
+    aliases: [ilum]
+    permission: mandomc.parkour.play
+  parkourfinish:
+    description: Finish an eligible Ilum run at Obi-Wan
+    usage: /parkourfinish <player>
+    permission: mandomc.parkour.admin
   c:
     description: View the planet chunk map
     usage: /c map
@@ -209,6 +223,14 @@ commands:
     usage: '/tpcancel'
     permission: mandomc.travel.tpcancel
 permissions:
+  mandomc.crates.play:
+    default: true
+  mandomc.crates.admin:
+    default: op
+  mandomc.parkour.play:
+    default: true
+  mandomc.parkour.admin:
+    default: op
   mandomc.territory.edit:
     description: Edit protected terrain while in Creative mode
     default: op

@@ -1,0 +1,183 @@
+schema-version: 1
+enabled: false
+world: minecraft:ilum
+auto-enter-on-world-change: true
+start:
+- 11.639
+- -60
+- -55.57
+- 0
+- 0
+return-world: minecraft:spawnworld
+fall-y: -90
+reward-crate: kyber
+reward-cooldown-hours: 24
+checkpoints:
+- number: 1
+  plate:
+  - 27
+  - -51
+  - -60
+- number: 2
+  plate:
+  - 80
+  - -46
+  - -57
+- number: 3
+  plate:
+  - -111
+  - 144
+  - -186
+- number: 4
+  plate:
+  - -120
+  - -37
+  - -230
+leaderboard:
+- -2.024
+- -57.675
+- -48.248
+npcs:
+- id: ahsoka
+  name: Ahsoka Tano
+  location:
+  - 125
+  - -61
+  - -68
+  - 0
+  - 0
+  texture: ewogICJ0aW1lc3RhbXAiIDogMTc3Mzg2MDg1NzEwNiwKICAicHJvZmlsZUlkIiA6ICI4MTFkNjM0NzUwY2Y0ZDI0OTJmZDcxYTViZjZhZjI3MSIsCiAgInByb2ZpbGVOYW1lIiA6ICJzcGlmZnRvcGlhbW1wMSIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS8yZjgwZDFiNjM3MTkxZDQzYjFlNWViNGI4Y2U4ODE5Nzk3OTFhZTkwOTY3MTJhYzE4M2NhZTY3OGNmMTJkMGVhIiwKICAgICAgIm1ldGFkYXRhIiA6IHsKICAgICAgICAibW9kZWwiIDogInNsaW0iCiAgICAgIH0KICAgIH0KICB9Cn0=
+  signature: AF40xm60i0OenGju4Mei/Mn8selIleyChFfgXkvnAl2pSGfz8uZkUyYcPQ6Kf66z0INg4udWyK+9/AE4uIR3xfZlfkQIuzSlVPoBw5tQQ7AyZa2gfSnGsjn5bsJFaqs0raLS/hQgePJ38ClhDe53RmV+PqZjTnkfTzEGEUmYvPDwo64uJRDTaCi+H94CTR/K99fglC9PO8u81PX6yy4u3Mx0913UsQj+eE5Mz/sgrS/FkEmQTZATHTlmmf1CvOSTOyD/MndpaYMtP0zCHBMWfskpcoTcFcFERLdTWEYjS+8EwbcOQ2yba4HA4UcJNml6Okve+LNZqA/EnynLM5byWI+0EWI3gwg73t2wI9+MqWLAO9zHigNEBjzut6NTjBeEREOKFV78TTXbgIsJlBMzdPYI9Q75ffSqYAwUPtkFpuaWmv82rX6J+HErAEne4nNY9uGpTaty8AMyWg85x2FVBmFBUwnl+DXghzxQgh73kkMlYK19SoCwcOfa2mXJEaJ7/DaNiYaAAcu+p54A3pqXSJSjlN6Uxe6rIZ0YNyHFoU0EpTvdJ2hmxZwlUnrIDth7XRhnloRk7r9qMxYwJ7vAaZdBrz/MSW2FsxDTOsVT+UgMiawLgy6cvzrSLXnuuiFIHn+5LeBekrK6Q/4lit6Qpz9Z+AdnsLJMwOoOz2CFfyU=
+  requires-checkpoint: 2
+  dialogue:
+  - Ilum reveals only what you are ready to face.
+  - Your crystal is not found… it is earned.
+  - Trust in the Force—it will guide you forward.
+  - Go on. Your path awaits.
+  teleport:
+  - -111
+  - 145
+  - -182
+  - 180
+  - 0
+- id: obiwan
+  name: Obi-Wan Kenobi
+  location:
+  - -121
+  - -27
+  - -217
+  - 0
+  - 0
+  texture: ewogICJ0aW1lc3RhbXAiIDogMTc3Mzg3NjY5NzA1MiwKICAicHJvZmlsZUlkIiA6ICIzMjA3MWFlYjYzZjI0NmY0YTVlMGZhMWY3ODg3ZGRhNCIsCiAgInByb2ZpbGVOYW1lIiA6ICJNcl9HZW5lcyIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9mMDQ5ZTkzYTZmYTM1N2UyMGZmODg5YTZmZTU0ZTQ5YzM4NTc0OTA0MWUwNzFhODg5ZThjM2ZhNjI3NDQ3ZmE4IgogICAgfQogIH0KfQ==
+  signature: doV/3JkN3xtdNpHEU5ecKL0SRW8/e68K7WJNOzc11gNZ79IQkASFW5DUb22A3MPJ0+0XCGK2QXF2cko9LanIpg23MKgzMBwpwbgDFdCqRDGKwZ9nxWMh0s5qlWr0aQBw1jqBklZYsBonV0EEub2oxBi09Vm1ocYP5fjNnXhTHiDcovqckxU2gESen3sy5o8DcsRpeaEIOZYT2u4fp3i7T6vLyQcB6qwD/wmu43YKCubR2OBY4uzizSHVsy9w8G6wa1gZJa0W/xrYZbdPAF29OJD3fh8u4n3+JvFOhBPhK7jxAfCQipx8SVOiicdIsD7nx+gAfU8LSquxItX2d5Vuo5m2n1KRMKS9F/diIsA48IvQK5Zu3aVAb6j15BNjFS3VDjzxHckQc4B2W1UQnL7wN+dgLvM9Q3Fj7Yd2RzYqCeg0oFrpkkEu+k4Ow6pRWee1HdW347v+RCHHbbKznt80fDXuRohULxwphOA1DqywNAtWAAi1t1H33SmN8EMzRBynsSZxZDd1gib3MqzPpJBP161keO7AHADU8OuH/8HcE9RP0tKK3SDvX7Uy5i/b5S5p+kcsgAL9cJLqhV6IaCjudVOh92osmg5J8RptcQlbB+Y4zL4x2XjgQ9kUBJIAoss727eQ4EccczZgh9sXSw83I53Wn7R6084vYd2GExEgqs8=
+  requires-checkpoint: 4
+  dialogue:
+  - Ah… I was wondering when you would arrive.
+  - You’ve done well to make it this far. Few ever do.
+  - The Force has guided you—and it has not been mistaken.
+  - Take this. Within it lies what you seek.
+  - A kyber crystal is more than a tool… it is a reflection of you.
+  - Use it wisely, and it will never fail you.
+  finish: true
+hints:
+- id: parkourHint1
+  location:
+  - 9.313010215759277
+  - -55.972721099853516
+  - -51.852821350097656
+  lines:
+  - '<dark_aqua><bold>Hint: <reset><aqua><italic>Parkour'
+- id: buttonHint1
+  location:
+  - 36.425418853759766
+  - -48.79999923706055
+  - -60.11782455444336
+  lines:
+  - '<dark_aqua><bold>Hint: <reset><aqua><italic>Button'
+- id: mazeHint
+  location:
+  - 170.3564910888672
+  - 60.701698303222656
+  - -56.64381408691406
+  lines:
+  - <aqua>Find the <dark_aqua><bold>Jedi<reset>
+  - <aqua>to move on!
+- id: dropperHint1
+  location:
+  - -110.51460266113281
+  - 145.1160888671875
+  - -195.05563354492188
+  lines:
+  - '<dark_aqua><bold>Hint: <reset><aqua><italic>Jump'
+- id: almost
+  location:
+  - -115.29271697998047
+  - -35.55139923095703
+  - -238.1254119873047
+  lines:
+  - <aqua>Almost there!
+- id: buttonHint3
+  location:
+  - -119.76354217529297
+  - -35.97257995605469
+  - -200.66175842285156
+  lines:
+  - '<dark_aqua><bold>Hint: <reset><aqua><italic>Button'
+- id: buttonHint2
+  location:
+  - 97.03252410888672
+  - -44.79999923706055
+  - -57.69696044921875
+  lines:
+  - '<dark_aqua><bold>Hint: <reset><aqua><italic>Button'
+- id: parkourHint2
+  location:
+  - -119.65934753417969
+  - -36.34132766723633
+  - -232.7221221923828
+  lines:
+  - '<dark_aqua><bold>Hint: <reset><aqua><italic>Parkour'
+- id: warningIlum
+  location:
+  - 5.6167378425598145
+  - -38.718509674072266
+  - -47.72952651977539
+  lines:
+  - <red><bold><italic>BEWARE!<reset>
+  - <red>You can only claim
+  - <red>the reward every
+  - <red>24 hours!
+messages:
+  welcome: <aqua>Ilum trials</aqua> <gray>— your inventory is stored safely. Reach the four pressure-plate checkpoints,
+    find Ahsoka, then speak to Obi-Wan. Right-click your compass to retry, bed to restart, or barrier to leave.
+  left: <aqua>Left Ilum. Your inventory and previous game mode have been restored.
+  recovered: <aqua>Your stored inventory was recovered after the interrupted Ilum run.
+  checkpoint: <aqua>Checkpoint {number}/4 reached.
+  checkpoint-order: <yellow>Reach the previous checkpoint first.
+  restart: <aqua>Course restarted. Your timer and checkpoints are reset.
+  need-checkpoints: <yellow>Find the earlier pressure-plate checkpoints before continuing.
+  unsafe: <yellow>Leave combat and dismount before entering parkour.
+  crate-pending: <yellow>Finish or claim your current crate reward before starting parkour.
+  outside: <gray>Use /parkour to enter Ilum first.
+  commands: <yellow>Use your leave item or /parkour leave before using other commands.
+  busy: <yellow>Listen to the current conversation first.
+  retry: <aqua>Returned to your last checkpoint.
+  finished: '<aqua>Ilum complete!</aqua> <gray>Time: {time} • Personal best: {best}.'
+  key-earned: <aqua>You earned one Kyber Crate Key!</aqua> <gray>Open the crate beside Batuu spawn, or use /crates
+    open kyber.
+  reward-cooldown: <gray>Your next Ilum key is available in {hours} hour(s). You can still replay for a faster time.
+  practice: <yellow>This is a practice run. Teleports, flight, and inspection runs do not earn rewards or leaderboard
+    times.
+  timer: <aqua>Ilum • {time}</aqua> <gray>• Best {best} • Checkpoint {checkpoint}/4
+  top-title: <aqua>Ilum • Top runners
+  top-row: <gray>{rank}. <aqua>{name}</aqua> <gray>• {time}
+  empty-top: <gray>No completed runs yet.
+  npc-line: <aqua>{npc}</aqua> <dark_gray>»</dark_gray> <gray>{line}
+  inspect: <aqua>Inspecting Ilum in Creative. Use /parkour leave when finished; /parkour start begins a timed run.
+  denied: <red>You cannot use that command.
+  usage: <gray>/parkour [start|leave|checkpoint|restart|status|top] • /parkour inspect (staff)
+  finish-usage: <gray>/parkourfinish <online player> — requires all checkpoints and the finish location.
+  offline: <yellow>That player must be online.
+  status: <gray>Ilum checkpoint {checkpoint}/4 • {time}
+  leaderboard-title: <aqua><bold>ILUM LEADERBOARD</bold></aqua>
+  leaderboard-footer: <gray>Finish the trials • one key every 24 hours
