@@ -1711,7 +1711,7 @@
     "wayfarer_crate_key": "<gray>Not currently obtainable through crafting or loot.",
     "agrinium_scrap": "<gray>Mine Agrinium Ore with a stone-or-better pickaxe for 1–5 Agrinium Scraps per ore. Fortune does not increase this final yield; Silk Touch keeps the ore.",
     "aurodium_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "beskar_scrap": "<gray>Mine either Beskar ore variant for 1–5 Beskar Scraps per ore: the gold-backed variant accepts any pickaxe; the debris-backed variant needs diamond or netherite. Fortune does not increase this final yield; Silk Touch keeps the ore.",
+    "beskar_scrap": "<gray>Mine Beskar Ore with any pickaxe, or Deepslate Beskar Ore with a diamond or netherite pickaxe, for 1–5 Beskar Scraps per ore. Fortune does not increase this final yield; Silk Touch keeps the ore.",
     "cortosis_scrap": "<gray>Not currently obtainable through crafting or loot.",
     "durasteel_scrap": "<gray>Mine Durasteel Ore with an iron-or-better pickaxe for 1–5 Durasteel Scraps per ore. Fortune does not increase this final yield; Silk Touch keeps the ore.",
     "electrum_scrap": "<gray>Mine Electrum Ore with an iron-or-better pickaxe for 1–5 Electrum Scraps per ore. Fortune does not increase this final yield; Silk Touch keeps the ore.",
