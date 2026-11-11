@@ -1,0 +1,10 @@
+schema-version: 1
+max-members: 5
+max-claims: 4
+raid-warpoints: 10
+raid-seconds: 3600
+inactive-seconds: 604800
+public-loot-seconds: 86400
+wilderness-reset-seconds: 86400
+restore-blocks-per-step: 24
+friendly-fire: false

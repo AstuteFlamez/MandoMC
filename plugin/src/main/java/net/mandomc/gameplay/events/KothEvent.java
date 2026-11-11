@@ -42,13 +42,22 @@ public final class KothEvent implements ManagedEvent, Listener {
     private boolean running;
     private int age;
     private UUID winner;
+    private final boolean rewards;
+    private final String rewardCrate;
+    private final Map<String,List<Player>> participants = new LinkedHashMap<>();
+    private net.mandomc.gameplay.clans.ClanService clans() {
+        return Bukkit.getServicesManager().load(net.mandomc.gameplay.clans.ClanService.class);
+    }
+    private String contestant(Player player) { return clans()==null?player.getUniqueId().toString():clans().contestant(player); }
+    private String contestantName(Player player) { return clans()==null?player.getName():clans().contestantName(player); }
     public KothEvent(JavaPlugin plugin, ConfigurationSection config) {
         this.plugin=plugin;settings=KothSettings.read(config);name=config.getString("display-name", "King of the Hill");
         language=config.getConfigurationSection("messages");
         for (String key : new String[]{"start","capturing","winner","timeout","stopped","waiting","progress","contested"})
             if (language==null || !language.isString(key)) throw new IllegalArgumentException("events/koth.yml: missing messages."+key);
-        if (config.getBoolean("rewards.enabled", false))
-            throw new IllegalArgumentException("events/koth.yml: rewards are not implemented; keep rewards.enabled false");
+        rewards=config.getBoolean("rewards.enabled",true);
+        rewardCrate=config.getString("rewards.crate","koth");
+        if(rewards&&!language.isString("reward"))throw new IllegalArgumentException("events/koth.yml: missing reward message");
     }
     public String id() { return "koth"; }
     public String displayName() { return name; }
@@ -65,6 +74,11 @@ public final class KothEvent implements ManagedEvent, Listener {
         var center=new Location(world,settings.x(),settings.y(),settings.z());
         if (!world.getWorldBorder().isInside(center) || !new SaberProtection().allowed(center))
             throw new IllegalStateException("KOTH hill must be inside a loaded PvP-enabled region");
+        if(rewards) {
+            var crates=Bukkit.getServicesManager().load(net.mandomc.gameplay.crates.CrateService.class);
+            if(crates==null||!crates.definitions().containsKey(rewardCrate)||!language.isString("reward"))
+                throw new IllegalArgumentException("events/koth.yml: reward crate/service/message unavailable");
+        }
         running=true;age=0;winner=null;capture.reset();
         bar=Bukkit.createBossBar("",BarColor.BLUE,BarStyle.SOLID);bar.setProgress(0);
         plugin.getServer().getPluginManager().registerEvents(this,plugin);
@@ -77,12 +91,17 @@ public final class KothEvent implements ManagedEvent, Listener {
         age+=10;
         if (age>=settings.maximumTicks()) {Bukkit.broadcast(text("timeout",""));stop(false);return;}
         Map<String,Player> present=new LinkedHashMap<>();
+        participants.clear();
         var visible=new java.util.HashSet<Player>();
         for (Player player:players) {
             if (!eligible(player) || !player.getWorld().equals(world)) continue;
             visible.add(player);
             if (!bar.getPlayers().contains(player)) bar.addPlayer(player);
-            if (inside(player.getLocation())) present.put(player.getUniqueId().toString(),player);
+            if (inside(player.getLocation())) {
+                String key=contestant(player);
+                present.putIfAbsent(key,player);
+                participants.computeIfAbsent(key,k->new java.util.ArrayList<>()).add(player);
+            }
         }
         for (Player viewer:List.copyOf(bar.getPlayers())) if (!visible.contains(viewer)) bar.removePlayer(viewer);
         updateCapture(present);
@@ -93,9 +112,9 @@ public final class KothEvent implements ManagedEvent, Listener {
         String previous=capture.holder();
         String completed=capture.update(present.keySet(),10,settings.captureTicks());
         String holder=capture.holder();
-        if (holder!=null && !holder.equals(previous)) Bukkit.broadcast(text("capturing",present.get(holder).getName()));
+        if (holder!=null && !holder.equals(previous)) Bukkit.broadcast(text("capturing",contestantName(present.get(holder))));
         String key=holder!=null?"progress":present.size()>1?"contested":"waiting";
-        String holderName=holder==null?"":present.get(holder).getName();
+        String holderName=holder==null?"":contestantName(present.get(holder));
         bar.setTitle(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(text(key,holderName)));
         bar.setColor(holder!=null?BarColor.GREEN:present.size()>1?BarColor.RED:BarColor.BLUE);
         bar.setProgress(Math.min(1,(double)capture.ticks()/settings.captureTicks()));
@@ -105,8 +124,21 @@ public final class KothEvent implements ManagedEvent, Listener {
                     settings.z()+Math.sin(angle)*settings.radius(),1,0,0,0,0);
         }
         if (completed!=null) {
-            winner=present.get(completed).getUniqueId();
-            Bukkit.broadcast(text("winner",present.get(completed).getName()));
+            winner=UUID.fromString(completed);
+            String winningName=contestantName(present.get(completed));
+            if(rewards) {
+                var eligible=participants.getOrDefault(completed,List.of(present.get(completed))).stream()
+                        .filter(this::eligible).filter(p->inside(p.getLocation())&&completed.equals(contestant(p))).toList();
+                if(eligible.isEmpty()) { capture.reset(); return; }
+                Player recipient=eligible.get(java.util.concurrent.ThreadLocalRandom.current().nextInt(eligible.size()));
+                var crates=java.util.Objects.requireNonNull(Bukkit.getServicesManager().load(net.mandomc.gameplay.crates.CrateService.class));
+                // End capture before payout: an IO exception must never retry a second key next tick.
+                stop(false);
+                crates.enqueueKey(recipient,rewardCrate,1);
+                recipient.saveData();
+                Bukkit.broadcast(MiniMessage.miniMessage().deserialize(language.getString("reward"),
+                        Placeholder.unparsed("clan",winningName),Placeholder.unparsed("recipient",recipient.getName())));
+            } else Bukkit.broadcast(text("winner",winningName));
             world.spawnParticle(Particle.END_ROD,settings.x(),settings.y()+1,settings.z(),40,.5,1,.5,.05);
             // No chest/commands/economy mutation: reward selection is explicitly deferred.
             stop(false);
@@ -127,7 +159,10 @@ public final class KothEvent implements ManagedEvent, Listener {
                 Placeholder.unparsed("seconds",Integer.toString(Math.max(0,(settings.captureTicks()-capture.ticks()+19)/20))));
     }
     private void departed(Player p) {
-        if (p.getUniqueId().toString().equals(capture.holder())) capture.reset();
+        if(!contestant(p).equals(capture.holder()))return;
+        boolean remains=world.getPlayers().stream().anyMatch(other->!other.getUniqueId().equals(p.getUniqueId())
+                &&eligible(other)&&inside(other.getLocation())&&contestant(other).equals(capture.holder()));
+        if(!remains)capture.reset();
     }
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true) public void move(PlayerMoveEvent e) {
         if (!inside(e.getTo())) departed(e.getPlayer());
@@ -141,6 +176,7 @@ public final class KothEvent implements ManagedEvent, Listener {
     public void stop(boolean announce) {
         boolean wasRunning=running;running=false;capture.reset();HandlerList.unregisterAll(this);
         if (bar!=null) {bar.removeAll();bar=null;}
+        participants.clear();
         if (announce && wasRunning) Bukkit.broadcast(text("stopped",""));
     }
 }

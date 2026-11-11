@@ -98,3 +98,6 @@ Quantity update: `/mmc give <item> [quantity]` and `/mmc give <player> <item> [q
 
 ## Native clan map
 `/c map` (`/clan map`, `/cl map`) shows every Mandalore chunk in a north-up chat grid. Orange is safezone, dark red is warzone, gray is wilderness and yellow `+` marks your current chunk. Hover for zone, chunk coordinates and block bounds. Requires `mandomc.clan.map` (default true). Other worlds show a clear unmapped message. This command loads no terrain. Its zone policy also drives native protection and entry titles. Batuu is safezone everywhere; its grid follows the player. Mandalore displays the complete 500×500 map. Membership and claims remain deferred.
+
+## Native clans and KOTH crate (implementation; deployment pending)
+`/c` (`/clan`, `/cl`) supports create, invite, join, leave, kick, leader, disband, claim, unclaim, sethome, home, info, warpoints and map. Names use 3–16 letters/digits/underscores. Claims and homes require clan leadership; home travel is available to members. `/crates preview koth`, `/crates keys`, `/crates open koth` and `/crates claim` use the shared crate engine. See [native clans](features/native-clans.md).

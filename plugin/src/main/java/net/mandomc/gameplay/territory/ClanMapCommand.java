@@ -39,6 +39,9 @@ public final class ClanMapCommand implements CommandExecutor, TabCompleter {
         command.setTabCompleter(this);
     }
 
+    private net.mandomc.gameplay.clans.ClanService pluginClans() {
+        return org.bukkit.Bukkit.getServicesManager().load(net.mandomc.gameplay.clans.ClanService.class);
+    }
     private Component message(String key) {
         return MiniMessage.miniMessage().deserialize(Objects.requireNonNull(language.getString(key)));
     }
@@ -53,9 +56,8 @@ public final class ClanMapCommand implements CommandExecutor, TabCompleter {
         int playerZ = Math.floorDiv(player.getLocation().getBlockZ(), 16);
         String world = player.getWorld().getKey().toString();
         ChunkAtlas atlas = policy.map(world, playerX, playerZ);
-        if (atlas == null) {
-            sender.sendMessage(message("unmapped")); return true;
-        }
+        if (atlas == null) atlas = policy.nearbyMap(world,player.getWorld().getName(),playerX,playerZ,
+                player.getLocation().getBlockY());
         player.sendMessage(message("title").append(Component.text(" " + atlas.name(), NamedTextColor.WHITE)));
         player.sendMessage(message("orientation"));
         for (int z = atlas.minZ(); z <= atlas.maxZ(); z++) {
@@ -63,13 +65,16 @@ public final class ClanMapCommand implements CommandExecutor, TabCompleter {
             for (int x = atlas.minX(); x <= atlas.maxX(); x++) {
                 char zone = atlas.zone(x, z);
                 boolean here = x == playerX && z == playerZ;
-                var color = here ? NamedTextColor.YELLOW : switch (zone) {
+                var clans=pluginClans();
+                var owner=clans==null?null:clans.state().owner(new net.mandomc.gameplay.clans.ClanState.Chunk(world,x,z));
+                var color = here ? NamedTextColor.YELLOW : owner!=null ? NamedTextColor.LIGHT_PURPLE : switch (zone) {
                     case 'S' -> net.kyori.adventure.text.format.TextColor.color(0xFFAA00);
                     case 'W' -> NamedTextColor.DARK_RED;
                     default -> NamedTextColor.DARK_GRAY;
                 };
                 String zoneKey = switch (zone) { case 'S' -> "safezone"; case 'W' -> "warzone"; default -> "wilderness"; };
-                Component hover = message(zoneKey)
+                Component hover = owner==null?message(zoneKey):Component.text(owner.name,NamedTextColor.LIGHT_PURPLE);
+                hover=hover
                         .append(Component.text(" | " + x + ", " + z + "\nX " + (x * 16) + ".." + (x * 16 + 15)
                                 + " | Z " + (z * 16) + ".." + (z * 16 + 15), NamedTextColor.WHITE));
                 row = row.append(Component.text(here ? "+" : "■", color).hoverEvent(HoverEvent.showText(hover)));
@@ -77,6 +82,7 @@ public final class ClanMapCommand implements CommandExecutor, TabCompleter {
             player.sendMessage(row);
         }
         player.sendMessage(message("legend"));
+        player.sendMessage(message("claims-legend"));
         player.sendMessage(message("position").append(Component.text(" " + playerX + ", " + playerZ
                 + " | X " + atlas.minX() + ".." + atlas.maxX() + " | Z " + atlas.minZ() + ".." + atlas.maxZ(), NamedTextColor.WHITE)));
         if (policy.wholeWorldSafe(world)) player.sendMessage(message("whole-world-safezone"));

@@ -35,7 +35,7 @@ The new pack lives in `resource-pack/` in this repository. Its build targets the
 | Blasters and grenades | WeaponMechanics and dependencies | Acquisition, saber interaction, combat policy |
 | Animated models | ModelEngine | Vehicle controls, ownership, seats, health |
 | Dungeon mobs | MythicMobs | Runs, objectives, doors, cleanup, completion rewards |
-| Clans | Paper APIs | Native membership/claims when implemented; chunk atlas, warpoints and raids |
+| Clans | Paper APIs | Native membership/claims, chunk atlas, warpoints, raids and land restoration |
 | Protected territories | Paper APIs; WorldEdit retained for staff tools | Native classification, enforcement, titles and every custom action |
 | Worlds | Paper APIs | Existing dimension loading, exact arrivals, aliases and travel |
 | Credits | MandoMC native ledger | Atomic balances, payments and admin adjustments; auction-house/reward integration deferred |
@@ -45,7 +45,7 @@ The new pack lives in `resource-pack/` in this repository. Its build targets the
 The catalog in server/plugins.catalog.json records admission status. Installed versions and artifact hashes are in server/plugins.lock.json. Boot validation does not establish gameplay compatibility. EssentialsX and Multiverse-Core are removed. MandoMC owns the selected utility commands and migration; their old runtime data is retained for rollback. Native rank badges now format tab, nameplates and the existing chat renderer; voting remains deferred.
 
 ## Contracts
-- MandoMC owns clan state when implemented. The atlas stores native static chunk zones, not membership or claims. TerritoryPolicy/TerritoryService own classification and enforcement; Bukkit services expose one authority to existing attack, vehicle, mob and arrival adapters. Pairwise warpoints remain keyed by stable group IDs.
+- ClanState/ClanStorage own native clan membership, claims, homes, activity and rivalry state. The atlas stores only static chunk zones. LandRestoration owns pre-edit terrain baselines and gradual wilderness/abandonment reset. TerritoryPolicy/TerritoryService own classification and enforcement; Bukkit services expose one authority to existing attack, vehicle, mob and arrival adapters. Pairwise warpoints remain keyed by stable group IDs.
 - MandoMC owns static territory protection. Raids never override safezone/warzone terrain rules. WorldGuard is removed; its local data is archived.
 - The native CreditLedger owns current credit balances. Future auction currency/integration details require approval; do not introduce a second balance writer or restore the old SQL mirror.
 - WeaponMechanics generates its weapons and handles projectiles. MandoMC references vendor IDs instead of duplicating weapon definitions.
@@ -68,13 +68,13 @@ KOTH owns a continuous capture timer keyed to the capturing group's stable ID, o
 
 Warpoints start at zero per pair of groups. An attributed opposing-group PvP kill adds one to the killer group's net score against the victim group; the reverse view decreases by one. Store one consistent rivalry result and apply each death once, including combat-logout deaths. Event PvP counts; unrelated group relationships do not change. Death retains normal full-loot behavior. Unaffiliated and non-attributed deaths need explicit handling.
 
-Initial raid eligibility is directional: `score(attackerGroup, defenderGroup) >= configuredThreshold`, with a positive threshold whose numeric value is not yet chosen. This can authorize an attack while defenders are offline. During an active raid, a drop below the threshold starts a configurable continuation window for that attacker/defender pair. The expiry is measured from the score drop, not the initial breach. Further raid actions require either a qualifying current score or the valid continuation window. Active-raid detection and refresh/retrigger semantics still need a feature-brief decision. The source event implementations are recovery material, not the authoritative specification.
+Raid eligibility is directional at +10. The first successful approved explosive breach starts a fixed one-hour raid, resets that rivalry to zero and freezes scoring for that pair until expiry. Other pairs continue scoring. Further breaches cannot extend the deadline; defenders may be offline and retain ownership. After expiry the attacker needs ten fresh net kills. This 2026-11-10 user decision supersedes the earlier score-drop continuation-window design. Unaffiliated, same-clan and unattributed deaths do not change rivalries. See [native clans](features/native-clans.md).
 
 ## Custom damage
 A weapon adapter receives an attributed hit, asks combat policy about regions, factions and defenses, then cancels or modifies a supported vendor event. Exactly one path applies damage. Vehicles and area damage follow the same policy and preserve attacker attribution.
 
 ## Explosive raiding
-Check world/static protection, claim owner, attributed attacking group, the pairwise score or valid continuation window, and explosive type. Only approved explosions may breach an eligible rival's base, including offline. Claims retain their owners. Hand-breaking and takeover remain denied; looting accessible chests is allowed for eligible attackers. Unrelated groups may enter an existing hole and pick up dropped items, but may not break blocks or open the owner's chests. Evaluate block damage, container access and item pickup separately; an eligible pair's permissions must not grant a global bypass. Change only approved blocks; decide entity damage separately.
+Check world/static protection, claim owner, attributed attacking group, the qualifying pairwise score or its active one-hour raid, and explosive type. Only approved explosions may breach an eligible rival's base, including offline. Claims retain their owners. Hand-breaking and takeover remain denied; looting accessible chests is allowed for eligible attackers. Unrelated groups may enter an existing hole and pick up dropped items, but may not break blocks or open the owner's chests. Evaluate block damage, container access and item pickup separately; an eligible pair's permissions must not grant a global bypass. Change only approved blocks; decide entity damage separately.
 
 Do not unclaim a base, grant broad bypass, or indiscriminately uncancel another plugin's event. Prove the selected hooks and ordering in an integration spike before implementing raids.
 

@@ -30,6 +30,9 @@ public final class TemporaryExplosions implements Listener, AutoCloseable {
     private record Saved(Position position, String data, long due) {}
 
     private final JavaPlugin plugin;
+    private net.mandomc.gameplay.clans.ClanService clans() {
+        return Bukkit.getServicesManager().load(net.mandomc.gameplay.clans.ClanService.class);
+    }
     private final BlastSettings settings;
     private final Predicate<Location> allowed;
     private final Path journal;
@@ -124,6 +127,13 @@ public final class TemporaryExplosions implements Listener, AutoCloseable {
 
     private void seed(Location center, List<Block> blocks) {
         blocks.clear();
+        var clans=clans();
+        if(clans!=null) {
+            int r=settings.radius();var world=center.getWorld();
+            for(int x=(center.getBlockX()-r)>>4;x<=(center.getBlockX()+r)>>4;x++)
+                for(int z=(center.getBlockZ()-r)>>4;z<=(center.getBlockZ()+r)>>4;z++)
+                    if(world.isChunkLoaded(x,z))clans.land().prepare(world,x,z);
+        }
         blocks.addAll(candidates(center));
     }
 
@@ -167,18 +177,21 @@ public final class TemporaryExplosions implements Listener, AutoCloseable {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void entityLimit(EntityExplodeEvent e) {
         limit(e.getLocation(), e.blockList());
+        if(clans()!=null)e.blockList().removeIf(b->!clans().blast(e.getEntity(),b.getLocation()));
         e.setYield(0);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void blockLimit(BlockExplodeEvent e) {
         limit(e.getBlock().getLocation().add(.5, .5, .5), e.blockList());
+        if(clans()!=null)e.blockList().removeIf(b->!clans().blast(null,b.getLocation()));
         e.setYield(0);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void entitySnapshot(EntityExplodeEvent e) {
         snapshot(e.blockList(), e);
+        if(!e.isCancelled()&&clans()!=null)clans().breached(e.getEntity(),e.blockList());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -190,6 +203,8 @@ public final class TemporaryExplosions implements Listener, AutoCloseable {
         var added = new ArrayList<Position>();
         long due = System.currentTimeMillis() + settings.restoreSeconds() * 1000L;
         for (Block block : blocks) {
+            // Clan breaches persist until abandonment; do not enroll them in short blast-hole repair.
+            if(clans()!=null&&clans().owner(block.getLocation())!=null)continue;
             Position pos = Position.of(block);
             if (pending.putIfAbsent(pos, new Saved(pos, block.getBlockData().getAsString(), due))
                     == null) added.add(pos);

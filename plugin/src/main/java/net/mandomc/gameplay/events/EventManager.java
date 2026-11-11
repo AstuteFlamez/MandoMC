@@ -93,6 +93,17 @@ public final class EventManager implements Listener, AutoCloseable {
         var nextEvents=new LinkedHashMap<String,ManagedEvent>();
         var nextEntries=new LinkedHashMap<String,EventRotation.Entry>();
         var kothConfig=read("events/koth.yml");
+        // One-time migration of the previously deferred reward. Later operator overrides remain explicit.
+        if(kothConfig.getInt("clan-rewards-version",0)<1) {
+            kothConfig.set("clan-rewards-version",1);kothConfig.set("rewards.enabled",true);
+            kothConfig.set("rewards.crate","koth");
+            try(var reader=new java.io.InputStreamReader(java.util.Objects.requireNonNull(plugin.getResource("events/koth.yml")),
+                    java.nio.charset.StandardCharsets.UTF_8)) {
+                var defaults=YamlConfiguration.loadConfiguration(reader);
+                if(!kothConfig.isString("messages.reward"))kothConfig.set("messages.reward",defaults.getString("messages.reward"));
+            }
+            kothConfig.save(new File(plugin.getDataFolder(),"events/koth.yml"));
+        }
         if(!"koth".equals(kothConfig.getString("id"))) throw new IllegalArgumentException("events/koth.yml: expected id koth");
         var koth=new KothEvent(plugin,kothConfig);
         nextEvents.put(koth.id(),koth);

@@ -1,0 +1,38 @@
+schema-version: 1
+crates:
+  koth:
+    name: '<gold>KOTH Crate'
+    key-item: koth_crate_key
+    key-mode: virtual
+    blocks: []
+    rewards:
+      - {item: durasteel_sheet, amount: 16, weight: 35}
+      - {item: agrinium_sheet, amount: 24, weight: 30}
+      - {item: beskar_scrap, amount: 4, weight: 20}
+      - {item: phrik_sheet, amount: 4, weight: 10}
+      - {item: beskar_sheet, amount: 4, weight: 5}
+messages:
+  denied: '<red>You cannot manage crate keys.'
+  players-only: '<gray>Use this command in game.'
+  no-key: '<yellow>You need a key for this crate. Win KOTH to earn a KOTH key.'
+  full: '<yellow>Free an inventory slot before opening the crate. Your key has not been used.'
+  mail-full: '<yellow>Your reward is saved. Free inventory space, then use /crates claim.'
+  parkour: '<yellow>Finish or leave parkour before opening a crate.'
+  unsafe: '<yellow>Leave combat and dismount before opening a crate.'
+  claimed: '<aqua>Claimed {amount} saved crate item(s).'
+  won: '<aqua>Crate reward » </aqua>'
+  opening-title: '<dark_gray>Opening {crate}…'
+  preview-title: '<dark_gray>{crate} • Rewards'
+  chance: '<gray>Chance: <yellow>{chance}%'
+  winner: '<aqua>↓ Your reward ↓'
+  skip: '<yellow>Skip animation • keep the same reward'
+  key-count: '<gray>Available keys: <aqua>{amount}'
+  open-hint: '<yellow>Click to open • consumes one key'
+  list: '<aqua>Crates: {crates}</aqua> <gray>Use /crates preview koth or /crates open koth. At a crate block: left-click to preview, right-click to open.'
+  keys: '<gray>{crate} keys: <aqua>{amount}'
+  usage: '<gray>/crates preview|open <crate> • /crates keys • /crates claim'
+  admin-usage: '<gray>/crates key give <crate> <player> [amount] • /crates setblock <crate>'
+  key-given: '<aqua>Gave {amount} crate key(s) to {player}.'
+  offline: '<yellow>That player must be online to receive keys.'
+  container: '<yellow>Look at a chest, barrel, shulker box, or ender chest within five blocks.'
+  bound: '<aqua>Container registered as a crate. Existing contents were preserved.'
