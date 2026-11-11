@@ -1,0 +1,90 @@
+package net.mandomc.verification;
+import java.nio.file.*;
+import java.util.*;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.*;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.*;
+import net.mandomc.bootstrap.MandoPlugin;
+import net.mandomc.gameplay.clans.*;
+import net.mandomc.gameplay.territory.*;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+public final class HudTerritoryProbe extends JavaPlugin {
+ private MandoPlugin mando;private Player actor;private Object handle;private Map<UUID,Object> online;
+ private ClanService clans;private ClanState.Clan clan,viewer,third;private ClanState.Chunk claim;
+ private Scoreboard board;private Objective objective;private int checks;private boolean full;
+ private void check(boolean ok,String why){if(!ok)throw new AssertionError(why);checks++;}
+ private String line(int n){return PlainTextComponentSerializer.plainText().serialize(objective.getScore("mmc_line_"+n).customName());}
+ private void later(Runnable r){Bukkit.getScheduler().runTaskLater(this,()->{try{r.run();}catch(Throwable e){fail(e);}},12);}
+ @Override public void onEnable(){Bukkit.getScheduler().runTaskLater(this,()->{try{begin();}catch(Throwable e){fail(e);}},100);}
+ private void stable(){check(actor.getScoreboard()==board,"Same scoreboard instance");check(board.getObjective("mandomc_hud").equals(objective),"Same objective");check(board.getEntries().stream().filter(e->e.startsWith("mmc_line_")).count()==14,"Exactly fourteen distinct stable keys");for(int i=0;i<14;i++)check(objective.getScore("mmc_line_"+i).getScore()==14-i,"Stable row order "+i);}
+ private void begin()throws Exception {
+  mando=(MandoPlugin)Bukkit.getPluginManager().getPlugin("MandoMC");check(mando!=null&&mando.hud()!=null,"Native HUD enabled");
+  var f=mando.hud().getClass().getDeclaredField("settings");f.setAccessible(true);var settings=(net.mandomc.gameplay.hud.HudSettings)f.get(mando.hud());
+  check(settings.kills().contains("<kills>")&&settings.kills().contains("<deaths>"),"Kills/deaths share template");
+  check(settings.lines().stream().filter(s->s.contains("<territory>")).count()==1,"One normal territory row");check(settings.combatLines().stream().filter(s->s.contains("<territory>")).count()==1,"One combat territory row");check(settings.lines().size()==14&&settings.combatLines().size()==14,"Both layouts fourteen rows");
+  full=Files.exists(getDataFolder().toPath().resolve("full-suite"));if(!full){success();return;}check(getServer().getPort()==25590,"Actors confined to disposable server");
+  var world=Bukkit.getWorld(NamespacedKey.minecraft("spawnworld"));actor=actor(world,world.getSpawnLocation());actor.setStatistic(Statistic.PLAYER_KILLS,7);actor.setStatistic(Statistic.DEATHS,3);mando.hud().attach(actor);board=actor.getScoreboard();objective=board.getObjective("mandomc_hud");
+  check(line(8).equals("⚔ ᴋɪʟʟѕ/ᴅᴇᴀᴛʜѕ: 7/3"),"Combined actual kills and deaths");check(line(9).equals("| ᴛᴇʀʀɪᴛᴏʀʏ: Safezone"),"Batuu safezone");stable();
+  var target=Bukkit.getWorld(NamespacedKey.minecraft("mandalore_review"));check(target!=null,"Mandalore available");check(actor.teleport(new Location(target,240,280,240)),"Cross-world movement succeeds");actor.setGravity(false);
+  later(()->wilderness(target));
+ }
+ private void steps(Runnable... actions){var i=new int[]{0};Runnable[] next=new Runnable[1];next[0]=()->{if(i[0]<actions.length){actions[i[0]++].run();later(next[0]);}};later(next[0]);}
+ private TerritoryIdentity identity(){return Bukkit.getServicesManager().load(TerritoryService.class).identity(actor,actor.getLocation());}
+ private void wilderness(World world){
+  check(line(9).endsWith("Wilderness"),"Cross-world wilderness updates on cycle");stable();
+  clans=Bukkit.getServicesManager().load(ClanService.class);check(clans!=null,"Authoritative clan service");claim=new ClanState.Chunk(world.getKey().toString(),15,15);check(!clans.state().claims.containsKey(claim),"Fixture chunk unclaimed");clan=clans.state().create("HudClaim",UUID.randomUUID(),System.currentTimeMillis());clans.state().claims.put(claim,clan.id);
+  steps(
+   ()->{check(line(9).endsWith("HudClaim"),"Same-chunk claim change shows owner");check(identity().relation()==TerritoryIdentity.Relation.OTHER,"Foreign claim blue relation");stable();clan.members.add(actor.getUniqueId());},
+   ()->{check(identity().relation()==TerritoryIdentity.Relation.OWN,"Membership change becomes green own claim");clan.members.remove(actor.getUniqueId());viewer=clans.state().create("HudViewer",actor.getUniqueId(),System.currentTimeMillis());third=clans.state().create("HudThird",UUID.randomUUID(),System.currentTimeMillis());for(int i=0;i<10;i++)clans.state().kill(viewer.id,clan.id,System.currentTimeMillis());},
+   ()->{check(identity().relation()==TerritoryIdentity.Relation.OTHER,"Eligible but unstarted raid stays blue");check(clans.state().breach(viewer.id,clan.id,System.currentTimeMillis(),60000,10),"Actual raid started");},
+   ()->{check(identity().relation()==TerritoryIdentity.Relation.RAID,"Attacker sees active defender claim red");var pair=viewer.id.compareTo(clan.id)<0?new ClanState.Pair(viewer.id,clan.id):new ClanState.Pair(clan.id,viewer.id);clans.state().rivalries.put(pair,new ClanState.Rivalry(0,viewer.id,System.currentTimeMillis()-1));},
+   ()->{check(identity().relation()==TerritoryIdentity.Relation.OTHER,"Raid expiry returns blue");for(int i=0;i<10;i++)clans.state().kill(third.id,clan.id,System.currentTimeMillis());check(clans.state().breach(third.id,clan.id,System.currentTimeMillis(),60000,10),"Unrelated raid started");},
+   ()->{check(identity().relation()==TerritoryIdentity.Relation.OTHER,"Third-party raid stays blue");var prior=identity();clans.state().claims.put(new ClanState.Chunk(world.getKey().toString(),15,14),clan.id);check(actor.teleport(new Location(world,240,280,224)),"Move into adjacent same-owner claim");actor.setGravity(false);check(prior.equals(identity()),"Contiguous same owner has identical transition identity");},
+   ()->{check(line(9).endsWith("HudClaim"),"Adjacent claim keeps owner label");clans.state().claims.entrySet().removeIf(e->e.getValue().equals(clan.id));},
+   ()->{check(line(9).endsWith("Wilderness"),"Same-chunk unclaim refreshes");check(actor.teleport(new Location(world,0,280,0)),"Move to warzone");actor.setGravity(false);},
+   ()->{check(line(9).endsWith("Warzone"),"Warzone movement refreshes");mando.combat().tag(actor);},
+   ()->{check(line(9).matches("⚔ ɪɴ ᴄᴏᴍʙᴀᴛ: [0-9]+\\.[0-9]s"),"Combat countdown retained");check(line(8).contains("ᴅᴏ ɴᴏᴛ ʟᴏɢ ᴏᴜᴛ")&&line(10).contains("ᴅᴏ ɴᴏᴛ ʟᴏɢ ᴏᴜᴛ"),"Both combat warnings retained");check(line(11).endsWith("Warzone"),"Territory persists during combat");stable();mando.combat().clear(actor);},
+   ()->{check(line(8).endsWith("7/3"),"Stats return after combat");check(line(9).endsWith("Warzone"),"Territory returns to normal slot");stable();try{success();}catch(Exception e){fail(e);}}
+  );
+ }
+ private void success()throws Exception{String result="HUD TERRITORY PASSED: "+checks+" native assertions";Files.createDirectories(getDataFolder().toPath());Files.writeString(getDataFolder().toPath().resolve("PASSED.txt"),result);getLogger().info(result);finish();if(full)Bukkit.shutdown();}
+ private void fail(Throwable e){getLogger().log(java.util.logging.Level.SEVERE,"HUD TERRITORY FAILED",e);try{Files.createDirectories(getDataFolder().toPath());Files.writeString(getDataFolder().toPath().resolve("FAILED.txt"),e.toString());}catch(Exception ignored){}finish();if(getServer().getPort()==25590)Bukkit.shutdown();}
+ private void finish(){if(clans!=null){for(var c:new ClanState.Clan[]{clan,viewer,third})if(c!=null)clans.state().remove(c);}if(actor!=null&&mando!=null){mando.combat().clear(actor);mando.hud().detach(actor);}cleanup();}
+    @SuppressWarnings("unchecked") private Player actor(World world,Location at)throws Exception {
+        Class<?> serverClass=Class.forName("net.minecraft.server.MinecraftServer"),levelClass=Class.forName("net.minecraft.server.level.ServerLevel"),
+                profileClass=Class.forName("com.mojang.authlib.GameProfile"),infoClass=Class.forName("net.minecraft.server.level.ClientInformation"),
+                playerClass=Class.forName("net.minecraft.server.level.ServerPlayer");
+        Object server=Bukkit.getServer().getClass().getMethod("getServer").invoke(Bukkit.getServer());
+        Object list=server.getClass().getMethod("getPlayerList").invoke(server);
+        var field=Class.forName("net.minecraft.server.players.PlayerList").getDeclaredField("playersByUUID");field.setAccessible(true);online=(Map<UUID,Object>)field.get(list);
+        Object level=world.getClass().getMethod("getHandle").invoke(world);
+        Object profile=profileClass.getConstructor(UUID.class,String.class).newInstance(UUID.randomUUID(),"HandbookCheck");
+        handle=playerClass.getConstructor(serverClass,levelClass,profileClass,infoClass).newInstance(server,level,profile,infoClass.getMethod("createDefault").invoke(null));
+        Class.forName("net.minecraft.world.entity.Entity").getField("valid").setBoolean(handle,true);
+        Class<?> flow=Class.forName("net.minecraft.network.protocol.PacketFlow"),connectionClass=Class.forName("net.minecraft.network.Connection");
+        Object connection=connectionClass.getConstructor(flow).newInstance(flow.getField("SERVERBOUND").get(null));
+        Class<?> cookieClass=Class.forName("net.minecraft.server.network.CommonListenerCookie");Object cookie=cookieClass.getMethod("createInitial",profileClass,boolean.class).invoke(null,profile,false);
+        Class<?> listenerClass=Class.forName("net.minecraft.server.network.ServerGamePacketListenerImpl");Object listener=listenerClass.getConstructor(serverClass,connectionClass,playerClass,cookieClass).newInstance(server,connection,handle,cookie);
+        playerClass.getField("connection").set(handle,listener);
+        var timer=listenerClass.getDeclaredField("clientLoadedTimeoutTimer");timer.setAccessible(true);timer.setInt(listener,0);
+        var waiting=listenerClass.getDeclaredField("waitingForRespawn");waiting.setAccessible(true);waiting.setBoolean(listener,false);
+        playerClass.getMethod("setPos",double.class,double.class,double.class).invoke(handle,at.getX(),at.getY(),at.getZ());
+        var player=(Player)playerClass.getMethod("getBukkitEntity").invoke(handle);online.put(player.getUniqueId(),handle);
+        level.getClass().getMethod("addNewPlayer",playerClass).invoke(level,handle);player.setGameMode(GameMode.SURVIVAL);player.setGravity(false);return player;
+    }
+    @SuppressWarnings("unchecked") private void cleanup(){
+        if(actor==null)return;
+        try {
+            actor.setItemOnCursor(null);
+            if(actor.getOpenInventory().getTopInventory() instanceof CraftingInventory c)c.setMatrix(new ItemStack[4]);
+            actor.closeInventory();online.remove(actor.getUniqueId());
+            for(var w:Bukkit.getWorlds()){Object level=w.getClass().getMethod("getHandle").invoke(w);((List<Object>)level.getClass().getMethod("players").invoke(level)).remove(handle);}
+            handle.getClass().getMethod("discard").invoke(handle);
+        }catch(Exception error){getLogger().warning("Book fixture cleanup: "+error);}
+        actor=null;
+    }
+ @Override public void onDisable(){finish();}
+}

@@ -24,6 +24,15 @@ public class HudSettingsTest {
         var legacy = config(); legacy.set("combat-lines", null);
         assertEquals(settings.combatLines(), HudSettings.read(legacy).combatLines());
     }
+    @Test public void combinedKillsDeathsAndTerritoryFitBothLayouts() {
+        var settings = HudSettings.read(config());
+        assertTrue(settings.kills().contains("ᴋɪʟʟѕ/ᴅᴇᴀᴛʜѕ"));
+        assertTrue(settings.kills().contains("<kills><gray>/<#75CDA9><deaths>"));
+        assertEquals(1, settings.lines().stream().filter(line -> line.contains("<territory>")).count());
+        assertEquals(1, settings.combatLines().stream().filter(line -> line.contains("<territory>")).count());
+        assertFalse(settings.lines().stream().anyMatch(line -> line.contains("<deaths>")));
+        assertEquals(14, settings.combatLines().size());
+    }
     @Test public void timerAlwaysHasOneDecimal() {
         assertEquals("15.0", HudSettings.seconds(150)); assertEquals("0.1", HudSettings.seconds(1)); assertEquals("0.0", HudSettings.seconds(0));
     }

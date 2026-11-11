@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.*;
 import net.mandomc.gameplay.combat.CombatService;
+import net.mandomc.gameplay.territory.TerritoryService;
 import net.mandomc.gameplay.credits.*;
 import net.mandomc.gameplay.ranks.*;
 import org.bukkit.Bukkit;
@@ -110,7 +111,8 @@ public final class PlayerHud implements Listener, AutoCloseable {
         var logo = settings.animations().get("logo").at(millis);
         int tenths = combat.remainingTenths(view.player);
         var timer = MiniMessage.miniMessage().deserialize(tenths > 0 ? settings.combat() : settings.kills(),
-                Placeholder.unparsed("seconds", HudSettings.seconds(tenths)), Placeholder.unparsed("kills", String.valueOf(view.kills)));
+                Placeholder.unparsed("seconds", HudSettings.seconds(tenths)), Placeholder.unparsed("kills", String.valueOf(view.kills)),
+                Placeholder.unparsed("deaths", String.valueOf(view.deaths)));
         var placeholders = TagResolver.resolver(
                 Placeholder.component("logo", logo), Placeholder.component("bar", settings.animations().get("bar").at(millis)),
                 Placeholder.component("serverinfo", settings.animations().get("serverinfo").at(millis)),
@@ -118,6 +120,7 @@ public final class PlayerHud implements Listener, AutoCloseable {
                 Placeholder.unparsed("date", settings.date().format(Instant.now())), Placeholder.unparsed("ping", String.valueOf(view.ping)),
                 Placeholder.component("rank", ranks.rank(view.player).badge(false)), Placeholder.component("combat-or-kills", timer),
                 Placeholder.unparsed("deaths", String.valueOf(view.deaths)),
+                Placeholder.unparsed("territory", territory(view.player)),
                 Placeholder.unparsed("balance", CreditLedger.format(credits.ledger().balance(view.player.getUniqueId()))));
         if (!view.objective.displayName().equals(logo)) view.objective.displayName(logo);
         var lines = tenths > 0 ? settings.combatLines() : settings.lines();
@@ -133,6 +136,12 @@ public final class PlayerHud implements Listener, AutoCloseable {
             view.player.sendPlayerListHeaderAndFooter(header, footer); view.header = header; view.footer = footer;
         }
     }
+    private String territory(Player player) {
+        // Services retain authority; resolving at render also handles same-chunk claim/disband changes.
+        var zones = Bukkit.getServicesManager().load(TerritoryService.class);
+        return zones == null ? "Wilderness" : zones.identity(player, player.getLocation()).name();
+    }
+
     private void mirrorTeams(View view, List<? extends Player> online) {
         var source = view.previous; var target = view.board;
         for (var team : Set.copyOf(target.getTeams())) {

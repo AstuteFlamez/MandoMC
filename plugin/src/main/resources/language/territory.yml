@@ -16,5 +16,8 @@ titles:
   safezone: '<gold>Safezone'
   warzone: '<dark_red>Warzone'
   wilderness: '<gray>Wilderness'
+  claim-own: '<green><clan>'
+  claim-other: '<blue><clan>'
+  claim-raid: '<red><clan>'
 
 claims-legend: '<light_purple>■ Clan claim <gray>— hover to see its owner.'
