@@ -1,6 +1,11 @@
 # Resume here
 Updated: 2026-11-11
 
+## Visible head driver correction (2026-11-11)
+All five decor rigs lacked tagged heads and instead received ModelEngine’s hidden fallback HEAD behavior. The old display transform stayed fixed while stored head yaw changed. DecorModel now replaces that fallback on each decor head with the normal public provider, applies local/inherited rotation and refreshes descendants, including Boba’s visor. Blueprints/pack assets and unrelated owners remain untouched.
+
+Six focused pose/config tests, 134 actual display-renderer direction/motion/body/anchor assertions and 76 native click-packet assertions pass. The scoped overlay changes only DecorModel.class over the current skull revision baseline; every unrelated JAR entry is identical. Deployed JAR SHA-256 `a10aabe28da5f5c279c58d1dd85b8150415babf69e92f8330dcdf68e5426ff45` at 22:35 America/Chicago on November 11. The one read-only live smoke passed 128 assertions. Normal server restarted cleanly without probes; all seven gray Jawa UUIDs/rigs, nine decor placements, 2115 frozen chunks, current pack and unrelated configs are preserved. Active Jabba and queued KOTH are restored; restart window released. Remaining: real-client visual feedback. Next action: approach all five characters from the side and above/below to confirm the visibly independent head response.
+
 ## Natural looking and written NPC dialogue (2026-11-11)
 The user clarified that NPC voice lines mean written chat, and requested quicker, natural looking. Staged changes remove all decorative click/ambient audio, cycle private character dialogue, and enable transparent ModelEngine client interaction targets only for the five characters. The original client-click fault is reproduced: disabled hitbox visibility suppressed the actual INTERACTION spawn packets, even though forced server IDs could trigger dialogue in earlier tests. Vehicles remain unclickable and fixed; all nine anchors, Boba's one-time offset and seven gray Jawas are preserved.
 

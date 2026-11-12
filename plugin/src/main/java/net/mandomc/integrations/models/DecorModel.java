@@ -4,6 +4,8 @@ import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.animation.BlueprintAnimation;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import com.ticxo.modelengine.api.model.bone.BoneBehaviorTypes;
+import com.ticxo.modelengine.api.model.bone.behavior.BoneBehaviorData;
 import net.mandomc.gameplay.decor.DecorDefinition;
 import org.bukkit.entity.ArmorStand;
 
@@ -18,6 +20,17 @@ public final class DecorModel implements AutoCloseable {
         // This flag sends an invisible INTERACTION target to clients; it does not show the native base.
         active.setCanHurt(false);active.setHitboxVisible(definition.npc());active.setMainHitbox(false);active.setRenderFire(false);
         modeled.addModel(active,false);
+        if (definition.npc()) {
+            var head = active.getBone("head").orElseThrow(() ->
+                    new IllegalStateException("Missing decor head bone " + definition.model()));
+            // Untagged bones already carry a hidden HEAD fallback, which does not drive a head.
+            // Replace that behavior rather than treating hasBoneBehavior(HEAD) as proof of tracking.
+            head.removeBoneBehavior(BoneBehaviorTypes.HEAD);
+            addHeadBehavior(head, BoneBehaviorTypes.HEAD);
+            // Local head rotation enters the hierarchy before child transforms, so Boba's visor follows too.
+            head.getBoneBehavior(BoneBehaviorTypes.HEAD).orElseThrow().setLocal(true);
+            refreshHeadChildren(head);
+        }
         modeled.setModelRotationLocked(true);modeled.setYBodyRotImmediately(definition.yaw());modeled.setYHeadRotImmediately(definition.yaw());modeled.setXHeadRotImmediately(definition.pitch());
         active.setModelRotationLocked(true);active.setLockYaw(true);active.setLockPitch(true);
         active.setLockedYBodyRot(definition.yaw());active.setLockedYHeadRot(definition.yaw());active.setLockedXHeadRot(definition.pitch());
@@ -38,6 +51,18 @@ public final class DecorModel implements AutoCloseable {
         active.setLockedYBodyRot(pose.body());active.setLockedYHeadRot(pose.head());active.setLockedXHeadRot(pose.pitch());
     }
     public ActiveModel active(){return active;}
+    private static <T extends com.ticxo.modelengine.api.model.bone.behavior.BoneBehavior> void addHeadBehavior(
+            com.ticxo.modelengine.api.model.bone.ModelBone bone,
+            com.ticxo.modelengine.api.model.bone.behavior.BoneBehaviorType<T> type) {
+        bone.addBoneBehavior(type.getBehaviorProvider().create(
+                bone, type, new BoneBehaviorData(java.util.Map.of("local", true, "inherited", true))));
+    }
+    private static void refreshHeadChildren(com.ticxo.modelengine.api.model.bone.ModelBone parent) {
+        for (var child : parent.getChildren().values()) {
+            child.forBehaviors(behavior -> behavior.onParentSwap(parent));
+            refreshHeadChildren(child);
+        }
+    }
     public ModeledEntity modeled(){return modeled;}
     @Override public void close(){modeled.destroy();}
 }

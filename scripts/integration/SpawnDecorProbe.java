@@ -38,6 +38,11 @@ public final class SpawnDecorProbe extends JavaPlugin {
             check(!model.modeled().shouldBeSaved()&&!model.modeled().isBaseEntityVisible()&&model.modeled().isInitialized(),definition.id()+" renderer ready without extra persistence");
             check(model.modeled().getModels().containsKey(definition.model()),definition.id()+" original requested rig attached");
             check(!model.active().canHurt()&&!model.active().isMainHitbox()&&model.active().isModelRotationLocked(),definition.id()+" no hurt flash/main hitbox or facing drift");
+            if(definition.npc()){
+                var head=model.active().getBone("head").orElseThrow();
+                check(!head.getImmutableBoneBehaviors().get(com.ticxo.modelengine.api.model.bone.BoneBehaviorTypes.HEAD).isHidden(),definition.id()+" real visible head driver, not hidden fallback");
+                check(head.getBoneBehavior(com.ticxo.modelengine.api.model.bone.BoneBehaviorTypes.HEAD).orElseThrow().isLocal(),definition.id()+" local head hierarchy enabled");
+            }
             check(model.active().isHitboxVisible()==definition.npc(),definition.id()+" transparent click target enabled for characters only");
             check(!base.getPersistentDataContainer().has(new NamespacedKey("mandomc","vehicle_id")),definition.id()+" never a player-owned vehicle");
             check(base.getLocation().getChunk().getPluginChunkTickets().contains(mando),definition.id()+" chunk kept loaded");

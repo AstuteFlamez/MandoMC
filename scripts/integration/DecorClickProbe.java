@@ -13,7 +13,7 @@ public final class DecorClickProbe extends JavaPlugin {
     private NativeProbePlayers actors;private DecorService decor;private int checks,index,round;
     private final List<String> firstLines=new ArrayList<>();
     private final List<Player> players=new ArrayList<>();private final List<String> evidence=new ArrayList<>();
-    public void onEnable(){later(new java.io.File(getDataFolder(),"after-scene").exists()?360:120,this::begin);}
+    public void onEnable(){later(new java.io.File(getDataFolder(),"after-head").exists()?480:new java.io.File(getDataFolder(),"after-scene").exists()?360:120,this::begin);}
     private void check(boolean value,String label){if(!value)throw new AssertionError(label);checks++;}
     private interface Step{void run()throws Exception;}
     private void later(long ticks,Step step){Bukkit.getScheduler().runTaskLater(this,()->{try{step.run();}catch(Throwable e){getLogger().log(java.util.logging.Level.SEVERE,"DECOR CLICK FAILED",e);save("FAILED",e.toString());if(actors!=null)actors.close();Bukkit.shutdown();}},ticks);}
