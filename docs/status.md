@@ -1,6 +1,11 @@
 # Resume here
 Updated: 2026-11-11
 
+## Nine fixed spawn scenery placements (2026-11-11)
+On `bilal/spawn-decor`, all nine user captures are configured: landed open-door U-Wing, landed X-Wing, fixed TIE and scale-two speeder, plus Boba Fett, Bossk, Gamorrean, Quarren and Twilek with original rigs, idle animation and voice clips. Protected nonpersistent bases reconstruct on restart without duplicates; scenery never uses player vehicle or combat mob ownership. Existing Jawas and Ilum NPCs remain untouched. The scenery deploys independently of pending chat polish, without a pack change.
+
+185 Java tests pass; isolated native boots pass 158 and 167 assertions, including exact facing, protections, dialogue/audio and clean restart reconstruction. The scoped overlay retains all unrelated deployed bytes and adds two verified lifecycle calls to the actual integrated command hub. See [feature brief](features/spawn-scenery.md). Deployed SHA-256 `78d10152d258a17e47865e9690326e25859f76391837a250d82e071cd9c1daf1`; 109 read-only live assertions passed. The temporary probe is removed, normal server restarted cleanly, frozen 2115 chunks and pack/configs preserved, and Jabba restored. Restart window released. Remaining: real-client visual feedback. Next action: inspect all nine scenery placements and click the five characters in-game.
+
 ## Crate destination hidden from warp menu (2026-11-11)
 On `bilal/legacy-ilum-crates`, menu visibility is separate from destination availability. Crates default to hidden, explicitly configured by `warps.crates.show-in-menu: false`; `/warp crate` and `/warp crates` remain available with the exact saved position/facing and existing travel policy. The five planet entries retain their original slots. Crate containers, holograms, keys, Ilum completion and unrelated services are unchanged.
 
