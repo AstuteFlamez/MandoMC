@@ -8,8 +8,8 @@ items:
     rarity: rare
     category: armor
     lore:
-      - '<gray>Craft with a chestplate to apply Jetpack.'
-      - '<gray>Craft two Jetpack I books into Jetpack II.'
+      - '<gray>Apply to a chestplate at an Agrinium Anvil.'
+      - '<gray>Combine two I books at an Agrinium Anvil for II.'
       - ''
       - '<yellow>[Double Sneak] Toggle thrust while worn'
       - ''

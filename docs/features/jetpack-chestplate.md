@@ -1,6 +1,17 @@
 # Feature: Jetpack chestplate enchantment
-Status: LIVE; books I/II and tooltip refinement deployed 2026-11-12 17:04 America/Chicago. Replaces the offhand wearable and visual comparison experiment.
+Status: Agrinium-Anvil-only update ready; supersedes the earlier crafting-grid flow below.
 Branch: bilal/boba-equipment
+
+## Current anvil flow
+Use a placed Agrinium Anvil to combine two Jetpack I books into Jetpack II, or put a chestplate in the left slot and a Jetpack book in the right slot to apply/upgrade it. Level cap II, book drops, armor tooltip and fuel rates remain unchanged. Crafting-grid routes are removed, including their recipe-book registrations. `/mmc equipment` and the books explain the anvil requirement.
+
+Agrinium Anvil is the existing server name for native ANVIL/CHIPPED_ANVIL/DAMAGED_ANVIL; its existing recipe returns minecraft:anvil. No second block-identity system is added. Upgrade preparation and pickup require a real nearby anvil block. Virtual menus and a station removed before pickup reject. Native anvil pickup owns XP, input consumption, inventory-capacity handling and anvil wear. Native displayed XP cost and prior-work growth are retained. The exception is limited to pure Jetpack-book operations; unrelated enchanting remains disabled by the existing survival policy. Existing ordinary anvil repairs/renames remain native.
+
+Eight fuel tests pass. A disposable full-current-runtime native probe passed 76 assertions through the real ServerGamePacketListener container-click handler, using an isolated valid native player with an in-memory channel. Tests include all three anvil damage states, normal/shift pickup, exact displayed XP cost, insufficient XP, full inventory, repeated clicks, removed station, virtual menu, grid rejection, tier cap, unchanged general enchanting restriction, chestplate metadata, native flight/fuel and flame behavior. The deprecated openAnvil fixture API uses force-open for worn block variants but production validation independently checks the real block/range. No real client or production test actor is used.
+
+Next action: deploy the scoped JAR/lore change and client-test the anvil UI.
+
+## Earlier implementation and rollout history
 
 ## Player experience
 Boba now drops a vanilla enchanted book named Jetpack I, containing the real stored Jetpack I enchantment. Craft two I books into one II book. Combine a book with one chestplate, in any positions in either crafting grid. The result is the same chestplate with the native `mandomc:jetpack` enchantment, displayed as Jetpack. Wear it in the chest slot and double-tap sneak to toggle thrust. The offhand remains free. There is no attached model or jetpack exhaust particle effect; normal armor appearance remains.

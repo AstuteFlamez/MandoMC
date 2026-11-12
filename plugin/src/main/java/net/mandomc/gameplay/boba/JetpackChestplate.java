@@ -12,7 +12,7 @@ import org.bukkit.inventory.*;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/** Native enchantment is the sole ability marker; native crafting owns ingredient consumption. */
+/** Native enchantment is the sole ability marker; the native Agrinium Anvil owns XP and consumption. */
 public final class JetpackChestplate implements Listener, AutoCloseable {
     public static final NamespacedKey KEY=new NamespacedKey("mandomc","jetpack");
     private static final NamespacedKey PRIOR_GLIDER=new NamespacedKey("mandomc","jetpack_prior_glider");
@@ -28,22 +28,13 @@ public final class JetpackChestplate implements Listener, AutoCloseable {
         ingredientLore=items.create(BobaEquipment.JETPACK).getItemMeta().lore();
         enchantment=Registry.ENCHANTMENT.get(KEY);
         if(enchantment==null)throw new IllegalStateException("Install server/datapacks/mandomc-jetpack in the primary world's datapacks directory before startup: missing mandomc:jetpack enchantment");
-        for(var material:Material.values())if(material.name().endsWith("_CHESTPLATE")&&material.isItem()) {
-            var key=new NamespacedKey(plugin,"jetpack_"+material.name().toLowerCase(Locale.ROOT));
-            var recipe=new ShapelessRecipe(key,upgrade(new ItemStack(material)));
-            recipe.addIngredient(new RecipeChoice.MaterialChoice(Material.ENCHANTED_BOOK,Material.ECHO_SHARD));
-            recipe.addIngredient(material);Bukkit.removeRecipe(key);
-            if(!Bukkit.addRecipe(recipe))throw new IllegalStateException("Could not register "+key);
-            recipes.add(key);
-        }
-        var bookKey=new NamespacedKey(plugin,"jetpack_book_ii");
-        var bookRecipe=new ShapelessRecipe(bookKey,book(2));
-        var books=new RecipeChoice.MaterialChoice(Material.ENCHANTED_BOOK,Material.ECHO_SHARD);
-        bookRecipe.addIngredient(books);bookRecipe.addIngredient(books);Bukkit.removeRecipe(bookKey);
-        if(!Bukkit.addRecipe(bookRecipe))throw new IllegalStateException("Could not register Jetpack II book recipe");
-        recipes.add(bookKey);
+        // Retire the former crafting-grid routes; an Agrinium Anvil now owns upgrades.
+        for(var material:Material.values())if(material.name().endsWith("_CHESTPLATE")&&material.isItem())
+            recipes.add(new NamespacedKey(plugin,"jetpack_"+material.name().toLowerCase(Locale.ROOT)));
+        recipes.add(new NamespacedKey(plugin,"jetpack_book_ii"));
+        recipes.forEach(Bukkit::removeRecipe);
         Bukkit.getPluginManager().registerEvents(this,plugin);
-        for(var player:Bukkit.getOnlinePlayers())player.discoverRecipes(recipes);
+
     }
     public int level(ItemStack item) { return item!=null&&item.getType().name().endsWith("_CHESTPLATE")?Math.clamp(item.getEnchantmentLevel(enchantment),0,2):0; }
     public boolean upgraded(ItemStack item) { return level(item)>0; }
@@ -83,7 +74,7 @@ public final class JetpackChestplate implements Listener, AutoCloseable {
         meta.addEnchant(enchantment,target,true);result.setItemMeta(meta);result.setData(DataComponentTypes.GLIDER);
         tooltip.update(result,enchantment);return result;
     }
-    /** Both grids support two I books -> II book, or one book + one chestplate. */
+    /** Validated combination helper retained for compatibility; live crafting routes are retired. */
     public ItemStack result(ItemStack[] matrix) {
         ItemStack chest=null;var levels=new ArrayList<Integer>();
         for(var item:matrix) {
@@ -139,20 +130,67 @@ public final class JetpackChestplate implements Listener, AutoCloseable {
     }
     @EventHandler(priority=EventPriority.HIGHEST)
     public void prepare(PrepareItemCraftEvent event) {
-        if(ownRecipe(event.getRecipe()))event.getInventory().setResult(result(event.getInventory().getMatrix()));
+        if(ownRecipe(event.getRecipe()))event.getInventory().setResult(null);
         else event.getInventory().setResult(cleanRemovedEnchantment(event.getInventory().getResult()));
     }
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void craft(CraftItemEvent event) {
-        if(ownRecipe(event.getRecipe())) {
-            var expected=result(event.getInventory().getMatrix());
-            if(expected==null||!expected.equals(event.getCurrentItem()))event.setCancelled(true);
-        } else event.setCurrentItem(cleanRemovedEnchantment(event.getCurrentItem()));
+        if(ownRecipe(event.getRecipe()))event.setCancelled(true);
+        else event.setCurrentItem(cleanRemovedEnchantment(event.getCurrentItem()));
     }
     @EventHandler(priority=EventPriority.HIGHEST)
     public void grindstone(PrepareGrindstoneEvent event) { event.setResult(cleanRemovedEnchantment(event.getResult())); }
+    private boolean agriniumAnvil(org.bukkit.inventory.view.AnvilView view) {
+        var location=view.getTopInventory().getLocation();
+        if(location==null||!(view.getPlayer() instanceof org.bukkit.entity.Player player)
+                ||player.getWorld()!=location.getWorld()||player.getLocation().distanceSquared(location.clone().add(.5,.5,.5))>64)return false;
+        return switch(location.getBlock().getType()) {
+            case ANVIL,CHIPPED_ANVIL,DAMAGED_ANVIL->true;
+            default->false;
+        };
+    }
+    private boolean jetpackInputs(org.bukkit.inventory.view.AnvilView view) {
+        return bookLevel(view.getTopInventory().getItem(0))>0||bookLevel(view.getTopInventory().getItem(1))>0;
+    }
+    private ItemStack anvilResult(org.bukkit.inventory.view.AnvilView view) {
+        if(!agriniumAnvil(view))return null;
+        var inventory=view.getTopInventory();var left=inventory.getItem(0);var right=inventory.getItem(1);
+        if(left==null||left.getAmount()!=1||right==null||bookLevel(right)==0)return null;
+        ItemStack result;
+        if(bookLevel(left)==1&&bookLevel(right)==1)result=book(2);
+        else if(left.getType().name().endsWith("_CHESTPLATE"))result=upgrade(left,bookLevel(right));
+        else return null;
+        if(result==null)return null;
+        // Preserve normal anvil prior-work growth; fuel efficiency is the only level-II ability change.
+        int work=Math.max(Objects.requireNonNullElse(left.getData(DataComponentTypes.REPAIR_COST),0),Objects.requireNonNullElse(right.getData(DataComponentTypes.REPAIR_COST),0));
+        result.setData(DataComponentTypes.REPAIR_COST,(int)Math.min(Integer.MAX_VALUE,2L*work+1));
+        if(result.getType().name().endsWith("_CHESTPLATE")) {
+            String name=view.getRenameText();
+            String old=left.getItemMeta().hasDisplayName()
+                    ?net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(left.getItemMeta().displayName())
+                    :left.getI18NDisplayName();
+            if(name!=null&&!name.equals(old)) {
+                var meta=result.getItemMeta();meta.displayName(name.isBlank()?null:net.kyori.adventure.text.Component.text(name)
+                        .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC,false));result.setItemMeta(meta);
+            }
+        }
+        return result;
+    }
     @EventHandler(priority=EventPriority.HIGHEST)
-    public void anvil(PrepareAnvilEvent event) { event.setResult(cleanRemovedEnchantment(event.getResult())); }
-    @EventHandler public void join(PlayerJoinEvent event) { event.getPlayer().discoverRecipes(recipes); }
+    public void anvil(PrepareAnvilEvent event) {
+        var view=event.getView();
+        if(!jetpackInputs(view)) { event.setResult(cleanRemovedEnchantment(event.getResult()));return; }
+        // Existing global survival rules run earlier at this priority. Only pure Jetpack operations qualify.
+        var result=anvilResult(view);event.setResult(result);
+        if(result!=null) { view.setRepairCost(Math.max(1,view.getRepairCost()));view.setRepairItemCountCost(1); }
+    }
+    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+    public void takeAnvil(InventoryClickEvent event) {
+        if(event.getRawSlot()!=2||!(event.getView() instanceof org.bukkit.inventory.view.AnvilView view)||!jetpackInputs(view))return;
+        var expected=anvilResult(view);
+        if(expected==null||!expected.equals(event.getCurrentItem()))event.setCancelled(true);
+        // Native anvil pickup owns XP, input consumption, full-inventory handling and anvil wear.
+    }
+    @EventHandler public void join(PlayerJoinEvent event) { }
     @Override public void close() { recipes.forEach(Bukkit::removeRecipe);HandlerList.unregisterAll(this); }
 }
