@@ -3,6 +3,8 @@ Updated: 2026-11-09
 
 ## Milestone
 
+Boba equipment READY handoff (2026-11-12): approved art/source through `36325cf`; exact-live-JAR release overlay rebased after recipe rollout onto `2fac77b269be20e90fa1f4caad7e03a8cd4e5edcc7d9219b9286fde4003bb152`. Public APIs, recipe entries, redstone boundary and all unowned bytes are preserved; the mandatory redstone Java agent/launcher remain untouched. Pack candidate preserves 1,157 deployed entries and adds eight gear assets. Original 11 Java/8 asset/131 isolated native checks remain passed; fresh packaging/API/YAML preflight passes. No stop/publication/deployment. Boss reads readiness directly; cross-chat permission is not a readiness blocker. Next action: receive the gear window after recipe release, refresh CAS baselines and smoke-test the additive bootstrap.
+
 Boba flamethrower identity pass (2026-11-12): restored a chunky brass fuel feed, bottle cap, burner slots and dark muzzle collar to the simplified native 32×32 sprite. Clear green shell and connected flame remain; 15 opaque colors plus transparency. Eight scoped asset/model checks and pack validation pass. Next action: review the balanced level of detail with the user.
 
 Boba flamethrower readability pass (2026-11-12): redesigned the native 32×32 grid around three readable forms—green gauntlet, red tank and dark nozzle—with one cuff band and a compact flame. Removed fine piping, fittings, indicators and extra panel trim; used 13 opaque colors plus transparency. Eight scoped asset/model checks and pack validation pass; behavior is unchanged. Next action: review the revised inventory-scale sprite with the user.
