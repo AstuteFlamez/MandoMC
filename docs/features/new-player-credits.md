@@ -1,5 +1,5 @@
 # Feature: New-player credits
-Status: playable (deployment pending)
+Status: playable / live
 Branch: bilal/new-player-credits
 
 ## Player experience
@@ -21,4 +21,4 @@ Native CreditLedger remains the sole balance authority. Initialization uses its 
 195 Java tests pass, including concurrent initialization, retry after rejected persistence, new and returning accounts, explicit zero balances, modified balances and reload durability. Final overlay passed 19 native Paper assertions: 12 first-login and seven after a clean process restart. Deployed Jawa supply and sell-supplies methods are retained exactly; only account initialization is added to their ledger source.
 
 ## Pause note
-Validated implementation and scoped three-entry deployment tooling; shared runtime unchanged. Next action: deploy in the coordinator-assigned window and verify the normal live server.
+Deployed on 2026-11-11 with one normal restart and no live probes/test accounts. Final JAR SHA-256 `288c0ad7ea229977aa895ba262e96fd0af8f6b742288dfa9a0b4e3e2dbdf76f5`. All unrelated JAR entries, plugin binaries, static configuration and pack settings are preserved. Existing balances and a real returning player’s zero balance are preserved; Jabba current/KOTH next restored. Seven gray NPCs retained their identities and passed two healthy head-tracking samples; nine decor anchors and 2115 frozen chunks are intact. A stopped-runtime backup and deployment receipt are retained privately. Window released. Next action: observe the next genuinely new player receiving the starting balance.
