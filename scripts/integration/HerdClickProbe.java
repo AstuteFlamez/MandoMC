@@ -37,10 +37,10 @@ public final class HerdClickProbe extends JavaPlugin {
   evidence.add("route="+index+" main="+model.isMainHitbox()+" visible="+hitbox.isHitboxVisible()+" spawn="+spawn+" horse="+horse.getLocation()+" owner="+owner.getLocation());
   int id=index%2==0?hitbox.getHitboxId():horse.getEntityId();var tracker=ModelEngineAPI.getInteractionTracker();Integer relay=tracker.getEntityRelay(id);if(relay==null&&tracker.getModelRelay(id)!=null)relay=horse.getEntityId();
   if(index%2==0)check(spawn!=null,"actual renderer hitbox is sent to the client");
-  check(ModelEngineAPI.shouldShow(owner,horse.getEntityId())!=com.ticxo.modelengine.api.nms.network.CancelType.HIDE,"client retains actual horse required by native mount screen");
+  check(ModelEngineAPI.shouldShow(owner,horse.getEntityId())!=com.ticxo.modelengine.api.nms.network.CancelType.HIDE,"client retains actual horse for native leash rendering");
   outboundHorseSpawn();
   packet(id,relay);
-  later(10,()->{actors.drain(owner);var packets=actors.otherPackets(owner);evidence.add("packets="+packets+" holder="+owner.getOpenInventory().getTopInventory().getHolder());check(owner.getOpenInventory().getTopInventory().getHolder()==horse,"client click route "+index+" keeps native saddle menu open");check(packets!=null&&packets.stream().anyMatch(p->p.contains("MountScreenOpen")),"native horse screen packet emitted route "+index);
+  later(10,()->{actors.drain(owner);var packets=actors.otherPackets(owner);evidence.add("packets="+packets+" holder="+owner.getOpenInventory().getTopInventory().getHolder());check(HerdEquipment.isMenu(owner.getOpenInventory().getTopInventory(),horse),"client click route "+index+" keeps custom saddle GUI open");check(packets!=null&&packets.stream().anyMatch(p->p.contains("ClientboundOpenScreenPacket")),"custom inventory screen packet emitted route "+index);
    if(++index==4){dewback();return;}
    if(index==8){save("CLICKS-PASSED.txt","HERD CLICK PASSED "+checks);actors.close();actors=null;Bukkit.shutdown();return;}
    if(index%4==2){owner.teleport(horse.getLocation().clone().add(0,0,4.5));}

@@ -30,7 +30,7 @@ public final class LiveHerdSmoke extends JavaPlugin {
             var mando=Bukkit.getPluginManager().getPlugin("MandoMC");
             check(mando!=null&&mando.isEnabled(),"MandoMC enabled");
             var listeners=HandlerList.getRegisteredListeners(mando).stream().map(r->r.getListener()).distinct().toList();
-            for(String suffix:List.of("HerdBootstrap","HerdAnimals","HerdBabies","HerdTempt","HerdModels"))
+            for(String suffix:List.of("HerdBootstrap","HerdAnimals","HerdBabies","HerdTempt","HerdModels","HerdEquipment","HerdLeads"))
                 check(listeners.stream().filter(l->l.getClass().getSimpleName().equals(suffix)).count()==1,"one herd lifecycle owner: "+suffix);
             var cfg=YamlConfiguration.loadConfiguration(new java.io.File(mando.getDataFolder(),"mobs/jawas.yml"));
             var ids=cfg.getConfigurationSection("npcs").getKeys(false);

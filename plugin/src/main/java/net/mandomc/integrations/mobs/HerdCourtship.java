@@ -57,14 +57,14 @@ public final class HerdCourtship implements Goal<Mob> {
                     && Objects.equals(baby.getOwnerUniqueId(), adult.getOwnerUniqueId());
         }
         @Override public boolean shouldActivate() {
-            if (baby.isAdult()) return false;
+            if (baby.isAdult() || baby.isLeashed()) return false;
             parent = baby.getNearbyEntities(16, 8, 16).stream().filter(Horse.class::isInstance).map(Horse.class::cast)
                     .filter(this::valid).min(Comparator.comparingDouble(adult -> baby.getLocation().distanceSquared(adult.getLocation())))
                     .orElse(null);
             return parent != null && baby.getLocation().distanceSquared(parent.getLocation()) >= 9;
         }
         @Override public boolean shouldStayActive() {
-            return !baby.isAdult() && parent != null && valid(parent)
+            return !baby.isAdult() && !baby.isLeashed() && parent != null && valid(parent)
                     && baby.getLocation().distanceSquared(parent.getLocation()) >= 4
                     && baby.getLocation().distanceSquared(parent.getLocation()) <= 256;
         }

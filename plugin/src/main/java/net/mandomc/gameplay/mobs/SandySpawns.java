@@ -114,6 +114,7 @@ public final class SandySpawns implements Listener, AutoCloseable {
             for (var entity : List.copyOf(population)) {
                 if (entity.getPersistentDataContainer().has(encounter)
                         && !(entity instanceof org.bukkit.entity.Tameable tameable && tameable.isTamed())
+                        && !(entity instanceof org.bukkit.entity.Mob mob && mob.isLeashed())
                         && players.stream().noneMatch(p -> horizontal(p.getLocation(), entity.getLocation()) <= 128 * 128)) {
                     mobs.remove(entity);
                     population.remove(entity);

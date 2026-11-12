@@ -20,11 +20,22 @@ Both parents then receive the native 6000-tick breeding cooldown. The child inhe
 Babies follow a nearby adult of their species and owner, with food attraction taking precedence.
 Natural encounters still spawn adults only.
 
-An owner's unsaddled adult opens the real native horse inventory on right click. Its native
-saddle slot owns the single actual saddle and controls the model's visible saddle. A saddled
-adult mounts on right click; sneak-right-click opens equipment. Armor is unavailable. Inventory
-click, shift, hotbar, drag, automation and ModelEngine mount paths enforce ownership, adulthood,
-territory and occupancy. Riding uses ModelEngine's native walking controller and existing gait.
+An owner's unsaddled adult opens a compact custom equipment GUI on right click. The center
+saddle control transfers one real saddle to or from the native saddle slot; shift-clicking a
+saddle below equips one, and shift-clicking the control returns it to available storage. Display
+icons and filler panes cannot be taken. A saddled adult mounts on right click; sneak-right-click
+opens equipment. Armor is unavailable. Ownership, adulthood, territory, range and occupancy
+are checked again for every transfer. The menu closes if access is lost. Native horse screens
+are blocked. Food and leads take priority over equipment and riding.
+
+Right-click with a lead to attach a native leash. Untamed animals may be led; tamed animals
+and their babies require their owner. Leads work from either hand, use native movement and
+fence knots, and retain the fence tether across restart. Ordinary right-click releases a leash
+and returns one lead in Survival; Creative retains the attaching item and creates no item on
+manual release. Sneak-right-click with a clear hand opens equipment while tethered. Cancelled
+or protected actions consume nothing. Custom food, mating and parent goals yield to the leash.
+There is no owner teleport or custom rope timer. Native protection/owner events also guard
+fence transfers and detachment. Babies still drop no items on death, including attached leads.
 
 Babies reuse the adult geometry, textures and animation at uniform half scale, including
 collision. Native Ageable state owns growth, cooldowns and save/load. Default 20-minute loaded
@@ -126,3 +137,17 @@ entries remain identical. Live SHA-256 is
 pack remains unchanged, the checker is removed, pre-stop currentNone/nextJabba is restored
 and the coordinated window released. Actual client menu/model placement and collision feedback
 remain the next playtest.
+
+
+## Custom equipment and leads (2026-11-12)
+The user superseded native horse menus with a custom GUI. HerdEquipment owns display/actions;
+the actual HorseInventory saddle remains the sole persistent equipment state. GUI stacks are
+presentation clones. Cursor and shift transfers move one original saddle; close, death, unload,
+protection and cancelled inventory paths never return display copies. Gray unused slots use
+the shared MenuItems background. HerdLeads routes actual model interactions into native leash
+state and cancellable Paper events. Only the two herd definitions change PreventLeashing to
+false; other species retain their vendor restrictions. Precise-hit Paper events have a separate
+handler list and are explicitly cancelled before queued herd actions, avoiding native/custom
+duplicate feeding or lead changes. 191 Java tests, two asset tests and176 native assertions pass:64 two-species actual click/screen
+checks,35 GUI/lead packet/physics checks,9 fence-restart/rejoin checks,56 full interactions
+and12 ordinary restart/conversion checks. Current rollout state is in docs/status.md.

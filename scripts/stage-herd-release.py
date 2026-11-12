@@ -29,6 +29,7 @@ def animal_definitions(text):
         else:
             block = block.replace('  Options:\n', '  Options:\n    Tameable: true\n', 1)
         block = re.sub(r'(?m)^    PreventOtherDrops: .*$', '    PreventOtherDrops: false', block)
+        block = re.sub(r'(?m)^    PreventLeashing: .*$', '    PreventLeashing: false', block)
         block, count = re.subn(r'(?m)^  AIGoalSelectors:\n(?:    .*\n)*',
                               '  AIGoalSelectors:\n    - clear\n    - 0 float\n    - 1 panic\n'
                               '    - 4 randomstroll\n    - 5 lookatplayers\n', block, count=1)

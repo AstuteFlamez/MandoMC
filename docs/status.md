@@ -1,6 +1,28 @@
 # Resume here
 Updated: 2026-11-12
 
+## Custom herd equipment GUI and native leads (2026-11-12)
+The user replaced horse screens with a custom equipment GUI and requested leads for Bantha
+and Dewback. A compact nine-slot menu uses the shared gray background and one saddle control;
+real cursor/shift transfers write only the native saddle slot. Ownership/range/territory/adult
+and occupancy checks apply to every action; no display stack can be extracted or persisted.
+Native horse screens are blocked. Leads attach through real native state/events, work from
+either hand on wild animals and owned adults/babies, use ordinary movement/fence knots and
+preserve the fence tie across restart. Only the owner may manage tamed animals. Native food,
+courtship and parent goals yield while leashed; ordinary right-click releases a lead and sneak
+with a clear hand still opens equipment. Cancelled actions consume nothing; release returns
+one lead in Survival, and baby deaths leak no separate native lead item. Precise-hit Paper
+interactions are handled explicitly to prevent native/custom action duplication.
+
+191 Java tests pass. Native targeted tests pass35 GUI/lead checks with real container packets,
+physics and native fence binding;9 restart/rejoin checks preserve the original ownerUUID,
+saddle and fence knot.56 full herd interactions and12 ordinary persistence checks also pass.
+The final two-species custom-screen check passes64 assertions, for176 native assertions total. The scoped candidate preserves473
+unrelated current JAR entries over latest KOTH baselinebfdc971e, modifies only herd owners/
+goals, the narrow leash cleanup exclusion and bundled GUI language, and adds equipment/lead
+helpers. Only two live Mythic PreventLeashing flags change. Current pack and Dewback blueprint
+are unchanged. No live custom GUI/leads rollout yet. Next action: obtain the assigned window and deploy the scoped candidate before client playtesting.
+
 ## Herd client saddle screen and Dewback body collision correction (2026-11-12)
 The user reproduced a missing saddle menu after taming with both hands clear. The server-side
 inventory opened, but ModelEngine omitted the native horse spawn; the client could not resolve

@@ -116,7 +116,7 @@ public final class HerdTempt implements Listener {
         }
 
         public boolean accepts(Player player) {
-            return player.isValid() && !player.isDead() && player.getGameMode() != GameMode.SPECTATOR
+            return !mob.isLeashed() && player.isValid() && !player.isDead() && player.getGameMode() != GameMode.SPECTATOR
                     && player.getWorld().equals(mob.getWorld()) && !net.mandomc.integrations.models.HerdModels.ridden(mob)
                     && mob.getLocation().distanceSquared(player.getLocation()) <= 100
                     && (player.getInventory().getItemInMainHand().getType() == food

@@ -22,6 +22,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityTameEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
@@ -38,6 +39,8 @@ public final class HerdAnimals implements Listener {
     private final ConfigurationSection language;
     private final Predicate<Location> allowed;
     private final Map<UUID, Integer> clicked = new HashMap<>();
+    private final HerdEquipment equipment;
+    private final HerdLeads leads;
     private final MiniMessage mini = MiniMessage.miniMessage();
     private final net.mandomc.gameplay.messaging.ChatStyle chat = new net.mandomc.gameplay.messaging.ChatStyle();
 
@@ -50,9 +53,21 @@ public final class HerdAnimals implements Listener {
         this.settings = settings;
         this.language = language;
         this.allowed = allowed;
+        equipment = new HerdEquipment(plugin, this, models, language);
+        leads = new HerdLeads(plugin, this);
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
+    public String type(Entity entity) { return mobs.type(entity); }
+    public boolean leadLocation(Location location) { return allowed.test(location); }
+    public boolean leadAccess(Player player, LivingEntity entity) {
+        return player.isValid() && !player.isDead() && player.getGameMode() != GameMode.SPECTATOR
+                && entity.isValid() && !entity.isDead() && player.getWorld().equals(entity.getWorld())
+                && player.getLocation().distanceSquared(entity.getLocation()) <= 36
+                && allowed.test(player.getLocation()) && allowed.test(entity.getLocation())
+                && (!(entity instanceof Tameable tameable) || !tameable.isTamed()
+                    || player.getUniqueId().equals(tameable.getOwnerUniqueId()));
+    }
     public boolean herd(Entity entity) { return HerdAge.herd(mobs.type(entity)); }
     public boolean owner(Player player, Horse horse) {
         return horse.isTamed() && horse.getOwnerUniqueId() != null && horse.getOwnerUniqueId().equals(player.getUniqueId());
@@ -74,6 +89,13 @@ public final class HerdAnimals implements Listener {
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (event.getRightClicked() instanceof LivingEntity entity) interact(event.getPlayer(), entity);
         });
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void interactAt(PlayerInteractAtEntityEvent event) {
+        // Bukkit gives precise-hit events their own handler list. Cancel the native action
+        // here too, before our queued model interaction attaches/feeds exactly once.
+        interact(event);
     }
 
     @EventHandler public void modelInteract(BaseEntityInteractEvent event) {
@@ -99,13 +121,18 @@ public final class HerdAnimals implements Listener {
         var food = settings.food(type);
         EquipmentSlot hand = player.getInventory().getItemInMainHand().getType() == food ? EquipmentSlot.HAND
                 : player.getInventory().getItemInOffHand().getType() == food ? EquipmentSlot.OFF_HAND : null;
-        if (!(entity instanceof Horse) && hand == null) { send(player, "feed", entity); return; }
+        EquipmentSlot leadHand = player.getInventory().getItemInMainHand().getType() == Material.LEAD ? EquipmentSlot.HAND
+                : player.getInventory().getItemInMainHand().getType() != food
+                    && player.getInventory().getItemInOffHand().getType() == Material.LEAD ? EquipmentSlot.OFF_HAND : null;
+        if (!(entity instanceof Horse) && hand == null && leadHand == null) { send(player, "feed", entity); return; }
         Horse horse = entity instanceof Horse h ? h : migrate(entity, type);
+        if (leadHand != null) { leads.interact(player, horse, leadHand); return; }
         if (hand != null) { feed(player, horse, hand); return; }
+        if (horse.isLeashed() && !player.isSneaking()) { leads.interact(player, horse, null); return; }
         if (!horse.isAdult()) { send(player, "young", horse); return; }
         if (!owner(player, horse)) { send(player, horse.isTamed() ? "owner" : "feed", horse); return; }
         if (models.occupied(horse)) return;
-        if (player.isSneaking() || !HerdModels.saddled(horse)) player.openInventory(horse.getInventory());
+        if (player.isSneaking() || !HerdModels.saddled(horse)) equipment.open(player, horse);
         else models.mount(horse, player);
     }
 
@@ -175,7 +202,7 @@ public final class HerdAnimals implements Listener {
                 && first.getOwnerUniqueId() != null && first.getOwnerUniqueId().equals(second.getOwnerUniqueId())
                 && first.getAge() == 0 && second.getAge() == 0 && first.isLoveMode() && second.isLoveMode()
                 && mobs.type(first).equals(mobs.type(second)) && HerdAge.herd(mobs.type(first))
-                && !models.occupied(first) && !models.occupied(second)
+                && !models.occupied(first) && !models.occupied(second) && !first.isLeashed() && !second.isLeashed()
                 && allowed.test(first.getLocation()) && allowed.test(second.getLocation());
     }
 
@@ -208,7 +235,7 @@ public final class HerdAnimals implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void open(InventoryOpenEvent event) {
         var horse = inventory(event.getInventory());
-        if (horse != null && (!(event.getPlayer() instanceof Player p) || !access(p, horse) || models.occupied(horse))) event.setCancelled(true);
+        if (horse != null) event.setCancelled(true); // Equipment is managed only through the custom GUI.
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void click(InventoryClickEvent event) {
@@ -237,7 +264,9 @@ public final class HerdAnimals implements Listener {
         var entity = Bukkit.getEntity(event.getVehicle().getModeledEntity().getBase().getUUID());
         if (entity instanceof Horse horse && herd(horse)
                 && (!(event.getPassenger() instanceof Player p) || !event.isDriver() || !access(p, horse)
-                    || !HerdModels.saddled(horse) || p.isSneaking()
+                    || !HerdModels.saddled(horse) || horse.isLeashed() || p.isSneaking()
+                    || p.getInventory().getItemInMainHand().getType() == Material.LEAD
+                    || p.getInventory().getItemInOffHand().getType() == Material.LEAD
                     || p.getInventory().getItemInMainHand().getType() == settings.food(mobs.type(horse))
                     || p.getInventory().getItemInOffHand().getType() == settings.food(mobs.type(horse)))) event.setCancelled(true);
     }
