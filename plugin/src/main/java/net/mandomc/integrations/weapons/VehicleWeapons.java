@@ -18,6 +18,7 @@ public final class VehicleWeapons implements Listener {
     private final VehicleService vehicles;
     private final TemporaryExplosions explosions;
     private final JavaPlugin plugin;
+    private final java.util.Map<Object, Entity> launched = new java.util.WeakHashMap<>();
 
     @SuppressWarnings("unchecked")
     public VehicleWeapons(
@@ -53,6 +54,18 @@ public final class VehicleWeapons implements Listener {
                         },
                         plugin,
                         true);
+        var emission = (Class<? extends Event>) Class.forName(
+                "me.deecaad.weaponmechanics.weapon.weaponevents.WeaponShootEvent", true, loader);
+        Bukkit.getPluginManager().registerEvent(emission, this, EventPriority.MONITOR, (listener, event) -> {
+            try {
+                Object projectile = call(event, "getProjectile");
+                Entity shooter = (Entity) call(projectile, "getShooter");
+                Entity vehicle = vehicles.combatVehicle(shooter);
+                if (vehicle != null) launched.put(projectile, vehicle);
+            } catch (ReflectiveOperationException error) {
+                throw new EventException(error);
+            }
+        }, plugin, true);
         var damage =
                 (Class<? extends Event>)
                         Class.forName(
@@ -90,9 +103,13 @@ public final class VehicleWeapons implements Listener {
     public void damage(Event event) {
         try {
             Entity victim = (Entity) call(event, "getVictim");
-            if (!vehicles.managed(victim)) return;
-            Entity shooter = (Entity) call(call(event, "getSource"), "getShooter");
-            if (!vehicles.mayDamage(victim, shooter)) ((Cancellable) event).setCancelled(true);
+            Object source = call(event, "getSource");
+            Entity shooter = (Entity) call(source, "getShooter");
+            Entity vehicle = vehicles.combatVehicle(shooter);
+            if (source.getClass().getSimpleName().equals("ProjectileDamageSource"))
+                vehicle = launched.getOrDefault(call(source, "getProjectile"), vehicle);
+            if (!vehicles.mayUse(vehicle, shooter, victim.getLocation())
+                    || !vehicles.mayDamage(victim, shooter)) ((Cancellable) event).setCancelled(true);
         } catch (ReflectiveOperationException error) {
             fail(event, error);
         }
@@ -103,6 +120,18 @@ public final class VehicleWeapons implements Listener {
             Object projectile = call(event, "getProjectile");
             Location center = ((Location) call(projectile, "getBukkitLocation")).clone();
             Entity shooter = (Entity) call(projectile, "getShooter");
+            Entity vehicle = launched.getOrDefault(projectile, vehicles.combatVehicle(shooter));
+            if (!vehicles.mayUse(vehicle, shooter, center)) {
+                ((Cancellable) event).setCancelled(true);
+                return;
+            }
+            if (vehicle != null) {
+                // Vendor splash damage has no projectile reference in its damage source.
+                // Filter its actual victim map while the launch platform is still available.
+                var victims = (java.util.Map<?, ?>) call(event, "getEntities");
+                victims.keySet().removeIf(target -> target instanceof Entity entity
+                        && !vehicles.mayUse(vehicle, shooter, entity.getLocation()));
+            }
             // Disable vendor block damage/regeneration. Keep its original entity damage and visual
             // effects.
             event.getClass()
@@ -113,7 +142,8 @@ public final class VehicleWeapons implements Listener {
                     .runTask(
                             plugin,
                             () -> {
-                                if (!((Cancellable) event).isCancelled())
+                                if (!((Cancellable) event).isCancelled()
+                                        && vehicles.mayUse(vehicle, shooter, center))
                                     explosions.vendorBlast(center, shooter);
                             });
         } catch (ReflectiveOperationException error) {
