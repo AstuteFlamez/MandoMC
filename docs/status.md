@@ -1,4 +1,9 @@
 # Resume here
+
+## Completed branch integration (2026-11-12)
+
+Merged the full histories of `bilal/vehicles-and-config` (939c2c4), `bilal/native-hud-ranks` (f11976d) and `bilal/e11-ammo-recipes` (6f0f223) into `main`, with explicit merge commits. The latter already includes the earlier branches; the final integrated tree retains its current implementations. Restored the green-bolt animation metadata's exact recorded upstream bytes from the SHA-256-verified legacy pack archive; parsed animation settings are identical. Verification: `./scripts/build.sh` passes all 174 Java tests; all 32 Python tooling tests pass; resource-pack validation/build passes (1089 files). No server restart, deployment, runtime/world edits or live integration probes were performed. Other feature branches and uncommitted work remain independent: this integration does not establish a complete source baseline for the currently deployed scoped overlays. `bilal/justtimm-saber-pack` remains untouched at dcbfca4; it records official model dependencies and asset wrappers for 78 named sabers. Next action: reconcile the remaining deployed feature overlays before any future full-JAR deployment.
+
 Updated: 2026-11-11
 
 ## Milestone
