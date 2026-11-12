@@ -10,5 +10,5 @@ items:
     lore:
       - '<gray>A fearsome trophy taken from a defeated Rancor.'
       - ''
-      - '<yellow>[<key:key.use>] Place on a solid surface'
-      - '<gray>Requires one clear block. Break to recover.'
+      - '<yellow>[<key:key.use>] Place on any block face'
+      - '<gray>Floor, wall or ceiling. Break to recover.'

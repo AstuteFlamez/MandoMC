@@ -34,6 +34,7 @@ public final class RancorTrophyProbe extends JavaPlugin implements Listener {
         trophies=Bukkit.getServicesManager().load(RancorTrophies.class);check(trophies!=null,"trophy custody service registered");clans=Bukkit.getServicesManager().load(ClanService.class);check(clans!=null&&clans.available(),"current clan authority available");
         var server=Bukkit.getServer().getClass().getMethod("getServer").invoke(Bukkit.getServer());var list=server.getClass().getMethod("getPlayerList").invoke(server);var field=Class.forName("net.minecraft.server.players.PlayerList").getDeclaredField("playersByUUID");field.setAccessible(true);online=(Map<UUID,Object>)field.get(list);
         world=Bukkit.getWorld(NamespacedKey.minecraft("tatooine_review"));for(int x=-15;x<=-12;x++)for(int z=-15;z<=-12;z++)ticket(world.getChunkAt(x,z));
+        if(new java.io.File(getDataFolder(),"faces-only.txt").exists()){facesBegin();return;}
         if(new java.io.File(getDataFolder(),"input-only.txt").exists()){inputOnly();return;}
         if(state().exists()){restart();return;}
         owner=actor(new Location(world,-233.5,200,-231.5),UUID.randomUUID(),"SkullOwner",false);intruder=actor(new Location(world,-233.5,200,-231.5),UUID.randomUUID(),"SkullOther",false);recruit=actor(new Location(world,-233.5,200,-231.5),UUID.randomUUID(),"SkullRecruit",false);
@@ -70,10 +71,9 @@ public final class RancorTrophyProbe extends JavaPlugin implements Listener {
     private void ticket(Chunk c){c.addPluginChunkTicket(this);chunks.add(c);}
     private Block floor(int x,int z){var b=world.getBlockAt(x,200,z);b.setType(Material.AIR,false);b.getRelative(BlockFace.DOWN).setType(Material.STONE,false);return b;}
     private void give(Player p){p.getInventory().clear();p.getInventory().setItemInMainHand(skull.clone());}
-    private void click(Player p,Block b){var event=new PlayerInteractEvent(p,Action.RIGHT_CLICK_BLOCK,p.getInventory().getItemInMainHand(),b.getRelative(BlockFace.DOWN),BlockFace.UP,EquipmentSlot.HAND);Bukkit.getPluginManager().callEvent(event);check(event.useItemInHand()==Event.Result.DENY,"native item-use path is consumed by custom placement");}
+    private void click(Player p,Block b){if(b.getRelative(BlockFace.DOWN).getType().isAir())b.getRelative(BlockFace.DOWN).setType(Material.STONE,false);var event=new PlayerInteractEvent(p,Action.RIGHT_CLICK_BLOCK,p.getInventory().getItemInMainHand(),b.getRelative(BlockFace.DOWN),BlockFace.UP,EquipmentSlot.HAND);Bukkit.getPluginManager().callEvent(event);check(event.useItemInHand()==Event.Result.DENY,"native item-use path is consumed by custom placement");}
     private void negatives()throws Exception{
         site=floor(-232,-232);give(owner);site.setType(Material.DIRT,false);trophies.place(owner,site,EquipmentSlot.HAND);check(owner.getInventory().getItemInMainHand().isSimilar(skull)&&site.getType()==Material.DIRT,"occupied cell rejected without consuming or replacing block");site.setType(Material.AIR,false);
-        site.getRelative(BlockFace.DOWN).setType(Material.AIR,false);trophies.place(owner,site,EquipmentSlot.HAND);check(count(owner)==1,"unsupported placement leaves item unchanged");site.getRelative(BlockFace.DOWN).setType(Material.STONE,false);
         var cow=world.spawn(site.getLocation().add(.5,0,.5),Cow.class,c->{c.setAI(false);c.setGravity(false);});trophies.place(owner,site,EquipmentSlot.HAND);check(count(owner)==1&&site.getType().isAir(),"living entity collision rejected without trapping it");cow.remove();
         cancelPlace=true;int beforeAttempt=attempts;click(owner,site);await(()->attempts>beforeAttempt&&trophies.journal().entries().isEmpty(),()->{cancelPlace=false;check(count(owner)==1&&site.getType().isAir(),"late cancelled native placement returns exact item");
             var safe=Bukkit.getWorld(NamespacedKey.minecraft("spawnworld"));var c=safe.getChunkAt(0,0);ticket(c);var b=safe.getBlockAt(10,200,10);b.setType(Material.AIR,false);b.getRelative(BlockFace.DOWN).setType(Material.STONE,false);
@@ -87,9 +87,9 @@ public final class RancorTrophyProbe extends JavaPlugin implements Listener {
     private long displays(Block b){return b.getWorld().getNearbyEntities(b.getLocation().add(.5,.5,.5),1,1,1).stream().filter(e->e instanceof ItemDisplay&&e.getPersistentDataContainer().has(new NamespacedKey("mandomc","rancor_trophy_display_v1"))).count();}
     private void placedChecks()throws Exception{
         check(site.getType()==Material.BARRIER&&count(owner)==0,"one item becomes one collision anchor");check(placeEvents==1,"one accepted block-place event per trophy");check(displays(site)==1,"exactly one visual display");check(placedEntry().item().equals(Base64.getEncoder().encodeToString(skull.serializeAsBytes())),"custody preserves full custom name/PDC/stack bytes");
-        var supportBreak=new BlockBreakEvent(site.getRelative(BlockFace.DOWN),owner);Bukkit.getPluginManager().callEvent(supportBreak);check(supportBreak.isCancelled(),"support cannot be removed under a placed trophy");
-        var blocks=new ArrayList<>(List.of(site,site.getRelative(BlockFace.DOWN)));var explosion=new EntityExplodeEvent(owner,site.getLocation(),blocks,1,ExplosionResult.DESTROY);Bukkit.getPluginManager().callEvent(explosion);check(!blocks.contains(site)&&!blocks.contains(site.getRelative(BlockFace.DOWN)),"explosion cannot remove trophy or its support");
-        var piston=new BlockPistonExtendEvent(site.getRelative(BlockFace.EAST),List.of(site.getRelative(BlockFace.DOWN)),BlockFace.NORTH);Bukkit.getPluginManager().callEvent(piston);check(piston.isCancelled(),"piston cannot move trophy support");
+        var supportBreak=new BlockBreakEvent(site.getRelative(BlockFace.DOWN),owner);Bukkit.getPluginManager().callEvent(supportBreak);check(!supportBreak.isCancelled(),"ordinary support break remains allowed");site.getRelative(BlockFace.DOWN).setType(Material.AIR,false);
+        var blocks=new ArrayList<>(List.of(site,site.getRelative(BlockFace.DOWN)));var explosion=new EntityExplodeEvent(owner,site.getLocation(),blocks,1,ExplosionResult.DESTROY);trophies.entityExplosion(explosion);check(!blocks.contains(site)&&blocks.contains(site.getRelative(BlockFace.DOWN)),"trophy explosion filter protects only trophy and leaves neighbor policy unchanged");Bukkit.getPluginManager().callEvent(explosion);
+        var piston=new BlockPistonExtendEvent(site.getRelative(BlockFace.EAST),List.of(site.getRelative(BlockFace.DOWN)),BlockFace.NORTH);trophies.piston(piston);check(!piston.isCancelled(),"trophy handler does not block neighbor piston movement");
         var clan=clans.state().create("SkullTest",owner.getUniqueId(),System.currentTimeMillis());var chunk=new ClanState.Chunk(world.getKey().toString(),site.getX()>>4,site.getZ()>>4);clans.state().claim(clan,chunk,4,c->true);clans.state().join(clan,recruit.getUniqueId(),4,System.currentTimeMillis());
         check(clans.state().role(clan,recruit.getUniqueId())==ClanRole.RECRUIT,"new member is actual native Recruit");
         trophies.breakTrophy(intruder,placedEntry());later(5,()->{check(site.getType()==Material.BARRIER&&count(intruder)==0,"foreign clan member cannot recover trophy");
@@ -153,6 +153,56 @@ public final class RancorTrophyProbe extends JavaPlugin implements Listener {
             mode.getClass().getMethod("handleBlockBreakAction",posType,actionType,dirType,int.class,int.class).invoke(mode,blockPos,action,direction,world.getMaxHeight(),1);
             await(()->trophies.journal().entries().isEmpty()&&count(owner)==1,()->{check(site.getType().isAir()&&displays(site)==0,"native survival destroy-block start legitimately recovers barrier-backed trophy");check(owner.getInventory().getItemInMainHand().isSimilar(skull),"native input round trip preserves exact named item");getLogger().info("RANCOR TROPHY INPUT PROBE PASSED: "+checks+" assertions");Bukkit.shutdown();});
         });
+    }
+    private final List<Entry> faceEntries=new ArrayList<>();
+    private final BlockFace[] faceCases={BlockFace.UP,BlockFace.NORTH,BlockFace.SOUTH,BlockFace.EAST,BlockFace.WEST,BlockFace.DOWN,BlockFace.EAST,BlockFace.UP};
+    private java.io.File faceState(){return new java.io.File(getDataFolder(),"faces.yml");}
+    private void facesBegin()throws Exception{
+        var old=YamlConfiguration.loadConfiguration(state());owner=actor(new Location(world,-233.5,200,-231.5),UUID.fromString(old.getString("owner")),"SkullOwner",true);owner.getInventory().clear();skull=mando.items().create(RancorTrophies.ITEM);
+        var meta=skull.getItemMeta();meta.displayName(net.kyori.adventure.text.Component.text("Every Face Trophy"));meta.getPersistentDataContainer().set(new NamespacedKey("trophyprobe","memory"),PersistentDataType.STRING,"six faces exact");meta.setMaxStackSize(1);skull.setItemMeta(meta);
+        if(faceState().exists()){
+            var saved=YamlConfiguration.loadConfiguration(faceState());skull=ItemStack.deserializeBytes(Base64.getDecoder().decode(saved.getString("skull")));
+            for(String id:saved.getStringList("entries")){var entry=trophies.journal().entries().get(UUID.fromString(id));check(entry!=null&&entry.phase()==Phase.PLACED,"face journal survives actual restart");faceEntries.add(entry);inspectPose(entry);}
+            recoverFace(0);
+        }else{
+            var json=net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().serialize(skull.getItemMeta().lore().getFirst());check(json.contains("mandomc:trophies")&&(json.contains("\\ue000")||json.contains("\ue000")),"native Legendary lore includes isolated TROPHY bitmap font");
+            if(new java.io.File(getDataFolder(),"resume-partial.txt").exists()){
+                for(int i=0;i<4;i++){var e=trophies.journal().at(new Cell(world.getKey().toString(),-232+(i%2)*3,200,-232+(i/2)*3));check(e!=null,"prior passed face retained");faceEntries.add(e);inspectPose(e);}placeFace(4);
+            }else placeFace(0);
+        }
+    }
+    private void placeFace(int index)throws Exception{
+        if(index==faceCases.length){
+            var saved=new YamlConfiguration();saved.set("entries",faceEntries.stream().map(e->e.id().toString()).toList());saved.set("skull",Base64.getEncoder().encodeToString(skull.serializeAsBytes()));saved.set("checks",checks);saved.save(faceState());owner.saveData();getLogger().info("RANCOR FACE INPUT PASSED: "+checks+" assertions; eight orientations/partial/replaceable cases saved");Bukkit.shutdown();return;
+        }
+        var face=faceCases[index];site=world.getBlockAt(-232+(index%2)*3,200,-232+(index/2)*3);site.setType(Material.AIR,false);site.getRelative(BlockFace.DOWN).setType(Material.AIR,false);var clicked=site.getRelative(face.getOppositeFace());clicked.setType(index==0||index==6?Material.STONE_SLAB:Material.STONE,false);
+        if(index==7){clicked=site;clicked.setType(Material.SHORT_GRASS,false);}var against=clicked;
+        moveActor(site.getLocation().add(-1.5,0,.5));give(owner);nativeUse(against,face);
+        await(()->placedEntry()!=null&&placedEntry().phase()==Phase.PLACED&&site.getType()==Material.BARRIER&&displays(site)==1,()->{
+            var entry=placedEntry();check(entry.face().name().equals(face.name()),"actual native input records clicked face "+index+"/"+face);check(count(owner)==0,"face placement consumes exactly one item");inspectPose(entry);faceEntries.add(entry);
+            if(against!=site){var event=new BlockBreakEvent(against,owner);Bukkit.getPluginManager().callEvent(event);check(!event.isCancelled(),"clicked support can be legitimately removed "+face);against.setType(Material.AIR,false);}
+            later(25,()->{check(trophies.journal().at(cell(site))!=null&&site.getType()==Material.BARRIER&&displays(site)==1,"unsupported trophy remains placed "+face);placeFace(index+1);});
+        });
+    }
+    private ItemDisplay visual(Entry entry){var b=world.getBlockAt(entry.cell().x(),entry.cell().y(),entry.cell().z());return b.getWorld().getNearbyEntities(b.getLocation().add(.5,.5,.5),1,1,1).stream().filter(ItemDisplay.class::isInstance).map(ItemDisplay.class::cast).filter(d->entry.id().toString().equals(d.getPersistentDataContainer().get(new NamespacedKey("mandomc","rancor_trophy_display_v1"),PersistentDataType.STRING))).findFirst().orElseThrow();}
+    private void inspectPose(Entry entry){
+        var display=visual(entry);check(displays(world.getBlockAt(entry.cell().x(),entry.cell().y(),entry.cell().z()))==1,"one display per oriented trophy");check(decode(entry).isSimilar(skull),"orientation keeps exact named stack metadata");check(display.getTransformation().getTranslation().distance(new org.joml.Vector3f(0,.0625f,0))<1e-6,"head centered before rotation");
+        var expected=entry.face()==Face.UP?new org.bukkit.util.Vector(0,0,-1):BlockFace.valueOf(entry.face().name()).getDirection();check(display.getLocation().getDirection().distance(expected)<1e-5,"rendered forward faces outward "+entry.face());
+        var center=new org.bukkit.util.Vector(entry.cell().x()+.5,entry.cell().y()+.5,entry.cell().z()+.5);if(entry.face()==Face.UP)center.add(new org.bukkit.util.Vector(0,-.0625,0));else center.subtract(BlockFace.valueOf(entry.face().name()).getDirection().multiply(.0625));check(display.getLocation().toVector().distance(center)<1e-5,"oriented geometry remains inside reserved cell and touches clicked side");
+    }
+    private void recoverFace(int index)throws Exception{
+        if(index==faceEntries.size()){trophies.recover(owner);later(25,()->{check(count(owner)==faceCases.length&&trophies.journal().entries().isEmpty(),"all face returns exactly once after restart");getLogger().info("RANCOR FACE RESTART PASSED: "+checks+" assertions");Bukkit.shutdown();});return;}
+        var e=faceEntries.get(index);site=world.getBlockAt(e.cell().x(),e.cell().y(),e.cell().z());moveActor(site.getLocation().add(-1.5,0,.5));nativeBreak(site);await(()->!trophies.journal().entries().containsKey(e.id())&&count(owner)==index+1,()->{check(site.getType().isAir()&&displays(site)==0,"native break recovers oriented trophy without leftovers");check(Arrays.stream(owner.getInventory().getStorageContents()).filter(Objects::nonNull).filter(trophies::skull).allMatch(item->item.isSimilar(skull)),"every face returns exact item bytes");recoverFace(index+1);});
+    }
+    private void moveActor(Location location)throws Exception{
+        // Unregistered fixture players have no client connection to acknowledge Bukkit teleports.
+        var handle=handles.get(owner.getUniqueId());handle.getClass().getMethod("setPos",double.class,double.class,double.class).invoke(handle,location.getX(),location.getY(),location.getZ());handle.getClass().getMethod("setYRot",float.class).invoke(handle,location.getYaw());handle.getClass().getMethod("setXRot",float.class).invoke(handle,location.getPitch());check(owner.getLocation().distanceSquared(location)<1e-6,"fixture actor is actually within native reach");
+    }
+    private void nativeUse(Block clicked,BlockFace face)throws Exception{
+        var handle=handles.get(owner.getUniqueId());var mode=handle.getClass().getField("gameMode").get(handle);var posType=Class.forName("net.minecraft.core.BlockPos");var dirType=Class.forName("net.minecraft.core.Direction");var handType=Class.forName("net.minecraft.world.InteractionHand");var vecType=Class.forName("net.minecraft.world.phys.Vec3");var hitType=Class.forName("net.minecraft.world.phys.BlockHitResult");var pos=posType.getConstructor(int.class,int.class,int.class).newInstance(clicked.getX(),clicked.getY(),clicked.getZ());var at=clicked.getLocation().add(.5,.5,.5).add(face.getDirection().multiply(.5));if(clicked.getType()==Material.STONE_SLAB&&face==BlockFace.UP)at.setY(clicked.getY()+.5);var vec=vecType.getConstructor(double.class,double.class,double.class).newInstance(at.getX(),at.getY(),at.getZ());var direction=dirType.getField(face.name()).get(null);var hand=handType.getField("MAIN_HAND").get(null);var hit=hitType.getConstructor(vecType,dirType,posType,boolean.class).newInstance(vec,direction,pos,false);var item=handle.getClass().getMethod("getItemInHand",handType).invoke(handle,hand);var level=world.getClass().getMethod("getHandle").invoke(world);Arrays.stream(mode.getClass().getMethods()).filter(m->m.getName().equals("useItemOn")&&m.getParameterCount()==5).findFirst().orElseThrow().invoke(mode,handle,level,item,hand,hit);
+    }
+    private void nativeBreak(Block block)throws Exception{
+        var handle=handles.get(owner.getUniqueId());var mode=handle.getClass().getField("gameMode").get(handle);var posType=Class.forName("net.minecraft.core.BlockPos");var dirType=Class.forName("net.minecraft.core.Direction");var actionType=Class.forName("net.minecraft.network.protocol.game.ServerboundPlayerActionPacket$Action");var pos=posType.getConstructor(int.class,int.class,int.class).newInstance(block.getX(),block.getY(),block.getZ());mode.getClass().getMethod("handleBlockBreakAction",posType,actionType,dirType,int.class,int.class).invoke(mode,pos,actionType.getField("START_DESTROY_BLOCK").get(null),dirType.getField("UP").get(null),world.getMaxHeight(),1);
     }
     private ItemStack decode(Entry e){return ItemStack.deserializeBytes(Base64.getDecoder().decode(e.item()));}
     private interface Check{void run()throws Exception;}

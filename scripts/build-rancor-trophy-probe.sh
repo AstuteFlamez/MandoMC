@@ -11,7 +11,7 @@ mkdir -p "$probe_dir/classes"
     org.apache.maven.plugins:maven-dependency-plugin:3.8.1:build-classpath \
     "-Dmdep.outputFile=$probe_dir/classpath.txt"
 "$JAVA_HOME/bin/javac" --release 25 \
-    -cp "$MANDOMC_ROOT/.local/native/candidate.jar:${MANDOMC_RUNTIME:-$MANDOMC_ROOT/server/runtime}/plugins/WeaponMechanics-4.3.1.jar:${MANDOMC_RUNTIME:-$MANDOMC_ROOT/server/runtime}/plugins/MechanicsCore-4.3.1.jar:${MANDOMC_RUNTIME:-$MANDOMC_ROOT/server/runtime}/plugins/MythicMobs-5.14.0.jar:${MANDOMC_RUNTIME:-$MANDOMC_ROOT/server/runtime}/plugins/ModelEngine-4.1.1.jar:$(cat "$probe_dir/classpath.txt")" \
+    -cp "${MANDOMC_TROPHY_CANDIDATE:-$MANDOMC_ROOT/.local/native/candidate.jar}:${MANDOMC_RUNTIME:-$MANDOMC_ROOT/server/runtime}/plugins/WeaponMechanics-4.3.1.jar:${MANDOMC_RUNTIME:-$MANDOMC_ROOT/server/runtime}/plugins/MechanicsCore-4.3.1.jar:${MANDOMC_RUNTIME:-$MANDOMC_ROOT/server/runtime}/plugins/MythicMobs-5.14.0.jar:${MANDOMC_RUNTIME:-$MANDOMC_ROOT/server/runtime}/plugins/ModelEngine-4.1.1.jar:$(cat "$probe_dir/classpath.txt")" \
     -d "$probe_dir/classes" scripts/integration/RancorTrophyProbe.java
 cat > "$probe_dir/classes/plugin.yml" <<'YAML'
 name: RancorTrophyProbe

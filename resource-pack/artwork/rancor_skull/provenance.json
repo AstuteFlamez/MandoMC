@@ -12,56 +12,89 @@
   "trophySizeBlocks": [
     0.875,
     0.875,
-    0.928125
+    0.875
   ],
   "reservedSpaceBlocks": [
     1,
     1,
     1
   ],
-  "facesFromSourcePixels": {
-    "north": [
-      24,
-      130,
-      48,
-      154
-    ],
-    "east": [
-      126,
-      100,
-      150,
-      124
-    ],
-    "south": [
-      110,
-      126,
-      134,
-      150
-    ],
-    "west": [
-      0,
-      130,
-      24,
-      154
-    ],
-    "up": [
-      132,
-      24,
-      156,
-      48
-    ],
-    "down": [
-      134,
-      124,
-      158,
-      148
-    ]
+  "faceOrientationTrace": {
+    "north": {
+      "sourceFace": "west",
+      "sourceUV": [
+        24,
+        130,
+        48,
+        154
+      ],
+      "respectSignedUV": true,
+      "clockwiseRotation": 0
+    },
+    "east": {
+      "sourceFace": "north",
+      "sourceUV": [
+        126,
+        100,
+        150,
+        124
+      ],
+      "respectSignedUV": true,
+      "clockwiseRotation": 0
+    },
+    "south": {
+      "sourceFace": "east",
+      "sourceUV": [
+        110,
+        126,
+        134,
+        150
+      ],
+      "respectSignedUV": true,
+      "clockwiseRotation": 0,
+      "completion": "Original crown contours extended over the exposed rear, with exact adjoining skin boundaries and original-palette quantization; no noise"
+    },
+    "west": {
+      "sourceFace": "south",
+      "sourceUV": [
+        0,
+        130,
+        24,
+        154
+      ],
+      "respectSignedUV": true,
+      "clockwiseRotation": 0
+    },
+    "up": {
+      "sourceFace": "up",
+      "sourceUV": [
+        156,
+        48,
+        132,
+        24
+      ],
+      "respectSignedUV": true,
+      "clockwiseRotation": 90
+    },
+    "down": {
+      "sourceFace": "down",
+      "sourceUV": [
+        158,
+        124,
+        134,
+        148
+      ],
+      "respectSignedUV": true,
+      "clockwiseRotation": 270
+    }
   },
   "changes": [
-    "Uniformly scale the original head to14 pixels per axis",
-    "Map all six source head faces into a separate complete bone atlas",
-    "Retain facial layout and teeth; expose dark eye/nose/mouth cavities",
-    "Add four small fang tips over the source canine positions"
+    "Uniformly scale original head to14 pixels per axis",
+    "Rotate original head -90 degrees around Y, retaining all signed face UVs",
+    "Match exact original Rancor skin palette and front pixels",
+    "Complete flat rear attachment from adjacent original skin boundaries",
+    "Remove all four added fang cubes",
+    "Center GUI three-quarter front presentation independently of placed transforms"
   ],
   "bossAssetsModified": false
 }

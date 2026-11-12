@@ -1,12 +1,12 @@
 {
-  "credit": "Derived from the owner-supplied Rancor Beast head; MandoMC skull UVs and bone finish.",
+  "credit": "Derived from the owner-supplied Rancor Beast head; MandoMC continuous UV wrap, original skin colors.",
   "textures": {
     "0": "mandomc:item/trophies/rancor_skull",
     "particle": "#0"
   },
   "elements": [
     {
-      "name": "Rancor cranium",
+      "name": "Rancor head",
       "from": [
         1,
         0,
@@ -73,300 +73,24 @@
           "texture": "#0"
         }
       }
-    },
-    {
-      "name": "left upper fang",
-      "from": [
-        4.7,
-        4.7,
-        0.15
-      ],
-      "to": [
-        5.55,
-        7.2,
-        1.15
-      ],
-      "faces": {
-        "north": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "east": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "south": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "west": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "up": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "down": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        }
-      }
-    },
-    {
-      "name": "right upper fang",
-      "from": [
-        10.45,
-        4.7,
-        0.15
-      ],
-      "to": [
-        11.3,
-        7.2,
-        1.15
-      ],
-      "faces": {
-        "north": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "east": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "south": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "west": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "up": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "down": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        }
-      }
-    },
-    {
-      "name": "left lower fang",
-      "from": [
-        4.4,
-        0.9,
-        0.25
-      ],
-      "to": [
-        5.15,
-        2.65,
-        1.15
-      ],
-      "faces": {
-        "north": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "east": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "south": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "west": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "up": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "down": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        }
-      }
-    },
-    {
-      "name": "right lower fang",
-      "from": [
-        10.85,
-        0.9,
-        0.25
-      ],
-      "to": [
-        11.6,
-        2.65,
-        1.15
-      ],
-      "faces": {
-        "north": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "east": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "south": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "west": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "up": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        },
-        "down": {
-          "uv": [
-            10,
-            0,
-            11,
-            2
-          ],
-          "texture": "#0"
-        }
-      }
     }
   ],
   "display": {
     "gui": {
       "rotation": [
-        22,
-        225,
+        25,
+        -135,
         0
       ],
       "translation": [
         0,
-        0,
+        1,
         0
       ],
       "scale": [
-        0.9,
-        0.9,
-        0.9
+        0.7,
+        0.7,
+        0.7
       ]
     },
     "ground": {

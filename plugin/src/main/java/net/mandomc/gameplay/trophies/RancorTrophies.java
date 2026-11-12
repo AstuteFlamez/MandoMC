@@ -73,10 +73,9 @@ public final class RancorTrophies implements Listener,AutoCloseable {
     private Block loaded(Cell c){var w=Bukkit.getWorld(NamespacedKey.fromString(c.world()));return w!=null&&w.isChunkLoaded(c.x()>>4,c.z()>>4)?w.getBlockAt(c.x(),c.y(),c.z()):null;}
     private NamespacedKey marker(Cell c){return new NamespacedKey("mandomc","trophy_"+(c.x()&15)+"_"+c.y()+"_"+(c.z()&15));}
     private boolean owned(Block b,Entry e){return e.id().toString().equals(b.getChunk().getPersistentDataContainer().get(marker(e.cell()),PersistentDataType.STRING));}
-    private boolean support(Block b){return b.getRelative(BlockFace.DOWN).getBlockData().isFaceSturdy(BlockFace.UP,BlockSupport.FULL);}
     private BoundingBox bounds(Block b){return new BoundingBox(b.getX()+.001,b.getY()+.001,b.getZ()+.001,b.getX()+.999,b.getY()+.999,b.getZ()+.999);}
     private boolean clear(Block b){
-        if(!b.getType().isAir() || !support(b) || b.getY()<b.getWorld().getMinHeight()+1 || b.getY()>=b.getWorld().getMaxHeight())return false;
+        if(!b.isReplaceable() || b.getY()<b.getWorld().getMinHeight() || b.getY()>=b.getWorld().getMaxHeight())return false;
         for(double x:new double[]{.001,.999})for(double z:new double[]{.001,.999})if(!b.getWorld().getWorldBorder().isInside(b.getLocation().add(x,.5,z)))return false;
         return b.getWorld().getNearbyEntities(bounds(b),e->e instanceof LivingEntity || e instanceof Vehicle || e instanceof Hanging).isEmpty();
     }
@@ -88,11 +87,11 @@ public final class RancorTrophies implements Listener,AutoCloseable {
     private void addReceipt(Player p,String value){var values=receipts(p);values.add(value);receipts(p,values);}
     private void release(Entry e){operations.remove(e.id());players.remove(e.owner(),e.id());reservations.remove(e.cell(),e.id());}
     /** Use the same provisional-block/event/rollback contract as native block placement. */
-    private boolean authorizePlace(Player p,Block b,EquipmentSlot hand,ItemStack item){
+    private boolean authorizePlace(Player p,Block b,Block against,EquipmentSlot hand,ItemStack item){
         if(!zoneEdits.test(p,b.getLocation()))return false;
         var original=b.getState();boolean allowed;
         checking=true;
-        try{b.setType(Material.BARRIER,false);var event=new BlockPlaceEvent(b,original,b.getRelative(BlockFace.DOWN),item.clone(),p,true,hand);Bukkit.getPluginManager().callEvent(event);allowed=!event.isCancelled()&&event.canBuild();}
+        try{b.setType(Material.BARRIER,false);var event=new BlockPlaceEvent(b,original,against,item.clone(),p,true,hand);Bukkit.getPluginManager().callEvent(event);allowed=!event.isCancelled()&&event.canBuild();}
         finally{original.update(true,false);checking=false;}
         return allowed;
     }
@@ -102,21 +101,23 @@ public final class RancorTrophies implements Listener,AutoCloseable {
             // Never override an earlier region/clan cancellation. Block-place events below are the final authority.
             boolean denied=event.useInteractedBlock()==Event.Result.DENY||event.useItemInHand()==Event.Result.DENY;
             event.setCancelled(true);if(denied)return;
-            if(event.getBlockFace()!=BlockFace.UP){tell(event.getPlayer(),"support");return;}
-            place(event.getPlayer(),event.getClickedBlock().getRelative(BlockFace.UP),event.getHand());
+            if(event.getClickedBlock()==null || !Set.of(BlockFace.UP,BlockFace.DOWN,BlockFace.NORTH,BlockFace.SOUTH,BlockFace.EAST,BlockFace.WEST).contains(event.getBlockFace()))return;
+            var clicked=event.getClickedBlock();var site=clicked.isReplaceable()?clicked:clicked.getRelative(event.getBlockFace());
+            place(event.getPlayer(),site,event.getHand(),Face.valueOf(event.getBlockFace().name()),clicked);
         }else if(event.getAction()==Action.LEFT_CLICK_BLOCK && event.getClickedBlock()!=null){
             var e=journal.at(cell(event.getClickedBlock()));
             if(e!=null&&e.phase()==Phase.PLACED){boolean denied=event.useInteractedBlock()==Event.Result.DENY;event.setCancelled(true);if(!denied)breakTrophy(event.getPlayer(),e);}
         }
     }
-    public void place(Player player,Block site,EquipmentSlot hand){
+    public void place(Player player,Block site,EquipmentSlot hand){place(player,site,hand,Face.UP,site.getRelative(BlockFace.DOWN));}
+    public void place(Player player,Block site,EquipmentSlot hand,Face face,Block against){
         if(closed||hand==null||players.containsKey(player.getUniqueId())||reservations.containsKey(cell(site))||journal.at(cell(site))!=null){tell(player,"busy");return;}
         var held=player.getInventory().getItem(hand);if(!skull(held)||!nearby(player,site))return;
-        if(!clear(site)){tell(player,support(site)?"space":"support");return;}
+        if(!clear(site)){tell(player,"space");return;}
         if(!zoneEdits.test(player,site.getLocation())){tell(player,"denied");return;}
         var stack=held.clone();stack.setAmount(1);
-        int yaw=Math.floorMod(Math.round(player.getYaw()/90)*90+180,360);
-        var entry=new Entry(UUID.randomUUID(),player.getUniqueId(),cell(site),yaw,Base64.getEncoder().encodeToString(stack.serializeAsBytes()),Phase.PREPARED);
+        int yaw=switch(face){case NORTH->180;case SOUTH->0;case EAST->270;case WEST->90;default->Math.floorMod(Math.round(player.getYaw()/90)*90+180,360);};
+        var entry=new Entry(UUID.randomUUID(),player.getUniqueId(),cell(site),yaw,face,Base64.getEncoder().encodeToString(stack.serializeAsBytes()),Phase.PREPARED);
         operations.add(entry.id());players.put(player.getUniqueId(),entry.id());reservations.put(entry.cell(),entry.id());tell(player,"placing");
         io(entry.id(),()->{journal.reserve(entry);return null;},(v,error)->{
             if(error!=null){release(entry);tell(player,"save-failed");return;}
@@ -127,7 +128,7 @@ public final class RancorTrophies implements Listener,AutoCloseable {
             var placed=entry.placed();
             io(entry.id(),()->{journal.replace(entry,placed);return null;},(ignored,problem)->{
                 if(problem!=null){release(entry);tell(player,"save-failed");return;}
-                if(!nearby(player,site)||!clear(site)||!authorizePlace(player,site,hand,stack)){release(entry);returning(placed,player.getUniqueId());return;}
+                if(!nearby(player,site)||!clear(site)||!authorizePlace(player,site,against,hand,stack)){release(entry);returning(placed,player.getUniqueId());return;}
                 install(placed,site);release(entry);tell(player,"placed");prune(player);
             });
         });
@@ -136,13 +137,32 @@ public final class RancorTrophies implements Listener,AutoCloseable {
     private void install(Entry entry,Block b){b.setType(Material.BARRIER,false);b.getChunk().getPersistentDataContainer().set(marker(entry.cell()),PersistentDataType.STRING,entry.id().toString());ensureDisplay(entry,b);}
     private void ensureDisplay(Entry entry,Block b){
         var matching=b.getWorld().getNearbyEntities(b.getLocation().add(.5,.5,.5),1,1,1).stream().filter(e->entry.id().toString().equals(e.getPersistentDataContainer().get(DISPLAY,PersistentDataType.STRING))).toList();
-        if(matching.stream().anyMatch(ItemDisplay.class::isInstance)){boolean keep=false;for(var e:matching){if(e instanceof ItemDisplay&&!keep)keep=true;else e.remove();}return;}
+        if(matching.stream().anyMatch(ItemDisplay.class::isInstance)){boolean keep=false;for(var e:matching){if(e instanceof ItemDisplay display&&!keep){configureDisplay(entry,b,display);keep=true;}else e.remove();}return;}
         matching.forEach(Entity::remove);
-        b.getWorld().spawn(b.getLocation().add(.5,.5,.5),ItemDisplay.class,display->{
+        b.getWorld().spawn(poseLocation(entry,b),ItemDisplay.class,display->{
             display.getPersistentDataContainer().set(DISPLAY,PersistentDataType.STRING,entry.id().toString());
-            display.setItemStack(items.create(ITEM));display.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);display.setRotation(entry.yaw(),0);
+            display.setItemStack(items.create(ITEM));configureDisplay(entry,b,display);
             display.setPersistent(true);display.setInvulnerable(true);display.setGravity(false);display.setShadowRadius(0);display.setViewRange(1);
         });
+    }
+    private Location poseLocation(Entry entry,Block b){
+        var location=b.getLocation().add(.5,.5,.5);
+        switch(entry.face()){
+            case UP->location.add(0,-.0625,0);
+            case DOWN->location.add(0,.0625,0);
+            case NORTH->location.add(0,0,.0625);
+            case SOUTH->location.add(0,0,-.0625);
+            case EAST->location.add(-.0625,0,0);
+            case WEST->location.add(.0625,0,0);
+        }
+        location.setYaw(entry.yaw());location.setPitch(entry.face()==Face.DOWN?90:0);return location;
+    }
+    private void configureDisplay(Entry entry,Block b,ItemDisplay display){
+        var location=poseLocation(entry,b);
+        if(display.getLocation().distanceSquared(location)>1e-8 || display.getYaw()!=location.getYaw() || display.getPitch()!=location.getPitch())display.teleport(location);
+        display.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);
+        // Center the original head's Y=0..14 geometry before rotating onto a wall/ceiling.
+        display.setTransformation(new org.bukkit.util.Transformation(new org.joml.Vector3f(0,.0625f,0),new org.joml.Quaternionf(),new org.joml.Vector3f(1),new org.joml.Quaternionf()));
     }
     public void breakTrophy(Player player,Entry entry){
         var b=loaded(entry.cell());if(entry.phase()!=Phase.PLACED||operations.contains(entry.id())||b==null||!owned(b,entry)||!nearby(player,b)||!zoneEdits.test(player,b.getLocation()))return;
@@ -191,7 +211,7 @@ public final class RancorTrophies implements Listener,AutoCloseable {
             var b=loaded(e.cell());if(b==null)continue;
             if(e.phase()==Phase.PLACED){
                 // An absent/replaced anchor is returned, never blindly rebuilt over a reset or another player's blocks.
-                if(b.getType()!=Material.BARRIER||!owned(b,e)||!support(b))returning(e,e.owner());else ensureDisplay(e,b);
+                if(b.getType()!=Material.BARRIER||!owned(b,e))returning(e,e.owner());else ensureDisplay(e,b);
             }
         }
         var owners=new HashSet<UUID>();for(var e:journal.entries().values())if(e.phase()==Phase.PREPARED)owners.add(e.owner());
@@ -212,7 +232,7 @@ public final class RancorTrophies implements Listener,AutoCloseable {
     @EventHandler public void loaded(EntitiesLoadEvent e){cleanDisplays(e.getEntities());}
     @EventHandler public void join(PlayerJoinEvent e){Bukkit.getScheduler().runTask(plugin,()->recover(e.getPlayer()));}
     @EventHandler public void closeInventory(InventoryCloseEvent e){if(e.getPlayer() instanceof Player p)Bukkit.getScheduler().runTask(plugin,()->recover(p));}
-    private boolean protectedBlock(Block b){var here=journal.at(cell(b));if(here!=null&&here.phase()==Phase.PLACED)return true;var above=journal.at(cell(b.getRelative(BlockFace.UP)));return above!=null&&above.phase()==Phase.PLACED;}
+    private boolean protectedBlock(Block b){var here=journal.at(cell(b));return here!=null&&here.phase()==Phase.PLACED;}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true) public void placeFallback(BlockPlaceEvent e){if(!checking&&(skull(e.getItemInHand())||protectedBlock(e.getBlock())))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true) public void breakBlock(BlockBreakEvent e){if(!checking&&protectedBlock(e.getBlock()))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true) public void entityExplosion(EntityExplodeEvent e){e.blockList().removeIf(this::protectedBlock);}

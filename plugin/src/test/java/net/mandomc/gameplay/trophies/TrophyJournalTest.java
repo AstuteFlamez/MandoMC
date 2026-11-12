@@ -38,4 +38,14 @@ public class TrophyJournalTest {
         assertThrows(IllegalStateException.class,()->journal.replace(e,new Entry(e.id(),UUID.randomUUID(),e.cell(),e.yaw(),e.item(),Phase.PLACED)));
         assertThrows(IllegalArgumentException.class,()->new Entry(e.id(),e.owner(),e.cell(),45,e.item(),Phase.PREPARED));
     }
+    @Test public void legacyFloorJournalKeepsYawAndMigratesWithoutChangingCustody()throws Exception {
+        var file=Files.createTempDirectory("trophy").resolve("data.yml");var e=entry();var y=new org.bukkit.configuration.file.YamlConfiguration();y.set("schema-version",1);String p="entries."+e.id()+".";y.set(p+"owner",e.owner().toString());y.set(p+"world",e.cell().world());y.set(p+"x",e.cell().x());y.set(p+"y",e.cell().y());y.set(p+"z",e.cell().z());y.set(p+"yaw",e.yaw());y.set(p+"item",e.item());y.set(p+"phase","PLACED");Files.writeString(file,y.saveToString());
+        var journal=new TrophyJournal(file,20);var restored=journal.at(e.cell());assertEquals(Face.UP,restored.face());assertEquals(e.yaw(),restored.yaw());assertEquals(e.item(),restored.item());journal.replace(restored,restored.returning(e.owner()));assertEquals(Face.UP,new TrophyJournal(file,20).entries().get(e.id()).face());assertEquals(2,org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(file.toFile()).getInt("schema-version"));
+    }
+    @Test public void allSixFacesPersistAndCannotChangeDuringCustodyTransfer()throws Exception {
+        for(var face:Face.values()){
+            var file=Files.createTempDirectory("trophy-face").resolve("data.yml");var journal=new TrophyJournal(file,20);var old=entry();var e=new Entry(old.id(),old.owner(),old.cell(),old.yaw(),face,old.item(),old.phase());journal.reserve(e);journal.replace(e,e.placed());var restored=new TrophyJournal(file,20).at(e.cell());assertEquals(face,restored.face());assertEquals(face,restored.returning(e.owner()).face());
+            var wrong=new Entry(e.id(),e.owner(),e.cell(),e.yaw(),face==Face.UP?Face.DOWN:Face.UP,e.item(),Phase.RETURNING);assertThrows(IllegalStateException.class,()->journal.replace(restored,wrong));
+        }
+    }
 }
