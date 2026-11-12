@@ -1,5 +1,5 @@
 # Galactic credit symbol
-Status: validated pack; publication/application pending coordination.
+Status: published, anonymously verified and selected by normal server startup. Client alignment confirmation remains.
 
 The default font maps U+0024 (`$`) to a monochrome Galactic credit mark: the angular Aurebesh Resh-like form with two strokes through its upper bar. Native credit amounts, decimal formatting and commands remain unchanged. Existing balances, Jawa prices, auction amounts and ordinary sidebar text inherit the mark automatically; no emoji/system-font fallback is involved. Only this one character is claimed. The bitmap is five pixels wide, height eight, ascent eight (raised one pixel following the user’s in-game alignment feedback), giving the same six-pixel advance as the standard dollar glyph. White RGBA pixels inherit text tint and shadow.
 
@@ -7,4 +7,4 @@ The repository's editable source is a five-by-eight pixel grid plus SVG; this ex
 
 The [sample](../assets/credit-symbol-samples.png) renders actual vanilla ASCII bitmap glyphs plus the proposed credit bitmap for balance/shop/auction/sidebar strings; it is an offline texture sample, not an authenticated client screenshot. 36 script checks pass, including dimensions, tint/advance, the double-bar/diagonal structure, six opaque skull face regions and source-asset preservation. The full merged pack validates all model, texture, atlas, font, sound and item references. An actual client reload remains to confirm game presentation after the coordinated asset rollout.
 
-User alignment follow-up: raise ascent from7 to8 with height8 and the exact same PNG/advance. The corrected client codec/priority check passes; the [comparison](../assets/credit-symbol-alignment.png) shows both values alongside the same digits. Incremental pack changes only this one JSON value and is held for the map owner’s explicit release before publication/application.
+User alignment follow-up: raise ascent from7 to8 with height8 and the exact same PNG/advance. The corrected client codec/priority check passes; the [comparison](../assets/credit-symbol-alignment.png) shows both values alongside the same digits. Incremental pack changes only this one JSON value. After explicit user publication approval, release `resource-pack-26.1.2-5efa3fdb6361` was published and anonymously verified with SHA-1 `e53a5a23d9b8f89ef6edb47a77aefe5388e2e1dc`; normal startup selected that exact release. Every other ZIP entry is byte-identical to `d38d5b8f3714`.
