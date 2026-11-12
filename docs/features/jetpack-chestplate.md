@@ -1,5 +1,5 @@
 # Feature: Jetpack chestplate enchantment
-Status: Agrinium-Anvil-only update ready; supersedes the earlier crafting-grid flow below.
+Status: Agrinium-Anvil-only update LIVE since 2026-11-12 17:19 America/Chicago; supersedes the earlier crafting-grid flow below.
 Branch: bilal/boba-equipment
 
 ## Current anvil flow
@@ -9,7 +9,7 @@ Agrinium Anvil is the existing server name for native ANVIL/CHIPPED_ANVIL/DAMAGE
 
 Eight fuel tests pass. A disposable full-current-runtime native probe passed 76 assertions through the real ServerGamePacketListener container-click handler, using an isolated valid native player with an in-memory channel. Tests include all three anvil damage states, normal/shift pickup, exact displayed XP cost, insufficient XP, full inventory, repeated clicks, removed station, virtual menu, grid rejection, tier cap, unchanged general enchanting restriction, chestplate metadata, native flight/fuel and flame behavior. The deprecated openAnvil fixture API uses force-open for worn block variants but production validation independently checks the real block/range. No real client or production test actor is used.
 
-Next action: deploy the scoped JAR/lore change and client-test the anvil UI.
+Deployed exact JAR `5a6406c1145b4f912fc4c9fc04cfcee84b4734f5ba75746dc5ee06676b1e0e62` with one clean restart/full stopped backup. All 45 production read-only checks passed. Resource/data packs and native agent/launcher are unchanged; all unowned JAR entries and APIs retained. KOTH active / next None restored and verified. Temporary audit removed; gear window released. Next action: user tests the native Agrinium Anvil UI.
 
 ## Earlier implementation and rollout history
 
