@@ -19,7 +19,7 @@ def load_yaml(data):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    for key in ['baseline', 'jawas-config', 'legacy-pack', 'current-pack', 'output']:
+    for key in ['baseline', 'jawas-config', 'legacy-pack', 'base-assets', 'current-pack', 'jawa-source', 'classpath-file', 'output']:
         parser.add_argument('--' + key, type=Path, required=True)
     parser.add_argument('--java', required=True)
     args = parser.parse_args()
@@ -35,47 +35,71 @@ def main():
     original = Image.open(BytesIO(original_bytes)).convert('RGBA')
     if original.size != (256, 256):
         raise ValueError('Expected original 256×256 pawnshop canvas')
-    wide = original.copy()
-    # Two extra 18px columns use existing repeated pixels, preserving roof/sign/pillars.
-    for x in range(44, 212):
-        for y in range(67, 124):
-            wide.putpixel((x, y), original.getpixel((x + 18 if x < 128 else x - 18, y)))
-    # Preserve the original lower slots/hotbar verbatim. Move the original gold info
-    # symbol to the existing info cell; the invisible server item keeps its tooltip.
-    info_symbol = original.crop((118, 142, 138, 161))
-    for y in range(142, 161):
-        for x in range(118, 138):
-            wide.putpixel((x, y), original.getpixel((139, y)))
-    wide.paste(info_symbol, (46, 142))
-    # Removing one unused interior row and raising ascent by 18 keeps four native rows aligned.
-    image = Image.new('RGBA', (256, 238))
-    image.paste(wide.crop((0, 0, 256, 124)), (0, 0))
-    image.paste(wide.crop((0, 142, 256, 256)), (0, 124))
-    for row in range(3):
-        for column in range(9):
-            x, y = 48 + 18 * column, 71 + 18 * row
-            assert (x - 40, y - 53) == (8 + 18 * column, 18 + 18 * row)
-            assert image.crop((x, y, x + 16, y + 16)).tobytes() == original.crop((66, 71, 82, 87)).tobytes()
-    assert image.crop((0, 143, 256, 238)).tobytes() == original.crop((0, 161, 256, 256)).tobytes()
-    assert image.crop((46, 124, 66, 143)).tobytes() == info_symbol.tobytes()
+    image = original.copy()
+    icon_inputs = []
+    with zipfile.ZipFile(args.base_assets) as supplied:
+        for name, x in [('confirm', 65), ('cancel', 173)]:
+            entry = 'Dark_Sci-Fi_GUI_RP/assets/minecraft/textures/gui/sprites/container/beacon/' + name + '.png'
+            data = supplied.read(entry)
+            icon = Image.open(BytesIO(data)).convert('RGBA')
+            if icon.size != (18, 18):
+                raise ValueError('Expected original 18px ' + name + ' icon')
+            image.alpha_composite(icon, (x, 142))
+            icon_inputs.append({'path': entry, 'sha256': hashlib.sha256(data).hexdigest()})
+    # No slot/roof/frame/tooltip-symbol redraw: only two supplied 18px icons differ.
+    for y in range(256):
+        for x in range(256):
+            if image.getpixel((x, y)) != original.getpixel((x, y)):
+                assert 142 <= y < 160 and (65 <= x < 83 or 173 <= x < 191)
     image.save(output / 'sell.png')
-    names = ['net/mandomc/gameplay/jawa/JawaSellInventory.class',
-             'net/mandomc/gameplay/jawa/JawaSellInventory$Tray.class']
-    patch_args = []
-    with zipfile.ZipFile(args.baseline) as baseline:
-        for name in names:
-            source = output / 'original' / name
-            source.parent.mkdir(parents=True, exist_ok=True)
-            source.write_bytes(baseline.read(name))
-            patch_args += [str(source), str(output / 'classes' / name)]
-    subprocess.run([args.java, str(Path(__file__).with_name('PatchSellGui.java')), *patch_args], check=True)
+    source = args.jawa_source.read_text()
+    original_source = source
+    changes = [
+        ('private static final int INPUTS=27, SIZE=36;',
+         'private static final int INPUTS=21, SIZE=54;\n'
+         '    private static int inputSlot(int index){return 10+(index/7)*9+index%7;}\n'
+         '    private static boolean input(int raw){return raw>=10 && raw<=34 && raw%9>=1 && raw%9<=7;}'),
+        ('MenuItems.fill(inventory);', ''),
+        ('label("gray-title")', 'label("buyer-gui-title")'),
+        ('inventory.setItem(27,info)', 'inventory.setItem(49,info)'),
+        ('inventory.setItem(35,close)', 'inventory.setItem(52,close)'),
+        ('tray.inventory.setItem(31,button)', 'tray.inventory.setItem(46,button)'),
+        ('if(raw==35)', 'if(raw==52)'), ('if(raw==31 &&', 'if(raw==46 &&'),
+        ('raw>=0 && raw<INPUTS', 'input(raw)'), ('if(raw<INPUTS)', 'if(input(raw))'),
+        ('inventory.setItem(i,', 'inventory.setItem(inputSlot(i),'),
+        ('inventory.getItem(i)', 'inventory.getItem(inputSlot(i))')]
+    for before, after in changes:
+        if before not in source:
+            raise ValueError('Sell source changed; review layout transformation: ' + before)
+        source = source.replace(before, after)
+    for variable in ['info', 'close', 'button']:
+        before = variable + '.setItemMeta(meta)'
+        if source.count(before) != 1:
+            raise ValueError('Unexpected control item presentation for ' + variable)
+        source = source.replace(before, 'meta.setItemModel(new NamespacedKey("mandomc","gui/control"));' + before)
+    source_path = output / 'source/net/mandomc/gameplay/jawa/JawaSellInventory.java'
+    source_path.parent.mkdir(parents=True, exist_ok=True)
+    source_path.write_text(source)
+    import difflib
+    (output / 'source.patch').write_text(''.join(difflib.unified_diff(
+        original_source.splitlines(True), source.splitlines(True),
+        fromfile='JawaSellInventory.java', tofile='JawaSellInventory.java')))
+    # Compile only the explicitly reviewed current owner source against its runtime APIs.
+    classes = output / 'classes'
+    classes.mkdir(exist_ok=True)
+    classpath = str(args.baseline.resolve()) + ':' + args.classpath_file.read_text().strip()
+    subprocess.run([str(Path(args.java).with_name('javac')), '-sourcepath', '', '-cp', classpath,
+                    '-d', str(classes), str(source_path)], check=True)
+    replacements = {str(path.relative_to(classes)): path.read_bytes()
+                    for path in (classes / 'net/mandomc/gameplay/jawa').glob('JawaSellInventory*.class')}
+    if not replacements:
+        raise ValueError('No compiled sell inventory classes')
 
     def patch_config(data):
         config = load_yaml(data)
         config['text']['buyer-gui-title'] = '<white><font:mandomc:gui/sell>\ue100\ue101</font>'
         return (json.dumps(config, indent=2, ensure_ascii=False) + '\n').encode()
 
-    replacements = {name: (output / 'classes' / name).read_bytes() for name in names}
     with zipfile.ZipFile(args.baseline) as baseline, zipfile.ZipFile(output / 'candidate.jar', 'w', zipfile.ZIP_DEFLATED) as candidate:
         replacements['mobs/jawas.yml'] = patch_config(baseline.read('mobs/jawas.yml'))
         for name in baseline.namelist():
@@ -85,10 +109,10 @@ def main():
     (output / 'jawas.yml').write_bytes(patch_config(args.jawas_config.read_bytes()))
     font = {'providers': [
         {'type': 'space', 'advances': {'\ue100': -48}},
-        {'type': 'bitmap', 'file': 'mandomc:gui/sell.png', 'ascent': 66, 'height': 238, 'chars': ['\ue101']}]}
+        {'type': 'bitmap', 'file': 'mandomc:gui/sell.png', 'ascent': 48, 'height': 256, 'chars': ['\ue101']}]}
     font_name = 'assets/mandomc/font/gui/sell.json'
     art_name = 'assets/mandomc/textures/gui/sell.png'
-    info_name = 'assets/mandomc/items/gui/info.json'
+    info_name = 'assets/mandomc/items/gui/control.json'
     with zipfile.ZipFile(args.current_pack) as current, zipfile.ZipFile(output / 'MandoMC-preview.zip', 'w', zipfile.ZIP_DEFLATED) as pack:
         if any(name in current.namelist() for name in [font_name, art_name, info_name]):
             raise ValueError('Sell GUI already exists in baseline; review before replacing it')
@@ -101,11 +125,13 @@ def main():
         assert all(current.read(n) == pack.read(n) for n in current.namelist())
     report = {'baselineJarSha256': digest(args.baseline), 'baselineConfigSha256': digest(args.jawas_config),
               'baselinePackSha256': digest(args.current_pack), 'changedJarEntries': list(replacements),
-              'addedPackEntries': [font_name, art_name, info_name], 'texture': [256, 238],
-              'menu': {'rows': 4, 'inputs': 27, 'info': 27, 'sell': 31, 'return': 35},
+              'addedPackEntries': [font_name, art_name, info_name], 'texture': [256, 256],
+              'menu': {'rows': 6, 'inputs': 21, 'info': 49, 'sell': 46, 'return': 52},
+              'sourceSha256': digest(args.jawa_source), 'baseAssetsSha256': digest(args.base_assets),
+              'iconInputs': icon_inputs,
               'privateStagingOnly': True}
     (output / 'report.json').write_text(json.dumps(report, indent=2) + '\n')
-    print('Staged two visual class edits and three additive pack assets; unrelated bytes verified unchanged.')
+    print('Staged original 21-slot artwork, supplied confirm/cancel icons and layout-only service changes; unrelated JAR/pack entries unchanged.')
 
 
 if __name__ == '__main__':

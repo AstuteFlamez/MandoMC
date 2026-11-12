@@ -34,29 +34,40 @@ public final class SellGuiProbe extends JavaPlugin {
     }
     private void open(){mando.jawas().open(buyer,gray);check(top().getHolder() instanceof JawaSellInventory.Tray,"gray buyer opens its deposit inventory");}
     private Inventory top(){return buyer.getOpenInventory().getTopInventory();}
+    private static int inputSlot(int index){return 10+(index/7)*9+index%7;}
     private void mixed(){
-        check(top().getSize()==36,"buyer tray uses 27 input slots and one control row");
-        for(int i=0;i<27;i++)check(top().getItem(i)==null,"input slot starts empty "+i);
-        check(new NamespacedKey("mandomc","gui/info").equals(top().getItem(27).getItemMeta().getItemModel()),"original gold info artwork uses invisible item with real tooltip");
-        check(top().getItem(27).getType()==Material.BOOK&&top().getItem(27).getItemMeta().lore().size()>=8,"info item explains placement, sale, returns and cancellation");
-        check(top().getItem(28)==null,"decorative panes do not obscure custom GUI artwork");
-        var protectedClick=new InventoryClickEvent(buyer.getOpenInventory(),InventoryType.SlotType.CONTAINER,28,ClickType.LEFT,InventoryAction.PLACE_ALL);
+        check(top().getSize()==54,"buyer tray uses 21 centered inputs in the original six-row artwork");
+        for(int i=0;i<21;i++)check(top().getItem(inputSlot(i))==null,"input slot starts empty "+i);
+        check(new NamespacedKey("mandomc","gui/control").equals(top().getItem(49).getItemMeta().getItemModel()),"original gold info artwork uses invisible item with real tooltip");
+        check(top().getItem(49).getType()==Material.BOOK&&top().getItem(49).getItemMeta().lore().size()>=8,"info item explains placement, sale, returns and cancellation");
+        check(top().getItem(0)==null,"decorative panes do not obscure custom GUI artwork");
+        var protectedClick=new InventoryClickEvent(buyer.getOpenInventory(),InventoryType.SlotType.CONTAINER,0,ClickType.LEFT,InventoryAction.PLACE_ALL);
         buyer.setItemOnCursor(new ItemStack(Material.STONE,5));Bukkit.getPluginManager().callEvent(protectedClick);
-        check(protectedClick.isCancelled()&&top().getItem(28)==null&&buyer.getItemOnCursor().getAmount()==5,"empty decorative control slots remain protected without consuming cursor");buyer.setItemOnCursor(null);
+        check(protectedClick.isCancelled()&&top().getItem(0)==null&&buyer.getItemOnCursor().getAmount()==5,"empty decorative control slots remain protected without consuming cursor");buyer.setItemOnCursor(null);
         check(net.kyori.adventure.text.serializer.gson.GsonComponentSerializer.gson().serialize(buyer.getOpenInventory().title()).contains("mandomc:gui/sell"),"actual open title uses isolated custom font");
+        var allowed=new HashSet<Integer>();for(int i=0;i<21;i++)allowed.add(inputSlot(i));
+        for(int raw=0;raw<54;raw++)if(!allowed.contains(raw)&&!Set.of(46,49,52).contains(raw)){
+            buyer.setItemOnCursor(new ItemStack(Material.STONE,5));var blockedCell=new InventoryClickEvent(buyer.getOpenInventory(),InventoryType.SlotType.CONTAINER,raw,ClickType.LEFT,InventoryAction.PLACE_ALL);Bukkit.getPluginManager().callEvent(blockedCell);check(blockedCell.isCancelled()&&top().getItem(raw)==null&&buyer.getItemOnCursor().getAmount()==5,"unused artwork cell protected "+raw);
+        }buyer.setItemOnCursor(null);
+        check(new NamespacedKey("mandomc","gui/control").equals(top().getItem(46).getItemMeta().getItemModel())&&new NamespacedKey("mandomc","gui/control").equals(top().getItem(52).getItemMeta().getItemModel()),"themed confirm and cancel art replace dye and barrier renderings");
+        buyer.getInventory().clear();for(int i=0;i<22;i++)buyer.getInventory().setItem(i,new ItemStack(Material.SAND,64));
+        for(int i=0;i<21;i++)shift(i);
+        check(countTop(Material.SAND)==21*64,"all 21 original sell cells accept a full stack");shift(21);
+        check(countTop(Material.SAND)==21*64&&count(Material.SAND)==64,"full centered tray leaves overflow in player inventory");
+        buyer.closeInventory();check(count(Material.SAND)==22*64&&mando.credits().ledger().balance(buyer.getUniqueId())==0,"closing a full tray returns every stack without a sale");buyer.getInventory().clear();open();
         buyer.getInventory().setItem(0,new ItemStack(Material.SAND,32));var hide=mando.items().create("bantha_hide");hide.setAmount(3);buyer.getInventory().setItem(1,hide);buyer.getInventory().setItem(2,treasure.clone());
         shift(0);shift(1);shift(2);check(countTop(Material.SAND)==32&&countTop(Material.DIAMOND)==4,"shift-click accepts any item into the input area");
         check(buyer.getPersistentDataContainer().has(journal),"deposit is held in durable player custody");
-        click(0,ClickType.RIGHT);check(buyer.getItemOnCursor().getAmount()==16,"right-click splits a deposited stack");click(3,ClickType.LEFT);
-        click(1,ClickType.RIGHT);check(buyer.getItemOnCursor().getAmount()==2,"custom item split preserves quantity");
-        var drag=new InventoryDragEvent(buyer.getOpenInventory(),new ItemStack(Material.AIR),buyer.getItemOnCursor().clone(),false,Map.of(4,one(hide),5,one(hide)));Bukkit.getPluginManager().callEvent(drag);
+        click(inputSlot(0),ClickType.RIGHT);check(buyer.getItemOnCursor().getAmount()==16,"right-click splits a deposited stack");click(inputSlot(3),ClickType.LEFT);
+        click(inputSlot(1),ClickType.RIGHT);check(buyer.getItemOnCursor().getAmount()==2,"custom item split preserves quantity");
+        var drag=new InventoryDragEvent(buyer.getOpenInventory(),new ItemStack(Material.AIR),buyer.getItemOnCursor().clone(),false,Map.of(inputSlot(4),one(hide),inputSlot(5),one(hide)));Bukkit.getPluginManager().callEvent(drag);
         check(drag.isCancelled()&&buyer.getItemOnCursor().isEmpty()&&countTopCustom("bantha_hide")==3,"drag distributes exact custom stacks without duplication");
-        var title=net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(top().getItem(31).getItemMeta().displayName());
+        var title=net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(top().getItem(46).getItemMeta().displayName());
         check(title.contains("4.00"),"quote totals partial bundles across input slots");
-        click(2,ClickType.LEFT);var held=buyer.getItemOnCursor().clone();
-        var blocked=new InventoryDragEvent(buyer.getOpenInventory(),new ItemStack(Material.AIR),held,false,Map.of(27,held));Bukkit.getPluginManager().callEvent(blocked);
-        check(blocked.isCancelled()&&buyer.getItemOnCursor().isSimilar(held)&&top().getItem(27).getType()==Material.BOOK,"drag cannot overwrite the info item or consume cursor items");click(2,ClickType.LEFT);
-        click(31,ClickType.LEFT);click(31,ClickType.LEFT);
+        click(inputSlot(2),ClickType.LEFT);var held=buyer.getItemOnCursor().clone();
+        var blocked=new InventoryDragEvent(buyer.getOpenInventory(),new ItemStack(Material.AIR),held,false,Map.of(49,held));Bukkit.getPluginManager().callEvent(blocked);
+        check(blocked.isCancelled()&&buyer.getItemOnCursor().isSimilar(held)&&top().getItem(49).getType()==Material.BOOK,"drag cannot overwrite the info item or consume cursor items");click(inputSlot(2),ClickType.LEFT);
+        click(46,ClickType.LEFT);click(46,ClickType.LEFT);
         later(35,this::mixedDone);
     }
     private void mixedDone(){
@@ -65,21 +76,22 @@ public final class SellGuiProbe extends JavaPlugin {
         check(count(Material.DIAMOND)==4&&buyer.getInventory().containsAtLeast(treasure,4),"unsellable items return with exact name and lore");
         check(!buyer.getPersistentDataContainer().has(journal),"finished mixed tray clears custody receipt");
         check(mando.credits().ledger().auctions().claims().values().stream().noneMatch(c->c.owner().equals(buyer.getUniqueId())),"sale creates no dangling item claims");
-        open();shift(slot(Material.DIAMOND));click(31,ClickType.LEFT);later(10,()->{
+        open();shift(slot(Material.DIAMOND));click(46,ClickType.LEFT);later(10,()->{
             check(count(Material.DIAMOND)==4&&mando.credits().ledger().balance(buyer.getUniqueId())==balance,"unsupported-only tray returns everything and pays nothing");
             partial();
         });
     }
     private void partial(){
-        buyer.getInventory().setItem(0,new ItemStack(Material.SAND,1));open();shift(0);click(31,ClickType.LEFT);
+        buyer.getInventory().setItem(0,new ItemStack(Material.SAND,1));open();shift(0);click(46,ClickType.LEFT);
         later(30,()->{balance+=3;check(mando.credits().ledger().balance(buyer.getUniqueId())==balance,"one item can sell at the proportional rate with integer-cent rounding");cancel();});
     }
     private void cancel(){
         buyer.getInventory().clear();var hide=mando.items().create("bantha_hide");hide.setAmount(5);buyer.getInventory().setItem(0,hide);buyer.getInventory().setItem(1,treasure.clone());
-        open();shift(0);shift(1);click(0,ClickType.LEFT);check(buyer.getItemOnCursor().getAmount()==5,"cursor can withdraw a deposited stack");buyer.closeInventory();
-        check(countCustom("bantha_hide")==5&&count(Material.DIAMOND)==4&&buyer.getItemOnCursor().isEmpty(),"closing returns both tray contents and cursor exactly once");
-        check(mando.credits().ledger().balance(buyer.getUniqueId())==balance,"closing without confirmation does not sell");
-        overflow();
+        open();shift(0);shift(1);click(inputSlot(0),ClickType.LEFT);check(buyer.getItemOnCursor().getAmount()==5,"cursor can withdraw a deposited stack");click(52,ClickType.LEFT);
+        later(2,()->{
+            check(countCustom("bantha_hide")==5&&count(Material.DIAMOND)==4&&buyer.getItemOnCursor().isEmpty(),"the themed X returns both tray contents and cursor exactly once");
+            check(mando.credits().ledger().balance(buyer.getUniqueId())==balance,"closing without confirmation does not sell");overflow();
+        });
     }
     private void overflow(){
         buyer.getInventory().clear();buyer.getInventory().setItem(0,treasure.clone());open();shift(0);
@@ -99,13 +111,13 @@ public final class SellGuiProbe extends JavaPlugin {
     }
     private ItemStack one(ItemStack item){var one=item.clone();one.setAmount(1);return one;}
     private int slot(Material material){for(int i=0;i<36;i++)if(buyer.getInventory().getItem(i)!=null&&buyer.getInventory().getItem(i).getType()==material)return i;throw new AssertionError("Missing material "+material);}
-    private int raw(int slot){for(int i=36;i<72;i++)if(buyer.getOpenInventory().convertSlot(i)==slot)return i;throw new AssertionError("Missing storage slot");}
+    private int raw(int slot){for(int i=54;i<90;i++)if(buyer.getOpenInventory().convertSlot(i)==slot)return i;throw new AssertionError("Missing storage slot");}
     private void shift(int slot){click(raw(slot),ClickType.SHIFT_LEFT);}
     private void click(int raw,ClickType kind){var event=new InventoryClickEvent(buyer.getOpenInventory(),InventoryType.SlotType.CONTAINER,raw,kind,kind==ClickType.SHIFT_LEFT?InventoryAction.MOVE_TO_OTHER_INVENTORY:InventoryAction.PICKUP_ALL);Bukkit.getPluginManager().callEvent(event);check(event.isCancelled(),"tray controls native transfer paths");}
     private int count(Material material){return Arrays.stream(buyer.getInventory().getStorageContents()).filter(Objects::nonNull).filter(i->i.getType()==material).mapToInt(ItemStack::getAmount).sum();}
     private int countCustom(String id){return Arrays.stream(buyer.getInventory().getStorageContents()).filter(Objects::nonNull).filter(i->id.equals(mando.items().identify(i))).mapToInt(ItemStack::getAmount).sum();}
-    private int countTop(Material material){int n=0;for(int i=0;i<27;i++){var item=top().getItem(i);if(item!=null&&item.getType()==material)n+=item.getAmount();}return n;}
-    private int countTopCustom(String id){int n=0;for(int i=0;i<27;i++){var item=top().getItem(i);if(item!=null&&id.equals(mando.items().identify(item)))n+=item.getAmount();}return n;}
+    private int countTop(Material material){int n=0;for(int i=0;i<21;i++){var item=top().getItem(inputSlot(i));if(item!=null&&item.getType()==material)n+=item.getAmount();}return n;}
+    private int countTopCustom(String id){int n=0;for(int i=0;i<21;i++){var item=top().getItem(inputSlot(i));if(item!=null&&id.equals(mando.items().identify(item)))n+=item.getAmount();}return n;}
     private interface Check{void run()throws Exception;}
     private void later(long ticks,Check action){Bukkit.getScheduler().runTaskLater(this,()->{try{action.run();}catch(Throwable error){getLogger().log(java.util.logging.Level.SEVERE,"SELL GUI PROBE FAILED",error);cleanup();Bukkit.shutdown();}},ticks);}
     private void check(boolean value,String text){if(!value)throw new AssertionError(text);checks++;getLogger().info("PASS "+text);}
