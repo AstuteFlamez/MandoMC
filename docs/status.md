@@ -1,6 +1,12 @@
 # Resume here
 Updated: 2026-11-11
 
+## First-join authoritative display name (2026-11-11, ready)
+On `bilal/chat-message-polish`, the first-time welcome now shares normal player chat's rank/display-name formatter instead of inserting a white account name. It uses the existing RankService membership/color/icon and the player's Adventure display name; default players retain the no-badge policy. System template styling precedes component insertion, with a neutral wrapper preserving exact name data, color, click/hover and literal markup. First-join detection, suppressed joins, event delivery and signed chat ownership are unchanged. Only MessageService.class and PlayerChat.class are staged over the current deployed JAR; configs, resource packs, starter/economy grants and unrelated bytes are preserved.
+
+192 Java tests and 29 isolated native Paper assertions pass: ranked/default display components, single icon/prefix, exact colors/click/hover, literal nickname markup, suppressed joins, returning-player detection without repeated welcome, no extra sends and signed-chat component/recipient identity. The fixture reconnect assertion was corrected to match the welcome phrase rather than its own player-name prefix. Shared server/probes remain untouched; boss chat owns the restart window. Candidate preserves every unrelated JAR entry. Next action: apply the validated two-class slice during the boss-coordinated rollout and verify it live.
+
+
 ## Scoreboard-lettered system prefix (2026-11-11)
 The user refined system chat to the scoreboard's exact bold small-cap `ᴍᴀɴᴅᴏᴍᴄ` lettering in the default Minecraft font, with category color on the brand and a separate dark-gray special `»` symbol. The subsequent correction explicitly supersedes typed ASCII `>>`. Administration brand/body remain red italic; the separator resets bold and italic. Normal player-name chat remains unchanged. Both older prefix forms are recognized for deduplication, and all rich component/packet/audience behavior remains intact.
 

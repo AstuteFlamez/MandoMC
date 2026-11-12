@@ -22,6 +22,14 @@ public class PlayerChatTest {
         assertEquals(name, result.children().getFirst());
         assertEquals(body.color(NamedTextColor.GRAY), result.children().getLast());
     }
+    @Test public void sharedDisplayNameKeepsRankColorAndRichLiteralNickname() {
+        var name = Component.text("<red>Nick").clickEvent(ClickEvent.suggestCommand("/msg Nick "))
+                .hoverEvent(Component.text("Player details"));
+        var result = PlayerChat.displayName(rank("admin"), name);
+        assertEquals("Icon <red>Nick", ChatStyle.plain(result));
+        assertEquals(name.color(NamedTextColor.AQUA), result.children().getLast());
+        assertEquals("<red>Nick", ChatStyle.plain(PlayerChat.displayName(rank("default"), name)));
+    }
     @Test public void rankedChatAddsOneAuthoritativeBadge() {
         var result = PlayerChat.render(rank("admin"), Component.text("Nick"), Component.text("hello"));
         assertEquals("Icon Nick » hello", ChatStyle.plain(result));

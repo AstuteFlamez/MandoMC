@@ -57,9 +57,14 @@ public final class MessageService implements Listener, AutoCloseable {
     }
     @EventHandler(priority=EventPriority.HIGHEST) public void joined(PlayerJoinEvent event){
         if(!event.getPlayer().hasPlayedBefore()&&event.joinMessage()!=null){
+            var player=event.getPlayer();
+            var ranks=((net.mandomc.bootstrap.MandoPlugin)plugin).ranks();
+            var name=PlayerChat.displayName(ranks.rank(player),player.displayName());
+            // Style first; the neutral wrapper absorbs template style without changing the rich name.
             var welcome=MiniMessage.miniMessage().deserialize(settings.getString("messages.first-join"),
-                    Placeholder.component("player",Component.text(event.getPlayer().getName(),net.kyori.adventure.text.format.NamedTextColor.WHITE)));
-            event.joinMessage(style.format(welcome,ChatCategory.SUCCESS));
+                    Placeholder.unparsed("player","<player>"));
+            event.joinMessage(style.format(welcome,ChatCategory.SUCCESS)
+                    .replaceText(replacement->replacement.matchLiteral("<player>").replacement(Component.empty().append(name))));
         }else if(event.joinMessage()!=null)event.joinMessage(style.format(event.joinMessage(),ChatCategory.STATUS));
     }
     @EventHandler(priority=EventPriority.MONITOR) public void packs(PlayerResourcePackStatusEvent event){
