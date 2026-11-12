@@ -1,6 +1,9 @@
 # Resume here
 Updated: 2026-11-11
 
+## New-player starting credits (2026-11-11, ready)
+On `bilal/new-player-credits`, native CreditLedger initializes genuinely new players with 2,500 credits, using the existing atomic persistence and economy writer. Existing accounts (including zero), returning players without ledger entries, death and respawn cannot replenish the grant. Default and common config use `initial-balance: '2500.00'`. 195 Java tests and 19 native Paper assertions pass (first login and clean process restart). Deployed Jawa economy APIs and all unrelated JAR entries are retained. Ready for coordinator deployment; no live change yet. Next action: deploy in the assigned shared-server window and verify live state. See [feature brief](features/new-player-credits.md).
+
 ## Scoreboard-lettered system prefix (2026-11-11)
 The user refined system chat to the scoreboard's exact bold small-cap `ᴍᴀɴᴅᴏᴍᴄ` lettering in the default Minecraft font, with category color on the brand and a separate dark-gray special `»` symbol. The subsequent correction explicitly supersedes typed ASCII `>>`. Administration brand/body remain red italic; the separator resets bold and italic. Normal player-name chat remains unchanged. Both older prefix forms are recognized for deduplication, and all rich component/packet/audience behavior remains intact.
 
