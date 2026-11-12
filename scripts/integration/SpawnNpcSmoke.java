@@ -40,7 +40,12 @@ public final class SpawnNpcSmoke extends JavaPlugin {
   if(++samples<60)return;
   for(String id:massiffs.bodies().keySet()){check(walked.getOrDefault(id,0.0)>2,"Every Massiff physically walks");evidence.add(id+" walked="+walked.get(id)+" location="+massiffs.bodies().get(id).getLocation());}
   task.cancel();Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"mandomc jawa models");save("PASSED","SPAWN NPC SMOKE PASSED: "+checks+" assertions");getLogger().info("SPAWN NPC SMOKE PASSED: "+checks);
-  if(!new java.io.File(getDataFolder(),"live-only").exists())Bukkit.shutdown();
+  boolean live=new java.io.File(getDataFolder(),"live-only").exists();Bukkit.getPluginManager().disablePlugin(this);if(!live)Bukkit.shutdown();
  }
- public void onDisable(){if(task!=null)task.cancel();}
+ public void onDisable(){
+  if(task!=null)task.cancel();
+  int listeners=org.bukkit.event.HandlerList.getRegisteredListeners(this).size();
+  long pending=Bukkit.getScheduler().getPendingTasks().stream().filter(t->t.getOwner()==this&&!t.isCancelled()).count();
+  save("CLEANUP","enabled="+isEnabled()+" listeners="+listeners+" pendingNonCancelled="+pending);
+ }
 }
