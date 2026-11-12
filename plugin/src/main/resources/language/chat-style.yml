@@ -1,0 +1,69 @@
+schema-version: 1
+enabled: true
+messages:
+  pack-prompt: <gray>Install the server textures for custom equipment, creatures and
+    planets.
+  pack-ready: <gray>Resource packs ready.
+  pack-failed: <gray>The resource pack could not load. Reconnect and allow server
+    resource packs.
+  first-join: <gray>Welcome <white><player></white> to MandoMC! Use <aqua>/tutorial</aqua>
+    to get started.
+sources:
+- file: language/messages.yml
+  category: INFO
+  admin-paths:
+  - utilities.heal-done
+  - utilities.feed-done
+  - utilities.gamemode-done
+  - utilities.speed-done
+  - utilities.fly-on
+  - utilities.fly-off
+  - utilities.god-on
+  - utilities.god-off
+  - utilities.vanish-on
+  - utilities.vanish-off
+  - utilities.teleported
+  - utilities.tpall-done
+  - utilities.weather-done
+  - utilities.time-value
+  - utilities.inventory-help
+  - ranks.changed
+- file: language/clans.yml
+  category: SOCIAL
+- file: language/territory.yml
+  category: STATUS
+- file: economy/credits.yml
+  category: ECONOMY
+  admin-paths:
+  - messages.adjusted
+- file: economy/auction-house.yml
+  category: ECONOMY
+- file: mobs/jawas.yml
+  category: ECONOMY
+- file: parkour/ilum.yml
+  category: INFO
+- file: crates/crates.yml
+  category: SUCCESS
+- file: events/schedule.yml
+  category: EVENT
+  admin-paths:
+  - messages.reloaded
+  - messages.started
+  - messages.stopped
+  - messages.queued
+  - messages.enabled
+  - messages.disabled
+- file: events/koth.yml
+  category: EVENT
+- file: events/jabba.yml
+  category: EVENT
+- file: events/beskar.yml
+  category: EVENT
+- file: items/recipes.yml
+  category: INFO
+- file: combat/sabers.yml
+  category: COMBAT
+- file: rules/survival.yml
+  category: INFO
+- file: decor/placements.yml
+  category: SOCIAL

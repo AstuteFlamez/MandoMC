@@ -1,6 +1,14 @@
 # Resume here
 Updated: 2026-11-11
 
+## Chat presentation and clean player names (2026-11-11)
+On `bilal/chat-message-polish`, audited system messages use the consistent category-colored MandoMC prefix, gray bodies/highlights, entirely red italic administrative responses and red nonitalic errors. First join/death messages are replaced in place, pack notices coalesce across the existing three IDs, and repeated ammo notices are throttled. Existing rich actions, game permissions/audiences, currency values, GUI/title/actionbar/item content and territory colors are preserved. Normal player chat uses the native rank badge and display name followed by » and the original message component; default ranks omit their badge. Paper still owns delivery/signatures and recipients.
+
+190 Java tests and 131 native assertions pass. The crate-message fixture was corrected to read raw packets after a server task boundary; crate gameplay is unchanged. The scoped deployment retains actual current command lifecycle hooks and unrelated feature bytes, including scenery and the latest Rancor trophy owner. See [feature brief](features/chat-presentation.md). Remaining: final integrated live smoke and client feedback; priority gray-Jawa repair comes first. Next action: coordinate a scoped chat rollout after the gray-Jawa repair completes.
+
+## Chat presentation polish (2026-11-11, in progress)
+On `bilal/chat-message-polish`, implementing a chat-only PacketEvents adapter for explicitly known current message templates, separate category colors, component-preserving formatting and sender-only admin responses in red italic. Unknown packets/messages, player chat, GUI/actionbar/title/item/sidebar colors remain unchanged. Explicit credits and utility-command send boundaries preserve existing permission/recipient decisions. New lifecycle handling replaces native death/join messages rather than broadcasting duplicates; pack prompts retain all pack IDs/URLs/hashes/required flags, with one terminal status per join. 188 Java tests pass; native protocol/rendered-flow validation and coverage audit remain unfinished. No live deployment or pack publication. Independent nine-point decorative placements are staged on `bilal/spawn-decor`; current clan/world source must be preserved during eventual overlay. Next action: finish isolated protocol/component and native audience/flow checks before coordinating a live window.
+
 ## Crate destination hidden from warp menu (2026-11-11)
 On `bilal/legacy-ilum-crates`, menu visibility is separate from destination availability. Crates default to hidden, explicitly configured by `warps.crates.show-in-menu: false`; `/warp crate` and `/warp crates` remain available with the exact saved position/facing and existing travel policy. The five planet entries retain their original slots. Crate containers, holograms, keys, Ilum completion and unrelated services are unchanged.
 

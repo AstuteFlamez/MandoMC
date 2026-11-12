@@ -4,7 +4,7 @@ main: net.mandomc.bootstrap.MandoPlugin
 api-version: '26.1.2'
 author: AstuteFlamez
 description: MandoMC gameplay
-softdepend: [ WorldEdit, WeaponMechanics, MythicMobs, ModelEngine]
+softdepend: [ packetevents, WorldEdit, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
   crates:
     description: Preview and open crates

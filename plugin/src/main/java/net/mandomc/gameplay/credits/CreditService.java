@@ -58,7 +58,7 @@ public final class CreditService implements AutoCloseable {
         });
     }
     private void send(CommandSender sender, String key, String name, String amount) {
-        sender.sendMessage(MiniMessage.miniMessage().deserialize(messages.getString(key),
+        net.mandomc.gameplay.messaging.ChatMessages.send(sender,"economy/credits.yml","messages."+key,MiniMessage.miniMessage().deserialize(messages.getString(key),
                 Placeholder.unparsed("player", name), Placeholder.unparsed("amount", amount)));
     }
     private void execute(CommandSender sender, String command, String[] args) {
