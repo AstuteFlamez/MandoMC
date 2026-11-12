@@ -1,3 +1,6 @@
+# Spawn NPC work in progress (2026-11-12)
+On `bilal/rebel-pilot-travel`, staged two native guide mannequins at immutable saved captures and exactly three peaceful modeled Massiffs in a surveyed bounded spawn footprint. Pilot opens the existing warp command owner; Cassian delegates daily book delivery/refresh to the existing tutorial command and otherwise gives private hints. Original nine scenery anchors and seven gray buyers remain separate. Build: 189 Java tests pass. Final recovery run: 1,106 native assertions pass, including actual mannequin/container-click packets, Chicago daily delivery, peaceful bounded movement, same-body model reattachment and stable-ID body reconstruction. Nine scenery anchors and gray seven audits pass; clean restart reconstruction and chunk-load duplicate reconciliation also pass. No shared server stop, deployment or pack publication performed. See [feature brief](features/spawn-travel-guides.md). Next action: receive the coordinated server window for the staged scoped overlay.
+
 # Resume here
 Updated: 2026-11-11
 
