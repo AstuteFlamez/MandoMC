@@ -1,5 +1,5 @@
 # Legendary Rancor Skull
-Status: original gameplay deployed; requested visual and six-face placement revision passes local checks, native orientation restart passed; coordinated application pending.
+Status: requested visual, badge and six-face placement revision deployed; normal startup and client pack load verified.
 Branch: `bilal/rancor-skull`.
 
 Defeating a real Rancor drops one Legendary Rancor Skull alongside existing loot. Its normal-size head derives from the supplied Rancor rig. The revised asset uses the original skin palette and signed UVs, rotates the source head consistently, removes all four added fang cubes, and completes its exposed rear from original crown contours and adjoining skin edges. The boss model/atlas stay unchanged. One cube measures 0.875 blocks on every axis. Only the GUI transform changes to a centered three-quarter front view fitting a normal slot; placed size is unchanged.
@@ -18,4 +18,6 @@ A dedicated atomic journal and saved player receipts own preparation, placement 
 
 The revised custody regression passes 53 native assertions across two actual disposable server starts: actual boss loot, cancelled/replayed notifications, normal build cancellation, collisions, current Recruit/foreign-claim permissions, exact metadata, full inventory and interrupted custody boundaries, saved display deduplication and legitimate return. Targeted native input covers all six faces, slab tops/sides, replaceable vegetation and support removal, checking one item/anchor/display and outward pose. The targeted face-input sequence passes68 assertions, and its real restart/recovery process passes77 assertions: all eight saved poses remain correct and all native breaks return exact metadata once. Test servers bind only to localhost:25593; no probe is installed live.
 
-Next action: rebase on the released NPC/chat live JAR, then publish/apply the verified head/badge pack and scoped trophy overlay.
+Deployment: scoped JAR `b34cf6d82787fef8d75c91ded4ab2192e6f4d3b1c1f0273837606056e24dd3e7` preserves every unrelated entry of NPC/chat baseline `d32e71f0ef4c`. Nine trophy-owned entries and two item files changed; all deployed class bytes match the native-tested candidate. Pack `resource-pack-26.1.2-0327ddb60933`, SHA-1 `eb622df1ae6788ca106b2891ed15d626a9ff6ceb`, is published, anonymously verified and selected by normal startup. The real client reports successful pack load. Seven gray buyers, nine decor placements, 2,115 frozen chunks, active Jabba and queued KOTH remain. The existing catalog installer normalized YAML formatting without changing intended data; unchanged Jabba code regenerated its per-run cleanup/entity journal normally. No live probes or fixture data were installed. Restart window released.
+
+Next action: client-playtest the revised head and floor/wall/ceiling placement. Newly generated skulls carry the bitmap badge; saved item metadata remains preserved during custody.
