@@ -1639,6 +1639,281 @@
         "E": "electrum",
         "W": "wiring_coil"
       }
+    },
+    "bantha_black_harness": {
+      "result": "minecraft:black_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:black_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
+    },
+    "bantha_blue_harness": {
+      "result": "minecraft:blue_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:blue_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
+    },
+    "bantha_book": {
+      "result": "minecraft:book",
+      "amount": 1,
+      "category": "utilities",
+      "type": "shapeless",
+      "ingredients": [
+        "minecraft:paper",
+        "minecraft:paper",
+        "minecraft:paper",
+        "bantha_hide"
+      ]
+    },
+    "bantha_brown_harness": {
+      "result": "minecraft:brown_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:brown_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
+    },
+    "bantha_bundle": {
+      "result": "minecraft:bundle",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "-",
+        "#"
+      ],
+      "ingredients": {
+        "#": "bantha_hide",
+        "-": "minecraft:string"
+      }
+    },
+    "bantha_cyan_harness": {
+      "result": "minecraft:cyan_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:cyan_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
+    },
+    "bantha_gray_harness": {
+      "result": "minecraft:gray_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:gray_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
+    },
+    "bantha_green_harness": {
+      "result": "minecraft:green_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:green_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
+    },
+    "bantha_item_frame": {
+      "result": "minecraft:item_frame",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "###",
+        "#X#",
+        "###"
+      ],
+      "ingredients": {
+        "#": "minecraft:stick",
+        "X": "bantha_hide"
+      }
+    },
+    "bantha_hide_from_rabbit_hide": {
+      "result": "bantha_hide",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "##",
+        "##"
+      ],
+      "ingredients": {
+        "#": "minecraft:rabbit_hide"
+      }
+    },
+    "bantha_light_blue_harness": {
+      "result": "minecraft:light_blue_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:light_blue_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
+    },
+    "bantha_light_gray_harness": {
+      "result": "minecraft:light_gray_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:light_gray_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
+    },
+    "bantha_lime_harness": {
+      "result": "minecraft:lime_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:lime_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
+    },
+    "bantha_magenta_harness": {
+      "result": "minecraft:magenta_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:magenta_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
+    },
+    "bantha_orange_harness": {
+      "result": "minecraft:orange_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:orange_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
+    },
+    "bantha_pink_harness": {
+      "result": "minecraft:pink_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:pink_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
+    },
+    "bantha_purple_harness": {
+      "result": "minecraft:purple_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:purple_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
+    },
+    "bantha_red_harness": {
+      "result": "minecraft:red_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:red_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
+    },
+    "bantha_white_harness": {
+      "result": "minecraft:white_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:white_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
+    },
+    "bantha_yellow_harness": {
+      "result": "minecraft:yellow_harness",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        "LLL",
+        "G#G"
+      ],
+      "ingredients": {
+        "#": "minecraft:yellow_wool",
+        "G": "minecraft:glass",
+        "L": "bantha_hide"
+      }
     }
   },
   "sources": {
@@ -1759,7 +2034,26 @@
     "minecraft:stone": "<gray>Smelt cobblestone in a furnace, or mine ordinary stone with a Silk Touch pickaxe.",
     "minecraft:stone_pressure_plate": "<gray>Craft two stone blocks side by side.",
     "minecraft:torch": "<gray>Craft coal or charcoal above a stick to make four torches.",
-    "minecraft:yellow_dye": "<gray>Craft a dandelion into yellow dye. Brown Jawa traders may stock dandelions."
+    "minecraft:yellow_dye": "<gray>Craft a dandelion into yellow dye. Brown Jawa traders may stock dandelions.",
+    "minecraft:paper": "<gray>Craft three sugar cane in a row to make three paper.",
+    "minecraft:string": "<gray>Drops from spiders; break cobwebs with a sword.",
+    "minecraft:rabbit_hide": "<gray>Drops from rabbits.",
+    "minecraft:black_wool": "<gray>Shear black sheep, or craft white wool with matching dye.",
+    "minecraft:blue_wool": "<gray>Shear blue sheep, or craft white wool with matching dye.",
+    "minecraft:brown_wool": "<gray>Shear brown sheep, or craft white wool with matching dye.",
+    "minecraft:cyan_wool": "<gray>Shear cyan sheep, or craft white wool with matching dye.",
+    "minecraft:gray_wool": "<gray>Shear gray sheep, or craft white wool with matching dye.",
+    "minecraft:green_wool": "<gray>Shear green sheep, or craft white wool with matching dye.",
+    "minecraft:light_blue_wool": "<gray>Shear light blue sheep, or craft white wool with matching dye.",
+    "minecraft:light_gray_wool": "<gray>Shear light gray sheep, or craft white wool with matching dye.",
+    "minecraft:lime_wool": "<gray>Shear lime sheep, or craft white wool with matching dye.",
+    "minecraft:magenta_wool": "<gray>Shear magenta sheep, or craft white wool with matching dye.",
+    "minecraft:orange_wool": "<gray>Shear orange sheep, or craft white wool with matching dye.",
+    "minecraft:pink_wool": "<gray>Shear pink sheep, or craft white wool with matching dye.",
+    "minecraft:purple_wool": "<gray>Shear purple sheep, or craft white wool with matching dye.",
+    "minecraft:red_wool": "<gray>Shear red sheep, or craft white wool with matching dye.",
+    "minecraft:white_wool": "<gray>Shear sheep, or craft four string in a square.",
+    "minecraft:yellow_wool": "<gray>Shear yellow sheep, or craft white wool with matching dye."
   },
   "guide": {
     "title": "<gold>Recipes",
@@ -2296,6 +2590,26 @@
     "minecraft:raw_iron",
     "minecraft:raw_iron_block",
     "minecraft:redstone",
-    "minecraft:redstone_block"
+    "minecraft:redstone_block",
+    "minecraft:black_harness",
+    "minecraft:blue_harness",
+    "minecraft:book",
+    "minecraft:brown_harness",
+    "minecraft:bundle",
+    "minecraft:cyan_harness",
+    "minecraft:gray_harness",
+    "minecraft:green_harness",
+    "minecraft:item_frame",
+    "minecraft:leather",
+    "minecraft:light_blue_harness",
+    "minecraft:light_gray_harness",
+    "minecraft:lime_harness",
+    "minecraft:magenta_harness",
+    "minecraft:orange_harness",
+    "minecraft:pink_harness",
+    "minecraft:purple_harness",
+    "minecraft:red_harness",
+    "minecraft:white_harness",
+    "minecraft:yellow_harness"
   ]
 }
