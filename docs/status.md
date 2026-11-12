@@ -1,10 +1,10 @@
 # Resume here
 Updated: 2026-11-11
 
-## All join and leave display names (2026-11-11, ready)
+## All join and leave display names (2026-11-11, live)
 The user's follow-up extends ranked Adventure display names to returning joins and quits. The same RankService/PlayerChat formatter supplies the rank icon/color and rich name. Native join/leave translations, renamed-player previous-name arguments, suppression, prefix, audiences and pack cleanup remain intact; plain lifecycle messages retain surrounding content and account-name boundaries. Name insertion retains existing native name hover data and display-name actions without parsing player text. First-time welcome wording and starter/economy eligibility are unchanged. Only MessageService.class and PlayerChat.class are staged; no config or resource changes.
 
-194 Java tests and 41 isolated native Paper assertions pass, including ranked/default first welcome, reconnect, quit, exact rich names, native wording, single icons, suppressed announcements, no extra sends and unchanged signed-chat recipients/body. Shared runtime remains untouched. Next action: apply the validated two-class overlay during the requested coordinator window, then verify live startup and preservation.
+194 Java tests and 41 isolated native Paper assertions pass, including ranked/default first welcome, reconnect, quit, exact rich names, native wording, single icons, suppressed announcements, no extra sends and unchanged signed-chat recipients/body. Deployed in the assigned coordinator window with one normal restart and no probe installed. Final JAR SHA-256 `10212a5d1683f0819c31a650b2e1c2b807189aba33cb169e7358106b3c30df22`; every unrelated class/resource entry, config/pack value and world-resource cleanup is preserved. Startup/read-only checks passed: chat owner ready, seven gray rigs, nine decor placements, frozen 2115 chunks, active Jabba restored. Full stopped-runtime backup retained privately and window released. Existing gray headTracking=false diagnostics also occurred before this restart; gray code is byte-identical and the coordinator was informed. Next action: reconnect and disconnect a ranked player to inspect the join/leave announcements in the real client.
 
 
 ## First-join authoritative display name (2026-11-11, live)
