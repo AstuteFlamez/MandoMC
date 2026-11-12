@@ -36,6 +36,7 @@ public final class BobaEquipment implements Listener, AutoCloseable {
     private final Map<UUID,Wearer> wearers=new HashMap<>();
     private final BukkitTask task;
     private final PlayerFlamethrower flames;
+    private final JetpackVisualTrials visualTrials;
     private boolean closed;
     private static final class Wearer {
         final Player player; final ThrustFuel fuel; final ItemDisplay display;
@@ -52,10 +53,12 @@ public final class BobaEquipment implements Listener, AutoCloseable {
         for(String key:List.of("fuel","warning","depleted","no-fuel","started","stopped","equip","flight-denied",
                 "no-ammo","cooldown","flame-denied"))
             if(!language.isString(key)) throw new IllegalArgumentException("messages.yml: missing boba-equipment."+key);
+        visualTrials=new JetpackVisualTrials(plugin);
         flames=new PlayerFlamethrower(plugin,items,settings,allowed,this::message);
         plugin.getServer().getPluginManager().registerEvents(this,plugin);
         task=plugin.getServer().getScheduler().runTaskTimer(plugin,this::tick,1,1);
     }
+    public JetpackVisualTrials visualTrials() { return visualTrials; }
     public PlayerFlamethrower flames() { return flames; }
     public boolean equipped(Player player) { return JETPACK.equals(items.identify(player.getInventory().getItemInOffHand())); }
     public boolean powered(Player player) { var w=wearers.get(player.getUniqueId());return w!=null&&w.powered; }
@@ -188,11 +191,12 @@ public final class BobaEquipment implements Listener, AutoCloseable {
             if(!transform.equals(w.display.getTransformation())) {
                 w.display.setTransformation(transform);w.display.setInterpolationDelay(0);
             }
+            visualTrials.update(p,w.display,pose);
         }
     }
     private void remove(Wearer w) {
         if(w.powered) { settle(w,clock.getAsLong());stop(w,"stopped"); }
-        persist(w);w.display.remove();
+        persist(w);visualTrials.remove(w.player);w.display.remove();
         if(w.player.isGliding()&&!equipped(w.player))w.player.setGliding(false);
     }
     public void detach(Player player) {
@@ -216,6 +220,6 @@ public final class BobaEquipment implements Listener, AutoCloseable {
     @Override public void close() {
         if(closed)return;closed=true;task.cancel();
         wearers.values().forEach(w->{remove(w);if(w.player.isGliding())w.player.setGliding(false);});wearers.clear();
-        flames.close();actionBarReservations.clear();HandlerList.unregisterAll(this);
+        flames.close();visualTrials.close();actionBarReservations.clear();HandlerList.unregisterAll(this);
     }
 }

@@ -30,6 +30,7 @@ public final class JetpackEquipmentMenu implements Listener, AutoCloseable {
         Bukkit.getPluginManager().registerEvents(this,plugin);
     }
     public void register(RootCommand root) {
+        equipment.visualTrials().register(root);
         root.register("equipment","mandomc.equipment",(sender,args)->{if(sender instanceof Player p)open(p);},(sender,args)->List.of());
     }
     private Component text(String key) {return MiniMessage.miniMessage().deserialize(language.getString(key));}
