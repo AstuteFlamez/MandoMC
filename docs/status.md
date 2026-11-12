@@ -3,6 +3,8 @@ Updated: 2026-11-09
 
 ## Milestone
 
+Boba flamethrower identity pass (2026-11-12): restored a chunky brass fuel feed, bottle cap, burner slots and dark muzzle collar to the simplified native 32×32 sprite. Clear green shell and connected flame remain; 15 opaque colors plus transparency. Eight scoped asset/model checks and pack validation pass. Next action: review the balanced level of detail with the user.
+
 Boba flamethrower readability pass (2026-11-12): redesigned the native 32×32 grid around three readable forms—green gauntlet, red tank and dark nozzle—with one cuff band and a compact flame. Removed fine piping, fittings, indicators and extra panel trim; used 13 opaque colors plus transparency. Eight scoped asset/model checks and pack validation pass; behavior is unchanged. Next action: review the revised inventory-scale sprite with the user.
 
 Boba flamethrower art refinement (2026-11-12): preserved the original 32×32 silhouette while replacing 240 noisy/partially transparent surface colors with 15 opaque colors plus transparency and deliberate highlight/shadow clusters. Editable native pixel-grid source and dependency-free renderer added; no high-resolution reduction in the revised texture. Scoped asset checks and pack validation pass. Shared runtime/publication untouched. Next action: show the revised sprite for visual feedback.

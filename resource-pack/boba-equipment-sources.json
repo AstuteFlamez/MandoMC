@@ -23,7 +23,7 @@
   "flamethrower": {
     "tool": "built-in image_gen",
     "prompt": "Use case: stylized-concept. Asset type: Minecraft 32 by 32 pixel-art inventory item sprite, original Mandalorian wrist flamethrower, Boba Fett palette. Create ONE isolated compact worn olive-green armored gauntlet / hand-held flamethrower, diagonal from lower left to upper right, dark gunmetal nozzle at upper right, small red fuel canister and brass piping, a few orange pixels at nozzle. Crisp square pixel clusters using a logical 32x32 pixel grid, no anti-aliasing, no text, no border, no background or shadow, actual transparent background. The sprite must read clearly at 32x32. Olive green, muted burgundy, gray metal, tiny amber indicators. Fill 26x26 of the logical grid with transparent padding. No hand, person or scenery. Deliver bitmap suitable for exact nearest-neighbor reduction to 32x32.",
-    "processing": "Native 32x32 editable pixel grid: 13 opaque colors plus transparency, broad silhouettes and contiguous shading. No high-resolution reduction in the current texture.",
+    "processing": "Native 32x32 editable pixel grid: 15 opaque colors plus transparency; olive gauntlet, red tank, chunky brass fuel feed and vented dark burner. No high-resolution reduction.",
     "destination": "assets/mandomc/textures/item/equipment/boba_flamethrower.png",
     "revisions": [
       {
@@ -38,6 +38,12 @@
         "method": "Edited the existing native pixel-grid source directly. Simplified to three dominant forms: green gauntlet, red fuel tank, dark barrel; one substantial cuff band and compact flame. Removed hoses, tiny fittings, indicator lights, broken trim and side-panel accents.",
         "source": "resource-pack/artwork/boba_flamethrower.pixels.json",
         "processing": "Rendered directly at 32x32 with scripts/render-boba-flamethrower.py; enlargement is preview-only."
+      },
+      {
+        "reason": "User found the simplified version too plain and wanted unmistakable flamethrower identity.",
+        "method": "Restored one substantial continuous brass fuel hose between the red tank and burner, added a metal bottle cap, broad burner slots and a dark muzzle collar. Kept the gauntlet surfaces clear and the flame attached to the nozzle.",
+        "source": "resource-pack/artwork/boba_flamethrower.pixels.json",
+        "processing": "Edited the native 32x32 grid directly; 15 opaque colors plus transparent background."
       }
     ],
     "initialProcessing": "Nearest-neighbor reduction to 32x32 with Java ImageIO; generated transparency preserved."

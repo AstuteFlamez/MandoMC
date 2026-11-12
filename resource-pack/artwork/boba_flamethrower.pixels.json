@@ -15,7 +15,9 @@
     "R": "ad4845ff",
     "H": "dd7860ff",
     "o": "ef7826ff",
-    "y": "ffda6aff"
+    "y": "ffda6aff",
+    "b": "896130ff",
+    "t": "e0b860ff"
   },
   "pixels": [
     "................................",
@@ -23,15 +25,15 @@
     "...........................o....",
     "..........................oo....",
     "......................###oyyoo..",
-    ".....................##hhoyyo...",
-    "....................##hhhmoo....",
-    "...................##hhhmmd#....",
-    "..................##hhhmmdd#....",
-    "...........####..##hhhmmdd#.....",
-    "..........##RRR#.#mhhmmdd#......",
-    ".........##RHHHR#######d#.......",
-    "........##RHHHRRR##LLLL#........",
-    "........#RHHHRRR##LGGGgg#.......",
+    ".....................##m#oyyo...",
+    "....................##hhm#oo....",
+    ".................####hdhmm##....",
+    "................btttbhhdmdd#....",
+    "...........####btb#btbmmdd#.....",
+    "..........##mhmtb#mhbb#dd#......",
+    ".........##RHH#t#####b#d#.......",
+    "........##RHHH#b###LL#L#........",
+    "........#RHHHRR###LGGGgg#.......",
     "........#HHHRRR##LGGggggs#......",
     "........#H######LGGggggs#.......",
     "........###LLLLLGGggggss#.......",
@@ -51,5 +53,5 @@
     "................................",
     "................................"
   ],
-  "notes": "Designed directly at 32x32: three large forms (olive gauntlet, red tank, dark barrel), one cuff band and a compact flame. No small hoses, fasteners, side-panel trim, vents or indicator lights. Each surface uses broad continuous pixel clusters."
+  "notes": "Native 32x32 Mandalorian flamethrower: clean olive gauntlet, red fuel bottle, one substantial brass fuel feed, dark vented burner head and attached flame. Details have a functional role and use continuous readable clusters; no high-resolution reduction."
 }
