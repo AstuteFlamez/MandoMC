@@ -65,7 +65,12 @@ public final class MessageService implements Listener, AutoCloseable {
                     Placeholder.unparsed("player","<player>"));
             event.joinMessage(style.format(welcome,ChatCategory.SUCCESS)
                     .replaceText(replacement->replacement.matchLiteral("<player>").replacement(Component.empty().append(name))));
-        }else if(event.joinMessage()!=null)event.joinMessage(style.format(event.joinMessage(),ChatCategory.STATUS));
+        }else if(event.joinMessage()!=null)event.joinMessage(lifecycle(event.joinMessage(),event.getPlayer()));
+    }
+    private Component lifecycle(Component original,org.bukkit.entity.Player player){
+        var ranks=((net.mandomc.bootstrap.MandoPlugin)plugin).ranks();
+        var name=PlayerChat.displayName(ranks.rank(player),player.displayName());
+        return PlayerChat.lifecycleName(style.format(original,ChatCategory.STATUS),player.getName(),player.displayName(),name);
     }
     @EventHandler(priority=EventPriority.MONITOR) public void packs(PlayerResourcePackStatusEvent event){
         if(!packIds.contains(event.getID())||packNotice.contains(event.getPlayer().getUniqueId()))return;
@@ -84,7 +89,7 @@ public final class MessageService implements Listener, AutoCloseable {
         }
     }
     @EventHandler public void quit(PlayerQuitEvent event){
-        if(event.quitMessage()!=null)event.quitMessage(style.format(event.quitMessage(),ChatCategory.STATUS));
+        if(event.quitMessage()!=null)event.quitMessage(lifecycle(event.quitMessage(),event.getPlayer()));
         loaded.remove(event.getPlayer().getUniqueId());packNotice.remove(event.getPlayer().getUniqueId());packets.forget(event.getPlayer().getUniqueId());
     }
     @Override public void close(){packets.close();HandlerList.unregisterAll(this);loaded.clear();packNotice.clear();}

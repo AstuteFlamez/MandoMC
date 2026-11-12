@@ -30,6 +30,30 @@ public class PlayerChatTest {
         assertEquals(name.color(NamedTextColor.AQUA), result.children().getLast());
         assertEquals("<red>Nick", ChatStyle.plain(PlayerChat.displayName(rank("default"), name)));
     }
+    @Test public void lifecycleTranslationsUseNameOnceAndKeepOldNameAndActions() {
+        var name = PlayerChat.displayName(rank("admin"), Component.text("<red>Nick")
+                .clickEvent(ClickEvent.suggestCommand("/msg Nick ")).hoverEvent(Component.text("Details")));
+        for (String key : List.of("multiplayer.player.joined", "multiplayer.player.joined.renamed", "multiplayer.player.left")) {
+            var input = Component.translatable(key, Component.text("Account").hoverEvent(Component.text("Native player details")), Component.text("OldAccount"))
+                    .clickEvent(ClickEvent.runCommand("/list"));
+            var styled = new ChatStyle().format(input, ChatCategory.STATUS);
+            var result = PlayerChat.lifecycleName(styled, "Account", Component.text("Account"), name);
+            var translation = (net.kyori.adventure.text.TranslatableComponent) result.children().get(1);
+            assertEquals(key, translation.key());
+            var argument = (Component) translation.arguments().getFirst().value();
+            assertEquals(name, argument.children().getFirst());
+            assertEquals(Component.text("Native player details"), argument.hoverEvent().value());
+            assertEquals(((net.kyori.adventure.text.TranslatableComponent) styled.children().get(1)).arguments().get(1), translation.arguments().get(1));
+            assertEquals(input.clickEvent(), translation.clickEvent());
+            assertEquals(result, PlayerChat.lifecycleName(result, "Account", Component.text("Account"), name));
+        }
+    }
+    @Test public void literalLifecycleNamesKeepWordBoundariesAndDoNotReparseMarkup() {
+        var name = PlayerChat.displayName(rank("admin"), Component.text("<red>Nick"));
+        var result = PlayerChat.lifecycleName(new ChatStyle().format(Component.text("Account left; OtherAccount stayed."), ChatCategory.STATUS),
+                "Account", Component.text("Account"), name);
+        assertEquals(ChatStyle.PREFIX + "Icon <red>Nick left; OtherAccount stayed.", ChatStyle.plain(result));
+    }
     @Test public void rankedChatAddsOneAuthoritativeBadge() {
         var result = PlayerChat.render(rank("admin"), Component.text("Nick"), Component.text("hello"));
         assertEquals("Icon Nick » hello", ChatStyle.plain(result));

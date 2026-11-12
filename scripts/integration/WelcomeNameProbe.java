@@ -40,9 +40,20 @@ public final class WelcomeNameProbe extends JavaPlugin {
             var hidden=new PlayerJoinEvent(normal,(Component)null);service.joined(hidden);check(hidden.joinMessage()==null,"Suppressed join retained");
             for(var player:List.of(ranked,normal)){
                 var played=player.getClass().getDeclaredField("hasPlayedBefore");played.setAccessible(true);played.setBoolean(player,true);check(player.hasPlayedBefore(),"Native returning-player flag set");
-                var reconnect=new PlayerJoinEvent(player,Component.text("Reconnect "+player.getName()));service.joined(reconnect);
+                var reconnect=new PlayerJoinEvent(player,Component.translatable("multiplayer.player.joined",Component.text(player.getName())));service.joined(reconnect);
                 check(!ChatStyle.plain(reconnect.joinMessage()).contains("Welcome "),"Reconnect has no repeated welcome");
-                check(ChatStyle.plain(reconnect.joinMessage()).equals(ChatStyle.PREFIX+"Reconnect "+player.getName()),"Returning join formatted once");
+                check(ChatStyle.formatted(reconnect.joinMessage()),"Returning join formatted once");
+                var joined=(TranslatableComponent)reconnect.joinMessage().children().get(1);
+                var expected=PlayerChat.displayName(ranks.rank(player),player.displayName());
+                check(joined.key().equals("multiplayer.player.joined")&&contains((Component)joined.arguments().getFirst().value(),expected),"Returning join retains native wording and exact rich name");
+                check(count(ChatStyle.plain((Component)joined.arguments().getFirst().value()),ranks.rank(player).icon())==(player==ranked?1:0),"Returning ranked/default badge policy");
+                var left=new org.bukkit.event.player.PlayerQuitEvent(player,Component.translatable("multiplayer.player.left",Component.text(player.getName())));service.quit(left);
+                var leaving=(TranslatableComponent)left.quitMessage().children().get(1);
+                check(ChatStyle.formatted(left.quitMessage())&&leaving.key().equals("multiplayer.player.left"),"Quit retains one prefix and native wording");
+                check(contains((Component)leaving.arguments().getFirst().value(),expected),"Quit retains exact rich ranked/default name");
+                var hiddenQuit=new org.bukkit.event.player.PlayerQuitEvent(player,(Component)null);service.quit(hiddenQuit);
+                check(hiddenQuit.quitMessage()==null,"Suppressed quit remains suppressed");
+                check(actors.drain(player).isEmpty(),"Lifecycle handlers do not add direct sends");
             }
             var body=Component.text("<red>literal");var signed=net.kyori.adventure.chat.SignedMessage.system("<red>literal",body);
             var viewers=new HashSet<net.kyori.adventure.audience.Audience>();viewers.add(normal);
@@ -65,6 +76,7 @@ public final class WelcomeNameProbe extends JavaPlugin {
         check(ChatStyle.plain(result).contains("/tutorial"),"Existing welcome guidance retained");
         check(actors.drain(player).isEmpty(),"Handler sends no extra broadcast/private message");
     }
-    private boolean contains(Component root,Component target){return root.equals(target)||root.children().stream().anyMatch(child->contains(child,target));}
+    private boolean contains(Component root,Component target){return root.equals(target)||root.children().stream().anyMatch(child->contains(child,target))
+            ||root instanceof TranslatableComponent translated&&translated.arguments().stream().anyMatch(argument->argument.value() instanceof Component child&&contains(child,target));}
     private int count(String text,String needle){return (text.length()-text.replace(needle,"").length())/needle.length();}
 }

@@ -1,6 +1,12 @@
 # Resume here
 Updated: 2026-11-11
 
+## All join and leave display names (2026-11-11, ready)
+The user's follow-up extends ranked Adventure display names to returning joins and quits. The same RankService/PlayerChat formatter supplies the rank icon/color and rich name. Native join/leave translations, renamed-player previous-name arguments, suppression, prefix, audiences and pack cleanup remain intact; plain lifecycle messages retain surrounding content and account-name boundaries. Name insertion retains existing native name hover data and display-name actions without parsing player text. First-time welcome wording and starter/economy eligibility are unchanged. Only MessageService.class and PlayerChat.class are staged; no config or resource changes.
+
+194 Java tests and 41 isolated native Paper assertions pass, including ranked/default first welcome, reconnect, quit, exact rich names, native wording, single icons, suppressed announcements, no extra sends and unchanged signed-chat recipients/body. Shared runtime remains untouched. Next action: apply the validated two-class overlay during the requested coordinator window, then verify live startup and preservation.
+
+
 ## First-join authoritative display name (2026-11-11, live)
 On `bilal/chat-message-polish`, the first-time welcome now shares normal player chat's rank/display-name formatter instead of inserting a white account name. It uses the existing RankService membership/color/icon and the player's Adventure display name; default players retain the no-badge policy. System template styling precedes component insertion, with a neutral wrapper preserving exact name data, color, click/hover and literal markup. First-join detection, suppressed joins, event delivery and signed chat ownership are unchanged. Only MessageService.class and PlayerChat.class are staged over the current deployed JAR; configs, resource packs, starter/economy grants and unrelated bytes are preserved.
 
