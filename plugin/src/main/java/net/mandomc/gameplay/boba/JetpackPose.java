@@ -6,7 +6,10 @@ import org.joml.Vector3f;
 
 /** The model is centered on the torso. Model +Z is the back; head yaw is never used for standing. */
 public final class JetpackPose {
-    public record Pose(Location center, Quaternionf rotation) { }
+    public record Pose(Location center, Quaternionf rotation) {
+        /** Actual geometry orientation after the client's built-in item-display Y half turn. */
+        public Quaternionf modelRotation() { return new Quaternionf(rotation).rotateY((float)Math.PI); }
+    }
     private JetpackPose() { }
     public static Pose at(Location feet,float bodyYaw,float lookPitch,boolean sneaking,boolean gliding) {
         float lean=gliding?(float)Math.toRadians(-90-lookPitch):sneaking?(float)Math.toRadians(-25):0;
@@ -23,6 +26,8 @@ public final class JetpackPose {
         var center=feet.clone().add(offset.x,offset.y,offset.z);
         // Entity yaw/pitch would otherwise apply head rotation a second time on top of the torso matrix.
         center.setYaw(0);center.setPitch(0);
-        return new Pose(center,rotation);
+        // ItemDisplayRenderer.submitInner applies Y=PI after the display transform (26.1.2 client).
+        // Cancel it here; particle/nozzle calculations use modelRotation(), the final geometry matrix.
+        return new Pose(center,rotation.rotateY((float)Math.PI));
     }
 }

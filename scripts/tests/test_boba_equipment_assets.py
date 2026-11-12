@@ -51,6 +51,29 @@ class BobaEquipmentAssets(unittest.TestCase):
         self.assertLessEqual(len(source['palette']), 16)
         self.assertTrue(all(bytes.fromhex(value)[3] in (0, 255) for value in source['palette'].values()))
 
+    def test_gui_model_is_recentered_and_fits_inventory_slot(self):
+        model = json.loads((ASSETS / 'models/equipment/boba_jetpack_gui.json').read_text())
+        for axis in range(3):
+            low = min(e['from'][axis] for e in model['elements'])
+            high = max(e['to'][axis] for e in model['elements'])
+            self.assertEqual((low + high) / 2, 8)
+        self.assertLess((max(e['to'][1] for e in model['elements']) -
+                         min(e['from'][1] for e in model['elements'])) * model['display']['gui']['scale'][1], 15)
+
+    def test_both_handednesses_hide_duplicate_held_jetpack(self):
+        item = json.loads((ASSETS / 'items/equipment/boba_jetpack.json').read_text())['model']
+        case = next(c for c in item['cases'] if isinstance(c['when'], list))
+        self.assertEqual(set(case['when']), {'firstperson_lefthand', 'firstperson_righthand',
+                                             'thirdperson_lefthand', 'thirdperson_righthand'})
+        self.assertEqual(case['model']['type'], 'minecraft:empty')
+
+    def test_dropped_jetpack_is_full_scale_and_bottom_aligned(self):
+        model = json.loads((ASSETS / 'models/equipment/boba_jetpack.json').read_text())
+        ground = model['display']['ground']
+        self.assertEqual(ground['scale'], [1, 1, 1])
+        attached = json.loads((ASSETS / 'models/equipment/boba_jetpack_attached.json').read_text())
+        self.assertEqual(min(e['from'][1] for e in attached['elements']) - 8 + ground['translation'][1], 0)
+
     def test_both_ids_and_attached_geometry_are_in_validated_pack(self):
         with zipfile.ZipFile(ROOT / 'resource-pack/build/MandoMC.zip') as pack:
             for name in ('boba_jetpack', 'boba_jetpack_attached', 'boba_flamethrower'):

@@ -1,36 +1,41 @@
 package net.mandomc.gameplay.boba;
-
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
 public class ThrustFuelTest {
-    @Test public void buysFirstSecondBeforeThrustAndRetainsFractionsAcrossRapidToggles() {
-        var coal=new AtomicInteger(2);var fuel=new ThrustFuel(0);
+    @Test public void tenCoalBuyOneSecondAcrossRapidToggles() {
+        var coal=new AtomicInteger(10);var fuel=new ThrustFuel(0);
         java.util.function.BooleanSupplier buy=()->coal.getAndUpdate(v->Math.max(0,v-1))>0;
-        for(int i=0;i<100;i++) {
-            assertTrue(fuel.start(buy));assertTrue(fuel.spend(10_000_000,buy));
-        }
-        assertEquals(1,coal.get());assertEquals(0,fuel.credit());
-        assertTrue(fuel.start(buy));assertEquals(0,coal.get());
-        assertTrue(fuel.spend(1_000_000_000,buy));assertFalse(fuel.start(buy));
+        for(int i=0;i<100;i++){assertTrue(fuel.start(buy));assertTrue(fuel.spend(10_000_000,buy));}
+        assertEquals(0,coal.get());assertEquals(0,fuel.credit());assertFalse(fuel.start(buy));
     }
-    @Test public void stalledTickPaysEveryElapsedIntervalAndCannotOverdraw() {
-        var coal=new AtomicInteger(3);var fuel=new ThrustFuel(0);
+    @Test public void firstCoalBuysPointOneSecondAndPartialIntervalSurvivesPause() {
+        var fuel=new ThrustFuel(0);var bought=new AtomicInteger();
+        assertTrue(fuel.start(()->{bought.incrementAndGet();return true;}));
+        assertEquals(100_000_000,fuel.credit());assertTrue(fuel.spend(20_000_000,()->false));
+        assertTrue(fuel.start(()->{throw new AssertionError("Partial interval must not buy more fuel");}));
+        assertEquals(.58,fuel.seconds(5),.000001);assertEquals(1,bought.get());
+    }
+    @Test public void stalledTickPaysEveryPointOneSecondWithoutOverdraw() {
+        var coal=new AtomicInteger(26);var fuel=new ThrustFuel(0);
         java.util.function.BooleanSupplier buy=()->coal.getAndUpdate(v->Math.max(0,v-1))>0;
-        assertTrue(fuel.start(buy));assertTrue(fuel.spend(2_500_000_000L,buy));
-        assertEquals(500_000_000,fuel.credit());assertEquals(.5,fuel.seconds(0),0);
-        assertFalse(fuel.spend(600_000_000,buy));assertEquals(0,fuel.credit());
+        assertTrue(fuel.start(buy));assertTrue(fuel.spend(2_550_000_000L,buy));
+        assertEquals(50_000_000,fuel.credit());assertEquals(0,coal.get());
+        assertFalse(fuel.spend(60_000_000,buy));assertEquals(0,fuel.credit());
     }
-    @Test public void warningsIncludeCreditAndRearmOnlyAboveThreshold() {
-        var fuel=new ThrustFuel(500_000_000);
-        assertFalse(fuel.warning(5));assertTrue(fuel.warning(4));assertFalse(fuel.warning(3));
-        assertFalse(fuel.warning(5));assertTrue(fuel.warning(4));
-        assertTrue(new ThrustFuel(0).warning(5));assertFalse(new ThrustFuel(0).warning(0));
+    @Test public void fiveSecondWarningNowMeansFiftyCoalAndRearmsAboveIt() {
+        var fuel=new ThrustFuel(0);assertFalse(fuel.warning(51));assertTrue(fuel.warning(50));
+        assertFalse(fuel.warning(40));assertFalse(fuel.warning(51));assertTrue(fuel.warning(50));
+        var partial=new ThrustFuel(50_000_000);assertFalse(partial.warning(50));
+        assertTrue(partial.spend(50_000_000,()->false));assertTrue(partial.warning(50));
+        assertFalse(new ThrustFuel(0).warning(0));
+    }
+    @Test public void alreadyPurchasedOldIntervalIsHonoredDuringRateChange() {
+        var fuel=new ThrustFuel(800_000_000);assertTrue(fuel.start(()->false));
+        assertTrue(fuel.spend(700_000_000,()->false));assertEquals(.1,fuel.seconds(0),0);
     }
     @Test public void persistentCreditResumesWithoutFreeRounding() {
         var fuel=new ThrustFuel(1234);assertTrue(fuel.start(()->false));
-        var resumed=new ThrustFuel(fuel.credit());assertTrue(resumed.spend(1234,()->false));
-        assertFalse(resumed.start(()->false));
+        var resumed=new ThrustFuel(fuel.credit());assertTrue(resumed.spend(1234,()->false));assertFalse(resumed.start(()->false));
     }
 }

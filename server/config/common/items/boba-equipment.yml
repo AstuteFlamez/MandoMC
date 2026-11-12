@@ -13,7 +13,7 @@ items:
       - ''
       - '<yellow>[Double Sneak] Toggle thrust'
       - ''
-      - '<gray>Fuel: 1 Coal / second, hotbar only.'
+      - '<gray>Fuel: 1 Coal / 0.1 seconds, hotbar only.'
   boba_flamethrower:
     material: BLAZE_ROD
     name: "<gold>Boba Fett's Flamethrower"

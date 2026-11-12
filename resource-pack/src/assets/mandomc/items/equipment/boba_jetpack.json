@@ -1,6 +1,30 @@
 {
   "model": {
-    "type": "minecraft:model",
-    "model": "mandomc:equipment/boba_jetpack"
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+    "cases": [
+      {
+        "when": "gui",
+        "model": {
+          "type": "minecraft:model",
+          "model": "mandomc:equipment/boba_jetpack_gui"
+        }
+      },
+      {
+        "when": [
+          "firstperson_lefthand",
+          "firstperson_righthand",
+          "thirdperson_lefthand",
+          "thirdperson_righthand"
+        ],
+        "model": {
+          "type": "minecraft:empty"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "mandomc:equipment/boba_jetpack"
+    }
   }
 }
