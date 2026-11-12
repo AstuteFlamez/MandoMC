@@ -1,0 +1,17 @@
+# Helmet decorations
+
+Players can hold a custom Beskar, Durasteel, Plastoid or robe helmet and sneak-right-click a block face to place it as a decoration. Normal right-click armor equip remains native. Break the decoration to recover the exact item. Floor, wall and ceiling placement use the existing six-face trophy controls.
+
+The existing `RancorTrophies` service remains the only world/inventory custody owner. Its unchanged `TrophyJournal` stores the full one-item native serialization, including name, lore, durability, dye, enchantments and arbitrary persistent data. Placement uses the same PREPARED/PLACED/RETURNING lifecycle, saved player receipts, crash recovery and single-writer durable I/O as Rancor trophies. No second journal or inventory fallback is introduced. A full inventory leaves the return saved until space becomes available.
+
+Recognition requires a registered stable catalog ID from the four allowed helmet IDs and a native HEAD equippable component. Vanilla helmets, other equipment and arbitrary renamed items remain excluded. Inventory and equipped armor contents are never replaced by the decoration display. The saved item itself supplies the world visual so dye and other presentation metadata survive placement.
+
+Every placement and recovery uses the existing native territory/clan build authority and Bukkit BlockPlaceEvent/BlockBreakEvent checks. Occupied cells and living-entity collisions are refused; each decoration reserves one invisible full-block collision anchor. Existing anchor ownership, explosion/piston filtering, deduplication, chunk-load cleanup and restart reconciliation apply equally to helmets. Supports may be removed as with the existing trophy policy; the saved decoration remains recoverable.
+
+World presentation uses ItemDisplay NONE, independently of GUI, head, hand, fixed and shelf model transforms. Three dimensional helmets retain their original geometry at normal head size, positioned against the selected surface. The flat robe hood uses half scale in the world only. The Rancor pose and custody schema are unchanged.
+
+The deployment artifact must be a narrow overlay on the current deployed JAR. It replaces only `RancorTrophies` and its generated switch helper plus bundled helmet message defaults. The builder requires the whole-JAR SHA-256 and the known deployed six-face trophy-owner class SHA-256. It preserves every other JAR entry, including the journal and bootstrap service registration from the already deployed trophy feature. Do not release a full JAR from this branch without integrating the prior trophy and other active feature histories.
+
+Verification: source build and 174 Java tests; isolated Paper port 25594 native use/break across 4 helmets x 6 faces; exact serialized metadata and display dye; no equipped-slot mutation; normal interaction bypass; cancelled placement refund and cancelled break retention; piston/explosion protection; full-inventory pending return; actual restart recovery and foreign-claim checks. See the retained ignored lifecycle/restart logs for the final pass counts.
+
+Release remains coordinated with the current server owner. Next action: deploy the scoped JAR overlay after all isolated checks pass and the coordinator releases the window; combine the independent four-model GUI overlay when assigned.

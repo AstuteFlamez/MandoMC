@@ -1,5 +1,7 @@
 # Resume here
 
+Helmet decorations (2026-11-12), `bilal/helmet-gui-orientation`: staged extension of the deployed six-face Rancor trophy owner. Sneak-right-click places the four registered HEAD helmets; native equip stays unchanged. Existing serialized-item journal/receipts, build authority, return lifecycle and world reconciliation are retained. 174 Java tests, 14 pack tests, 302 native lifecycle assertions and 14 actual-restart/foreign-claim assertions pass in isolated Paper 25594. No live changes; pending coordinator release. See [feature](features/helmet-decorations.md). Next action: recheck current JAR/pack CAS and apply the narrow owner/language plus independent GUI overlays when assigned.
+
 Helmet GUI orientation (2026-11-12), `bilal/helmet-gui-orientation`: staged four GUI-only model changes and actual geometry/UV contact sheet. Source JSON/reference build passes; deployed 1178-entry overlay retains all 1174 unrelated entries and every non-GUI transform. No live changes. Boba owns the current rollout window. See [feature](features/helmet-gui-orientation.md). Next action: publish the scoped overlay after coordinator release, rebasing against the then-current pack CAS.
 
 ## JustTimm integration history (2026-11-12)
