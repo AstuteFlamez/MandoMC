@@ -1,0 +1,24 @@
+{
+  "symbol": "Galactic credit: Aurebesh Resh / angular7 with two strokes through the top bar",
+  "reference": "https://starwars.fandom.com/wiki/Galactic_Credit_Standard/Legends",
+  "art": "Original hand-pixelled interpretation; no third-party image copied",
+  "codepoint": "U+0024",
+  "size": [
+    5,
+    8
+  ],
+  "ascent": 7,
+  "height": 8,
+  "advance": 6,
+  "pattern": [
+    "#.#..",
+    "#####",
+    "#.#.#",
+    "....#",
+    "...#.",
+    "..#..",
+    ".#...",
+    "#...."
+  ],
+  "tint": "white RGBA, transparent background"
+}

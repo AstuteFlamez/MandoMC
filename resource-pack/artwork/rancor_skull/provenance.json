@@ -1,0 +1,67 @@
+{
+  "source": "server/config/common/modelengine/blueprints/rancor.bbmodel",
+  "sourceSha256": "9a19e3dea2939a9af72c1073d37ae7fa96ab84556158459142c6925ab775b1e8",
+  "sourceAtlas": "resource-pack/src/assets/modelengine/textures/entity/models/rancor.png",
+  "atlasSha256": "03641195fdd3eafd0a006be7fd6b6feffa3ee64ce1a619d394b69adab7990c67",
+  "sourceBone": "h_head",
+  "sourceSizePixels": [
+    24,
+    24,
+    24
+  ],
+  "trophySizeBlocks": [
+    0.875,
+    0.875,
+    0.928125
+  ],
+  "reservedSpaceBlocks": [
+    1,
+    1,
+    1
+  ],
+  "facesFromSourcePixels": {
+    "north": [
+      24,
+      130,
+      48,
+      154
+    ],
+    "east": [
+      126,
+      100,
+      150,
+      124
+    ],
+    "south": [
+      110,
+      126,
+      134,
+      150
+    ],
+    "west": [
+      0,
+      130,
+      24,
+      154
+    ],
+    "up": [
+      132,
+      24,
+      156,
+      48
+    ],
+    "down": [
+      134,
+      124,
+      158,
+      148
+    ]
+  },
+  "changes": [
+    "Uniformly scale the original head to14 pixels per axis",
+    "Map all six source head faces into a separate complete bone atlas",
+    "Retain facial layout and teeth; expose dark eye/nose/mouth cavities",
+    "Add four small fang tips over the source canine positions"
+  ],
+  "bossAssetsModified": false
+}

@@ -1,0 +1,505 @@
+{
+  "meta": {
+    "format_version": "4.10",
+    "model_format": "java_block",
+    "box_uv": false
+  },
+  "name": "Rancor Skull",
+  "resolution": {
+    "width": 128,
+    "height": 64
+  },
+  "elements": [
+    {
+      "name": "Rancor cranium",
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            24.0,
+            24.0
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            24.0,
+            0.0,
+            48.0,
+            24.0
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            48.0,
+            0.0,
+            72.0,
+            24.0
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            0.0,
+            24.0,
+            24.0,
+            48.0
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            24.0,
+            24.0,
+            48.0,
+            48.0
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            48.0,
+            24.0,
+            72.0,
+            48.0
+          ],
+          "texture": 0
+        }
+      },
+      "uuid": "75069200-4d60-5237-9897-d9e47b370ad3",
+      "type": "cube",
+      "origin": [
+        8,
+        7,
+        8
+      ],
+      "box_uv": false
+    },
+    {
+      "name": "left upper fang",
+      "from": [
+        4.7,
+        4.7,
+        0.15
+      ],
+      "to": [
+        5.55,
+        7.2,
+        1.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        }
+      },
+      "uuid": "8f1cd8df-93d7-508d-a298-052a9eeccc99",
+      "type": "cube",
+      "origin": [
+        8,
+        7,
+        8
+      ],
+      "box_uv": false
+    },
+    {
+      "name": "right upper fang",
+      "from": [
+        10.45,
+        4.7,
+        0.15
+      ],
+      "to": [
+        11.3,
+        7.2,
+        1.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        }
+      },
+      "uuid": "ac634cf8-069b-524d-a2c5-66da6fbbc883",
+      "type": "cube",
+      "origin": [
+        8,
+        7,
+        8
+      ],
+      "box_uv": false
+    },
+    {
+      "name": "left lower fang",
+      "from": [
+        4.4,
+        0.9,
+        0.25
+      ],
+      "to": [
+        5.15,
+        2.65,
+        1.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        }
+      },
+      "uuid": "26693a78-c422-5492-b525-646dd70eed29",
+      "type": "cube",
+      "origin": [
+        8,
+        7,
+        8
+      ],
+      "box_uv": false
+    },
+    {
+      "name": "right lower fang",
+      "from": [
+        10.85,
+        0.9,
+        0.25
+      ],
+      "to": [
+        11.6,
+        2.65,
+        1.15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "east": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "south": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "west": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "up": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        },
+        "down": {
+          "uv": [
+            80,
+            0,
+            88,
+            8
+          ],
+          "texture": 0
+        }
+      },
+      "uuid": "6a78d70a-2e2c-5090-ae16-c43dfaa884b4",
+      "type": "cube",
+      "origin": [
+        8,
+        7,
+        8
+      ],
+      "box_uv": false
+    }
+  ],
+  "outliner": [
+    "75069200-4d60-5237-9897-d9e47b370ad3",
+    "8f1cd8df-93d7-508d-a298-052a9eeccc99",
+    "ac634cf8-069b-524d-a2c5-66da6fbbc883",
+    "26693a78-c422-5492-b525-646dd70eed29",
+    "6a78d70a-2e2c-5090-ae16-c43dfaa884b4"
+  ],
+  "textures": [
+    {
+      "uuid": "58254b44-8099-5a5c-ad49-1912a25c121e",
+      "name": "rancor_skull.png",
+      "id": "0",
+      "width": 128,
+      "height": 64,
+      "uv_width": 128,
+      "uv_height": 64,
+      "source": "data:image/png;base64,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"
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        22,
+        225,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    }
+  }
+}

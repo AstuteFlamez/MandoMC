@@ -2,6 +2,15 @@
   "providers": [
     {
       "type": "bitmap",
+      "file": "mandomc:font/credit.png",
+      "ascent": 7,
+      "height": 8,
+      "chars": [
+        "$"
+      ]
+    },
+    {
+      "type": "bitmap",
       "file": "mandomc:font/item_labels/weapon.png",
       "ascent": 8,
       "height": 9,
