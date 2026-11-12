@@ -48,5 +48,6 @@ public final class JabbaDrops implements Listener {
                 plugin.getLogger().log(java.util.logging.Level.SEVERE, "Jabba mob drop failed", error);
             }
         }, plugin);
+        new RancorTrophyDrops(plugin,items);
     }
 }
