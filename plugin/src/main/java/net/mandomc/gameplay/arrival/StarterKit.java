@@ -24,11 +24,13 @@ public final class StarterKit implements Listener {
     private final NamespacedKey pending;
     private final List<Entry> entries = new ArrayList<>();
     private final String message;
+    private final net.mandomc.gameplay.tutorial.TutorialHandbook handbook;
 
     public StarterKit(JavaPlugin plugin, ItemCatalog catalog, ConfigurationSection config, String message) {
         this.plugin = plugin;
         this.catalog = catalog;
         this.message = message;
+        this.handbook = new net.mandomc.gameplay.tutorial.TutorialHandbook(plugin);
         granted = new NamespacedKey(plugin, "starter_kit_v1");
         pending = new NamespacedKey(plugin, "starter_kit_pending_v1");
         if (config.getInt("schema-version", -1) != 1) throw new IllegalArgumentException("arrival/starter-kit.yml: expected schema-version 1");
@@ -75,10 +77,31 @@ public final class StarterKit implements Listener {
             var trial = plugin.getServer().createInventory(null, 36);
             var storage = player.getInventory().getStorageContents();
             for (int i = 0; i < storage.length; i++) trial.setItem(i, storage[i] == null ? null : storage[i].clone());
+            // Reuse a marked handbook (including offhand) without adding another copy.
+            // Refresh only the trial inventory until the entire kit is known to fit.
+            boolean hasHandbook = false;
+            ItemStack offhand = player.getInventory().getItemInOffHand();
+            ItemStack refreshedOffhand = null;
+            for (int slot = 0; slot < trial.getSize(); slot++) {
+                if (handbook.isHandbook(trial.getItem(slot))) {
+                    var current = handbook.create();
+                    current.setAmount(trial.getItem(slot).getAmount());
+                    trial.setItem(slot, current);
+                    hasHandbook = true;
+                    break;
+                }
+            }
+            if (!hasHandbook && handbook.isHandbook(offhand)) {
+                refreshedOffhand = handbook.create();
+                refreshedOffhand.setAmount(offhand.getAmount());
+                hasHandbook = true;
+            }
+            if (!hasHandbook) kit.add(handbook.create());
             if (!trial.addItem(kit.stream().map(ItemStack::clone).toArray(ItemStack[]::new)).isEmpty()) {
                 throw new IllegalStateException("not enough inventory space");
             }
             player.getInventory().setStorageContents(trial.getContents());
+            if (refreshedOffhand != null) player.getInventory().setItemInOffHand(refreshedOffhand);
             player.getPersistentDataContainer().set(granted, PersistentDataType.BYTE, (byte) 1);
             player.getPersistentDataContainer().remove(pending);
             player.sendMessage(MiniMessage.miniMessage().deserialize(message));

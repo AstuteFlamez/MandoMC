@@ -94,14 +94,101 @@ public final class HandbookProbe extends JavaPlugin {
         arrival.onPack(new PlayerResourcePackStatusEvent(actor,UUID.randomUUID(),PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED));
         check(handbooks()==0,"Subsequent pack load does not change handbook delivery");
         check(inventory.getItemInOffHand().getAmount()==9,"First-join chat preserves offhand gear");
-        success();
+        kitChecks(arrival);
+    }
+    private final NamespacedKey granted = new NamespacedKey("mandomc", "starter_kit_v1");
+    private final NamespacedKey pending = new NamespacedKey("mandomc", "starter_kit_pending_v1");
+    private void kitChecks(ArrivalListener arrival) {
+        var kit = mando.starterKit();
+        var inventory = actor.getInventory();
+        inventory.clear();
+        actor.getPersistentDataContainer().remove(granted);
+        actor.getPersistentDataContainer().remove(pending);
+        actor.getPersistentDataContainer().remove(new NamespacedKey("mandomc", "arrival_tutorial_v1"));
+        check(!actor.hasPlayedBefore(), "Fixture is a native new player");
+        kit.join(new org.bukkit.event.player.PlayerJoinEvent(actor, net.kyori.adventure.text.Component.empty()));
+        check(actor.getPersistentDataContainer().has(pending), "First join marks kit pending before scheduled delivery");
+        later(() -> {
+            check(handbooks() == 1, "First join grants exactly one handbook with kit");
+            check(!actor.getPersistentDataContainer().has(new NamespacedKey("mandomc", "arrival_tutorial_v1")), "Kit does not consume pack-gated welcome marker");
+            arrival.onPack(new PlayerResourcePackStatusEvent(actor, UUID.randomUUID(), PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED));
+            check(handbooks() == 1, "Pack success after kit gives no duplicate book");
+            check(actor.getPersistentDataContainer().has(granted) && !actor.getPersistentDataContainer().has(pending), "Complete kit commits once-only marker");
+            check(inventory.contains(Material.STONE_PICKAXE) && inventory.contains(Material.STONE_AXE)
+                    && inventory.contains(Material.STONE_SHOVEL) && inventory.contains(Material.STONE_HOE)
+                    && inventory.contains(Material.COOKED_BEEF, 64), "Original material kit retained");
+            for (String name : List.of("robes_helmet", "robes_chestplate", "robes_leggings", "robes_boots", "e11", "standard_plasma_cells")) {
+                check(Arrays.stream(inventory.getStorageContents()).filter(Objects::nonNull)
+                        .anyMatch(i -> i.isSimilar(mando.items().create(name))), "Original generated kit item " + name);
+            }
+            var before = copy(inventory.getContents());
+            kit.join(new org.bukkit.event.player.PlayerJoinEvent(returning(), net.kyori.adventure.text.Component.empty()));
+            later(() -> {
+                equal(before, inventory.getContents(), "Reconnect never refills kit");
+                inventory.clear(); // Normal full-loot death has removed the original gear/book.
+                arrival.respawn(new org.bukkit.event.player.PlayerRespawnEvent(actor, actor.getLocation(), false,
+                        false, false, org.bukkit.event.player.PlayerRespawnEvent.RespawnReason.DEATH));
+                check(!kit.grant(actor), "Death does not reset kit eligibility");
+                kit.join(new org.bukkit.event.player.PlayerJoinEvent(returning(), net.kyori.adventure.text.Component.empty()));
+                later(() -> {
+                    check(handbooks() == 0 && inventory.isEmpty(), "Respawn/reconnect after losing book grants no extra kit");
+                    actor.getPersistentDataContainer().remove(granted);
+                    kit.join(new org.bukkit.event.player.PlayerJoinEvent(returning(), net.kyori.adventure.text.Component.empty()));
+                    check(!actor.getPersistentDataContainer().has(pending), "Established unmarked player is not treated as first join");
+                    // Eleven free slots fit the old kit, but not the new twelve-item kit.
+                    for (int i = 0; i < 25; i++) inventory.setItem(i, new ItemStack(Material.DIAMOND, 64));
+                    inventory.setHelmet(new ItemStack(Material.IRON_HELMET));
+                    inventory.setItemInOffHand(new ItemStack(Material.EMERALD, 7));
+                    var fullBefore = copy(inventory.getContents());
+                    kit.join(new org.bukkit.event.player.PlayerJoinEvent(actor, net.kyori.adventure.text.Component.empty()));
+                    later(() -> {
+                        equal(fullBefore, inventory.getContents(), "Insufficient room for handbook defers entire kit atomically");
+                        check(!actor.getPersistentDataContainer().has(granted) && actor.getPersistentDataContainer().has(pending), "Failed first join retains pending retry");
+                        inventory.setItem(24, null);
+                        kit.join(new org.bukkit.event.player.PlayerJoinEvent(returning(), net.kyori.adventure.text.Component.empty()));
+                        later(() -> {
+                            check(handbooks() == 1 && actor.getPersistentDataContainer().has(granted), "Pending reconnect grants complete kit after freeing slot");
+                            check(inventory.getHelmet().getType() == Material.IRON_HELMET && inventory.getItemInOffHand().getAmount() == 7, "Kit preserves armor/offhand");
+                            existingBookKit(false);
+                            existingBookKit(true);
+                            try { success(); } catch (Exception error) { throw new RuntimeException(error); }
+                        });
+                    });
+                });
+            });
+        });
+    }
+    private Player returning() {
+        // Native inventory/PDC/server player with the persisted returning-player eligibility flag.
+        return (Player) Proxy.newProxyInstance(Player.class.getClassLoader(), new Class<?>[]{Player.class},
+                (proxy, method, args) -> method.getName().equals("hasPlayedBefore") ? true : method.invoke(actor, args));
+    }
+    private void existingBookKit(boolean offhand) {
+        var inventory = actor.getInventory();
+        inventory.clear();actor.getPersistentDataContainer().remove(granted);
+        var old = book.create();old.setAmount(3);
+        var meta = (BookMeta) old.getItemMeta();meta.pages(net.kyori.adventure.text.Component.text("Old handbook"));old.setItemMeta(meta);
+        if (offhand) inventory.setItemInOffHand(old); else inventory.setItem(0, old);
+        for (int i = offhand ? 0 : 1; i < 36; i++) inventory.setItem(i, new ItemStack(Material.DIAMOND, 64));
+        var before = copy(inventory.getContents());
+        check(!mando.starterKit().grant(actor), "Existing book/full storage defers kit");
+        equal(before, inventory.getContents(), "Failed kit does not refresh existing handbook or overwrite gear");
+        for (int i = 25; i < 36; i++) inventory.setItem(i, null);
+        check(mando.starterKit().grant(actor), "Existing book leaves eleven slots sufficient for kit");
+        check(handbooks() == 3, "Existing handbook stack reused without duplicates");
+        var current = offhand ? inventory.getItemInOffHand() : inventory.getItem(0);
+        check(((BookMeta) current.getItemMeta()).getPageCount() == 11, "Existing handbook refreshed to current eleven pages");
+        command();check(handbooks() == 3, "Tutorial still reuses starter-kit handbook stack");
+    }
+    private void later(Runnable run) {
+        Bukkit.getScheduler().runTaskLater(this, () -> { try { run.run(); } catch (Throwable error) { fail(error); } }, 2);
     }
     private void command(){check(mando.getCommand("tutorial").execute(actor,"tutorial",new String[0]),"Actual tutorial command executes");}
     private int handbooks(){int n=0;for(var item:actor.getInventory().getContents())if(book.isHandbook(item))n+=item.getAmount();return n;}
     private ItemStack[] copy(ItemStack[] content){return Arrays.stream(content).map(i->i==null?null:i.clone()).toArray(ItemStack[]::new);}
     private void equal(ItemStack[] a,ItemStack[] b,String why){check(a.length==b.length,why+" length");for(int i=0;i<a.length;i++)check(Objects.equals(a[i],b[i]),why+" slot"+i);}
     private void success()throws Exception {
-        String result="HANDBOOK PASSED: "+checks+" native assertions;11 feature pages, command/inventory/first-join checks\n";
+        String result="HANDBOOK PASSED: "+checks+" native assertions;11 feature pages, command/inventory/first-join/starter-kit checks\n";
         Files.createDirectories(getDataFolder().toPath());Files.writeString(getDataFolder().toPath().resolve("PASSED.txt"),result);getLogger().info(result);cleanup();
         if(getServer().getPort()==25590)Bukkit.shutdown();
     }
