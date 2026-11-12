@@ -54,8 +54,14 @@ To deploy a new MandoMC build while stopped:
 ./scripts/build.sh
 ./scripts/server-control.py stop
 cp plugin/target/MandoMC.jar server/runtime/plugins/MandoMC.jar
+mkdir -p server/runtime/agents
+cp redstone-agent/target/MandoMC-RedstoneAgent.jar server/runtime/agents/MandoMC-RedstoneAgent.jar
 ./scripts/server-control.py start
 ```
+
+The redstone circuit cutoff requires the matching startup agent and launcher. Deploy both with the plugin;
+the launcher uses `-javaagent:agents/MandoMC-RedstoneAgent.jar`. Do not deploy the plugin alone or hot-attach the agent.
+See [redstone circuit policy](../docs/features/redstone-disabled.md) for the pinned native hooks and scoped-release checks.
 
 The runtime itself is not a Git backup. A clean clone needs Java 25, the Paper artifact saved as `server/runtime/paper.jar`, and each locked vendor artifact in `server/runtime/plugins/`. Build/copy MandoMC, copy the local server.properties template on initial setup, and accept Minecraft's EULA before starting. Downloaded plugin dependencies and defaults are generated on the first boot. Do not overwrite an existing server.properties or world with setup templates.
 

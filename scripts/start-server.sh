@@ -8,4 +8,5 @@ if [[ ! -f paper.jar ]]; then
 fi
 python3 "$MANDOMC_ROOT/scripts/sync-resource-pack.py"
 cp "$MANDOMC_ROOT/docs/assets/server-icon.png" server-icon.png
-exec "$JAVA_HOME/bin/java" -Xms1G -Xmx"${MANDOMC_MAX_MEMORY:-4G}" -jar paper.jar --nogui "$@"
+exec "$JAVA_HOME/bin/java" -javaagent:agents/MandoMC-RedstoneAgent.jar \
+    -Xms1G -Xmx"${MANDOMC_MAX_MEMORY:-4G}" -jar paper.jar --nogui "$@"
