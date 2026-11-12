@@ -1,4 +1,6 @@
 # Resume here
+
+Reload indicator (2026-11-12), `bilal/reload-indicator`: scoped actionbar fallback implemented using actual WeaponMechanics reload events and HandData. Adds priority ownership for existing MandoMC actionbar notices without item/cooldown/ammo mutation. 107 Java tests and 105 exact post-Boba Paper/vendor assertions pass, including real countdown packets, all nine reloadable titles, native completion/cancel/death, lag-aware timing and existing fuel-owner arbitration. The final targeted lifecycle rerun passed 33 assertions without vendor fixture errors. Shared runtime and pack untouched. Candidate must be rebuilt against the post-Boba fix baseline before any coordinated rollout; never install this stale branch's complete Maven JAR. See [reload indicator](features/reload-indicator.md). Next action: receive the boss-assigned server window after the Boba correction release, recheck the exact live baseline, and deploy only the scoped overlay.
 Updated: 2026-11-09
 
 ## Milestone
