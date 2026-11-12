@@ -1,0 +1,27 @@
+{
+  "schema-version": 1,
+  "items": {
+    "tibanna_gas_cells": {
+      "material": "ECHO_SHARD",
+      "name": "<yellow>Tibanna Gas Cells",
+      "custom-model-data": 51,
+      "item-model": "mandomc:ammo/tibanna_gas_cells",
+      "rarity": "common",
+      "category": "ammo",
+      "lore": [
+        "<gray>Vehicle cannon ammunition."
+      ]
+    },
+    "proton_torpedo": {
+      "material": "ECHO_SHARD",
+      "name": "<yellow>Proton Torpedo",
+      "custom-model-data": 52,
+      "item-model": "mandomc:ammo/proton_torpedo",
+      "rarity": "common",
+      "category": "ammo",
+      "lore": [
+        "<gray>Vehicle cannon ammunition."
+      ]
+    }
+  }
+}

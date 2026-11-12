@@ -7,7 +7,7 @@ public record SaberSettings(String itemId, String model, String hilt, double thr
         double cooling, int recoveryDelay, int overheat, double halfAngle, int reflectionLimit,
         double arcWidth, double arcHeight, double bankDegrees, double lockAngle, double lockCorrection,
         double returnHeight, double variation, double spinDegrees, double throwCostPercent, int throwDrainTicks,
-        double damageMultiplier) {
+        double damageMultiplier, java.util.Map<String, SaberVariant> variants) {
     public static SaberSettings read(ConfigurationSection c) {
         if (c.getInt("schema-version") != 1) throw new IllegalArgumentException("combat/sabers.yml: expected schema-version 1");
         return new SaberSettings(text(c,"item-id"), text(c,"item-model"), text(c,"hilt-model"),
@@ -22,9 +22,10 @@ public record SaberSettings(String itemId, String model, String hilt, double thr
                 optional(c, "throw-lock-correction", 1.5, 0, 3),
                 optional(c, "throw-return-height", 2.4, 0, 4), optional(c, "throw-variation", 1, 0, 1),
                 optional(c, "throw-spin-degrees", 38, 1, 90),
-                optional(c, "throw-cost-percent", 75, 0, 100),
+                optional(c, "throw-cost-percent", 51, 0, 100),
                 (int)optional(c, "throw-drain-ticks", 20, 1, 100),
-                optional(c, "guard-damage-multiplier", 5, 0.01, 100));
+                optional(c, "guard-damage-multiplier", 5, 0.01, 100),
+                SaberVariant.read(c, text(c, "item-id"), text(c, "item-model")));
     }
     private static double optional(ConfigurationSection c, String key, double fallback, double min, double max) {
         return c.contains(key) ? number(c, key, min, max) : fallback;

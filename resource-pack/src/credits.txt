@@ -1,7 +1,7 @@
 MANDOMC RESOURCE PACK — CREDITS
 
 A special thank-you to JustTimm for the excellent lightsaber models and textures
-in JustTimm's Lightsaber Workshop, including Darth Vader's lightsaber.
+in JustTimm's Lightsaber Workshop, including all 78 named lightsabers used by MandoMC.
 Your work helps bring MandoMC's Star Wars world to life.
 
 Lightsaber Workshop:
@@ -17,3 +17,10 @@ Modrinth CDN. His models and textures are not copied into this ZIP.
 MandoMC gameplay integration, item configuration and pack assembly: MandoMC.
 Other recovered assets and their provenance are listed in resource-pack/sources.json
 in the MandoMC repository: https://github.com/AstuteFlamez/MandoMC
+
+Faithful 32x by the Faithful team — https://faithfulpack.net/
+Official base pack delivered unmodified from Modrinth. Diamond/netherite block and diamond-ore texture layouts in the MandoMC metal previews derive from Faithful 32x 26.1 (June 2026); metal palette edits by MandoMC. See faithful-license.txt for the unmodified license.
+
+Original animated green laser: recovered unchanged from the pinned MandoPack archive; namespaced model references only.
+
+Electrum storage-block plate: original AI-generated artwork, created with OpenAI imagegen for MandoMC (2026-11-09), normalized to 32px.

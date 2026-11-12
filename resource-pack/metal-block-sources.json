@@ -1,0 +1,112 @@
+{
+  "schema-version": 1,
+  "source": "Faithful 32x 26.1 June 2026, official unmodified Modrinth version Fj5GKJnf",
+  "website": "https://faithfulpack.net/",
+  "license": "src/faithful-license.txt",
+  "scope": "Block textures only. Native block IDs, world generation, drops, armor and tool textures are unchanged. Ore rock backgrounds retain Faithful pixels except the requested deepslate dark-tone floor; only each source ore\u2019s saturated mineral pixels are recolored. Distinct Faithful diamond and emerald mineral geometries distinguish Durasteel and Beskar.",
+  "blocks": [
+    {
+      "name": "durasteel_block",
+      "source": "assets/minecraft/textures/block/diamond_block.png",
+      "sourceSha256": "3595cd124795772ce0e87838217257955341d6d798dac6435971618a6ead01e3",
+      "palette": "durasteel",
+      "replaces": [
+        "diamond_block"
+      ],
+      "recoloredPixels": 1024,
+      "softStoneShadows": false,
+      "mineralHue": [
+        0.4,
+        0.61
+      ],
+      "shadowFloorLuma": null,
+      "outputSha256": "eb8b3d501644d68beccf1141bc49e64d8b1e2cacfcb78b5a2e5e6d80265eeb38"
+    },
+    {
+      "name": "stone_durasteel_ore",
+      "source": "assets/minecraft/textures/block/diamond_ore.png",
+      "sourceSha256": "6c1fa6f862457b0ea0a1c934af884b0761771da166cba4160fbb772436deb055",
+      "palette": "durasteel",
+      "replaces": [
+        "diamond_ore"
+      ],
+      "recoloredPixels": 199,
+      "softStoneShadows": true,
+      "mineralHue": [
+        0.4,
+        0.61
+      ],
+      "shadowFloorLuma": null,
+      "outputSha256": "e650e3901e93c2259d2e72a33239cf1f70c0de7e38ba3b2a90297999fb76a0a1"
+    },
+    {
+      "name": "deepslate_durasteel_ore",
+      "source": "assets/minecraft/textures/block/deepslate_diamond_ore.png",
+      "sourceSha256": "d52620c3d8d2f942e3d91ed517a4d22fdaf03e1571e65412f4b522412ad46c63",
+      "palette": "durasteel",
+      "replaces": [
+        "deepslate_diamond_ore"
+      ],
+      "recoloredPixels": 244,
+      "softStoneShadows": false,
+      "mineralHue": [
+        0.4,
+        0.61
+      ],
+      "shadowFloorLuma": 80,
+      "outputSha256": "3aa62b31758a363a0c50ef1f59ce2faeb6d5bfc4e186ef954b595a8ee2211d88"
+    },
+    {
+      "name": "beskar_block",
+      "source": "assets/minecraft/textures/block/netherite_block.png",
+      "sourceSha256": "cbb0735bca8521feb0162c70768d554457222e8a68fbe89b0708ccaf39037b3f",
+      "palette": "beskar",
+      "replaces": [
+        "netherite_block"
+      ],
+      "recoloredPixels": 1024,
+      "softStoneShadows": false,
+      "mineralHue": [
+        0.4,
+        0.61
+      ],
+      "shadowFloorLuma": null,
+      "outputSha256": "a3976d246c6e3e360c4dd27025864ebbf66bd6c144cf5db49a20c4eb4d3a1c91"
+    },
+    {
+      "name": "stone_beskar_ore",
+      "source": "assets/minecraft/textures/block/emerald_ore.png",
+      "sourceSha256": "a944e08c51cf0cc13d9792ab6d618aec897d5eab9b5b903b288829428428cadd",
+      "palette": "beskar",
+      "replaces": [
+        "nether_gold_ore"
+      ],
+      "recoloredPixels": 225,
+      "softStoneShadows": true,
+      "mineralHue": [
+        0.25,
+        0.49
+      ],
+      "shadowFloorLuma": null,
+      "outputSha256": "f7425d79955a98aa1344d6bc5f096aa681072ffa6ca062104203472e4e49c468"
+    },
+    {
+      "name": "deepslate_beskar_ore",
+      "source": "assets/minecraft/textures/block/deepslate_emerald_ore.png",
+      "sourceSha256": "668c679fae2e732855d91606fe029b83cbc92dfc3b8cb14a286ad46acb83a6c7",
+      "palette": "beskar",
+      "replaces": [
+        "ancient_debris_side",
+        "ancient_debris_top"
+      ],
+      "recoloredPixels": 167,
+      "softStoneShadows": false,
+      "mineralHue": [
+        0.25,
+        0.49
+      ],
+      "shadowFloorLuma": 80,
+      "outputSha256": "cdd410dedc9149f1108065626e61229c812b1962f5ecc81b03cc9a4f337c0849"
+    }
+  ]
+}

@@ -6,7 +6,7 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "\u0110"
+        "Đ"
       ]
     },
     {
@@ -15,7 +15,7 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "\u0111"
+        "đ"
       ]
     },
     {
@@ -24,7 +24,7 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "\u0123"
+        "ģ"
       ]
     },
     {
@@ -33,7 +33,7 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "\u0109"
+        "ĉ"
       ]
     },
     {
@@ -42,7 +42,7 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "\u0116"
+        "Ė"
       ]
     },
     {
@@ -51,7 +51,7 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "\u0115"
+        "ĕ"
       ]
     },
     {
@@ -60,7 +60,7 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "\u010b"
+        "ċ"
       ]
     },
     {
@@ -69,7 +69,7 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "\u010c"
+        "Č"
       ]
     },
     {
@@ -78,7 +78,7 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "\u0112"
+        "Ē"
       ]
     },
     {
@@ -87,7 +87,7 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "\u0121"
+        "ġ"
       ]
     },
     {
@@ -96,7 +96,79 @@
       "ascent": 8,
       "height": 9,
       "chars": [
-        "\u010f"
+        "ď"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/legendary.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "ē"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/mythic.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "Ĕ"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/component.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "Ċ"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/metal.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "č"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/fuel.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "Ģ"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/tool.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "ĸ"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/valuable.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "Ď"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/item_labels/key.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "Ĥ"
       ]
     }
   ]

@@ -13,6 +13,14 @@ public record EncounterPlan(List<Member> members, int leaderLevel) {
         members = List.copyOf(members);
     }
 
+    /** Independent opportunities preserve the legacy wildlife rate while increasing only free patrol slots. */
+    public static List<Kind> opportunities(RandomGenerator random, SandySettings settings, boolean patrolAvailable) {
+        var result = new ArrayList<Kind>();
+        if (patrolAvailable && random.nextDouble() < settings.patrolChance()) result.add(Kind.PATROL);
+        if (random.nextDouble() < settings.wildlifeChance()) result.add(Kind.values()[1 + random.nextInt(3)]);
+        return List.copyOf(result);
+    }
+
     public static EncounterPlan roll(Kind kind, RandomGenerator random, SandySettings settings) {
         int leader = random.nextInt(settings.minLevel(), settings.maxLevel() + 1);
         var types = new ArrayList<String>();

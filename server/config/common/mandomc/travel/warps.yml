@@ -1,37 +1,52 @@
+---
 schema-version: 1
-gui-title: '<dark_gray>Galaxy Map'
+gui-title: "<dark_gray>Galaxy Map"
 gui-size: 54
 messages:
-  players-only: '<red>Open warps in game.'
-  unknown: '<red>Choose Batuu, Earth, Hoth or Tatooine.'
-  unavailable: '<red>This destination is unavailable.'
-  click: '<yellow>Click to travel.'
+  players-only: "<red>Open warps in game."
+  unknown: "<red>Choose Batuu, Earth, Hoth or Tatooine."
+  unavailable: "<red>This destination is unavailable."
+  click: "<yellow>Click to travel."
 warps:
   spawn:
-    name: '<gold>Batuu'
+    name: "<gold>Batuu"
     material: STICK
     item-model: mandomc:planets/batuu
     slot: 28
-    badges: '<white>đġ'
-    description: '<gray>Black Spire Outpost. Protected spawn hub.'
+    badges: "<white>đġ"
+    description: "<gray>Black Spire Outpost. Protected spawn hub."
   earth:
-    name: '<green>Earth'
+    name: "<green>Earth"
     material: STICK
     item-model: mandomc:planets/earth
     slot: 1
-    badges: '<white>đġ'
-    description: '<gray>Unknown Regions. Survival, building and gathering.'
+    badges: "<white>đġ"
+    description: "<gray>Unknown Regions. Survival, building and gathering."
   hoth:
-    name: '<white>Hoth'
+    name: "<white>Hoth"
     material: STICK
     item-model: mandomc:planets/hoth
     slot: 39
-    badges: '<white>ĕġ'
-    description: '<gray>King of the Hill and PvP warzone.'
+    badges: "<white>Ėġ"
+    description: "<gray>King of the Hill and PvP warzone."
   tatooine:
-    name: '<gold>Tatooine'
+    name: "<gold>Tatooine"
     material: STICK
     item-model: mandomc:planets/tatooine
     slot: 43
-    badges: '<white>đġ'
-    description: '<gray>Jabba’s Palace. Dungeon testing.'
+    badges: "<white>đġ"
+    description: "<gray>Jabba’s Palace. Dungeon testing."
+  mandalore:
+    name: "<gray>Mandalore"
+    material: STICK
+    item-model: mandomc:planets/mandalore
+    slot: 32
+    description: "<gray>Glassed cities and the Beskar mines."
+    badges: "<white>Ēġ"
+  ilum:
+    name: "<aqua>Ilum"
+    material: STICK
+    item-model: mandomc:planets/ilum
+    slot: 20
+    badges: "<white>Ēġ"
+    description: "<gray>The original Jedi trials. Earn a Kyber Crate Key."

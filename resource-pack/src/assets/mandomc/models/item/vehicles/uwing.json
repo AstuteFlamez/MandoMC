@@ -6,7 +6,8 @@
     1024
   ],
   "textures": {
-    "0": "mandomc:item/vehicles/uwing"
+    "0": "mandomc:item/vehicles/uwing",
+    "particle": "#0"
   },
   "elements": [
     {

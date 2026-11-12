@@ -5,7 +5,8 @@
     128
   ],
   "textures": {
-    "3": "mandomc:item/projectiles/redlaser"
+    "3": "mandomc:item/projectiles/redlaser",
+    "particle": "#3"
   },
   "elements": [
     {

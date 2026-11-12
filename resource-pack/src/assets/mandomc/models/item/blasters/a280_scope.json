@@ -6,7 +6,8 @@
     128
   ],
   "textures": {
-    "0": "mandomc:item/blasters/a280"
+    "0": "mandomc:item/blasters/a280",
+    "particle": "#0"
   },
   "elements": [
     {

@@ -1,42 +1,67 @@
-schema-version: 1
-# Image badges must exist in the pack; categories without art use a text label.
-rarities:
-  common: 'đ'
-  uncommon: 'Ė'
-  rare: 'ĕ'
-categories:
-  vehicles: 'ď'
-  materials: 'Č'
-  armor: 'ĉ'
-  consumables: 'ċ'
-  weapons: 'Đ'
-# Explicitly list shipped vendor content; WeaponMechanics demo weapons stay out of the browser.
-external-items:
-  e11:
-    kind: weapon
-    vendor-id: E11
-    category: weapons
-  standard_plasma_cells:
-    kind: ammo
-    vendor-id: Standard_Plasma_Cells
-    category: ammo
-  cycler_rifle:
-    kind: weapon
-    vendor-id: CyclerRifle
-    category: weapons
-  se14c:
-    kind: weapon
-    vendor-id: SE14C
-    category: weapons
-  a280:
-    kind: weapon
-    vendor-id: A280
-    category: weapons
-  relby_v10:
-    kind: weapon
-    vendor-id: RelbyV10
-    category: weapons
-  ee3:
-    kind: weapon
-    vendor-id: EE3
-    category: weapons
+{
+  "schema-version": 1,
+  "rarities": {
+    "common": "đ",
+    "uncommon": "Ė",
+    "rare": "ĕ",
+    "epic": "Ē",
+    "legendary": "ē",
+    "mythic": "Ĕ"
+  },
+  "categories": {
+    "vehicles": "ď",
+    "materials": "Č",
+    "armor": "ĉ",
+    "consumables": "ċ",
+    "weapons": "Đ",
+    "components": "Ċ",
+    "crystals": "Ď",
+    "fuel": "Ģ",
+    "keys": "Ĥ",
+    "metals": "č",
+    "tokens": "<gray>[Tokens]",
+    "tools": "ĸ"
+  },
+  "external-items": {
+    "e11": {
+      "kind": "weapon",
+      "vendor-id": "E11",
+      "category": "weapons"
+    },
+    "standard_plasma_cells": {
+      "kind": "ammo",
+      "vendor-id": "Standard_Plasma_Cells",
+      "category": "ammo"
+    },
+    "cycler_rifle": {
+      "kind": "weapon",
+      "vendor-id": "CyclerRifle",
+      "category": "weapons"
+    },
+    "se14c": {
+      "kind": "weapon",
+      "vendor-id": "SE14C",
+      "category": "weapons"
+    },
+    "a280": {
+      "kind": "weapon",
+      "vendor-id": "A280",
+      "category": "weapons"
+    },
+    "relby_v10": {
+      "kind": "weapon",
+      "vendor-id": "RelbyV10",
+      "category": "weapons"
+    },
+    "ee3": {
+      "kind": "weapon",
+      "vendor-id": "EE3",
+      "category": "weapons"
+    },
+    "ionized_energy_cells": {
+      "kind": "ammo",
+      "vendor-id": "Ionized_Energy_Cells",
+      "category": "ammo"
+    }
+  }
+}

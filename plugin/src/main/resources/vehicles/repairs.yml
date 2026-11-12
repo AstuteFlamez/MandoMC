@@ -1,0 +1,6 @@
+schema-version: 1
+# Five HP per pulse; higher wear makes a fresh wrench repair about 312 HP total.
+health-per-pulse: 5.0
+interval-ticks: 4
+durability-per-pulse: 25
+reach: 3.0

@@ -26,7 +26,7 @@ warps:
     material: STICK
     item-model: mandomc:planets/hoth
     slot: 39
-    badges: '<white>ĕġ'
+    badges: '<white>Ėġ'
     description: '<gray>King of the Hill and PvP warzone.'
   tatooine:
     name: '<gold>Tatooine'

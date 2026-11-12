@@ -47,51 +47,83 @@ public final class RecipeGuide implements Listener, AutoCloseable {
         this.recipes = recipes;
         this.config = config;
         for (String key : List.of("title", "detail-title", "previous", "next", "back", "close", "all",
-                "category", "hint", "ingredient-hint", "crafting", "unavailable", "player-only")) {
+                "category", "hint", "ingredient-hint", "crafting", "unavailable", "player-only",
+                "categories", "category-hint", "page", "smelting", "smelting-time")) {
             if (!config.isString("guide." + key)) throw new IllegalArgumentException("items/recipes.yml: missing guide." + key);
         }
         Bukkit.getPluginManager().registerEvents(this, plugin);
         var command = Objects.requireNonNull(plugin.getCommand("recipes"));
         command.setExecutor((sender, ignored, label, args) -> {
             if (!(sender instanceof Player player)) sender.sendMessage(text("player-only", ""));
-            else if (args.length == 0) open(player, null, 0);
+            else if (args.length == 0) categories(player);
             else if (args.length == 1) {
-                var matches = recipes.definitions().stream().filter(r -> r.result().equals(args[0])).toList();
-                if (matches.isEmpty()) player.sendMessage(text("unavailable", ""));
+                var matches = recipesFor(args[0]);
+                if (matches.isEmpty()) {
+                    String source = config.getString("sources." + args[0]);
+                    player.sendMessage(source == null ? text("unavailable", "") : render(source));
+                }
                 else detail(player, matches.getFirst(), p -> open(p, null, 0));
             } else return false;
             return true;
         });
         command.setTabCompleter((sender, ignored, label, args) -> args.length == 1
-                ? recipes.definitions().stream().map(RecipeDefinition::result).distinct().sorted()
+                ? recipes.guideDefinitions().stream().map(RecipeDefinition::result).distinct().sorted()
                         .filter(id -> id.startsWith(args[0])).toList() : List.of());
     }
 
+    private void categories(Player player) {
+        var menu = new Menu(player, text("title", ""));
+        button(menu, 10, Material.KNOWLEDGE_BOOK, "all", "", p -> open(p, null, 0));
+        var materials = recipes.guideDefinitions().stream().filter(r -> matchesCategory(r, "materials")).toList();
+        if (!materials.isEmpty()) category(menu, 11, "materials", materials);
+        int slot = 12;
+        for (String category : recipes.guideDefinitions().stream().map(RecipeDefinition::category).distinct().sorted().toList()) {
+            if (category.equals("materials")) continue;
+            var entries = recipes.guideDefinitions().stream().filter(r -> r.category().equals(category)).toList();
+            category(menu, slot, category, entries);
+            slot++;
+            if (slot % 9 == 8) slot += 2;
+        }
+        button(menu, 53, Material.BARRIER, "close", "", Player::closeInventory);
+        player.openInventory(menu.inventory);
+    }
+
+    private void category(Menu menu, int slot, String category, List<RecipeDefinition> entries) {
+        var icon = recipes.result(entries.getFirst());
+        icon.setAmount(1);
+        var meta = icon.getItemMeta();
+        meta.displayName(text("category", label(category)));
+        meta.lore(List.of(text("category-hint", Integer.toString(entries.size()))));
+        icon.setItemMeta(meta);
+        menu.inventory.setItem(slot, icon);
+        menu.actions.put(slot, p -> open(p, category, 0));
+    }
+
+    private static boolean matchesCategory(RecipeDefinition recipe, String category) {
+        return category == null || recipe.category().equals(category)
+                || category.equals("materials") && java.util.Set.of("components", "metals").contains(recipe.category());
+    }
+
+    private static String label(String category) {
+        return Character.toUpperCase(category.charAt(0)) + category.substring(1).replace('_', ' ');
+    }
+
     private void open(Player player, String category, int requestedPage) {
-        var choices = recipes.definitions().stream().filter(r -> category == null || r.category().equals(category)).toList();
+        var choices = recipes.guideDefinitions().stream().filter(r -> matchesCategory(r, category)).toList();
         int page = ItemBrowser.clampPage(requestedPage, choices.size());
         var menu = new Menu(player, text("title", ""));
         for (int slot = 0, i = page * 45; slot < 45 && i < choices.size(); slot++, i++) {
             var recipe = choices.get(i);
             var icon = recipes.result(recipe);
-            var meta = icon.getItemMeta();
-            var lore = meta.lore() == null ? new ArrayList<Component>() : new ArrayList<>(meta.lore());
-            lore.add(Component.empty());
-            lore.add(text("hint", ""));
-            meta.lore(lore);
-            icon.setItemMeta(meta);
-            menu.inventory.setItem(slot, icon);
+            menu.inventory.setItem(slot, obtainPreview(icon));
             menu.actions.put(slot, p -> detail(p, recipe, v -> open(v, category, page)));
         }
-        var categories = recipes.definitions().stream().map(RecipeDefinition::category).distinct().sorted().toList();
-        button(menu, 45, Material.CHEST, category == null ? "all" : "category", category == null ? "" : category, p -> {
-            int next = category == null ? 0 : categories.indexOf(category) + 1;
-            open(p, next >= categories.size() ? null : categories.get(next), 0);
-        });
+        button(menu, 45, Material.CHEST, "categories", "", this::categories);
         if (page > 0) button(menu, 48, Material.ARROW, "previous", "", p -> open(p, category, page - 1));
         if (page + 1 < ItemBrowser.pageCount(choices.size())) {
             button(menu, 50, Material.ARROW, "next", "", p -> open(p, category, page + 1));
         }
+        button(menu, 49, Material.PAPER, "page", (page + 1) + " / " + ItemBrowser.pageCount(choices.size()), p -> {});
         button(menu, 53, Material.BARRIER, "close", "", Player::closeInventory);
         player.openInventory(menu.inventory);
     }
@@ -106,10 +138,10 @@ public final class RecipeGuide implements Listener, AutoCloseable {
                 char symbol = recipe.shape().get(y).charAt(x);
                 if (symbol == ' ') continue;
                 String ingredient = recipe.ingredients().get(symbol);
-                int slot = GRID[y * 3 + x];
-                menu.inventory.setItem(slot, recipes.ingredient(ingredient));
+                int slot = GRID[(y + recipe.guideRowOffset()) * 3 + x];
+                menu.inventory.setItem(slot, obtainPreview(recipes.ingredient(ingredient)));
                 menu.actions.put(slot, p -> {
-                    var matches = recipes.definitions().stream().filter(r -> r.result().equals(ingredient)).toList();
+                    var matches = recipesFor(ingredient);
                     if (matches.isEmpty()) {
                         String source = config.getString("sources." + ingredient);
                         p.sendMessage(source == null ? text("unavailable", "") : render(source));
@@ -118,7 +150,12 @@ public final class RecipeGuide implements Listener, AutoCloseable {
             }
         }
         menu.inventory.setItem(25, recipes.result(recipe));
-        button(menu, 23, Material.CRAFTING_TABLE, "crafting", "", p -> {});
+        button(menu, 23, recipe.stonecutting() ? Material.STONECUTTER : recipe.smelting()
+                        ? recipe.blasting() ? Material.BLAST_FURNACE : Material.FURNACE : Material.CRAFTING_TABLE,
+                recipe.stonecutting() ? "stonecutting" : recipe.smelting() ? recipe.blasting() ? "smelting" : "furnace"
+                        : recipe.shapeless() ? "shapeless" : "crafting", "", p -> {});
+        if (recipe.smelting()) button(menu, 32, Material.CLOCK, "smelting-time",
+                String.format(java.util.Locale.ROOT, "%.1f", recipe.cookTime() / 20.0), p -> {});
         button(menu, 49, Material.BOOK, "ingredient-hint", "", p -> {});
         button(menu, 45, Material.ARROW, "back", "", back);
         button(menu, 53, Material.BARRIER, "close", "", Player::closeInventory);
@@ -134,8 +171,29 @@ public final class RecipeGuide implements Listener, AutoCloseable {
         menu.actions.put(slot, action);
     }
 
+    private ItemStack obtainPreview(ItemStack original) {
+        var preview = original.clone();
+        var meta = preview.getItemMeta();
+        var lore = meta.lore() == null ? new ArrayList<Component>() : new ArrayList<>(meta.lore());
+        lore.add(Component.empty());
+        lore.add(text("obtain-hint", ""));
+        meta.lore(lore);
+        preview.setItemMeta(meta);
+        return preview;
+    }
+
+    private List<RecipeDefinition> recipesFor(String itemId) {
+        String preferred = config.getString("guide.preferred-recipes." + itemId, "");
+        return recipes.guideDefinitions().stream().filter(recipe -> recipe.result().equals(itemId) || recipe.id().equals(itemId))
+                .sorted(java.util.Comparator.comparing(recipe -> !recipe.id().equals(preferred))).toList();
+    }
+
     private Component text(String key, String value) {
-        return render(Objects.requireNonNull(config.getString("guide." + key, key.equals("leave-empty") ? "<gray>Leave empty" : null), "items/recipes.yml: guide." + key)
+        return render(Objects.requireNonNull(config.getString("guide." + key,
+                key.equals("shapeless") ? "<yellow>Craft in any arrangement"
+                        : key.equals("stonecutting") ? "<yellow>Choose a saber style at a stonecutter"
+                        : key.equals("furnace") ? "<yellow>Smelt in a furnace"
+                        : key.equals("obtain-hint") ? "<yellow>Click to see how to obtain." : null), "items/recipes.yml: guide." + key)
                 .replace("<value>", value));
     }
 

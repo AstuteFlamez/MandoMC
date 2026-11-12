@@ -88,3 +88,7 @@ Jabba is now a registered scheduled event: `/event start jabba` starts the share
 - `/mmc rank list|get <player|UUID>|set|add|remove <player|UUID> <rank>`: operator/MandoStudios rank management (`mandomc.ranks.manage`).
 
 Rank IDs: `mandostudios`, `mod`, `builder`, `creator`, `mandalore`, `marshal`, `warrior`, `default`. UUIDs support offline changes; names must already be known to the server. Monetary values use at most two decimals, with no self-payment or overdrafts. Fresh credit balances are zero.
+
+Native auction house: `/ah` (`/auctionhouse`, `/auction`) browses player listings; `/ah sell <price> [amount]` lists the held quantity for a total stack price; `/ah selling` manages your listings; `/ah collect` reclaims items; `/ah search <name>` filters item or seller names. Price/newest sorting is in the menu. Normal players have `mandomc.auction`; Creative, Spectator and combat-tagged actions are denied. Eight listings, 48 hours, no fees/tax, permanent claims. No new plugin or currency.
+
+Quantity update: `/mmc give <item> [quantity]` and `/mmc give <player> <item> [quantity]` accept a trailing whole number from 1 to 2304. Default remains one. Console uses the target form. Factory-generated items split into valid stacks; insufficient storage refuses the whole grant. Existing permission/browser behavior remains.

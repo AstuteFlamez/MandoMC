@@ -6,7 +6,8 @@
     128
   ],
   "textures": {
-    "0": "mandomc:item/melee/gamorrean_axe"
+    "0": "mandomc:item/melee/gamorrean_axe",
+    "particle": "#0"
   },
   "elements": [
     {

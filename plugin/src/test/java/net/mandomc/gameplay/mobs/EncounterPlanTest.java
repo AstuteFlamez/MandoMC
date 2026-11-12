@@ -7,6 +7,11 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class EncounterPlanTest {
+    @org.junit.Test public void creativePlayersAreEligibleButSpectatorsRemainExcluded() {
+        for (org.bukkit.GameMode mode : org.bukkit.GameMode.values()) {
+            org.junit.Assert.assertEquals(mode != org.bukkit.GameMode.SPECTATOR, SandySpawns.eligible(mode));
+        }
+    }
     private YamlConfiguration config() {
         return YamlConfiguration.loadConfiguration(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/mobs/spawning.yml"))));
     }

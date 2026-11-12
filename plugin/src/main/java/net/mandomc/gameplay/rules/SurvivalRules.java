@@ -43,6 +43,7 @@ public final class SurvivalRules implements Listener {
     private final boolean potions;
     private final boolean vanillaWeapons;
     private final boolean dimensions;
+    private final boolean vanillaArmorCrafting;
     private final Set<EntityType> disabledNaturalMobs = EnumSet.noneOf(EntityType.class);
     private final Predicate<ItemStack> saber;
     private final ItemCatalog items;
@@ -59,8 +60,10 @@ public final class SurvivalRules implements Listener {
         potions = config.getBoolean("disable-potions", true);
         vanillaWeapons = config.getBoolean("disable-vanilla-weapons", true);
         dimensions = config.getBoolean("disable-nether-and-end", true);
+        vanillaArmorCrafting = config.getBoolean("disable-vanilla-armor-crafting", true);
         var disabled = config.contains("disabled-natural-mobs")
-                ? config.getStringList("disabled-natural-mobs") : List.of("SLIME");
+                ? config.getStringList("disabled-natural-mobs")
+                : List.of("SLIME", "HUSK", "RABBIT", "CAMEL", "CAMEL_HUSK", "PARCHED");
         for (String type : disabled) {
             try {
                 disabledNaturalMobs.add(EntityType.valueOf(type));
@@ -69,15 +72,41 @@ public final class SurvivalRules implements Listener {
             }
         }
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        plugin.getServer().getPluginManager().registerEvents(new net.mandomc.gameplay.items.OreDrops(items), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new net.mandomc.gameplay.items.MetalMaterials(items), plugin);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void naturalSpawn(CreatureSpawnEvent event) {
-        var reason = event.getSpawnReason();
-        if (disabledNaturalMobs.contains(event.getEntityType())
-                && (reason == CreatureSpawnEvent.SpawnReason.NATURAL
-                || reason == CreatureSpawnEvent.SpawnReason.CHUNK_GEN)) {
+        if (disabledNaturalSpawn(event.getEntityType(), event.getSpawnReason())) event.setCancelled(true);
+    }
+
+    public boolean disabledNaturalSpawn(EntityType type, CreatureSpawnEvent.SpawnReason reason) {
+        return disabledNaturalMobs.contains(type) && (reason == CreatureSpawnEvent.SpawnReason.NATURAL
+                || reason == CreatureSpawnEvent.SpawnReason.CHUNK_GEN);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void beforeNaturalSpawn(com.destroystokyo.paper.event.entity.PreCreatureSpawnEvent event) {
+        if (disabledNaturalSpawn(event.getType(), event.getReason())) {
+            // Stop natural Husk initialization before it can create DEFAULT-reason camel/rider companions.
             event.setCancelled(true);
+            event.setShouldAbortSpawn(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void generatedChunk(org.bukkit.event.world.ChunkLoadEvent event) {
+        if (!event.isNewChunk()) return;
+        // Modern worldgen serializes entities directly and never fires CHUNK_GEN spawn events.
+        // Only suppress initial entities in genuinely new chunks; never sweep existing chunks/entities.
+        for (var entity : event.getChunk().getEntities()) {
+            var reason = entity.getEntitySpawnReason();
+            if (disabledNaturalMobs.contains(entity.getType())
+                    && (reason == CreatureSpawnEvent.SpawnReason.DEFAULT
+                    || disabledNaturalSpawn(entity.getType(), reason))
+                    && entity.customName() == null && entity.getPersistentDataContainer().isEmpty()
+                    && entity.getScoreboardTags().isEmpty()) entity.remove();
         }
     }
 
@@ -190,7 +219,7 @@ public final class SurvivalRules implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void craft(PrepareItemCraftEvent event) {
         var result = event.getInventory().getResult();
-        if (banned(result)) {
+        if (banned(result) || deniedArmorCraft(result, event.isRepair())) {
             event.getInventory().setResult(null);
             return;
         }
@@ -223,6 +252,44 @@ public final class SurvivalRules implements Listener {
         // Native crafting repairs remove enchantments; preserve identity, not free enchantment retention.
         for (var enchantment : repaired.getEnchantments().keySet()) repaired.removeEnchantment(enchantment);
         event.getInventory().setResult(repaired);
+    }
+
+    public boolean deniedArmorCraft(ItemStack result, boolean repair) {
+        return vanillaArmorCrafting && !repair && result != null && armorMaterial(result.getType())
+                && items.identify(result) == null;
+    }
+
+    public static boolean armorMaterial(Material material) {
+        String name = material.name();
+        return name.endsWith("_HELMET") || name.endsWith("_CHESTPLATE") || name.endsWith("_LEGGINGS")
+                || name.endsWith("_BOOTS") || name.endsWith("_ARMOR");
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void takeCraft(org.bukkit.event.inventory.CraftItemEvent event) {
+        if (deniedArmorCraft(event.getCurrentItem(), repairRecipe(event.getRecipe()))) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void automaticCraft(org.bukkit.event.block.CrafterCraftEvent event) {
+        if (deniedArmorCraft(event.getResult(), repairRecipe(event.getRecipe()))) event.setCancelled(true);
+    }
+
+    private boolean repairRecipe(org.bukkit.inventory.Recipe recipe) {
+        return recipe instanceof org.bukkit.Keyed keyed
+                && keyed.getKey().equals(org.bukkit.NamespacedKey.minecraft("repair_item"));
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void smith(org.bukkit.event.inventory.PrepareSmithingEvent event) {
+        if (deniedArmorCraft(event.getResult(), false)) event.setResult(null);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void takeSmith(org.bukkit.event.inventory.SmithItemEvent event) {
+        if (deniedArmorCraft(event.getCurrentItem(), false)) event.setCancelled(true);
     }
 
     public boolean disabledWorld(World world) {

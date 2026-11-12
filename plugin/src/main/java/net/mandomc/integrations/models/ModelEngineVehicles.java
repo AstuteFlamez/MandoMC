@@ -82,9 +82,10 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
                             });
         }
         if (model != null && e.isDriver()) {
+            model.stopSound();
             model.entity.setAI(true);
             model.entity.setGravity(true);
-            model.entity.setVelocity(new Vector(0, -.12, 0));
+            model.entity.setVelocity(new Vector(0, VehicleModels.grounded(model.entity) ? 0 : -.12, 0));
             model.active.getBone("body").ifPresent(b -> b.setManualAnimator(null));
             model.animate(false);
         }
@@ -106,6 +107,7 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
         private final ActiveModel active;
         private final Access access;
         private final MountControllerType controller;
+        private final Set<Player> soundListeners = new HashSet<>();
 
         Model(
                 LivingEntity entity,
@@ -120,6 +122,20 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
                     new MountControllerType((rider, mount) -> new Controller(rider, mount, this));
         }
 
+        private void stopSound() {
+            for (Player player : soundListeners) player.stopSound(definition.sound());
+            soundListeners.clear();
+        }
+
+        private void playSound(org.bukkit.Location location) {
+            for (Player player : location.getWorld().getPlayers()) {
+                if (player.getLocation().distanceSquared(location) <= 256) {
+                    player.playSound(location, definition.sound(), .7f, 1);
+                    soundListeners.add(player);
+                }
+            }
+        }
+
         private void animate(boolean mounted) {
             var handler = active.getAnimationHandler();
             handler.stopAnimation(mounted ? "dismount" : "mount");
@@ -128,23 +144,76 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
 
         @Override
         public boolean mount(Player player, Seat seat) {
+            return mount(player, seat, null);
+        }
+
+        @Override
+        public List<SeatStatus> seats() {
+            var manager = active.getMountManager().orElseThrow();
+            var result = new ArrayList<SeatStatus>();
+            result.add(new SeatStatus("pilot", Seat.PILOT, driver()));
+            for (Seat role : List.of(Seat.PASSENGER, Seat.GUNNER)) {
+                for (String id : role == Seat.GUNNER ? definition.gunners() : definition.passengers()) {
+                    var bone = manager.getSeat(id).orElse(null);
+                    Player occupant = manager.getPassengerSeatMap().entrySet().stream()
+                            .filter(entry -> entry.getValue() == bone && entry.getKey() instanceof Player)
+                            .map(entry -> (Player) entry.getKey()).findFirst().orElse(null);
+                    result.add(new SeatStatus(id, role, occupant));
+                }
+            }
+            return List.copyOf(result);
+        }
+
+        @Override
+        public boolean mount(Player player, Seat seat, String seatId) {
+            // Resolve an empty destination before releasing the current seat. Transfers stay
+            // within this model, and failed/cancelled destination mounts restore the old seat.
+            var snapshot = seats();
+            var target = snapshot.stream()
+                    .filter(s -> s.role() == seat && (seatId == null || seatId.equals(s.id())))
+                    .filter(s -> s.occupant() == null).findFirst().orElse(null);
+            if (target == null) return false;
+            var previous = snapshot.stream().filter(s -> player.equals(s.occupant())).findFirst().orElse(null);
+            if (previous != null) {
+                eject(player);
+                if (riders().contains(player)) return false;
+            }
+            boolean mounted = board(player, seat, target.id());
+            if (!mounted && previous != null) board(player, previous.role(), previous.id());
+            return mounted;
+        }
+
+        private boolean board(Player player, Seat seat, String seatId) {
             var seats = active.getMountManager().orElseThrow();
             boolean driver = seat == Seat.PILOT;
+            var allowed = seat == Seat.GUNNER ? definition.gunners() : definition.passengers();
+            if (!driver && seatId != null && !allowed.contains(seatId)) return false;
             boolean mounted =
                     driver
                             ? seats.mountDriver(player, controller)
-                            : seats.mountAvailable(
-                                    player,
-                                    seat == Seat.GUNNER
-                                            ? definition.gunners()
-                                            : definition.passengers(),
-                                    controller);
+                            : seatId != null
+                                    ? seats.mountPassenger(seatId, player, controller)
+                                    : seats.mountAvailable(player, allowed, controller);
             if (mounted && driver) {
                 entity.setAI(true);
                 entity.setGravity(!definition.aerial());
                 animate(true);
             }
             return mounted;
+        }
+
+        @Override
+        public org.bukkit.Location muzzle(String bone) {
+            return active.getBone(bone).map(b -> b.getLocation()).map(org.bukkit.Location::clone).orElse(null);
+        }
+
+        @Override
+        public Vector aim() {
+            var facing = entity.getLocation();
+            var pilot = driver();
+            facing.setPitch(pilot == null ? 0 : (float) Math.clamp(pilot.getEyeLocation().getPitch(),
+                    -definition.pitch(), definition.pitch()));
+            return facing.getDirection();
         }
 
         @Override
@@ -184,6 +253,7 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
 
         @Override
         public void remove() {
+            stopSound();
             models.remove(entity.getUniqueId());
             active.getMountManager()
                     .ifPresent(
@@ -210,6 +280,8 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
         @Override
         public void updateDriverMovement(MoveController controller, ActiveModel active) {
             if (!(getEntity() instanceof Player player) || !model.access.mayPilot(player)) {
+                model.stopSound();
+                soundTicks = 0;
                 controller.setVelocity(0, 0, 0);
                 return;
             }
@@ -225,9 +297,12 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
                                     input.isSneak(),
                                     eye.getYaw(),
                                     eye.getPitch()),
-                            controller.isOnGround(),
+                            VehicleModels.grounded(model.entity),
                             controller.getVelocity().getY());
             if (step.dismount()) {
+                motion.stop();
+                controller.setVelocity(0, 0, 0);
+                model.stopSound();
                 model.eject(player);
                 return;
             }
@@ -235,6 +310,8 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
             var to = from.clone().add(step.x(), step.y(), step.z());
             if (controller.isInWater() || !model.access.mayMove(from, to)) {
                 motion.stop();
+                model.stopSound();
+                soundTicks = 0;
                 controller.setVelocity(0, 0, 0);
                 return;
             }
@@ -256,8 +333,13 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
                             .rotateX((float) Math.toRadians(step.pitch()))
                             .rotateZ((float) Math.toRadians(step.roll()));
             }
-            if (--soundTicks <= 0 && !model.definition.sound().isBlank()) {
-                model.entity.getWorld().playSound(from, model.definition.sound(), .7f, 1);
+            boolean moving = step.x() * step.x() + step.z() * step.z() > .0001
+                    || (!VehicleModels.grounded(model.entity) && Math.abs(step.y()) > .01);
+            if (!moving) {
+                model.stopSound();
+                soundTicks = 0;
+            } else if (--soundTicks <= 0 && !model.definition.sound().isBlank()) {
+                model.playSound(from);
                 soundTicks = model.definition.soundTicks();
             }
         }

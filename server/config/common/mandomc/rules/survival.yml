@@ -4,7 +4,12 @@ disable-elytras: true
 disable-enchanting: true
 disable-potions: true
 disable-vanilla-weapons: true
+# Custom catalog armor and native crafting/anvil repairs remain available.
+disable-vanilla-armor-crafting: true
 disable-nether-and-end: true
 
 # All worlds and biomes; spawners, eggs, commands and custom summons remain available.
-disabled-natural-mobs: [SLIME]
+disabled-natural-mobs: [SLIME, HUSK, RABBIT, CAMEL, CAMEL_HUSK, PARCHED]
+
+# Paper pre-spawn blocks natural candidates before cavalry initialization.
+# New-chunk initial vanilla entities are suppressed; existing chunks and custom/command/breeding/spawner entities stay.

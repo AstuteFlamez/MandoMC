@@ -1,0 +1,150 @@
+{
+  "schema-version": 1,
+  "source": "Official Faithful 32x 26.1-june-2026 Fj5GKJnf",
+  "license": "src/faithful-license.txt",
+  "scope": "Native iron/Agrinium and redstone/Electrum presentation. Electrum replaces nonoxidizing redstone; lit/unlit ores share native texture aliases. Agrinium uses Faithful iron mineral clusters; Electrum uses gold clusters. The Electrum storage face is an original generated metal plate. Block states and placed shapes remain native.",
+  "textures": [
+    {
+      "target": "minecraft/textures/block/iron_ore.png",
+      "source": "assets/minecraft/textures/block/iron_ore.png",
+      "sourceSha256": "7ce1c6a83f766f6033c66c010ca299f41e7d8591cff86c3ebc1474a83cba85dd",
+      "palette": "agrinium",
+      "oreMask": true,
+      "softStoneShadows": true,
+      "recoloredPixels": 201,
+      "mineralHue": [
+        0.0,
+        0.18
+      ],
+      "shadowFloorLuma": null,
+      "outputSha256": "94c8f766b0893aa35d6d993bb18a44d0c2ff36d556b45a20dcbb59e70878ecc3"
+    },
+    {
+      "target": "minecraft/textures/block/deepslate_iron_ore.png",
+      "source": "assets/minecraft/textures/block/deepslate_iron_ore.png",
+      "sourceSha256": "495b1e8d4862758979f11b814fcc93630f3a2092a728ac99eb45243c2456cdd0",
+      "palette": "agrinium",
+      "oreMask": true,
+      "softStoneShadows": false,
+      "recoloredPixels": 201,
+      "mineralHue": [
+        0.0,
+        0.18
+      ],
+      "shadowFloorLuma": 80,
+      "outputSha256": "28c669797de5f061e1bcce21169177a4c949cfa049ae2a3608151dfd4b37476f"
+    },
+    {
+      "target": "minecraft/textures/block/iron_block.png",
+      "source": "assets/minecraft/textures/block/iron_block.png",
+      "sourceSha256": "ac2ebf4bf1641d2b2be299de9ea6f87f17eb15e0eb5f8ec44bcc54cab1880824",
+      "palette": "agrinium",
+      "oreMask": false,
+      "softStoneShadows": false,
+      "recoloredPixels": 1024,
+      "mineralHue": [
+        0.4,
+        0.61
+      ],
+      "shadowFloorLuma": null,
+      "outputSha256": "d3e43ef2edea2f7c3964dd889748216cb99d74ee3462e36ab04b297438cee385"
+    },
+    {
+      "target": "minecraft/textures/block/raw_iron_block.png",
+      "source": "assets/minecraft/textures/block/raw_iron_block.png",
+      "sourceSha256": "5df60641a8c635d17f82069e0f1a1f327d4c914da43bca711225a7c5bc1c141c",
+      "palette": "agrinium",
+      "oreMask": false,
+      "softStoneShadows": false,
+      "recoloredPixels": 1024,
+      "mineralHue": [
+        0.4,
+        0.61
+      ],
+      "shadowFloorLuma": null,
+      "outputSha256": "d17fe8cbfff0dde75d6e06a4bc9ad3f454feec9a1150d9900e9428ca9111fbfa"
+    },
+    {
+      "target": "minecraft/textures/item/iron_ingot.png",
+      "localSource": "mandomc/textures/item/legacy/metals/ingots/agrinium.png",
+      "outputSha256": "8d8ac6e367282e20843c9cd0aa3b39b669161120ccdbe547db513f6389b956a7"
+    },
+    {
+      "target": "minecraft/textures/item/raw_iron.png",
+      "localSource": "mandomc/textures/item/legacy/metals/scraps/agrinium_scrap.png",
+      "outputSha256": "1ea2fdfa4eb89cd5bd73902e1f18922a21dee82e7361300cc4df5034e960531b"
+    },
+    {
+      "target": "minecraft/textures/item/iron_nugget.png",
+      "source": "assets/minecraft/textures/item/iron_nugget.png",
+      "sourceSha256": "44a2beff50ec960711025f63e97a20eb02724ef6aca96c49447046fdada84371",
+      "palette": "agrinium",
+      "oreMask": false,
+      "softStoneShadows": false,
+      "recoloredPixels": 1024,
+      "mineralHue": [
+        0.4,
+        0.61
+      ],
+      "shadowFloorLuma": null,
+      "outputSha256": "ff6fbfe4ad9969674912eeb6864b87d6f7f54008396a77a9000219176f4de4a2"
+    },
+    {
+      "target": "minecraft/textures/block/redstone_ore.png",
+      "source": "assets/minecraft/textures/block/gold_ore.png",
+      "sourceSha256": "bb2004bc8e9d9a41ebc5808173c744d136cdfe2dbbcc60aa19c0e812c1b42b52",
+      "palette": "electrum",
+      "oreMask": true,
+      "softStoneShadows": true,
+      "recoloredPixels": 242,
+      "mineralHue": [
+        0.05,
+        0.23
+      ],
+      "shadowFloorLuma": 96,
+      "outputSha256": "933f736f2b19198bd3faa8a2390b25e7059e31c04fe6ba3a92d92b0f08daa3f4"
+    },
+    {
+      "target": "minecraft/textures/block/deepslate_redstone_ore.png",
+      "source": "assets/minecraft/textures/block/deepslate_gold_ore.png",
+      "sourceSha256": "a9f124fed608b33cff600200dfa6a5799aa926381beb7e1d6c8ebfcd63bad674",
+      "palette": "electrum",
+      "oreMask": true,
+      "softStoneShadows": false,
+      "recoloredPixels": 242,
+      "mineralHue": [
+        0.05,
+        0.23
+      ],
+      "shadowFloorLuma": 80,
+      "outputSha256": "042acbd4a7f9b4c88457bba4dbb18afc7b476b0ce836e1fe34939c137aa2978a"
+    },
+    {
+      "target": "minecraft/textures/block/redstone_block.png",
+      "generatedSource": "art-sources/electrum-block-32.png",
+      "sourceSha256": "c7f1e908551dfd07f275c44cf4c7923ca29c338e3f0e07bb1a594bee4a91d136",
+      "outputSha256": "c7f1e908551dfd07f275c44cf4c7923ca29c338e3f0e07bb1a594bee4a91d136"
+    },
+    {
+      "target": "minecraft/textures/item/redstone.png",
+      "localSource": "mandomc/textures/item/legacy/metals/ingots/electrum.png",
+      "outputSha256": "a63707f74a4ad2e703ea4410755d51ce46b4bd11da1136ec15d87b68bef0c741"
+    },
+    {
+      "target": "mandomc/textures/item/tools/agrinium_pickaxe.png",
+      "recoloredLocalSource": "mandomc/textures/item/legacy/tools/durasteel_pickaxe.png",
+      "palette": "agrinium",
+      "recoloredPixels": 138,
+      "sourceSha256": "41f95bfbad45244427bbd6a20bbcc75668c4897cbc4bc5a7d502d675faa77646",
+      "outputSha256": "97a79c1a52366db091636169c4f2abe4b39b7f05e3960292af80917186144693"
+    },
+    {
+      "target": "mandomc/textures/item/tools/agrinium_shovel.png",
+      "recoloredLocalSource": "mandomc/textures/item/legacy/tools/durasteel_shovel.png",
+      "palette": "agrinium",
+      "recoloredPixels": 215,
+      "sourceSha256": "d38c8ec37f53c8f35e2f1c3cdca33b6604ca00c92d61dde22b9b6f4fee154fd8",
+      "outputSha256": "55c0e392275186a6edf4b6d2e48aaeafdca62ec8833ff44d463957911fa73442"
+    }
+  ]
+}

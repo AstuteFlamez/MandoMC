@@ -23,7 +23,7 @@ The first join grants a stone pickaxe, axe, shovel and hoe, 64 steak, four Deser
 The first friends playtest should bring the in-scope gameplay systems together in a rough, integrated version. The development slices below are incremental building and checking steps toward that target. The precise content depth for each system still needs agreement; force powers and resource planets are excluded for now.
 
 ## Proposed everyday loop
-Establish a base, gather supplies, prepare equipment, venture out, fight or complete an activity, return with loot, and fund the next expedition. Building gives the group a home and stockpile. Credits come from a mixture of resource selling and activity rewards. Specific equipment variants, recipes and prices still need decisions.
+Establish a base, gather supplies, prepare equipment, venture out, fight or complete an activity, return with loot, and fund the next expedition. Building gives the group a home and stockpile. Equipment acquisition is crafting-first. NPC equipment shops and resource-selling shops are excluded. Existing credits/balances/payments remain; player-to-player auction-house trading is planned, with its rules and currency integration undecided. Specific unapproved recipes and event rewards still need decisions.
 
 Resource planets are deferred. The initial supply loop must work with ordinary survival resources and in-scope activities. Revisit special resource planets only when the user brings them back into scope.
 
@@ -38,7 +38,7 @@ Resource planets are deferred. The initial supply loop must work with ordinary s
 Use [the feature brief](templates/feature.md). Record unresolved gameplay choices as unresolved; infrastructure work must not silently decide them.
 
 ## Proposed development slices
-The [build order](build-order.md) proposes: arrival/protection → combat → KOTH → Jabba → vehicles → crafting/progression → shops → later raids (clan integration deferred). These are small internal checkpoints toward the integrated friends playtest, not separate launch promises. Both KOTH and Jabba remain in scope.
+The [build order](build-order.md) proposes: arrival/protection → combat → KOTH → Jabba → vehicles → crafting/progression → remaining equipment recipes → later raids (clan integration deferred). These are small internal checkpoints toward the integrated friends playtest, not separate launch promises. Both KOTH and Jabba remain in scope.
 
 Record pairwise kills when combat lands; enable explosive raiding only after claim and damage permissions have been verified. Begin with the [arrival/protection brief](features/arrival-and-protection.md). The order is an advisor recommendation awaiting review, not a new accepted gameplay decision.
 
@@ -49,18 +49,18 @@ Record pairwise kills when combat lands; enable explosive raiding only after cla
 Clans naming is accepted; clan integration is deferred. Travel beyond the implemented spawn/survival routes remains open. Combat tagging and initial equipment quantities are defined in the combat-basics brief.
 
 ## Vehicle baseline
-Aircraft carry players in the first integrated playtest; built-in aerial weapons remain deferred. Speeders and aircraft are initially bought with credits. The long-term direction is crafting for all equipment, including blasters and vehicles. The accepted initial shop/crafting mix remains the first playable version; the later transition must preserve item identities and existing ownership.
+Aircraft carry players in the first integrated playtest; recovered built-in cannons use their configured ammunition. Speeders, aircraft, blasters and ammunition are part of the current all-equipment crafting direction. Preserve stable item identities and existing ownership as recipes land; do not add an initial purchase phase.
 
 Only the player who placed a vehicle can pilot it. Membership in the same group does not grant pilot access. Anyone, including an opposing player, may use an available passenger seat. The U-wing currently has one open-access gunner seat; it is the only role allowed to fire held blasters. Its actual passenger seats will be added later. Pilots and passengers cannot fire held blasters, and menus hide seat roles absent from the vehicle.
 
 Outside protected areas, enemies may destroy vehicles but cannot steal them by taking the pilot seat. Destruction permanently removes the vehicle; the player must obtain another. The placing player can pack a vehicle back into an inventory item only when it is stationary, empty and out of combat. Packing must not repair or duplicate it for free. Damage permission, piloting and other seat access are separate rules; do not infer one from another.
 
 ## Accepted acquisition loop
-Sell ordinary survival resources to buy basic blasters and ammunition; craft basic armor from survival materials; earn credits and rare components from KOTH/Jabba; use those components to craft lightsabers and advanced equipment.
+Gather ordinary survival materials and craft equipment, including armor, blasters, ammunition and vehicles. Existing event components/loot remain alternate acquisition routes where implemented. Finished lightsaber recipes remain deferred until that implementation is ready.
 
-The user accepted this loop on 2026-11-05. It also supplies the normal route for replacing lost equipment. Specific recipes, equipment variants, prices, drop rates and grind duration remain open. Resource planets are not required.
+The user revised acquisition on 2026-11-09: all equipment should have recipes. Crafting also supplies the normal route for replacing lost equipment. Remaining recipes, equipment variants, drop rates and grind duration require approval. Resource planets are not required.
 
-Longer term, all equipment acquisition shifts toward crafting, including blasters and vehicles. This is a later progression change, not a prerequisite for the initial integrated playtest.
+No NPC/server equipment shops or resource-selling shops are planned. A player-to-player auction house replaces shops as future trading; rules, fees, listing duration, implementation choice and currency details are undecided. Existing credits, ranks and payment commands remain.
 
 ## Saber baseline and equipment power
 The user uses shield-based models for lightsabers, taking advantage of shield blocking. Their earlier implementation included reflection and saber throwing. Recover that approach as the starting point; a new timed-parry requirement has not been accepted. Separate Force powers remain deferred.
@@ -117,10 +117,13 @@ Use existing Tusken Raider, bantha, dewback and massiff models in Desert, Badlan
 
 Tusken patrols have 2–4 ranged/melee raiders, 0–2 banthas and 0–2 massiffs, with six total at most. Separate wildlife groups contain 1–3 of exactly one species: bantha, dewback or massiff. Natural vanilla spawns are replaced within the selected biomes, preserving player breeding/spawners and existing animals. Custom wildlife cannot use vanilla pig feeding, saddling, breeding or mounting. Banthas/dewbacks wander; Tuskens/massiffs are hostile.
 
-The first cycler-shooting Tusken and bounded spawning are implemented. Playtest density/combat before the drop pass: cycler rifle, bantha hide and species-specific materials. Rates, quantities and crafting uses are undecided. Saber blocking/reflection spends regenerating durability at 5× incoming damage. Throws require and spend 75% over one second. Zero charge stuns all saber actions; recharge starts after five seconds without charge use or positive damage dealt/taken, then restores 10% per second. Exhausted actions say “You are too tired to …”. Balance and rendered feedback can now be tested against ranged mobs. See [the mob brief](features/sandy-biome-mobs.md) for parameters and verification.
+The first cycler-shooting Tusken and bounded spawning are implemented. Playtest density/combat before the drop pass: cycler rifle, bantha hide and species-specific materials. Rates, quantities and crafting uses are undecided. Saber blocking/reflection spends regenerating durability at 5× incoming damage. Throws require and spend 51 of 100 charge over one second (accepted November 10). Zero charge stuns all saber actions; recharge starts after five seconds without charge use or positive damage dealt/taken, then restores 10% per second. Exhausted actions say “You are too tired to …”. The user accepted sabers as complete on November 10. See [the mob brief](features/sandy-biome-mobs.md) for parameters and verification.
 
 ## Tatooine test access (2026-11-09)
 The user requested importing legacy Tatooine before implementing Boba, to test flight inside his actual dungeon room. `/warp tatooine` is now an additional combat-enabled adventure destination with map protection and the shared travel countdown/combat gate. Dungeon scheduling and encounter placement remain deferred. The arrival is now the user-selected palace entrance, preserving precise position and camera angles. Legacy Boba and his EE-3 are restored for manual room testing before boss refinement.
 
 ## Jabba operation flow (2026-11-09)
 The latest user decision supersedes earlier chest-gated proposals: spawn every cache at event start, open each next door on the final owned room enemy's death, and remove remaining caches at event end. Caches use legacy one-click randomized loot and disappear when claimed. After Rancor dies the palace stays open until the scheduled end. Nearby palace players receive `Room [x] unlocked » blast doors opening`. Native MandoMC gates replace BigDoors.
+
+## Accepted progression follow-up (2026-11-09)
+The user delegated finished-saber recipes and a conventional player auction house, then required the auction implementation inside MandoMC with no additional plugin. Native `/ah` uses existing credits, eight 48-hour fixed-price listings, no fees/tax, confirmation and permanent item claims. All themed ores yield catalog scraps before ingot refining. Four-metal storage has visible reciprocal 9:1 conversions; iron utility recipes use Agrinium Sheets. Blaster/ammo recipes and final-world generation are explicitly deferred. These decisions supersede the earlier undecided auction/saber holds above. See the ordered progression queue for verification and rollout state.

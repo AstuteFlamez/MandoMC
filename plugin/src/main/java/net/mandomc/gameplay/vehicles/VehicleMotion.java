@@ -23,7 +23,7 @@ public final class VehicleMotion {
         if (cooldown > 0) cooldown--;
         boolean forward = input.forward > 0;
         if (d.aerial()) {
-            if (input.forward < 0) {
+            if (input.forward < 0 || input.sneak) {
                 thrust = false;
                 boostTicks = 0;
             } else if (forward && !previousForward) {
@@ -44,11 +44,13 @@ public final class VehicleMotion {
                         speed,
                         target,
                         Math.abs(target) > Math.abs(speed) ? d.acceleration() : d.braking());
-        float pitch = d.aerial() ? (float) Math.clamp(input.pitch, -d.pitch(), d.pitch()) : 0;
+        float pitch = d.aerial() && !(ground && speed == 0) ? (float) Math.clamp(input.pitch, -d.pitch(), d.pitch()) : 0;
         double yawRad = Math.toRadians(input.yaw), pitchRad = Math.toRadians(pitch);
         double x = -Math.sin(yawRad) * Math.cos(pitchRad) * speed;
         double z = Math.cos(yawRad) * Math.cos(pitchRad) * speed;
-        double y = d.aerial() ? -Math.sin(pitchRad) * speed : verticalVelocity;
+        // A small downward contact probe keeps a parked aircraft grounded instead of hovering
+        // with a stale native ground flag. Jump still provides explicit vertical takeoff.
+        double y = d.aerial() ? (ground && speed == 0 ? -.04 : -Math.sin(pitchRad) * speed) : verticalVelocity;
         if (d.aerial()) {
             if (input.jump) y += d.speed() * .4;
             if (input.sneak) y -= d.speed() * .4;

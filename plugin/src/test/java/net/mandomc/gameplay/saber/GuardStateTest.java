@@ -39,30 +39,30 @@ public class GuardStateTest {
         for (int tick = 1; tick < 80; tick++) g.cool(tick, s);
         assertTrue(g.disabled(79));assertFalse(g.disabled(80));assertEquals(60.5, g.heat(), 0);
     }
-    @Test public void fullThrowDrainsToQuarterChargeThenWaitsFiveSecondsAndRepairs() {
+    @Test public void fullThrowSpends51ChargeThenWaitsFiveSecondsAndRepairs() {
         var g = new GuardState();var s = settings();g.thrown(s);
         assertTrue(g.recovering());assertEquals(0, g.heat(), 0);
         for (int tick = 1; tick <= 20; tick++) {
-            g.cool(tick, s);assertEquals(tick * 3.75, g.heat(), 1e-9);
+            g.cool(tick, s);assertEquals(tick * 2.55, g.heat(), 1e-9);
         }
         assertEquals(100, s.recoveryDelay());
         for (int tick = 21; tick < 120; tick++) g.cool(tick, s);
-        assertEquals(75, g.heat(), 0);assertFalse(g.canThrow(119, s));
-        g.cool(120, s);assertEquals(74.5, g.heat(), 0);
-        for (int tick = 121; tick <= 218; tick++) g.cool(tick, s);
-        assertFalse(g.canThrow(218, s));g.cool(219, s);assertTrue(g.canThrow(219, s));
-        for (int tick = 220; tick < 300; tick++) g.cool(tick, s);
+        assertEquals(51, g.heat(), 1e-9);assertFalse(g.canThrow(119, s));
+        g.cool(120, s);assertEquals(50.5, g.heat(), 1e-9);
+        for (int tick = 121; tick <= 122; tick++) g.cool(tick, s);
+        assertFalse(g.canThrow(122, s));g.cool(123, s);assertTrue(g.canThrow(123, s));
+        for (int tick = 124; tick < 230; tick++) g.cool(tick, s);
         assertEquals(0, g.heat(), 0);assertFalse(g.recovering());
     }
     @Test public void throwRequiresItsEntireCostIncludingPreviouslyReservedDrain() {
         var g = new GuardState();var s = settings();
-        assertTrue(g.canThrow(0, s));g.hit(0, s, 5.02);assertFalse(g.canThrow(0, s));
+        assertTrue(g.canThrow(0, s));g.hit(0, s, 9.82);assertFalse(g.canThrow(0, s));
         g.cool(100, s);assertTrue(g.canThrow(100, s));
         g.thrown(s);assertFalse(g.canThrow(100, s));
-        var exact = new GuardState();exact.hit(0, s, 5);assertTrue(exact.canThrow(0, s));
+        var exact = new GuardState();exact.hit(0, s, 9.8);assertTrue(exact.canThrow(0, s));
         exact.thrown(s);
         for (int tick = 1; tick <= 20; tick++) exact.cool(tick, s);
-        assertEquals(100, exact.heat(), 0);assertTrue(exact.disabled(20));
+        assertEquals(100, exact.heat(), 1e-9);assertTrue(exact.disabled(20));
     }
     @Test public void combatActivityRestartsTheFullQuietWindowWithoutSpendingCharge() {
         var g = new GuardState();var s = settings();g.hit(0, s, 6);
@@ -75,14 +75,14 @@ public class GuardStateTest {
     @Test public void reflectionAfterThrowAddsScaledCostAndRestartsQuietTime() {
         var g = new GuardState();var s = settings();g.thrown(s);
         for (int tick = 1; tick <= 20; tick++) g.cool(tick, s);
-        g.hit(40, s, 4);assertEquals(95, g.heat(), 0);
-        g.cool(139, s);assertEquals(95, g.heat(), 0);
-        g.cool(140, s);assertEquals(94.5, g.heat(), 0);
+        g.hit(40, s, 4);assertEquals(71, g.heat(), 1e-9);
+        g.cool(139, s);assertEquals(71, g.heat(), 1e-9);
+        g.cool(140, s);assertEquals(70.5, g.heat(), 1e-9);
     }
     @Test public void additiveDefaultsAndInvalidTuningAreValidated() {
         var c = config();c.set("throw-cost-percent", null);c.set("throw-drain-ticks", null);
         c.set("guard-damage-multiplier", null);
-        assertEquals(75, SaberSettings.read(c).throwCostPercent(), 0);
+        assertEquals(51, SaberSettings.read(c).throwCostPercent(), 0);
         assertEquals(20, SaberSettings.read(c).throwDrainTicks());
         assertEquals(5, SaberSettings.read(c).damageMultiplier(), 0);
         c.set("guard-damage-multiplier", 2);assertEquals(2, SaberSettings.read(c).damageMultiplier(), 0);

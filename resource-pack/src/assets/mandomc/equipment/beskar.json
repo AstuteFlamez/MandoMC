@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "mandomc:beskar"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "mandomc:beskar"
+      }
+    ]
+  }
+}

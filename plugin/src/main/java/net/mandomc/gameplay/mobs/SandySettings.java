@@ -7,7 +7,8 @@ import org.bukkit.configuration.ConfigurationSection;
 public record SandySettings(String world, Set<String> biomes, Set<String> ground, int minLevel, int maxLevel,
         int raidersMin, int raidersMax, int banthasMax, int massiffsMax, int wildlifeMin, int wildlifeMax,
         int groupCap, int localCap, int worldCap, int radius, int interval, double chance,
-        int minDistance, int maxDistance, int separation, int attempts, double rifleBase, double riflePerLevel) {
+        int minDistance, int maxDistance, int separation, int attempts, double rifleBase, double riflePerLevel,
+        double patrolFrequencyMultiplier, int patrolDisengageSeconds) {
     public static SandySettings read(ConfigurationSection c) {
         if (c.getInt("schema-version") != 1) throw new IllegalArgumentException("mobs/spawning.yml: expected schema-version 1");
         var result = new SandySettings(c.getString("world", "minecraft:overworld"),
@@ -20,7 +21,8 @@ public record SandySettings(String world, Set<String> biomes, Set<String> ground
                 c.getInt("population.radius-blocks"), c.getInt("spawn.interval-seconds"),
                 c.getDouble("spawn.chance"), c.getInt("spawn.minimum-player-distance"),
                 c.getInt("spawn.maximum-player-distance"), c.getInt("spawn.encounter-separation"),
-                c.getInt("spawn.attempts"), c.getDouble("cycler.mob-base-damage"), c.getDouble("cycler.damage-per-level"));
+                c.getInt("spawn.attempts"), c.getDouble("cycler.mob-base-damage"), c.getDouble("cycler.damage-per-level"),
+                c.getDouble("spawn.patrol-frequency-multiplier", 3), c.getInt("patrol.disengage-seconds", 30));
         if (result.world == null || result.biomes.isEmpty() || result.ground.isEmpty()
                 || result.minLevel < 1 || result.maxLevel < result.minLevel || result.maxLevel > 100
                 || result.raidersMin < 2 || result.raidersMax < result.raidersMin
@@ -31,6 +33,9 @@ public record SandySettings(String world, Set<String> biomes, Set<String> ground
                 || result.localCap < result.groupCap || result.worldCap < result.localCap || result.worldCap > 256
                 || result.radius < 32 || result.radius > 256 || result.interval < 5 || result.interval > 3600
                 || !Double.isFinite(result.chance) || result.chance < 0 || result.chance > 1
+                || !Double.isFinite(result.patrolFrequencyMultiplier)
+                || result.patrolFrequencyMultiplier < 0 || result.patrolFrequencyMultiplier > 16
+                || result.patrolDisengageSeconds < 5 || result.patrolDisengageSeconds > 600
                 || result.minDistance < 24 || result.maxDistance <= result.minDistance || result.maxDistance > 128
                 || result.separation < 16 || result.separation > result.radius
                 || result.attempts < 1 || result.attempts > 32
@@ -44,4 +49,7 @@ public record SandySettings(String world, Set<String> biomes, Set<String> ground
     public double rifleDamage(int level) {
         return rifleBase + (Math.clamp(level, minLevel, maxLevel) - 1) * riflePerLevel;
     }
+
+    public double patrolChance() { return Math.min(1, chance / 4 * patrolFrequencyMultiplier); }
+    public double wildlifeChance() { return chance * 3 / 4; }
 }
