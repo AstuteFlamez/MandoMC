@@ -5,9 +5,8 @@ import java.util.List;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
+import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.mandomc.integrations.regions.SaberProtection;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -15,9 +14,6 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.World;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,7 +33,7 @@ public final class KothEvent implements ManagedEvent, Listener {
     private final ConfigurationSection language;
     private final String name;
     private final CaptureState capture = new CaptureState();
-    private BossBar bar;
+    private final Map<Player,BossBar> bars = new LinkedHashMap<>();
     private World world;
     private boolean running;
     private int age;
@@ -49,7 +45,17 @@ public final class KothEvent implements ManagedEvent, Listener {
         return Bukkit.getServicesManager().load(net.mandomc.gameplay.clans.ClanService.class);
     }
     private String contestant(Player player) { return clans()==null?player.getUniqueId().toString():clans().contestant(player); }
-    private String contestantName(Player player) { return clans()==null?player.getName():clans().contestantName(player); }
+    private Component contestantName(Player player, Player viewer) {
+        if (player == null) return Component.empty();
+        var service = clans();
+        return KothPresentation.name(service == null ? null : service.member(player),
+                service == null || viewer == null ? null : service.member(viewer),
+                service == null ? null : service.state(), player.displayName(), System.currentTimeMillis());
+    }
+    private void announce(String key, Player holder, String recipient) {
+        var template = KothPresentation.template(language.getString(key), seconds(), recipient, true);
+        KothPresentation.broadcast(template, viewer -> contestantName(holder, viewer), contestantName(holder, null));
+    }
     public KothEvent(JavaPlugin plugin, ConfigurationSection config) {
         this.plugin=plugin;settings=KothSettings.read(config);name=config.getString("display-name", "King of the Hill");
         language=config.getConfigurationSection("messages");
@@ -80,30 +86,34 @@ public final class KothEvent implements ManagedEvent, Listener {
                 throw new IllegalArgumentException("events/koth.yml: reward crate/service/message unavailable");
         }
         running=true;age=0;winner=null;capture.reset();
-        bar=Bukkit.createBossBar("",BarColor.BLUE,BarStyle.SOLID);bar.setProgress(0);
+
         plugin.getServer().getPluginManager().registerEvents(this,plugin);
-        Bukkit.broadcast(text("start", ""));
+        announce("start", null, "");
     }
     public void tick() { sample(world.getPlayers()); }
     /** Takes a main-thread player snapshot; event time advances only with server ticks. */
     public void sample(Collection<? extends Player> players) {
         if (!running) return;
         age+=10;
-        if (age>=settings.maximumTicks()) {Bukkit.broadcast(text("timeout",""));stop(false);return;}
+        if (age>=settings.maximumTicks()) {announce("timeout",null,"");stop(false);return;}
         Map<String,Player> present=new LinkedHashMap<>();
         participants.clear();
         var visible=new java.util.HashSet<Player>();
         for (Player player:players) {
             if (!eligible(player) || !player.getWorld().equals(world)) continue;
             visible.add(player);
-            if (!bar.getPlayers().contains(player)) bar.addPlayer(player);
+            bars.computeIfAbsent(player, viewer -> {
+                var bar = BossBar.bossBar(Component.empty(), 0, BossBar.Color.BLUE, BossBar.Overlay.PROGRESS);
+                viewer.showBossBar(bar);
+                return bar;
+            });
             if (inside(player.getLocation())) {
                 String key=contestant(player);
                 present.putIfAbsent(key,player);
                 participants.computeIfAbsent(key,k->new java.util.ArrayList<>()).add(player);
             }
         }
-        for (Player viewer:List.copyOf(bar.getPlayers())) if (!visible.contains(viewer)) bar.removePlayer(viewer);
+        for (Player viewer:List.copyOf(bars.keySet())) if (!visible.contains(viewer)) viewer.hideBossBar(bars.remove(viewer));
         updateCapture(present);
     }
     /** Applies an already eligible contestant snapshot; keeps group resolution outside the capture rule. */
@@ -112,12 +122,14 @@ public final class KothEvent implements ManagedEvent, Listener {
         String previous=capture.holder();
         String completed=capture.update(present.keySet(),10,settings.captureTicks());
         String holder=capture.holder();
-        if (holder!=null && !holder.equals(previous)) Bukkit.broadcast(text("capturing",contestantName(present.get(holder))));
+        if (holder!=null && !holder.equals(previous)) announce("capturing",present.get(holder),"");
         String key=holder!=null?"progress":present.size()>1?"contested":"waiting";
-        String holderName=holder==null?"":contestantName(present.get(holder));
-        bar.setTitle(net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection().serialize(text(key,holderName)));
-        bar.setColor(holder!=null?BarColor.GREEN:present.size()>1?BarColor.RED:BarColor.BLUE);
-        bar.setProgress(Math.min(1,(double)capture.ticks()/settings.captureTicks()));
+        var template = KothPresentation.template(language.getString(key), seconds(), "", false);
+        for (var entry : bars.entrySet()) {
+            entry.getValue().name(KothPresentation.render(template, contestantName(holder == null ? null : present.get(holder), entry.getKey())));
+            entry.getValue().color(holder!=null?BossBar.Color.GREEN:present.size()>1?BossBar.Color.RED:BossBar.Color.BLUE);
+            entry.getValue().progress((float)Math.min(1,(double)capture.ticks()/settings.captureTicks()));
+        }
         for (int i=0;i<20;i++) {
             double angle=Math.PI*2*i/20;
             world.spawnParticle(Particle.HAPPY_VILLAGER,settings.x()+Math.cos(angle)*settings.radius(),settings.y()+.15,
@@ -125,7 +137,7 @@ public final class KothEvent implements ManagedEvent, Listener {
         }
         if (completed!=null) {
             winner=UUID.fromString(completed);
-            String winningName=contestantName(present.get(completed));
+            Player winningPlayer=present.get(completed);
             if(rewards) {
                 var eligible=participants.getOrDefault(completed,List.of(present.get(completed))).stream()
                         .filter(this::eligible).filter(p->inside(p.getLocation())&&completed.equals(contestant(p))).toList();
@@ -136,9 +148,8 @@ public final class KothEvent implements ManagedEvent, Listener {
                 stop(false);
                 crates.enqueueKey(recipient,rewardCrate,1);
                 recipient.saveData();
-                Bukkit.broadcast(MiniMessage.miniMessage().deserialize(language.getString("reward"),
-                        Placeholder.unparsed("clan",winningName),Placeholder.unparsed("recipient",recipient.getName())));
-            } else Bukkit.broadcast(text("winner",winningName));
+                announce("reward",winningPlayer,recipient.getName());
+            } else announce("winner",winningPlayer,"");
             world.spawnParticle(Particle.END_ROD,settings.x(),settings.y()+1,settings.z(),40,.5,1,.5,.05);
             // No chest/commands/economy mutation: reward selection is explicitly deferred.
             stop(false);
@@ -154,9 +165,8 @@ public final class KothEvent implements ManagedEvent, Listener {
     private boolean inside(Location location) {
         return location.getWorld().equals(world) && settings.inside(location.getX(),location.getY(),location.getZ());
     }
-    private Component text(String key,String player) {
-        return MiniMessage.miniMessage().deserialize(language.getString(key),Placeholder.unparsed("player",player),
-                Placeholder.unparsed("seconds",Integer.toString(Math.max(0,(settings.captureTicks()-capture.ticks()+19)/20))));
+    private int seconds() {
+        return Math.max(0,(settings.captureTicks()-capture.ticks()+19)/20);
     }
     private void departed(Player p) {
         if(!contestant(p).equals(capture.holder()))return;
@@ -175,8 +185,8 @@ public final class KothEvent implements ManagedEvent, Listener {
     @EventHandler public void death(PlayerDeathEvent e) {departed(e.getEntity());}
     public void stop(boolean announce) {
         boolean wasRunning=running;running=false;capture.reset();HandlerList.unregisterAll(this);
-        if (bar!=null) {bar.removeAll();bar=null;}
+        bars.forEach(Player::hideBossBar);bars.clear();
         participants.clear();
-        if (announce && wasRunning) Bukkit.broadcast(text("stopped",""));
+        if (announce && wasRunning) announce("stopped",null,"");
     }
 }
