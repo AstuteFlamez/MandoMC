@@ -96,11 +96,11 @@ worlds:
     pvp: true
     difficulty: normal
     spawn:
-      x: -125.5
+      x: -122.95567934671374
       y: 70.0
-      z: -118.5
-      yaw: 180.0
-      pitch: 0.0
+      z: -118.82338196932402
+      yaw: 5.0999756
+      pitch: -0.90000015
   mandalore:
     key: minecraft:mandalore_review
     aliases:
