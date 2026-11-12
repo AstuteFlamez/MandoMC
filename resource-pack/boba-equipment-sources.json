@@ -23,7 +23,7 @@
   "flamethrower": {
     "tool": "built-in image_gen",
     "prompt": "Use case: stylized-concept. Asset type: Minecraft 32 by 32 pixel-art inventory item sprite, original Mandalorian wrist flamethrower, Boba Fett palette. Create ONE isolated compact worn olive-green armored gauntlet / hand-held flamethrower, diagonal from lower left to upper right, dark gunmetal nozzle at upper right, small red fuel canister and brass piping, a few orange pixels at nozzle. Crisp square pixel clusters using a logical 32x32 pixel grid, no anti-aliasing, no text, no border, no background or shadow, actual transparent background. The sprite must read clearly at 32x32. Olive green, muted burgundy, gray metal, tiny amber indicators. Fill 26x26 of the logical grid with transparent padding. No hand, person or scenery. Deliver bitmap suitable for exact nearest-neighbor reduction to 32x32.",
-    "processing": "Nearest-neighbor reduction to 32x32 with Java ImageIO; generated transparency preserved.",
+    "processing": "Native 32x32 editable pixel grid: 13 opaque colors plus transparency, broad silhouettes and contiguous shading. No high-resolution reduction in the current texture.",
     "destination": "assets/mandomc/textures/item/equipment/boba_flamethrower.png",
     "revisions": [
       {
@@ -32,7 +32,14 @@
         "prompt": "Edit target: attached flamethrower item sprite. Preserve its diagonal silhouette, gauntlet shape, olive green shell, burgundy canister, brass tube, dark nozzle and tiny orange flame. Refine it as a polished human-authored-looking Minecraft inventory sprite designed from the outset on EXACTLY 32 by 32 pixels. The current sprite looks chalky and muddy: replace its scattered gray flecks and broken highlights with clean contiguous pixel clusters and a small cohesive palette (about 12-16 colors). Smooth readable curved silhouette using deliberate pixel stair steps. Rich warm olive midtones, deep green shadows, restrained golden highlights; clean metal edges and subtly rounded gauntlet surfaces. One consistent upper-left light source. No dithering, no random texture, no grain, no pastel chalk, no blurry antialiasing, no thin noisy scratches. Simplify details that cannot read at 32px. Main request is cleaner, smoother, organic pixel craftsmanship while keeping the same overall shape. Transparent background, transparent padding, no text, no extra objects. Deliver actual 32x32 PNG if possible; otherwise render an EXACT 32x32 logical grid as uniformly enlarged square pixels with no subpixel detail at all, each logical pixel completely solid. Do not make a high-resolution illustration with small details.",
         "source": "resource-pack/artwork/boba_flamethrower.pixels.json",
         "processing": "Edited original 32x32 silhouette directly with 16-entry RGBA palette (15 opaque colors plus transparency), solid alpha, contiguous highlight/shadow clusters; no high-resolution reduction. scripts/render-boba-flamethrower.py renders the exact native grid."
+      },
+      {
+        "reason": "User requested designing around 32x32 limits and removing details that cannot read at that size.",
+        "method": "Edited the existing native pixel-grid source directly. Simplified to three dominant forms: green gauntlet, red fuel tank, dark barrel; one substantial cuff band and compact flame. Removed hoses, tiny fittings, indicator lights, broken trim and side-panel accents.",
+        "source": "resource-pack/artwork/boba_flamethrower.pixels.json",
+        "processing": "Rendered directly at 32x32 with scripts/render-boba-flamethrower.py; enlargement is preview-only."
       }
-    ]
+    ],
+    "initialProcessing": "Nearest-neighbor reduction to 32x32 with Java ImageIO; generated transparency preserved."
   }
 }

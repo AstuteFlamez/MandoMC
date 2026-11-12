@@ -30,7 +30,7 @@ Settings: `equipment/boba.yml`; organized runtime overrides: `server/config/comm
 - Flame range nine blocks, burst twenty ticks, emission every two ticks, projectile speed 0.5 blocks/tick, contact radius 0.5 blocks, one base health point per target per ten ticks, 100 burn ticks, sixty-tick/three-second cooldown. Native armor/immunity may reduce actual health loss. Packet travel can continue up to eighteen ticks after the last emission.
 
 ## Assets
-- `resource-pack/src/assets/mandomc/textures/item/equipment/boba_flamethrower.png`: original transparent 32×32 RGBA PNG, original built-in image_gen artwork, refined directly on an editable native 32×32 grid with 15 solid colors plus transparency. Reproduce with `scripts/render-boba-flamethrower.py`; source: `resource-pack/artwork/boba_flamethrower.pixels.json`. Full prompt/provenance: `resource-pack/boba-equipment-sources.json`.
+- `resource-pack/src/assets/mandomc/textures/item/equipment/boba_flamethrower.png`: original transparent 32×32 RGBA PNG, original built-in image_gen artwork, refined directly on an editable native 32×32 grid with 13 solid colors plus transparency, three dominant shapes and simplified trim. Reproduce with `scripts/render-boba-flamethrower.py`; source: `resource-pack/artwork/boba_flamethrower.pixels.json`. Full prompt/provenance: `resource-pack/boba-equipment-sources.json`.
 - `models/equipment/boba_jetpack_attached.json`: fourteen original rocket/nozzle cuboids and UVs, recentered at original torso height; original texture copied unchanged. Reproduce with `scripts/extract-boba-jetpack.py`.
 - Item model definitions: `assets/mandomc/items/equipment/`; standalone item/hand models: `assets/mandomc/models/equipment/`. Texture paths use the vanilla-stitched `item/` directory.
 
