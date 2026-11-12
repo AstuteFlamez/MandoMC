@@ -27,5 +27,11 @@
       "destination": "assets/mandomc/textures/item/planets/tatooine.png",
       "changes": "Unchanged pixels; namespaced reference."
     }
-  ]
+  ],
+  "tooltipBadge": {
+    "sourcePath": "assets/minecraft/textures/default/planet.png",
+    "sourceSha256": "c321fba46c3245bc668a8cf2ed75e7fb1a9449cbd427950ee138a8dadf0d707f",
+    "destination": "assets/mandomc/textures/font/item_labels/planet.png",
+    "changes": "Exact pixels, glyph, height and ascent; Common/Rare rarity badges already present."
+  }
 }

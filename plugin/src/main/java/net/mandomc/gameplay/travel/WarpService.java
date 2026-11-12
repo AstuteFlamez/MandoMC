@@ -92,6 +92,11 @@ public final class WarpService implements Listener, AutoCloseable {
         if(!player.hasPermission("mandomc.travel.warp")) {player.sendMessage(message("unavailable"));return false;}
         return travel.request(player,()->destination(id));
     }
+    public Component badges(String id) {
+        String fallback = id.equals("hoth") ? "<white>ĕġ" : "<white>đġ";
+        return MiniMessage.miniMessage().deserialize(config.getString("warps." + id + ".badges", fallback))
+                .decoration(TextDecoration.ITALIC, false);
+    }
     public void open(Player player) {
         Inventory inventory=plugin.getServer().createInventory(null,size,text("gui-title"));
         slots.forEach((slot,id)-> {
@@ -100,7 +105,7 @@ public final class WarpService implements Listener, AutoCloseable {
             var meta=item.getItemMeta();meta.displayName(text(path+"name"));
             String model=config.getString(path+"item-model", "");
             if(!model.isEmpty()) meta.setItemModel(org.bukkit.NamespacedKey.fromString(model));
-            meta.lore(List.of(text(path+"description"),Component.empty(),message("click")));item.setItemMeta(meta);
+            meta.lore(List.of(badges(id), Component.empty(), text(path+"description"),Component.empty(),message("click")));item.setItemMeta(meta);
             inventory.setItem(slot,item);
         });
         MenuItems.fill(inventory);

@@ -31,11 +31,11 @@ The new pack lives in `resource-pack/` in this repository. Its build targets the
 | Factions | FactionsUUID | Warpoints, vulnerability, controlled breaches |
 | Protected regions | WorldGuard with WorldEdit | Enforcement for every custom action |
 | Worlds | Paper APIs | Existing dimension loading, exact arrivals, aliases and travel |
-| Credits | Provider deferred; Vault retained | Shops, prices, sinks and rewards remain deferred |
+| Credits | MandoMC native ledger | Atomic balances, payments and admin adjustments; shops/rewards deferred |
 | Items, armor, crafting | Paper APIs and resource-pack/ | Stable IDs, recipes, custom behavior |
 | KOTH and resource regeneration | Paper APIs | Event rules, bounded regeneration |
 
-The catalog in server/plugins.catalog.json records admission status. Installed versions and artifact hashes are in server/plugins.lock.json. Boot validation does not establish gameplay compatibility. EssentialsX and Multiverse-Core are removed. MandoMC owns the selected utility commands and migration; their old runtime data is retained for rollback. Voting and global chat presentation remain deferred.
+The catalog in server/plugins.catalog.json records admission status. Installed versions and artifact hashes are in server/plugins.lock.json. Boot validation does not establish gameplay compatibility. EssentialsX and Multiverse-Core are removed. MandoMC owns the selected utility commands and migration; their old runtime data is retained for rollback. Native rank badges now format tab, nameplates and the existing chat renderer; voting remains deferred.
 
 ## Contracts
 - FactionsUUID owns membership, relations and claims. MandoMC owns pairwise warpoints keyed by stable group IDs; vendor faction power is not the raid authority. Do not mirror claims into WorldGuard.
@@ -90,7 +90,10 @@ Current FactionsUUID changed names, packages and coordinates from the old source
 `ItemCatalog` owns one validated snapshot of native item templates and explicit vendor factories. Native IDs use mandomc:item_id; vendor generation remains behind integrations/weapons. Definitions/presentation are configuration; item delivery and the paginated inventory browser are Java behavior. `RootCommand` dispatches registered feature handlers, keeping bootstrap and command parsing independent of catalog internals. No recipe or economy state is stored in item presentation.
 
 ## Combat basics
-CombatService owns the sole 15-second elapsed-time tag, temporary sidebar, external teleport denial and combat-logout death. TeleportService consults that state. Positive, uncancelled Bukkit damage provides mob/player attribution, including WeaponMechanics. Paper performs one death/drop pipeline after SaberService returns an airborne item. SurvivalRules owns use/crafting/portal restrictions; Paper/Bukkit and the MandoMC world registry also disable dimension loading. StarterKit owns once-only first-join delivery; WeaponMechanics generates its E-11 and ammo. See [combat basics](features/combat-basics.md).
+CombatService owns the sole 15-second elapsed-time tag, external teleport denial and combat-logout death. PlayerHud owns the persistent sidebar and reads that tag; combat replaces its kills row only while active. TeleportService consults that state. Positive, uncancelled Bukkit damage provides mob/player attribution, including WeaponMechanics. Paper performs one death/drop pipeline after SaberService returns an airborne item. SurvivalRules owns use/crafting/portal restrictions; Paper/Bukkit and the MandoMC world registry also disable dimension loading. StarterKit owns once-only first-join delivery; WeaponMechanics generates its E-11 and ammo. See [combat basics](features/combat-basics.md).
 
 ## Native utilities
 WorldService owns the existing dimension registry and exact arrivals in worlds.yml. PersonalTravel saves homes/return locations in native player data; TeleportRequests stores bounded ephemeral consent and delegates to TeleportService. AdminService exposes explicit operator actions. See [native utilities](features/native-utilities.md).
+
+## Native ranks, HUD and credits
+RankService owns UUID memberships and Bukkit permission attachments. WorldEdit/WorldGuard query the same native grants through the supported WEPIF provider; no LuckPerms or Vault permission fallback. PlayerHud owns one sidebar per viewer while mirroring existing gameplay teams. CreditLedger commits integer-cent account changes on one IO worker with atomic durable replacement; the HUD reads only committed balances. The user requested fresh accounts on 2026-11-09: everyone defaults to Default and zero credits; only AstuteFlamez is explicitly MandoStudios. No legacy account import runs at startup. See [feature brief](features/native-hud-ranks-credits.md).

@@ -1,0 +1,148 @@
+{
+  "providers": [
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/mandostudios.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0100"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/mandostudios_icon.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0101"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/marshal.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0102"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/marshal_icon.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0103"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/moderator.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0104"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/moderator_icon.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0105"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/mandalore.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0106"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/mandalore_icon.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0107"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/warrior.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0108"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/warrior_icon.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0125"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/builder.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0126"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/builder_icon.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0127"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/creator.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0129"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/creator_icon.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u0128"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/default.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u012a"
+      ]
+    },
+    {
+      "type": "bitmap",
+      "file": "mandomc:font/ranks/default_icon.png",
+      "ascent": 8,
+      "height": 9,
+      "chars": [
+        "\u012b"
+      ]
+    }
+  ]
+}

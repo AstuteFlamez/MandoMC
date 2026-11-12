@@ -78,3 +78,13 @@ Cycler rifle: `/mmc give cycler_rifle`, also in Weapons. Right click fires; left
 The galaxy warp menu uses the recovered custom planet icons. Earth is isolated in the upper-left Unknown Regions by the user’s choice, Batuu sits west, and Hoth sits southeast of Batuu. `/warp batuu` is the public spawn destination; `/warp spawn` and the old world-name aliases still work.
 
 Jabba is now a registered scheduled event: `/event start jabba` starts the shared palace operation and `/event stop` resets it. Its current/next GUI entries travel to Tatooine. All caches spawn at start and only room kills unlock gates. See [Jabba operation](features/jabba-dungeon.md).
+
+## Identity and credits
+- `/sb` or `/scoreboard`: toggle the full sidebar for this session (`mandomc.hud`).
+- `/balance [player]`, `/bal`, `/money`: view credits (`mandomc.credits.balance`).
+- `/pay <player|UUID> <amount>`: transfer credits (`mandomc.credits.pay`).
+- `/balancetop`, `/baltop`: ten largest balances (`mandomc.credits.top`).
+- `/credits give|take|set <player|UUID> <amount>`: operator/MandoStudios balance adjustment (`mandomc.credits.admin`).
+- `/mmc rank list|get <player|UUID>|set|add|remove <player|UUID> <rank>`: operator/MandoStudios rank management (`mandomc.ranks.manage`).
+
+Rank IDs: `mandostudios`, `mod`, `builder`, `creator`, `mandalore`, `marshal`, `warrior`, `default`. UUIDs support offline changes; names must already be known to the server. Monetary values use at most two decimals, with no self-payment or overdrafts. Fresh credit balances are zero.

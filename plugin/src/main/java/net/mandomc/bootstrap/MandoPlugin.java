@@ -15,6 +15,13 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MandoPlugin extends JavaPlugin implements Listener {
+    private net.mandomc.gameplay.ranks.RankService ranks;
+    private net.mandomc.integrations.permissions.WorldEditRanks worldEditRanks;
+    private net.mandomc.gameplay.credits.CreditService credits;
+    private net.mandomc.gameplay.hud.PlayerHud hud;
+    public net.mandomc.gameplay.ranks.RankService ranks() { return ranks; }
+    public net.mandomc.gameplay.credits.CreditService credits() { return credits; }
+    public net.mandomc.gameplay.hud.PlayerHud hud() { return hud; }
     private net.mandomc.gameplay.combat.CombatService combat;
     private net.mandomc.gameplay.combat.CombatBarrier barrier;
     public net.mandomc.gameplay.combat.CombatBarrier barrier() { return barrier; }
@@ -107,6 +114,11 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 }
             }, sender -> sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage()
                     .deserialize(Objects.requireNonNull(language.getString("items.denied")))));
+            ranks = new net.mandomc.gameplay.ranks.RankService(this, loadFeature("ranks/ranks.yml"));
+            if (getServer().getPluginManager().isPluginEnabled("WorldEdit"))
+                worldEditRanks = new net.mandomc.integrations.permissions.WorldEditRanks(this, ranks);
+            new net.mandomc.commands.RankCommands(root, ranks, language.getConfigurationSection("ranks"));
+            credits = new net.mandomc.gameplay.credits.CreditService(this, loadFeature("economy/credits.yml"));
             for (var resource : new String[] {"items/catalog.yml", "items/definitions/vehicles.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/jabba.yml", "items/definitions/jabba-loot.yml", "items/definitions/dioxis.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
                 if (!new File(getDataFolder(), resource).isFile()) saveResource(resource, false);
             }
@@ -151,6 +163,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             var combatConfig = loadFeature("combat/combat.yml");
             combat = new net.mandomc.gameplay.combat.CombatService(this, combatConfig,
                     language.getConfigurationSection("combat"), sabers::finish);
+            hud = new net.mandomc.gameplay.hud.PlayerHud(this, loadFeature("interface/hud.yml"), combat, ranks, credits);
             var boundaryProtection = new net.mandomc.integrations.regions.SaberProtection();
             barrier = new net.mandomc.gameplay.combat.CombatBarrier(this, combat,
                     location -> !boundaryProtection.allowed(location), combatConfig.getConfigurationSection("barrier"),
@@ -261,6 +274,10 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (hud != null) hud.close();
+        if (credits != null) credits.close();
+        if (worldEditRanks != null) worldEditRanks.close();
+        if (ranks != null) ranks.close();
         if (vehicles != null) vehicles.close();
         if (explosions != null) explosions.close();
         if (commandBindings != null) commandBindings.close();

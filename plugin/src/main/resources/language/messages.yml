@@ -126,6 +126,14 @@ utilities:
   weather-done: '<green>Weather changed in <value>.'
   weather-locked: '<yellow>Weather is disabled in this world.'
 
+ranks:
+  list: '<gray>Ranks: <white><ranks>'
+  current: '<gray><player>: <white><ranks>'
+  changed: '<gray><player> now has ranks: <white><ranks>'
+  save-failed: '<red>Rank change could not be saved or another save is pending. Try again.'
+  usage: '<gray>/mmc rank list | get <player|UUID> | set|add|remove <player|UUID> <rank>'
+  player-missing: '<red>Player not found. Use an exact known name or UUID.'
+  unknown: '<red>Unknown rank. Use /mmc rank list.'
 vehicles:
   menu-title: '<dark_gray>Vehicle seats'
   pilot: '<yellow>Pilot seat (placer only)'

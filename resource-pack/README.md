@@ -73,3 +73,6 @@ The recovered Rancor model, original scale/hitbox and six voice samples are incl
 
 ## Jabba stash components
 The original seven JABBA-tagged component items use namespaced material models with original pixels; provenance is in jabba-loot-sources.json. The dungeon's native doors and revised Rancor particle/block-display effects need no additional artwork.
+
+## Native rank and warp badges
+All eight legacy rank names and small icons are recovered unchanged, with ascent 8/height 9, under `mandomc:font/ranks/`. The dedicated `mandomc:ranks` font preserves the old glyph mapping without replacing ordinary Latin text globally. `rank-sources.json` records per-texture source hashes. Native tab/chat use small icons; sidebar/nameplates use full rank badges. The Common/Rare + Planet lore rows in `/warps` reuse the original Planet glyph/texture documented in `planet-sources.json`; existing planet item models are unchanged.
