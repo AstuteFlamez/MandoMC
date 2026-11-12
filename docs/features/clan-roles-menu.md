@@ -1,5 +1,5 @@
 # Feature: Clan roles, roster menu and connected territory
-Status: verified implementation; coordinated rollout pending
+Status: deployed and verified
 Branch: bilal/tutorial-handbook
 
 `/c` opens an informational native menu; `/c help` lists every command. Clan members see name/status, their role, member/claim counts, home, active raids/warpoints and actual player heads with role and online status. Active raids sort before ordinary rival scores. Head profiles load asynchronously with a three-second fallback and ten-minute request cache. Member pages also support grandfathered larger rosters. No-clan players see create/join/help guidance. Public home labels say Mandalore/Tatooine rather than exposing internal Review keys.
@@ -20,4 +20,6 @@ The sidebar's bottom serverinfo has one gray frame, exactly `play.mandomc.net`, 
 
 Verification: 216 Java tests; 422 native GUI/command/storage/connected-claim/buffer assertions, including a live tick/profile refresh with all owned slots preserved; two native starts each pass 16 migration/persistence assertions for legacy five-member/disconnected clans and Officer/Recruit ranks; 129 native HUD/NPC/mechanism/color/footer assertions. The initially disconnected fake client was correctly immobile to vanilla, so the long-lived fixture now uses an in-memory connected channel and real load acknowledgements. No production workaround was needed. Overlay tooling verifies old public API signatures and rejects the known missing-NPC-method regression.
 
-Next action: honor the user's new vehicle/mob placement restart hold. After explicit completion/release, rebase/CAS the latest shared release, apply the scoped slice and minimal configuration edits with a stopped backup, then verify normal startup, help/footer and frozen checksums.
+Deployment: after the explicit nine-point hold release, the scoped14-entry overlay rebased on6c5b6616deployed as bd3f109cf519aacf9b462957c407364dc79dd162e4e027b670f4d1c25b5bfe23. Full stopped backup and private receipt retained. Four minimal runtime config edits verified; all existing clan members/leader/claims,1434frozen originals,otherpluginJARs,packsettings and all unrelated release bytes preserved. Clean startup and live help/NPC smoke passed; no production actors or probe JARs were installed. The previous active Beskar run had25unmined nodes; it was restarted after normal lifecycle cleanup. Window released.
+
+Next action: test `/c` and `/c help` in game, then exercise Officer/Recruit permissions with another player.
