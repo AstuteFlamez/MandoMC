@@ -37,6 +37,7 @@ public final class SellGuiProbe extends JavaPlugin {
     private void mixed(){
         check(top().getSize()==36,"buyer tray uses 27 input slots and one control row");
         for(int i=0;i<27;i++)check(top().getItem(i)==null,"input slot starts empty "+i);
+        check(new NamespacedKey("mandomc","gui/info").equals(top().getItem(27).getItemMeta().getItemModel()),"original gold info artwork uses invisible item with real tooltip");
         check(top().getItem(27).getType()==Material.BOOK&&top().getItem(27).getItemMeta().lore().size()>=8,"info item explains placement, sale, returns and cancellation");
         check(top().getItem(28)==null,"decorative panes do not obscure custom GUI artwork");
         var protectedClick=new InventoryClickEvent(buyer.getOpenInventory(),InventoryType.SlotType.CONTAINER,28,ClickType.LEFT,InventoryAction.PLACE_ALL);

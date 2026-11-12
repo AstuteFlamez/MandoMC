@@ -40,14 +40,13 @@ def main():
     for x in range(44, 212):
         for y in range(67, 124):
             wide.putpixel((x, y), original.getpixel((x + 18 if x < 128 else x - 18, y)))
-    # The live book/sell/return items replace the baked, noninteractive info symbol.
+    # Preserve the original lower slots/hotbar verbatim. Move the original gold info
+    # symbol to the existing info cell; the invisible server item keeps its tooltip.
+    info_symbol = original.crop((118, 142, 138, 161))
     for y in range(142, 161):
         for x in range(118, 138):
             wide.putpixel((x, y), original.getpixel((139, y)))
-    tile = original.crop((65, 70, 83, 88))
-    for y in [173, 191, 209, 231]:
-        for column in range(9):
-            wide.paste(tile, (47 + 18 * column, y))
+    wide.paste(info_symbol, (46, 142))
     # Removing one unused interior row and raising ascent by 18 keeps four native rows aligned.
     image = Image.new('RGBA', (256, 238))
     image.paste(wide.crop((0, 0, 256, 124)), (0, 0))
@@ -57,6 +56,8 @@ def main():
             x, y = 48 + 18 * column, 71 + 18 * row
             assert (x - 40, y - 53) == (8 + 18 * column, 18 + 18 * row)
             assert image.crop((x, y, x + 16, y + 16)).tobytes() == original.crop((66, 71, 82, 87)).tobytes()
+    assert image.crop((0, 143, 256, 238)).tobytes() == original.crop((0, 161, 256, 256)).tobytes()
+    assert image.crop((46, 124, 66, 143)).tobytes() == info_symbol.tobytes()
     image.save(output / 'sell.png')
     names = ['net/mandomc/gameplay/jawa/JawaSellInventory.class',
              'net/mandomc/gameplay/jawa/JawaSellInventory$Tray.class']
@@ -87,22 +88,24 @@ def main():
         {'type': 'bitmap', 'file': 'mandomc:gui/sell.png', 'ascent': 66, 'height': 238, 'chars': ['\ue101']}]}
     font_name = 'assets/mandomc/font/gui/sell.json'
     art_name = 'assets/mandomc/textures/gui/sell.png'
+    info_name = 'assets/mandomc/items/gui/info.json'
     with zipfile.ZipFile(args.current_pack) as current, zipfile.ZipFile(output / 'MandoMC-preview.zip', 'w', zipfile.ZIP_DEFLATED) as pack:
-        if font_name in current.namelist() or art_name in current.namelist():
+        if any(name in current.namelist() for name in [font_name, art_name, info_name]):
             raise ValueError('Sell GUI already exists in baseline; review before replacing it')
         for name in current.namelist():
             pack.writestr(name, current.read(name))
         pack.writestr(font_name, json.dumps(font, indent=2, ensure_ascii=False) + '\n')
         pack.writestr(art_name, (output / 'sell.png').read_bytes())
+        pack.writestr(info_name, json.dumps({'model': {'type': 'minecraft:empty'}}) + '\n')
     with zipfile.ZipFile(args.current_pack) as current, zipfile.ZipFile(output / 'MandoMC-preview.zip') as pack:
         assert all(current.read(n) == pack.read(n) for n in current.namelist())
     report = {'baselineJarSha256': digest(args.baseline), 'baselineConfigSha256': digest(args.jawas_config),
               'baselinePackSha256': digest(args.current_pack), 'changedJarEntries': list(replacements),
-              'addedPackEntries': [font_name, art_name], 'texture': [256, 238],
+              'addedPackEntries': [font_name, art_name, info_name], 'texture': [256, 238],
               'menu': {'rows': 4, 'inputs': 27, 'info': 27, 'sell': 31, 'return': 35},
               'privateStagingOnly': True}
     (output / 'report.json').write_text(json.dumps(report, indent=2) + '\n')
-    print('Staged two visual class edits and two additive pack assets; unrelated bytes verified unchanged.')
+    print('Staged two visual class edits and three additive pack assets; unrelated bytes verified unchanged.')
 
 
 if __name__ == '__main__':
