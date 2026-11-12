@@ -1,5 +1,5 @@
 # Feature: Consistent chat presentation
-Status: implementation
+Status: playable
 Branch: bilal/chat-message-polish
 
 ## Player experience
@@ -21,4 +21,4 @@ MessageService owns formatting and lifecycle notices. MessageCatalog loads expli
 190 Java tests pass. The isolated native server passes 131 assertions including serialized pack fields, unknown/overlay exclusions, rich events, exact admin/private economy audiences, unchanged dollar amounts, actual crate full-inventory denial without spending either key, crate reward, in-place death and first-join handlers, coalesced pack results and actual AsyncChatEvent renderer preserving viewers, signed-message identity, nickname components, cancellation and literal markup. Native raw system messages require capture after a server task boundary; the initial fixture read was corrected without modifying crate gameplay. Production smoke uses protocol-only mode without synthetic actors.
 
 ## Pause note
-Source and native checks are ready; no live chat update yet. Priority gray-Jawa repair owns the next rollout. Next action: coordinate a scoped chat rollout against the latest deployed baseline after that repair.
+Chat polish and adjusted scenery are live after the priority gray-Jawa repair. 57 live protocol checks and 109 live scenery checks passed; normal server restarted cleanly without probes, all seven gray rigs and pack/configs preserved, Jabba restored. Next action: inspect actual client chat and NPC looking.
