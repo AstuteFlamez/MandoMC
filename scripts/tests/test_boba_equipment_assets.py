@@ -42,6 +42,15 @@ class BobaEquipmentAssets(unittest.TestCase):
         self.assertIn(0, alpha)
         self.assertIn(255, alpha)
 
+    def test_native_pixel_grid_reproduces_clean_palette_and_solid_alpha(self):
+        spec = importlib.util.spec_from_file_location('flame_render', ROOT / 'scripts/render-boba-flamethrower.py')
+        renderer = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(renderer)
+        self.assertEqual(renderer.render(), (ASSETS / 'textures/item/equipment/boba_flamethrower.png').read_bytes())
+        source = json.loads(renderer.SOURCE.read_text())
+        self.assertLessEqual(len(source['palette']), 16)
+        self.assertTrue(all(bytes.fromhex(value)[3] in (0, 255) for value in source['palette'].values()))
+
     def test_both_ids_and_attached_geometry_are_in_validated_pack(self):
         with zipfile.ZipFile(ROOT / 'resource-pack/build/MandoMC.zip') as pack:
             for name in ('boba_jetpack', 'boba_jetpack_attached', 'boba_flamethrower'):
