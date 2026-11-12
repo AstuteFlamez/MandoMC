@@ -19,6 +19,7 @@ public final class ClanFeature implements AutoCloseable {
     private final MandoPlugin plugin;
     private final ClanService clans;
     private final FrozenLandPreparation preparation;
+    private final ClanCommands commands;
     private final BukkitTask startup;
     private CrateService ownedCrates;
     private boolean closed;
@@ -31,7 +32,7 @@ public final class ClanFeature implements AutoCloseable {
                 "Native territory service must start before clans");
         clans=new ClanService(plugin,territory,read("clans/settings.yml"),read("language/clans.yml"));
         preparation=new FrozenLandPreparation(plugin,clans);
-        new ClanCommands(plugin,clans,plugin.travel());
+        commands=new ClanCommands(plugin,clans,plugin.travel());
         startup=Bukkit.getScheduler().runTask(plugin,()->{
             try {
                 plugin.items().reload();
@@ -72,7 +73,7 @@ public final class ClanFeature implements AutoCloseable {
         }
     }
     @Override public void close() {
-        if(closed)return;closed=true;startup.cancel();preparation.close();clans.close();
+        if(closed)return;closed=true;startup.cancel();commands.close();preparation.close();clans.close();
         if(ownedCrates!=null) {
             Bukkit.getServicesManager().unregister(CrateService.class,ownedCrates);ownedCrates.close();ownedCrates=null;
         }

@@ -33,7 +33,7 @@ public final class HudTerritoryProbe extends JavaPlugin {
   var spawned=new java.util.ArrayList<org.bukkit.entity.Entity>();
   try{zones.spawnNpc(org.bukkit.entity.EntityType.PIG,spawn,()->{spawned.add(spawn.getWorld().spawnEntity(spawn,org.bukkit.entity.EntityType.PIG));spawned.add(spawn.getWorld().spawnEntity(spawn,org.bukkit.entity.EntityType.PIG));return true;});check(spawned.get(0).isValid(),"Original approved NPC spawn works");check(!spawned.get(1).isValid(),"NPC allowance is one use, not a spawn bypass");}finally{spawned.forEach(org.bukkit.entity.Entity::remove);}
   var world=Bukkit.getWorld(NamespacedKey.minecraft("spawnworld"));actor=actor(world,world.getSpawnLocation());actor.setStatistic(Statistic.PLAYER_KILLS,7);actor.setStatistic(Statistic.DEATHS,3);mando.hud().attach(actor);board=actor.getScoreboard();objective=board.getObjective("mandomc_hud");
-  check(line(8).equals("⚔ ᴋɪʟʟѕ/ᴅᴇᴀᴛʜѕ: 7/3"),"Combined actual kills and deaths");check(line(9).equals("⚑ ᴛᴇʀʀɪᴛᴏʀʏ: Safezone"),"Batuu safezone");valueColor(9,"Safezone",net.kyori.adventure.text.format.NamedTextColor.GOLD);stable();
+  check(line(12).equals("play.mandomc.net"),"Static play footer in normal layout");check(line(8).equals("⚔ ᴋɪʟʟѕ/ᴅᴇᴀᴛʜѕ: 7/3"),"Combined actual kills and deaths");check(line(9).equals("⚑ ᴛᴇʀʀɪᴛᴏʀʏ: Safezone"),"Batuu safezone");valueColor(9,"Safezone",net.kyori.adventure.text.format.NamedTextColor.GOLD);stable();
   var target=Bukkit.getWorld(NamespacedKey.minecraft("mandalore_review"));check(target!=null,"Mandalore available");check(actor.teleport(new Location(target,240,280,240)),"Cross-world movement succeeds");actor.setGravity(false);
   later(()->wilderness(target));
  }
@@ -52,7 +52,7 @@ public final class HudTerritoryProbe extends JavaPlugin {
    ()->{check(line(9).endsWith("HudClaim"),"Adjacent claim keeps owner label");clans.state().claims.entrySet().removeIf(e->e.getValue().equals(clan.id));},
    ()->{check(line(9).endsWith("Wilderness"),"Same-chunk unclaim refreshes");check(actor.teleport(new Location(world,0,280,0)),"Move to warzone");actor.setGravity(false);},
    ()->{check(line(9).endsWith("Warzone"),"Warzone movement refreshes");valueColor(9,"Warzone",net.kyori.adventure.text.format.NamedTextColor.DARK_RED);mando.combat().tag(actor);},
-   ()->{check(line(9).matches("⚔ ɪɴ ᴄᴏᴍʙᴀᴛ: [0-9]+\\.[0-9]s"),"Combat countdown retained");check(line(8).contains("ᴅᴏ ɴᴏᴛ ʟᴏɢ ᴏᴜᴛ")&&line(10).contains("ᴅᴏ ɴᴏᴛ ʟᴏɢ ᴏᴜᴛ"),"Both combat warnings retained");check(line(11).endsWith("Warzone"),"Territory persists during combat");stable();mando.combat().clear(actor);},
+   ()->{check(line(9).matches("⚔ ɪɴ ᴄᴏᴍʙᴀᴛ: [0-9]+\\.[0-9]s"),"Combat countdown retained");check(line(8).contains("ᴅᴏ ɴᴏᴛ ʟᴏɢ ᴏᴜᴛ")&&line(10).contains("ᴅᴏ ɴᴏᴛ ʟᴏɢ ᴏᴜᴛ"),"Both combat warnings retained");check(line(11).endsWith("Warzone"),"Territory persists during combat");check(line(12).equals("play.mandomc.net"),"Static play footer in combat layout");stable();mando.combat().clear(actor);},
    ()->{check(line(8).endsWith("7/3"),"Stats return after combat");check(line(9).endsWith("Warzone"),"Territory returns to normal slot");stable();try{success();}catch(Exception e){fail(e);}}
   );
  }

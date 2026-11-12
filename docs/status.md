@@ -1,6 +1,11 @@
 # Resume here
 Updated: 2026-11-10
 
+## Clan roles/menu and static play footer verified (2026-11-11)
+`/c` opens secure roster/info GUI and `/c help` documents actions. Leader > Officer > Member > Recruit; new joins Recruit, legacy members Member, leader UUID authoritative. Officers manage land and invite/kick lower ranks; leader controls ranks/transfer. Recruit shared-storage opening/use/breaking is denied, including live demotion checks; ordinary edits/workstations remain. Four-player cap, cardinal claims, full foreign/static buffer, anti-island unclaim and unclaimall are included; no forced legacy eviction. Existing11page handbook changes only5players to4. Gray bottom footer is staticplay.mandomc.net.
+
+216Java,422native GUI/permissions/inventory/buffer assertions,16migration assertions across each of2native starts, and129HUD/NPC/mechanism/footer assertions pass. The long-lived fixture uses connected in-memory transport because vanilla correctly closes menus for disconnected/immobile fakes. Narrow14-entry overlay preserves all unrelated latest6c5b6616progression/Beskar/API-repair/chat-owner bytes and automatically checks original public API signatures. Frozen1434originals untouched. No restart owned. New direct user hold during vehicle/mob location collection supersedes prior releases; no live stop has begun. Four minimal config edits staged with deployment authorization flag false. **Next action:** wait for explicit placement-done/hold-release handoff, rebase/CAS then deploy and verify live.
+
 ## Territory compatibility repair deployed (2026-11-11)
 The earlier HUD overlay used older TerritoryService source and dropped spawnNpc/approvedNpcSpawn/mechanisms despite retaining unrelated class bytes. A live NPC NoSuchMethodError exposed the missing public API during follow-on integration. Restored all original method bodies and NpcSpawn record; javap confirms the original public signatures are a subset of the repaired API. A dedicated Java API regression and127native tests cover actual one-use protected spawning, Ilum-only mechanisms and all HUD/claim/color behavior.
 

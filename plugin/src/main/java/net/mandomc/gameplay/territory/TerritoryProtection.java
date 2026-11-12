@@ -19,7 +19,7 @@ public final class TerritoryProtection implements Listener {
     private boolean staff(Player p){return p.getGameMode()==org.bukkit.GameMode.CREATIVE && p.hasPermission("mandomc.territory.edit");}
     private void deny(Player p){p.sendActionBar(territories.message("protected"));}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void breakBlock(BlockBreakEvent e){if(blocked(e.getBlock())&&!staff(e.getPlayer())){e.setCancelled(true);deny(e.getPlayer());}}
+    public void breakBlock(BlockBreakEvent e){if(blocked(e.getBlock())&&!staff(e.getPlayer())&&!net.mandomc.gameplay.events.EventMining.allowed(e.getBlock(),e.getPlayer())){e.setCancelled(true);deny(e.getPlayer());}}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void place(BlockPlaceEvent e){if(blocked(e.getBlock())&&!staff(e.getPlayer())){e.setCancelled(true);deny(e.getPlayer());}}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
@@ -37,7 +37,7 @@ public final class TerritoryProtection implements Listener {
         boolean tool=item.endsWith("_HOE")||item.endsWith("_SHOVEL")||item.endsWith("_AXE")||item.equals("BONE_MEAL")
                 ||item.equals("FLINT_AND_STEEL")||item.equals("FIRE_CHARGE")||item.endsWith("_BUCKET")
                 ||item.equals("SHEARS")||item.equals("SWEET_BERRIES");
-        if(physical||container||tool)e.setCancelled(true);
+        if((physical&&(!territories.mechanisms(b.getLocation())||b.getType()==org.bukkit.Material.FARMLAND))||container||tool)e.setCancelled(true);
     }
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void entityInteract(PlayerInteractEntityEvent e){if(!territories.edits(e.getRightClicked().getLocation())&&!staff(e.getPlayer())
@@ -54,6 +54,7 @@ public final class TerritoryProtection implements Listener {
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void inventoryMove(org.bukkit.event.inventory.InventoryMoveItemEvent e){
         var from=e.getSource().getLocation();var to=e.getDestination().getLocation();
+        if(from!=null&&to!=null&&from.getWorld().equals(to.getWorld())&&territories.mechanisms(from))return;
         if((from!=null&&!territories.edits(from))||(to!=null&&!territories.edits(to)))e.setCancelled(true);
     }
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
@@ -71,7 +72,7 @@ public final class TerritoryProtection implements Listener {
     public void vehicleDestroy(VehicleDestroyEvent e){if(!territories.combat(e.getVehicle().getLocation())
             ||(e.getAttacker()!=null&&!territories.combat(e.getAttacker().getLocation())))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void spawn(CreatureSpawnEvent e){if(!territories.spawning(e.getLocation()))e.setCancelled(true);}
+    public void spawn(CreatureSpawnEvent e){if(!territories.spawning(e.getLocation())&&!territories.approvedNpcSpawn(e))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void entityChange(EntityChangeBlockEvent e){if(blocked(e.getBlock()))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
@@ -82,6 +83,7 @@ public final class TerritoryProtection implements Listener {
     public void blockExplode(BlockExplodeEvent e){e.blockList().removeIf(this::blocked);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void dispense(BlockDispenseEvent e){
+        if(territories.mechanisms(e.getBlock().getLocation()))return;
         if(blocked(e.getBlock()) || (e.getBlock().getBlockData() instanceof org.bukkit.block.data.Directional direction
                 && blocked(e.getBlock().getRelative(direction.getFacing()))))e.setCancelled(true);
     }
@@ -100,9 +102,9 @@ public final class TerritoryProtection implements Listener {
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void spread(BlockSpreadEvent e){if(blocked(e.getBlock()))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void flow(BlockFromToEvent e){if(blocked(e.getBlock())||blocked(e.getToBlock()))e.setCancelled(true);}
+    public void flow(BlockFromToEvent e){if(territories.mechanisms(e.getBlock().getLocation()))return;if(blocked(e.getBlock())||blocked(e.getToBlock()))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void pistonExtend(BlockPistonExtendEvent e){if(blocked(e.getBlock())||blocked(e.getBlock().getRelative(e.getDirection()))||e.getBlocks().stream().anyMatch(b->blocked(b)||blocked(b.getRelative(e.getDirection()))))e.setCancelled(true);}
+    public void pistonExtend(BlockPistonExtendEvent e){if(territories.mechanisms(e.getBlock().getLocation()))return;if(blocked(e.getBlock())||blocked(e.getBlock().getRelative(e.getDirection()))||e.getBlocks().stream().anyMatch(b->blocked(b)||blocked(b.getRelative(e.getDirection()))))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void pistonRetract(BlockPistonRetractEvent e){if(blocked(e.getBlock())||blocked(e.getBlock().getRelative(e.getDirection()))||e.getBlocks().stream().anyMatch(b->blocked(b)||blocked(b.getRelative(e.getDirection()))))e.setCancelled(true);}
+    public void pistonRetract(BlockPistonRetractEvent e){if(territories.mechanisms(e.getBlock().getLocation()))return;if(blocked(e.getBlock())||blocked(e.getBlock().getRelative(e.getDirection()))||e.getBlocks().stream().anyMatch(b->blocked(b)||blocked(b.getRelative(e.getDirection()))))e.setCancelled(true);}
 }

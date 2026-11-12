@@ -33,6 +33,14 @@ public class HudSettingsTest {
         assertFalse(settings.lines().stream().anyMatch(line -> line.contains("<deaths>")));
         assertEquals(14, settings.combatLines().size());
     }
+    @Test public void bothLayoutsKeepOneStaticGrayPlayAddress() {
+        var settings=HudSettings.read(config());var footer=settings.animations().get("serverinfo");
+        assertEquals(1,footer.frames().size());
+        assertEquals("play.mandomc.net",net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(footer.at(0)));
+        assertEquals(net.kyori.adventure.text.format.NamedTextColor.GRAY,footer.at(0).color());
+        assertEquals(footer.at(0),footer.at(9999999));
+        assertTrue(settings.lines().contains("<serverinfo>"));assertTrue(settings.combatLines().contains("<serverinfo>"));
+    }
     @Test public void timerAlwaysHasOneDecimal() {
         assertEquals("15.0", HudSettings.seconds(150)); assertEquals("0.1", HudSettings.seconds(1)); assertEquals("0.0", HudSettings.seconds(0));
     }

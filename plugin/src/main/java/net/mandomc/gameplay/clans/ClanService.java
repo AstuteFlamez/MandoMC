@@ -71,15 +71,32 @@ public final class ClanService implements Listener, AutoCloseable {
         var owner=owner(l);
         return available() && !land.restoring(LandRestoration.chunk(l)) && (owner==null || owner.members.contains(p.getUniqueId()));
     }
+    public List<Component> help(){return language.getStringList("help").stream()
+            .map(line->MiniMessage.miniMessage().deserialize(line)).toList();}
+    public boolean recruitStorageDenied(Player p,Location l,boolean storage) {
+        var owner=owner(l);
+        return storage&&owner!=null&&owner.abandonedAt==0&&state.role(owner,p.getUniqueId())==ClanRole.RECRUIT;
+    }
+    public static boolean storage(org.bukkit.inventory.Inventory inventory) {
+        var holder=inventory.getHolder();
+        return holder instanceof org.bukkit.block.Container || holder instanceof org.bukkit.block.DoubleChest
+                || holder instanceof org.bukkit.entity.minecart.StorageMinecart || holder instanceof org.bukkit.entity.minecart.HopperMinecart
+                || (holder instanceof org.bukkit.entity.ChestedHorse horse&&horse.isCarryingChest())
+                || inventory.getType()==org.bukkit.event.inventory.InventoryType.ENDER_CHEST;
+    }
     public boolean canContainer(Player p,Location l) {
+        return canContainer(p,l,l.getBlock().getState() instanceof org.bukkit.block.Container
+                || l.getBlock().getType()==Material.ENDER_CHEST);
+    }
+    public boolean canContainer(Player p,Location l,boolean storage) {
         if(l.getBlock().getState() instanceof org.bukkit.block.Chest chest
                 &&chest.getInventory().getHolder() instanceof org.bukkit.block.DoubleChest doubleChest) {
             var left=containerLocation(doubleChest.getLeftSide());
             var right=containerLocation(doubleChest.getRightSide());
-            if(left!=null&&!canContainerSingle(p,left))return false;
-            if(right!=null&&!canContainerSingle(p,right))return false;
+            if(left!=null&&!canContainerSingle(p,left,storage))return false;
+            if(right!=null&&!canContainerSingle(p,right,storage))return false;
         }
-        return canContainerSingle(p,l);
+        return canContainerSingle(p,l,storage);
     }
     public boolean splitContainer(Location l) {
         if(l.getBlock().getState() instanceof org.bukkit.block.Chest chest
@@ -94,10 +111,11 @@ public final class ClanService implements Listener, AutoCloseable {
         // Chest#getInventory returns the combined inventory even when asked through one half.
         return holder instanceof org.bukkit.block.BlockState block ? block.getLocation() : holder.getInventory().getLocation();
     }
-    private boolean canContainerSingle(Player p,Location l) {
+    private boolean canContainerSingle(Player p,Location l,boolean storage) {
         if(!available())return false;
         var owner=owner(l);if(owner==null)return true;
-        if(owner.abandonedAt!=0||owner.members.contains(p.getUniqueId()))return true;
+        if(owner.abandonedAt!=0)return true;
+        if(owner.members.contains(p.getUniqueId()))return !recruitStorageDenied(p,l,storage);
         var attacker=member(p);
         return attacker!=null&&state.canRaid(attacker.id,owner.id,System.currentTimeMillis(),settings.raidThreshold());
     }

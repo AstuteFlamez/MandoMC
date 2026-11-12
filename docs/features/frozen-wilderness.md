@@ -1,5 +1,5 @@
 # Feature: Frozen wilderness originals
-Status: verified implementation; awaiting Jawa restart handoff before live capture
+Status: deployed; 1,434 originals durably captured and checksum-verified
 Branch: bilal/tutorial-handbook
 
 ## Player outcome
@@ -25,5 +25,8 @@ The initial atlas-only count of 1,657 was refined against actual border data aft
 ## Verification
 202 Java tests pass. The final frozen native suite passes 27 assertions against the scoped release rebased on the current shared JAR: finite capture and durable completion; retained original checksum; no unsupported capture; unchanged originals after later edits and actual Survival placement/break callbacks; first-attempt native claim; restart checksum preservation; scope-change refusal; and explicit partial failure with retained verified chunks, no missing-world generation and a durable failure receipt. Earlier disposable passes separately exercised recovery from a torn last journal line. The final combined release also passes 118 native sidebar/claim/raid/combat assertions.
 
+## Live receipt
+Completed 1,434/1,434: 1,430 new snapshots and four previous originals retained byte-exact, totaling 2,622,532 compressed bytes. Every file checksum and the durable completion receipt match journal SHA-256 94591dc8c08ba5f24fb5fe76c2e13e6bf5beb89479e54522e0f88b172cf98f45. The job resumed across coordinated restarts without resampling.
+
 ## Next action
-Obtain the coordinated handoff after Jawa rollout, rebase and back up the current server, install the verified combined slice/scope, then verify all 1,434 live checksums and the completion receipt.
+Retain this version until an explicit user-requested change. Hoth expansion waits for final terrain, policy and centered 512-block border receipts, then a new capture-id must retain this existing support scope. Any explicitly requested decorative-ore correction must be narrowly surveyed/backed up; never broadly refresh originals.

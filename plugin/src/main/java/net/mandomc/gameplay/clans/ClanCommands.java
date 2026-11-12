@@ -7,23 +7,25 @@ import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class ClanCommands implements CommandExecutor, TabCompleter {
+public final class ClanCommands implements CommandExecutor, TabCompleter, AutoCloseable {
     private record Invitation(UUID clan, long expires) {}
     private final ClanService clans;
     private final TeleportService travel;
     private final Map<UUID,Invitation> invites=new HashMap<>();
     private final CommandExecutor map;
+    private final ClanMenu menu;
     public ClanCommands(JavaPlugin plugin,ClanService clans,TeleportService travel) {
-        this.clans=clans;this.travel=travel;
+        this.clans=clans;this.travel=travel;menu=new ClanMenu(plugin,clans,p->help(p));
         var command=Objects.requireNonNull(plugin.getCommand("c"));map=command.getExecutor();
         command.setExecutor(this);command.setTabCompleter(this);
     }
     @Override public boolean onCommand(CommandSender sender,Command cmd,String label,String[] args) {
+        if(args.length==1&&args[0].equalsIgnoreCase("help")){help(sender);return true;}
         if(args.length==1&&args[0].equalsIgnoreCase("map"))return map.onCommand(sender,cmd,label,args);
         if(!(sender instanceof Player p)){sender.sendMessage(clans.message("players-only"));return true;}
         try {
             if(!clans.available())throw new IllegalArgumentException("failed");
-            if(args.length==0)throw new IllegalArgumentException("usage");
+            if(args.length==0){menu.open(p);return true;}
             String action=args[0].toLowerCase(Locale.ROOT);
             var state=clans.state(); var clan=clans.member(p);long now=System.currentTimeMillis();
             if(action.equals("create")) {
@@ -58,9 +60,14 @@ public final class ClanCommands implements CommandExecutor, TabCompleter {
             }
             if(action.equals("leave")) {
                 length(args,1);if(clan.leader.equals(p.getUniqueId()))throw new IllegalArgumentException("leader-leave");
-                clan.members.remove(p.getUniqueId());clans.saved(p,"left");return true;
+                clan.members.remove(p.getUniqueId());clan.roles.remove(p.getUniqueId());clans.saved(p,"left");return true;
             }
-            if(!clan.leader.equals(p.getUniqueId()))throw new IllegalArgumentException("not-leader");
+            var role=state.role(clan,p.getUniqueId());
+            if(Set.of("invite","kick","claim","unclaim","unclaimall").contains(action)) {
+                if(role==null||!role.manages())throw new IllegalArgumentException("not-manager");
+            }else if(Set.of("leader","disband","sethome","promote","demote").contains(action)) {
+                if(role!=ClanRole.LEADER)throw new IllegalArgumentException("not-leader");
+            }else throw new IllegalArgumentException("usage");
             switch(action) {
                 case "invite" -> {
                     length(args,2);var target=Bukkit.getPlayerExact(args[1]);
@@ -71,13 +78,16 @@ public final class ClanCommands implements CommandExecutor, TabCompleter {
                     target.sendMessage(clans.message("invitation","clan",clan.name));
                     p.sendMessage(clans.message("invited","player",target.getName(),"clan",clan.name));
                 }
-                case "kick", "leader" -> {
+                case "kick", "leader", "promote", "demote" -> {
                     length(args,2);
-                    UUID target=clan.members.stream().filter(id->args[1].equalsIgnoreCase(Bukkit.getOfflinePlayer(id).getName()))
+                    UUID target=clan.members.stream().filter(id->(args[1].equalsIgnoreCase(menu.playerName(id))||args[1].equalsIgnoreCase(id.toString())))
                             .findFirst().orElseThrow(()->new IllegalArgumentException("not-clanmate"));
                     if(target.equals(p.getUniqueId()))throw new IllegalArgumentException("not-clanmate");
-                    if(action.equals("kick"))clan.members.remove(target);else clan.leader=target;
-                    clans.saved(p,action.equals("kick")?"kicked":"leader","player",args[1]);
+                    if(action.equals("kick"))state.kick(clan,p.getUniqueId(),target);
+                    else if(action.equals("leader"))state.transfer(clan,p.getUniqueId(),target);
+                    else state.changeRole(clan,p.getUniqueId(),target,action.equals("promote"));
+                    clans.saved(p,action.equals("kick")?"kicked":action.equals("leader")?"leader":"role-changed",
+                            "player",args[1],"role",action.equals("kick")?"Removed":state.role(clan,target).label());
                 }
                 case "claim" -> {
                     length(args,1);var chunk=LandRestoration.chunk(p.getLocation());
@@ -120,9 +130,11 @@ public final class ClanCommands implements CommandExecutor, TabCompleter {
         }catch(IllegalArgumentException error){p.sendMessage(clans.message(error.getMessage()));}
         return true;
     }
+    private void help(CommandSender sender){clans.help().forEach(sender::sendMessage);}
+    @Override public void close(){menu.close();}
     private static void length(String[] args,int count){if(args.length!=count)throw new IllegalArgumentException("usage");}
     @Override public List<String> onTabComplete(CommandSender sender,Command cmd,String label,String[] args) {
-        List<String> choices=args.length==1?List.of("map","create","invite","join","leave","kick","leader","disband",
+        List<String> choices=args.length==1?List.of("help","map","create","invite","join","leave","kick","leader","promote","demote","disband",
                 "claim","unclaim","unclaimall","sethome","home","info","warpoints"):args.length==2?
                 Set.of("join","info","warpoints").contains(args[0].toLowerCase(Locale.ROOT))?
                         clans.state().clans.values().stream().map(c->c.name).toList():

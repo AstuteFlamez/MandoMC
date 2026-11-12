@@ -16,6 +16,7 @@ public final class ClanState {
         public final String name;
         public UUID leader;
         public final Set<UUID> members = new LinkedHashSet<>();
+        public final Map<UUID,ClanRole> roles = new LinkedHashMap<>();
         public long lastActive;
         public long abandonedAt;
         public Home home;
@@ -47,7 +48,32 @@ public final class ClanState {
         if (member(player) != null) throw new IllegalArgumentException("already-member");
         if (clan.abandonedAt != 0) throw new IllegalArgumentException("abandoned");
         if (clan.members.size() >= limit) throw new IllegalArgumentException("member-limit");
-        clan.members.add(player); clan.lastActive = now;
+        clan.members.add(player);clan.roles.put(player,ClanRole.RECRUIT); clan.lastActive = now;
+    }
+    public ClanRole role(Clan clan, UUID player) {
+        if(clan==null||!clan.members.contains(player))return null;
+        return clan.leader.equals(player)?ClanRole.LEADER:clan.roles.getOrDefault(player,ClanRole.MEMBER);
+    }
+    public void kick(Clan clan, UUID actor, UUID target) {
+        var rank=role(clan,actor);var lower=role(clan,target);
+        if(rank==null||!rank.manages())throw new IllegalArgumentException("not-manager");
+        if(lower==null)throw new IllegalArgumentException("not-clanmate");
+        if(actor.equals(target)||rank.ordinal()<=lower.ordinal())throw new IllegalArgumentException("rank-protected");
+        clan.members.remove(target);clan.roles.remove(target);
+    }
+    public void changeRole(Clan clan, UUID actor, UUID target, boolean promote) {
+        if(!clan.leader.equals(actor))throw new IllegalArgumentException("not-leader");
+        var rank=role(clan,target);
+        if(rank==null)throw new IllegalArgumentException("not-clanmate");
+        if(rank==ClanRole.LEADER)throw new IllegalArgumentException("rank-protected");
+        int next=rank.ordinal()+(promote?1:-1);
+        if(next<ClanRole.RECRUIT.ordinal()||next>ClanRole.OFFICER.ordinal())throw new IllegalArgumentException("role-limit");
+        clan.roles.put(target,ClanRole.values()[next]);
+    }
+    public void transfer(Clan clan, UUID actor, UUID target) {
+        if(!clan.leader.equals(actor))throw new IllegalArgumentException("not-leader");
+        if(!clan.members.contains(target)||actor.equals(target))throw new IllegalArgumentException("not-clanmate");
+        clan.roles.put(actor,ClanRole.MEMBER);clan.roles.remove(target);clan.leader=target;
     }
     public void claim(Clan clan, Chunk chunk, int limit, java.util.function.Predicate<Chunk> wilderness) {
         if (clan.abandonedAt != 0) throw new IllegalArgumentException("abandoned");

@@ -32,6 +32,15 @@ public class ClanStateTest {
         }
         state.claim(b,new ClanState.Chunk("world",1,1),4,c->true);
     }
+    @Test public void fullForeignBufferIncludesDiagonalsWhileOwnLandTouchesEdges() {
+        var a=clan("Alpha");var b=clan("Bravo");state.claim(a,new ClanState.Chunk("world",0,0),4,c->true);
+        for(var chunk:List.of(new ClanState.Chunk("world",1,0),new ClanState.Chunk("world",1,1)))
+            assertThrows(IllegalArgumentException.class,()->state.claim(b,chunk,4,c->true));
+        state.claim(b,new ClanState.Chunk("world",2,0),4,c->true);assertEquals(b,state.owner(new ClanState.Chunk("world",2,0)));
+        var local=new ClanState();var own=local.create("Own",UUID.randomUUID(),0);
+        local.claim(own,new ClanState.Chunk("world",0,0),4,c->true);local.claim(own,new ClanState.Chunk("world",1,0),4,c->true);
+        assertEquals(2,local.claims.size());
+    }
     @Test public void ownAdjacentClaimsAllowedButStaticProtectionBuffersApply() {
         var a=clan("Alpha");state.claim(a,new ClanState.Chunk("world",0,0),4,c->true);
         state.claim(a,new ClanState.Chunk("world",1,0),4,c->true);

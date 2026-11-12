@@ -406,6 +406,4 @@ animations:
   serverinfo:
     interval-ms: 2500
     frames:
-      - "<gray>ᴍᴀɴᴅᴏᴍᴄ.ɴᴇᴛ"
-      - "<gray>ѕᴛᴏʀᴇ.ᴍᴀɴᴅᴏᴍᴄ.ɴᴇᴛ"
-      - "<gray>ᴅɪѕᴄᴏʀᴅ.ɢɢ/ᴍᴀɴᴅᴏᴍᴄ"
+      - "<gray>play.mandomc.net"

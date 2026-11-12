@@ -12,6 +12,9 @@ final class ClanStorage {
             Map<String,Object> row = new LinkedHashMap<>();
             row.put("id", c.id.toString()); row.put("name", c.name); row.put("leader", c.leader.toString());
             row.put("members", c.members.stream().map(UUID::toString).toList());
+            Map<String,String> roles=new LinkedHashMap<>();
+            c.roles.forEach((id,role)->{if(c.members.contains(id)&&!c.leader.equals(id))roles.put(id.toString(),role.name().toLowerCase(Locale.ROOT));});
+            row.put("roles",roles);
             row.put("last-active", c.lastActive); row.put("abandoned-at", c.abandonedAt);
             if (c.home != null) row.put("home", Map.of("world",c.home.world(),"x",c.home.x(),"y",c.home.y(),
                     "z",c.home.z(),"yaw",c.home.yaw(),"pitch",c.home.pitch()));
@@ -43,6 +46,14 @@ final class ClanStorage {
             }
             if (!c.members.contains(c.leader) || state.named(c.name)!=null || state.clans.containsKey(c.id))
                 throw new IllegalArgumentException("Invalid clan identity");
+            if(row.containsKey("roles")&&!(row.get("roles") instanceof Map<?,?>))throw new IllegalArgumentException("Invalid clan roles");
+            if(row.get("roles") instanceof Map<?,?> roles)for(var entry:roles.entrySet()) {
+                UUID player=UUID.fromString(entry.getKey().toString());var role=ClanRole.read(entry.getValue().toString());
+                if(!c.members.contains(player))throw new IllegalArgumentException("Role assigned to nonmember");
+                if(c.leader.equals(player))continue;
+                if(role==ClanRole.LEADER)throw new IllegalArgumentException("Multiple clan leaders");
+                c.roles.put(player,role);
+            }
             c.abandonedAt = number(row,"abandoned-at");
             if (row.get("home") instanceof Map<?,?> h) c.home = new ClanState.Home(h.get("world").toString(),
                     decimal(h,"x"),decimal(h,"y"),decimal(h,"z"),(float)decimal(h,"yaw"),(float)decimal(h,"pitch"));

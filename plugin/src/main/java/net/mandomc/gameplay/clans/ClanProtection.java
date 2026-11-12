@@ -19,6 +19,7 @@ final class ClanProtection implements Listener {
     ClanProtection(ClanService clans,TerritoryService territory){this.clans=clans;this.territory=territory;}
     private boolean staff(Player p){return p.getGameMode()==GameMode.CREATIVE&&p.hasPermission("mandomc.territory.edit");}
     private boolean edit(Player p,Block block) {
+        if(net.mandomc.gameplay.events.EventMining.allowed(block,p))return true;
         if(staff(p)){clans.land().staffEdit(block);return true;}
         if(!clans.canEdit(p,block.getLocation())){p.sendActionBar(clans.message("protected"));return false;}
         if(p.getGameMode()!=GameMode.SURVIVAL)return true;
@@ -29,13 +30,19 @@ final class ClanProtection implements Listener {
     }
     private void touch(Player p,Block b){if(p.getGameMode()==GameMode.SURVIVAL)clans.land().touch(LandRestoration.chunk(b));}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void breakBlock(BlockBreakEvent e){if(!edit(e.getPlayer(),e.getBlock()))e.setCancelled(true);}
+    public void breakBlock(BlockBreakEvent e){
+        boolean storage=e.getBlock().getState() instanceof Container||e.getBlock().getType()==org.bukkit.Material.ENDER_CHEST;
+        if(!staff(e.getPlayer())&&clans.recruitStorageDenied(e.getPlayer(),e.getBlock().getLocation(),storage)) {
+            e.setCancelled(true);e.getPlayer().sendActionBar(clans.message("recruit-storage"));return;
+        }
+        if(!edit(e.getPlayer(),e.getBlock()))e.setCancelled(true);
+    }
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void place(BlockPlaceEvent e){if(!edit(e.getPlayer(),e.getBlock()))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void multi(BlockMultiPlaceEvent e){for(var s:e.getReplacedBlockStates())if(!edit(e.getPlayer(),s.getBlock()))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
-    public void broke(BlockBreakEvent e){touch(e.getPlayer(),e.getBlock());}
+    public void broke(BlockBreakEvent e){if(!net.mandomc.gameplay.events.EventMining.owns(e.getBlock()))touch(e.getPlayer(),e.getBlock());}
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
     public void placed(BlockPlaceEvent e){touch(e.getPlayer(),e.getBlock());}
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
@@ -52,7 +59,12 @@ final class ClanProtection implements Listener {
     public void interact(PlayerInteractEvent e) {
         Block b=e.getClickedBlock();if(b==null||e.useInteractedBlock()==Event.Result.DENY||staff(e.getPlayer()))return;
         if(b.getState() instanceof Container||b.getType()==org.bukkit.Material.ENDER_CHEST) {
-            if(!clans.canContainer(e.getPlayer(),b.getLocation()))e.setUseInteractedBlock(Event.Result.DENY);
+            if(!clans.canContainer(e.getPlayer(),b.getLocation())){
+                e.setUseInteractedBlock(Event.Result.DENY);
+                if(clans.recruitStorageDenied(e.getPlayer(),b.getLocation(),true)){
+                    e.setUseItemInHand(Event.Result.DENY);e.getPlayer().sendActionBar(clans.message("recruit-storage"));
+                }
+            }
             return;
         }
         // Doors, redstone and physical/tool interactions cannot modify a rival's base.
@@ -70,7 +82,25 @@ final class ClanProtection implements Listener {
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void inventory(InventoryOpenEvent e) {
         var l=e.getInventory().getLocation();
-        if(l!=null&&e.getPlayer() instanceof Player p&&!staff(p)&&!clans.canContainer(p,l))e.setCancelled(true);
+        if(l!=null&&e.getPlayer() instanceof Player p&&!staff(p)&&!clans.canContainer(p,l,ClanService.storage(e.getInventory())))e.setCancelled(true);
+    }
+    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+    public void containerClick(InventoryClickEvent e) {
+        var inventory=e.getView().getTopInventory();var location=inventory.getLocation();
+        if(location!=null&&e.getWhoClicked() instanceof Player p&&!staff(p)
+                &&!clans.canContainer(p,location,ClanService.storage(inventory)))e.setCancelled(true);
+    }
+    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+    public void containerDrag(InventoryDragEvent e) {
+        var inventory=e.getView().getTopInventory();var location=inventory.getLocation();
+        if(location!=null&&e.getWhoClicked() instanceof Player p&&!staff(p)
+                &&!clans.canContainer(p,location,ClanService.storage(inventory)))e.setCancelled(true);
+    }
+    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+    public void storageEntityDamage(EntityDamageEvent e) {
+        if(!(e.getEntity() instanceof org.bukkit.inventory.InventoryHolder holder)||!ClanService.storage(holder.getInventory()))return;
+        var player=ClanService.attacker(e.getDamageSource().getCausingEntity());
+        if(player!=null&&!staff(player)&&clans.recruitStorageDenied(player,e.getEntity().getLocation(),true))e.setCancelled(true);
     }
     private boolean automated(Block from,Block to) {
         var a=clans.owner(from.getLocation());var b=clans.owner(to.getLocation());
