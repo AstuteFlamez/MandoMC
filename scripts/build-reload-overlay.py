@@ -12,18 +12,18 @@ assert hash(a.baseline.read_bytes())==a.expected_sha256,'Baseline changed'
 classes=w/'classes';shutil.rmtree(classes,ignore_errors=True);classes.mkdir(exist_ok=True)
 shutil.rmtree(w/'after',ignore_errors=True)
 cp=str(a.baseline)+':'+a.classpath_file.read_text().strip()
-sources=[r/'plugin/src/main/java/net/mandomc/integrations/weapons/ReloadIndicator.java',r/'plugin/src/main/java/net/mandomc/gameplay/hud/ActionBars.java',r/'scripts/integration/ReloadOverlay.java']
+sources=[r/'plugin/src/main/java/net/mandomc/integrations/weapons/ReloadIndicator.java',r/'plugin/src/main/java/net/mandomc/integrations/weapons/NativeReloadSweep.java',r/'scripts/integration/ReloadOverlay.java']
 subprocess.run([str(a.java_home/'bin/javac'),'--release','25','-cp',cp,'-d',str(classes),*map(str,sources)],check=True)
 with zipfile.ZipFile(a.baseline) as z:before={n:z.read(n) for n in z.namelist()}
 after=dict(before);changed=[]
 for name,data in before.items():
- if name.startswith('net/mandomc/') and name.endswith('.class') and (b'sendActionBar' in data or name=='net/mandomc/bootstrap/MandoPlugin.class'):
+ if name.startswith('net/mandomc/') and name.endswith('.class') and name=='net/mandomc/bootstrap/MandoPlugin.class':
   src=w/'before'/name;dst=w/'after'/name;src.parent.mkdir(parents=True,exist_ok=True);src.write_bytes(data)
   result=subprocess.run([str(a.java_home/'bin/java'),'-cp',str(classes)+':'+cp,'ReloadOverlay',str(src),str(dst)],check=True,capture_output=True,text=True)
   if dst.exists():after[name]=dst.read_bytes();changed.append(name);print(result.stdout.strip())
-for group in ['net/mandomc/integrations/weapons','net/mandomc/gameplay/hud']:
+for group in ['net/mandomc/integrations/weapons']:
  for f in (classes/group).glob('*.class'):after[f.relative_to(classes).as_posix()]=f.read_bytes()
-after['language/reload-indicator.yml']=(r/'plugin/src/main/resources/language/reload-indicator.yml').read_bytes()
+
 assert 'net/mandomc/bootstrap/MandoPlugin.class' in changed
 assert all('Redstone' not in n for n in changed)
 a.output.parent.mkdir(parents=True,exist_ok=True)

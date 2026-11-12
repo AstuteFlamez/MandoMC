@@ -10,15 +10,7 @@ public final class ReloadOverlay {
         byte[] bytes=Files.readAllBytes(input);var model=cf.parse(bytes);int[] count={0,0,0};
         boolean bootstrap=model.thisClass().asInternalName().equals("net/mandomc/bootstrap/MandoPlugin");
         var bridge=ClassDesc.of("net.mandomc.integrations.weapons.ReloadIndicator");
-        byte[] after=cf.transformClass(model,ClassTransform.transformingMethodBodies((b,e)->{
-            if(e instanceof InvokeInstruction i&&i.name().equalsString("sendActionBar")) {
-                if(!i.type().equalsString("(Lnet/kyori/adventure/text/Component;)V")
-                        ||!i.owner().asInternalName().equals("org/bukkit/entity/Player"))
-                    throw new IllegalStateException("Unrouted actionbar signature: "+i);
-                b.invokestatic(ClassDesc.of("net.mandomc.gameplay.hud.ActionBars"),"send",
-                        MethodTypeDesc.ofDescriptor("(Lorg/bukkit/entity/Player;Lnet/kyori/adventure/text/Component;)V"));count[0]++;
-            } else b.with(e);
-        }));
+        byte[] after=bytes;
         if(bootstrap) {
             if(new String(bytes,java.nio.charset.StandardCharsets.ISO_8859_1).contains("net/mandomc/integrations/weapons/ReloadIndicator"))
                 throw new IllegalStateException("Reload bootstrap already installed");

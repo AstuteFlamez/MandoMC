@@ -2,15 +2,10 @@ package net.mandomc.integrations.weapons;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import net.mandomc.gameplay.hud.ActionBars;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -28,9 +23,8 @@ public final class ReloadIndicator implements Listener, AutoCloseable {
     private final Map<Key, Reload> reloads = new HashMap<>();
     private final Method shooter, hand, title, handData, duration, reloading, elapsed, weaponTitle;
     private final BukkitTask task;
-    private final Object boba;
-    private final Method bobaOwner;
-    private final String message;
+    private final NativeReloadSweep sweep;
+    private final Map<Key, NativeReloadSweep.Session> views = new HashMap<>();
     private boolean failed;
 
     @SuppressWarnings("unchecked")
@@ -48,15 +42,7 @@ public final class ReloadIndicator implements Listener, AutoCloseable {
         reloading = data.getMethod("isReloading"); elapsed = data.getMethod("getReloadElapsedTime");
         weaponTitle = Class.forName("me.deecaad.weaponmechanics.WeaponMechanicsAPI", true, loader)
                 .getMethod("getWeaponTitle", ItemStack.class);
-        if (!new java.io.File(plugin.getDataFolder(), "language/reload-indicator.yml").isFile())
-            plugin.saveResource("language/reload-indicator.yml", false);
-        var language = YamlConfiguration.loadConfiguration(new java.io.File(plugin.getDataFolder(), "language/reload-indicator.yml"));
-        message = java.util.Objects.requireNonNull(language.getString("progress"), "reload-indicator.yml: progress");
-        // The post-Boba release owns powered thrust and the full critical-fuel notice interval.
-        var featureType = Class.forName("net.mandomc.gameplay.boba.BobaEquipmentFeature", true, plugin.getClass().getClassLoader());
-        var feature = java.util.Objects.requireNonNull(Bukkit.getServicesManager().load((Class) featureType), "Boba UI owner is unavailable");
-        boba = featureType.getMethod("equipment").invoke(feature);
-        bobaOwner = boba.getClass().getMethod("ownsActionBar", Player.class);
+        sweep = new NativeReloadSweep();
         Bukkit.getPluginManager().registerEvent(start, this, EventPriority.MONITOR,
                 (listener, event) -> observe(event, true), plugin, true);
         for (String end : new String[]{"WeaponReloadCompleteEvent", "WeaponReloadCancelEvent"}) {
@@ -76,6 +62,7 @@ public final class ReloadIndicator implements Listener, AutoCloseable {
             String name = (String) title.invoke(event);
             if (start) {
                 // Capture the final event object, read only after all listeners and vendor acceptance have run.
+                var prior = reloads.get(key); if (prior != null) remove(key, prior);
                 reloads.put(key, new Reload(player, name, handData.invoke(event, false), event, Bukkit.getCurrentTick()));
             } else {
                 var current = reloads.get(key);
@@ -97,46 +84,47 @@ public final class ReloadIndicator implements Listener, AutoCloseable {
                         || !state.title().equals(weaponTitle.invoke(null, stack))) {
                     remove(key, state); continue;
                 }
-                if (Bukkit.getCurrentTick() % 2 != 0) continue;
                 int total = (int) duration.invoke(state.event());
                 if (total <= 0) { remove(key, state); continue; }
                 // Vendor elapsed time uses wall milliseconds, while its tasks execute in server ticks.
                 // Cap presentation by observed ticks so lag cannot run the countdown ahead of the real task.
                 int passed = Math.min((int) elapsed.invoke(state.hand()), Math.max(0, Bukkit.getCurrentTick() - state.startTick()));
                 int remaining = Math.max(0, total - passed);
-                int filled = Math.min(10, Math.max(0, (int) Math.floor(10.0 * (total - remaining) / total)));
-                var bar = MiniMessage.miniMessage().deserialize("<yellow>" + "|".repeat(filled)
-                        + "<dark_gray>" + "|".repeat(10 - filled));
-                // One writer when dual wielding: prefer the main hand if both are actually reloading.
-                if (key.hand() == EquipmentSlot.OFF_HAND && reloads.containsKey(new Key(key.player(), EquipmentSlot.HAND))) continue;
-                if (Boolean.TRUE.equals(bobaOwner.invoke(boba, player))) continue;
-                ActionBars.reload(player, MiniMessage.miniMessage().deserialize(message,
-                        Placeholder.component("bar", bar), Placeholder.unparsed("time", String.format(Locale.ROOT, "%.1f", remaining / 20.0))));
+                var view = views.get(key);
+                if (view == null && remaining > 0) views.put(key, sweep.open(player, key.hand(), state.title(), remaining));
+                else if (view != null) view.maintain(remaining);
             }
         } catch (ReflectiveOperationException | RuntimeException error) { fail(error); }
     }
 
     private void remove(Key key, Reload state) {
         reloads.remove(key, state);
-        if (reloads.keySet().stream().noneMatch(k -> k.player().equals(key.player()))) ActionBars.clearReload(state.player());
+        var view = views.remove(key); if (view != null) view.close();
     }
     private void clear(Player player) {
-        reloads.keySet().removeIf(key -> key.player().equals(player.getUniqueId()));
-        ActionBars.clearReload(player); ActionBars.forget(player);
+        for (var entry : java.util.List.copyOf(reloads.entrySet()))
+            if (entry.getKey().player().equals(player.getUniqueId())) remove(entry.getKey(), entry.getValue());
     }
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void slot(PlayerItemHeldEvent event) {
+        var key = new Key(event.getPlayer().getUniqueId(), EquipmentSlot.HAND);
+        var current = reloads.get(key); if (current != null) remove(key, current);
+    }
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void swap(PlayerSwapHandItemsEvent event) { clear(event.getPlayer()); }
     @EventHandler public void quit(PlayerQuitEvent event) { clear(event.getPlayer()); }
     @EventHandler public void death(PlayerDeathEvent event) { clear(event.getEntity()); }
     @EventHandler public void world(PlayerChangedWorldEvent event) { clear(event.getPlayer()); }
     private void fail(Exception error) {
         failed = true;
-        for (var state : reloads.values()) ActionBars.clearReload(state.player());
-        reloads.clear();
+        for (var view : views.values()) view.close();
+        views.clear(); reloads.clear();
         plugin.getLogger().log(Level.SEVERE, "Reload indicator disabled; WeaponMechanics gameplay is unchanged", error);
     }
     @Override public void close() {
         task.cancel(); HandlerList.unregisterAll(this);
-        for (var state : reloads.values()) ActionBars.clearReload(state.player());
-        reloads.clear(); ActionBars.close();
+        for (var view : views.values()) view.close();
+        views.clear(); reloads.clear();
     }
     public int activeReloads() { return reloads.size(); }
     public static void enable(JavaPlugin plugin) {
