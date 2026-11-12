@@ -21,10 +21,13 @@ public class TerritoryPolicyTest {
   assertEquals(WARZONE,p.zone("minecraft:mandalore_review",0,8,0));assertTrue(p.combat("minecraft:mandalore_review",0,8,0));assertFalse(p.edits("minecraft:mandalore_review",0,8,0));
   assertEquals(WILDERNESS,p.zone("minecraft:mandalore_review",-69,76,-188));assertTrue(p.edits("minecraft:mandalore_review",-69,76,-188));
  }
- @Test public void exactHothAndRetiredLandingBoundariesArePreserved(){
-  var p=policy();assertEquals(SAFEZONE,p.zone("minecraft:hoth",-47,80,-153));assertEquals(WARZONE,p.zone("minecraft:hoth",-237,-64,-121));
-  assertEquals(WARZONE,p.zone("minecraft:hoth",237,319,237));assertEquals(SAFEZONE,p.zone("minecraft:hoth",238,100,0));
-  assertEquals(SAFEZONE,p.zone("minecraft:hoth",0,320,0));assertFalse(p.spawning("minecraft:hoth",0,100,0));
+ @Test public void hothBaseSouthwestWarzoneAndRetiredLandingBoundaries(){
+  var p=policy();assertEquals(SAFEZONE,p.zone("minecraft:hoth",-47,80,-153));assertEquals(WILDERNESS,p.zone("minecraft:hoth",-237,-64,-121));
+  assertEquals(WARZONE,p.zone("minecraft:hoth",-237,319,237));assertEquals(WILDERNESS,p.zone("minecraft:hoth",238,100,0));
+  assertEquals(WILDERNESS,p.zone("minecraft:hoth",0,320,0));
+  assertTrue(p.wildernessChunk("minecraft:hoth",10,0));
+  assertFalse(p.wildernessChunk("minecraft:hoth",-10,10));
+  assertFalse(p.wildernessChunk("minecraft:hoth",16,0));assertFalse(p.spawning("minecraft:hoth",0,100,0));
   assertEquals(SAFEZONE,p.zone("minecraft:overworld",-144,73,-144));assertEquals(WILDERNESS,p.zone("minecraft:overworld",-145,73,-144));
   assertEquals(WILDERNESS,p.zone("minecraft:tatooine",1711,100,2201));assertTrue(p.edits("minecraft:tatooine",1711,100,2201));
  }
@@ -42,7 +45,8 @@ public class TerritoryPolicyTest {
  }
  @Test public void nearbyMapUsesNativeHothAndLegacyCuboidsInsteadOfInventingWilderness(){
   var p=policy();var hoth=p.nearbyMap("minecraft:hoth","Hoth",0,0,70);
-  assertEquals('W',hoth.zone(0,0));assertEquals('S',hoth.zone(15,0));
+  assertEquals('W',hoth.zone(-1,0));assertEquals('.',hoth.zone(15,0));
+  assertEquals('S',p.map("minecraft:hoth",0,0).zone(-3,-10));
   var old=p.nearbyMap("minecraft:overworld","Old",0,0,70);
   assertEquals('S',old.zone(-9,-9));assertEquals('.',old.zone(0,0));
  }

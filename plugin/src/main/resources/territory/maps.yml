@@ -1,6 +1,6 @@
 schema-version: 1
 world: minecraft:mandalore_review
-name: Mandalore (500×500)
+name: "Mandalore (500\xD7500)"
 min-chunk-x: -16
 max-chunk-x: 15
 min-chunk-z: -16
@@ -61,11 +61,13 @@ legacy-landing:
   - -129
   - 319
   - -129
+mechanism-worlds:
+- minecraft:ilum
 additional-maps:
   tatooine:
     schema-version: 1
     world: minecraft:tatooine_review
-    name: Tatooine (500×500)
+    name: "Tatooine (500\xD7500)"
     min-chunk-x: -16
     max-chunk-x: 15
     min-chunk-z: -16
@@ -103,5 +105,44 @@ additional-maps:
     - '...................WWWWWWWWWWWWW'
     - '...................WWWWWWWWWWWWW'
     - '...................WWWWWWWWWWWWW'
-mechanism-worlds:
-- minecraft:ilum
+  hoth:
+    schema-version: 1
+    world: minecraft:hoth
+    name: "Hoth (512\xD7512)"
+    min-chunk-x: -16
+    max-chunk-x: 15
+    min-chunk-z: -16
+    max-chunk-z: 15
+    rows:
+    - '............SSS.................'
+    - '...........SSSSS................'
+    - '...........SSSSSS...............'
+    - '...........SSSSSSS..............'
+    - '..........SSSSSSSSS.............'
+    - '..........SSSSSSSSSS............'
+    - '..........SSSSSSSSSS............'
+    - '..........SSSSSSSSSS............'
+    - '..........SSSSSSSSSS............'
+    - '...........SSSSSSSS.............'
+    - '............SSSSSSS.............'
+    - '................SS..............'
+    - '................................'
+    - '................................'
+    - '................................'
+    - '................................'
+    - WWWWWWWWWWWWWWWW................
+    - WWWWWWWWWWWWWWWW................
+    - WWWWWWWWWWWWWWWW................
+    - WWWWWWWWWWWWWWWW................
+    - WWWWWWWWWWWWWWWW................
+    - WWWWWWWWWWWWWWWW................
+    - WWWWWWWWWWWWWWWW................
+    - WWWWWWWWWWWWWWWW................
+    - WWWWWWWWWWWWWWWW................
+    - WWWWWWWWWWWWWWWW................
+    - WWWWWWWWWWWWWWWW................
+    - WWWWWWWWWWWWWWWW................
+    - WWWWWWWWWWWWWWWW................
+    - WWWWWWWWWWWWWWWW................
+    - WWWWWWWWWWWWWWWW................
+    - WWWWWWWWWWWWWWWW................

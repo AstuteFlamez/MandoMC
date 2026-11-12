@@ -1,30 +1,66 @@
-schema-version: 1
-gui-title: '<dark_gray>Galaxy Map'
-gui-size: 54
-messages:
-  players-only: '<red>Open warps in game.'
-  unknown: '<red>Choose Batuu, Hoth or Tatooine.'
-  unavailable: '<red>This destination is unavailable.'
-  click: '<yellow>Click to travel.'
-warps:
-  spawn:
-    name: '<gold>Batuu'
-    material: STICK
-    item-model: mandomc:planets/batuu
-    slot: 28
-    badges: '<white>đġ'
-    description: '<gray>Black Spire Outpost. Protected spawn hub.'
-  hoth:
-    name: '<white>Hoth'
-    material: STICK
-    item-model: mandomc:planets/hoth
-    slot: 39
-    badges: '<white>ĕġ'
-    description: '<gray>King of the Hill and PvP warzone.'
-  tatooine:
-    name: '<gold>Tatooine'
-    material: STICK
-    item-model: mandomc:planets/tatooine
-    slot: 43
-    badges: '<white>đġ'
-    description: '<gray>Jabba’s Palace. Dungeon testing.'
+{
+  "schema-version": 1,
+  "gui-title": "<dark_gray>Galaxy Map",
+  "gui-size": 54,
+  "messages": {
+    "players-only": "<red>Open warps in game.",
+    "unknown": "<red>Choose a destination from the Galaxy Map.",
+    "unavailable": "<red>This destination is unavailable.",
+    "click": "<yellow>Click to travel."
+  },
+  "warps": {
+    "spawn": {
+      "name": "<gold>Batuu",
+      "material": "STICK",
+      "item-model": "mandomc:planets/batuu",
+      "slot": 28,
+      "description": "<gray>Black Spire Outpost. Protected spawn hub."
+    },
+    "hoth": {
+      "name": "<white>Hoth",
+      "material": "STICK",
+      "item-model": "mandomc:planets/hoth",
+      "slot": 39,
+      "description": "<gray>King of the Hill and PvP warzone.",
+      "badges": "<white>\u0116\u0121"
+    },
+    "tatooine": {
+      "name": "<gold>Tatooine",
+      "material": "STICK",
+      "item-model": "mandomc:planets/tatooine",
+      "slot": 43,
+      "description": "<gray>Desert settlements and Jabba\u2019s Palace."
+    },
+    "mandalore": {
+      "name": "<gray>Mandalore",
+      "material": "STICK",
+      "item-model": "mandomc:planets/mandalore",
+      "slot": 32,
+      "description": "<gray>Glassed cities and the Beskar mines.",
+      "badges": "<white>\u0112\u0121"
+    },
+    "ilum": {
+      "name": "<aqua>Ilum",
+      "material": "STICK",
+      "item-model": "mandomc:planets/ilum",
+      "slot": 20,
+      "badges": "<white>\u0112\u0121",
+      "description": "<gray>The original Jedi trials. Earn a Kyber Crate Key."
+    },
+    "crates": {
+      "name": "<aqua>Crates",
+      "material": "ENDER_CHEST",
+      "slot": 24,
+      "description": "<gray>Preview rewards and open your crate keys.",
+      "location": {
+        "world": "minecraft:spawnworld",
+        "x": -32.522060072695176,
+        "y": 96.0,
+        "z": 16.540950565404483,
+        "yaw": -89.548004,
+        "pitch": 0.59998304
+      },
+      "show-in-menu": false
+    }
+  }
+}

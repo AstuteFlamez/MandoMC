@@ -40,17 +40,20 @@ public final class WarpService implements Listener, AutoCloseable {
         size=config.getInt("gui-size",54);
         if(size<9 || size>54 || size%9!=0) throw new IllegalArgumentException("travel/warps.yml: gui-size must be 9..54 in rows of nine");
         var section=config.getConfigurationSection("warps");
-        if(section==null || !section.getKeys(false).equals(java.util.Set.copyOf(ids())))
-            throw new IllegalArgumentException("travel/warps.yml: configure exactly spawn, hoth and tatooine");
-        for(String id:ids()) {
+        if(section==null || !java.util.Set.copyOf(ids()).containsAll(section.getKeys(false))
+                || !section.getKeys(false).containsAll(java.util.Set.of("spawn","hoth","tatooine")))
+            throw new IllegalArgumentException("travel/warps.yml: require spawn/hoth/tatooine; optional mandalore/ilum/crates");
+        for(String id:section.getKeys(false)) {
             int slot=config.getInt("warps."+id+".slot",-1);
             Material material=Material.matchMaterial(config.getString("warps."+id+".material",""));
-            if(slot<0 || slot>=size || slots.put(slot,id)!=null || material==null || !material.isItem() || material.isAir())
+            boolean visible=config.getBoolean("warps."+id+".show-in-menu",!id.equals("crates"));
+            if(slot<0 || slot>=size || (visible&&slots.put(slot,id)!=null) || material==null || !material.isItem() || material.isAir())
                 throw new IllegalArgumentException("travel/warps.yml: invalid/duplicate slot or material for "+id);
             String model=config.getString("warps."+id+".item-model","");
             if(!model.isEmpty() && org.bukkit.NamespacedKey.fromString(model)==null) throw new IllegalArgumentException("travel/warps.yml: missing/invalid item-model for "+id);
             for(String key:List.of("name","description")) require("warps."+id+"."+key);
         }
+        if(section.contains("crates")) destination("crates");
         require("gui-title");
         for(String key:List.of("players-only","unknown","unavailable","click")) require("messages."+key);
         var command=Objects.requireNonNull(plugin.getCommand("warp"));
@@ -62,31 +65,48 @@ public final class WarpService implements Listener, AutoCloseable {
             return true;
         });
         command.setTabCompleter((sender,ignored,label,args)->args.length==1
-                ?List.of("batuu","hoth","tatooine").stream().filter(id->id.startsWith(args[0].toLowerCase(Locale.ROOT))).toList():List.of());
+                ?List.of("batuu","hoth","tatooine","mandalore","ilum","crate","crates").stream().filter(id->configured(canonical(id)))
+                    .filter(id->id.startsWith(args[0].toLowerCase(Locale.ROOT))).toList():List.of());
         plugin.getServer().getPluginManager().registerEvents(this,plugin);
     }
     private void require(String path) {
         if(!config.isString(path) || config.getString(path).isBlank()) throw new IllegalArgumentException("travel/warps.yml: missing "+path);
     }
-    public static List<String> ids() {return List.of("spawn","hoth","tatooine");}
+    public static List<String> ids() {return List.of("spawn","hoth","tatooine","mandalore","ilum","crates");}
     public static String canonical(String input) {
         return switch(input.toLowerCase(Locale.ROOT)) {
             case "batuu","spawn","spawnworld","blackspireoutpost","black_spire_outpost"->"spawn";
             case "hoth"->"hoth";
             case "tatooine"->"tatooine";
+            case "mandalore","mandalorereview","mandalore_review"->"mandalore";
+            case "ilum"->"ilum";
+            case "crate","crates"->"crates";
             default->null;
         };
     }
     private Component text(String path) {return MiniMessage.miniMessage().deserialize(config.getString(path)).decoration(TextDecoration.ITALIC,false);}
     private Component message(String key) {return text("messages."+key);}
+    private boolean configured(String id) {return config.isConfigurationSection("warps."+id);}
     public Location destination(String id) {
         return switch(id) {case "spawn"->arrivals.spawn();case "hoth"->arrivals.protectedWorld("minecraft:hoth");
-            case "tatooine"->arrivals.adventureWorld("minecraft:tatooine");
+            case "tatooine"->arrivals.adventureWorld("minecraft:tatooine_review");
+            case "mandalore"->arrivals.adventureWorld("minecraft:mandalore_review");
+            case "ilum"->arrivals.adventureWorld("minecraft:ilum");
+            case "crates"->crateDestination();
             default->throw new IllegalStateException("Unknown public warp: "+id);};
+    }
+    private Location crateDestination() {
+        String path="warps.crates.location.";
+        for(String key:List.of("world","x","y","z","yaw","pitch"))
+            if(!config.contains(path+key))throw new IllegalArgumentException("travel/warps.yml: missing "+path+key);
+        var key=org.bukkit.NamespacedKey.fromString(config.getString(path+"world",""));
+        var world=key==null?null:plugin.getServer().getWorld(key);
+        return ArrivalDestinations.safeSpawn(new Location(world,config.getDouble(path+"x"),config.getDouble(path+"y"),
+                config.getDouble(path+"z"),(float)config.getDouble(path+"yaw"),(float)config.getDouble(path+"pitch")));
     }
     public boolean request(Player player,String input) {
         String id=canonical(input);
-        if(id==null) {player.sendMessage(message("unknown"));return false;}
+        if(id==null || !configured(id)) {player.sendMessage(message("unknown"));return false;}
         if(!player.hasPermission("mandomc.travel.warp")) {player.sendMessage(message("unavailable"));return false;}
         return travel.request(player,()->destination(id));
     }
