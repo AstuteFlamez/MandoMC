@@ -30,7 +30,9 @@ public final class SpawnDecorProbe extends JavaPlugin {
             var base=decor.bases().get(definition.id());var model=decor.model(definition.id());Location at=definition.location();
             check(base.isValid()&&!base.isDead(),definition.id()+" live base");
             check(base.getWorld()==at.getWorld()&&base.getLocation().distanceSquared(at)<.000001,definition.id()+" exact world and coordinates");
-            check(base.getLocation().getYaw()==definition.yaw()&&base.getLocation().getPitch()==definition.pitch(),definition.id()+" exact captured yaw/pitch");
+            if(liveOnly&&definition.npc())check(Math.abs(Math.IEEEremainder(base.getYaw()-model.modeled().getYBodyRot(),360))<.1
+                    &&Math.abs(Math.IEEEremainder(model.active().getLockedYHeadRot()-model.modeled().getYHeadRot(),360))<.1,definition.id()+" native/rendered live look remains synchronized");
+            else check(base.getLocation().getYaw()==definition.yaw()&&base.getLocation().getPitch()==definition.pitch(),definition.id()+" exact captured yaw/pitch");
             check(base.isInvulnerable()&&!base.hasGravity()&&!base.isCollidable()&&!base.isPersistent()&&base.isSilent(),definition.id()+" frozen protected nonpersistent base");
             check(!base.canMove()&&!base.canTick(),definition.id()+" no native tick/motion controller");
             check(!model.modeled().shouldBeSaved()&&!model.modeled().isBaseEntityVisible()&&model.modeled().isInitialized(),definition.id()+" renderer ready without extra persistence");
