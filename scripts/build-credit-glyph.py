@@ -15,8 +15,8 @@ def build():
     (art/'credit.svg').write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 8" shape-rendering="crispEdges"><g fill="white">'+''.join(rects)+'</g></svg>\n')
     (art/'design.json').write_text(json.dumps({'symbol':'Galactic credit: Aurebesh Resh / angular7 with two strokes through the top bar',
         'reference':'https://starwars.fandom.com/wiki/Galactic_Credit_Standard/Legends','art':'Original hand-pixelled interpretation; no third-party image copied',
-        'codepoint':'U+0024','size':[5,8],'ascent':7,'height':8,'advance':6,'pattern':PATTERN,'tint':'white RGBA, transparent background'},indent=2)+'\n')
+        'codepoint':'U+0024','size':[5,8],'ascent':8,'height':8,'advance':6,'pattern':PATTERN,'tint':'white RGBA, transparent background'},indent=2)+'\n')
     font=ROOT/'resource-pack/src/assets/minecraft/font/default.json';data=json.loads(font.read_text())
-    data['providers']=[{'type':'bitmap','file':'mandomc:font/credit.png','ascent':7,'height':8,'chars':['$']}]+[p for p in data['providers']if p.get('file')!='mandomc:font/credit.png']
+    data['providers']=[{'type':'bitmap','file':'mandomc:font/credit.png','ascent':8,'height':8,'chars':['$']}]+[p for p in data['providers']if p.get('file')!='mandomc:font/credit.png']
     font.write_text(json.dumps(data,indent=2,ensure_ascii=False)+'\n');print('Built Galactic credit glyph at U+0024, five visible pixels + one pixel advance; other characters unchanged.')
 if __name__=='__main__':build()

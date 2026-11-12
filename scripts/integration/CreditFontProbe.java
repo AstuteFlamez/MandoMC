@@ -15,8 +15,8 @@ public class CreditFontProbe {
   var custom=resource("MandoMC",Files.readAllBytes(Path.of(args[0])));
   var records=new ArrayList<>((List<Pair<?,GlyphProviderDefinition.Conditional>>)load.invoke(null,List.of(base,custom),Identifier.parse("minecraft:default")));
   Collections.reverse(records);boolean found=false;
-  for(var record:records){var definition=record.getSecond().definition();if(definition instanceof BitmapProvider.Definition bitmap){for(var row:bitmap.codepointGrid())for(int cp:row)if(cp==36){var id=record.getFirst();var pack=id.getClass().getDeclaredMethod("pack");pack.setAccessible(true);if(!pack.invoke(id).equals("MandoMC")||!bitmap.file().toString().equals("mandomc:font/credit.png")||bitmap.ascent()!=7||bitmap.height()!=8)throw new AssertionError("wrong selected dollar provider");found=true;break;}}if(found)break;}
+  for(var record:records){var definition=record.getSecond().definition();if(definition instanceof BitmapProvider.Definition bitmap){for(var row:bitmap.codepointGrid())for(int cp:row)if(cp==36){var id=record.getFirst();var pack=id.getClass().getDeclaredMethod("pack");pack.setAccessible(true);if(!pack.invoke(id).equals("MandoMC")||!bitmap.file().toString().equals("mandomc:font/credit.png")||bitmap.ascent()!=8||bitmap.height()!=8)throw new AssertionError("wrong selected dollar provider");found=true;break;}}if(found)break;}
   if(!found)throw new AssertionError("dollar glyph missing");
-  System.out.println("26.1.2 client FontManager CODEC/stack validation PASSED: top-pack credit bitmap wins for U+0024; baseline7/height8 accepted.");
+  System.out.println("26.1.2 client FontManager CODEC/stack validation PASSED: top-pack credit bitmap wins for U+0024; ascent8/height8 accepted.");
  }
 }

@@ -3,7 +3,7 @@
     {
       "type": "bitmap",
       "file": "mandomc:font/credit.png",
-      "ascent": 7,
+      "ascent": 8,
       "height": 8,
       "chars": [
         "$"
