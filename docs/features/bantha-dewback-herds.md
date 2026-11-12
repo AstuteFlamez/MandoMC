@@ -151,3 +151,10 @@ handler list and are explicitly cancelled before queued herd actions, avoiding n
 duplicate feeding or lead changes. 191 Java tests, two asset tests and176 native assertions pass:64 two-species actual click/screen
 checks,35 GUI/lead packet/physics checks,9 fence-restart/rejoin checks,56 full interactions
 and12 ordinary restart/conversion checks. Current rollout state is in docs/status.md.
+
+The custom GUI/leads rollout is live with JAR SHA-256
+`989c7a597d6c827d9e1463de8b465ee42a605c8877719414e8661cca74cdd7cf`. One normal
+restart and175 read-only live assertions preserve the gray7/decor9/boards2/frozen2115 state.
+All473 unrelated JAR entries and the current pack/Dewback blueprint remain unchanged. KOTH
+was restored, the checker JAR removed and the coordinated window released. Client appearance
+and feel remain the next playtest.

@@ -21,7 +21,16 @@ The final two-species custom-screen check passes64 assertions, for176 native ass
 unrelated current JAR entries over latest KOTH baselinebfdc971e, modifies only herd owners/
 goals, the narrow leash cleanup exclusion and bundled GUI language, and adds equipment/lead
 helpers. Only two live Mythic PreventLeashing flags change. Current pack and Dewback blueprint
-are unchanged. No live custom GUI/leads rollout yet. Next action: obtain the assigned window and deploy the scoped candidate before client playtesting.
+are unchanged. Deployed with one normal restart in the assigned window. Live JAR SHA-256
+`989c7a597d6c827d9e1463de8b465ee42a605c8877719414e8661cca74cdd7cf`; both herd
+PreventLeashing flags are false.175 read-only live assertions pass across two snapshots:
+gray7 actual health/rigs, decor9, boards2 and frozen2115. The startup Mythic sample was empty;
+no actors were created. All473 unrelated JAR entries, current pack, Dewback blueprint and
+protected config/frozen files are preserved; server.properties changed only its generated
+timestamp comment. The self-disabled checker JAR is removed, fresh pre-stop KOTH restored
+and the window released. Exact backups/receipt are in ignored
+`.local/herd-custom-release/live-receipt.json`. Next action: client-test custom saddle transfers,
+lead attachment/release and fence-knot appearance.
 
 ## Herd client saddle screen and Dewback body collision correction (2026-11-12)
 The user reproduced a missing saddle menu after taming with both hands clear. The server-side
