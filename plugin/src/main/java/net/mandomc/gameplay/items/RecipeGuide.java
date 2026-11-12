@@ -115,7 +115,7 @@ public final class RecipeGuide implements Listener, AutoCloseable {
         for (int slot = 0, i = page * 45; slot < 45 && i < choices.size(); slot++, i++) {
             var recipe = choices.get(i);
             var icon = recipes.result(recipe);
-            menu.inventory.setItem(slot, obtainPreview(icon));
+            menu.inventory.setItem(slot, obtainPreview(icon, recipe.result()));
             menu.actions.put(slot, p -> detail(p, recipe, v -> open(v, category, page)));
         }
         button(menu, 45, Material.CHEST, "categories", "", this::categories);
@@ -139,7 +139,7 @@ public final class RecipeGuide implements Listener, AutoCloseable {
                 if (symbol == ' ') continue;
                 String ingredient = recipe.ingredients().get(symbol);
                 int slot = GRID[(y + recipe.guideRowOffset()) * 3 + x];
-                menu.inventory.setItem(slot, obtainPreview(recipes.ingredient(ingredient)));
+                menu.inventory.setItem(slot, obtainPreview(recipes.ingredient(ingredient), ingredient));
                 menu.actions.put(slot, p -> {
                     var matches = recipesFor(ingredient);
                     if (matches.isEmpty()) {
@@ -171,11 +171,16 @@ public final class RecipeGuide implements Listener, AutoCloseable {
         menu.actions.put(slot, action);
     }
 
-    private ItemStack obtainPreview(ItemStack original) {
+    private ItemStack obtainPreview(ItemStack original, String itemId) {
         var preview = original.clone();
         var meta = preview.getItemMeta();
         var lore = meta.lore() == null ? new ArrayList<Component>() : new ArrayList<>(meta.lore());
         lore.add(Component.empty());
+        String source = config.getString("sources." + itemId);
+        if (source != null && !source.isBlank()) {
+            for (String line : source.split("\\R")) lore.add(render(line));
+            lore.add(Component.empty());
+        }
         lore.add(text("obtain-hint", ""));
         meta.lore(lore);
         preview.setItemMeta(meta);
