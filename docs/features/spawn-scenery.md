@@ -1,5 +1,5 @@
 # Feature: Fixed spawn scenery
-Status: playable; natural looking and written dialogue update staged
+Status: playable
 Branch: bilal/spawn-decor
 
 ## Player experience
@@ -22,4 +22,4 @@ DecorService owns configuration, protected bases, chunk tickets, target selectio
 The client-click fault was reproduced with the original artifact: interaction hitboxes were registered server-side but `hitboxVisible=false` made ModelEngine omit their client INTERACTION spawn packets. Forcing those unspawned IDs in direct tests had hidden the bug; the revised tests require actual client spawn packet production first.
 
 ## Pause note
-The scoped natural-looking/chat-only update is ready. Next action: deploy in the assigned window and verify the five client click targets read-only, then ask the user to right-click Boba and Bossk in game.
+The natural-looking/chat-only update is deployed. 118 read-only live checks passed; the normal server runs without probes, all seven gray rigs/UUIDs and pack/configs are preserved, and Jabba is restored. Next action: right-click Boba and Bossk in a real client and inspect their head/body response.
