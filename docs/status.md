@@ -1,5 +1,7 @@
 # Resume here
 
+Helmet GUI orientation (2026-11-12), `bilal/helmet-gui-orientation`: staged four GUI-only model changes and actual geometry/UV contact sheet. Source JSON/reference build passes; deployed 1178-entry overlay retains all 1174 unrelated entries and every non-GUI transform. No live changes. Boba owns the current rollout window. See [feature](features/helmet-gui-orientation.md). Next action: publish the scoped overlay after coordinator release, rebasing against the then-current pack CAS.
+
 ## JustTimm integration history (2026-11-12)
 
 Merged the remaining `bilal/justtimm-saber-pack` commit dcbfca4 by full-history merge after the user approved its integration. All 78 catalog entries, item wrappers and pinned official upstream model references were already present on `main`. Preserved the exact current font JSON bytes: the merge's only proposed content change was equivalent Unicode escaping. All other existing pack assets, GUI art, fonts, credits and gameplay remain byte-identical to the previously verified integration. The JustTimm branch name and its dirty worktree are retained. No upstream artwork was downloaded, copied or rehosted; no pack publication or server deployment/restart is part of this follow-up. Verification: all 32 Python tooling tests and pack build pass; gameplay/build inputs are unchanged from the prior 174-test Java build. Next action: reconcile remaining deployed feature overlays before any full-JAR deployment.
