@@ -162,10 +162,12 @@ public final class BobaEquipment implements Listener, AutoCloseable {
                             p.setVelocity(velocity);
                         }
                         if(Bukkit.getCurrentTick()%4==0) {
-                            var exhaustPose=JetpackPose.at(p.getLocation(),p.getBodyYaw(),p.getPitch(),p.isSneaking(),p.isGliding());
+                            var exhaustPose=backAttachment.pose(p);
                             var exhaust=new Vector3f(0,-1,0).rotate(exhaustPose.modelRotation());
                             for(float x:new float[]{-.375f,.375f}) {
-                                var nozzle=new Vector3f(x,-.25f,.375f).rotate(exhaustPose.modelRotation());
+                                var nozzle=new Vector3f(x,-.25f,.375f)
+                                        .mul((float)p.getAttribute(org.bukkit.attribute.Attribute.SCALE).getValue())
+                                        .rotate(exhaustPose.modelRotation());
                                 var at=exhaustPose.center().clone().add(nozzle.x,nozzle.y,nozzle.z);
                                 p.getWorld().spawnParticle(Particle.FLAME,at,0,exhaust.x,exhaust.y,exhaust.z,.12);
                                 p.getWorld().spawnParticle(Particle.LARGE_SMOKE,at,1,.04,.04,.04,0);
@@ -177,12 +179,12 @@ public final class BobaEquipment implements Listener, AutoCloseable {
                     }
                 }
             }
-            var pose=JetpackPose.at(p.getLocation(),p.getBodyYaw(),p.getPitch(),p.isSneaking(),p.isGliding());
+            var pose=backAttachment.pose(p);
             // Native passenger movement follows the same interpolated player position on every client frame.
             // Only the torso-local pose changes; no per-tick teleports or delayed absolute movement packets.
             w.display.setRotation(0,0);
             var transform=new Transformation(backAttachment.translation(p,w.display,pose.center()),
-                    pose.rotation(),new Vector3f(1),new Quaternionf());
+                    pose.rotation(),new Vector3f((float)p.getAttribute(org.bukkit.attribute.Attribute.SCALE).getValue()),new Quaternionf());
             if(!transform.equals(w.display.getTransformation())) {
                 w.display.setTransformation(transform);w.display.setInterpolationDelay(0);
             }

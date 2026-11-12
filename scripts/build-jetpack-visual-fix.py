@@ -13,7 +13,7 @@ with zipfile.ZipFile(a.jar) as z:before={n:z.read(n) for n in z.namelist()}
 after=dict(before)
 for file in classes.rglob('*.class'):after[file.relative_to(classes).as_posix()]=file.read_bytes()
 for name in ['items/definitions/boba-equipment.yml','equipment/boba.yml']:after[name]=(ROOT/'plugin/src/main/resources'/name).read_bytes()
-changed=sorted(n for n in before if before[n]!=after[n]);allowed={'net/mandomc/gameplay/boba/BobaEquipment.class','net/mandomc/gameplay/boba/BobaEquipment$Wearer.class','net/mandomc/gameplay/boba/JetpackPose.class','net/mandomc/gameplay/boba/JetpackPose$Pose.class','net/mandomc/gameplay/boba/ThrustFuel.class','items/definitions/boba-equipment.yml','equipment/boba.yml'};assert set(changed)<=allowed
+changed=sorted(n for n in before if before[n]!=after[n]);allowed={'net/mandomc/gameplay/boba/BobaEquipment.class','net/mandomc/gameplay/boba/BobaEquipment$Wearer.class','net/mandomc/gameplay/boba/JetpackPose.class','net/mandomc/gameplay/boba/JetpackPose$Pose.class','net/mandomc/gameplay/boba/ThrustFuel.class','net/mandomc/integrations/models/PlayerBackAttachment.class','items/definitions/boba-equipment.yml','equipment/boba.yml'};assert set(changed)<=allowed
 jar=a.output/'MandoMC.jar'
 with zipfile.ZipFile(jar,'w',zipfile.ZIP_DEFLATED) as z:
  for n,data in sorted(after.items()):

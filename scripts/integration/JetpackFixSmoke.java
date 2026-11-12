@@ -82,7 +82,7 @@ public final class JetpackFixSmoke extends JavaPlugin {
         for(float yaw:new float[]{0,90,180,270}) {
             actor.setRotation(yaw+35,50);actor.setBodyYaw(yaw);
             tick.invoke(equipment);riding.invoke(actorHandle,displayHandle);
-            var expected=JetpackPose.at(actor.getLocation(),yaw,50,false,false);
+            var expected=new net.mandomc.integrations.models.PlayerBackAttachment().pose(actor);
             var content=display.getLocation().add(display.getTransformation().getTranslation().x,
                     display.getTransformation().getTranslation().y,display.getTransformation().getTranslation().z);
             getLogger().info("MOUNT yaw="+yaw+" actualBody="+actor.getBodyYaw()+" glide="+actor.isGliding()+" powered="+equipment.powered(actor)+" mounted="+(display.getVehicle()==actor)+" content="+content+" expected="+expected.center()+" translation="+display.getTransformation().getTranslation());
@@ -97,17 +97,44 @@ public final class JetpackFixSmoke extends JavaPlugin {
             check(display.isValid()&&display.getVehicle()==actor,"native attachment survives movement into loaded player destination chunk");
             var moved=display.getLocation().add(display.getTransformation().getTranslation().x,
                     display.getTransformation().getTranslation().y,display.getTransformation().getTranslation().z);
-            check(moved.distance(JetpackPose.at(actor.getLocation(),yaw,50,false,false).center())<.00001,
+            check(moved.distance(new net.mandomc.integrations.models.PlayerBackAttachment().pose(actor).center())<.00001,
                     "native mount follows 18-block parent movement without absolute teleport lag at yaw "+yaw);
         }
-        actor.setSneaking(true);tick.invoke(equipment);riding.invoke(actorHandle,displayHandle);
+        actor.setSneaking(true);actor.setPose(Pose.SNEAKING);tick.invoke(equipment);riding.invoke(actorHandle,displayHandle);
         var actual=display.getLocation().add(display.getTransformation().getTranslation().x,
                 display.getTransformation().getTranslation().y,display.getTransformation().getTranslation().z);
-        check(actual.distance(JetpackPose.at(actor.getLocation(),actor.getBodyYaw(),actor.getPitch(),true,false).center())<.00001,"sneaking mount translation uses exact native pivot");
-        actor.setSneaking(false);actor.setGliding(true);actor.setRotation(0,0);actor.setBodyYaw(0);tick.invoke(equipment);
+        check(actual.distance(new net.mandomc.integrations.models.PlayerBackAttachment().pose(actor).center())<.00001,"sneaking mount translation uses exact native pivot");
+        actor.setSneaking(false);actor.setPose(Pose.STANDING);actor.setGliding(true);actor.setRotation(0,0);actor.setBodyYaw(0);
+        var flyTicks=Class.forName("net.minecraft.world.entity.LivingEntity").getDeclaredField("fallFlyTicks");
+        flyTicks.setAccessible(true);
+        for(int ticks:new int[]{0,2,5,8,10,30}) {
+            flyTicks.setInt(actorHandle,ticks);tick.invoke(equipment);riding.invoke(actorHandle,displayHandle);
+            var position=display.getLocation().add(display.getTransformation().getTranslation().x,
+                    display.getTransformation().getTranslation().y,display.getTransformation().getTranslation().z);
+            check(position.distance(new net.mandomc.integrations.models.PlayerBackAttachment().pose(actor).center())<.00001,
+                    "native glide counter follows full torso render pivot at tick "+ticks);
+        }
+        tick.invoke(equipment);
         var effective=new org.joml.Quaternionf(display.getTransformation().getLeftRotation()).rotateY((float)Math.PI);
         check(new org.joml.Vector3f(0,0,1).rotate(effective).y>.999,"gliding geometry is above horizontal back rather than below/front");
         check(display.getTeleportDuration()==0&&display.getVehicle()==actor,"display follows via passenger sync with zero teleport interpolation");
+        actor.setGliding(false);actor.setPose(Pose.SWIMMING);
+        var swimming=Class.forName("net.minecraft.world.entity.LivingEntity").getDeclaredField("swimAmount");
+        swimming.setAccessible(true);
+        for(float amount:new float[]{0,.25f,.5f,.75f,1}) {
+            swimming.setFloat(actorHandle,amount);tick.invoke(equipment);riding.invoke(actorHandle,displayHandle);
+            var position=display.getLocation().add(display.getTransformation().getTranslation().x,
+                    display.getTransformation().getTranslation().y,display.getTransformation().getTranslation().z);
+            check(position.distance(new net.mandomc.integrations.models.PlayerBackAttachment().pose(actor).center())<.00001,
+                    "native crawl/swim progress follows torso pivot at "+amount);
+        }
+        swimming.setFloat(actorHandle,0);actor.setPose(Pose.STANDING);
+        var chest=actor.getInventory().getChestplate();actor.getInventory().setChestplate(null);tick.invoke(equipment);
+        var bare=new net.mandomc.integrations.models.PlayerBackAttachment().pose(actor);
+        actor.getInventory().setChestplate(chest);tick.invoke(equipment);
+        var armored=new net.mandomc.integrations.models.PlayerBackAttachment().pose(actor);
+        check(bare.center().distance(armored.center())>.04&&bare.center().distance(armored.center())<.05,
+                "live armor removal tightens plate against skin instead of leaving armor gap");
         move.invoke(actorHandle,original.getX(),original.getY(),original.getZ());riding.invoke(actorHandle,displayHandle);tick.invoke(equipment);
     }
     private Player nativePlayer(Location location)throws Exception {
