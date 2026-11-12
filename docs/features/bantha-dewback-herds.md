@@ -1,5 +1,5 @@
 # Feature: Bantha and Dewback herds
-Status: implemented and staged; deployment and client playtest pending
+Status: deployed; client appearance and riding-feel playtest pending
 Branch: bilal/bantha-dewback-babies
 
 ## Player experience
@@ -84,8 +84,14 @@ only the herd class families, two drop owners and narrow SandySpawns changes ove
 shared JAR. A Java ClassFile patch adds one bootstrap call while preserving every unrelated
 bootstrap method. All unrelated JAR entries, including the deployed level-removal adapters,
 remain byte-identical. The scoped pack merges over the current published ZIP. Recheck both
-baselines and coordinate the server window before deployment or publication. No live world,
-shared runtime or published pack has been changed by this work.
+baselines and coordinate the server window before deployment or publication. The coordinated rollout used one normal restart, scoped backups, a verified public pack
+download and the current baselines. Live JAR SHA-256 is
+`34352f7b05410c52b12f69fd554e282983399c5d811fd4bbc20779daccfbadd9`. Pack
+`resource-pack-26.1.2-2c075adc803b` was selected at startup and successfully loaded by the player.
+171 read-only live assertions passed across two snapshots, including seven gray host UUIDs,
+nine decor anchors, both boards and 2115 ready frozen chunks. All 2131 frozen baseline files
+remained byte-identical. There were no loaded Mythic mobs in the startup sample; the seven
+existing gray hosts had valid actual health. The checker self-disabled and its JAR was removed.
+KOTH was restored from the fresh pre-stop status and the deployment window released.
 
-Next action: hand the tested scoped artifacts to the coordinating chat, recheck the current
-baselines and use its assigned deployment window before the client playtest.
+Next action: client-test food attraction, native saddle equipment, saddle appearance and riding feel.
