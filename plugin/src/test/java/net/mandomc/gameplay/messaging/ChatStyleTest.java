@@ -18,7 +18,8 @@ public class ChatStyleTest {
         TextColor color=c.color()==null?inherited:c.color();
         var italic=c.decoration(TextDecoration.ITALIC)==TextDecoration.State.NOT_SET?italics:c.decoration(TextDecoration.ITALIC);
         if(c instanceof TextComponent t&&!t.content().isEmpty()){
-            if(admin){assertEquals(NamedTextColor.RED,color);assertEquals(TextDecoration.State.TRUE,italic);}
+            if(t.content().equals(" » ")){assertEquals(NamedTextColor.DARK_GRAY,color);assertEquals(TextDecoration.State.FALSE,italic);}
+            else if(admin){assertEquals(NamedTextColor.RED,color);assertEquals(TextDecoration.State.TRUE,italic);}
             else {assertEquals(TextDecoration.State.FALSE,italic);assertEquals(NamedTextColor.RED,color);}
         }
         for(var child:c.children())effective(child,color,italic,admin);
@@ -28,7 +29,7 @@ public class ChatStyleTest {
         var input=Component.empty().append(Component.text("ᴍᴀɴᴅᴏᴍᴄ",NamedTextColor.RED)).append(Component.text(" » ",NamedTextColor.DARK_GRAY))
                 .append(Component.text("Open recipes",NamedTextColor.GREEN).clickEvent(click).hoverEvent(hover));
         var result=style.format(input,ChatCategory.INFO);
-        assertEquals("MandoMC » Open recipes",ChatStyle.plain(result));
+        assertEquals("ᴍᴀɴᴅᴏᴍᴄ » Open recipes",ChatStyle.plain(result));
         assertTrue(hasEvents(result,click,hover));assertSame(result,style.format(result,ChatCategory.INFO));
     }
     private boolean hasEvents(Component c,ClickEvent click,HoverEvent<?> hover){
@@ -36,7 +37,7 @@ public class ChatStyleTest {
     }
     @Test public void literalPlayerMarkupIsNeverParsed(){
         var result=style.format(Component.text("Invited <red><click:run_command:/op me>name",NamedTextColor.GREEN),ChatCategory.SOCIAL);
-        assertEquals("MandoMC » Invited <red><click:run_command:/op me>name",ChatStyle.plain(result));
+        assertEquals("ᴍᴀɴᴅᴏᴍᴄ » Invited <red><click:run_command:/op me>name",ChatStyle.plain(result));
         assertNull(result.clickEvent());
     }
     @Test public void translationCauseAndArgumentsRemainNative(){
@@ -45,6 +46,18 @@ public class ChatStyleTest {
         assertTrue(result.children().get(1) instanceof TranslatableComponent);
         assertEquals("death.attack.player",((TranslatableComponent)result.children().get(1)).key());
         assertEquals(2,((TranslatableComponent)result.children().get(1)).arguments().size());
+    }
+    @Test public void matchesScoreboardBrandAndKeepsSeparatorIndependent(){
+        var result=style.format(Component.text("Ready",NamedTextColor.GREEN),ChatCategory.SUCCESS);
+        var brand=result.children().getFirst();var separator=brand.children().getFirst();
+        assertEquals("ᴍᴀɴᴅᴏᴍᴄ » Ready",ChatStyle.plain(result));
+        assertEquals(net.kyori.adventure.key.Key.key("minecraft:default"),brand.font());
+        assertEquals(TextDecoration.State.TRUE,brand.decoration(TextDecoration.BOLD));
+        assertEquals(NamedTextColor.GREEN,brand.color());assertEquals(NamedTextColor.DARK_GRAY,separator.color());
+        assertEquals(TextDecoration.State.FALSE,separator.decoration(TextDecoration.BOLD));
+        for(String legacy:new String[]{"MandoMC » Ready","ᴍᴀɴᴅᴏᴍᴄ » Ready","[MandoMC] >> Ready"})
+            assertEquals("ᴍᴀɴᴅᴏᴍᴄ » Ready",ChatStyle.plain(style.format(Component.text(legacy),ChatCategory.SUCCESS)));
+        assertSame(result,style.format(result,ChatCategory.SUCCESS));
     }
     @Test public void templatesAreAnchoredAndRegexLiteralsAreQuoted(){
         var pattern=MessageCatalog.templatePattern("<gray>Paid $<amount> to <player> (saved).");

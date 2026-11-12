@@ -52,7 +52,7 @@ public final class ChatPolishProbe extends JavaPlugin {
         var ammo=event(new WrapperPlayServerSystemChatMessage(false,oldAmmo),ConnectionState.PLAY);
         packets.onPacketSend(ammo);check(!ammo.isCancelled(),"First genuine vendor ammo notice retained");
         var ammoMessage=((WrapperPlayServerSystemChatMessage)ammo.getLastUsedWrapper()).getMessage();
-        colored(ammoMessage,ChatCategory.ERROR,false);check(ChatStyle.plain(ammoMessage).equals("MandoMC » Out of plasma cells!"),"Vendor prefix replaced exactly once");
+        colored(ammoMessage,ChatCategory.ERROR,false);check(ChatStyle.plain(ammoMessage).equals(ChatStyle.PREFIX+"Out of plasma cells!"),"Vendor prefix replaced exactly once");
         var repeated=event(new WrapperPlayServerSystemChatMessage(false,oldAmmo),ConnectionState.PLAY);packets.onPacketSend(repeated);check(repeated.isCancelled(),"Repeated empty-ammo notice throttled");
         var crate=system(mm("<aqua>Crate reward » </aqua><blue>Blue Kyber Crystal"),false);colored(crate,ChatCategory.SUCCESS,false);samples.add(ChatStyle.plain(crate));
         for(UUID id:messages.packIds()){
@@ -179,13 +179,17 @@ public final class ChatPolishProbe extends JavaPlugin {
     private void colored(Component message,ChatCategory category,boolean admin){
         check(ChatStyle.formatted(message),"Formatted component has one owned prefix");
         check(message.children().getFirst().color().equals(category.color()),"Category color "+category);
+        var brand=message.children().getFirst();var separator=brand.children().getFirst();
+        check(brand.font().equals(net.kyori.adventure.key.Key.key("minecraft:default"))&&brand.decoration(TextDecoration.BOLD)==TextDecoration.State.TRUE,"Scoreboard smallcap bold brand uses default font");
+        check(separator instanceof TextComponent text&&text.content().equals(" » ")&&separator.color().equals(NamedTextColor.DARK_GRAY)
+                &&separator.decoration(TextDecoration.BOLD)==TextDecoration.State.FALSE,"Special double-chevron separator independently dark gray");
         if(admin)effective(message,null,TextDecoration.State.NOT_SET);
         else check(message.children().getFirst().decoration(TextDecoration.ITALIC)==TextDecoration.State.FALSE,"Ordinary message prefix non-italic");
     }
     private void effective(Component node,TextColor inherited,TextDecoration.State inheritedItalic){
         var color=node.color()==null?inherited:node.color();
         var italic=node.decoration(TextDecoration.ITALIC)==TextDecoration.State.NOT_SET?inheritedItalic:node.decoration(TextDecoration.ITALIC);
-        if(node instanceof TextComponent text&&!text.content().isEmpty())check(color.equals(NamedTextColor.RED)&&italic==TextDecoration.State.TRUE,"All visible staff text red italic");
+        if(node instanceof TextComponent text&&!text.content().isEmpty())check(text.content().equals(" » ")?color.equals(NamedTextColor.DARK_GRAY)&&italic==TextDecoration.State.FALSE:color.equals(NamedTextColor.RED)&&italic==TextDecoration.State.TRUE,"Staff body/brand red italic; separator dark gray");
         for(var child:node.children())effective(child,color,italic);
         if(node instanceof TranslatableComponent translated)for(var arg:translated.arguments())if(arg.value() instanceof Component child)effective(child,color,italic);
     }

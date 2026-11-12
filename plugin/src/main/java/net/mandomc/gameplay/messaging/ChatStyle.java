@@ -14,14 +14,15 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 /** Formats an existing component tree without reparsing player text, click events or translations. */
 public final class ChatStyle {
-    public static final String PREFIX = "MandoMC » ";
+    public static final String BRAND = "ᴍᴀɴᴅᴏᴍᴄ";
+    public static final String PREFIX = BRAND + " » ";
     private static final PlainTextComponentSerializer PLAIN = PlainTextComponentSerializer.plainText();
-    private static final Pattern LEGACY = Pattern.compile("^(?:\\[(?:MandoMC|ᴍᴀɴᴅᴏᴍᴄ)\\]|(?:MandoMC|ᴍᴀɴᴅᴏᴍᴄ))\\s*[»>:]\\s*", Pattern.CASE_INSENSITIVE);
+    private static final Pattern LEGACY = Pattern.compile("^(?:\\[(?:MandoMC|ᴍᴀɴᴅᴏᴍᴄ)\\]|(?:MandoMC|ᴍᴀɴᴅᴏᴍᴄ))\\s*(?:>>|[»>:])\\s*", Pattern.CASE_INSENSITIVE);
 
     public static String plain(Component component) { return PLAIN.serialize(component); }
     public static boolean formatted(Component component) {
         return component.children().size() == 2 && component.children().getFirst() instanceof TextComponent prefix
-                && prefix.content().equals(PREFIX) && component.decoration(TextDecoration.ITALIC) == TextDecoration.State.FALSE;
+                && plain(prefix).equals(PREFIX) && prefix.content().equals(BRAND) && component.decoration(TextDecoration.ITALIC) == TextDecoration.State.FALSE;
     }
     public static String withoutPrefix(String text) { return LEGACY.matcher(text).replaceFirst(""); }
 
@@ -31,9 +32,13 @@ public final class ChatStyle {
         Component body = match.find() ? removeLeadingText(input, new AtomicInteger(match.end())) : input;
         TextColor base = firstColor(body, null);
         body = restyle(body, category, base);
-        var prefix = Component.text(PREFIX, category.color())
-                .decoration(TextDecoration.ITALIC, category == ChatCategory.ADMIN);
-        return Component.empty().color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false)
+        var prefix = Component.text(BRAND, category.color())
+                .font(net.kyori.adventure.key.Key.key("minecraft:default"))
+                .decoration(TextDecoration.BOLD, true)
+                .decoration(TextDecoration.ITALIC, category == ChatCategory.ADMIN)
+                .append(Component.text(" » ", NamedTextColor.DARK_GRAY)
+                        .decoration(TextDecoration.BOLD, false).decoration(TextDecoration.ITALIC, false));
+        return Component.empty().color(NamedTextColor.GRAY).decoration(TextDecoration.BOLD, false).decoration(TextDecoration.ITALIC, false)
                 .append(prefix).append(body);
     }
 

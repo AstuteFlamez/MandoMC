@@ -1,6 +1,11 @@
 # Resume here
 Updated: 2026-11-11
 
+## Scoreboard-lettered system prefix (2026-11-11)
+The user refined system chat to the scoreboard's exact bold small-cap `ᴍᴀɴᴅᴏᴍᴄ` lettering in the default Minecraft font, with category color on the brand and a separate dark-gray special `»` symbol. The subsequent correction explicitly supersedes typed ASCII `>>`. Administration brand/body remain red italic; the separator resets bold and italic. Normal player-name chat remains unchanged. Both older prefix forms are recognized for deduplication, and all rich component/packet/audience behavior remains intact.
+
+191 Java tests and 181 full native assertions pass. The scoped overlay changes only ChatStyle.class; no resource pack or configuration change is needed. The corrective live rollout passed 81 protocol and 109 read-only scenery assertions; normal server restarted without probes. Final JAR SHA-256 `fca6562c4bc66459a50a029ffa51d3c455c76d1d9137af4a0f0b30c179e5ae59`. All seven gray rigs, nine scenery anchors, frozen 2115 chunks and pack/static configs are preserved; Jabba restored and window released. Next action: inspect the exact `ᴍᴀɴᴅᴏᴍᴄ »` prefix in the client.
+
 ## Chat presentation and clean player names (2026-11-11)
 On `bilal/chat-message-polish`, audited system messages use the consistent category-colored MandoMC prefix, gray bodies/highlights, entirely red italic administrative responses and red nonitalic errors. First join/death messages are replaced in place, pack notices coalesce across the existing three IDs, and repeated ammo notices are throttled. Existing rich actions, game permissions/audiences, currency values, GUI/title/actionbar/item content and territory colors are preserved. Normal player chat uses the native rank badge and display name followed by » and the original message component; default ranks omit their badge. Paper still owns delivery/signatures and recipients.
 
