@@ -45,7 +45,8 @@ public final class JawaTraders implements Listener, AutoCloseable {
     private record Conversation(Mob entity, boolean hadAI, Set<UUID> viewers) { }
     private final Map<UUID,Conversation> conversations=new HashMap<>();
     private final Random random=new Random();
-    private final BukkitTask population, idle;
+    private final BukkitTask population, idle, grayLook;
+    private final Map<UUID,UUID> grayLookTargets = new HashMap<>();
     private boolean healthy=true;
     private boolean placing;
     private boolean reconcileScheduled;
@@ -82,6 +83,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
         root.register("jawa","mandomc.admin.status",this::command,(s,a)->a.length==1?List.of("gray","brown","remove","status","models"):List.of());
         population=Bukkit.getScheduler().runTaskTimer(plugin,this::population,100,settings.interval()*20L);
         idle=Bukkit.getScheduler().runTaskTimer(plugin,this::idle,100,5);
+        grayLook=Bukkit.getScheduler().runTaskTimer(plugin,this::grayLook,102,2);
         attackTask=Bukkit.getScheduler().runTaskTimer(plugin,this::combatTick,100,1);
         Bukkit.getScheduler().runTaskLater(plugin,this::reconcileGroups,2);
     }
@@ -365,7 +367,30 @@ public final class JawaTraders implements Listener, AutoCloseable {
         removeOrphans(event.getEntities());
         if(!reconcileScheduled){reconcileScheduled=true;Bukkit.getScheduler().runTask(plugin,()->{reconcileScheduled=false;reconcileGroups();});}
     }
-    @EventHandler public void unloaded(org.bukkit.event.world.EntitiesUnloadEvent event){for(var entity:event.getEntities()){combatants.remove(entity.getUniqueId());attackClock.disengage(entity.getUniqueId());grayModels.unloaded(entity.getUniqueId());}}
+    @EventHandler public void unloaded(org.bukkit.event.world.EntitiesUnloadEvent event){for(var entity:event.getEntities()){combatants.remove(entity.getUniqueId());attackClock.disengage(entity.getUniqueId());grayModels.unloaded(entity.getUniqueId());grayLookTargets.remove(entity.getUniqueId());}}
+    private void grayLook() {
+        for (var entry : anchors.entrySet()) {
+            if (!(Bukkit.getEntity(entry.getValue()) instanceof LivingEntity entity) || !entity.isValid()
+                    || entity.isDead()) continue;
+            var home = anchor(entry.getKey());
+            if (home == null || entity.getWorld() != home.getWorld()) continue;
+            var candidates = home.getWorld().getPlayers().stream()
+                    .filter(p -> p.isOnline() && !p.isDead() && p.getGameMode() != GameMode.SPECTATOR)
+                    .filter(p -> p.getMetadata("vanished").stream().noneMatch(v -> v.asBoolean()))
+                    .filter(p -> p.getLocation().distanceSquared(home) < 25)
+                    .sorted(Comparator.comparingDouble((Player p) -> p.getLocation().distanceSquared(home))
+                            .thenComparing(Player::getUniqueId)).toList();
+            Player viewer = candidates.isEmpty() ? null : candidates.getFirst();
+            var retained = candidates.stream()
+                    .filter(p -> p.getUniqueId().equals(grayLookTargets.get(entity.getUniqueId())))
+                    .findFirst().orElse(null);
+            if (retained != null && viewer != null && retained.getLocation().distanceSquared(home)
+                    <= viewer.getLocation().distanceSquared(home) + 1) viewer = retained;
+            if (viewer == null) grayLookTargets.remove(entity.getUniqueId());
+            else grayLookTargets.put(entity.getUniqueId(), viewer.getUniqueId());
+            grayModels.look(entity, home, viewer == null ? null : viewer.getEyeLocation());
+        }
+    }
     private Location anchor(String id) {
         String p="npcs."+id;var key=NamespacedKey.fromString(config.getString(p+".world",""));var world=key==null?null:Bukkit.getWorld(key);
         return world==null?null:new Location(world,config.getDouble(p+".x"),config.getDouble(p+".y"),config.getDouble(p+".z"),(float)config.getDouble(p+".yaw"),(float)config.getDouble(p+".pitch"));
@@ -397,11 +422,6 @@ public final class JawaTraders implements Listener, AutoCloseable {
             entity.setInvulnerable(true);entity.setCollidable(false);entity.setSilent(true);entity.setRemoveWhenFarAway(false);
             if(entity instanceof Mob mob){mob.setAI(false);mob.setTarget(null);}
             if(entity.getWorld()!=home.getWorld() || entity.getLocation().distanceSquared(home)>.01)entity.teleport(home);
-            var viewer=home.getWorld().getPlayers().stream().filter(p->p.getGameMode()!=GameMode.SPECTATOR && p.getLocation().distanceSquared(home)<25)
-                    .min(Comparator.comparingDouble(p->p.getLocation().distanceSquared(home))).orElse(null);
-            var direction=home.clone();direction.setYaw(home.getYaw()+(float)(25*Math.sin(clock*.06)));
-            var look=viewer==null?home.clone().add(direction.getDirection().multiply(4)).add(0,.8,0):viewer.getEyeLocation();
-            facing.face(entity,look,6);
         }
         for(var player:Bukkit.getOnlinePlayers())if(player.getOpenInventory().getTopInventory().getHolder() instanceof Menu menu) {
             var source=Bukkit.getEntity(menu.jawa);
@@ -453,7 +473,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
         player.sendMessage(text("usage"));
     }
     @Override public void close() {
-        population.cancel();idle.cancel();attackTask.cancel();grayModels.close();attackClock.clear();combatants.clear();ionizationHits.close();ionization.close();buyer.close();
+        population.cancel();idle.cancel();attackTask.cancel();grayLook.cancel();grayLookTargets.clear();grayModels.close();attackClock.clear();combatants.clear();ionizationHits.close();ionization.close();buyer.close();
         for(UUID id:List.copyOf(conversations.keySet()))endConversation(id);
         HandlerList.unregisterAll(this);
         for(var player:Bukkit.getOnlinePlayers())if(player.getOpenInventory().getTopInventory().getHolder() instanceof Menu)player.closeInventory();
