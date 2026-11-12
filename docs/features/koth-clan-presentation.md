@@ -1,5 +1,5 @@
 # Feature: KOTH clan presentation
-Status: implementation, verified and awaiting rollout
+Status: playable, deployed
 Branch: bilal/koth-clan-presentation
 
 ## Player experience
@@ -21,4 +21,4 @@ No new configuration or migrations. Existing `events/koth.yml` messages accept t
 Full source build: 221 tests passed, supplying the already deployed ChatStyle/ChatCategory API classes to this older source worktree's compile output. The narrow overlay builder compiles directly against its supplied baseline and verifies six component/relationship tests and unchanged public KOTH API. The standalone disposable Paper probe passes 77 actual lifecycle/component/audience assertions, including the real KOTH crate payout and single save, without installing fixtures on live. It reads a copy of the existing deployed KOTH crate definition into its isolated fixture.
 
 ## Pause note
-Two-class overlay is ready on the latest released herd baseline. The builder pins the expected KOTH implementation and preserves all unrelated JAR bytes. Shared runtime and resource pack remain untouched. Next action: coordinator-assigned backed-up deployment window.
+Deployed the two-class overlay after explicit coordinator GO on herd baseline `5e56f3e9`; final live JAR `bfdc971e03c4ed9dade44b28e7846ab5632c94d83c938caca6a59c0a445d7bc7`. One normal restart and a full stopped runtime backup. All 2,224 protected files and semantic server/pack settings remain unchanged; no new live plugins or actors. Two settled read-only native console snapshots verify seven gray Jawas at 10/10 actual health, nine decor anchors and two stable boards. All 2,115 frozen originals are retained. Jabba/empty queue restored with ordinary event commands after normal transient-run cleanup. Window released. Next action: ordinary in-game appearance feedback.
