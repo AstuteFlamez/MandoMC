@@ -1,6 +1,9 @@
 # Resume here
 Updated: 2026-11-11
 
+## Jabba reset investigation: admin mob removal (2026-11-11)
+Read-only live review on1707e1dc confirms /mm mobs killall at21:39:37 immediately precedes the missing-owned-mob error at the same second. The existing lifecycle deliberately resets when a registered dungeon mob disappears without a counted death; this incident is explained by the admin removal, not spontaneous despawn or the palace transform. Current JabbaEvent.class is byte-identical to the tested migrated release; palace-run.yml still targets minecraft:tatooine_review. Read-only /event status at21:41:54 reports no active event and KOTH queued. No event start/stop, restart, terrain or configuration changes were performed; coordinator informed. No fix is required for this incident. Next action: continue ordinary client playtesting; if a disappearance recurs without an admin removal command, collect the new timestamp and entity evidence.
+
 ## Hoth caves, official planets and Jabba migration deployed (2026-11-11)
 Shared rollout completed and window explicitly released to the coordinator. Current scoped JAR is cd39f3f872a64327f179a5c359799205084efc7eec075d41c2445d5b55b408d8: exactly7owned entries differ from latest pre-rollout combatHUD72269ba5, every unrelated clan/role/HUD/API/event/NPC entry is byte-identical. All other plugin JARs are unchanged. Full coherent stopped-runtime backup and deployment receipts are private. Final normal startup completed in57.771seconds (launcher55second wait timed out safely, leaving the process running; ready state was verified without another restart). All temporary checkers are removed. User rejoined and all three packs successfully loaded.
 
