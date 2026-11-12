@@ -8,8 +8,8 @@ items:
     rarity: rare
     category: armor
     lore:
-      - '<gray>Equip in your offhand to wear.'
-      - '<gray>Leaves your chestplate and armor intact.'
+      - '<gray>Craft with a chestplate to add Jetpack.'
+      - '<gray>Wear the upgraded chestplate to fly.'
       - ''
       - '<yellow>[Double Sneak] Toggle thrust'
       - ''

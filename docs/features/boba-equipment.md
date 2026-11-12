@@ -1,5 +1,5 @@
 # Feature: Boba Fett equipment drops
-Status: LIVE trial deployment at 2026-11-12 14:06:31 America/Chicago; client flight/rendering validation pending.
+Status: jetpack wearable/visual experiment superseded by [the chestplate enchantment](jetpack-chestplate.md). Historical visual implementation and rollout evidence remain below; the flamethrower remains active.
 Branch: bilal/boba-equipment
 
 ## Player experience

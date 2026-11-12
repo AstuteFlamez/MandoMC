@@ -133,7 +133,7 @@ boba-equipment:
   no-fuel: '<red>Put coal in your hotbar to start the jetpack.'
   started: '<yellow>Jetpack thrust enabled.'
   stopped: '<gray>Jetpack thrust stopped.'
-  equip: '<yellow>Equip the jetpack in your offhand first.'
+  equip: '<yellow>Wear a chestplate with the Jetpack enchantment first.'
   flight-denied: '<red>Jetpack flight is unavailable here or in your current movement mode.'
   no-ammo: '<red>Flamethrower requires a Fire Charge in your inventory.'
   cooldown: '<yellow>Flamethrower is cooling down.'
