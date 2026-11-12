@@ -8,7 +8,7 @@ public record BosskShotSettings(double singleDamage,double burstTotalDamage) {
     }
     public BosskShotSettings {
         if(!Double.isFinite(singleDamage)||!Double.isFinite(burstTotalDamage)||singleDamage<=0||singleDamage>20||burstTotalDamage<=0||burstTotalDamage>20)
-            throw new IllegalArgumentException("bossk.yml: shooting damage budgets must be finite and between 0 and 20");
+            throw new IllegalArgumentException("mobs/bossk.yml: shooting damage budgets must be finite and between 0 and 20");
     }
     public double perShot(boolean single){return single?singleDamage:burstTotalDamage/3;}
 }

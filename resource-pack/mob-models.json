@@ -11,7 +11,11 @@
     "quarren_guard",
     "rancor",
     "ranged_raider",
-    "twilek_guard"
+    "speederbike",
+    "tiefighter",
+    "twilek_guard",
+    "uwing",
+    "xwing"
   ],
   "files": [
     {
@@ -435,6 +439,34 @@
       "sha256": "599dd79452e636b9b96d7df5ed0f16a3f1cab554c54ea1aac9aba7297863e961"
     },
     {
+      "path": "assets/modelengine/items/speederbike/speeder.json",
+      "sha256": "bceb1ca04745ba59025aeca7df798fbfeb68a066786191d115d3c36bc29600c4"
+    },
+    {
+      "path": "assets/modelengine/items/speederbike/weapon_one.json",
+      "sha256": "658454cb52b4eac98601d593b549ea4a9ee65ed59fd959a3f2e813f3ffb3a252"
+    },
+    {
+      "path": "assets/modelengine/items/speederbike/weapon_two.json",
+      "sha256": "9bafe9e02863fe3d87b6d5f57f1c5b941d716eed35b476c8161795c9c0c7ef0e"
+    },
+    {
+      "path": "assets/modelengine/items/tiefighter/cockpit.json",
+      "sha256": "d9f3eec0565e90bae408509c53b74c0a48eaaf7f5859c6ad12c9e62cc229e403"
+    },
+    {
+      "path": "assets/modelengine/items/tiefighter/left_wing.json",
+      "sha256": "cd9dbeda9d65912bf9672cc0cc57132e39d341469daa7ff60c7de0ad81cf8d84"
+    },
+    {
+      "path": "assets/modelengine/items/tiefighter/right_wing.json",
+      "sha256": "4975b61d117378171a7d3dd1df40327b8f03dde18a5be05ababefe5f4ced1af7"
+    },
+    {
+      "path": "assets/modelengine/items/tiefighter/seat.json",
+      "sha256": "d9203bd5220b8c83c9c7e271e83c1a709a091f352935739225cfeed61655fd3c"
+    },
+    {
       "path": "assets/modelengine/items/twilek_guard/head.json",
       "sha256": "c26ed9b5cefdc5b59fb0b107e0a57ee625b754cab2d3630cb4137e3a139e950a"
     },
@@ -461,6 +493,82 @@
     {
       "path": "assets/modelengine/items/twilek_guard/torso.json",
       "sha256": "fe4b3e889741208b2789e8430a1684feed04a31ab5742422b513f747d0db868d"
+    },
+    {
+      "path": "assets/modelengine/items/uwing/body.json",
+      "sha256": "5cb6b3072dcbe16284219beb3326b4e0a6bb82e231bf4e09be32933d73f70179"
+    },
+    {
+      "path": "assets/modelengine/items/uwing/front_leg_shafts.json",
+      "sha256": "f398c9c3d952eeacd839f657605fb11110168c47bc972de73ea500e31dc706a0"
+    },
+    {
+      "path": "assets/modelengine/items/uwing/front_legs.json",
+      "sha256": "7a8a4a1117cc0c8bd4faec5b98ee9da3751e79883eede53be7f3b43edcbc207b"
+    },
+    {
+      "path": "assets/modelengine/items/uwing/left_door.json",
+      "sha256": "670cbcfc9997e54549ebce98511f8fa72c80b91e381e4bec2236c038ef466b26"
+    },
+    {
+      "path": "assets/modelengine/items/uwing/left_wing.json",
+      "sha256": "8eb45832585ff6cee00165efb0731ac5b352095f64ac9e4d1680b8917de447d2"
+    },
+    {
+      "path": "assets/modelengine/items/uwing/rear_leg_shafts.json",
+      "sha256": "ef1427d548aaffed638c3e277f5ed2e71c4555b345d1b87ad171ba509060f389"
+    },
+    {
+      "path": "assets/modelengine/items/uwing/rear_legs.json",
+      "sha256": "5af2cac78b0c7ea0ed01e02e65fa4ad71ca39e244c7cb0775090bb9ea1d765c4"
+    },
+    {
+      "path": "assets/modelengine/items/uwing/right_door.json",
+      "sha256": "8df62ea8db9fbea43ee9bc8aa19936069a01b402aee1e6f9ef7bae32009e61ba"
+    },
+    {
+      "path": "assets/modelengine/items/uwing/right_wing.json",
+      "sha256": "cddaad590c8a4febf4ee90faa186bb421b16cccf2391b9fd4f91b7de10c1dd5d"
+    },
+    {
+      "path": "assets/modelengine/items/xwing/body.json",
+      "sha256": "5baaccc301fcec7815cbb3c7a8bc465666b92e3e344814fb99cb9f1cabd31ebc"
+    },
+    {
+      "path": "assets/modelengine/items/xwing/cockpit.json",
+      "sha256": "9f786c07bb82fa0a6b759fa0b2e18c15a954566b1564174adf4f2f0d2f34e19c"
+    },
+    {
+      "path": "assets/modelengine/items/xwing/front_leg.json",
+      "sha256": "1699cda886d1c6b7d4df36c330406689f82d03f9ee25e56294ffdca89ea6c978"
+    },
+    {
+      "path": "assets/modelengine/items/xwing/front_leg_foot.json",
+      "sha256": "99a91a32a538ed111ef8d87a1828149555837db4e625fa969933b060b56bb86e"
+    },
+    {
+      "path": "assets/modelengine/items/xwing/left_bottom_wing.json",
+      "sha256": "f35dc269eacb6334c122faf4f654bef8efe2e12f555ea9fbcd70572fb0016dc2"
+    },
+    {
+      "path": "assets/modelengine/items/xwing/left_leg.json",
+      "sha256": "d363e967c8d6938b1c0aa61fd3f844c7dec7441e4be941e1723cdaa394a60c28"
+    },
+    {
+      "path": "assets/modelengine/items/xwing/left_top_wing.json",
+      "sha256": "8c11c4ae3552fafabbe46e95794c3ae3928d6f7d3bbe8e194444707850543611"
+    },
+    {
+      "path": "assets/modelengine/items/xwing/right_bottom_wing.json",
+      "sha256": "e517c578f5252c145e099be19ca9a9a799227105283489b63497f08c90c0e522"
+    },
+    {
+      "path": "assets/modelengine/items/xwing/right_leg.json",
+      "sha256": "99aeaf7aa02c434bbd72f07749d8d5beeec91599669ecc434d7b09b2866c11a1"
+    },
+    {
+      "path": "assets/modelengine/items/xwing/right_top_wing.json",
+      "sha256": "72c0a89662ed447455fd6ff758fd0221cfa727ec302f1ddaebd4b19452d9092d"
     },
     {
       "path": "assets/modelengine/models/bantha/body.json",
@@ -947,6 +1055,34 @@
       "sha256": "23900ac352bf23e070e291e5610fef243ca68392f8c56d483681074337e0cf64"
     },
     {
+      "path": "assets/modelengine/models/speederbike/speeder.json",
+      "sha256": "d1b43be7ac6fc66492db6f207a508e58ade3091283eee5ec749007c39ee18d85"
+    },
+    {
+      "path": "assets/modelengine/models/speederbike/weapon_one.json",
+      "sha256": "b01292fb4cdc4f81689b6257e5924cc260a4ae2abf83a3cb144c562aff06b081"
+    },
+    {
+      "path": "assets/modelengine/models/speederbike/weapon_two.json",
+      "sha256": "4ce1951e809ca6cd95583db9012ea8df17b8cb9219f513fd398136693860fca5"
+    },
+    {
+      "path": "assets/modelengine/models/tiefighter/cockpit.json",
+      "sha256": "c5278e665f1cdaf383ecbeeaed3c6a290325aa2ca0e7cc80d97dee3069a2cf4e"
+    },
+    {
+      "path": "assets/modelengine/models/tiefighter/left_wing.json",
+      "sha256": "5c52b65f87fb1a1571877ba29a1f303022e5551552ef218015e8ded3c4a749da"
+    },
+    {
+      "path": "assets/modelengine/models/tiefighter/right_wing.json",
+      "sha256": "fb861f7b4891aa15b92f8763e3239deb76e49be0314108ccc5bd1975c57bdb39"
+    },
+    {
+      "path": "assets/modelengine/models/tiefighter/seat.json",
+      "sha256": "c426fed7f7c01464605039d5c1e353578131a39a7ebfde02649cca57c1177493"
+    },
+    {
       "path": "assets/modelengine/models/twilek_guard/head.json",
       "sha256": "2e3a37230459646cca347c5904f54ca4502c78c91375210aa16402ecd7a95fdd"
     },
@@ -973,6 +1109,82 @@
     {
       "path": "assets/modelengine/models/twilek_guard/torso.json",
       "sha256": "a4450066fdf26732e384e7139d0861334f34b5b2445c31fa0e589b86e606a1f8"
+    },
+    {
+      "path": "assets/modelengine/models/uwing/body.json",
+      "sha256": "d74f537cac75591c5690720f4343f654bbc76b58ddad2c42290d4b032d33f453"
+    },
+    {
+      "path": "assets/modelengine/models/uwing/front_leg_shafts.json",
+      "sha256": "8417c9cf0111fafe38d54b9587746ac63dc7bcabe5762ea312462b33e2fdc41d"
+    },
+    {
+      "path": "assets/modelengine/models/uwing/front_legs.json",
+      "sha256": "0b5db0460f3c7495b83b2a326289730db9edb187eed78941ac5f7ca830cebd47"
+    },
+    {
+      "path": "assets/modelengine/models/uwing/left_door.json",
+      "sha256": "3d18c1619088ce1ff60be625aed4c233cb6297272c5dc6b148bdef8da79d0f0c"
+    },
+    {
+      "path": "assets/modelengine/models/uwing/left_wing.json",
+      "sha256": "a9d15e3c1afa2b76ac2b8230a45cd4b64561a9091536e975e7f2d8a2fe6bb31b"
+    },
+    {
+      "path": "assets/modelengine/models/uwing/rear_leg_shafts.json",
+      "sha256": "06b4e3042e017c3117c1b5e9244d8f52eced0198b9b1cd75cd72a4dd19f258a9"
+    },
+    {
+      "path": "assets/modelengine/models/uwing/rear_legs.json",
+      "sha256": "77701284a29871e81a3c17dafc2e8664426039aea33d98217326471a363fba97"
+    },
+    {
+      "path": "assets/modelengine/models/uwing/right_door.json",
+      "sha256": "0fea5f044a47663febc9a20c42a94f17c3e5d7185ad2f5fc3c7ca5ddfcbf5299"
+    },
+    {
+      "path": "assets/modelengine/models/uwing/right_wing.json",
+      "sha256": "b21b100180055ae3c5288c1b5692ad6a597fb2f1f14cd18a5a3f6043fa831fcd"
+    },
+    {
+      "path": "assets/modelengine/models/xwing/body.json",
+      "sha256": "7dd9b126a4757bce3a1c72c89b6d59f12ff2d17d9dc434182783813b4e00bcf7"
+    },
+    {
+      "path": "assets/modelengine/models/xwing/cockpit.json",
+      "sha256": "be1c8c0797f1adb8aca9a878d46f22f4bafe69f26d45260bbf1ff1c7314ae8c5"
+    },
+    {
+      "path": "assets/modelengine/models/xwing/front_leg.json",
+      "sha256": "f0fe8b7f9a797e4c463bcedd5462a1126ce1c9872fb96e87eb1bb3a2602a8d08"
+    },
+    {
+      "path": "assets/modelengine/models/xwing/front_leg_foot.json",
+      "sha256": "8da913d935f7e3d614824541285535d91b81b9bbb9475aaf70c2be5c927e8bb7"
+    },
+    {
+      "path": "assets/modelengine/models/xwing/left_bottom_wing.json",
+      "sha256": "70ffa8563a91f439983f59bc5e945f626589e3fcfba5ae9a2a08cec0017b84aa"
+    },
+    {
+      "path": "assets/modelengine/models/xwing/left_leg.json",
+      "sha256": "35aa7330eaa72087f8c4429b67bb7fa6d71e50f58b03f5fdf77c00480ed23cba"
+    },
+    {
+      "path": "assets/modelengine/models/xwing/left_top_wing.json",
+      "sha256": "0d6a5aaaab635c2b539f64b4685f13746ef4f3dad10de9dee7af03a487da8dfd"
+    },
+    {
+      "path": "assets/modelengine/models/xwing/right_bottom_wing.json",
+      "sha256": "a79b9c40548b473729d7c155ea4846551e7cbcb87d3d3bd3d3b12056520bb1a7"
+    },
+    {
+      "path": "assets/modelengine/models/xwing/right_leg.json",
+      "sha256": "b5ba73df934671f1e0771b9e0fda544b502f9dd7698e516b4c7d67213d159d39"
+    },
+    {
+      "path": "assets/modelengine/models/xwing/right_top_wing.json",
+      "sha256": "45a7f10253db3300ba6c431d39314133f03798c29d20e768396988ed169bff88"
     },
     {
       "path": "assets/modelengine/textures/entity/models/bantha.png",
@@ -1003,8 +1215,16 @@
       "sha256": "03641195fdd3eafd0a006be7fd6b6feffa3ee64ce1a619d394b69adab7990c67"
     },
     {
+      "path": "assets/modelengine/textures/entity/models/speederbike.png",
+      "sha256": "59b9a259d5fa32582acf14a46ecafdcb629e9166fcf028db976faacc81b13c53"
+    },
+    {
       "path": "assets/modelengine/textures/entity/models/tessek.png",
       "sha256": "33bf63f8c76f4794ea227b95a8053e8cedb4140c36cd26f5cc0734d4637d83b8"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/tiefighter.png",
+      "sha256": "8a8fd709bcaf5ad3c24c3a0f72a28e89c47c7554e849fde40f2c99c7b5080f34"
     },
     {
       "path": "assets/modelengine/textures/entity/models/tusken_raider_melee.png",
@@ -1017,6 +1237,14 @@
     {
       "path": "assets/modelengine/textures/entity/models/twilek_guard.png",
       "sha256": "bb82c1b563f7444ece1e4b14069dc5ee39a79d5faafc1b85ea91302a3329a986"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/uwing.png",
+      "sha256": "07add87ca6c7af8f90bc419154b04b0faa5708e4ed2733fb724168dfbe9109f7"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/xwing.png",
+      "sha256": "82e51e6a91a734fb4f1e8f6f1519d24ebc27ac81ee9e64eab201df083db99b08"
     }
   ]
 }

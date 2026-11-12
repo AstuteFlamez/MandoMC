@@ -37,9 +37,9 @@ public final class ItemCatalog {
     }
 
     public void reload() throws IOException, InvalidConfigurationException {
-        var presentation = read(directory.resolve("items.yml"));
+        var presentation = read(directory.resolve("items/catalog.yml"));
         var definitions = new LinkedHashMap<String, ItemDefinition>();
-        try (var files = Files.list(directory.resolve("items"))) {
+        try (var files = Files.list(directory.resolve("items/definitions"))) {
             for (Path file : files.filter(p -> p.getFileName().toString().endsWith(".yml")).sorted().toList()) {
                 var config = read(file);
                 var section = config.getConfigurationSection("items");
@@ -63,17 +63,17 @@ public final class ItemCatalog {
             for (String id : external.getKeys(false)) {
                 var section = external.getConfigurationSection(id);
                 if (!id.matches("[a-z0-9_]+") || section == null) {
-                    throw new IllegalArgumentException("items.yml: invalid external item " + id);
+                    throw new IllegalArgumentException("items/catalog.yml: invalid external item " + id);
                 }
                 String kind = section.getString("kind", "");
                 String vendorId = section.getString("vendor-id", "");
                 String category = section.getString("category", "");
                 if (!Set.of("weapon", "ammo").contains(kind) || !vendorId.matches("[A-Za-z0-9_]+")
                         || !category.matches("[a-z0-9_]+")) {
-                    throw new IllegalArgumentException("items.yml: invalid external item fields for " + id);
+                    throw new IllegalArgumentException("items/catalog.yml: invalid external item fields for " + id);
                 }
                 if (candidate.putIfAbsent(id, new Entry(category, () -> externalFactory.apply(kind, vendorId))) != null) {
-                    throw new IllegalArgumentException("items.yml: duplicate item ID " + id);
+                    throw new IllegalArgumentException("items/catalog.yml: duplicate item ID " + id);
                 }
             }
         }
@@ -156,7 +156,7 @@ public final class ItemCatalog {
     private static String badge(YamlConfiguration config, String group, String name) {
         String key = group + "." + name;
         if (!config.isString(key) || config.getString(key).isBlank()) {
-            throw new IllegalArgumentException("items.yml: unknown or empty badge " + key);
+            throw new IllegalArgumentException("items/catalog.yml: unknown or empty badge " + key);
         }
         return config.getString(key);
     }

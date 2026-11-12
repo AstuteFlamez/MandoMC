@@ -84,9 +84,9 @@ public final class ArrivalProbe extends JavaPlugin {
                 "minecraft:overworld"), protection).validate(), "missing destination rejected");
 
         var plugin = (JavaPlugin) Bukkit.getPluginManager().getPlugin("MandoMC");
-        var language = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "messages.yml"));
+        var language = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "language/messages.yml"));
         var listener = new ArrivalListener(this, settings, destinations, language);
-        var travelConfig = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "teleport.yml"));
+        var travelConfig = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "travel/teleport.yml"));
         travelConfig.set("warmup-seconds", 3);
         var travel = new TeleportService(this, travelConfig, language, ((net.mandomc.bootstrap.MandoPlugin) plugin).combat());
         listeners.add(travel);

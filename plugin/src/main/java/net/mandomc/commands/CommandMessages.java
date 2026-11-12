@@ -12,7 +12,7 @@ public final class CommandMessages {
     public CommandMessages(ConfigurationSection language) { this.language = language; }
     public Component text(String key, String value) {
         String template = language.getString("utilities." + key);
-        if (template == null) throw new IllegalStateException("messages.yml: missing utilities." + key);
+        if (template == null) throw new IllegalStateException("language/messages.yml: missing utilities." + key);
         return MiniMessage.miniMessage().deserialize(template, Placeholder.unparsed("value", value));
     }
     public void send(CommandSender sender, String key) { send(sender, key, ""); }

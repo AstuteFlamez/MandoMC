@@ -1,0 +1,18 @@
+schema-version: 1
+name: 'U-Wing'
+movement: aerial
+health: 180
+speed: 2.5
+scale: 1
+acceleration: 0.07
+braking: 0.09
+max-pitch: 20
+max-roll: 15
+boost:
+  multiplier: 1.25
+  duration-ticks: 12
+  cooldown-ticks: 80
+sound: 'mandomc:vehicles.tie_fighter_fly'
+sound-ticks: 420
+passenger-seats: []
+gunner-seats: ["seatone"]

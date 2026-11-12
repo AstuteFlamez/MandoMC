@@ -35,12 +35,12 @@ public final class ArrivalListener implements Listener {
         var mini = MiniMessage.miniMessage();
         this.tutorial = language.getStringList("tutorial").stream().map(mini::deserialize).toList();
         if (tutorial.isEmpty()) {
-            throw new IllegalArgumentException("messages.yml: tutorial must contain at least one message");
+            throw new IllegalArgumentException("language/messages.yml: tutorial must contain at least one message");
         }
         for (var key : List.of("unavailable", "players-only")) {
             var message = language.getString(key);
             if (message == null || message.isBlank()) {
-                throw new IllegalArgumentException("messages.yml: missing " + key);
+                throw new IllegalArgumentException("language/messages.yml: missing " + key);
             }
             messages.put(key, mini.deserialize(message));
         }

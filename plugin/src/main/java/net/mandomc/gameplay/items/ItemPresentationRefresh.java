@@ -21,6 +21,18 @@ public final class ItemPresentationRefresh implements Listener {
 
     public static boolean refresh(ItemCatalog items, ItemStack item) {
         String id = items.identify(item);
+        if (id != null && Set.of("speederbike", "xwing", "tiefighter", "uwing").contains(id)) {
+            // Change only the badge row: packed health, identity tokens and other lore stay intact.
+            var meta = item.getItemMeta();
+            var lore = meta.lore();
+            var badge = items.create(id).getItemMeta().lore().getFirst();
+            if (lore == null || lore.isEmpty() || lore.getFirst().equals(badge)) return false;
+            var updated = new java.util.ArrayList<>(lore);
+            updated.set(0, badge);
+            meta.lore(updated);
+            item.setItemMeta(meta);
+            return true;
+        }
         if (id == null || !Set.of("bantha_hide", "massiff_ribs", "dewback_leg").contains(id)) return false;
         var template = items.create(id);
         var current = template.getItemMeta();

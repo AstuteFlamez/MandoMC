@@ -12,7 +12,7 @@ public final class CombatTags {
     private final long duration;
 
     public CombatTags(int seconds, LongSupplier clock) {
-        if (seconds < 1 || seconds > 300) throw new IllegalArgumentException("combat.yml: tag-seconds must be 1..300");
+        if (seconds < 1 || seconds > 300) throw new IllegalArgumentException("combat/combat.yml: tag-seconds must be 1..300");
         this.duration = seconds * 1000L;
         this.clock = clock;
     }

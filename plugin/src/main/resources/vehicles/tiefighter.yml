@@ -1,0 +1,18 @@
+schema-version: 1
+name: 'TIE Fighter'
+movement: aerial
+health: 150
+speed: 3
+scale: 1
+acceleration: 0.1
+braking: 0.12
+max-pitch: 30
+max-roll: 15
+boost:
+  multiplier: 1.35
+  duration-ticks: 16
+  cooldown-ticks: 80
+sound: 'mandomc:vehicles.tie_fighter_fly'
+sound-ticks: 420
+passenger-seats: []
+gunner-seats: []

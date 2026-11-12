@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 
 public class EncounterPlanTest {
     private YamlConfiguration config() {
-        return YamlConfiguration.loadConfiguration(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/mobs.yml"))));
+        return YamlConfiguration.loadConfiguration(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/mobs/spawning.yml"))));
     }
     @Test public void patrolBudgetsAndLevelBandsHoldAcrossManyRolls() {
         var settings = SandySettings.read(config());

@@ -9,7 +9,7 @@ public record SandySettings(String world, Set<String> biomes, Set<String> ground
         int groupCap, int localCap, int worldCap, int radius, int interval, double chance,
         int minDistance, int maxDistance, int separation, int attempts, double rifleBase, double riflePerLevel) {
     public static SandySettings read(ConfigurationSection c) {
-        if (c.getInt("schema-version") != 1) throw new IllegalArgumentException("mobs.yml: expected schema-version 1");
+        if (c.getInt("schema-version") != 1) throw new IllegalArgumentException("mobs/spawning.yml: expected schema-version 1");
         var result = new SandySettings(c.getString("world", "minecraft:overworld"),
                 Set.copyOf(c.getStringList("biomes")),
                 c.getStringList("ground").stream().map(String::toUpperCase).collect(Collectors.toUnmodifiableSet()),
@@ -36,7 +36,7 @@ public record SandySettings(String world, Set<String> biomes, Set<String> ground
                 || result.attempts < 1 || result.attempts > 32
                 || !Double.isFinite(result.rifleBase) || result.rifleBase <= 0 || result.rifleBase > 100
                 || !Double.isFinite(result.riflePerLevel) || result.riflePerLevel < 0 || result.riflePerLevel > 10) {
-            throw new IllegalArgumentException("mobs.yml: invalid levels, group budget, population, spawn or cycler bounds");
+            throw new IllegalArgumentException("mobs/spawning.yml: invalid levels, group budget, population, spawn or cycler bounds");
         }
         return result;
     }

@@ -75,7 +75,7 @@ public final class EventManager implements Listener, AutoCloseable {
     /** Idle-only replacement validates all data before releasing the previous configuration. */
     public void reload() throws Exception {
         if(active!=null) throw new IllegalStateException("An event is active");
-        var nextConfig=read("events.yml");
+        var nextConfig=read("events/schedule.yml");
         ZoneId nextZone=ZoneId.of(nextConfig.getString("scheduler.timezone",""));
         int nextMinute=nextConfig.getInt("scheduler.announcements.start-minute",-1);
         var nextSchedule=new HourlySchedule(ZonedDateTime.now(nextZone),
@@ -84,8 +84,8 @@ public final class EventManager implements Listener, AutoCloseable {
                 nextConfig.getInt("scheduler.announcements.start-warning-minute",-1),nextMinute);
         for(String key:List.of("current","next","chances","chance-entry","none","idle","click","starts-in","ending","starting",
                 "denied","players-only","busy","reloaded","invalid","started","stopped","queued","enabled","disabled","usage"))
-            if(!nextConfig.isString("messages."+key)) throw new IllegalArgumentException("events.yml: missing messages."+key);
-        if(!nextConfig.isString("gui.title")) throw new IllegalArgumentException("events.yml: missing gui.title");
+            if(!nextConfig.isString("messages."+key)) throw new IllegalArgumentException("events/schedule.yml: missing messages."+key);
+        if(!nextConfig.isString("gui.title")) throw new IllegalArgumentException("events/schedule.yml: missing gui.title");
         var nextCountdown = new EventEndCountdown(
                 nextConfig.getString("ending-countdown.title", EventEndCountdown.DEFAULT_TITLE),
                 nextConfig.getString("ending-countdown.subtitle", EventEndCountdown.DEFAULT_SUBTITLE));
