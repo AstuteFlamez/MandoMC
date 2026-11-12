@@ -28,7 +28,9 @@ gray7 actual health/rigs, decor9, boards2 and frozen2115. The startup Mythic sam
 no actors were created. All473 unrelated JAR entries, current pack, Dewback blueprint and
 protected config/frozen files are preserved; server.properties changed only its generated
 timestamp comment. The self-disabled checker JAR is removed, fresh pre-stop KOTH restored
-and the window released. Exact backups/receipt are in ignored
+and the window released. Startup left Jabba queued instead of pre-stop nextNone; the receipt
+is corrected, and the coordinator assigned the next redstone deployment owner to restore that
+queue during its planned restart. No extra event reset/restart was performed here. Exact backups/receipt are in ignored
 `.local/herd-custom-release/live-receipt.json`. Next action: client-test custom saddle transfers,
 lead attachment/release and fence-knot appearance.
 
