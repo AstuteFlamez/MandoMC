@@ -30,19 +30,6 @@ worlds:
       center-x: 0.0
       center-z: 0.0
       size: 512.0
-  overworld:
-    key: minecraft:overworld
-    aliases:
-    - dev_world
-    weather: true
-    pvp: true
-    difficulty: normal
-    spawn:
-      x: -135.5
-      y: 73.0
-      z: -135.5
-      yaw: 0.0
-      pitch: 0.0
   spawnworld:
     key: minecraft:spawnworld
     aliases:
