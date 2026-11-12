@@ -33,7 +33,7 @@ public final class PlayerHud implements Listener, AutoCloseable {
         Component name, header, footer;
         int order;
         boolean hidden;
-        int ping, kills, deaths, visible;
+        int ping, kills, deaths, visible, rows;
         View(Player player, Scoreboard board, Objective objective) {
             this.player = player; previous = player.getScoreboard(); this.board = board; this.objective = objective;
             oldName = player.playerListName(); oldHeader = player.playerListHeader(); oldFooter = player.playerListFooter();
@@ -124,12 +124,16 @@ public final class PlayerHud implements Listener, AutoCloseable {
                 Placeholder.unparsed("balance", CreditLedger.format(credits.ledger().balance(view.player.getUniqueId()))));
         if (!view.objective.displayName().equals(logo)) view.objective.displayName(logo);
         var lines = tenths > 0 ? settings.combatLines() : settings.lines();
-        if (!view.hidden) for (int i = 0; i < lines.size(); i++) {
+        // Remove surplus entries on shorter layouts, including while hidden. Display-slot toggling
+        // controls visibility; keeping the model current prevents stale rows on the next reveal.
+        for (int i = lines.size(); i < view.rows; i++) view.board.resetScores("mmc_line_" + i);
+        for (int i = 0; i < lines.size(); i++) {
             var line = MiniMessage.miniMessage().deserialize(lines.get(i), placeholders);
             var score = view.objective.getScore("mmc_line_" + i);
-            if (!score.isScoreSet()) score.setScore(settings.lines().size() - i);
+            if (!score.isScoreSet()) score.setScore(Math.max(settings.lines().size(),settings.combatLines().size()) - i);
             if (!line.equals(score.customName())) score.customName(line);
         }
+        view.rows = lines.size();
         var header = MiniMessage.miniMessage().deserialize(settings.header(), placeholders);
         var footer = MiniMessage.miniMessage().deserialize(settings.footer(), placeholders);
         if (!header.equals(view.header) || !footer.equals(view.footer)) {

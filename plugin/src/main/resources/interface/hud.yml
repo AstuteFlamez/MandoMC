@@ -31,7 +31,6 @@ combat-lines:
   - '<red><!bold>⚠ ᴅᴏ ɴᴏᴛ ʟᴏɢ ᴏᴜᴛ'
   - '<combat-or-kills>'
   - '<red><!bold>⚠ ᴅᴏ ɴᴏᴛ ʟᴏɢ ᴏᴜᴛ'
-  - '<dark_gray>⚑ <gray>ᴛᴇʀʀɪᴛᴏʀʏ<dark_gray>: <#75CDA9><territory>'
   - '<serverinfo>'
   - '<bar>'
 combat: '<red>⚔ ɪɴ ᴄᴏᴍʙᴀᴛ: <white><seconds>s'

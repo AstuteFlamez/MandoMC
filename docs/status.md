@@ -1,6 +1,9 @@
 # Resume here
 Updated: 2026-11-11
 
+## Combat Territory removal deployed (2026-11-11)
+Combat now has thirteen rows with no Territory entry; normal fourteen-row Territory returns after combat. Renderer removes surplus score entries and updates its model while hidden, preserving the same objective/scoreboard, both warnings, countdown, stats, colors and static play footer. 217 Java tests and 288 disposable native assertions pass, covering re-tag, manual clear, natural expiry while hidden, reveal, world changes and respawn, plus existing claim/raid/NPC compatibility. Four-entry scoped overlay retains all original public APIs and unrelated live JAR entries. Deployed four-entry overlay on bd3f109c; final JAR 72269ba59126b21c04df8785daf50b7b84076b67e2c958fdcfc4dbdcf0855931. One runtime change removes only combat Territory row. Full stopped backup; clean normal startup, active Jabba restored, all 1,434 frozen originals and unrelated plugins/properties/welcome/handbook verified unchanged. No live probes. Restart window released. **Next action:** ordinary in-game combat/sidebar playtest.
+
 ## Clan roles/menu and static play footer deployed (2026-11-11)
 `/c` opens secure roster/info GUI and `/c help` documents actions. Leader > Officer > Member > Recruit; new joins Recruit, legacy members Member, leader UUID authoritative. Officers manage land and invite/kick lower ranks; leader controls ranks/transfer. Recruit shared-storage opening/use/breaking is denied, including live demotion checks; ordinary edits/workstations remain. Four-player cap, cardinal claims, full foreign/static buffer, anti-island unclaim and unclaimall are included; no forced legacy eviction. Existing11page handbook changes only5players to4. Gray bottom footer is staticplay.mandomc.net.
 
