@@ -1,26 +1,25 @@
 # Feature: Fixed spawn scenery
-Status: playable
+Status: playable; natural looking and written dialogue update staged
 Branch: bilal/spawn-decor
 
 ## Player experience
-Boba is offset once by three model pixels (3/16 block) forward along his original captured yaw. His immutable baseline coordinates are retained in configuration. All five characters look toward the nearest non-spectator, non-vanished player within five blocks with six-degree updates every five ticks, returning to captured facing when nobody is nearby. Their feet never move.
+Nine approved placements decorate Batuu: landed open-door U-Wing, landed X-Wing, fixed TIE fighter and large speeder, plus Boba Fett, Bossk, Gamorrean, Quarren and Twilek. Right-clicking a character gives one private, character-appropriate written line in chat. Three lines cycle independently per player and character. Decorative NPCs do not play audio.
 
-Batuu contains the four vehicles and five characters at the nine user-captured positions and facing. The landed U-Wing has open doors, the X-Wing is landed, and the TIE fighter and large speeder remain stationary. Players can click Boba Fett, Bossk, the Gamorrean, Quarren and Twilek for short private dialogue and nearby original voice clips.
+Boba is offset once by three model pixels (3/16 block) forward along his saved yaw, retaining immutable capture coordinates. Character heads respond within two ticks and turn independently. Bodies follow only when the target exceeds a 45-degree comfortable angle; neck yaw stays within 60 degrees and pitch within 35 degrees. A small target-distance margin prevents jitter between equally near players. Characters return to captured facing when no eligible player is within five blocks.
 
 ## Rules
-Scenery is invulnerable, silent except for controlled voice playback, non-collidable and fixed. It cannot be driven, ridden, packed, stolen or equipped. Characters use idle models without combat AI. Clicks have a three-second per-player cooldown; voices have eight-second per-character and ambient global cooldowns. Restart reconstructs exactly one instance of each configured ID. Existing player vehicles, Jawas and Ilum NPCs retain their owners.
-
-## Smallest playable version
-Nine approved captures, four vehicles and five characters, with no additional pack assets. Client appearance and perceived model facing remain subject to player feedback.
+Feet remain at exact saved anchors; vehicles never look at players. Scenery is invulnerable, non-collidable and nonpersistent, cannot be driven, mounted, packed, stolen or equipped, and never uses combat AI. Click dialogue has a three-second per-player cooldown shared by native/model/offhand paths. ModelEngine supplies transparent client interaction entities for the five characters only; enabling those targets does not make decorative bases visible or damageable. Existing gray Jawas, Ilum NPCs and player vehicles retain their own state.
 
 ## Ownership and integrations
-DecorService owns configuration, protected bases, chunk tickets, dialogue and cleanup. DecorModel uses the original ModelEngine rigs and animation poses. TerritoryService authorizes the protected decorative entity spawn. No Mythic combat instances or VehicleService records are created. The deployment overlay preserves the actual integrated command hub and adds start/stop calls only; unrelated existing JAR entries remain identical.
+DecorService owns configuration, protected bases, chunk tickets, target selection, written dialogue and cleanup. DecorLook computes shortest-arc head/body poses. DecorModel writes native and rendered locked rotations through ModelEngine. TerritoryService authorizes protected scenery spawning. The existing integrated lifecycle is retained; unrelated deployed entries remain identical.
 
 ## Parameters
-`decor/placements.yml` defines one to 32 stable IDs with world, exact coordinates, yaw/pitch, original model, scale, animations and optional dialogue/voices. Changes require restart. Voice range defaults to seven blocks; ambient intervals default to 80–140 seconds.
+`decor/placements.yml` defines one to 32 stable IDs with world, exact location/facing, original rig, scale, animations and optional written dialogue. `look-range` defaults to five blocks. `forward-offset-pixels` derives the applied anchor from its immutable capture. Changes require restart.
 
 ## Verification
-186 Java tests pass. Original scenery native Paper first boot passes 158 assertions and second boot 167, including exact placement, loaded original rigs, damage/teleport/mount/equipment protection, private dialogue, audio, throttling, duplicate lifecycle handling and new runtime UUIDs after restart. The Boba/look follow-up passes 221 assertions on first boot and 230 on second boot, including actual native/rendered head and body tracking, nearest selection, return-facing and unchanged feet/vehicles. Production verification uses a separate read-only mode without fake actors or interaction mutations.
+189 Java tests pass, including prompt head-only response, behind-player body following, shortest-arc wraparound, neck/pitch limits, exact idle return and nonaccumulating Boba offset. The current targeted native run passes 221 scene/motion assertions and 76 actual packet interaction assertions across all five speakers: real ModelEngine client interaction-spawn packets, actual renderer IDs and base INTERACT_AT, held item, main/offhand deduplication, private speaker/prefix components, line cycling and zero decorative sound packets. Original entity persistence/duplicate/protection checks remain verified from prior boots.
+
+The client-click fault was reproduced with the original artifact: interaction hitboxes were registered server-side but `hitboxVisible=false` made ModelEngine omit their client INTERACTION spawn packets. Forcing those unspawned IDs in direct tests had hidden the bug; the revised tests require actual client spawn packet production first.
 
 ## Pause note
-Nine placements are deployed. 109 read-only live assertions passed; the temporary probe is removed and normal server/Jabba restored. The Boba offset/looking follow-up is also live with chat polish after the gray repair, with 109 read-only scenery and 57 chat protocol assertions passed. All seven gray rigs, pack and unrelated configs remain unchanged. Next action: inspect models, looking and dialogue in a real client.
+The scoped natural-looking/chat-only update is ready. Next action: deploy in the assigned window and verify the five client click targets read-only, then ask the user to right-click Boba and Bossk in game.

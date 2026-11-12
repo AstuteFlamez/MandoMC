@@ -1,6 +1,11 @@
 # Resume here
 Updated: 2026-11-11
 
+## Natural looking and written NPC dialogue (2026-11-11)
+The user clarified that NPC voice lines mean written chat, and requested quicker, natural looking. Staged changes remove all decorative click/ambient audio, cycle private character dialogue, and enable transparent ModelEngine client interaction targets only for the five characters. The original client-click fault is reproduced: disabled hitbox visibility suppressed the actual INTERACTION spawn packets, even though forced server IDs could trigger dialogue in earlier tests. Vehicles remain unclickable and fixed; all nine anchors, Boba's one-time offset and seven gray Jawas are preserved.
+
+Heads now respond every two ticks, independently within a comfortable neck cone; bodies follow only beyond 45 degrees. Pitch is clamped, all motion uses shortest arcs, nearest-target hysteresis prevents jitter, and idle returns to saved facing. 189 Java tests, 221 targeted native scene/motion assertions and 76 real native interaction-packet assertions pass, including all five names/current prefix, renderer/base paths, held item, line rotation, offhand dedup and zero decorative audio. No extra persistence matrix is needed: those owners are unchanged. Next action: deploy the scoped update in the next assigned window and run read-only live verification.
+
 ## Boba adjustment and stationary character looking (2026-11-11)
 Boba's location is now derived from the immutable point-three capture with a three-model-pixel forward offset along saved yaw: X -0.1873143519423295 blocks, Z -0.008341675876292521 blocks. Baseline coordinates, height and pitch remain in config; repeated parses/restarts cannot accumulate the offset. All five decorative characters smoothly turn native and rendered body/head rotations toward the closest non-spectator, non-vanished player within five blocks, at most six degrees every five ticks, and return to saved facing when nobody is eligible. Feet stay anchored and vehicles stay fixed.
 

@@ -15,7 +15,7 @@ public class DecorDefinitionTest {
         var uwing=values.stream().filter(d->d.type().equals("u_wing")).findFirst().orElseThrow();
         assertTrue(uwing.openDoors());assertEquals("landing",uwing.mode());assertEquals(11.695954251385313,uwing.x(),0);assertEquals(18.749952f,uwing.yaw(),0);
         assertEquals(5,values.stream().filter(DecorDefinition::npc).count());
-        for(var value:values)if(value.npc()){assertTrue(value.dialogue().size()>=3);assertTrue(value.voices().size()>=2);assertEquals(List.of("idle"),value.animations());}
+        for(var value:values)if(value.npc()){assertTrue(value.dialogue().size()>=3);assertTrue(value.voices().isEmpty());assertEquals(List.of("idle"),value.animations());}
     }
     @Test public void forwardOffsetUsesImmutableCaptureOnce(){
         var yaml=YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(getClass().getResourceAsStream("/decor/placements.yml"),java.nio.charset.StandardCharsets.UTF_8));

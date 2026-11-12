@@ -29,25 +29,18 @@ public final class DecorService implements Listener,AutoCloseable {
     private final Map<String,DecorDefinition> definitions=new LinkedHashMap<>();
     private final Map<String,Live> live=new LinkedHashMap<>();
     private final Map<UUID,Long> interactions=new HashMap<>();
-    private final Map<String,Long> voices=new HashMap<>();
-    private final Map<String,Long> lastVoice=new HashMap<>();
+    private final Map<UUID,Map<String,Integer>> dialogueCursor=new HashMap<>();
     private final Set<Chunk> chunks=new HashSet<>();
     private final Set<UUID> internalTeleports=new HashSet<>();
     private final BukkitTask ticker;
-    private final Random random=new Random();
-    private final double voiceRange;
     private final double lookRange;
-    private final float lookStep;
-    private final int ambientMin,ambientMax;
-    private long nextAmbient;
+    private final Map<String,UUID> lookTargets=new HashMap<>();
     private boolean closing;
     public DecorService(MandoPlugin plugin,YamlConfiguration config){
         this.plugin=plugin;this.config=config;
         if(config.getInt("schema-version")!=1)throw new IllegalArgumentException("decor/placements.yml: schema-version1 required");
-        lookRange=config.getDouble("look-range",5);lookStep=(float)config.getDouble("look-step",6);
-        if(!Double.isFinite(lookRange)||lookRange<1||lookRange>8||!Float.isFinite(lookStep)||lookStep<1||lookStep>15)throw new IllegalArgumentException("Invalid decor look range/step");
-        voiceRange=config.getDouble("voice-range",7);ambientMin=config.getInt("ambient-min-seconds",80);ambientMax=config.getInt("ambient-max-seconds",140);
-        if(!Double.isFinite(voiceRange)||voiceRange<1||voiceRange>16||ambientMin<30||ambientMax<ambientMin)throw new IllegalArgumentException("Invalid decor voice range/cooldown");
+        lookRange=config.getDouble("look-range",5);
+        if(!Double.isFinite(lookRange)||lookRange<1||lookRange>8)throw new IllegalArgumentException("Invalid decor look range/step");
         for(var entry:config.getMapList("placements")){
             var definition=DecorDefinition.read(entry);
             if(definitions.putIfAbsent(definition.id(),definition)!=null)throw new IllegalArgumentException("Duplicate decor id "+definition.id());
@@ -69,7 +62,7 @@ public final class DecorService implements Listener,AutoCloseable {
             for(var definition:definitions.values())spawn(definition);
         }catch(RuntimeException error){removeAll();throw error;}
         Bukkit.getPluginManager().registerEvents(this,plugin);
-        ticker=Bukkit.getScheduler().runTaskTimer(plugin,this::tick,5,5);
+        ticker=Bukkit.getScheduler().runTaskTimer(plugin,this::tick,2,2);
         plugin.getLogger().info("Spawn decor ready: "+live.size()+" fixed model placements; no combat AI or player vehicle ownership.");
     }
     private void spawn(DecorDefinition definition){
@@ -83,10 +76,10 @@ public final class DecorService implements Listener,AutoCloseable {
         }));
         try{live.put(definition.id(),new Live(definition,base,new DecorModel(base,definition)));}
         catch(RuntimeException error){base.remove();throw error;}
-        voices.put(definition.id(),System.currentTimeMillis()+1000L*random.nextInt(ambientMin,ambientMax+1));
     }
     public List<DecorDefinition> definitions(){return List.copyOf(definitions.values());}
     public Map<String,ArmorStand> bases(){var result=new LinkedHashMap<String,ArmorStand>();live.forEach((id,value)->result.put(id,value.base));return Map.copyOf(result);}
+    public UUID lookTarget(String id){return lookTargets.get(id);}
     public DecorModel model(String id){return live.get(id).model;}
     private Live owned(Entity entity){
         String id=entity.getPersistentDataContainer().get(MARKER,PersistentDataType.STRING);
@@ -105,36 +98,29 @@ public final class DecorService implements Listener,AutoCloseable {
                 internalTeleports.add(base.getUniqueId());try{base.teleport(at);}finally{internalTeleports.remove(base.getUniqueId());}
             }
             if(definition.npc()){
-                var viewer=at.getWorld().getPlayers().stream()
+                var candidates=at.getWorld().getPlayers().stream()
                         .filter(p->p.getGameMode()!=GameMode.SPECTATOR&&p.isOnline()&&!p.isDead())
                         .filter(p->p.getMetadata("vanished").stream().noneMatch(v->v.asBoolean()))
                         .filter(p->p.getLocation().distanceSquared(at)<lookRange*lookRange)
-                        .min(Comparator.comparingDouble((Player p)->p.getLocation().distanceSquared(at)).thenComparing(Player::getUniqueId)).orElse(null);
+                         .sorted(Comparator.comparingDouble((Player p)->p.getLocation().distanceSquared(at)).thenComparing(Player::getUniqueId)).toList();
+                Player viewer=candidates.isEmpty()?null:candidates.getFirst();
+                var retained=candidates.stream().filter(p->p.getUniqueId().equals(lookTargets.get(definition.id()))).findFirst().orElse(null);
+                if(retained!=null&&viewer!=null&&retained.getLocation().distanceSquared(at)<=viewer.getLocation().distanceSquared(at)+1)viewer=retained;
+                if(viewer==null)lookTargets.remove(definition.id());else lookTargets.put(definition.id(),viewer.getUniqueId());
                 var direction=viewer==null?at:at.clone().setDirection(viewer.getEyeLocation().toVector().subtract(base.getEyeLocation().toVector()));
-                value.model.face(base,direction.getYaw(),direction.getPitch(),lookStep);
+                value.model.face(base,direction.getYaw(),direction.getPitch(),viewer!=null);
             }else base.setRotation(at.getYaw(),at.getPitch());
             base.setVelocity(new Vector());base.setFireTicks(0);
-            if(definition.npc()&&now>=nextAmbient&&now>=voices.getOrDefault(definition.id(),Long.MAX_VALUE)){
-                boolean near=at.getWorld().getPlayers().stream().anyMatch(p->p.getLocation().distanceSquared(at)<=voiceRange*voiceRange);
-                if(near){voice(value);nextAmbient=now+20_000;}
-                voices.put(definition.id(),now+1000L*random.nextInt(ambientMin,ambientMax+1));
-            }
+
         }
         interactions.entrySet().removeIf(entry->entry.getValue()<now-60_000);
-    }
-    private void voice(Live value){
-        if(value.definition.voices().isEmpty())return;
-        long now=System.currentTimeMillis();if(now<lastVoice.getOrDefault(value.definition.id(),0L))return;
-        lastVoice.put(value.definition.id(),now+8000);
-        var at=value.definition.location();String sound=value.definition.voices().get(random.nextInt(value.definition.voices().size()));
-        for(var player:at.getWorld().getPlayers())if(player.getLocation().distanceSquared(at)<=voiceRange*voiceRange)
-            player.playSound(at,sound,SoundCategory.VOICE,.7f,1);
     }
     private void talk(Player player,Live value){
         if(!value.definition.npc()||!player.getWorld().equals(value.base.getWorld())||player.getLocation().distanceSquared(value.base.getLocation())>36)return;
         long now=System.currentTimeMillis();if(now-interactions.getOrDefault(player.getUniqueId(),0L)<3000)return;
         interactions.put(player.getUniqueId(),now);
-        String line=value.definition.dialogue().get(random.nextInt(value.definition.dialogue().size()));
+        int lineIndex=dialogueCursor.computeIfAbsent(player.getUniqueId(),id->new HashMap<>()).merge(value.definition.id(),1,Integer::sum)-1;
+        String line=value.definition.dialogue().get(Math.floorMod(lineIndex,value.definition.dialogue().size()));
         Component text=MiniMessage.miniMessage().deserialize(config.getString("messages.npc-line"),
                 Placeholder.unparsed("npc",value.definition.name()),Placeholder.unparsed("line",line));
         // Chat presentation is optional; rendering/placement has no dependency on its implementation.
@@ -144,12 +130,13 @@ public final class DecorService implements Listener,AutoCloseable {
             if(service!=null)text=(Component)type.getMethod("known",String.class,String.class,Component.class).invoke(service,"decor/placements.yml","messages.npc-line",text);
         }catch(ClassNotFoundException absent){/* Independent feature build retains its original dialogue. */}
         catch(ReflectiveOperationException error){throw new IllegalStateException("Cannot format decorative NPC dialogue",error);}
-        player.sendMessage(text);voice(value);
+        player.sendMessage(text);
     }
     @EventHandler(priority=EventPriority.HIGHEST) public void interact(PlayerInteractEntityEvent event){
         var value=owned(event.getRightClicked());if(value==null)return;event.setCancelled(true);
         if(event.getHand()==EquipmentSlot.HAND)talk(event.getPlayer(),value);
     }
+    @EventHandler public void quit(PlayerQuitEvent event){interactions.remove(event.getPlayer().getUniqueId());dialogueCursor.remove(event.getPlayer().getUniqueId());}
     @EventHandler public void modelInteract(BaseEntityInteractEvent event){
         var value=live.values().stream().filter(v->v.base.getUniqueId().equals(event.getBaseEntity().getUUID())).findFirst().orElse(null);
         if(value!=null&&event.getSlot()==EquipmentSlot.HAND&&event.getAction()!=BaseEntityInteractEvent.Action.ATTACK)talk(event.getPlayer(),value);
@@ -167,5 +154,5 @@ public final class DecorService implements Listener,AutoCloseable {
         for(var value:List.copyOf(live.values())){value.model.close();value.base.remove();}live.clear();
         chunks.forEach(chunk->chunk.removePluginChunkTicket(plugin));chunks.clear();
     }
-    @Override public void close(){closing=true;ticker.cancel();HandlerList.unregisterAll(this);removeAll();interactions.clear();voices.clear();lastVoice.clear();}
+    @Override public void close(){closing=true;ticker.cancel();HandlerList.unregisterAll(this);removeAll();interactions.clear();dialogueCursor.clear();lookTargets.clear();}
 }

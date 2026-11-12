@@ -1,10 +1,6 @@
 schema-version: 1
 enabled: true
-voice-range: 7
 look-range: 5
-look-step: 6
-ambient-min-seconds: 80
-ambient-max-seconds: 140
 messages:
   npc-line: <gold><npc></gold> <dark_gray>»</dark_gray> <gray><line>
 placements:
@@ -56,10 +52,6 @@ placements:
   mode: stationary_idle
   animations:
   - idle
-  voices:
-  - mandomc:mobs.boba_impressed
-  - mandomc:mobs.boba_stay_out_of_my_way
-  - mandomc:mobs.boba_die
   dialogue:
   - Keep your eyes open. Trouble never announces itself.
   - Every job has a price. Make sure you know yours.
@@ -79,10 +71,6 @@ placements:
   mode: stationary_idle
   animations:
   - idle
-  voices:
-  - mandomc:mobs.bossk_trophy
-  - mandomc:mobs.bossk_slay
-  - mandomc:mobs.bossk_profit
   dialogue:
   - A good hunter knows when to wait.
   - There is always another contract.
@@ -102,9 +90,6 @@ placements:
   mode: stationary_idle
   animations:
   - idle
-  voices:
-  - mandomc:mobs.gamorrean_idle1
-  - mandomc:mobs.gamorrean_idle2
   dialogue:
   - Hrrmph. No trouble here.
   - Keep walking. The gate is watched.
@@ -124,10 +109,6 @@ placements:
   mode: stationary_idle
   animations:
   - idle
-  voices:
-  - mandomc:mobs.alien1
-  - mandomc:mobs.alien2
-  - mandomc:mobs.alien3
   dialogue:
   - The docks hear more than the cantina.
   - Travel light, and keep your credits close.
@@ -147,10 +128,6 @@ placements:
   mode: stationary_idle
   animations:
   - idle
-  voices:
-  - mandomc:mobs.alien1
-  - mandomc:mobs.alien2
-  - mandomc:mobs.alien3
   dialogue:
   - A friendly face can open more doors than a blaster.
   - New arrivals always have the best stories.

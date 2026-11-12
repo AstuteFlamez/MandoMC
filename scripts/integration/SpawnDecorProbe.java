@@ -38,6 +38,7 @@ public final class SpawnDecorProbe extends JavaPlugin {
             check(!model.modeled().shouldBeSaved()&&!model.modeled().isBaseEntityVisible()&&model.modeled().isInitialized(),definition.id()+" renderer ready without extra persistence");
             check(model.modeled().getModels().containsKey(definition.model()),definition.id()+" original requested rig attached");
             check(!model.active().canHurt()&&!model.active().isMainHitbox()&&model.active().isModelRotationLocked(),definition.id()+" no hurt flash/main hitbox or facing drift");
+            check(model.active().isHitboxVisible()==definition.npc(),definition.id()+" transparent click target enabled for characters only");
             check(!base.getPersistentDataContainer().has(new NamespacedKey("mandomc","vehicle_id")),definition.id()+" never a player-owned vehicle");
             check(base.getLocation().getChunk().getPluginChunkTickets().contains(mando),definition.id()+" chunk kept loaded");
             for(String animation:definition.animations())check(model.active().getAnimationHandler().getAnimation(animation)!=null,definition.id()+" required pose/idle present");
@@ -60,7 +61,7 @@ public final class SpawnDecorProbe extends JavaPlugin {
             var base=decor.bases().get(definition.id());var event=new PlayerInteractEntityEvent(player,base,EquipmentSlot.HAND);Bukkit.getPluginManager().callEvent(event);
             check(event.isCancelled(),definition.id()+" interaction cannot manipulate native stand");
             var dialogue=actors.drain(player);check(dialogue.size()==1&&net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(dialogue.getFirst()).contains(definition.name()),definition.id()+" private character dialogue delivered");
-            var other=actors.otherPackets(player);check(other!=null&&other.stream().anyMatch(name->name.contains("SoundPacket")),definition.id()+" original voice cue delivered nearby");
+            var other=actors.otherPackets(player);check(other==null||other.stream().noneMatch(name->name.contains("SoundPacket")),definition.id()+" dialogue is written chat without decorative audio");
             Bukkit.getPluginManager().callEvent(new PlayerInteractEntityEvent(player,base,EquipmentSlot.HAND));check(actors.drain(player).isEmpty(),definition.id()+" repeated click dialogue throttled");
             check(!base.addPassenger(player)&&base.getPassengers().isEmpty(),definition.id()+" native riding prevented");
             var equipment=new PlayerArmorStandManipulateEvent(player,base,new ItemStack(Material.DIAMOND_HELMET),new ItemStack(Material.AIR),EquipmentSlot.HEAD,EquipmentSlot.HAND);Bukkit.getPluginManager().callEvent(equipment);check(equipment.isCancelled(),definition.id()+" equipment theft blocked");
@@ -75,14 +76,14 @@ public final class SpawnDecorProbe extends JavaPlugin {
     private void finish(Properties previous,Properties snapshot,Path first)throws Exception{
             Files.createDirectories(getDataFolder().toPath());if(previous.isEmpty())try(var out=Files.newOutputStream(first)){snapshot.store(out,"Stable IDs; runtime UUIDs must be recreated without duplicates");}
             String phase=previous.isEmpty()?"PHASE1":"PHASE2";Files.writeString(getDataFolder().toPath().resolve(phase+"-PASSED.txt"),"SPAWN DECOR "+phase+" PASSED: "+checks+" native assertions\n");getLogger().info("SPAWN DECOR "+phase+" PASSED: "+checks+" native assertions");cleanup();
-            if(new java.io.File(getDataFolder(),"standalone").exists())Bukkit.shutdown();else waitForChat(phase,0);
+            if(new java.io.File(getDataFolder(),"wait-for-click").exists())waitForClick(0);else if(new java.io.File(getDataFolder(),"standalone").exists())Bukkit.shutdown();else waitForChat(phase,0);
     }
     private void lookTests(Check done){
-        later(160,()->{
+        later(40,()->{
             for(var d:decor.definitions())if(d.npc()){
                 var base=decor.bases().get(d.id());
                 var closest=base.getWorld().getPlayers().stream().filter(p->p.getGameMode()!=GameMode.SPECTATOR&&p.getLocation().distanceSquared(d.location())<25)
-                        .min(Comparator.comparingDouble(p->p.getLocation().distanceSquared(d.location()))).orElseThrow();
+                        .filter(p->p.getUniqueId().equals(decor.lookTarget(d.id()))).findFirst().orElseThrow();
                 facing(d,closest.getEyeLocation(),"all five follow nearby player");
             }
             for(var player:speakers)player.teleport(new Location(player.getWorld(),200,140,200));
@@ -91,15 +92,15 @@ public final class SpawnDecorProbe extends JavaPlugin {
             speakers.get(2).teleport(d.location().add(.25,0,0));speakers.get(2).setGameMode(GameMode.SPECTATOR);
             speakers.get(3).teleport(d.location().add(-.25,0,0));speakers.get(3).setMetadata("vanished",new org.bukkit.metadata.FixedMetadataValue(mando,true));
             float initial=decor.model(d.id()).modeled().getYBodyRot();
-            later(5,()->{
-                check(Math.abs(Math.IEEEremainder(decor.model(d.id()).modeled().getYBodyRot()-initial,360))<=6.01,"Look updates bounded to six degrees per five ticks");
-                later(160,()->{
+            later(2,()->{
+                check(Math.abs(Math.IEEEremainder(decor.model(d.id()).modeled().getYBodyRot()-initial,360))<=12.01,"Natural body updates bounded to twelve degrees per two ticks");
+                later(40,()->{
                     facing(d,speakers.get(0).getEyeLocation(),"nearest selected; closer spectator and vanished excluded");
                     speakers.get(0).teleport(new Location(d.location().getWorld(),200,140,200));
-                    later(160,()->{
+                    later(40,()->{
                         facing(d,speakers.get(1).getEyeLocation(),"target leaving selects next nearest player");
                         for(var player:speakers){player.teleport(new Location(player.getWorld(),200,140,200));player.removeMetadata("vanished",mando);}
-                        later(160,()->{
+                        later(40,()->{
                             for(var definition:decor.definitions()){
                                 var base=decor.bases().get(definition.id());var model=decor.model(definition.id());
                                 check(base.getLocation().distanceSquared(definition.location())<.000001,"Looking never translates feet: "+definition.id());
@@ -116,11 +117,16 @@ public final class SpawnDecorProbe extends JavaPlugin {
     private void facing(DecorDefinition d,Location target,String label){
         var base=decor.bases().get(d.id());var model=decor.model(d.id());
         var desired=d.location().setDirection(target.toVector().subtract(base.getEyeLocation().toVector()));
-        check(Math.abs(Math.IEEEremainder(base.getYaw()-desired.getYaw(),360))<.01,label+" native yaw");
-        check(Math.abs(Math.IEEEremainder(model.modeled().getYBodyRot()-desired.getYaw(),360))<.01,label+" rendered body");
+        check(Math.abs(Math.IEEEremainder(base.getYaw()-model.modeled().getYBodyRot(),360))<.01,label+" native/body yaw synchronization");
+        check(Math.abs(Math.IEEEremainder(model.modeled().getYBodyRot()-desired.getYaw(),360))<=45.01,label+" body catches up only to comfortable head cone");
         check(Math.abs(Math.IEEEremainder(model.modeled().getYHeadRot()-desired.getYaw(),360))<.01,label+" rendered head");
-        check(Math.abs(model.modeled().getXHeadRot()-desired.getPitch())<.01,label+" rendered head pitch");
+        check(Math.abs(model.modeled().getXHeadRot()-Math.max(-35,Math.min(35,desired.getPitch())))<.01,label+" head pitch clamped naturally");
         check(base.getLocation().distanceSquared(d.location())<.000001,label+" exact anchor");
+    }
+    private void waitForClick(int tries){
+        var dir=getDataFolder().toPath().getParent().resolve("DecorClickProbe");
+        if(Files.exists(dir.resolve("PASSED.txt"))||Files.exists(dir.resolve("FAILED.txt"))||tries>60){Bukkit.shutdown();return;}
+        later(20,()->waitForClick(tries+1));
     }
     private void waitForChat(String phase,int retries){
         var result=getDataFolder().toPath().getParent().resolve("ChatPolishProbe/PASSED.txt");

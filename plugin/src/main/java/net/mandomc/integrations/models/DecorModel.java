@@ -15,7 +15,8 @@ public final class DecorModel implements AutoCloseable {
         if(ModelEngineAPI.getBlueprint(definition.model())==null)throw new IllegalStateException("Missing decor blueprint "+definition.model());
         modeled=ModelEngineAPI.getOrCreateModeledEntity(base);modeled.setSaved(false);modeled.setBaseEntityVisible(false);
         active=ModelEngineAPI.createActiveModel(definition.model());active.setScale(definition.scale());
-        active.setCanHurt(false);active.setHitboxVisible(false);active.setMainHitbox(false);active.setRenderFire(false);
+        // This flag sends an invisible INTERACTION target to clients; it does not show the native base.
+        active.setCanHurt(false);active.setHitboxVisible(definition.npc());active.setMainHitbox(false);active.setRenderFire(false);
         modeled.addModel(active,false);
         modeled.setModelRotationLocked(true);modeled.setYBodyRotImmediately(definition.yaw());modeled.setYHeadRotImmediately(definition.yaw());modeled.setXHeadRotImmediately(definition.pitch());
         active.setModelRotationLocked(true);active.setLockYaw(true);active.setLockPitch(true);
@@ -28,14 +29,13 @@ public final class DecorModel implements AutoCloseable {
             if(!definition.npc())property.setForceLoopMode(BlueprintAnimation.LoopMode.HOLD);
         }
     }
-    public void face(ArmorStand base,float targetYaw,float targetPitch,float maxStep){
-        float yaw=modeled.getYBodyRot()+(float)Math.max(-maxStep,Math.min(maxStep,Math.IEEEremainder(targetYaw-modeled.getYBodyRot(),360)));
-        float pitch=modeled.getXHeadRot()+Math.max(-maxStep,Math.min(maxStep,targetPitch-modeled.getXHeadRot()));
-        base.setRotation(yaw,pitch);
+    public void face(ArmorStand base,float targetYaw,float targetPitch,boolean tracking){
+        var pose=net.mandomc.gameplay.decor.DecorLook.step(modeled.getYBodyRot(),modeled.getYHeadRot(),modeled.getXHeadRot(),targetYaw,targetPitch,tracking);
+        base.setRotation(pose.body(),pose.pitch());
         var controller=modeled.getBase().getBodyRotationController();
-        controller.setYBodyRot(yaw);controller.setYHeadRot(yaw);controller.setXHeadRot(pitch);
-        modeled.setYBodyRotImmediately(yaw);modeled.setYHeadRotImmediately(yaw);modeled.setXHeadRotImmediately(pitch);
-        active.setLockedYBodyRot(yaw);active.setLockedYHeadRot(yaw);active.setLockedXHeadRot(pitch);
+        controller.setYBodyRot(pose.body());controller.setYHeadRot(pose.head());controller.setXHeadRot(pose.pitch());
+        modeled.setYBodyRotImmediately(pose.body());modeled.setYHeadRotImmediately(pose.head());modeled.setXHeadRotImmediately(pose.pitch());
+        active.setLockedYBodyRot(pose.body());active.setLockedYHeadRot(pose.head());active.setLockedXHeadRot(pose.pitch());
     }
     public ActiveModel active(){return active;}
     public ModeledEntity modeled(){return modeled;}
