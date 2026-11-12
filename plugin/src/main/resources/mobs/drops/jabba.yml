@@ -1,0 +1,43 @@
+schema-version: 1
+enabled: true
+drops:
+  GamorreanGuard:
+    weapon: gamorrean_axe
+    weapon-chance: 0.25
+    ammo-rolls: 0
+  QuarrenGuard:
+    weapon: se14c
+    weapon-chance: 0.2
+    ammo: standard_plasma_cells
+    ammo-chance: 0.5
+    ammo-rolls: 3
+  TwilekGuard:
+    weapon: a280
+    weapon-chance: 0.2
+    ammo: standard_plasma_cells
+    ammo-chance: 0.5
+    ammo-rolls: 3
+  BobaFett:
+    weapon: ee3
+    weapon-chance: 0.5
+    ammo: standard_plasma_cells
+    ammo-chance: 0.5
+    ammo-rolls: 3
+    equipment:
+      boba_jetpack: 0.10
+      boba_flamethrower: 0.15
+  JawaBrown:
+    weapon: jawa_ionization_blaster
+    weapon-chance: 0.12
+    ammo: ionized_energy_cells
+    ammo-chance: 0.5
+    ammo-rolls: 3
+    salvage:
+      minimum: 1
+      maximum: 2
+      pool:
+      - wiring_coil
+      - basic_power_cell
+      - rough_power_cell
+      - basic_emitter_coil
+      - makeshift_recoil_buffer

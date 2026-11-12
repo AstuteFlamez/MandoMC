@@ -1,0 +1,38 @@
+{
+  "parent": "mandomc:equipment/boba_jetpack_attached",
+  "display": {
+    "gui": {
+      "rotation": [
+        20,
+        145,
+        0
+      ],
+      "scale": [
+        0.65,
+        0.65,
+        0.65
+      ]
+    },
+    "firstperson_lefthand": {
+      "scale": [
+        0,
+        0,
+        0
+      ]
+    },
+    "thirdperson_lefthand": {
+      "scale": [
+        0,
+        0,
+        0
+      ]
+    },
+    "ground": {
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    }
+  }
+}

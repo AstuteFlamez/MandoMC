@@ -265,3 +265,5 @@ permissions:
     default: op
   mandomc.travel.homes.unlimited:
     default: op
+  mandomc.equipment:
+    default: true

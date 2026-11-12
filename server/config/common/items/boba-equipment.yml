@@ -1,0 +1,29 @@
+schema-version: 1
+items:
+  boba_jetpack:
+    material: ECHO_SHARD
+    name: "<gold>Boba Fett's Jetpack"
+    custom-model-data: 3101
+    item-model: mandomc:equipment/boba_jetpack
+    rarity: rare
+    category: armor
+    lore:
+      - '<gray>Equip in your offhand to wear.'
+      - '<gray>Leaves your chestplate and armor intact.'
+      - ''
+      - '<yellow>[Double Sneak] Toggle thrust'
+      - ''
+      - '<gray>Fuel: 1 Coal / second, hotbar only.'
+  boba_flamethrower:
+    material: BLAZE_ROD
+    name: "<gold>Boba Fett's Flamethrower"
+    custom-model-data: 3102
+    item-model: mandomc:equipment/boba_flamethrower
+    rarity: rare
+    category: weapons
+    lore:
+      - '<gray>A wrist-mounted Mandalorian flame projector.'
+      - ''
+      - '<yellow>[Right Click] Flame burst'
+      - ''
+      - '<gray>Ammo: 1 Fire Charge / burst.'

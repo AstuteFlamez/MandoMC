@@ -21,8 +21,10 @@ public final class JabbaDrops implements Listener {
             throw new IllegalStateException("jabba-mobs.enabled requires MythicMobs");
         }
         for (var rule : settings.mobs().values()) {
-            if (!items.ids().contains(rule.weapon()) || (rule.ammoRolls() > 0 && !items.ids().contains(rule.ammo()))) {
-                throw new IllegalArgumentException("jabba-mobs.yml: unknown catalog weapon or ammo item");
+            if (rule.extras().stream().anyMatch(extra -> !items.ids().contains(extra.item()))
+                    || !items.ids().containsAll(rule.salvage().pool())
+                    || !items.ids().contains(rule.weapon()) || (rule.ammoRolls() > 0 && !items.ids().contains(rule.ammo()))) {
+                throw new IllegalArgumentException("mobs/drops/jabba.yml: unknown catalog weapon or ammo item");
             }
         }
         var type = (Class<? extends Event>) Class.forName("io.lumine.mythic.bukkit.events.MythicMobDeathEvent",

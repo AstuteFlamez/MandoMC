@@ -25,3 +25,6 @@ drops:
     ammo: standard_plasma_cells
     ammo-chance: 0.50
     ammo-rolls: 3
+    equipment:
+      boba_jetpack: 0.10
+      boba_flamethrower: 0.15
