@@ -1,5 +1,5 @@
 # Feature: Recipe acquisition context
-Status: staged and verified
+Status: deployed and verified
 Branch: bilal/bantha-hide-utilities
 
 ## Player experience
@@ -23,4 +23,4 @@ Native source notes identify the crafting station, mob, geode or terrain type wh
 The repository build passes all 174 tests. A focused isolated Paper run passes 1,357 assertions: exact 106-ingredient coverage; source-line text/format; unchanged templates and native results; actual detail previews; craftable click-through and Back navigation; source-only chat actions; and retained twenty Bantha Hide Utilities entries. A separate live-config audit checks actual brown stock/category membership, event worlds, node count, crate reward pools and unchanged non-source recipe settings. No probe or actors are installed live.
 
 ## Pause note
-Staged; no live stop. The coordinator currently controls restart scheduling. Next action: acquire the assigned window, rebase to the latest JAR, apply only the guide/source patch and verify normal startup.
+Deployed in the assigned window on 2026-11-12. One normal startup completed at 13:45:23 local; KOTH and its empty next-event selection were restored. Final JAR SHA-256 `2fac77b269be20e90fa1f4caad7e03a8cd4e5edcc7d9219b9286fde4003bb152`. Only RecipeGuide.class and items/recipes.yml differ from the incoming live JAR. The unchanged redstone-agent launcher was used. Arrival, nine decor placements, two stable seven-Jawa model snapshots and the frozen-wilderness 2115/2115 receipt pass. Frozen journal/receipt/scope checksums match the retained stopped-runtime backup. The restart window is released. Next action: client-check ingredient acquisition previews and their recipe links in `/recipes`.
