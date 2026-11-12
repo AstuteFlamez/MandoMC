@@ -1,14 +1,11 @@
-# MythicMobs owns AI, health and level. MandoMC owns group placement and population budgets.
+# MythicMobs owns AI, health and entity lifecycle. MandoMC owns group placement and population budgets.
 # Tusken weapon drops are supplied once through the Mythic death integration (10% each).
 TuskenRaiderSniper:
   Type: ZOMBIE
-  Display: '&6Tusken Raider &7[Lv. <caster.level>]'
+  Display: '&6Tusken Raider'
   Health: 20
   Damage: 3
   Faction: Tusken
-  LevelModifiers:
-    Health: 4
-    Damage: 0.5
   Options:
     PreventSunburn: true
     PreventJockeyMounts: true
@@ -45,13 +42,10 @@ TuskenRaiderSniper:
 
 TuskenRaiderMelee:
   Type: ZOMBIE
-  Display: '&6Tusken Raider &7[Lv. <caster.level>]'
+  Display: '&6Tusken Raider'
   Health: 20
   Damage: 4
   Faction: Tusken
-  LevelModifiers:
-    Health: 4
-    Damage: 0.5
   Options:
     PreventSunburn: true
     PreventJockeyMounts: true
@@ -82,11 +76,9 @@ TuskenRaiderMelee:
 
 Bantha:
   Type: PIG
-  Display: '&6Bantha &7[Lv. <caster.level>]'
+  Display: '&6Bantha'
   Health: 50
   Damage: 0
-  LevelModifiers:
-    Health: 8
   Options:
     Silent: true
     PreventOtherDrops: true
@@ -111,11 +103,9 @@ Bantha:
 
 Dewback:
   Type: PIG
-  Display: '&2Dewback &7[Lv. <caster.level>]'
+  Display: '&2Dewback'
   Health: 40
   Damage: 0
-  LevelModifiers:
-    Health: 6
   Options:
     Silent: true
     PreventOtherDrops: true
@@ -138,10 +128,10 @@ Dewback:
     - sound{s=mandomc:mobs.dewback_idle;v=1.5;p=1} @self ~onTimer:220 0.2
     - sound{s=mandomc:mobs.dewback_death;v=2;p=1} @self ~onDeath
 
-# Legacy behavior; group levels remain labels, with the original fixed combat stats.
+# Legacy behavior with the original fixed combat stats.
 Massiff:
   Type: ZOMBIE
-  Display: '&6&lMassiff &7[Lv. <caster.level>]'
+  Display: '&6&lMassiff'
   Health: 50
   Damage: 0
   Faction: Tusken

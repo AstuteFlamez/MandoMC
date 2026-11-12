@@ -3,9 +3,6 @@ enabled: true
 world: minecraft:overworld
 biomes: [minecraft:desert, minecraft:badlands, minecraft:eroded_badlands]
 ground: [SAND, RED_SAND, SANDSTONE, RED_SANDSTONE, TERRACOTTA, ORANGE_TERRACOTTA, YELLOW_TERRACOTTA, WHITE_TERRACOTTA, BROWN_TERRACOTTA, RED_TERRACOTTA, LIGHT_GRAY_TERRACOTTA]
-levels:
-  minimum: 1
-  maximum: 5
 patrol:
   raiders-min: 2
   raiders-max: 4
@@ -28,7 +25,6 @@ spawn:
   attempts: 8
 cycler:
   mob-base-damage: 6.0
-  damage-per-level: 0.5
 
 weapon-drops:
   chance: 0.10
