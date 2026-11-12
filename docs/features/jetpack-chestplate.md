@@ -1,5 +1,5 @@
 # Feature: Jetpack chestplate enchantment
-Status: implementation; replaces the offhand wearable and visual comparison experiment.
+Status: LIVE since 2026-11-12 16:45 America/Chicago; replaces the offhand wearable and visual comparison experiment.
 Branch: bilal/boba-equipment
 
 ## Player experience
@@ -31,4 +31,4 @@ Existing equipment/boba.yml movement/flame settings remain in force. Fuel cost a
 Six deterministic fuel tests pass. The exact-candidate disposable full runtime tests real registry loading, all seven material recipes, rejection cases, native 3x3 consumption, actual 2x2 normal and shift result clicks, repeated-click duplication prevention, full item-component preservation, native grindstone preparation, prior-glider retention, offhand migration/rejection, chest-slot native glide and zero visual entities. Registered flame/ammo/collision behavior is also exercised. Native result is 57 assertions passed. The real-time depletion check uses elapsed nanoseconds rather than assuming startup catch-up ticks take a fixed wall-clock duration.
 
 ## Pause note
-Next action: deploy the scoped JAR and native registry pack, then verify ordinary crafting and chestplate flight in the connected client.
+Deployed exact JAR `f067c786195b454e0f3d0f9d9413447138458c8ce87ecb477c4b8d3ad7da6cfb` and the native enchantment data pack with one clean restart and a full stopped backup. All 41 production read-only checks passed, including native enchantment, all chestplate recipes, removed test route/controller, existing loot, NPCs/decor/boards, frozen baselines, pack and native agent. The pack is unchanged. Jabba active / next None was separately restored and read back. Temporary audit removed; gear window released. Next action: user verifies ordinary crafting and chest-slot flight in the connected client.
