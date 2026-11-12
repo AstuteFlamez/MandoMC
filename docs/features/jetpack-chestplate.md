@@ -1,5 +1,5 @@
 # Feature: Jetpack chestplate enchantment
-Status: LIVE since 2026-11-12 16:45 America/Chicago; replaces the offhand wearable and visual comparison experiment.
+Status: LIVE; books I/II and tooltip refinement deployed 2026-11-12 17:04 America/Chicago. Replaces the offhand wearable and visual comparison experiment.
 Branch: bilal/boba-equipment
 
 ## Player experience
@@ -39,3 +39,5 @@ The native enchantment is capped at II, so vanilla enchantment descriptions incl
 Catalog armor now hides the native enchantment block that precedes lore and reproduces all normally visible enchantment names below the original rarity/category badge row. Generated rows carry an invisible component insertion marker, allowing idempotent refresh and exact removal without deleting original descriptions. Original enchantment-hide flags are remembered and restored. Already-hidden unrelated enchantments stay hidden; actual enchantment data remains unchanged. Vanilla armor without badge lore keeps vanilla tooltip rendering.
 
 Legacy model ingredients migrate to native books in carried inventories and on spawn/open. A grindstoned plain book is never recreated as an enchanted book. The native resource pack remains unchanged. Eight deterministic fuel tests and 81 exact-candidate native assertions pass, including actual book drops, normal/shift book consumption, direct II application/cap, screenshot-regression checks on real Beskar armor, exact tooltip/lore restoration, migration and real level-II activation with 0.2 seconds per coal. Connected-client appearance remains a manual confirmation.
+
+The book/II/tooltip refinement is live as JAR `58a6238614d85e0875cc7775c53e5f74403b53ea2b3d79ba013d0afefd282423`, with one clean restart and a full stopped backup. All 44 production read-only preservation/registration checks passed; KOTH active / next None was restored and separately read back. Resource pack and mandatory native agent/launcher remain unchanged. Temporary audit removed; gear window released. Next action: connected-client book/tooltip confirmation and manual I+I crafting.
