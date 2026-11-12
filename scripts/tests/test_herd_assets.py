@@ -15,6 +15,12 @@ class HerdAssetsTests(unittest.TestCase):
         for name, digest in expected.items():
             with self.subTest(species=name):
                 data = json.loads((ROOT / f'server/config/common/modelengine/blueprints/{name}.bbmodel').read_text())
+                # The user-requested collision edit changes only the hidden Dewback hitbox.
+                if name == 'dewback':
+                    group = next(g for g in data['outliner'] if g.get('name') == 'hitbox')
+                    cube = next(c for c in data['elements'] if c['uuid'] == group['children'][0])
+                    self.assertEqual((cube['from'], cube['to']), ([-13, 0, -34], [13, 36, 22]))
+                    cube['from'], cube['to'] = [-13, 12.25, -60], [13, 34.25, -34]
                 original = {'elements': [cube for cube in data['elements'] if not cube['name'].startswith('saddle_')],
                             'animations': data['animations'], 'texture': data['textures'][0]}
                 actual = hashlib.sha256(json.dumps(original, sort_keys=True, separators=(',', ':')).encode()).hexdigest()

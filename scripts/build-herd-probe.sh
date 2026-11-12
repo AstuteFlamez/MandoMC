@@ -15,13 +15,14 @@ runtime_libs="$(rg --files "$runtime/libraries" -g '*.jar' | paste -sd : -)"
 cp -R plugin/target/classes/net "$probe_dir/classes/"
 "$JAVA_HOME/bin/javac" --release 25 \
     -cp "plugin/target/classes:$runtime/plugins/MythicMobs-5.14.0.jar:$runtime/plugins/ModelEngine-4.1.1.jar:$(cat "$probe_dir/classpath.txt"):$runtime_libs" \
-    -d "$probe_dir/classes" scripts/integration/HerdProbe.java scripts/integration/HerdAnimalProbe.java scripts/integration/NativeProbePlayers.java
+    -d "$probe_dir/classes" scripts/integration/HerdProbe.java scripts/integration/HerdAnimalProbe.java scripts/integration/NativeProbePlayers.java scripts/integration/HerdClickProbe.java
 mkdir -p "$probe_dir/classes/items/definitions" "$probe_dir/classes/mobs"
 cp plugin/src/main/resources/mobs/spawning.yml "$probe_dir/classes/mobs/"
 cp plugin/src/main/resources/items/catalog.yml "$probe_dir/classes/items/"
 cp plugin/src/main/resources/items/definitions/{materials,dewback}.yml "$probe_dir/classes/items/definitions/"
 probe_main="HerdProbe"
 if [[ "${MANDOMC_HERD_PHASE:-babies}" == animals ]]; then probe_main="HerdAnimalProbe"; fi
+if [[ "${MANDOMC_HERD_PHASE:-babies}" == clicks ]]; then probe_main="HerdClickProbe"; fi
 cat > "$probe_dir/classes/plugin.yml" <<YAML
 name: HerdProbe
 version: '1'

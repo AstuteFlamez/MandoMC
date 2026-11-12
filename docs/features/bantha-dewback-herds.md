@@ -95,3 +95,29 @@ existing gray hosts had valid actual health. The checker self-disabled and its J
 KOTH was restored from the fresh pre-stop status and the deployment window released.
 
 Next action: client-test food attraction, native saddle equipment, saddle appearance and riding feel.
+
+
+## Client saddle-screen correction and Dewback collision (2026-11-12)
+The first client playtest found a gap in the original inventory test: a server-side HorseInventory
+can open even when ModelEngine suppresses the real horse's spawn packet. The client then cannot
+resolve the owner ID in ClientboundMountScreenOpenPacket and displays no screen. HerdModels now
+registers the actual horse as the model's supported PivotOverride, with native and forced
+invisibility. ModelEngine retains that exact horse on the client while suppressing its ordinary
+body/equipment rendering. Native owner, inventory and saddle remain the only state authority;
+there is no proxy horse. Renderer hitbox and native base INTERACT_AT routes use the same action.
+
+The new isolated HerdClickProbe verifies the real generated interaction-box spawn and relay,
+the actual outgoing ModelEngine horse-spawn filter, matching native owner ID, forced invisibility
+metadata, emitted native mount-screen packet and a menu that remains open after ten ticks. It
+covers both species at three and 4.5 blocks. The regression fails on the prior deployed class
+because the native horse is hidden entirely. Existing taming, breeding, native inventory, riding,
+death and restart/conversion checks are also rerun.
+
+At the user's request, only Dewback's hidden hitbox cube expands from its old head-only bounds
+to [-13,0,-34]..[13,36,22]. The resulting native adult collision is 3.5 blocks wide and 2.25 tall;
+babies retain uniform half size. Main native collision uses a square horizontal bounding box;
+the existing head sub-hitbox remains. All visible cubes, textures, UVs and animation keyframes
+are unchanged. Regenerating the model produces byte-identical visible pack assets, so the
+current published pack remains in use. 191 Java tests, two asset tests and132 native checks
+pass (64 packet/collision,56 full interactions,12 restart/conversion). The correction is staged
+pending the reserved coordinated window.

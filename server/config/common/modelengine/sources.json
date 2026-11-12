@@ -23,7 +23,7 @@
       "source": "ModelEngine/blueprints/Dewback.bbmodel",
       "sha256": "3ed9cf7d45c806ccaeb8e456f263e179370cd9867ce4952e374652508a5f9f92",
       "destination": "server/config/common/modelengine/blueprints/dewback.bbmodel",
-      "changes": "Normalize model ID; remove local texture path metadata; preserve embedded textures, geometry and animation. Add separate saddle geometry and a body-parented driver locator; reuse the original Bantha atlas for brown leather. Original cubes, texture UVs and animation keyframes remain unchanged."
+      "changes": "Normalize model ID; remove local texture path metadata; preserve embedded textures, geometry and animation. Add separate saddle geometry and a body-parented driver locator; reuse the original Bantha atlas for brown leather. Original cubes, texture UVs and animation keyframes remain unchanged. User requested larger body collision: expand only the hidden hitbox cube from head-only bounds to [-13,0,-34]..[13,36,22]; visible cubes, UVs and keyframes unchanged."
     },
     {
       "source": "ModelEngine/blueprints/massiff.bbmodel",

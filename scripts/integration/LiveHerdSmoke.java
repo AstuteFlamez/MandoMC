@@ -80,6 +80,15 @@ public final class LiveHerdSmoke extends JavaPlugin {
             var mobs=new MythicMobAccess();int managed=0;
             for(var world:Bukkit.getWorlds())for(var entity:world.getLivingEntities())if(mobs.managed(entity)) {
                 managed++;check(entity.getHealth()>0&&entity.getHealth()<=entity.getMaxHealth(),"actual loaded mob health "+entity.getUniqueId());
+                if(entity instanceof Horse horse && net.mandomc.gameplay.mobs.HerdAge.herd(mobs.type(horse))) {
+                    var modeled=ModelEngineAPI.getModeledEntity(horse);
+                    check(modeled!=null&&modeled.isPivotOverride(horse.getEntityId())&&horse.isInvisible()
+                            &&ModelEngineAPI.getEntityHandler().isForcedInvisible(horse),"existing herd keeps real invisible client horse "+horse.getUniqueId());
+                    if(mobs.type(horse).equals("Dewback")) {
+                        double scale=horse.isAdult()?1:.5;
+                        check(Math.abs(horse.getWidth()-3.5*scale)<.001&&Math.abs(horse.getHeight()-2.25*scale)<.001,"existing Dewback body collision "+horse.getUniqueId());
+                    }
+                }
                 rows.add("MOB "+mobs.type(entity)+" hp="+entity.getHealth()+"/"+entity.getMaxHealth()+" level="+mobs.level(entity));
             }
             rows.add("SNAPSHOT "+(second?2:1)+" managed="+managed+" checks="+checks);

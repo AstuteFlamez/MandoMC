@@ -1,6 +1,20 @@
 # Resume here
 Updated: 2026-11-12
 
+## Herd client saddle screen and Dewback body collision correction (2026-11-12)
+The user reproduced a missing saddle menu after taming with both hands clear. The server-side
+inventory opened, but ModelEngine omitted the native horse spawn; the client could not resolve
+the mount-screen owner. The native Horse is now retained as an invisible ModelEngine pivot,
+including initial invisibility metadata. A real packet regression fails on the deployed class;
+renderer/base click routes, outgoing spawn filtering and native menu lifetime pass with the fix.
+The requested Dewback hidden hitbox expands to body bounds: actual adult3.5 wide/2.25 tall,
+baby uniformly half-size, with no visible asset or published pack changes. 191 Java tests, two asset tests and132 native checks pass:64 actual packet/collision checks,
+56 full interactions and12 restart/conversion checks. The final outgoing metadata check proves
+the client horse stays invisible while its real ID remains available for the saddle screen.
+Scoped candidate changes only HerdModels.class and Dewback.bbmodel, preserving476 unrelated
+current JAR entries. No live fix has been installed. Next action: use the reserved coordinated window to deploy the two-file correction,
+then client-test the saddle screen.
+
 ## Bantha/Dewback native herds deployed (2026-11-12)
 Full taming, native horse equipment/saddle, walking-controller riding, owner-only feeding/management, protected courtship, inherited baby ownership, native growth/cooldown persistence and legacy pig conversion are implemented on `bilal/bantha-dewback-babies`. The first slice remains separately reproducible at `e152ec2`. Current source includes the peer's fixed-base mob-stat changes; deployment preserves the actual live adapters byte-identically. See [feature brief](features/bantha-dewback-herds.md) for defaults and lifecycle boundaries.
 

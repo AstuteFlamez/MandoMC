@@ -57,6 +57,14 @@ public final class HerdModels implements Listener {
         entity.getPersistentDataContainer().set(HerdAge.KIND, org.bukkit.persistence.PersistentDataType.STRING,
                 "bantha".equals(id) ? "Bantha" : "Dewback");
         models.put(entity.getUniqueId(), model);
+        if (entity instanceof Horse && model.getPivotOverride().isEmpty()) {
+            // The native mount screen resolves this exact horse on the client. A hidden base
+            // is otherwise omitted entirely by ModelEngine's spawn-packet filter.
+            // Keep the real horse as an invisible pivot; equipment remains model-owned.
+            model.setPivotOverride(ModelEngineAPI.getPivotOverrideRegistry().getOrCreate(entity));
+            ((Horse) entity).setInvisible(true); // Include invisibility in the initial native spawn metadata too.
+            ModelEngineAPI.getEntityHandler().setForcedInvisible(entity, true);
+        }
         scale(entity, model);
         equipment(entity, model);
         modeled.getBase().setMaxStepHeight(1);
