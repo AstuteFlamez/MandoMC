@@ -33,10 +33,11 @@ public final class HerdBabies implements Listener {
         var drops = type.getMethod("getDrops");
         Bukkit.getPluginManager().registerEvent(type, this, EventPriority.HIGHEST, (listener, event) -> {
             try {
-                if (HerdAge.herd((String) name.invoke(mobType.invoke(event)))
-                        && HerdAge.baby((Entity) entity.invoke(event))) {
-                    ((List<ItemStack>) drops.invoke(event)).clear();
-                }
+                String id = (String) name.invoke(mobType.invoke(event));
+                if (!HerdAge.herd(id)) return;
+                var animal = (Entity) entity.invoke(event);
+                animal.getPersistentDataContainer().set(HerdAge.KIND, PersistentDataType.STRING, id);
+                if (HerdAge.baby(animal)) ((List<ItemStack>) drops.invoke(event)).clear();
             } catch (ReflectiveOperationException error) {
                 throw new IllegalStateException("Cannot suppress baby herd drops", error);
             }
@@ -48,7 +49,7 @@ public final class HerdBabies implements Listener {
         if (!HerdAge.herd(type)) throw new IllegalArgumentException("Not a herd species: " + type);
         var entity = mobs.spawn(type, location, level);
         if (!(entity instanceof Ageable ageable)) {
-            mobs.remove(entity);
+            if (entity != null) mobs.remove(entity);
             throw new IllegalStateException(type + " must use a native ageable base");
         }
         ageable.setBaby();
@@ -66,12 +67,18 @@ public final class HerdBabies implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void death(EntityDeathEvent event) {
         var entity = event.getEntity();
-        if (!HerdAge.baby(entity)) return;
         String type = entity.getPersistentDataContainer().get(HerdAge.KIND, PersistentDataType.STRING);
         if (!HerdAge.herd(type)) type = mobs.type(entity);
-        if (HerdAge.herd(type)) {
+        if (!HerdAge.herd(type)) return;
+        if (HerdAge.baby(entity)) {
             event.getDrops().clear();
             event.setDroppedExp(0);
+        } else {
+            // Retain native equipment drops and catalog rewards; replace only the pig/horse body loot.
+            event.getDrops().removeIf(item -> !item.hasItemMeta() && switch (item.getType()) {
+                case LEATHER, PORKCHOP, COOKED_PORKCHOP -> true;
+                default -> false;
+            });
         }
     }
 }

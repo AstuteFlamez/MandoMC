@@ -31,7 +31,6 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     public net.mandomc.gameplay.arrival.StarterKit starterKit() { return starterKit; }
     public net.mandomc.gameplay.rules.SurvivalRules rules() { return rules; }
     private net.mandomc.gameplay.mobs.SandySpawns mobs;
-    private net.mandomc.integrations.mobs.HerdTempt herdTempt;
     public net.mandomc.gameplay.mobs.SandySpawns mobs() { return mobs; }
     private net.mandomc.gameplay.events.EventManager events;
     private net.mandomc.gameplay.travel.WarpService warps;
@@ -216,16 +215,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 var mythic = new net.mandomc.integrations.mobs.MythicMobAccess();
                 new net.mandomc.integrations.mobs.MassiffDrops(this, items);
                 new net.mandomc.integrations.mobs.DewbackDrops(this, items);
-                new net.mandomc.integrations.mobs.HerdBabies(this, mythic);
-                new net.mandomc.integrations.models.HerdModels(this);
-                var herdConfig = loadFeature("mobs/herd.yml");
-                var banthaFood = org.bukkit.Material.matchMaterial(herdConfig.getString("bantha-food", ""));
-                var dewbackFood = org.bukkit.Material.matchMaterial(herdConfig.getString("dewback-food", ""));
-                if (herdConfig.getInt("schema-version") != 1 || banthaFood == null || dewbackFood == null
-                        || !banthaFood.isItem() || !dewbackFood.isItem()) {
-                    throw new IllegalArgumentException("mobs/herd.yml: expected schema 1 and valid food materials");
-                }
-                herdTempt = new net.mandomc.integrations.mobs.HerdTempt(this, mythic, banthaFood, dewbackFood);
+                HerdBootstrap.enable(this);
                 new net.mandomc.integrations.weapons.MobWeaponDamage(this, mythic, settings);
                 new net.mandomc.integrations.mobs.TuskenDrops(this, items,
                         mobConfig.getDouble("weapon-drops.chance", 0.10));
@@ -294,7 +284,6 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        if (herdTempt != null) herdTempt.close();
         if (hud != null) hud.close();
         if (credits != null) credits.close();
         if (worldEditRanks != null) worldEditRanks.close();

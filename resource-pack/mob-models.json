@@ -51,6 +51,10 @@
       "sha256": "071b3963f67b93113037cbf2502571c76ae7e781fb9efe0a5f66ee6ef550ca57"
     },
     {
+      "path": "assets/modelengine/items/bantha/saddle.json",
+      "sha256": "53a8fd5bed969a45bdb1bce639e92da64916726c7d03c83ab5838b6780ebf180"
+    },
+    {
       "path": "assets/modelengine/items/bantha/tail.json",
       "sha256": "dae1f127b3c896396fa454aa9c7fd25942f739c2b392358d11b20c5719af6171"
     },
@@ -205,6 +209,10 @@
     {
       "path": "assets/modelengine/items/dewback/right_front_leg.json",
       "sha256": "b45cd315f93e0f6e9c29f304601bea63350989e78af1b32699891c5e9cd74d42"
+    },
+    {
+      "path": "assets/modelengine/items/dewback/saddle.json",
+      "sha256": "a7fcfcd89059a4d28f6c82f363f9a799713ccdac9c859653d15d9e88802add21"
     },
     {
       "path": "assets/modelengine/items/dewback/top_jaw.json",
@@ -603,6 +611,10 @@
       "sha256": "8c21718099acd23f8859fa4f646784a004e633e3a952504be5d14a25ec2f1352"
     },
     {
+      "path": "assets/modelengine/models/bantha/saddle.json",
+      "sha256": "63f5c344225da6c453f7c10c42b9b879ac521ce7f8334bc2c19c1f6bfb3e927e"
+    },
+    {
       "path": "assets/modelengine/models/bantha/tail.json",
       "sha256": "a0df366a3ce5dda3c16d95c0edaa5f37fc8efa8259ef66454c21b97aea4415c7"
     },
@@ -825,6 +837,10 @@
     {
       "path": "assets/modelengine/models/dewback/right_front_leg.json",
       "sha256": "6ba0d99dc12829d9f1ecf91b762857b9b5ecd4a2309b4b3015d627ae78895170"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/saddle.json",
+      "sha256": "4310df6661a9547b27e056b1a794798eb23dd6606f211bcaed10f16149b6f0c1"
     },
     {
       "path": "assets/modelengine/models/dewback/top_jaw.json",
@@ -1205,6 +1221,10 @@
     {
       "path": "assets/modelengine/textures/entity/models/gamorrean_guard.png",
       "sha256": "29c5545f0c7e420caac92b6a8a8441bd2873c54e52aa503b2dfc5e862fb8f231"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/herd_saddle.png",
+      "sha256": "408e6873ace2e126e39b7dfb382b807454538b37434e117319ce0b5e0768aba7"
     },
     {
       "path": "assets/modelengine/textures/entity/models/massiff.png",

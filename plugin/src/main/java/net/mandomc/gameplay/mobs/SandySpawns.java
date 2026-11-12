@@ -70,12 +70,13 @@ public final class SandySpawns implements Listener, AutoCloseable {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void interact(PlayerInteractEntityEvent event) {
-        if (mobs.managed(event.getRightClicked())) event.setCancelled(true);
+        if (mobs.managed(event.getRightClicked()) && !HerdAge.herd(mobs.type(event.getRightClicked()))) event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void breed(EntityBreedEvent event) {
-        if (mobs.managed(event.getMother()) || mobs.managed(event.getFather())) event.setCancelled(true);
+        if ((mobs.managed(event.getMother()) || mobs.managed(event.getFather()))
+                && !event.getEntity().getPersistentDataContainer().has(HerdAge.KIND)) event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -112,6 +113,7 @@ public final class SandySpawns implements Listener, AutoCloseable {
             // Remove only our natural encounters after all players leave their vicinity; no death/drop pipeline.
             for (var entity : List.copyOf(population)) {
                 if (entity.getPersistentDataContainer().has(encounter)
+                        && !(entity instanceof org.bukkit.entity.Tameable tameable && tameable.isTamed())
                         && players.stream().noneMatch(p -> horizontal(p.getLocation(), entity.getLocation()) <= 128 * 128)) {
                     mobs.remove(entity);
                     population.remove(entity);

@@ -1,104 +1,91 @@
 # Feature: Bantha and Dewback herds
-Status: implementation; first slice staged, not deployed
+Status: implemented and staged; deployment and client playtest pending
 Branch: bilal/bantha-dewback-babies
 
 ## Player experience
-Banthas follow a player holding a Hay Bale; Dewbacks follow a player holding Cactus.
-Either hand attracts them. They walk using the native navigator, stop within 2.5 blocks,
-and lose interest when food is removed, the player becomes a spectator, exceeds ten blocks,
-or breaks line of sight. This applies to adults and babies; no owner teleport or combat-pet behavior.
+Banthas follow Hay Bales; Dewbacks follow Cactus held in either hand. Adults and babies use
+native navigation, stop within 2.5 blocks and lose interest beyond ten blocks, without line
+of sight, or when the holder becomes a spectator. Native float, panic and wandering remain.
+There is no owner teleport or combat-pet behavior. Ridden animals do not chase food holders.
 
-Babies reuse exactly the adult geometry, texture and animation at uniform half scale, including
-collision. Native Ageable age owns the baby/adult transition and save/load. Native default
-20-minute loaded growth is retained; normal server unload behavior pauses growth. Growth does
-not introduce separate health or level formulas. Both the Mythic and final native death-drop
-pipelines suppress all baby items and experience, including player and environmental kills.
-Adult Banthas add 1–3 ordinary brown wool alongside their existing 1–3 hide. Adult Dewback food
-and all other species' drops are unchanged. Natural encounter rolls still spawn only adults;
-no ambient baby chance was added.
+Feed a wild adult to attempt taming (one-third chance by default). The owner can feed an
+injured animal to heal four health points, accelerate a baby's remaining growth by ten percent,
+or put a healthy mature animal into love mode for 600 ticks. Each accepted attempt consumes
+one food; Creative retains it. Cancelled/protected actions, cooldowns and duplicate hand events
+consume nothing. Food takes precedence over equipment and riding.
 
-## Smallest playable version
-This slice provides a breeding-callable baby spawn boundary, automatic growth/scaling,
-complete baby death-loot suppression, adult Bantha wool and food attraction. Native panic and
-float goals precede attraction; existing idle/wander animation remains ModelEngine-owned.
-Food interaction, taming, mating, ownership and saddle controls below are the next slice,
-not already enabled by this checkpoint. Existing blanket interaction/mount/breed denial remains.
+Two mature, healthy animals of the same species and owner navigate together and produce one
+Mythic offspring after courtship. Territory checks and the cancellable native breed event apply.
+Both parents then receive the native 6000-tick breeding cooldown. The child inherits its owner.
+Babies follow a nearby adult of their species and owner, with food attraction taking precedence.
+Natural encounters still spawn adults only.
 
-## Riding and breeding architecture
-The existing base is PIG for both species. The current models have no saddle geometry,
-saddle texture variant, driver/passenger bone, riding controller, or mount/dismount clip.
-Bantha's separate groups are body/head/horns/tail/four legs/hitbox. Dewback has body/head/jaws/
-back/tail/four legs/hitbox/shadow. Both have only walk, idle and death clips. Reuse these walking
-clips while riding; no new gait is required. Existing adult textures are 256 by 256.
+An owner's unsaddled adult opens the real native horse inventory on right click. Its native
+saddle slot owns the single actual saddle and controls the model's visible saddle. A saddled
+adult mounts on right click; sneak-right-click opens equipment. Armor is unavailable. Inventory
+click, shift, hotbar, drag, automation and ModelEngine mount paths enforce ownership, adulthood,
+territory and occupancy. Riding uses ModelEngine's native walking controller and existing gait.
 
-A true native horse inventory requires a horse-family base; Bukkit cannot open one for a pig.
-Use HORSE for new herd spawns, with its single native owner UUID/tamed state and native
-HorseInventory saddle slot as the authority. Do not mirror a saddle in a custom menu or PDC.
-Keep native Ageable growth and breeding cooldown; record any new schema-marked breeding
-metadata on the entity only when native APIs cannot express it. Prevent native horse armor and
-unapproved pig carrot/potato breeding. Existing wild pig-backed herd instances need a deliberate
-one-time conversion on interaction: preserve location, level, current/max health ratio and natural
-encounter tags; publish the replacement only after successful creation, then remove the old entity
-without death loot. Tamed animals must be excluded from far-player natural cleanup. Do not
-rewrite every wild mob at startup or change natural spawn budgets.
+Babies reuse the adult geometry, textures and animation at uniform half scale, including
+collision. Native Ageable state owns growth, cooldowns and save/load. Default 20-minute loaded
+growth remains; unloading pauses it. Babies drop no items or experience, including equipment.
+Adult Banthas add 1–3 ordinary brown wool alongside their existing hide. Adult Dewback food is
+unchanged. Adults retain the actual equipped saddle on death without duplicate equipment.
 
-One herd service owns accepted feeding, taming, love/cooldown decisions and offspring creation.
-Use the configured species food for attraction and accepted feeding. Consume exactly one item
-for a successful action (Creative exempt), reject repeat/offhand duplicate callbacks, and give
-food precedence over menu/mount. Only the owner may manage equipment or mount; ordinary
-food attraction may select anyone. Breeding must validate same species, mature age, cooldown,
-owner authorization and territory before producing one Mythic offspring. Use native navigation
-for courtship and parent following, not teleport or position writes. Rejected actions and protected
-interactions consume nothing. Tamability chance, healing and baby feeding acceleration must be
-configured and explicitly documented when implemented, not silently treated as settled rules.
+## State and vendor boundaries
+New animals use HORSE bases for native owner/tame/age/HorseInventory state. There is no shadow
+saddle inventory, owner save file or menu-proxy horse. Existing pig-backed animals convert only
+when fed: create the same Mythic species, preserve native age/lock, position, AI/awareness,
+velocity and encounter tags, clamp current health to the new base maximum, then remove the old
+entity without death. Failed replacement leaves the old entity. Current fixed base stats and
+level-one spawns preserve the separately deployed removal of mob leveling. No injury ratio or
+age-based health multiplier is introduced. Owned animals avoid far-player encounter cleanup.
 
-After taming: ordinary right click on an unsaddled adult opens the native horse menu; placing
-a real saddle updates visible equipment. Ordinary right click on a saddled adult mounts;
-sneak-right-click opens the same menu. Check owner/adult/saddle/protection before the native
-menu, inventory edits and ModelEngine mount events, including shift/hotbar/drag paths. Gate
-native auto-mounts through the same authority. No temporary horse entity as a menu proxy.
+HerdAnimals owns accepted actions and birth; HerdCourtship owns native navigation goals;
+HerdModels owns model scale, saddle visibility and riding. HerdBootstrap provides one lifecycle
+entry and uses the current territory integration. Model setup receives the event's modeled
+entity because the active model is not yet linked during AddModelEvent. Mythic 5.14 reapplies
+volatile goals five ticks after tame events, including cancelled events; the adapter reattaches
+only herd goals at tick six and retains native persistence.
 
-Extend each existing model with a driver locator and an initially hidden saddle/belt bone,
-attached to its animated body. Inspect the existing UV atlas before allocating a small saddle
-texture area or a separate approved texture. Toggle geometry from the native saddle slot on
-inventory mutation, load and death; opening a menu is not itself an equipment change. Reuse
-ModelEngine's native ride controller and existing vehicle integration boundary patterns, without
-putting herd animals into the packed vehicle item/fuel/death-blast system. A restart restores
-native owner, saddle, age and cooldown, then reapplies the model state. Babies cannot mount or
-hold equipment. Validate the merged current pack and coordinate the shared server window before any
-resource-pack release.
+Mythic and final native death handlers clear all baby drops/XP. Adults allow native equipment
+drops and filter ordinary leather/pork body drops, preserving catalog rewards and the real
+saddle. PreventOtherDrops is false for these two horses because Mythic otherwise deletes their
+equipped saddle. All other species retain their existing pipeline.
+
+Each original blueprint gains a body-parented saddle and driver locator. Existing cube UVs,
+textures and keyframes remain unchanged. The saddle texture reuses the existing brown atlas.
+The pack overlay adds only five files over the actual published pack; every existing entry,
+including current fonts, credits, Rancor trophy and scenery, remains byte-identical.
 
 ## Parameters
-`mobs/herd.yml` schema 1: `bantha-food: HAY_BLOCK`, `dewback-food: CACTUS`.
-These are working choices from the user follow-up. Restart applies food configuration.
-`mobs/drops/bantha.yml`: additive `drops.wool-minimum` and `drops.wool-maximum`,
-default 1 and 3, validated as integers with 1 <= minimum <= maximum <= 64. Older runtime
-configuration receives the same additive defaults. Existing hide quantity keys retain meaning.
+`mobs/herd.yml` schema 1: `bantha-food: HAY_BLOCK`, `dewback-food: CACTUS`,
+`tame-chance: 0.3333333333333333`, `healing: 4`, `baby-growth-fraction: 0.1`,
+`love-ticks: 600`, `breed-cooldown-ticks: 6000`. Restart applies configuration.
+`mobs/drops/bantha.yml` adds `drops.wool-minimum: 1` and `drops.wool-maximum: 3`;
+integers must satisfy 1 <= minimum <= maximum <= 64. Existing hide settings retain meaning.
+Language uses `language/herd.yml` through the existing chat styling owner.
 
-## Verification
-The complete Java build passes all 191 tests. The disposable Paper 26.1.2 build 74 /
-MythicMobs 5.14.0 / ModelEngine R4.1.1 probe passes 41 first-boot assertions and six
-restart assertions (47 total). Actual collision dimensions are half the adult dimensions for
-both species. Player and environmental deaths, ordinary animal isolation, configured adult
-drops, native growth, actual registered food-goal/path creation, both hands, food changes,
-wall/spectator rejection and persisted growth/model state pass. Client rendering remains
-unverified. No shared server restart or publication occurred.
+## Verification and rollout
+191 Java tests and two asset geometry tests pass. Full interaction tests on disposable Paper
+26.1.2 build 74 / MythicMobs 5.14.0 / ModelEngine R4.1.1 pass 56 first-boot and 12 restart
+assertions. These exercise real native equipment container clicks, taming cancellation,
+ownership/protection, food consumption, healing, courtship, offspring, controller input,
+saddle visibility/removal/death, persisted owner/age/saddle/cooldown and actual legacy pig
+conversion after restart with injury and AI preserved. The final foundation regression adds 41 first-boot and six growth-restart checks, for
+115 passing native assertions in total. These are native API/protocol checks; client appearance is pending.
 
-See the disposable-server HerdProbe. It injects extra custom/native death drops to verify the
-final baby guards, exercises actual Mythic deaths, uniform scale, native growth, real native
-pathfinding, main/offhand attraction, wrong food, walls and spectator rejection, and performs
-a second boot for persisted baby age/identity/model state. Never install this destructive test
-plugin in the development world: it builds its own floor and stops the disposable server.
+Both probe plugins are destructive fixtures for their isolated world/port only. Never install
+them on the shared development world. The foundation fixture clears its previous wall before
+checking attraction, so repeated runs start from the same terrain.
 
-## Rollout
-No shared runtime or resource-pack source was changed. This isolated checkout starts at the
-chat integration checkpoint `cc9c9f6`; its full built JAR is not a replacement for the newer
-shared JAR. Integrate current NPC/starter-book and other concurrent changes before packaging,
-or prepare a verified scoped deployment that preserves every unrelated current entry. Read
-the actual shared JAR/hash and coordinate its restart window immediately before deployment.
+The isolated source baseline predates concurrent shared features. The deployment script overlays
+only the herd class families, two drop owners and narrow SandySpawns changes over the current
+shared JAR. A Java ClassFile patch adds one bootstrap call while preserving every unrelated
+bootstrap method. All unrelated JAR entries, including the deployed level-removal adapters,
+remain byte-identical. The scoped pack merges over the current published ZIP. Recheck both
+baselines and coordinate the server window before deployment or publication. No live world,
+shared runtime or published pack has been changed by this work.
 
-## Pause note
-Staged source only. Native saddle/owner/mating implementation and client visual playtesting
-remain. Next action: coordinate the shared runtime window and integrate current concurrent source
-before deploying this tested first slice. Continue with the native horse-backed interaction
-flow in the next implementation slice.
+Next action: hand the tested scoped artifacts to the coordinating chat, recheck the current
+baselines and use its assigned deployment window before the client playtest.

@@ -7,7 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
-/** Public API boundary for the pinned MythicMobs version; Mythic owns AI, level and entity lifecycle. */
+/** Public API boundary for the pinned MythicMobs version; Mythic owns AI and entity lifecycle; encounters use configured base stats. */
 public final class MythicMobAccess {
     public static final Set<String> TYPES = Set.of("TuskenRaiderSniper", "TuskenRaiderMelee", "Bantha", "Dewback", "Massiff");
     private final Object api;
@@ -37,11 +37,17 @@ public final class MythicMobAccess {
         for (String id : TYPES) {
             if (definition.invoke(api, id) == null) throw new IllegalStateException("Missing MythicMobs definition: " + id);
         }
+        var owner = org.bukkit.plugin.java.JavaPlugin.getProvidingPlugin(MythicMobAccess.class);
+        if (org.bukkit.event.HandlerList.getRegisteredListeners(owner).stream()
+                .noneMatch(listener -> listener.getListener() instanceof MobBaseStats)) {
+            new MobBaseStats(owner, this, vendor, api, active, activeType);
+        }
+
     }
 
     public LivingEntity spawn(String id, Location location, int mobLevel) {
         try {
-            return (LivingEntity) spawn.invoke(api, id, location, mobLevel);
+            return (LivingEntity) spawn.invoke(api, id, location, MobBaseStats.TYPES.contains(id) ? 1 : mobLevel);
         } catch (ReflectiveOperationException error) {
             throw new IllegalStateException("Cannot spawn Mythic mob " + id, error);
         }

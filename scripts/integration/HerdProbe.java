@@ -63,7 +63,11 @@ public final class HerdProbe extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(this, this);
         var world = Bukkit.getWorlds().getFirst();
         point = new Location(world, 0.5, 10, 0.5);
-        for (int x=-16;x<=16;x++) for (int z=-16;z<=16;z++) world.getBlockAt(x,9,z).setType(Material.SANDSTONE);
+        for (int x=-16;x<=16;x++) for (int z=-16;z<=16;z++) {
+            world.getBlockAt(x,9,z).setType(Material.SANDSTONE);
+            // The wall rejection check persists blocks across disposable-server runs.
+            for (int y=10;y<16;y++) world.getBlockAt(x,y,z).setType(Material.AIR);
+        }
         world.getChunkAt(point).addPluginChunkTicket(this);
         state = getDataFolder().toPath().resolve("restart-uuid.txt");
         if (Files.exists(state)) {

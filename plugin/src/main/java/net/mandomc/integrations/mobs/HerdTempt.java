@@ -27,10 +27,16 @@ public final class HerdTempt implements Listener {
     private final JavaPlugin plugin;
     private final MythicMobAccess mobs;
     private final Set<UUID> attached = new HashSet<>();
+    private final HerdAnimals animals;
     private final Material banthaFood;
     private final Material dewbackFood;
 
     public HerdTempt(JavaPlugin plugin, MythicMobAccess mobs, Material banthaFood, Material dewbackFood) {
+        this(plugin, mobs, banthaFood, dewbackFood, null);
+    }
+
+    public HerdTempt(JavaPlugin plugin, MythicMobAccess mobs, Material banthaFood, Material dewbackFood, HerdAnimals animals) {
+        this.animals = animals;
         this.plugin = plugin;
         this.mobs = mobs;
         this.banthaFood = banthaFood;
@@ -52,6 +58,21 @@ public final class HerdTempt implements Listener {
         });
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void tamed(org.bukkit.event.entity.EntityTameEvent event) {
+        if (!(event.getEntity() instanceof Mob mob) || !HerdAge.herd(mobs.type(mob))) return;
+        UUID id = mob.getUniqueId();
+        // Mythic 5.14 reapplies volatile AI five ticks after a tame event, even when a later
+        // listener cancels it. Reattach only our goals after that vendor refresh.
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (Bukkit.getEntity(id) instanceof Mob loaded && loaded.isValid()) {
+                attach(loaded);
+                if (loaded instanceof org.bukkit.entity.Tameable tameable && tameable.isTamed()
+                        && tameable.getOwnerUniqueId() != null) mobs.persist(loaded);
+            }
+        }, 6);
+    }
+
     private void attach(Mob mob) {
         String type = mobs.type(mob);
         if (!HerdAge.herd(type)) return;
@@ -59,6 +80,12 @@ public final class HerdTempt implements Listener {
         var goals = Bukkit.getMobGoals();
         goals.removeGoal(mob, FoodGoal.KEY);
         goals.addGoal(mob, 3, new FoodGoal(mob, food));
+        if (animals != null && mob instanceof org.bukkit.entity.Horse horse) {
+            goals.removeGoal(mob, HerdCourtship.PAIR);
+            goals.removeGoal(mob, HerdCourtship.PARENT);
+            goals.addGoal(mob, 2, new HerdCourtship(horse, mobs, animals));
+            goals.addGoal(mob, 3, new HerdCourtship.Parent(horse, mobs));
+        }
         attached.add(mob.getUniqueId());
     }
 
@@ -70,6 +97,8 @@ public final class HerdTempt implements Listener {
     public void close() {
         for (UUID uuid : attached) if (Bukkit.getEntity(uuid) instanceof Mob mob) {
             Bukkit.getMobGoals().removeGoal(mob, FoodGoal.KEY);
+            Bukkit.getMobGoals().removeGoal(mob, HerdCourtship.PAIR);
+            Bukkit.getMobGoals().removeGoal(mob, HerdCourtship.PARENT);
         }
         attached.clear();
     }
@@ -88,7 +117,7 @@ public final class HerdTempt implements Listener {
 
         public boolean accepts(Player player) {
             return player.isValid() && !player.isDead() && player.getGameMode() != GameMode.SPECTATOR
-                    && player.getWorld().equals(mob.getWorld()) && mob.getPassengers().isEmpty()
+                    && player.getWorld().equals(mob.getWorld()) && !net.mandomc.integrations.models.HerdModels.ridden(mob)
                     && mob.getLocation().distanceSquared(player.getLocation()) <= 100
                     && (player.getInventory().getItemInMainHand().getType() == food
                         || player.getInventory().getItemInOffHand().getType() == food)

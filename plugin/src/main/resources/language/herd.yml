@@ -1,0 +1,5 @@
+protected: '<red>You cannot manage animals here.'
+feed: '<yellow>Feed this animal <food> to tame it.'
+owner: '<red>Only this animal’s owner can manage it.'
+young: '<yellow>This animal needs to grow before you can ride it.'
+tamed: '<green>Tamed! Right-click to equip a saddle.'

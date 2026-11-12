@@ -3,12 +3,18 @@ package net.mandomc.integrations.models;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.events.AddModelEvent;
 import com.ticxo.modelengine.api.model.ActiveModel;
+import com.ticxo.modelengine.api.model.ModeledEntity;
+import com.ticxo.modelengine.api.events.ModelSetupEvent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import net.mandomc.gameplay.mobs.HerdAge;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.Player;
+import org.bukkit.Material;
+import com.ticxo.modelengine.api.mount.controller.MountControllerTypes;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,12 +29,13 @@ public final class HerdModels implements Listener {
         // Covers models already attached before this listener, without repeatedly scanning worlds.
         for (var world : Bukkit.getWorlds()) for (var entity : world.getLivingEntities()) {
             var modeled = ModelEngineAPI.getModeledEntity(entity);
-            if (modeled != null) for (var model : modeled.getModels().values()) track(entity, model);
+            if (modeled != null) for (var model : modeled.getModels().values()) track(entity, model, modeled);
         }
         Bukkit.getScheduler().runTaskTimer(plugin, () -> models.entrySet().removeIf(entry -> {
             var entity = Bukkit.getEntity(entry.getKey());
             if (entity == null || !entity.isValid() || entry.getValue().isDestroyed()) return true;
             scale(entity, entry.getValue());
+            equipment(entity, entry.getValue());
             return false;
         }), 1, 1);
     }
@@ -36,16 +43,61 @@ public final class HerdModels implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void attached(AddModelEvent event) {
         var entity = Bukkit.getEntity(event.getTarget().getBase().getUUID());
-        if (entity != null) track(entity, event.getModel());
+        if (entity != null) track(entity, event.getModel(), event.getTarget());
     }
 
-    private void track(Entity entity, ActiveModel model) {
+    @EventHandler public void setup(ModelSetupEvent event) {
+        var entity = Bukkit.getEntity(event.getModeledEntity().getBase().getUUID());
+        if (entity != null) track(entity, event.getActiveModel(), event.getModeledEntity());
+    }
+
+    private void track(Entity entity, ActiveModel model, ModeledEntity modeled) {
         String id = model.getBlueprint().getName();
         if (!"bantha".equals(id) && !"dewback".equals(id)) return;
         entity.getPersistentDataContainer().set(HerdAge.KIND, org.bukkit.persistence.PersistentDataType.STRING,
                 "bantha".equals(id) ? "Bantha" : "Dewback");
         models.put(entity.getUniqueId(), model);
         scale(entity, model);
+        equipment(entity, model);
+        modeled.getBase().setMaxStepHeight(1);
+    }
+
+    public static boolean saddled(Horse horse) {
+        var saddle = horse.getInventory().getSaddle();
+        return saddle != null && saddle.getType() == Material.SADDLE && saddle.getAmount() == 1;
+    }
+
+    private static void equipment(Entity entity, ActiveModel model) {
+        boolean equipped = entity instanceof Horse horse && horse.isAdult() && horse.isTamed() && saddled(horse);
+        var saddle = model.getBones().get("saddle");
+        if (saddle != null && saddle.isVisible() != equipped) saddle.setVisible(equipped);
+        model.getMountManager().ifPresent(manager -> {
+            manager.setCanDrive(equipped);
+            manager.setCanRide(false);
+            if (!equipped && manager.hasRiders()) manager.dismountAll();
+        });
+    }
+
+    public static boolean ridden(Entity entity) {
+        if (entity.getPassengers().stream().anyMatch(Player.class::isInstance)) return true;
+        var modeled = ModelEngineAPI.getModeledEntity(entity);
+        return modeled != null && modeled.getModels().values().stream().anyMatch(model ->
+                model.getMountManager().map(manager -> manager.hasRiders()).orElse(false));
+    }
+
+    public boolean occupied(Horse horse) { return ridden(horse); }
+
+    public boolean mount(Horse horse, Player player) {
+        var model = models.get(horse.getUniqueId());
+        if (model == null || occupied(horse) || !saddled(horse)) return false;
+        horse.getPathfinder().stopPathfinding();
+        equipment(horse, model);
+        return model.getMountManager().map(manager -> manager.mountDriver(player, MountControllerTypes.WALKING)).orElse(false);
+    }
+
+    public void close() {
+        for (var model : models.values()) model.getMountManager().ifPresent(manager -> manager.dismountAll());
+        models.clear();
     }
 
     public static void scale(Entity entity, ActiveModel model) {

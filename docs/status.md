@@ -1,5 +1,12 @@
 # Resume here
-Updated: 2026-11-11
+Updated: 2026-11-12
+
+## Bantha/Dewback native herds ready for coordination (2026-11-12)
+Full taming, native horse equipment/saddle, walking-controller riding, owner-only feeding/management, protected courtship, inherited baby ownership, native growth/cooldown persistence and legacy pig conversion are implemented on `bilal/bantha-dewback-babies`. The first slice remains separately reproducible at `e152ec2`. Current source includes the peer's fixed-base mob-stat changes; deployment preserves the actual live adapters byte-identically. See [feature brief](features/bantha-dewback-herds.md) for defaults and lifecycle boundaries.
+
+191 Java tests, two asset tests and 115 isolated native assertions pass (56 full interactions + 12 restart/conversion + 41 foundation + six growth restart). Actual native container moves, saddle death recovery, protection/cancellation, model state, riding input, loot suppression and pathfinding pass. The foundation fixture now clears its persisted visibility-test wall before each run. Final successful native logs contain no errors or exceptions. Client saddle placement, appearance and riding feel remain unverified.
+
+Scoped candidate preserves 459 unrelated current JAR entries over live baseline `bfd76d8a7194447b6907b1dd3fa7f2b1d9f76782f219635e59f8e594b6665c4c`; the bootstrap patch preserves all unrelated method bodies and passes JVM verification. Pack SHA-256 `2c075adc803b28496eb6a7d5f8164a6c7cc85c87c0cb7ed83ceb4139459e8f54` adds five saddle assets while retaining all 1152 existing published entries byte-identically. Ready artifacts and exact hashes are in ignored `.local/herd-release/ready.json`. No shared runtime, world or published pack has changed. Next action: obtain messaging authorization, hand off to the coordinating chat, recheck current baselines and use its assigned deployment window.
 
 ## Scoreboard-lettered system prefix (2026-11-11)
 The user refined system chat to the scoreboard's exact bold small-cap `ᴍᴀɴᴅᴏᴍᴄ` lettering in the default Minecraft font, with category color on the brand and a separate dark-gray special `»` symbol. The subsequent correction explicitly supersedes typed ASCII `>>`. Administration brand/body remain red italic; the separator resets bold and italic. Normal player-name chat remains unchanged. Both older prefix forms are recognized for deduplication, and all rich component/packet/audience behavior remains intact.
