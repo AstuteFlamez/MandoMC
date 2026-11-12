@@ -19,6 +19,7 @@ with zipfile.ZipFile(a.baseline) as old,zipfile.ZipFile(a.built) as built:
  with zipfile.ZipFile(a.output,'w',zipfile.ZIP_DEFLATED) as dst:
   for name,value in sorted(new.items()):dst.writestr(name,value)
  changed=[n for n in new if data.get(n)!=new[n]]
- assert all(new[n]==value for n,value in data.items() if not(a.lifecycle and n==hub))
+ owned=lambda n:n.startswith('net/mandomc/gameplay/decor/') or n.startswith('net/mandomc/integrations/models/DecorModel') or n=='decor/placements.yml'
+ assert all(new[n]==value for n,value in data.items() if not owned(n) and not(a.lifecycle and n==hub))
  report={'baseline-sha256':hashlib.sha256(a.baseline.read_bytes()).hexdigest(),'candidate-sha256':hashlib.sha256(a.output.read_bytes()).hexdigest(),'changed-entries':changed,'existing-entry-exceptions':[hub] if a.lifecycle else [],'all-unrelated-entries-identical':True,'lifecycle-installed':a.lifecycle}
  a.output.with_suffix('.json').write_text(json.dumps(report,indent=2));print(json.dumps(report,indent=2))

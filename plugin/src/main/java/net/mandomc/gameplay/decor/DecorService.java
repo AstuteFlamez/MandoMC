@@ -36,12 +36,16 @@ public final class DecorService implements Listener,AutoCloseable {
     private final BukkitTask ticker;
     private final Random random=new Random();
     private final double voiceRange;
+    private final double lookRange;
+    private final float lookStep;
     private final int ambientMin,ambientMax;
     private long nextAmbient;
     private boolean closing;
     public DecorService(MandoPlugin plugin,YamlConfiguration config){
         this.plugin=plugin;this.config=config;
         if(config.getInt("schema-version")!=1)throw new IllegalArgumentException("decor/placements.yml: schema-version1 required");
+        lookRange=config.getDouble("look-range",5);lookStep=(float)config.getDouble("look-step",6);
+        if(!Double.isFinite(lookRange)||lookRange<1||lookRange>8||!Float.isFinite(lookStep)||lookStep<1||lookStep>15)throw new IllegalArgumentException("Invalid decor look range/step");
         voiceRange=config.getDouble("voice-range",7);ambientMin=config.getInt("ambient-min-seconds",80);ambientMax=config.getInt("ambient-max-seconds",140);
         if(!Double.isFinite(voiceRange)||voiceRange<1||voiceRange>16||ambientMin<30||ambientMax<ambientMin)throw new IllegalArgumentException("Invalid decor voice range/cooldown");
         for(var entry:config.getMapList("placements")){
@@ -65,7 +69,7 @@ public final class DecorService implements Listener,AutoCloseable {
             for(var definition:definitions.values())spawn(definition);
         }catch(RuntimeException error){removeAll();throw error;}
         Bukkit.getPluginManager().registerEvents(this,plugin);
-        ticker=Bukkit.getScheduler().runTaskTimer(plugin,this::tick,20,20);
+        ticker=Bukkit.getScheduler().runTaskTimer(plugin,this::tick,5,5);
         plugin.getLogger().info("Spawn decor ready: "+live.size()+" fixed model placements; no combat AI or player vehicle ownership.");
     }
     private void spawn(DecorDefinition definition){
@@ -100,7 +104,16 @@ public final class DecorService implements Listener,AutoCloseable {
             if(!base.getWorld().equals(at.getWorld())||base.getLocation().distanceSquared(at)>.000001){
                 internalTeleports.add(base.getUniqueId());try{base.teleport(at);}finally{internalTeleports.remove(base.getUniqueId());}
             }
-            base.setRotation(at.getYaw(),at.getPitch());base.setVelocity(new Vector());base.setFireTicks(0);
+            if(definition.npc()){
+                var viewer=at.getWorld().getPlayers().stream()
+                        .filter(p->p.getGameMode()!=GameMode.SPECTATOR&&p.isOnline()&&!p.isDead())
+                        .filter(p->p.getMetadata("vanished").stream().noneMatch(v->v.asBoolean()))
+                        .filter(p->p.getLocation().distanceSquared(at)<lookRange*lookRange)
+                        .min(Comparator.comparingDouble((Player p)->p.getLocation().distanceSquared(at)).thenComparing(Player::getUniqueId)).orElse(null);
+                var direction=viewer==null?at:at.clone().setDirection(viewer.getEyeLocation().toVector().subtract(base.getEyeLocation().toVector()));
+                value.model.face(base,direction.getYaw(),direction.getPitch(),lookStep);
+            }else base.setRotation(at.getYaw(),at.getPitch());
+            base.setVelocity(new Vector());base.setFireTicks(0);
             if(definition.npc()&&now>=nextAmbient&&now>=voices.getOrDefault(definition.id(),Long.MAX_VALUE)){
                 boolean near=at.getWorld().getPlayers().stream().anyMatch(p->p.getLocation().distanceSquared(at)<=voiceRange*voiceRange);
                 if(near){voice(value);nextAmbient=now+20_000;}

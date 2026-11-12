@@ -1,6 +1,11 @@
 # Resume here
 Updated: 2026-11-11
 
+## Boba adjustment and stationary character looking (2026-11-11)
+Boba's location is now derived from the immutable point-three capture with a three-model-pixel forward offset along saved yaw: X -0.1873143519423295 blocks, Z -0.008341675876292521 blocks. Baseline coordinates, height and pitch remain in config; repeated parses/restarts cannot accumulate the offset. All five decorative characters smoothly turn native and rendered body/head rotations toward the closest non-spectator, non-vanished player within five blocks, at most six degrees every five ticks, and return to saved facing when nobody is eligible. Feet stay anchored and vehicles stay fixed.
+
+186 Java tests, 221 native first-boot assertions and 230 native second-boot assertions pass, including target entry/leave/nearest selection, vanish/spectator exclusions, head lock consistency, unchanged anchors/vehicle orientation and restart reconstruction. The update changes four scenery-owned JAR entries only. Remaining: live rollout after priority gray-Jawa repair and client feedback. Next action: coordinate the scoped update against the latest deployed baseline once that repair is complete.
+
 ## Nine fixed spawn scenery placements (2026-11-11)
 On `bilal/spawn-decor`, all nine user captures are configured: landed open-door U-Wing, landed X-Wing, fixed TIE and scale-two speeder, plus Boba Fett, Bossk, Gamorrean, Quarren and Twilek with original rigs, idle animation and voice clips. Protected nonpersistent bases reconstruct on restart without duplicates; scenery never uses player vehicle or combat mob ownership. Existing Jawas and Ilum NPCs remain untouched. The scenery deploys independently of pending chat polish, without a pack change.
 

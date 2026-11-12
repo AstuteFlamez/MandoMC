@@ -17,6 +17,16 @@ public class DecorDefinitionTest {
         assertEquals(5,values.stream().filter(DecorDefinition::npc).count());
         for(var value:values)if(value.npc()){assertTrue(value.dialogue().size()>=3);assertTrue(value.voices().size()>=2);assertEquals(List.of("idle"),value.animations());}
     }
+    @Test public void forwardOffsetUsesImmutableCaptureOnce(){
+        var yaml=YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(getClass().getResourceAsStream("/decor/placements.yml"),java.nio.charset.StandardCharsets.UTF_8));
+        var data=yaml.getMapList("placements").stream().filter(m->"point3_boba_fett".equals(m.get("id"))).findFirst().orElseThrow();
+        var first=DecorDefinition.read(data);var second=DecorDefinition.read(data);
+        assertEquals(first,second);
+        assertEquals(13.699999988079071-Math.sin(Math.toRadians(92.54987))*.1875,first.x(),1e-12);
+        assertEquals(20.836308565903398+Math.cos(Math.toRadians(92.54987))*.1875,first.z(),1e-12);
+        assertEquals(93,first.y(),0);assertEquals(2.1386168f,first.pitch(),0);
+        assertEquals(13.699999988079071,((Number)((Map<?,?>)data.get("location")).get("x")).doubleValue(),0);
+    }
     @Test public void nonfiniteOrOutOfContractDataIsRejected(){
         var d=definitions().getFirst();
         assertThrows(IllegalArgumentException.class,()->copy(d,Double.NaN,1,List.of()));

@@ -24,8 +24,11 @@ public record DecorDefinition(String id,String name,String type,String model,dou
     private static List<String> list(Map<?,?> map,String key){return map.get(key) instanceof List<?> values?values.stream().map(Object::toString).toList():List.of();}
     public static DecorDefinition read(Map<?,?> data){
         var at=(Map<?,?>)Objects.requireNonNull(data.get("location"));
+        double pixels=data.get("forward-offset-pixels") instanceof Number n?n.doubleValue():0;
+        if(!Double.isFinite(pixels)||Math.abs(pixels)>16)throw new IllegalArgumentException("Invalid forward model-pixel offset");
+        double angle=Math.toRadians(number(at,"yaw"));
         return new DecorDefinition(text(data,"id"),text(data,"name"),text(data,"type"),text(data,"model"),number(data,"scale"),text(data,"mode"),Boolean.TRUE.equals(data.get("open-doors")),
-                text(at,"world"),number(at,"x"),number(at,"y"),number(at,"z"),(float)number(at,"yaw"),(float)number(at,"pitch"),list(data,"animations"),list(data,"voices"),list(data,"dialogue"));
+                text(at,"world"),number(at,"x")-Math.sin(angle)*pixels/16,number(at,"y"),number(at,"z")+Math.cos(angle)*pixels/16,(float)number(at,"yaw"),(float)number(at,"pitch"),list(data,"animations"),list(data,"voices"),list(data,"dialogue"));
     }
     public boolean npc(){return !dialogue.isEmpty();}
     public Location location(){

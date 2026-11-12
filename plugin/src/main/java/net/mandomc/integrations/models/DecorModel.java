@@ -28,6 +28,15 @@ public final class DecorModel implements AutoCloseable {
             if(!definition.npc())property.setForceLoopMode(BlueprintAnimation.LoopMode.HOLD);
         }
     }
+    public void face(ArmorStand base,float targetYaw,float targetPitch,float maxStep){
+        float yaw=modeled.getYBodyRot()+(float)Math.max(-maxStep,Math.min(maxStep,Math.IEEEremainder(targetYaw-modeled.getYBodyRot(),360)));
+        float pitch=modeled.getXHeadRot()+Math.max(-maxStep,Math.min(maxStep,targetPitch-modeled.getXHeadRot()));
+        base.setRotation(yaw,pitch);
+        var controller=modeled.getBase().getBodyRotationController();
+        controller.setYBodyRot(yaw);controller.setYHeadRot(yaw);controller.setXHeadRot(pitch);
+        modeled.setYBodyRotImmediately(yaw);modeled.setYHeadRotImmediately(yaw);modeled.setXHeadRotImmediately(pitch);
+        active.setLockedYBodyRot(yaw);active.setLockedYHeadRot(yaw);active.setLockedXHeadRot(pitch);
+    }
     public ActiveModel active(){return active;}
     public ModeledEntity modeled(){return modeled;}
     @Override public void close(){modeled.destroy();}

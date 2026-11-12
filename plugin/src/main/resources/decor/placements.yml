@@ -1,6 +1,8 @@
 schema-version: 1
 enabled: true
 voice-range: 7
+look-range: 5
+look-step: 6
 ambient-min-seconds: 80
 ambient-max-seconds: 140
 messages:
@@ -38,6 +40,8 @@ placements:
   animations:
   - dismount
 - id: point3_boba_fett
+  # Baseline capture remains immutable; three model pixels forward along saved yaw.
+  forward-offset-pixels: 3
   name: Boba Fett
   type: boba_fett
   model: boba_fett
