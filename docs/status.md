@@ -1,5 +1,10 @@
 # Resume here
 
+## JustTimm integration history (2026-11-12)
+
+Merged the remaining `bilal/justtimm-saber-pack` commit dcbfca4 by full-history merge after the user approved its integration. All 78 catalog entries, item wrappers and pinned official upstream model references were already present on `main`. Preserved the exact current font JSON bytes: the merge's only proposed content change was equivalent Unicode escaping. All other existing pack assets, GUI art, fonts, credits and gameplay remain byte-identical to the previously verified integration. The JustTimm branch name and its dirty worktree are retained. No upstream artwork was downloaded, copied or rehosted; no pack publication or server deployment/restart is part of this follow-up. Verification: all 32 Python tooling tests and pack build pass; gameplay/build inputs are unchanged from the prior 174-test Java build. Next action: reconcile remaining deployed feature overlays before any full-JAR deployment.
+
+
 ## Completed branch integration (2026-11-12)
 
 Merged the full histories of `bilal/vehicles-and-config` (939c2c4), `bilal/native-hud-ranks` (f11976d) and `bilal/e11-ammo-recipes` (6f0f223) into `main`, with explicit merge commits. The latter already includes the earlier branches; the final integrated tree retains its current implementations. Restored the green-bolt animation metadata's exact recorded upstream bytes from the SHA-256-verified legacy pack archive; parsed animation settings are identical. Verification: `./scripts/build.sh` passes all 174 Java tests; all 32 Python tooling tests pass; resource-pack validation/build passes (1089 files). No server restart, deployment, runtime/world edits or live integration probes were performed. Other feature branches and uncommitted work remain independent: this integration does not establish a complete source baseline for the currently deployed scoped overlays. `bilal/justtimm-saber-pack` remains untouched at dcbfca4; it records official model dependencies and asset wrappers for 78 named sabers. Next action: reconcile the remaining deployed feature overlays before any future full-JAR deployment.
