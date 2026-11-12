@@ -1,4 +1,11 @@
 # Resume here
+## Urgent gray Jawa model recovery (2026-11-11)
+Fixed persisted buyers appearing as pigs: anchor reuse had no ModelEngine reconciliation and relied only on Mythic spawn/load hooks. Four copied hosts reproduced missing model registrations. New scoped adapter reuses valid gray rigs, restores missing `jawa_black` rigs and face-only red/fullbright eyes, and hides the host only after a complete rig exists. Bounded backoff/cooldown handles unavailable blueprints without task proliferation; unload/close clears retries. Foreign owners are never overwritten. Admin `jawa models` audits per-anchor UUID/count/registry/base/eyes.
+
+194 Java tests, initial 255 native assertions and 347 restart/real-chunk-cycle assertions pass. Disposable tests preserve all seven host UUIDs/positions, single ownership, repeated healthy model identities, actual missing-rig recovery, pig visibility repair and unrelated model ownership. Fixture-only decor tickets were released to permit the actual chunk unload; live tickets were untouched.
+
+Live JAR `28fae78ff1dd6058f476202964665dc70dcc016e18bd20d964ea73f2f19c7aea` changes only JawaTraders and two new model-adapter classes over `1707e1dcdfef`. Every unrelated JAR entry and all protected YAML configs are byte-identical. Clean startup and actual seven-anchor audit show count1, one initialized/live gray rig, baseVisible=false, eyesff0000/15/15 for every buyer. Nine decor placements and 2,115 frozen chunks remain. Pack `5efa3fdb6361` preserved; no live probes, inventory/economy resets or location/category changes. Event state restored as found: no current event, queued KOTH. Restart window explicitly released to chat/look owner. Next action: client-confirm all seven gray Jawas remain correct while the separate skull visual/placement revision is staged.
+
 Updated: 2026-11-11
 
 ## Jawa group categories and independent combat (2026-11-11)

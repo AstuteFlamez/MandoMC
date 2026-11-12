@@ -9,6 +9,13 @@ Gray Jawas are fixed salvage buyers, immune to damage, with idle looking behavio
 
 The first gray buyer uses the user's captured Batuu position/facing, stored only in runtime configuration. `/mmc jawa gray <id>` saves the issuing administrator's current position and facing; `/mmc jawa remove <id>` removes it. `/mmc jawa brown` summons a two-Jawa test group ahead of the administrator. `/mmc jawa status` reports service health. Six additional user-selected Batuu locations are now saved as distinct anchors, including the two intentionally close positions. Exactly one new invincible gray buyer exists at each point, preserving the original for seven buyers total. Exact player snapshots and coordinates stay in private runtime data.
 
+## Gray model reconciliation
+Anchored buyers retain the same host entity through model recovery. A dedicated ModelEngine adapter checks the gray rig during the existing idle sweep, attaches only the missing `jawa_black` model, restores face-only red tint/full brightness, and hides the pig only after complete face bones exist. Healthy models are reused. Foreign model owners are never removed or overwritten. Unavailable blueprints/bones retry with bounded exponential backoff and a cooldown using the existing task; unload/close clears retry state. `/mmc jawa models` reports each saved anchor's host UUID, count, model registry, initialization, base visibility and eye state without changing any entity.
+
+The original fault was persisted anchor reuse without model reconciliation: four of seven copied live hosts had no ModelEngine registration after load, while three were healthy. 194 Java tests pass. Disposable runtime checks pass 255 assertions initially and 347 after real restart/chunk unload/reload, including all seven exact host identities/positions, complete bones/red eyes/hidden bases, forced missing-model/base-visibility repair, repeated-check model reuse and foreign-owner preservation. The fixture's decor tickets were released only to exercise chunk unload; live decor tickets are preserved.
+
+Live verification: all seven saved anchors have exactly one initialized gray rig, red full-bright eyes and a hidden pig base after normal startup. Scoped JAR `28fae78ff1dd` preserves all other current gameplay entries, configs, pack and player data. No temporary live probe was used.
+
 ## Economy and recovery
 Use the existing CreditService, ledger and serialized writer; preserve existing balances. Accounts start at zero. No starter credits or changes to other reward systems are introduced. `/balance`, `/pay` and administrative `/credits give|take|set` continue to work.
 

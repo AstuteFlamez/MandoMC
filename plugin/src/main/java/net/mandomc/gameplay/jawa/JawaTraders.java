@@ -30,6 +30,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
     private final JawaSettings settings;
     private final JawaMobs vendor;
     private final ModelFacing facing;
+    private final net.mandomc.integrations.models.GrayJawaModels grayModels;
     private final JawaSellInventory buyer;
     private final JawaCategoryGroups categoryGroups;
     private final Set<String> pendingGroups=new HashSet<>(), failedGroups=new HashSet<>();
@@ -65,6 +66,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
         }
         settings=JawaSettings.read(config);
         vendor=new JawaMobs();facing=new ModelFacing();
+        grayModels=new net.mandomc.integrations.models.GrayJawaModels(plugin.getLogger()::info);
         categoryGroups=new JawaCategoryGroups(plugin.getDataFolder().toPath().resolve("data/jawa-category-groups.yml"));
         attackClock=new JawaAttackClock(JawaAttackClock.Settings.read(Objects.requireNonNull(config.getConfigurationSection("combat-timing"))),random);
         group=new NamespacedKey(plugin,"jawa_group_v1");born=new NamespacedKey(plugin,"jawa_born_v1");npc=new NamespacedKey(plugin,"jawa_npc_v1");paused=new NamespacedKey(plugin,"jawa_conversation_ai_v1");categoryKey=new NamespacedKey(plugin,"jawa_category_v1");
@@ -77,7 +79,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
         buyer=new JawaSellInventory(plugin,config,settings,this::canTrade);
         Bukkit.getPluginManager().registerEvents(this,plugin);
         for(var world:Bukkit.getWorlds()) removeOrphans(world.getEntities());
-        root.register("jawa","mandomc.admin.status",this::command,(s,a)->a.length==1?List.of("gray","brown","remove","status"):List.of());
+        root.register("jawa","mandomc.admin.status",this::command,(s,a)->a.length==1?List.of("gray","brown","remove","status","models"):List.of());
         population=Bukkit.getScheduler().runTaskTimer(plugin,this::population,100,settings.interval()*20L);
         idle=Bukkit.getScheduler().runTaskTimer(plugin,this::idle,100,5);
         attackTask=Bukkit.getScheduler().runTaskTimer(plugin,this::combatTick,100,1);
@@ -363,7 +365,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
         removeOrphans(event.getEntities());
         if(!reconcileScheduled){reconcileScheduled=true;Bukkit.getScheduler().runTask(plugin,()->{reconcileScheduled=false;reconcileGroups();});}
     }
-    @EventHandler public void unloaded(org.bukkit.event.world.EntitiesUnloadEvent event){for(var entity:event.getEntities()){combatants.remove(entity.getUniqueId());attackClock.disengage(entity.getUniqueId());}}
+    @EventHandler public void unloaded(org.bukkit.event.world.EntitiesUnloadEvent event){for(var entity:event.getEntities()){combatants.remove(entity.getUniqueId());attackClock.disengage(entity.getUniqueId());grayModels.unloaded(entity.getUniqueId());}}
     private Location anchor(String id) {
         String p="npcs."+id;var key=NamespacedKey.fromString(config.getString(p+".world",""));var world=key==null?null:Bukkit.getWorld(key);
         return world==null?null:new Location(world,config.getDouble(p+".x"),config.getDouble(p+".y"),config.getDouble(p+".z"),(float)config.getDouble(p+".yaw"),(float)config.getDouble(p+".pitch"));
@@ -391,6 +393,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
                 if(entity==null){entity=plugin.territories().spawnNpc(EntityType.PIG,home,()->vendor.access().spawn("JawaGray",home,1));if(entity==null || !entity.isValid())continue;}
                 entity.getPersistentDataContainer().set(npc,PersistentDataType.STRING,id);vendor.access().persist(entity);anchors.put(id,entity.getUniqueId());
             }
+            grayModels.ensure(entity,clock*5L);
             entity.setInvulnerable(true);entity.setCollidable(false);entity.setSilent(true);entity.setRemoveWhenFarAway(false);
             if(entity instanceof Mob mob){mob.setAI(false);mob.setTarget(null);}
             if(entity.getWorld()!=home.getWorld() || entity.getLocation().distanceSquared(home)>.01)entity.teleport(home);
@@ -409,6 +412,16 @@ public final class JawaTraders implements Listener, AutoCloseable {
     }
     private void command(org.bukkit.command.CommandSender sender,String[] args) {
         if(args.length==1 && args[0].equals("status")){sender.sendMessage(Component.text("Jawa spawning: "+healthy+"; gray NPCs: "+anchors.size()));return;}
+        if(args.length==1 && args[0].equals("models")) {
+            var entries=config.getConfigurationSection("npcs");
+            if(entries!=null)for(String id:entries.getKeys(false)) {
+                var home=anchor(id);if(home==null){sender.sendMessage(Component.text(id+" world unavailable"));continue;}
+                if(!home.getWorld().isChunkLoaded(home.getBlockX()>>4,home.getBlockZ()>>4)){sender.sendMessage(Component.text(id+" unloaded"));continue;}
+                var found=home.getWorld().getNearbyEntities(home,8,8,8).stream().filter(e->id.equals(e.getPersistentDataContainer().get(npc,PersistentDataType.STRING))).filter(LivingEntity.class::isInstance).map(LivingEntity.class::cast).toList();
+                sender.sendMessage(Component.text(id+" count="+found.size()+" "+found.stream().map(grayModels::audit).toList()));
+            }
+            return;
+        }
         if(!(sender instanceof Player player))return;
         if(args.length==1 && args[0].equals("brown")){
             var site=player.getLocation().add(player.getLocation().getDirection().setY(0).normalize().multiply(3));
@@ -440,7 +453,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
         player.sendMessage(text("usage"));
     }
     @Override public void close() {
-        population.cancel();idle.cancel();attackTask.cancel();attackClock.clear();combatants.clear();ionizationHits.close();ionization.close();buyer.close();
+        population.cancel();idle.cancel();attackTask.cancel();grayModels.close();attackClock.clear();combatants.clear();ionizationHits.close();ionization.close();buyer.close();
         for(UUID id:List.copyOf(conversations.keySet()))endConversation(id);
         HandlerList.unregisterAll(this);
         for(var player:Bukkit.getOnlinePlayers())if(player.getOpenInventory().getTopInventory().getHolder() instanceof Menu)player.closeInventory();
