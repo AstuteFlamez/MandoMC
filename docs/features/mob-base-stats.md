@@ -1,5 +1,5 @@
 # Feature: Mob base stats
-Status: verified, awaiting coordinated deployment
+Status: deployed and verified
 Branch: bilal/remove-mob-levels
 
 ## Player experience
@@ -20,4 +20,6 @@ MandoMC owns encounters, group budgets and fixed NPC rifle damage; Mythic owns d
 `./scripts/build.sh --offline` passes 107 tests. The changed encounter tests retain patrol/wildlife counts and cap coverage and now assert base levels and fixed rifle damage. Initial disposable native Paper checks pass 34 assertions. A genuine save/restart run passes 41 assertions: old level-five entities restore with the same UUIDs before migration, injured HP stays seven with max health 20/damage four, baby age/age lock and horse taming owner survive, AI/target/movement/scale remain intact, over-cap Bantha health clamps to 50, and Bossk's 111/800 health stays untouched. All eight fresh definitions use configured health/plain names; direct native Mythic spawning at requested level five is coerced to base stats. The probe is restricted to a disposable levels_test world on loopback port 25578.
 
 ## Pause note
-The narrow class overlay and latest-file config transformations are staged. Shared server restart is held for the coordinator's explicit release/assignment. Next action: deploy in the assigned window and audit currently loaded names/stats without creating live game entities.
+Deployed with one ordinary restart on 2026-11-12, ready at 00:00:56 America/Chicago. JAR SHA-256 `bfd76d8a7194447b6907b1dd3fa7f2b1d9f76782f219635e59f8e594b6665c4c`. Four existing classes and bundled spawn config changed, one listener added, 458 unrelated entries remain byte-identical to the immediate deployed baseline. Existing entity regions, Mythic data, JAR and the three affected configs were backed up before startup. The read-only startup audit saw zero affected loaded mobs and zero failures before event restoration. Jabba's Palace / next None was restored from the fresh pre-stop snapshot. All three ensuing real event guards have level-one metadata, plain Quarren Guard names and native max-health base 25. One guard retains an unrelated vanilla `leader_zombie_bonus` modifier; removing vanilla modifiers is outside the level-system change. The audit plugin self-disabled and its own hash-verified JAR was removed, without a second restart. No fake actors or test entities were created on the shared runtime. No startup errors/severe messages appeared. The restart window is released.
+
+Next action: client-check plain mob names during normal play; integrate this source slice before later full builds.
