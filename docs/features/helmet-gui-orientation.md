@@ -8,4 +8,4 @@ The overlay builder accepts an explicit deployed ZIP and SHA-256, preserves its 
 
 Verification: source pack build validates JSON and local references; live-baseline overlay preserves 1174/1178 entries byte for byte; non-GUI model equality checked. The offline actual geometry/UV contact sheet includes before/after, 16px views, robe hood and vanilla Steve-head reference. Corrected projected model bounds fit a 16-unit slot. Minecraft client appearance still awaits playtesting.
 
-Publication is staged pending the coordinator's release of the reserved Boba window. Next action: rebuild overlay if the deployed pack CAS changes, publish and verify the authorized four-entry overlay when assigned.
+Published and applied through one normal restart after direct user approval. Anonymous hosted bytes and actual client pack load are verified. All unrelated pack entries remain unchanged. The subsequent dropped-ground-size request is tracked separately in helmet-ground-size.md.
