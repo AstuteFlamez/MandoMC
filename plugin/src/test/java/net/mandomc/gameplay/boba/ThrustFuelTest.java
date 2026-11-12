@@ -38,4 +38,19 @@ public class ThrustFuelTest {
         var fuel=new ThrustFuel(1234);assertTrue(fuel.start(()->false));
         var resumed=new ThrustFuel(fuel.credit());assertTrue(resumed.spend(1234,()->false));assertFalse(resumed.start(()->false));
     }
+    @Test public void levelTwoPaysHalfTheCoalForTheSamePoweredTime() {
+        for(int level:new int[]{1,2}) {
+            var coal=new AtomicInteger(10);var fuel=new ThrustFuel(0,level);
+            java.util.function.BooleanSupplier buy=()->coal.getAndUpdate(v->Math.max(0,v-1))>0;
+            assertTrue(fuel.start(buy));assertTrue(fuel.spend(1_000_000_000L,buy));
+            assertEquals(level==1?0:5,coal.get());assertEquals(0,fuel.credit());
+        }
+    }
+    @Test public void levelChangePreservesPaidNanosecondsAndFiveSecondWarning() {
+        var fuel=new ThrustFuel(70_000_000,1);fuel.setLevel(2);
+        assertEquals(70_000_000,fuel.credit());assertEquals(5.07,fuel.seconds(25),.000001);
+        assertFalse(fuel.warning(25));assertTrue(fuel.warning(24));
+        assertTrue(fuel.spend(70_000_000,()->false));assertTrue(fuel.start(()->true));
+        assertEquals(200_000_000,fuel.credit());fuel.setLevel(1);assertEquals(200_000_000,fuel.credit());
+    }
 }

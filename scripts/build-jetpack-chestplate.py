@@ -7,7 +7,7 @@ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--jar',type=Path,
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 assert sha(a.jar)==a.expected_jar and sha(a.pack)==a.expected_pack,'Live baseline changed'
 a.output.mkdir(parents=True,exist_ok=True);classes=a.output/'classes';classes.mkdir(exist_ok=True)
-cp=str(a.jar)+':'+a.classpath_file.read_text().strip();sources=[ROOT/'plugin/src/main/java/net/mandomc/gameplay/boba'/n for n in ['BobaEquipment.java','JetpackEquipmentMenu.java','JetpackChestplate.java']]
+cp=str(a.jar)+':'+a.classpath_file.read_text().strip();sources=[ROOT/'plugin/src/main/java/net/mandomc/gameplay/boba'/n for n in ['BobaEquipment.java','JetpackEquipmentMenu.java','JetpackChestplate.java','JetpackTooltip.java','ThrustFuel.java']]
 subprocess.run([str(a.java_home/'bin/javac'),'--release','25','-cp',cp,'-d',str(classes),*map(str,sources)],check=True)
 with zipfile.ZipFile(a.jar) as z:before={n:z.read(n) for n in z.namelist()}
 after=dict(before)
@@ -15,7 +15,7 @@ for file in classes.rglob('*.class'):after[file.relative_to(classes).as_posix()]
 for name in ['items/definitions/boba-equipment.yml','equipment/jetpack-chestplate.yml']:after[name]=(ROOT/'plugin/src/main/resources'/name).read_bytes()
 for n in ['language/messages.yml']:
  if n in before:after[n]=before[n].replace(b'Equip the jetpack in your offhand first.',b'Wear a chestplate with the Jetpack enchantment first.')
-changed=sorted(n for n in before if before[n]!=after[n]);allowed={'net/mandomc/gameplay/boba/BobaEquipment.class','net/mandomc/gameplay/boba/BobaEquipment$Wearer.class','net/mandomc/gameplay/boba/JetpackPose.class','net/mandomc/gameplay/boba/JetpackPose$Pose.class','net/mandomc/gameplay/boba/ThrustFuel.class','net/mandomc/gameplay/boba/JetpackEquipmentMenu.class','net/mandomc/integrations/models/PlayerBackAttachment.class','items/definitions/boba-equipment.yml','equipment/boba.yml','language/messages.yml'};assert set(changed)<=allowed
+changed=sorted(n for n in before if before[n]!=after[n]);allowed={'net/mandomc/gameplay/boba/BobaEquipment.class','net/mandomc/gameplay/boba/BobaEquipment$Wearer.class','net/mandomc/gameplay/boba/JetpackPose.class','net/mandomc/gameplay/boba/JetpackPose$Pose.class','net/mandomc/gameplay/boba/ThrustFuel.class','net/mandomc/gameplay/boba/JetpackEquipmentMenu.class','net/mandomc/integrations/models/PlayerBackAttachment.class','items/definitions/boba-equipment.yml','equipment/boba.yml','equipment/jetpack-chestplate.yml','net/mandomc/gameplay/boba/JetpackChestplate.class','language/messages.yml'};assert set(changed)<=allowed
 jar=a.output/'MandoMC.jar'
 with zipfile.ZipFile(jar,'w',zipfile.ZIP_DEFLATED) as z:
  for n,data in sorted(after.items()):

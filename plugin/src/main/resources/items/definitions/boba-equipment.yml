@@ -1,19 +1,19 @@
 schema-version: 1
 items:
   boba_jetpack:
-    material: ECHO_SHARD
-    name: "<gold>Boba Fett's Jetpack"
-    custom-model-data: 3101
-    item-model: mandomc:equipment/boba_jetpack
+    material: ENCHANTED_BOOK
+    name: "<yellow>Jetpack I"
+    custom-model-data: 0
+    item-model: minecraft:enchanted_book
     rarity: rare
     category: armor
     lore:
-      - '<gray>Craft with a chestplate to add Jetpack.'
-      - '<gray>Wear the upgraded chestplate to fly.'
+      - '<gray>Craft with a chestplate to apply Jetpack.'
+      - '<gray>Craft two Jetpack I books into Jetpack II.'
       - ''
-      - '<yellow>[Double Sneak] Toggle thrust'
+      - '<yellow>[Double Sneak] Toggle thrust while worn'
       - ''
-      - '<gray>Fuel: 1 Coal / 0.1 seconds, hotbar only.'
+      - '<gray>I: 1 Coal / 0.1s. II: 1 Coal / 0.2s.'
   boba_flamethrower:
     material: BLAZE_ROD
     name: "<gold>Boba Fett's Flamethrower"

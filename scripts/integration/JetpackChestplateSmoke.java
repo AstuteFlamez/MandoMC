@@ -68,6 +68,11 @@ public final class JetpackChestplateSmoke extends JavaPlugin {
             check(!equipment.powered(actor),"registered jetpack depletes after its purchased 0.1-second interval");
             check(target.getHealth()<target.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH).getValue(),"registered native flame packets damage a real target");
             check(actor.getInventory().getItem(2).getAmount()==1,"entire registered burst spent only one fire charge");
+            var levelTwo=equipment.chestplates().upgrade(actor.getInventory().getChestplate(),1);
+            actor.getInventory().setChestplate(levelTwo);actor.getInventory().setItem(1,new ItemStack(Material.COAL));
+            check(equipment.toggle(actor),"native level II chestplate activates through same controls");
+            check(actor.getInventory().getItem(1)==null&&Math.abs(equipment.seconds(actor)-.2)<.00001,"native level II first coal buys exactly 0.2 seconds");
+            equipment.toggle(actor);
             equipment.detach(actor);
             check(equipment.attachment(actor)==null,"registered cleanup removes attachment");
             getLogger().info("JETPACK CHESTPLATE SMOKE PASSED: "+checks+" assertions; exact candidate/full startup/native registered services");
@@ -91,6 +96,7 @@ public final class JetpackChestplateSmoke extends JavaPlugin {
         check(enchant!=null,"real datapack Jetpack enchantment exists in native registry");
         check(!main.getCommand("mandomc").getTabCompleter().onTabComplete(Bukkit.getConsoleSender(),main.getCommand("mandomc"),"mmc",new String[]{"jetpackt"}).contains("jetpacktest"),"old visual test route removed");
         check(Bukkit.getPluginManager().getPlugin("MandoMC")!=null&&equipment.visualTrials()==null,"no visual test controller instantiated");
+        bookAndTooltipProof(armor);
         var pack=main.items().create(BobaEquipment.JETPACK);
         pack.setData(io.papermc.paper.datacomponent.DataComponentTypes.GLIDER);
         pack.setData(io.papermc.paper.datacomponent.DataComponentTypes.EQUIPPABLE,io.papermc.paper.datacomponent.item.Equippable.equippable(EquipmentSlot.OFF_HAND));
@@ -115,7 +121,9 @@ public final class JetpackChestplateSmoke extends JavaPlugin {
         input[0]=armor.clone();input[8]=new ItemStack(Material.ECHO_SHARD);
         check(empty(Bukkit.getServer().craftItemResult(input,actor.getWorld(),actor).getResult()),"unidentified echo shard cannot pay for upgrade");
         input[8]=pack.clone();input[0]=upgraded.clone();
-        check(empty(Bukkit.getServer().craftItemResult(input,actor.getWorld(),actor).getResult()),"already upgraded chestplate rejects duplicate pack");
+        check(recipes.level(Bukkit.getServer().craftItemResult(input,actor.getWorld(),actor).getResult())==2,"level I chest plus I book combines to level II");
+        input[0]=recipes.upgrade(upgraded,1);
+        check(empty(Bukkit.getServer().craftItemResult(input,actor.getWorld(),actor).getResult()),"level II chest rejects further upgrades");
         input[0]=armor.clone();input[4]=new ItemStack(Material.DIRT);
         check(empty(Bukkit.getServer().craftItemResult(input,actor.getWorld(),actor).getResult()),"extra ingredient rejects recipe");
         var grid=(org.bukkit.inventory.CraftingInventory)actor.getOpenInventory().getTopInventory();
@@ -139,6 +147,60 @@ public final class JetpackChestplateSmoke extends JavaPlugin {
         var priorUpgrade=recipes.upgrade(prior);priorUpgrade.removeEnchantment(enchant);
         check(recipes.cleanRemovedEnchantment(priorUpgrade).hasData(io.papermc.paper.datacomponent.DataComponentTypes.GLIDER),"removing upgrade preserves a preexisting independent glide flag");
         return upgraded;
+    }
+    private void bookAndTooltipProof(ItemStack armor)throws Exception {
+        var service=equipment.chestplates();var enchant=Registry.ENCHANTMENT.get(JetpackChestplate.KEY);
+        check(enchant.getMaxLevel()==2,"native enchantment is capped at level II");
+        var prototype=main.items().create(BobaEquipment.JETPACK);
+        check(prototype.getType()==Material.ENCHANTED_BOOK&&(prototype.getItemMeta().getItemModel()==null||NamespacedKey.minecraft("enchanted_book").equals(prototype.getItemMeta().getItemModel())),"drop catalog uses vanilla enchanted book, no jetpack model");
+        var drop=actor.getWorld().dropItem(actor.getLocation(),prototype);
+        check(drop.getItemStack().getItemMeta() instanceof org.bukkit.inventory.meta.EnchantmentStorageMeta m&&m.getStoredEnchantLevel(enchant)==1,"actual drop spawn receives real stored Jetpack I");
+        drop.remove();var first=service.book(1);service.maintain(first);var stable=first.clone();service.maintain(first);
+        check(stable.equals(first),"book maintenance does not resend changing metadata each tick");
+        var second=service.book(1);
+        var inputs=new ItemStack[9];inputs[0]=first;inputs[7]=second;
+        var combined=Bukkit.getServer().craftItemResult(inputs,actor.getWorld(),actor);
+        check(service.bookLevel(combined.getResult())==2,"native crafting combines two I books into II");
+        check(Arrays.stream(combined.getResultingMatrix()).allMatch(this::empty),"native II book craft consumes both I books exactly once");
+        inputs[0]=combined.getResult();inputs[7]=service.book(2);
+        check(empty(Bukkit.getServer().craftItemResult(inputs,actor.getWorld(),actor).getResult()),"two II books cannot create III");
+        inputs[0]=armor.clone();inputs[7]=service.book(2);
+        check(service.level(Bukkit.getServer().craftItemResult(inputs,actor.getWorld(),actor).getResult())==2,"II book applies level II directly to chestplate");
+        var custom=main.items().create("beskar_chestplate");
+        check(custom!=null,"actual Beskar chestplate exists for screenshot regression");
+        custom.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.PROTECTION,4);
+        var original=custom.clone();var upgraded=service.upgrade(custom);
+        var lore=upgraded.getItemMeta().lore();
+        check(upgraded.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS),"native above-badge enchantment block hidden on catalog armor");
+        check(lore.getFirst().equals(original.getItemMeta().lore().getFirst()),"original rarity/category badge remains the first lore row");
+        var plain=net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText();
+        int jetpack=-1;int protection=-1;
+        for(int i=0;i<lore.size();i++) {
+            if(plain.serialize(lore.get(i)).contains("Jetpack"))jetpack=i;
+            if(plain.serialize(lore.get(i)).toLowerCase(java.util.Locale.ROOT).contains("protection"))protection=i;
+        }
+        check(jetpack>0&&protection>jetpack,"Jetpack I and other enchantments display below badges");
+        service.maintain(upgraded);var once=upgraded.clone();service.maintain(upgraded);
+        check(once.equals(upgraded),"tooltip maintenance never duplicates generated enchantment lines");
+        upgraded.removeEnchantment(enchant);upgraded=service.cleanRemovedEnchantment(upgraded);
+        check(upgraded.equals(original),"removing Jetpack restores original lore, flags and components exactly");
+        var legacy=new ItemStack(Material.ECHO_SHARD);var meta=legacy.getItemMeta();
+        meta.getPersistentDataContainer().set(net.mandomc.gameplay.items.ItemCatalog.ITEM_ID,org.bukkit.persistence.PersistentDataType.STRING,BobaEquipment.JETPACK);legacy.setItemMeta(meta);
+        check(service.maintain(legacy)&&legacy.getType()==Material.ENCHANTED_BOOK&&service.bookLevel(legacy)==1,"legacy model tokens migrate into native I books");
+        var grid=(CraftingInventory)actor.getOpenInventory().getTopInventory();
+        var left=service.book(1);left.setAmount(2);var right=service.book(1);right.setAmount(2);
+        grid.setMatrix(new ItemStack[]{left,right,null,null});click(0,"PICKUP");
+        check(service.bookLevel(actor.getItemOnCursor())==2,"actual 2x2 output click crafts II book");
+        check(Arrays.stream(grid.getMatrix()).filter(i->!empty(i)).mapToInt(ItemStack::getAmount).sum()==2,"actual book click consumes one from each input stack");
+        actor.setItemOnCursor(null);click(0,"QUICK_MOVE");
+        check(Arrays.stream(grid.getMatrix()).allMatch(this::empty),"shift book crafting consumes the remaining pair");
+        check(Arrays.stream(actor.getInventory().getStorageContents()).anyMatch(i->service.bookLevel(i)==2),"shift result delivers real II book");
+        var grind=MenuType.GRINDSTONE.create(actor,net.kyori.adventure.text.Component.text("Book removal"));actor.openInventory(grind);
+        grind.getTopInventory().setItem(0,service.book(1));var plainBook=grind.getTopInventory().getItem(2);
+        check(plainBook!=null&&plainBook.getType()==Material.BOOK,"native grindstone turns I book into ordinary book");
+        service.maintain(plainBook);
+        check(plainBook.getType()==Material.BOOK&&service.bookLevel(plainBook)==0,"maintenance cannot resurrect a removed book enchantment");
+        actor.closeInventory();
     }
     private Player nativePlayer(Location location)throws Exception {
         Class<?> serverClass=Class.forName("net.minecraft.server.MinecraftServer"),levelClass=Class.forName("net.minecraft.server.level.ServerLevel"),

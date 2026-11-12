@@ -3,14 +3,14 @@ Status: LIVE since 2026-11-12 16:45 America/Chicago; replaces the offhand wearab
 Branch: bilal/boba-equipment
 
 ## Player experience
-Combine one Boba jetpack with one chestplate, in any positions in either crafting grid. The result is the same chestplate with the native `mandomc:jetpack` enchantment, displayed as Jetpack. Wear it in the chest slot and double-tap sneak to toggle thrust. The offhand remains free. There is no attached model or jetpack exhaust particle effect; normal armor appearance remains.
+Boba now drops a vanilla enchanted book named Jetpack I, containing the real stored Jetpack I enchantment. Craft two I books into one II book. Combine a book with one chestplate, in any positions in either crafting grid. The result is the same chestplate with the native `mandomc:jetpack` enchantment, displayed as Jetpack. Wear it in the chest slot and double-tap sneak to toggle thrust. The offhand remains free. There is no attached model or jetpack exhaust particle effect; normal armor appearance remains.
 
 The jetpack ingredient is consumed. The chestplate retains its material, durability, name, lore, other enchantments, trim, persistent data and unrelated native components. All seven native chestplate materials and custom armor based on those materials are supported. The flamethrower is unchanged.
 
 ## Rules
-- Exactly one identified Boba jetpack and one not-yet-upgraded chestplate; extra ingredients, ordinary echo shards and duplicate upgrades reject the recipe. No layout requirement; both 2x2 and 3x3 crafting work.
+- One valid Jetpack book plus one chestplate, or two I books for the II-book recipe. Extra ingredients, ordinary echo shards and upgrades beyond II reject the recipe. No layout requirement; both 2x2 and 3x3 crafting work.
 - Minecraft owns normal/shift-click output transfers and ingredient consumption. The plugin validates the live matrix/result; it does not implement a second consumption path.
-- Existing double-sneak controls, movement policy, speed, cooldowns and fuel rules remain: one hotbar coal per 0.1 real seconds; charcoal/storage coal excluded; purchased fractions persist; warning at five seconds. No separate visual preference affects ability.
+- Existing double-sneak controls, movement policy, speed, cooldowns and fuel rules remain: level I buys 0.1 real seconds per hotbar coal, level II buys 0.2 seconds; charcoal/storage coal excluded; purchased fractions persist; warning at five seconds. No separate visual preference affects ability.
 - Native grindstone disenchanting removes Jetpack and the glide flag introduced by it. An independently preexisting glide flag is retained. Native crafting repair may strip enchantments as usual; orphaned upgrade flags are cleaned from crafting/anvil/grindstone results.
 - Armor removal/breakage, death, logout and existing travel/disable boundaries stop powered flight with the existing credit persistence. Normal native armor/drop/keep-inventory rules own item loss. No virtual jetpack storage or duplicate item exists.
 - Legacy offhand jetpacks become ingredients; their previous offhand glider/equippable components are cleared when carried. Already-stored ingredients remain craftable without requiring exact old lore/components. Ingredient hints update when carried.
@@ -32,3 +32,10 @@ Six deterministic fuel tests pass. The exact-candidate disposable full runtime t
 
 ## Pause note
 Deployed exact JAR `f067c786195b454e0f3d0f9d9413447138458c8ce87ecb477c4b8d3ad7da6cfb` and the native enchantment data pack with one clean restart and a full stopped backup. All 41 production read-only checks passed, including native enchantment, all chestplate recipes, removed test route/controller, existing loot, NPCs/decor/boards, frozen baselines, pack and native agent. The pack is unchanged. Jabba active / next None was separately restored and read back. Temporary audit removed; gear window released. Next action: user verifies ordinary crafting and chest-slot flight in the connected client.
+
+## Book and tooltip refinement
+The native enchantment is capped at II, so vanilla enchantment descriptions include the I/II suffix. Two separate I-book ingredients produce one II book; II + II does not create III. A book applies its level to an unupgraded chestplate; native-style I + I on an existing chestplate also becomes II. Upgrades beyond II reject. Level II changes only the paid fuel interval; speed, steering and all other flight rules stay unchanged. Purchased nanoseconds are retained when changing levels, rather than rescaled into free fuel.
+
+Catalog armor now hides the native enchantment block that precedes lore and reproduces all normally visible enchantment names below the original rarity/category badge row. Generated rows carry an invisible component insertion marker, allowing idempotent refresh and exact removal without deleting original descriptions. Original enchantment-hide flags are remembered and restored. Already-hidden unrelated enchantments stay hidden; actual enchantment data remains unchanged. Vanilla armor without badge lore keeps vanilla tooltip rendering.
+
+Legacy model ingredients migrate to native books in carried inventories and on spawn/open. A grindstoned plain book is never recreated as an enchanted book. The native resource pack remains unchanged. Eight deterministic fuel tests and 81 exact-candidate native assertions pass, including actual book drops, normal/shift book consumption, direct II application/cap, screenshot-regression checks on real Beskar armor, exact tooltip/lore restoration, migration and real level-II activation with 0.2 seconds per coal. Connected-client appearance remains a manual confirmation.

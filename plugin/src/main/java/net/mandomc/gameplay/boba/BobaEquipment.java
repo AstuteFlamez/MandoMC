@@ -66,8 +66,9 @@ public final class BobaEquipment implements Listener, AutoCloseable {
     public ItemDisplay attachment(Player player) { return null; }
     public double seconds(Player player) {
         var w=wearers.get(player.getUniqueId());
-        return (w==null?new ThrustFuel(player.getPersistentDataContainer().getOrDefault(CREDIT,PersistentDataType.LONG,0L)):w.fuel)
-                .seconds(BobaInventory.coal(player.getInventory()));
+        var fuel=(w==null?new ThrustFuel(player.getPersistentDataContainer().getOrDefault(CREDIT,PersistentDataType.LONG,0L),chestplates.level(player.getInventory().getChestplate())):w.fuel);
+        fuel.setLevel(chestplates.level(player.getInventory().getChestplate()));
+        return fuel.seconds(BobaInventory.coal(player.getInventory()));
     }
     private void message(Player player,String key) {
         if(Set.of("warning","depleted","no-fuel").contains(key))
@@ -77,12 +78,12 @@ public final class BobaEquipment implements Listener, AutoCloseable {
     }
     private Wearer wear(Player player) {
         return wearers.computeIfAbsent(player.getUniqueId(),id->{
-            return new Wearer(player,new ThrustFuel(player.getPersistentDataContainer().getOrDefault(CREDIT,PersistentDataType.LONG,0L)));
+            return new Wearer(player,new ThrustFuel(player.getPersistentDataContainer().getOrDefault(CREDIT,PersistentDataType.LONG,0L),chestplates.level(player.getInventory().getChestplate())));
         });
     }
     public boolean toggle(Player player) {
         if(closed||!equipped(player)) { message(player,"equip");return false; }
-        var w=wear(player);
+        var w=wear(player);w.fuel.setLevel(chestplates.level(player.getInventory().getChestplate()));
         if(w.powered) { settle(w,clock.getAsLong());stop(w,"stopped");return true; }
         if(!eligible(player)||player.getGameMode()==GameMode.CREATIVE||player.isFlying()) {
             message(player,"flight-denied");return false;
@@ -126,7 +127,11 @@ public final class BobaEquipment implements Listener, AutoCloseable {
         if(closed)return;
         actionBarReservations.entrySet().removeIf(e->clock.getAsLong()>=e.getValue());
         for(var player:plugin.getServer().getOnlinePlayers()) {
-            for(var item:player.getInventory().getContents())if(item!=null)chestplates.migrateIngredient(item);
+            var inventory=player.getInventory();
+            for(int slot=0;slot<inventory.getSize();slot++) {
+                var item=inventory.getItem(slot);
+                if(item!=null&&chestplates.maintain(item))inventory.setItem(slot,item);
+            }
             if(equipped(player)&&!player.isDead())wear(player);
         }
         for(var it=wearers.values().iterator();it.hasNext();) {
@@ -134,6 +139,7 @@ public final class BobaEquipment implements Listener, AutoCloseable {
             if(!equipped(p)||!p.isOnline()||p.isDead()) {
                 remove(w);it.remove();continue;
             }
+            w.fuel.setLevel(chestplates.level(p.getInventory().getChestplate()));
             if(w.powered) {
                 if(!eligible(p)) { settle(w,clock.getAsLong());stop(w,"stopped"); }
                 else if(settle(w,clock.getAsLong())) {
