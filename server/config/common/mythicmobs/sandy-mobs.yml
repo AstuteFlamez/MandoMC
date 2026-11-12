@@ -98,8 +98,10 @@ Bantha:
     AlwaysShowName: false
   AIGoalSelectors:
     - clear
-    - randomstroll
-    - lookatplayers
+    - 0 float
+    - 1 panic
+    - 4 randomstroll
+    - 5 lookatplayers
   AITargetSelectors:
     - clear
   Skills:
@@ -127,8 +129,10 @@ Dewback:
     AlwaysShowName: false
   AIGoalSelectors:
     - clear
-    - randomstroll
-    - lookatplayers
+    - 0 float
+    - 1 panic
+    - 4 randomstroll
+    - 5 lookatplayers
   AITargetSelectors:
     - clear
   Skills:

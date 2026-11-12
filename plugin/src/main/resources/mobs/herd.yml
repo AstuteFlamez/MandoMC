@@ -1,0 +1,4 @@
+schema-version: 1
+# Working food choices; used by native pathfinding attraction in either hand.
+bantha-food: HAY_BLOCK
+dewback-food: CACTUS
