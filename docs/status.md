@@ -12,8 +12,15 @@ baby uniformly half-size, with no visible asset or published pack changes. 191 J
 56 full interactions and12 restart/conversion checks. The final outgoing metadata check proves
 the client horse stays invisible while its real ID remains available for the saddle screen.
 Scoped candidate changes only HerdModels.class and Dewback.bbmodel, preserving476 unrelated
-current JAR entries. No live fix has been installed. Next action: use the reserved coordinated window to deploy the two-file correction,
-then client-test the saddle screen.
+current JAR entries. Deployed in the reserved window with one normal restart: live JAR SHA-256
+`5e56f3e9fbc757bb63ac032ada528516759ad21d5c339edbe9d1e8b216ec1245`. All476 unrelated
+JAR entries remain byte-identical. 171 read-only live assertions pass across two snapshots:
+gray7/decor9/boards2/frozen2115. The loaded Mythic startup sample was empty; gray native health
+was valid. Protected config/pack/frozen files remain byte-identical; server.properties changes
+only its native generated timestamp comment, with every setting identical. No pack publication.
+The self-disabled checker JAR is removed. Fresh pre-stop currentNone/nextJabba is restored,
+and the window released. Ignored `.local/herd-menu-fix/live-receipt.json` records backups and
+exact hashes. Next action: user client-test the saddle screen and enlarged Dewback body collision.
 
 ## Bantha/Dewback native herds deployed (2026-11-12)
 Full taming, native horse equipment/saddle, walking-controller riding, owner-only feeding/management, protected courtship, inherited baby ownership, native growth/cooldown persistence and legacy pig conversion are implemented on `bilal/bantha-dewback-babies`. The first slice remains separately reproducible at `e152ec2`. Current source includes the peer's fixed-base mob-stat changes; deployment preserves the actual live adapters byte-identically. See [feature brief](features/bantha-dewback-herds.md) for defaults and lifecycle boundaries.

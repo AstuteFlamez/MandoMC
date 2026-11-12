@@ -119,5 +119,10 @@ babies retain uniform half size. Main native collision uses a square horizontal 
 the existing head sub-hitbox remains. All visible cubes, textures, UVs and animation keyframes
 are unchanged. Regenerating the model produces byte-identical visible pack assets, so the
 current published pack remains in use. 191 Java tests, two asset tests and132 native checks
-pass (64 packet/collision,56 full interactions,12 restart/conversion). The correction is staged
-pending the reserved coordinated window.
+pass (64 packet/collision,56 full interactions,12 restart/conversion). Deployed with one normal
+restart and171 read-only live assertions. The JAR changes only HerdModels.class; all476 other
+entries remain identical. Live SHA-256 is
+`5e56f3e9fbc757bb63ac032ada528516759ad21d5c339edbe9d1e8b216ec1245`. The current
+pack remains unchanged, the checker is removed, pre-stop currentNone/nextJabba is restored
+and the coordinated window released. Actual client menu/model placement and collision feedback
+remain the next playtest.
