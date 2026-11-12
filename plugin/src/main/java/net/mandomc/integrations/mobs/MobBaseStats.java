@@ -99,6 +99,7 @@ public final class MobBaseStats implements Listener {
                 String name = oldName.replaceAll("(?i)(?:§[0-9a-fk-or])*\\s*\\[Lv\\. (?:§[0-9a-fk-or])*[0-9.]+\\]", "")
                         .replaceAll("(?i)(?:§[0-9a-fk-or])*Lvl\\. (?:§[0-9a-fk-or])*[0-9.]+ (?:§[0-9a-fk-or])*- ", "");
                 if (!name.equals(oldName)) {
+                    name = name.stripTrailing();
                     setDisplayName.invoke(mob, name);
                     entity.setCustomName(name);
                 }
