@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.*;
 import net.mandomc.gameplay.combat.CombatService;
+import net.mandomc.gameplay.territory.TerritoryService;
 import net.mandomc.gameplay.credits.*;
 import net.mandomc.gameplay.ranks.*;
 import org.bukkit.Bukkit;
@@ -32,7 +33,7 @@ public final class PlayerHud implements Listener, AutoCloseable {
         Component name, header, footer;
         int order;
         boolean hidden;
-        int ping, kills, deaths, visible;
+        int ping, kills, deaths, visible, rows;
         View(Player player, Scoreboard board, Objective objective) {
             this.player = player; previous = player.getScoreboard(); this.board = board; this.objective = objective;
             oldName = player.playerListName(); oldHeader = player.playerListHeader(); oldFooter = player.playerListFooter();
@@ -110,7 +111,8 @@ public final class PlayerHud implements Listener, AutoCloseable {
         var logo = settings.animations().get("logo").at(millis);
         int tenths = combat.remainingTenths(view.player);
         var timer = MiniMessage.miniMessage().deserialize(tenths > 0 ? settings.combat() : settings.kills(),
-                Placeholder.unparsed("seconds", HudSettings.seconds(tenths)), Placeholder.unparsed("kills", String.valueOf(view.kills)));
+                Placeholder.unparsed("seconds", HudSettings.seconds(tenths)), Placeholder.unparsed("kills", String.valueOf(view.kills)),
+                Placeholder.unparsed("deaths", String.valueOf(view.deaths)));
         var placeholders = TagResolver.resolver(
                 Placeholder.component("logo", logo), Placeholder.component("bar", settings.animations().get("bar").at(millis)),
                 Placeholder.component("serverinfo", settings.animations().get("serverinfo").at(millis)),
@@ -118,21 +120,33 @@ public final class PlayerHud implements Listener, AutoCloseable {
                 Placeholder.unparsed("date", settings.date().format(Instant.now())), Placeholder.unparsed("ping", String.valueOf(view.ping)),
                 Placeholder.component("rank", ranks.rank(view.player).badge(false)), Placeholder.component("combat-or-kills", timer),
                 Placeholder.unparsed("deaths", String.valueOf(view.deaths)),
+                Placeholder.component("territory", territory(view.player)),
                 Placeholder.unparsed("balance", CreditLedger.format(credits.ledger().balance(view.player.getUniqueId()))));
         if (!view.objective.displayName().equals(logo)) view.objective.displayName(logo);
         var lines = tenths > 0 ? settings.combatLines() : settings.lines();
-        if (!view.hidden) for (int i = 0; i < lines.size(); i++) {
+        // Remove surplus entries on shorter layouts, including while hidden. Display-slot toggling
+        // controls visibility; keeping the model current prevents stale rows on the next reveal.
+        for (int i = lines.size(); i < view.rows; i++) view.board.resetScores("mmc_line_" + i);
+        for (int i = 0; i < lines.size(); i++) {
             var line = MiniMessage.miniMessage().deserialize(lines.get(i), placeholders);
             var score = view.objective.getScore("mmc_line_" + i);
-            if (!score.isScoreSet()) score.setScore(settings.lines().size() - i);
+            if (!score.isScoreSet()) score.setScore(Math.max(settings.lines().size(),settings.combatLines().size()) - i);
             if (!line.equals(score.customName())) score.customName(line);
         }
+        view.rows = lines.size();
         var header = MiniMessage.miniMessage().deserialize(settings.header(), placeholders);
         var footer = MiniMessage.miniMessage().deserialize(settings.footer(), placeholders);
         if (!header.equals(view.header) || !footer.equals(view.footer)) {
             view.player.sendPlayerListHeaderAndFooter(header, footer); view.header = header; view.footer = footer;
         }
     }
+    private Component territory(Player player) {
+        // Services retain authority; resolving at render also handles same-chunk claim/disband changes.
+        var zones = Bukkit.getServicesManager().load(TerritoryService.class);
+        return zones == null ? Component.text("Wilderness",net.kyori.adventure.text.format.NamedTextColor.GRAY)
+                : zones.label(player);
+    }
+
     private void mirrorTeams(View view, List<? extends Player> online) {
         var source = view.previous; var target = view.board;
         for (var team : Set.copyOf(target.getTeams())) {

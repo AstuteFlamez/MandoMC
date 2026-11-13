@@ -36,4 +36,19 @@ public class TerritoryPolicyTest {
   assertFalse(p.edits("minecraft:ilum",27,-51,-60));assertFalse(p.combat("minecraft:ilum",27,-51,-60));
   assertFalse(p.mechanisms("minecraft:spawnworld"));assertFalse(p.mechanisms("minecraft:tatooine"));
  }
+ @Test public void fullHeightClaimChecksIncludePartialLegacyCuboids(){
+  var p=policy();assertFalse(p.wildernessChunk("minecraft:overworld",-9,-9));
+  assertTrue(p.wildernessChunk("minecraft:overworld",-10,-9));
+  assertFalse(p.wildernessChunk("minecraft:spawnworld",1000,1000));
+  assertFalse(p.wildernessChunk("minecraft:hoth",1000,1000));
+  assertFalse(p.wildernessChunk("minecraft:mandalore_review",-2,-12));
+  assertFalse(p.wildernessChunk("minecraft:mandalore_review",0,0));
+  assertTrue(p.wildernessChunk("minecraft:tatooine",0,0));
+ }
+ @Test public void nearbyMapUsesNativeHothAndLegacyCuboidsInsteadOfInventingWilderness(){
+  var p=policy();var hoth=p.nearbyMap("minecraft:hoth","Hoth",0,0,70);
+  assertEquals('W',hoth.zone(0,0));assertEquals('S',hoth.zone(15,0));
+  var old=p.nearbyMap("minecraft:overworld","Old",0,0,70);
+  assertEquals('S',old.zone(-9,-9));assertEquals('.',old.zone(0,0));
+ }
 }

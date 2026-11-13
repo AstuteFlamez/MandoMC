@@ -1,0 +1,116 @@
+schema-version: 1
+title: MandoMC Handbook
+author: MandoMC
+page-count: 11
+lore:
+- A quick guide to life on the server.
+- Use /tutorial for a fresh copy.
+messages:
+  given: <gold>Handbook added. <gray>Open it any time, or use /tutorial again.
+  updated: <gold>Your handbook is up to date.
+  full: <yellow>Your inventory is full. <gray>Read the handbook now; free a slot and use /tutorial to keep a copy.
+  busy: <yellow>Put away your cursor item and crafting ingredients, then use /tutorial.
+  players-only: <gray>Use /tutorial in game to get the handbook.
+pages:
+- id: travel
+  topic: Getting Started & Travel
+  heading: Travel
+  body: |-
+    Batuu: safe spawn.
+    /warp: galaxy map.
+    /spawn: back to Batuu.
+
+    Stand still to travel. Combat blocks travel.
+
+    /c map: zones and claims.
+    Wild edits reset after 24h without edits.
+- id: combat_weapons
+  topic: Combat, Death, Blasters & Lightsabers
+  heading: Combat & Weapons
+  body: |-
+    Death drops carried gear. Combat: 15s. Logout in combat kills you.
+
+    Blaster: use to fire; drop key reloads.
+
+    Saber: hold use to guard; sneak + attack throws. Rest recovers charge.
+- id: jawas
+  topic: Jawa Shops
+  heading: Jawa Shops
+  body: |-
+    Brown Jawas sell supplies on Tatooine. Right-click to browse.
+
+    Gray buyers pay credits. Put salvage in the sell window, then Sell. Rejected items return; closing returns leftovers.
+- id: mining_materials
+  topic: Mining & Materials
+  heading: Mining & Materials
+  body: |-
+    Mine themed ores for metal scraps. Refine scraps to ingots.
+
+    Scraps, ingots and sheets feed equipment crafting.
+
+    /recipes shows sources and the right furnace or workstation.
+- id: crafting
+  topic: Crafting & /recipes
+  heading: Crafting
+  body: |-
+    /recipes opens the guide. Pick an item for recipes and sources.
+
+    Follow ingredients to their own recipes. Check the workstation: crafting, blast furnace or stonecutter.
+- id: credits_auctions
+  topic: Credits & /ah
+  heading: Credits & Auctions
+  body: |-
+    /balance: your credits.
+    /pay <player> <amount>
+
+    /ah: player market.
+    Hold an item, then:
+    /ah sell <price>
+
+    /ah collect retrieves saved items and returns.
+- id: clans_claims
+  topic: Clans & Claims
+  heading: Clans & Claims
+  body: |-
+    Max 4 players; 4 chunks.
+    /c create <name>
+    /c invite <player>
+    /c join <clan>
+    /c claim
+    /c map
+
+    Leave a full empty chunk beside rival claims and protected zones.
+- id: raids_warpoints
+  topic: Raids & Warpoints
+  heading: Raids & Warpoints
+  body: |-
+    +10 vs a rival: explosive raids and chest loot. First breach starts 1h; pair points reset/freeze. No hand-breaking.
+
+    After 7d clan inactivity: 24h public loot, then gradual land reset.
+- id: events
+  topic: Events
+  heading: Events
+  body: |-
+    KOTH: /warp hoth
+    Hill: -148, 27, 141.
+    Clan holds 3min; clear all holders to reset. A random winner on hill gets a key.
+
+    Jabba: watch /event. Clear rooms; caches and PvP. Beat Rancor, then loot before closing.
+- id: vehicles
+  topic: Vehicles
+  heading: Vehicles
+  body: |-
+    Place a vehicle on solid ground, then choose a seat. Only the placer pilots. See item hints for keys.
+
+    Pack when stopped, empty and out of combat. Destroyed vehicles are lost.
+- id: ilum_crates
+  topic: Ilum & Crates
+  heading: Ilum & Crates
+  body: |-
+    /warp ilum
+    Follow plates and Jedi. Compass retries; /parkour leave exits.
+
+    Finish for one Kyber key per 24h. Your gear is kept safe.
+
+    /warp crates
+    /crates open kyber

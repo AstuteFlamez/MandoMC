@@ -21,8 +21,8 @@ commands:
     usage: /parkourfinish <player>
     permission: mandomc.parkour.admin
   c:
-    description: View the planet chunk map
-    usage: /c map
+    description: Manage your clan, claims and rivalries
+    usage: /c [create|invite|join|claim|home|warpoints|map]
     aliases: [clan, cl]
     permission: mandomc.clan.map
   auctionhouse:

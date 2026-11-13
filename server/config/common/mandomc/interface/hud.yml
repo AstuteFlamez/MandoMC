@@ -14,13 +14,27 @@ lines:
   - ''
   - '<aqua><bold>Stats'
   - '<combat-or-kills>'
-  - '<dark_gray>☠ <gray>ᴅᴇᴀᴛʜѕ<dark_gray>: <#75CDA9><deaths>'
+  - '<dark_gray>⚑ <gray>ᴛᴇʀʀɪᴛᴏʀʏ<dark_gray>: <#75CDA9><territory>'
   - '<dark_gray>¤ <gray>ʙᴀʟᴀɴᴄᴇ<dark_gray>: <#FCD05C>$<balance>'
   - ''
   - '<serverinfo>'
   - '<bar>'
+combat-lines:
+  - '<bar>'
+  - '<dark_gray>⏳ <gray><date>'
+  - ''
+  - '<aqua><bold><player>'
+  - '<dark_gray>| <gray>ᴘɪɴɢ<dark_gray>: <green><ping>'
+  - '<dark_gray>| <gray>ʀᴀɴᴋ<dark_gray>: <rank>'
+  - ''
+  - '<red><!bold>ᴄᴏᴍʙᴀᴛ'
+  - '<red><!bold>⚠ ᴅᴏ ɴᴏᴛ ʟᴏɢ ᴏᴜᴛ'
+  - '<combat-or-kills>'
+  - '<red><!bold>⚠ ᴅᴏ ɴᴏᴛ ʟᴏɢ ᴏᴜᴛ'
+  - '<serverinfo>'
+  - '<bar>'
 combat: '<red>⚔ ɪɴ ᴄᴏᴍʙᴀᴛ: <white><seconds>s'
-kills: '<dark_gray>⚔ <gray>ᴋɪʟʟѕ<dark_gray>: <red><kills>'
+kills: '<dark_gray>⚔ <gray>ᴋɪʟʟѕ/ᴅᴇᴀᴛʜѕ<dark_gray>: <red><kills><gray>/<#75CDA9><deaths>'
 messages:
   shown: '<gray>Scoreboard shown.'
   hidden: '<gray>Scoreboard hidden.'
@@ -391,6 +405,4 @@ animations:
   serverinfo:
     interval-ms: 2500
     frames:
-      - "<gray>ᴍᴀɴᴅᴏᴍᴄ.ɴᴇᴛ"
-      - "<gray>ѕᴛᴏʀᴇ.ᴍᴀɴᴅᴏᴍᴄ.ɴᴇᴛ"
-      - "<gray>ᴅɪѕᴄᴏʀᴅ.ɢɢ/ᴍᴀɴᴅᴏᴍᴄ"
+      - "<gray>play.mandomc.net"

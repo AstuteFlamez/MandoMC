@@ -19,7 +19,7 @@ public final class TerritoryProtection implements Listener {
     private boolean staff(Player p){return p.getGameMode()==org.bukkit.GameMode.CREATIVE && p.hasPermission("mandomc.territory.edit");}
     private void deny(Player p){p.sendActionBar(territories.message("protected"));}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void breakBlock(BlockBreakEvent e){if(blocked(e.getBlock())&&!staff(e.getPlayer())){e.setCancelled(true);deny(e.getPlayer());}}
+    public void breakBlock(BlockBreakEvent e){if(blocked(e.getBlock())&&!staff(e.getPlayer())&&!net.mandomc.gameplay.events.EventMining.allowed(e.getBlock(),e.getPlayer())){e.setCancelled(true);deny(e.getPlayer());}}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void place(BlockPlaceEvent e){if(blocked(e.getBlock())&&!staff(e.getPlayer())){e.setCancelled(true);deny(e.getPlayer());}}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)

@@ -20,7 +20,10 @@ public final class TerritoryWeapons implements Listener {
                 try {
                     Object source=shooter.invoke(event);
                     Object target=victim==null?null:victim.invoke(event);
-                    if((source instanceof Entity entity&&!territories.combat(entity.getLocation()))
+                    var clans=plugin.getServer().getServicesManager().load(net.mandomc.gameplay.clans.ClanService.class);
+                    if((clans!=null&&source instanceof Entity shooterEntity&&target instanceof Entity targetEntity
+                            &&clans.friendly(shooterEntity,targetEntity))
+                            ||(source instanceof Entity entity&&!territories.combat(entity.getLocation()))
                             ||(target instanceof Entity victimEntity&&!territories.combat(victimEntity.getLocation())))
                         ((Cancellable)event).setCancelled(true);
                 }catch(ReflectiveOperationException error){

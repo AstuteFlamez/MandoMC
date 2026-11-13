@@ -117,8 +117,9 @@ public class EventRulesTest {
         for(String excluded:List.of("alderaan","endor","jabba","devworld","survival"))
             assertNull(WarpService.canonical(excluded));
     }
-    @Test public void rewardsAreExplicitlyDisabled() {
-        assertFalse(koth().getBoolean("rewards.enabled",true));
+    @Test public void rewardsUseTheSharedKothCrate() {
+        assertTrue(koth().getBoolean("rewards.enabled",false));
+        assertEquals("koth",koth().getString("rewards.crate"));
         assertTrue(koth().getStringList("settings.reward-commands").isEmpty());
     }
 }
