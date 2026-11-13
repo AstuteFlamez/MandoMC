@@ -64,8 +64,8 @@ def prepare(runtime, destination):
                 shutil.copyfile(source, destination / name)
         (destination / 'plugins').mkdir()
         lock = json.loads((ROOT / 'server/plugins.lock.json').read_text())
-        allowed_dirs = ('MandoMC', 'ModelEngine', 'MechanicsCore', 'WeaponMechanics',
-                        'MythicMobs', 'WorldEdit', 'WorldGuard', 'Factions', 'Vault')
+        allowed_dirs = ('MandoMC', 'MandoAccess', 'CoreProtect', 'ModelEngine', 'MechanicsCore',
+                        'WeaponMechanics', 'MythicMobs', 'WorldEdit', 'WorldGuard', 'Factions', 'Vault')
         for name in allowed_dirs:
             source = runtime / 'plugins' / name
             if source.is_dir():
@@ -87,6 +87,14 @@ def prepare(runtime, destination):
             else:
                 raise ValueError(f'Owner-supplied binary required: {artifact["name"]}')
         shutil.copyfile(plugin, destination / 'plugins' / 'MandoMC.jar')
+        shutil.copyfile(ROOT / 'access/target/MandoAccess.jar', destination / 'plugins/MandoAccess.jar')
+        (destination / 'agents').mkdir()
+        shutil.copyfile(ROOT / 'redstone-agent/target/MandoMC-RedstoneAgent.jar',
+                        destination / 'agents/MandoMC-RedstoneAgent.jar')
+        shutil.copyfile(ROOT / 'deployment/start.sh', destination / 'start.sh')
+        source_access = ROOT / 'access/src/main/resources/config.yml'
+        (destination / 'plugins/MandoAccess').mkdir(exist_ok=True)
+        shutil.copyfile(source_access, destination / 'plugins/MandoAccess/config.yml')
         # Routine deployment overrides are applied from the selected source tree.
         config = ROOT / 'server/config/common/mandomc'
         for source in config.rglob('*.yml'):
@@ -100,12 +108,27 @@ def prepare(runtime, destination):
             'server-ip': '', 'server-port': '25570', 'enable-rcon': 'false',
             'rcon.password': '', 'rcon.port': '25575', 'enable-query': 'false',
             'query.port': '25570', 'online-mode': 'true'}))
-        # A fresh deployment never inherits the laptop owner/operator list.
+        # Carry the established owner's access records with the rebuilt server;
+        # the independent MandoAccess maintenance state remains private.
         for name in ('ops.json', 'banned-ips.json', 'banned-players.json', 'whitelist.json'):
-            (destination / name).write_text('[]\n')
+            shutil.copyfile(runtime / name, destination / name)
+        level_name = next((line.partition('=')[2] for line in props.read_text().splitlines()
+                           if line.startswith('level-name=')), 'dev_world')
+        datapacks = destination / level_name / 'datapacks'
+        for source in (ROOT / 'server/datapacks').iterdir():
+            shutil.copytree(source, datapacks / source.name, dirs_exist_ok=True)
+        import importlib.util
+        spec = importlib.util.spec_from_file_location('transfer', ROOT / 'scripts/pebblehost.py')
+        transfer = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(transfer)
+        for target, data in transfer.payload().items():
+            installed = destination / transfer.installed_path(target)
+            installed.parent.mkdir(parents=True, exist_ok=True)
+            installed.write_bytes(data)
+        commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
+        props.write_bytes(transfer.production_properties(props.read_bytes(), commit))
         # Reuse the already accepted Minecraft agreement without accepting it here.
         shutil.copyfile(runtime / 'eula.txt', destination / 'eula.txt')
-        commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
         inventory = {str(path.relative_to(destination)): hashlib.sha256(path.read_bytes()).hexdigest()
                      for path in destination.rglob('*') if path.is_file()}
         (destination / '.prepared.json').write_text(json.dumps(dict(

@@ -33,13 +33,22 @@ jobs:
         run: ./scripts/build.sh
       - name: Test tooling and validate resource pack
         run: |
-          python -m unittest discover -s scripts/tests -v
           python scripts/build-resource-pack.py
+          python -m unittest discover -s scripts/tests -v
+          python scripts/build-deployment-manifest.py --check
           python -c "import runpy; runpy.run_path('scripts/pebblehost.py')['payload']()"
+
+  publish-pack:
+    name: Publish the checked main resource pack
+    needs: verify
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/resource-pack.yml
 
   upload:
     name: Upload production files; restart manually
-    needs: verify
+    needs: [verify, publish-pack]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.PEBBLEHOST_BOOTSTRAPPED == 'true'
     runs-on: ubuntu-latest
     environment: production
@@ -61,6 +70,7 @@ jobs:
         run: |
           python scripts/prepare-ci.py
           ./scripts/build.sh
+          python scripts/build-resource-pack.py
       - name: Skip superseded main commits
         id: current
         env:

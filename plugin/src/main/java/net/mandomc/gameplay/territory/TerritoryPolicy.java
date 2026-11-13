@@ -109,5 +109,4 @@ public final class TerritoryPolicy {
     }
     public boolean mechanisms(String world) { return mechanismWorlds.contains(world); }
     public boolean wholeWorldSafe(String world) { return safeWorlds.containsKey(world); }
-    public boolean mechanisms(String world) { return mechanismWorlds.contains(world); }
 }

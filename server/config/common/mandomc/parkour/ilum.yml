@@ -148,37 +148,46 @@ hints:
   - <red>the reward every
   - <red>24 hours!
 messages:
-  welcome: <aqua>Ilum trials</aqua> <gray>— your inventory is stored safely. Reach the four pressure-plate checkpoints,
-    find Ahsoka, then speak to Obi-Wan. Right-click your compass to retry, bed to restart, or barrier to leave.
+  welcome: <aqua>Ilum trials</aqua> <gray>— your inventory is stored safely. Reach
+    the four pressure-plate checkpoints, find Ahsoka, then speak to Obi-Wan. Right-click
+    your compass to retry, bed to restart, or barrier to leave.
   left: <aqua>Left Ilum. Your inventory and previous game mode have been restored.
-  recovered: <aqua>Your stored inventory was recovered after the interrupted Ilum run.
+  recovered: <aqua>Your stored inventory was recovered after the interrupted Ilum
+    run.
   checkpoint: <aqua>Checkpoint {number}/4 reached.
   checkpoint-order: <yellow>Reach the previous checkpoint first.
   restart: <aqua>Course restarted. Your timer and checkpoints are reset.
   need-checkpoints: <yellow>Find the earlier pressure-plate checkpoints before continuing.
   unsafe: <yellow>Leave combat and dismount before entering parkour.
-  crate-pending: <yellow>Finish or claim your current crate reward before starting parkour.
+  crate-pending: <yellow>Finish or claim your current crate reward before starting
+    parkour.
   outside: <gray>Use /parkour to enter Ilum first.
   commands: <yellow>Use your leave item or /parkour leave before using other commands.
-  npc-interrupted: <yellow>Stay near the Jedi until the conversation finishes. Speak to them again to continue.
   busy: <yellow>Listen to the current conversation first.
   retry: <aqua>Returned to your last checkpoint.
-  finished: '<aqua>Ilum complete!</aqua> <gray>You are back at spawn.</gray> <gray>Time: {time} • Personal best: {best}.'
-  key-earned: <aqua>You earned one Kyber Crate Key!</aqua> <gray>Open the crate beside Batuu spawn, or use /crates
-    open kyber.
-  reward-cooldown: <gray>Your next Ilum key is available in {hours} hour(s). You can still replay for a faster time.
-  practice: <yellow>This is a practice run. Teleports, flight, and inspection runs do not earn rewards or leaderboard
-    times.
+  finished: '<aqua>Ilum complete!</aqua> <gray>You are back at spawn.</gray> <gray>Time:
+    {time} • Personal best: {best}.'
+  key-earned: <aqua>You earned one Kyber Crate Key!</aqua> <gray>Open the crate beside
+    Batuu spawn, or use /crates open kyber.
+  reward-cooldown: <gray>Your next Ilum key is available in {hours} hour(s). You can
+    still replay for a faster time.
+  practice: <yellow>This is a practice run. Teleports, flight, and inspection runs
+    do not earn rewards or leaderboard times.
   timer: <aqua>Ilum • {time}</aqua> <gray>• Best {best} • Checkpoint {checkpoint}/4
   top-title: <aqua>Ilum • Top runners
   top-row: <gray>{rank}. <aqua>{name}</aqua> <gray>• {time}
   empty-top: <gray>No completed runs yet.
   npc-line: <aqua>{npc}</aqua> <dark_gray>»</dark_gray> <gray>{line}
-  inspect: <aqua>Inspecting Ilum in Creative. Use /parkour leave when finished; /parkour start begins a timed run.
+  inspect: <aqua>Inspecting Ilum in Creative. Use /parkour leave when finished; /parkour
+    start begins a timed run.
   denied: <red>You cannot use that command.
-  usage: <gray>/parkour [start|leave|checkpoint|restart|status|top] • /parkour inspect (staff)
-  finish-usage: <gray>/parkourfinish <online player> — requires all checkpoints and the finish location.
+  usage: <gray>/parkour [start|leave|checkpoint|restart|status|top] • /parkour inspect
+    (staff)
+  finish-usage: <gray>/parkourfinish <online player> — requires all checkpoints and
+    the finish location.
   offline: <yellow>That player must be online.
   status: <gray>Ilum checkpoint {checkpoint}/4 • {time}
   leaderboard-title: <aqua><bold>ILUM LEADERBOARD</bold></aqua>
   leaderboard-footer: <gray>Finish the trials • one key every 24 hours
+  npc-interrupted: <yellow>Stay near the Jedi until the conversation finishes. Speak
+    to them again to continue.

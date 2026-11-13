@@ -2035,15 +2035,15 @@
     "minecraft:stone_pressure_plate": "<gray>Craft two stone blocks side by side.\n<gray>Stone source: Tatooine or Hoth caves.",
     "minecraft:torch": "<gray>Craft coal or charcoal above a stick.\n<gray>Coal Ore: Tatooine caves; sticks from planks.",
     "minecraft:yellow_dye": "<gray>Craft a dandelion into yellow dye.\n<gray>Dandelions: brown Jawa shop on Tatooine,\n<gray>Greenery & dyes category.",
-    "minecraft:paper": "<gray>Craft three sugar cane in a row for three paper.\n<gray>Sugar cane: brown Jawa shop on Tatooine,\n<gray>Farming starters category.",
-    "minecraft:string": "<gray>Spiders drop string; cut cobwebs with a sword.\n<gray>Also: brown Jawa shop on Tatooine,\n<gray>Utility supplies category.",
-    "minecraft:rabbit_hide": "<gray>Rabbits drop rabbit hides.\n<gray>Natural rabbit spawning is currently disabled;\n<gray>no brown Jawa shop stocks rabbit hides.",
     "minecraft:black_wool": "<gray>Dye white wool black, or shear black sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
     "minecraft:blue_wool": "<gray>Dye white wool blue, or shear blue sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
+    "minecraft:paper": "<gray>Craft three sugar cane in a row for three paper.\n<gray>Sugar cane: brown Jawa shop on Tatooine,\n<gray>Farming starters category.",
     "minecraft:brown_wool": "<gray>Dye white wool brown, or shear brown sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
+    "minecraft:string": "<gray>Spiders drop string; cut cobwebs with a sword.\n<gray>Also: brown Jawa shop on Tatooine,\n<gray>Utility supplies category.",
     "minecraft:cyan_wool": "<gray>Dye white wool cyan, or shear cyan sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
     "minecraft:gray_wool": "<gray>Dye white wool gray, or shear gray sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
     "minecraft:green_wool": "<gray>Dye white wool green, or shear green sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
+    "minecraft:rabbit_hide": "<gray>Rabbits drop rabbit hides.\n<gray>Natural rabbit spawning is currently disabled;\n<gray>no brown Jawa shop stocks rabbit hides.",
     "minecraft:light_blue_wool": "<gray>Dye white wool light blue, or shear light blue sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
     "minecraft:light_gray_wool": "<gray>Dye white wool light gray, or shear light gray sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
     "minecraft:lime_wool": "<gray>Dye white wool lime, or shear lime sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
@@ -2663,5 +2663,8 @@
     "minecraft:red_harness",
     "minecraft:white_harness",
     "minecraft:yellow_harness"
-  ]
+  ],
+  "unobtainable": {
+    "ilum_kyber_crate_key": "<gray>Complete the Ilum trials, once every 24 hours."
+  }
 }

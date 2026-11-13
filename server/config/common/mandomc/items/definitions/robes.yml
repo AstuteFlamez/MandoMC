@@ -1,0 +1,55 @@
+schema-version: 1
+items:
+  robes_helmet:
+    material: LEATHER_HELMET
+    name: '<yellow>Desert Robes Hood'
+    custom-model-data: 1
+    item-model: mandomc:armor/robes_helmet
+    equipment-model: mandomc:desert_robes
+    rarity: uncommon
+    category: armor
+    lore:
+      - '<gray>Lightweight hood crafted from'
+      - '<gray>treated bantha hide.'
+      - ''
+      - '<gray>Provides minimal protection while'
+      - '<gray>shielding from harsh climates.'
+  robes_chestplate:
+    material: LEATHER_CHESTPLATE
+    name: '<yellow>Desert Robes Tunic'
+    custom-model-data: 1
+    item-model: mandomc:armor/robes_chestplate
+    equipment-model: mandomc:desert_robes
+    rarity: uncommon
+    category: armor
+    lore:
+      - '<gray>Traditional robes worn by travelers'
+      - '<gray>across desert worlds.'
+      - ''
+      - '<gray>Designed for comfort and mobility.'
+  robes_leggings:
+    material: LEATHER_LEGGINGS
+    name: '<yellow>Desert Robes Pants'
+    custom-model-data: 1
+    item-model: mandomc:armor/robes_leggings
+    equipment-model: mandomc:desert_robes
+    rarity: uncommon
+    category: armor
+    lore:
+      - '<gray>Flexible legwear made from layered'
+      - '<gray>bantha hide materials.'
+      - ''
+      - '<gray>Ideal for long journeys.'
+  robes_boots:
+    material: LEATHER_BOOTS
+    name: '<yellow>Desert Robes Boots'
+    custom-model-data: 1
+    item-model: mandomc:armor/robes_boots
+    equipment-model: mandomc:desert_robes
+    rarity: uncommon
+    category: armor
+    lore:
+      - '<gray>Soft boots crafted for traversing'
+      - '<gray>sand and rocky terrain.'
+      - ''
+      - '<gray>Lightweight and reliable.'

@@ -5,10 +5,10 @@ crates:
     key-item: ilum_kyber_crate_key
     key-mode: physical
     blocks:
-    - world: minecraft:spawnworld
-      x: -24
+    - z: 20
+      world: minecraft:spawnworld
       y: 97
-      z: 20
+      x: -24
     rewards:
     - item: blue_kyber
       amount: 1
@@ -31,6 +31,31 @@ crates:
     - item: white_kyber
       amount: 1
       weight: 1
+  koth:
+    name: <gold>KOTH Crate
+    key-item: koth_crate_key
+    key-mode: virtual
+    blocks:
+    - z: 14
+      world: minecraft:spawnworld
+      y: 97
+      x: -19
+    rewards:
+    - item: durasteel_sheet
+      amount: 16
+      weight: 35
+    - item: agrinium_sheet
+      amount: 24
+      weight: 30
+    - item: beskar_scrap
+      amount: 4
+      weight: 20
+    - item: phrik_sheet
+      amount: 4
+      weight: 10
+    - item: beskar_sheet
+      amount: 4
+      weight: 5
 messages:
   block-hint: '<gray>Left-click: Preview <dark_gray>• <aqua>Right-click: Open'
   denied: <red>You cannot manage crate keys.

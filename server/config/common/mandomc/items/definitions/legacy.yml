@@ -1,0 +1,1866 @@
+{
+  "schema-version": 1,
+  "items": {
+    "plastoid_helmet": {
+      "material": "CHAINMAIL_HELMET",
+      "name": "<aqua>Stormtrooper Helmet",
+      "custom-model-data": 1,
+      "rarity": "common",
+      "category": "armor",
+      "lore": [
+        "<gray>Standard plastoid helmet worn by",
+        "<gray>Imperial Stormtroopers.",
+        "",
+        "<gray>Integrated optics and comms",
+        "<gray>provide battlefield awareness."
+      ],
+      "item-model": "mandomc:armor/plastoid_helmet",
+      "head-model": true
+    },
+    "plastoid_chestplate": {
+      "material": "CHAINMAIL_CHESTPLATE",
+      "name": "<aqua>Stormtrooper Chestplate",
+      "custom-model-data": 1,
+      "rarity": "common",
+      "category": "armor",
+      "lore": [
+        "<gray>Standard plastoid armor worn by",
+        "<gray>Imperial Stormtroopers.",
+        "",
+        "<gray>Provides balanced protection",
+        "<gray>against blaster fire."
+      ],
+      "item-model": "mandomc:armor/plastoid_chestplate",
+      "equipment-model": "mandomc:plastoid"
+    },
+    "plastoid_leggings": {
+      "material": "CHAINMAIL_LEGGINGS",
+      "name": "<aqua>Stormtrooper Leggings",
+      "custom-model-data": 1,
+      "rarity": "common",
+      "category": "armor",
+      "lore": [
+        "<gray>Reinforced plastoid leg armor",
+        "<gray>used across Imperial forces.",
+        "",
+        "<gray>Designed for mobility while",
+        "<gray>maintaining protection."
+      ],
+      "item-model": "mandomc:armor/plastoid_leggings",
+      "equipment-model": "mandomc:plastoid"
+    },
+    "plastoid_boots": {
+      "material": "CHAINMAIL_BOOTS",
+      "name": "<aqua>Stormtrooper Boots",
+      "custom-model-data": 1,
+      "rarity": "common",
+      "category": "armor",
+      "lore": [
+        "<gray>Standard-issue combat boots",
+        "<gray>paired with plastoid armor.",
+        "",
+        "<gray>Offers stability across harsh",
+        "<gray>terrain conditions."
+      ],
+      "item-model": "mandomc:armor/plastoid_boots",
+      "equipment-model": "mandomc:plastoid"
+    },
+    "beskar_helmet": {
+      "material": "NETHERITE_HELMET",
+      "name": "<gold>Beskar Helmet",
+      "custom-model-data": 0,
+      "rarity": "legendary",
+      "category": "armor",
+      "lore": [
+        "<gray>Forged from pure beskar steel,",
+        "<gray>capable of withstanding blaster fire.",
+        "",
+        "<gray>Worn by Mandalorian warriors."
+      ],
+      "item-model": "mandomc:armor/beskar_helmet",
+      "head-model": true
+    },
+    "beskar_chestplate": {
+      "material": "NETHERITE_CHESTPLATE",
+      "name": "<gold>Beskar Chestplate",
+      "custom-model-data": 0,
+      "rarity": "legendary",
+      "category": "armor",
+      "lore": [
+        "<gray>Nearly indestructible plating forged",
+        "<gray>from refined beskar alloy.",
+        "",
+        "<gray>Provides unmatched protection."
+      ],
+      "item-model": "mandomc:armor/beskar_chestplate",
+      "equipment-model": "mandomc:beskar"
+    },
+    "beskar_leggings": {
+      "material": "NETHERITE_LEGGINGS",
+      "name": "<gold>Beskar Leggings",
+      "custom-model-data": 0,
+      "rarity": "legendary",
+      "category": "armor",
+      "lore": [
+        "<gray>Reinforced beskar plates designed",
+        "<gray>for both durability and mobility.",
+        "",
+        "<gray>Built for Mandalorian combat."
+      ],
+      "item-model": "mandomc:armor/beskar_leggings",
+      "equipment-model": "mandomc:beskar"
+    },
+    "beskar_boots": {
+      "material": "NETHERITE_BOOTS",
+      "name": "<gold>Beskar Boots",
+      "custom-model-data": 0,
+      "rarity": "legendary",
+      "category": "armor",
+      "lore": [
+        "<gray>Heavy-duty beskar footwear offering",
+        "<gray>stability and battlefield resilience.",
+        "",
+        "<gray>Forged to endure any terrain."
+      ],
+      "item-model": "mandomc:armor/beskar_boots",
+      "equipment-model": "mandomc:beskar"
+    },
+    "purple_xwing": {
+      "material": "ECHO_SHARD",
+      "name": "<dark_purple><bold>X-Wing Starfighter",
+      "custom-model-data": 4,
+      "rarity": "legendary",
+      "category": "vehicles",
+      "lore": [],
+      "item-model": "mandomc:legacy/purple_xwing"
+    },
+    "tiefighter_cockpit": {
+      "material": "ECHO_SHARD",
+      "name": "<dark_gray>TIE Fighter Cockpit",
+      "custom-model-data": 350,
+      "rarity": "rare",
+      "category": "components",
+      "lore": [
+        "<gray>The central control module of a",
+        "<gray>TIE Fighter."
+      ],
+      "item-model": "mandomc:legacy/tiefighter_cockpit"
+    },
+    "tiefighter_wing": {
+      "material": "ECHO_SHARD",
+      "name": "<dark_gray>TIE Fighter Wing",
+      "custom-model-data": 351,
+      "rarity": "rare",
+      "category": "components",
+      "lore": [
+        "<gray>A reinforced solar panel wing",
+        "<gray>used by Imperial fighters."
+      ],
+      "item-model": "mandomc:legacy/tiefighter_wing"
+    },
+    "x_wing_cockpit": {
+      "material": "ECHO_SHARD",
+      "name": "<red>X-Wing Cockpit",
+      "custom-model-data": 352,
+      "rarity": "rare",
+      "category": "components",
+      "lore": [
+        "<gray>Advanced cockpit system used in",
+        "<gray>Rebel starfighters."
+      ],
+      "item-model": "mandomc:legacy/x_wing_cockpit"
+    },
+    "x_wing_left_wing": {
+      "material": "ECHO_SHARD",
+      "name": "<red>X-Wing Left Wing",
+      "custom-model-data": 353,
+      "rarity": "rare",
+      "category": "components",
+      "lore": [
+        "<gray>A precision-engineered wing for",
+        "<gray>X-Wing starfighters."
+      ],
+      "item-model": "mandomc:legacy/x_wing_left_wing"
+    },
+    "x_wing_right_wing": {
+      "material": "ECHO_SHARD",
+      "name": "<red>X-Wing Right Wing",
+      "custom-model-data": 354,
+      "rarity": "rare",
+      "category": "components",
+      "lore": [
+        "<gray>Mirrored counterpart of the left",
+        "<gray>wing assembly."
+      ],
+      "item-model": "mandomc:legacy/x_wing_right_wing"
+    },
+    "money_note": {
+      "material": "PAPER",
+      "name": "<green>Money Note",
+      "custom-model-data": 30,
+      "rarity": "rare",
+      "category": "tokens",
+      "lore": [
+        "<gray>A printed credit note."
+      ],
+      "item-model": "mandomc:legacy/money_note"
+    },
+    "cortosis_alloy_frame": {
+      "material": "ECHO_SHARD",
+      "name": "<white>Cortosis Alloy Frame",
+      "custom-model-data": 100,
+      "rarity": "legendary",
+      "category": "materials",
+      "lore": [
+        "<gray>A rare cortosis-infused frame",
+        "<gray>resistant to energy weapons."
+      ],
+      "item-model": "mandomc:legacy/cortosis_alloy_frame"
+    },
+    "high_efficiency_energy_segment": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>High Efficiency Energy Segment",
+      "custom-model-data": 102,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Optimized for maximum energy flow",
+        "<gray>with minimal loss."
+      ],
+      "item-model": "mandomc:legacy/high_efficiency_energy_segment"
+    },
+    "high_tech_stabilizer": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>High-Tech Stabilizer",
+      "custom-model-data": 103,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Advanced stabilizer used in",
+        "<gray>precision-grade systems."
+      ],
+      "item-model": "mandomc:legacy/high_tech_stabilizer"
+    },
+    "incredibly_strong_and_light_frame": {
+      "material": "ECHO_SHARD",
+      "name": "<white>Lightweight Reinforced Frame",
+      "custom-model-data": 104,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Strong yet lightweight frame",
+        "<gray>ideal for mobility builds."
+      ],
+      "item-model": "mandomc:legacy/incredibly_strong_and_light_frame"
+    },
+    "ionized_focusing_lens": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Ionized Focusing Lens",
+      "custom-model-data": 105,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Focuses ionized energy into",
+        "<gray>precise, high-output beams."
+      ],
+      "item-model": "mandomc:legacy/ionized_focusing_lens"
+    },
+    "kyber_tech_recoil_dampener": {
+      "material": "ECHO_SHARD",
+      "name": "<light_purple>Kyber-Tech Recoil Dampener",
+      "custom-model-data": 106,
+      "rarity": "epic",
+      "category": "materials",
+      "lore": [
+        "<gray>Uses kyber energy to absorb",
+        "<gray>massive recoil forces."
+      ],
+      "item-model": "mandomc:legacy/kyber_tech_recoil_dampener"
+    },
+    "state_of_the_art_recoil_dampener": {
+      "material": "ECHO_SHARD",
+      "name": "<light_purple>State-of-the-Art Dampener",
+      "custom-model-data": 109,
+      "rarity": "epic",
+      "category": "materials",
+      "lore": [
+        "<gray>Top-tier recoil suppression system",
+        "<gray>used in elite equipment."
+      ],
+      "item-model": "mandomc:legacy/state_of_the_art_recoil_dampener"
+    },
+    "basic_emitter_coil": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Basic Emitter Coil",
+      "custom-model-data": 110,
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>A simple emitter component",
+        "<gray>used in basic devices."
+      ],
+      "item-model": "mandomc:legacy/basic_emitter_coil"
+    },
+    "basic_ion_chamber": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Basic Ion Chamber",
+      "custom-model-data": 111,
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>A basic chamber for storing",
+        "<gray>ionized particles."
+      ],
+      "item-model": "mandomc:legacy/basic_ion_chamber"
+    },
+    "basic_power_cell": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Basic Power Cell",
+      "custom-model-data": 112,
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Low-capacity energy source",
+        "<gray>for simple machinery."
+      ],
+      "item-model": "mandomc:legacy/basic_power_cell"
+    },
+    "makeshift_recoil_buffer": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Makeshift Recoil Buffer",
+      "custom-model-data": 113,
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Crude buffer offering minimal",
+        "<gray>recoil reduction."
+      ],
+      "item-model": "mandomc:legacy/makeshift_recoil_buffer"
+    },
+    "old_and_worn_barrel_liner": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Worn Barrel Liner",
+      "custom-model-data": 114,
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Degraded liner with reduced",
+        "<gray>effectiveness."
+      ],
+      "item-model": "mandomc:legacy/old_and_worn_barrel_liner"
+    },
+    "old_ion_chamber": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Old Ion Chamber",
+      "custom-model-data": 115,
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Outdated and inefficient",
+        "<gray>ion storage unit."
+      ],
+      "item-model": "mandomc:legacy/old_ion_chamber"
+    },
+    "primitive_recoil_buffer": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Primitive Recoil Buffer",
+      "custom-model-data": 116,
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Barely reduces recoil but",
+        "<gray>still somewhat useful."
+      ],
+      "item-model": "mandomc:legacy/primitive_recoil_buffer"
+    },
+    "rough_power_cell": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Rough Power Cell",
+      "custom-model-data": 117,
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Unrefined energy source",
+        "<gray>with unstable output."
+      ],
+      "item-model": "mandomc:legacy/rough_power_cell"
+    },
+    "simple_emitter_coil": {
+      "material": "ECHO_SHARD",
+      "name": "<green>Simple Emitter Coil",
+      "custom-model-data": 118,
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Improved emission efficiency",
+        "<gray>over basic models."
+      ],
+      "item-model": "mandomc:legacy/simple_emitter_coil"
+    },
+    "worn_barrel_liner": {
+      "material": "ECHO_SHARD",
+      "name": "<green>Worn Barrel Liner",
+      "custom-model-data": 119,
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Functional but shows wear",
+        "<gray>from extended use."
+      ],
+      "item-model": "mandomc:legacy/worn_barrel_liner"
+    },
+    "barrel_liner": {
+      "material": "ECHO_SHARD",
+      "name": "<green>Barrel Liner",
+      "custom-model-data": 120,
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Standard liner that enhances",
+        "<gray>weapon durability."
+      ],
+      "item-model": "mandomc:legacy/barrel_liner"
+    },
+    "durable_mid_grade_power_core": {
+      "material": "ECHO_SHARD",
+      "name": "<green>Mid-Grade Power Core",
+      "custom-model-data": 121,
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Reliable energy core used in",
+        "<gray>mid-tier equipment."
+      ],
+      "item-model": "mandomc:legacy/durable_mid_grade_power_core"
+    },
+    "durasteel_power_core": {
+      "material": "ECHO_SHARD",
+      "name": "<green>Durasteel Power Core",
+      "custom-model-data": 122,
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Reinforced core offering better",
+        "<gray>stability and durability."
+      ],
+      "item-model": "mandomc:legacy/durasteel_power_core"
+    },
+    "enhanced_ion_chamber": {
+      "material": "ECHO_SHARD",
+      "name": "<green>Enhanced Ion Chamber",
+      "custom-model-data": 123,
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Improved containment for",
+        "<gray>higher efficiency."
+      ],
+      "item-model": "mandomc:legacy/enhanced_ion_chamber"
+    },
+    "finely_tuned_emitter_coil": {
+      "material": "ECHO_SHARD",
+      "name": "<green>Finely Tuned Emitter Coil",
+      "custom-model-data": 124,
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Calibrated for precision output",
+        "<gray>and improved accuracy."
+      ],
+      "item-model": "mandomc:legacy/finely_tuned_emitter_coil"
+    },
+    "modular_recoil_buffer": {
+      "material": "ECHO_SHARD",
+      "name": "<green>Modular Recoil Buffer",
+      "custom-model-data": 125,
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Upgradeable system for adaptable",
+        "<gray>recoil control."
+      ],
+      "item-model": "mandomc:legacy/modular_recoil_buffer"
+    },
+    "precision_emitter_coil": {
+      "material": "ECHO_SHARD",
+      "name": "<green>Precision Emitter Coil",
+      "custom-model-data": 126,
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Designed for superior accuracy",
+        "<gray>in energy projection."
+      ],
+      "item-model": "mandomc:legacy/precision_emitter_coil"
+    },
+    "recoil_reduction_system": {
+      "material": "ECHO_SHARD",
+      "name": "<green>Recoil Reduction System",
+      "custom-model-data": 127,
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Reduces recoil impact for smoother",
+        "<gray>weapon handling."
+      ],
+      "item-model": "mandomc:legacy/recoil_reduction_system"
+    },
+    "reinforced_barrel_liner": {
+      "material": "ECHO_SHARD",
+      "name": "<green>Reinforced Barrel Liner",
+      "custom-model-data": 128,
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Extra durable liner built for",
+        "<gray>high-output systems."
+      ],
+      "item-model": "mandomc:legacy/reinforced_barrel_liner"
+    },
+    "reinforced_ion_chamber": {
+      "material": "ECHO_SHARD",
+      "name": "<green>Reinforced Ion Chamber",
+      "custom-model-data": 129,
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Enhanced chamber with improved",
+        "<gray>structural integrity."
+      ],
+      "item-model": "mandomc:legacy/reinforced_ion_chamber"
+    },
+    "batteries": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Batteries",
+      "custom-model-data": 131,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Portable energy storage units."
+      ],
+      "item-model": "mandomc:legacy/batteries"
+    },
+    "biosample": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Biosample",
+      "custom-model-data": 132,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Biological sample used for research."
+      ],
+      "item-model": "mandomc:legacy/biosample"
+    },
+    "circuit_board": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Circuit Board",
+      "custom-model-data": 133,
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Core component of electronic systems."
+      ],
+      "item-model": "mandomc:legacy/circuit_board"
+    },
+    "coaxium_fragment": {
+      "material": "ECHO_SHARD",
+      "name": "<light_purple>Coaxium Fragment",
+      "custom-model-data": 134,
+      "rarity": "epic",
+      "category": "materials",
+      "lore": [
+        "<gray>Highly volatile and powerful energy source."
+      ],
+      "item-model": "mandomc:legacy/coaxium_fragment"
+    },
+    "cryo_gel": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Cryo Gel",
+      "custom-model-data": 135,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Used to cool high-temperature systems."
+      ],
+      "item-model": "mandomc:legacy/cryo_gel"
+    },
+    "detonator": {
+      "material": "ECHO_SHARD",
+      "name": "<red>Detonator",
+      "custom-model-data": 136,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Triggers explosive reactions."
+      ],
+      "item-model": "mandomc:legacy/detonator"
+    },
+    "detonite": {
+      "material": "ECHO_SHARD",
+      "name": "<red>Detonite",
+      "custom-model-data": 137,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Highly explosive compound."
+      ],
+      "item-model": "mandomc:legacy/detonite"
+    },
+    "duracrete_chunk": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Duracrete Chunk",
+      "custom-model-data": 138,
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Basic construction material."
+      ],
+      "item-model": "mandomc:legacy/duracrete_chunk"
+    },
+    "duraplast": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Duraplast",
+      "custom-model-data": 139,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Lightweight yet durable polymer."
+      ],
+      "item-model": "mandomc:legacy/duraplast"
+    },
+    "glitterstim_fibers": {
+      "material": "ECHO_SHARD",
+      "name": "<light_purple>Glitterstim Fibers",
+      "custom-model-data": 141,
+      "rarity": "epic",
+      "category": "materials",
+      "lore": [
+        "<gray>Rare fibers with unusual properties."
+      ],
+      "item-model": "mandomc:legacy/glitterstim_fibers"
+    },
+    "gundark_sinew": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Gundark Sinew",
+      "custom-model-data": 142,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Strong organic material."
+      ],
+      "item-model": "mandomc:legacy/gundark_sinew"
+    },
+    "hutta_silk": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Hutta Silk",
+      "custom-model-data": 143,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Luxurious and durable fabric."
+      ],
+      "item-model": "mandomc:legacy/hutta_silk"
+    },
+    "hyperspace_coil_fragment": {
+      "material": "ECHO_SHARD",
+      "name": "<light_purple>Hyperspace Coil Fragment",
+      "custom-model-data": 144,
+      "rarity": "epic",
+      "category": "materials",
+      "lore": [
+        "<gray>Fragment of a hyperspace drive component."
+      ],
+      "item-model": "mandomc:legacy/hyperspace_coil_fragment"
+    },
+    "isotope_5": {
+      "material": "ECHO_SHARD",
+      "name": "<light_purple>Isotope-5",
+      "custom-model-data": 145,
+      "rarity": "epic",
+      "category": "materials",
+      "lore": [
+        "<gray>Extremely rare and unstable isotope."
+      ],
+      "item-model": "mandomc:legacy/isotope_5"
+    },
+    "metal_casing": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Metal Casing",
+      "custom-model-data": 146,
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Basic structural component."
+      ],
+      "item-model": "mandomc:legacy/metal_casing"
+    },
+    "metal_scrap": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Metal Scrap",
+      "custom-model-data": 147,
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Discarded pieces of metal."
+      ],
+      "item-model": "mandomc:legacy/metal_scrap"
+    },
+    "micro_servo_motor": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Micro Servo Motor",
+      "custom-model-data": 148,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Precision motor for mechanical systems."
+      ],
+      "item-model": "mandomc:legacy/micro_servo_motor"
+    },
+    "myocaine_gel": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Myocaine Gel",
+      "custom-model-data": 149,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Used for biological enhancement or healing."
+      ],
+      "item-model": "mandomc:legacy/myocaine_gel"
+    },
+    "nova_crystal_dust": {
+      "material": "ECHO_SHARD",
+      "name": "<light_purple>Nova Crystal Dust",
+      "custom-model-data": 150,
+      "rarity": "epic",
+      "category": "materials",
+      "lore": [
+        "<gray>Residue of highly energetic crystals."
+      ],
+      "item-model": "mandomc:legacy/nova_crystal_dust"
+    },
+    "plastoid": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Plastoid",
+      "custom-model-data": 151,
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Common armor material."
+      ],
+      "item-model": "mandomc:legacy/plastoid"
+    },
+    "quadanium_steel": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Quadanium Steel",
+      "custom-model-data": 152,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>High-strength construction alloy."
+      ],
+      "item-model": "mandomc:legacy/quadanium_steel"
+    },
+    "refined_coaxium": {
+      "material": "ECHO_SHARD",
+      "name": "<light_purple>Refined Coaxium",
+      "custom-model-data": 153,
+      "rarity": "epic",
+      "category": "materials",
+      "lore": [
+        "<gray>Stabilized form of raw coaxium."
+      ],
+      "item-model": "mandomc:legacy/refined_coaxium"
+    },
+    "refined_kolto": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Refined Kolto",
+      "custom-model-data": 154,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Medical substance with healing properties."
+      ],
+      "item-model": "mandomc:legacy/refined_kolto"
+    },
+    "ronto_hide": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Ronto Hide",
+      "custom-model-data": 155,
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Tough organic material."
+      ],
+      "item-model": "mandomc:legacy/ronto_hide"
+    },
+    "ryll_spice": {
+      "material": "ECHO_SHARD",
+      "name": "<light_purple>Ryll Spice",
+      "custom-model-data": 156,
+      "rarity": "epic",
+      "category": "materials",
+      "lore": [
+        "<gray>Highly valuable and volatile substance."
+      ],
+      "item-model": "mandomc:legacy/ryll_spice"
+    },
+    "scrap_heap": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Scrap Heap",
+      "custom-model-data": 157,
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>A pile of discarded parts",
+        "<gray>waiting to be repurposed."
+      ],
+      "item-model": "mandomc:legacy/scrap_heap"
+    },
+    "switch": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Switch",
+      "custom-model-data": 158,
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>A basic control component",
+        "<gray>used in simple circuits."
+      ],
+      "item-model": "mandomc:legacy/switch"
+    },
+    "synthetic_polymer": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Synthetic Polymer",
+      "custom-model-data": 159,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Engineered material with enhanced",
+        "<gray>flexibility and durability."
+      ],
+      "item-model": "mandomc:legacy/synthetic_polymer"
+    },
+    "synthrubber": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Synthrubber",
+      "custom-model-data": 160,
+      "rarity": "rare",
+      "category": "materials",
+      "lore": [
+        "<gray>Artificial rubber compound used",
+        "<gray>in advanced machinery."
+      ],
+      "item-model": "mandomc:legacy/synthrubber"
+    },
+    "tibanna_gas_vial": {
+      "material": "ECHO_SHARD",
+      "name": "<light_purple>Tibanna Gas Vial",
+      "custom-model-data": 161,
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>A pressurized vial of tibanna gas",
+        "<gray>used to power blaster systems."
+      ],
+      "item-model": "mandomc:legacy/tibanna_gas_vial"
+    },
+    "zersium": {
+      "material": "ECHO_SHARD",
+      "name": "<light_purple>Zersium",
+      "custom-model-data": 164,
+      "rarity": "epic",
+      "category": "materials",
+      "lore": [
+        "<gray>A rare and mysterious element",
+        "<gray>with powerful unknown properties."
+      ],
+      "item-model": "mandomc:legacy/zersium"
+    },
+    "bantha_wrap": {
+      "material": "COOKED_BEEF",
+      "name": "<green>Bantha Wrap",
+      "custom-model-data": 1,
+      "rarity": "uncommon",
+      "category": "consumables",
+      "lore": [
+        "<gray>A hearty wrap made from seasoned",
+        "<gray>bantha meat and fresh ingredients."
+      ],
+      "item-model": "mandomc:legacy/bantha_wrap"
+    },
+    "rhydonium_barrel": {
+      "material": "ECHO_SHARD",
+      "name": "<red>Rhydonium Barrel",
+      "custom-model-data": 10,
+      "rarity": "rare",
+      "category": "fuel",
+      "lore": [
+        "<gray>A volatile starship-grade fuel",
+        "<gray>stored in reinforced alloy barrels."
+      ],
+      "item-model": "mandomc:legacy/rhydonium_barrel"
+    },
+    "rhydonium_barrel_block": {
+      "material": "ECHO_SHARD",
+      "name": "<red>Empty Rhydonium Barrel Model",
+      "custom-model-data": 11,
+      "rarity": "rare",
+      "category": "fuel",
+      "lore": [],
+      "item-model": "mandomc:legacy/rhydonium_barrel_block"
+    },
+    "rhydonium_barrel_quarter": {
+      "material": "ECHO_SHARD",
+      "name": "<red>Quarter Rhydonium Barrel Model",
+      "custom-model-data": 12,
+      "rarity": "rare",
+      "category": "fuel",
+      "lore": [],
+      "item-model": "mandomc:legacy/rhydonium_barrel_quarter"
+    },
+    "rhydonium_barrel_half": {
+      "material": "ECHO_SHARD",
+      "name": "<red>Half Rhydonium Barrel Model",
+      "custom-model-data": 13,
+      "rarity": "rare",
+      "category": "fuel",
+      "lore": [],
+      "item-model": "mandomc:legacy/rhydonium_barrel_half"
+    },
+    "rhydonium_barrel_three": {
+      "material": "ECHO_SHARD",
+      "name": "<red>3/4 Rhydonium Barrel Model",
+      "custom-model-data": 14,
+      "rarity": "rare",
+      "category": "fuel",
+      "lore": [],
+      "item-model": "mandomc:legacy/rhydonium_barrel_three"
+    },
+    "rhydonium_barrel_full": {
+      "material": "ECHO_SHARD",
+      "name": "<red>Full Rhydonium Barrel Model",
+      "custom-model-data": 15,
+      "rarity": "rare",
+      "category": "fuel",
+      "lore": [],
+      "item-model": "mandomc:legacy/rhydonium_barrel_full"
+    },
+    "rhydonium_canister": {
+      "material": "ECHO_SHARD",
+      "name": "<red>Rhydonium Canister",
+      "custom-model-data": 7,
+      "rarity": "uncommon",
+      "category": "fuel",
+      "lore": [
+        "<gray>A portable container used",
+        "<gray>to transport rhydonium fuel."
+      ],
+      "item-model": "mandomc:legacy/rhydonium_canister"
+    },
+    "straight_hilt": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Straight Hilt",
+      "custom-model-data": 168,
+      "rarity": "uncommon",
+      "category": "components",
+      "lore": [
+        "<gray>A classic hilt design,",
+        "<gray>favored by Jedi for its balance."
+      ],
+      "item-model": "mandomc:legacy/straight_hilt"
+    },
+    "great_hilt": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Great Hilt",
+      "custom-model-data": 166,
+      "rarity": "uncommon",
+      "category": "components",
+      "lore": [
+        "<gray>A heavy, two-handed hilt",
+        "<gray>built for power and stability."
+      ],
+      "item-model": "mandomc:legacy/great_hilt"
+    },
+    "whip_hilt": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Whip Hilt",
+      "custom-model-data": 169,
+      "rarity": "uncommon",
+      "category": "components",
+      "lore": [
+        "<gray>A curved hilt favored by",
+        "<gray>unconventional duelists."
+      ],
+      "item-model": "mandomc:legacy/whip_hilt"
+    },
+    "pike_hilt": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Pike Hilt",
+      "custom-model-data": 167,
+      "rarity": "uncommon",
+      "category": "components",
+      "lore": [
+        "<gray>An extended hilt for defensive",
+        "<gray>and long-reaching strikes."
+      ],
+      "item-model": "mandomc:legacy/pike_hilt"
+    },
+    "fang_hilt": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Fang Hilt",
+      "custom-model-data": 165,
+      "rarity": "uncommon",
+      "category": "components",
+      "lore": [
+        "<gray>A compact, aggressive hilt",
+        "<gray>designed for swift strikes."
+      ],
+      "item-model": "mandomc:legacy/fang_hilt"
+    },
+    "keycard": {
+      "material": "ECHO_SHARD",
+      "name": "<aqua>Keycard",
+      "custom-model-data": 404,
+      "rarity": "uncommon",
+      "category": "keys",
+      "lore": [
+        "<gray>A security access card."
+      ],
+      "item-model": "mandomc:legacy/keycard"
+    },
+    "vote_crate_key": {
+      "material": "ECHO_SHARD",
+      "name": "<green>Vote Crate Key",
+      "custom-model-data": 403,
+      "rarity": "common",
+      "category": "keys",
+      "lore": [
+        "<gray>A token for supporting the server."
+      ],
+      "item-model": "mandomc:legacy/vote_crate_key"
+    },
+    "pathfinder_crate_key": {
+      "material": "ECHO_SHARD",
+      "name": "<gold>Pathfinder Crate Key",
+      "custom-model-data": 408,
+      "rarity": "rare",
+      "category": "keys",
+      "lore": [
+        "<gray>Recovered from distant routes",
+        "<gray>and unexplored territories."
+      ],
+      "item-model": "mandomc:legacy/pathfinder_crate_key"
+    },
+    "voyager_crate_key": {
+      "material": "ECHO_SHARD",
+      "name": "<red>Voyager Crate Key",
+      "custom-model-data": 407,
+      "rarity": "epic",
+      "category": "keys",
+      "lore": [
+        "<gray>Carried across hyperspace lanes,",
+        "<gray>holding valuable cargo access."
+      ],
+      "item-model": "mandomc:legacy/voyager_crate_key"
+    },
+    "wayfarer_crate_key": {
+      "material": "ECHO_SHARD",
+      "name": "<blue>Wayfarer Crate Key",
+      "custom-model-data": 401,
+      "rarity": "legendary",
+      "category": "keys",
+      "lore": [
+        "<gray>Belonging to seasoned travelers",
+        "<gray>who traverse the galaxy’s edges."
+      ],
+      "item-model": "mandomc:legacy/wayfarer_crate_key"
+    },
+    "red_kyber": {
+      "material": "NETHER_STAR",
+      "name": "<red>Red Kyber Crystal",
+      "custom-model-data": 1,
+      "rarity": "rare",
+      "category": "crystals",
+      "lore": [
+        "<gray>A corrupted kyber crystal",
+        "<gray>bled through the dark side."
+      ],
+      "item-model": "mandomc:legacy/red_kyber"
+    },
+    "orange_kyber": {
+      "material": "NETHER_STAR",
+      "name": "<gold>Orange Kyber Crystal",
+      "custom-model-data": 2,
+      "rarity": "rare",
+      "category": "crystals",
+      "lore": [
+        "<gray>A rare kyber crystal with",
+        "<gray>a brilliant amber glow."
+      ],
+      "item-model": "mandomc:legacy/orange_kyber"
+    },
+    "yellow_kyber": {
+      "material": "NETHER_STAR",
+      "name": "<yellow>Yellow Kyber Crystal",
+      "custom-model-data": 3,
+      "rarity": "rare",
+      "category": "crystals",
+      "lore": [
+        "<gray>Favored by temple guards",
+        "<gray>of the Jedi Order."
+      ],
+      "item-model": "mandomc:legacy/yellow_kyber"
+    },
+    "green_kyber": {
+      "material": "NETHER_STAR",
+      "name": "<green>Green Kyber Crystal",
+      "custom-model-data": 4,
+      "rarity": "rare",
+      "category": "crystals",
+      "lore": [
+        "<gray>A crystal often wielded by",
+        "<gray>Jedi deeply connected to the Force."
+      ],
+      "item-model": "mandomc:legacy/green_kyber"
+    },
+    "purple_kyber": {
+      "material": "NETHER_STAR",
+      "name": "<dark_purple>Purple Kyber Crystal",
+      "custom-model-data": 5,
+      "rarity": "rare",
+      "category": "crystals",
+      "lore": [
+        "<gray>A rare crystal associated",
+        "<gray>with balance between light and dark."
+      ],
+      "item-model": "mandomc:legacy/purple_kyber"
+    },
+    "white_kyber": {
+      "material": "NETHER_STAR",
+      "name": "<white>White Kyber Crystal",
+      "custom-model-data": 6,
+      "rarity": "rare",
+      "category": "crystals",
+      "lore": [
+        "<gray>A purified kyber crystal",
+        "<gray>free from the influence of the dark side."
+      ],
+      "item-model": "mandomc:legacy/white_kyber"
+    },
+    "blue_kyber": {
+      "material": "NETHER_STAR",
+      "name": "<blue>Blue Kyber Crystal",
+      "custom-model-data": 7,
+      "rarity": "rare",
+      "category": "crystals",
+      "lore": [
+        "<gray>The most common crystal",
+        "<gray>used by Jedi guardians."
+      ],
+      "item-model": "mandomc:legacy/blue_kyber"
+    },
+    "agrinium_scrap": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Agrinium Scrap",
+      "custom-model-data": 250,
+      "rarity": "common",
+      "category": "metals",
+      "lore": [
+        "<gray>Fragments of agrinium awaiting refinement."
+      ],
+      "item-model": "mandomc:legacy/agrinium_scrap"
+    },
+    "agrinium": {
+      "material": "IRON_INGOT",
+      "name": "<gray>Agrinium",
+      "custom-model-data": 200,
+      "rarity": "common",
+      "category": "metals",
+      "lore": [
+        "<gray>A lightweight industrial metal."
+      ],
+      "item-model": "mandomc:legacy/agrinium"
+    },
+    "agrinium_sheet": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Agrinium Sheet",
+      "custom-model-data": 300,
+      "rarity": "common",
+      "category": "metals",
+      "lore": [
+        "<gray>Refined sheet of agrinium."
+      ],
+      "item-model": "mandomc:legacy/agrinium_sheet"
+    },
+    "aurodium_scrap": {
+      "material": "ECHO_SHARD",
+      "name": "<gold>Aurodium Scrap",
+      "custom-model-data": 251,
+      "rarity": "uncommon",
+      "category": "metals",
+      "lore": [
+        "<gray>Fragments of a precious golden alloy."
+      ],
+      "item-model": "mandomc:legacy/aurodium_scrap"
+    },
+    "aurodium": {
+      "material": "ECHO_SHARD",
+      "name": "<gold>Aurodium",
+      "custom-model-data": 201,
+      "rarity": "uncommon",
+      "category": "metals",
+      "lore": [
+        "<gray>A valuable golden alloy."
+      ],
+      "item-model": "mandomc:legacy/aurodium"
+    },
+    "aurodium_sheet": {
+      "material": "ECHO_SHARD",
+      "name": "<gold>Aurodium Sheet",
+      "custom-model-data": 301,
+      "rarity": "uncommon",
+      "category": "metals",
+      "lore": [
+        "<gray>A refined golden metal sheet."
+      ],
+      "item-model": "mandomc:legacy/aurodium_sheet"
+    },
+    "beskar_scrap": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Beskar Scrap",
+      "custom-model-data": 252,
+      "rarity": "epic",
+      "category": "metals",
+      "lore": [
+        "<gray>Fragments of legendary Beskar."
+      ],
+      "item-model": "mandomc:legacy/beskar_scrap"
+    },
+    "beskar": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Raw Beskar",
+      "custom-model-data": 202,
+      "rarity": "epic",
+      "category": "metals",
+      "lore": [
+        "<gray>The legendary Mandalorian metal."
+      ],
+      "item-model": "mandomc:legacy/beskar"
+    },
+    "beskar_sheet": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Beskar Sheet",
+      "custom-model-data": 302,
+      "rarity": "epic",
+      "category": "metals",
+      "lore": [
+        "<gray>A refined sheet of Beskar."
+      ],
+      "item-model": "mandomc:legacy/beskar_sheet"
+    },
+    "cortosis_scrap": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Cortosis Scrap",
+      "custom-model-data": 253,
+      "rarity": "rare",
+      "category": "metals",
+      "lore": [
+        "<gray>Fragments of cortosis."
+      ],
+      "item-model": "mandomc:legacy/cortosis_scrap"
+    },
+    "cortosis": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Cortosis",
+      "custom-model-data": 203,
+      "rarity": "rare",
+      "category": "metals",
+      "lore": [
+        "<gray>Disrupts energy weapons."
+      ],
+      "item-model": "mandomc:legacy/cortosis"
+    },
+    "cortosis_sheet": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Cortosis Sheet",
+      "custom-model-data": 303,
+      "rarity": "rare",
+      "category": "metals",
+      "lore": [
+        "<gray>Refined cortosis sheet."
+      ],
+      "item-model": "mandomc:legacy/cortosis_sheet"
+    },
+    "durasteel_scrap": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Durasteel Scrap",
+      "custom-model-data": 254,
+      "rarity": "uncommon",
+      "category": "metals",
+      "lore": [
+        "<gray>Scraps of durasteel."
+      ],
+      "item-model": "mandomc:legacy/durasteel_scrap"
+    },
+    "durasteel": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Durasteel",
+      "custom-model-data": 204,
+      "rarity": "uncommon",
+      "category": "metals",
+      "lore": [
+        "<gray>A strong industrial alloy."
+      ],
+      "item-model": "mandomc:legacy/durasteel"
+    },
+    "durasteel_sheet": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Durasteel Sheet",
+      "custom-model-data": 304,
+      "rarity": "uncommon",
+      "category": "metals",
+      "lore": [
+        "<gray>A tough, durable metal sheet."
+      ],
+      "item-model": "mandomc:legacy/durasteel_sheet"
+    },
+    "electrum_scrap": {
+      "material": "ECHO_SHARD",
+      "name": "<gold>Electrum Scrap",
+      "custom-model-data": 255,
+      "rarity": "uncommon",
+      "category": "metals",
+      "lore": [
+        "<gray>Fragments of electrum."
+      ],
+      "item-model": "mandomc:legacy/electrum_scrap"
+    },
+    "electrum": {
+      "material": "REDSTONE",
+      "name": "<gold>Electrum",
+      "custom-model-data": 205,
+      "rarity": "uncommon",
+      "category": "metals",
+      "lore": [
+        "<gray>A conductive golden alloy."
+      ],
+      "item-model": "mandomc:legacy/electrum"
+    },
+    "electrum_sheet": {
+      "material": "ECHO_SHARD",
+      "name": "<gold>Electrum Sheet",
+      "custom-model-data": 305,
+      "rarity": "uncommon",
+      "category": "metals",
+      "lore": [
+        "<gray>Thin sheet for precision parts."
+      ],
+      "item-model": "mandomc:legacy/electrum_sheet"
+    },
+    "lommite_scrap": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Lommite Scrap",
+      "custom-model-data": 256,
+      "rarity": "common",
+      "category": "metals",
+      "lore": [
+        "<gray>Basic refining material."
+      ],
+      "item-model": "mandomc:legacy/lommite_scrap"
+    },
+    "lommite": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Lommite",
+      "custom-model-data": 206,
+      "rarity": "common",
+      "category": "metals",
+      "lore": [
+        "<gray>A common refining metal."
+      ],
+      "item-model": "mandomc:legacy/lommite"
+    },
+    "lommite_sheet": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Lommite Sheet",
+      "custom-model-data": 306,
+      "rarity": "common",
+      "category": "metals",
+      "lore": [
+        "<gray>Basic metal sheet."
+      ],
+      "item-model": "mandomc:legacy/lommite_sheet"
+    },
+    "mandalorian_iron_scrap": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Mandalorian Iron Scrap",
+      "custom-model-data": 257,
+      "rarity": "epic",
+      "category": "metals",
+      "lore": [
+        "<gray>Fragments of Mandalorian iron."
+      ],
+      "item-model": "mandomc:legacy/mandalorian_iron_scrap"
+    },
+    "mandalorian_iron": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Mandalorian Iron",
+      "custom-model-data": 207,
+      "rarity": "epic",
+      "category": "metals",
+      "lore": [
+        "<gray>An extremely durable metal."
+      ],
+      "item-model": "mandomc:legacy/mandalorian_iron"
+    },
+    "mandalorian_sheet": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Mandalorian Sheet",
+      "custom-model-data": 307,
+      "rarity": "epic",
+      "category": "metals",
+      "lore": [
+        "<gray>Highly durable forged sheet."
+      ],
+      "item-model": "mandomc:legacy/mandalorian_sheet"
+    },
+    "neuranium_scrap": {
+      "material": "ECHO_SHARD",
+      "name": "<dark_gray>Neuranium Scrap",
+      "custom-model-data": 258,
+      "rarity": "rare",
+      "category": "metals",
+      "lore": [
+        "<gray>Dense reactor-grade fragments."
+      ],
+      "item-model": "mandomc:legacy/neuranium_scrap"
+    },
+    "neuranium": {
+      "material": "ECHO_SHARD",
+      "name": "<dark_gray>Neuranium",
+      "custom-model-data": 208,
+      "rarity": "rare",
+      "category": "metals",
+      "lore": [
+        "<gray>A dense reactor metal."
+      ],
+      "item-model": "mandomc:legacy/neuranium"
+    },
+    "neuranium_sheet": {
+      "material": "ECHO_SHARD",
+      "name": "<dark_gray>Neuranium Sheet",
+      "custom-model-data": 308,
+      "rarity": "rare",
+      "category": "metals",
+      "lore": [
+        "<gray>Used in high-energy systems."
+      ],
+      "item-model": "mandomc:legacy/neuranium_sheet"
+    },
+    "phrik_scrap": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Phrik Scrap",
+      "custom-model-data": 259,
+      "rarity": "rare",
+      "category": "metals",
+      "lore": [
+        "<gray>Lightsaber-resistant fragments."
+      ],
+      "item-model": "mandomc:legacy/phrik_scrap"
+    },
+    "phrik": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Phrik",
+      "custom-model-data": 209,
+      "rarity": "rare",
+      "category": "metals",
+      "lore": [
+        "<gray>Resistant to lightsabers."
+      ],
+      "item-model": "mandomc:legacy/phrik"
+    },
+    "phrik_sheet": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Phrik Sheet",
+      "custom-model-data": 309,
+      "rarity": "rare",
+      "category": "metals",
+      "lore": [
+        "<gray>Advanced resistant alloy."
+      ],
+      "item-model": "mandomc:legacy/phrik_sheet"
+    },
+    "songsteel_scrap": {
+      "material": "ECHO_SHARD",
+      "name": "<light_purple>Songsteel Scrap",
+      "custom-model-data": 260,
+      "rarity": "epic",
+      "category": "metals",
+      "lore": [
+        "<gray>Rare refined fragments."
+      ],
+      "item-model": "mandomc:legacy/songsteel_scrap"
+    },
+    "songsteel": {
+      "material": "ECHO_SHARD",
+      "name": "<light_purple>Songsteel",
+      "custom-model-data": 210,
+      "rarity": "epic",
+      "category": "metals",
+      "lore": [
+        "<gray>A rare elegant alloy."
+      ],
+      "item-model": "mandomc:legacy/songsteel"
+    },
+    "songsteel_sheet": {
+      "material": "ECHO_SHARD",
+      "name": "<light_purple>Songsteel Sheet",
+      "custom-model-data": 310,
+      "rarity": "epic",
+      "category": "metals",
+      "lore": [
+        "<gray>Refined songsteel sheet."
+      ],
+      "item-model": "mandomc:legacy/songsteel_sheet"
+    },
+    "durasteel_helmet": {
+      "material": "DIAMOND_HELMET",
+      "name": "<aqua>Durasteel Helmet",
+      "custom-model-data": 1,
+      "item-model": "mandomc:armor/durasteel_helmet",
+      "rarity": "rare",
+      "category": "armor",
+      "lore": [
+        "<gray>Reinforced durasteel armor."
+      ],
+      "head-model": true
+    },
+    "durasteel_chestplate": {
+      "material": "DIAMOND_CHESTPLATE",
+      "name": "<aqua>Durasteel Chestplate",
+      "custom-model-data": 1,
+      "item-model": "mandomc:armor/durasteel_chestplate",
+      "rarity": "rare",
+      "category": "armor",
+      "lore": [
+        "<gray>Reinforced durasteel armor."
+      ],
+      "equipment-model": "mandomc:durasteel"
+    },
+    "durasteel_leggings": {
+      "material": "DIAMOND_LEGGINGS",
+      "name": "<aqua>Durasteel Leggings",
+      "custom-model-data": 1,
+      "item-model": "mandomc:armor/durasteel_leggings",
+      "rarity": "rare",
+      "category": "armor",
+      "lore": [
+        "<gray>Reinforced durasteel armor."
+      ],
+      "equipment-model": "mandomc:durasteel"
+    },
+    "durasteel_boots": {
+      "material": "DIAMOND_BOOTS",
+      "name": "<aqua>Durasteel Boots",
+      "custom-model-data": 1,
+      "item-model": "mandomc:armor/durasteel_boots",
+      "rarity": "rare",
+      "category": "armor",
+      "lore": [
+        "<gray>Reinforced durasteel armor."
+      ],
+      "equipment-model": "mandomc:durasteel"
+    },
+    "durasteel_pickaxe": {
+      "material": "DIAMOND_PICKAXE",
+      "name": "<aqua>Durasteel Pickaxe",
+      "custom-model-data": 1,
+      "item-model": "mandomc:tools/durasteel_pickaxe",
+      "rarity": "rare",
+      "category": "tools",
+      "lore": [
+        "<gray>A durable tool forged for field work."
+      ]
+    },
+    "durasteel_shovel": {
+      "material": "DIAMOND_SHOVEL",
+      "name": "<aqua>Durasteel Shovel",
+      "custom-model-data": 1,
+      "item-model": "mandomc:tools/durasteel_shovel",
+      "rarity": "rare",
+      "category": "tools",
+      "lore": [
+        "<gray>A durable tool forged for field work."
+      ]
+    },
+    "durasteel_wrench": {
+      "material": "DIAMOND_HOE",
+      "name": "<aqua>Durasteel Wrench",
+      "custom-model-data": 1,
+      "item-model": "mandomc:tools/durasteel_wrench",
+      "rarity": "rare",
+      "category": "tools",
+      "lore": [
+        "<gray>Repairs damaged, parked vehicles.",
+        "",
+        "<yellow>[<key:key.sneak>] + [<key:key.use>] Start repairing",
+        "<gray>Keep crouching nearby with this wrench held."
+      ]
+    },
+    "beskar_pickaxe": {
+      "material": "NETHERITE_PICKAXE",
+      "name": "<aqua>Beskar Pickaxe",
+      "custom-model-data": 1,
+      "item-model": "mandomc:tools/beskar_pickaxe",
+      "rarity": "legendary",
+      "category": "tools",
+      "lore": [
+        "<gray>A durable tool forged for field work."
+      ]
+    },
+    "beskar_shovel": {
+      "material": "NETHERITE_SHOVEL",
+      "name": "<aqua>Beskar Shovel",
+      "custom-model-data": 1,
+      "item-model": "mandomc:tools/beskar_shovel",
+      "rarity": "legendary",
+      "category": "tools",
+      "lore": [
+        "<gray>A durable tool forged for field work."
+      ]
+    },
+    "uwing_wing": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>U-Wing Wing",
+      "custom-model-data": 913,
+      "rarity": "rare",
+      "category": "components",
+      "lore": [
+        "<gray>A dedicated vehicle assembly component."
+      ],
+      "item-model": "mandomc:vehicles/components/uwing_wing"
+    },
+    "agrinium_shovel": {
+      "material": "IRON_SHOVEL",
+      "name": "<green>Agrinium Shovel",
+      "custom-model-data": 1,
+      "item-model": "mandomc:tools/agrinium_shovel",
+      "rarity": "uncommon",
+      "category": "tools",
+      "lore": [
+        "<gray>A durable tool forged for field work."
+      ]
+    },
+    "speederbike_repulsor": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Speeder Bike Repulsor",
+      "custom-model-data": 911,
+      "rarity": "rare",
+      "category": "components",
+      "lore": [
+        "<gray>A dedicated vehicle assembly component."
+      ],
+      "item-model": "mandomc:vehicles/components/speederbike_repulsor"
+    },
+    "speederbike_chassis": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>Speeder Bike Chassis",
+      "custom-model-data": 910,
+      "rarity": "rare",
+      "category": "components",
+      "lore": [
+        "<gray>A dedicated vehicle assembly component."
+      ],
+      "item-model": "mandomc:vehicles/components/speederbike_chassis"
+    },
+    "agrinium_pickaxe": {
+      "material": "IRON_PICKAXE",
+      "name": "<green>Agrinium Pickaxe",
+      "custom-model-data": 1,
+      "item-model": "mandomc:tools/agrinium_pickaxe",
+      "rarity": "uncommon",
+      "category": "tools",
+      "lore": [
+        "<gray>A durable tool forged for field work."
+      ]
+    },
+    "uwing_cockpit": {
+      "material": "ECHO_SHARD",
+      "name": "<gray>U-Wing Cockpit",
+      "custom-model-data": 912,
+      "rarity": "rare",
+      "category": "components",
+      "lore": [
+        "<gray>A dedicated vehicle assembly component."
+      ],
+      "item-model": "mandomc:vehicles/components/uwing_cockpit"
+    },
+    "agrinium_block": {
+      "material": "IRON_BLOCK",
+      "name": "<gray>Agrinium Block",
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Stores nine Agrinium ingots.",
+        "<gray>Craft back into nine matching ingots."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:iron_block"
+    },
+    "agrinium_ore": {
+      "material": "IRON_ORE",
+      "name": "<gray>Agrinium Ore",
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Agrinium Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:iron_ore"
+    },
+    "deepslate_agrinium_ore": {
+      "material": "DEEPSLATE_IRON_ORE",
+      "name": "<gray>Deepslate Agrinium Ore",
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Agrinium Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:deepslate_iron_ore"
+    },
+    "durasteel_block": {
+      "material": "DIAMOND_BLOCK",
+      "name": "<gray>Durasteel Block",
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Stores nine Durasteel ingots.",
+        "<gray>Craft back into nine matching ingots."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:diamond_block"
+    },
+    "durasteel_ore": {
+      "material": "DIAMOND_ORE",
+      "name": "<gray>Durasteel Ore",
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Durasteel Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:diamond_ore"
+    },
+    "deepslate_durasteel_ore": {
+      "material": "DEEPSLATE_DIAMOND_ORE",
+      "name": "<gray>Deepslate Durasteel Ore",
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Durasteel Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:deepslate_diamond_ore"
+    },
+    "electrum_block": {
+      "material": "REDSTONE_BLOCK",
+      "name": "<gray>Electrum Block",
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Stores nine Electrum ingots.",
+        "<gray>Craft back into nine matching ingots."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:redstone_block"
+    },
+    "electrum_ore": {
+      "material": "REDSTONE_ORE",
+      "name": "<gray>Electrum Ore",
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Electrum Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:redstone_ore"
+    },
+    "deepslate_electrum_ore": {
+      "material": "DEEPSLATE_REDSTONE_ORE",
+      "name": "<gray>Deepslate Electrum Ore",
+      "rarity": "uncommon",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Electrum Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:deepslate_redstone_ore"
+    },
+    "beskar_block": {
+      "material": "NETHERITE_BLOCK",
+      "name": "<gray>Beskar Block",
+      "rarity": "epic",
+      "category": "materials",
+      "lore": [
+        "<gray>Stores nine Beskar ingots.",
+        "<gray>Craft back into nine matching ingots."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:netherite_block"
+    },
+    "beskar_ore": {
+      "material": "NETHER_GOLD_ORE",
+      "name": "<gray>Beskar Ore",
+      "rarity": "epic",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Beskar Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:nether_gold_ore"
+    },
+    "deepslate_beskar_ore": {
+      "material": "ANCIENT_DEBRIS",
+      "name": "<gray>Deepslate Beskar Ore",
+      "rarity": "epic",
+      "category": "materials",
+      "lore": [
+        "<gray>Mining yields Beskar Scraps.",
+        "<gray>Silk Touch preserves this ore block."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:ancient_debris"
+    },
+    "raw_agrinium": {
+      "material": "RAW_IRON",
+      "name": "<gray>Raw Agrinium",
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Retained raw metal for native refining.",
+        "<gray>Current Agrinium ores yield scraps."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:raw_iron"
+    },
+    "raw_agrinium_block": {
+      "material": "RAW_IRON_BLOCK",
+      "name": "<gray>Raw Agrinium Block",
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Retained raw metal for native refining.",
+        "<gray>Current Agrinium ores yield scraps."
+      ],
+      "custom-model-data": 0,
+      "item-model": "minecraft:raw_iron_block"
+    }
+  }
+}

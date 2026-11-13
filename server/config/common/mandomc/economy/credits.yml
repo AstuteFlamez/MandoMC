@@ -1,7 +1,5 @@
 schema-version: 1
-# First-time players only; existing accounts and returning players keep their balances.
-initial-balance: '2500.00'
-# Balances are stored as integer cents in data/credits-data.yml.
+# New players receive the starting balance once; existing and returning balances are preserved.
 messages:
   balance: '<gray><player>: <gold>$<amount>'
   paid: '<gray>Paid <gold>$<amount> <gray>to <white><player><gray>.'
@@ -20,3 +18,5 @@ messages:
   denied: '<red>You do not have permission.'
   saving: '<yellow>A change is being saved. Try again in a moment.'
   save-failed: '<red>The transaction could not be saved. Balances were not changed.'
+
+initial-balance: '2500.00'

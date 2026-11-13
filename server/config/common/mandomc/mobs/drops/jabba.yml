@@ -24,7 +24,7 @@ drops:
     ammo-chance: 0.5
     ammo-rolls: 3
     equipment:
-      boba_jetpack: 0.10
+      boba_jetpack: 0.1
       boba_flamethrower: 0.15
   JawaBrown:
     weapon: jawa_ionization_blaster

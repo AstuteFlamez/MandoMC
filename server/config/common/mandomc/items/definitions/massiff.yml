@@ -1,0 +1,13 @@
+schema-version: 1
+items:
+  massiff_ribs:
+    material: COOKED_MUTTON
+    food-nutrition: 4
+    name: '<green>Massiff Ribs'
+    custom-model-data: 1
+    item-model: mandomc:consumables/massiff_ribs
+    rarity: uncommon
+    category: consumables
+    lore:
+      - '<gray>Still warm from the hunt,'
+      - '<gray>these ribs reek of blood and sand.'

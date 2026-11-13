@@ -1,6 +1,6 @@
 schema-version: 1
 jetpack:
-  # Coal cost is fixed at one hotbar COAL per 0.1 real seconds of powered flight.
+  # Coal cost is fixed at one hotbar COAL per real second of powered flight.
   speed: 0.9
   steering: 0.28
   launch: 0.6

@@ -76,7 +76,7 @@ def activate(sftp, metadata):
         # puts the JAR in plugins/ directly. The uploader understands that alias.
         files = transfer.payload()
         for target, data in files.items():
-            installed = 'plugins/MandoMC.jar' if target == 'plugins/update/MandoMC.jar' else target
+            installed = transfer.installed_path(target)
             if transfer.read_remote(sftp, installed) != data:
                 raise ValueError(f'Installed content differs from the selected source: {installed}')
         receipt = dict(schemaVersion=1, sourceCommit=commit,

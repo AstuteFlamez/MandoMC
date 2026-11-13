@@ -1,0 +1,17 @@
+{
+  "schema-version": 1,
+  "items": {
+    "bantha_hide": {
+      "material": "LEATHER",
+      "name": "<gray>Bantha Hide",
+      "custom-model-data": 155,
+      "item-model": "mandomc:materials/bantha_hide",
+      "rarity": "common",
+      "category": "materials",
+      "lore": [
+        "<gray>Tough organic material.",
+        "<gray>Used in robes and leather crafting."
+      ]
+    }
+  }
+}

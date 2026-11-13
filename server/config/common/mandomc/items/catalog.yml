@@ -1,73 +1,60 @@
-{
-  "schema-version": 1,
-  "rarities": {
-    "common": "đ",
-    "uncommon": "Ė",
-    "rare": "ĕ",
-    "epic": "Ē",
-    "legendary": "ē",
-    "mythic": "Ĕ"
-  },
-  "categories": {
-    "vehicles": "ď",
-    "materials": "Č",
-    "armor": "ĉ",
-    "consumables": "ċ",
-    "weapons": "Đ",
-    "components": "Ċ",
-    "crystals": "Ď",
-    "fuel": "Ģ",
-    "keys": "Ĥ",
-    "metals": "č",
-    "tokens": "<gray>[Tokens]",
-    "tools": "ĸ",
-    "trophies": "<font:mandomc:trophies></font>"
-  },
-  "external-items": {
-    "e11": {
-      "kind": "weapon",
-      "vendor-id": "E11",
-      "category": "weapons"
-    },
-    "standard_plasma_cells": {
-      "kind": "ammo",
-      "vendor-id": "Standard_Plasma_Cells",
-      "category": "ammo"
-    },
-    "cycler_rifle": {
-      "kind": "weapon",
-      "vendor-id": "CyclerRifle",
-      "category": "weapons"
-    },
-    "se14c": {
-      "kind": "weapon",
-      "vendor-id": "SE14C",
-      "category": "weapons"
-    },
-    "a280": {
-      "kind": "weapon",
-      "vendor-id": "A280",
-      "category": "weapons"
-    },
-    "relby_v10": {
-      "kind": "weapon",
-      "vendor-id": "RelbyV10",
-      "category": "weapons"
-    },
-    "ee3": {
-      "kind": "weapon",
-      "vendor-id": "EE3",
-      "category": "weapons"
-    },
-    "jawa_ionization_blaster": {
-      "kind": "weapon",
-      "vendor-id": "Jawa_Ionization_Blaster",
-      "category": "weapons"
-    },
-    "ionized_energy_cells": {
-      "kind": "ammo",
-      "vendor-id": "Ionized_Energy_Cells",
-      "category": "ammo"
-    }
-  }
-}
+schema-version: 1
+rarities:
+  uncommon: Ė
+  rare: ĕ
+  common: đ
+  epic: Ē
+  legendary: ē
+  mythic: Ĕ
+categories:
+  armor: ĉ
+  weapons: Đ
+  materials: Č
+  consumables: ċ
+  vehicles: ď
+  components: Ċ
+  crystals: Ď
+  fuel: Ģ
+  keys: Ĥ
+  metals: č
+  tokens: <gray>[Tokens]
+  tools: ĸ
+  ammo: ģ
+  trophies: <font:mandomc:trophies></font>
+external-items:
+  cycler_rifle:
+    kind: weapon
+    vendor-id: CyclerRifle
+    category: weapons
+  e11:
+    kind: weapon
+    vendor-id: E11
+    category: weapons
+  standard_plasma_cells:
+    kind: ammo
+    vendor-id: Standard_Plasma_Cells
+    category: ammo
+  se14c:
+    kind: weapon
+    vendor-id: SE14C
+    category: weapons
+  a280:
+    kind: weapon
+    vendor-id: A280
+    category: weapons
+  relby_v10:
+    kind: weapon
+    vendor-id: RelbyV10
+    category: weapons
+  ee3:
+    kind: weapon
+    vendor-id: EE3
+    category: weapons
+  jawa_ionization_blaster:
+    kind: weapon
+    vendor-id: Jawa_Ionization_Blaster
+    category: weapons
+  ionized_energy_cells:
+    kind: ammo
+    vendor-id: Ionized_Energy_Cells
+    category: ammo

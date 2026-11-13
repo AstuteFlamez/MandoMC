@@ -49,6 +49,11 @@ class Remote:
         self.files[target] = self.files.pop(source)
         self.renames.append((source, target))
 
+    def rename(self, source, target):
+        if target in self.files:
+            raise OSError(errno.EEXIST, 'exists')
+        self.posix_rename(source, target)
+
 
 class SftpSafetyTests(unittest.TestCase):
     def test_rejects_path_traversal_and_absolute_paths(self):
@@ -104,21 +109,64 @@ class SftpSafetyTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'migration'):
             module.deploy(Remote(), 'a' * 40, apply=True)
 
+    def test_replacement_on_pebblehost_keeps_old_bytes_before_installing_new(self):
+        class PebbleRemote(Remote):
+            def posix_rename(self, source, target):
+                raise OSError(errno.ENOTSUP, 'extension unsupported')
+
+            def rename(self, source, target):
+                if target in self.files:
+                    raise OSError(errno.EEXIST, 'exists')
+                self.files[target] = self.files.pop(source)
+                self.renames.append((source, target))
+
+        remote = PebbleRemote({'start.sh': b'old'})
+        module.atomic_write(remote, 'start.sh', b'new')
+        self.assertEqual(remote.files['start.sh'], b'new')
+        previous = [value for name, value in remote.files.items() if '.mandomc-previous-' in name]
+        self.assertEqual(previous, [b'old'])
+
+    def test_staged_agent_compares_the_installed_agent_after_restart(self):
+        target = '.mandomc/pending/MandoMC-RedstoneAgent.jar'
+        remote = Remote({'agents/MandoMC-RedstoneAgent.jar': b'old'})
+        self.assertEqual(module.plan(remote, {target: b'new'}, {'files': {target: module.sha(b'old')}}),
+                         [(target, b'new', b'old')])
+
     def test_backup_precedes_overwrite_and_no_restart_is_sent(self):
         from unittest.mock import patch
         target = 'plugins/update/MandoMC.jar'
         old_state = json.dumps({'files': {target: module.sha(b'old')}}).encode()
         remote = Remote({'.mandomc/bootstrap.json': b'{"schemaVersion":1}',
-                         '.mandomc/deployed.json': old_state, 'plugins/MandoMC.jar': b'old'})
-        with patch.object(module, 'payload', return_value={target: b'new'}):
+                         '.mandomc/deployed.json': old_state, 'plugins/MandoMC.jar': b'old',
+                         'server.properties': b'online-mode=true\n'})
+        with patch.object(module, 'payload', return_value={target: b'new'}), \
+                patch.object(module, 'production_properties', side_effect=lambda data, commit: data):
             module.deploy(remote, 'a' * 40, apply=True)
         destinations = [target for _, target in remote.renames]
-        self.assertIn('/files/plugins/update/MandoMC.jar', destinations[1])
-        self.assertEqual(destinations[2], target)
-        self.assertEqual(destinations[3], '.mandomc/deployed.json')
+        self.assertIn('/files/server.properties', destinations[1])
+        self.assertIn('/files/plugins/update/MandoMC.jar', destinations[2])
+        self.assertEqual(destinations[3], target)
+        self.assertEqual(destinations[4], '.mandomc/deployed.json')
         state = json.loads(remote.files['.mandomc/deployed.json'])
         self.assertTrue(state['restartRequired'])
         self.assertNotIn('.mandomc/deploy.lock', remote.directories)
+
+    def test_pack_and_motd_update_preserves_host_settings_and_secrets(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / 'resource-pack/build').mkdir(parents=True)
+            (root / 'server/runtime').mkdir(parents=True)
+            (root / 'resource-pack/build/MandoMC.json').write_text(json.dumps(
+                dict(minecraftVersion='26.1.2', sha1='b' * 40)))
+            (root / 'resource-pack/hosting.json').write_text(json.dumps(
+                dict(repository='AstuteFlamez/MandoMC', packId='stable-id', required=True, prompt='Equipment')))
+            (root / 'server/runtime/server.properties.template').write_text('motd=§cAlpha\\nJoin Discord!\n')
+            original = b'server-port=25570\nrcon.password=private-value\nonline-mode=true\nmotd=old\n'
+            updated = module.production_properties(original, 'a' * 40, root)
+            self.assertIn(b'server-port=25570\nrcon.password=private-value\nonline-mode=true\n', updated)
+            self.assertIn(b'motd=\\u00a7cAlpha\\nJoin Discord!\n', updated)
+            self.assertIn(b'resource-pack-26.1.2-aaaaaaaaaaaa/MandoMC.zip', updated)
+            self.assertIn(b'resource-pack-sha1=' + b'b' * 40, updated)
 
 
 if __name__ == '__main__':

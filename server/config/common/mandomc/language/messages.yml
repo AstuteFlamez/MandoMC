@@ -1,0 +1,35 @@
+{
+  "tutorial": [
+    "<gold><bold>Welcome to MandoMC \u2014 Black Spire Outpost</bold></gold>",
+    "<gray>Batuu is the protected spawn hub.</gray>",
+    "<yellow><click:run_command:/warp><hover:show_text:\"Choose a planet\">[Open Galaxy Map]</hover></click></yellow><gray> or type /warp to visit Tatooine or Hoth.</gray>",
+    "<gray>Carried items drop on death. Type /tutorial to read this again.</gray>"
+  ],
+  "unavailable": "<red>The arrival route is unavailable. Please contact a server administrator.</red>",
+  "players-only": "<gray>Use this command in game.</gray>",
+  "from-spawn": "<yellow>Transport departs from Black Spire Outpost.</yellow>",
+  "dismount": "<yellow>Dismount and leave passengers behind before travelling.</yellow>",
+  "departing": "<gold>Departing in {seconds} seconds. Stand still; movement or damage cancels departure.</gold>",
+  "cancelled": "<yellow>Departure cancelled. Type /warp to choose a destination.</yellow>",
+  "arrived": "<green>You have arrived.</green>",
+  "already-departing": "<yellow>Your shuttle is preparing. Stand still.</yellow>",
+  "teleport": {
+    "countdown-title": "<gradient:#FFCC66:#55FFFF><bold><seconds></bold></gradient>",
+    "countdown-subtitle": "<gray>Preparing transport\u2026 <white>Stand still</white></gray>",
+    "success-title": "<aqua><bold>TRANSPORT COMPLETE</bold></aqua>",
+    "success-subtitle": "<gray>You have arrived.</gray>",
+    "moved": "<red>You moved. Teleportation cancelled.</red>",
+    "damaged": "<red>You took damage. Teleportation cancelled.</red>",
+    "interrupted": "<yellow>Teleportation cancelled.</yellow>",
+    "unavailable": "<red>That destination is unavailable. Teleportation cancelled.</red>",
+    "combat": "<red>You cannot teleport during combat.</red>",
+    "mounted": "<yellow>Dismount and leave passengers behind before teleporting.</yellow>",
+    "pending": "<yellow>You already have a teleport counting down.</yellow>",
+    "players-only": "<gray>Use this command in game.</gray>"
+  },
+  "items": {
+    "quantity": "<red>Use a whole-item quantity from 1 to 2304.",
+    "usage": "<yellow>/mmc give [player] [item] [quantity]",
+    "console-item-required": "<yellow>Console usage: /mandomc give <player> <item> [quantity]"
+  }
+}

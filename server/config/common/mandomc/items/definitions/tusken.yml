@@ -1,0 +1,12 @@
+schema-version: 1
+items:
+  gaffi_stick:
+    material: IRON_SWORD
+    name: "<yellow><bold>Gaffi Stick"
+    custom-model-data: 12
+    item-model: mandomc:melee/gaffi_stick
+    rarity: uncommon
+    category: weapons
+    lore:
+      - '<gray>A traditional Tusken melee weapon.'
+      - '<gray>Forged for close combat in the dunes.'
