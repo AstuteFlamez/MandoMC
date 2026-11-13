@@ -93,6 +93,24 @@ class PackSyncTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'Stop the server'):
                 sync.assert_stopped(self.original)
 
+    def test_explicit_pin_survives_a_newer_main_release(self):
+        self.cache()
+        pin = self.properties.parent / 'resource-packs/pinned.json'
+        pin.write_text(json.dumps(self.manifest))
+        with patch.object(sync, 'latest_pack', side_effect=AssertionError('Must not replace the explicit selection')):
+            self.run_sync()
+        self.assertIn('resource-pack=' + self.url, self.properties.read_text())
+
+    def test_invalid_pin_fails_closed_instead_of_replacing_it_with_cached_main(self):
+        self.cache()
+        pin = self.properties.parent / 'resource-packs/pinned.json'
+        invalid = dict(self.manifest, sha1='0' * 40)
+        pin.write_text(json.dumps(invalid))
+        with patch.object(sync, 'latest_pack', side_effect=AssertionError('Must not discard an invalid explicit selection')):
+            with self.assertRaisesRegex(ValueError, 'checksum mismatch'):
+                self.run_sync()
+        self.assertEqual(self.properties.read_text(), self.original)
+
 
 if __name__ == '__main__':
     unittest.main()

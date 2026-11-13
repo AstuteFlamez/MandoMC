@@ -91,3 +91,8 @@ spherical lighting, forests and meadows, blue water, warm shores, cloud pixels,
 and a small Theed-style ivory/green landmark matching active planet detail.
 No resizing occurs. Provenance is in planet-icon-sources.json. The refinement
 release replaces only Naboo's PNG and preserves every other active pack entry.
+
+Naboo's current development delivery composes the latest published main pack with
+its three already-approved Naboo files, preserving every main-pack entry. Its
+local verified pin prevents subsequent main-only releases from silently removing
+the local-feature icon before source integration.

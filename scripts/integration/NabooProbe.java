@@ -26,7 +26,7 @@ public final class NabooProbe extends JavaPlugin {
             var folder=getDataFolder().toPath();
             if(Files.exists(folder.resolve("PASSED.txt"))||Files.exists(folder.resolve("FAILED.txt")))return;
             var complete=Bukkit.getPluginManager().getPlugin("MandoMC").getDataFolder().toPath()
-                    .resolve("data/frozen-land/wilderness-naboo-island-20261113.journal.completed");
+                    .resolve("data/frozen-land/wilderness-naboo-caves-20261113.journal.completed");
             if(!Files.exists(complete))return;
             try {
                 run();getDataFolder().mkdirs();
@@ -53,19 +53,21 @@ public final class NabooProbe extends JavaPlugin {
         var clans=Bukkit.getServicesManager().load(ClanService.class);
         check(service!=null&&clans!=null,"Native territory/clans active");
         var policy=service.policy();var atlas=policy.map("minecraft:naboo",-834,200);
-        check(atlas.rows().stream().flatMapToInt(String::chars).filter(c->c=='S').count()==100,"Whole island is exactly 100 chunks");
-        check(atlas.rows().stream().noneMatch(row->row.contains("W")),"No new warzone");
+        check(atlas.rows().stream().flatMapToInt(String::chars).filter(c->c=='S').count()==100,"Island is exactly 100 chunks");
+        check(atlas.rows().stream().flatMapToInt(String::chars).filter(c->c=='W').count()==100,"Build area is exactly 100 warzone chunks");
         for(int z=188;z<=231;z++)for(int x=-864;x<=-831;x++) {
-            boolean safe=atlas.zone(x,z)=='S';
+            char zone=atlas.zone(x,z);boolean safe=zone=='S';boolean wild=zone=='.';
             for(int y:new int[]{-64,0,59,319})for(int offset:new int[]{0,15}) {
                 var point=new Location(world,x*16+offset,y,z*16+offset);
-                check(service.zone(point)==(safe?TerritoryPolicy.Zone.SAFEZONE:TerritoryPolicy.Zone.WILDERNESS),"Full-height chunk boundary");
+                check(service.zone(point)==(safe?TerritoryPolicy.Zone.SAFEZONE:wild?TerritoryPolicy.Zone.WILDERNESS:TerritoryPolicy.Zone.WARZONE),"Full-height chunk boundary");
                 check(service.combat(point)==!safe,"Combat boundary");
                 check(service.spawning(point)==!safe,"Creature-spawn boundary");
-                check(policy.edits("minecraft:naboo",point.getBlockX(),y,point.getBlockZ())==!safe,"Building boundary");
+                check(policy.edits("minecraft:naboo",point.getBlockX(),y,point.getBlockZ())==wild,"Building boundary");
             }
-            if(safe)check(!clans.land().supported(new ClanState.Chunk("minecraft:naboo",x,z)),"Safe island removed from claim scope");
+            if(!wild)check(!clans.land().supported(new ClanState.Chunk("minecraft:naboo",x,z)),"Safe island removed from claim scope");
         }
+        check(service.zone(new Location(world,-13720,80,3280))==TerritoryPolicy.Zone.WARZONE,"Build area protected");
+        check(service.zone(new Location(world,-13600,80,3280))==TerritoryPolicy.Zone.WILDERNESS,"Beyond build area wilderness");
         check(service.zone(arrival)==TerritoryPolicy.Zone.SAFEZONE,"New arrival protected");
         check(service.zone(new Location(world,-13551,101,3359))==TerritoryPolicy.Zone.WILDERNESS,"Former arrival restored to wilderness");
         check(service.zone(new Location(world,-13480,59,3080))==TerritoryPolicy.Zone.SAFEZONE,"Island north of border protected too");
@@ -80,13 +82,25 @@ public final class NabooProbe extends JavaPlugin {
         Inventory[] menu=new Inventory[1];UUID id=UUID.randomUUID();
         var actor=(Player)Proxy.newProxyInstance(Player.class.getClassLoader(),new Class<?>[]{Player.class},(p,m,a)->switch(m.getName()) {
             case "getUniqueId"->id;case "openInventory"->{menu[0]=(Inventory)a[0];yield null;}
-            case "hasPermission","isOnline"->true;case "hashCode"->id.hashCode();case "equals"->p==a[0];default->null;
+            case "hasPermission","isOnline"->true;case "getGameMode"->GameMode.SURVIVAL;
+            case "hashCode"->id.hashCode();case "equals"->p==a[0];default->null;
         });
         plugin.warps().open(actor);
         check(menu[0]!=null&&menu[0].getSize()==54,"Galaxy Map opens");
         var icon=menu[0].getItem(15);
         check(icon!=null&&NamespacedKey.fromString("mandomc:planets/naboo").equals(icon.getItemMeta().getItemModel()),"Naboo model retained");
         check(plugin.getCommand("warp").tabComplete(actor,"warp",new String[]{"nab"}).contains("naboo"),"Completion retained");
+        var warPoint=new Location(world,-13720,80,3280);
+        check(service.combat(warPoint)&&!service.edits(warPoint)&&!service.interactions(warPoint),"Warzone permits PvP while locking scenery");
+        var guard=new net.mandomc.gameplay.territory.TerritoryProtection(service);
+        var door=(org.bukkit.block.Block)Proxy.newProxyInstance(org.bukkit.block.Block.class.getClassLoader(),new Class<?>[]{org.bukkit.block.Block.class},(p,m,a)->switch(m.getName()) {
+            case "getLocation"->warPoint.clone();case "getType"->Material.OAK_DOOR;case "getState"->null;
+            case "getWorld"->world;case "hashCode"->1;case "equals"->p==a[0];default->null;
+        });
+        var interacting=new org.bukkit.event.player.PlayerInteractEvent(actor,org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK,null,door,org.bukkit.block.BlockFace.NORTH,org.bukkit.inventory.EquipmentSlot.HAND);
+        guard.interact(interacting);check(interacting.isCancelled(),"Build doors cannot be used by normal players");
+        var breaking=new org.bukkit.event.block.BlockBreakEvent(door,actor);
+        guard.breakBlock(breaking);check(breaking.isCancelled(),"Build blocks cannot be broken by normal players");
         for(String existing:new String[]{"spawn","hoth","tatooine","mandalore","ilum"})
             check(plugin.warps().destination(existing).getWorld()!=null,"Existing warp "+existing);
     }
