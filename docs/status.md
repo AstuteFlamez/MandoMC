@@ -1,5 +1,9 @@
 # Resume here
 
+## Voting banner (2026-11-12)
+
+Added `docs/assets/server-banner.png` beside the server icon on the main checkout. Original pixel art drawn directly at 468 × 60; copied byte-for-byte without scaling. Verified PNG dimensions and source equality. No unfinished asset work. Next action: upload the banner to the voting-site listings.
+
 ## Voting migration addition (2026-11-12)
 
 Added hash-pinned NuVotifier 2.7.3 and VotingPlugin 7.1.1, five reviewed vote-site entries, and the native Voting Crate. A real encrypted V1 TCP vote against a disposable Java 25 / Paper 26.1.2 fixture awarded exactly 500 native credits and one virtual vote key. No live players or production balances were touched. The crate remains unplaced; `/crates setblock vote` saves its location outside the managed config. Five new Java location tests pass; full reactor has 313 gameplay plus 4 access tests, and all 67 Python checks pass. History scanning found no secrets after reviewing four exact false positives. Production preparation now explicitly supports public access and imports the existing private RSA identity without tracking it. Production cutover and external voting-site acknowledgements are pending. Next action: publish the tested integrated commit and stage the exact main CI build for migration.
