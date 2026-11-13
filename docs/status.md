@@ -2,13 +2,13 @@
 
 ## Compact resource pack (2026-11-13)
 
-Removed generator-specific artwork notes, prompts and unused high-resolution source export from the current resource-pack files. Kept the final texture and third-party credits/licenses. Build output minifies JSON, removes non-rendering PNG metadata and recompresses unchanged scanlines with level-nine DEFLATE. ZIP decreases from 2,626,531 to 2,525,650 bytes (100,881 bytes); 1,173,055 unused repository bytes removed. All 73 pack/tooling checks pass (one compiled-launcher check skipped in pack-only mode), including semantic equality for every JSON resource and unchanged decompressed texture data/color metadata. Publication is pending. Next action: merge and publish the compact pack through the standard workflow.
+Removed generator-specific artwork notes, prompts and unused high-resolution source export from the current resource-pack files. Kept the final texture and third-party credits/licenses. Build output minifies JSON, removes non-rendering PNG metadata and recompresses unchanged scanlines with level-nine DEFLATE. ZIP decreases from 2,626,531 to 2,525,650 bytes (100,881 bytes); 1,173,055 unused repository bytes removed. All 73 pack/tooling checks pass (one compiled-launcher check skipped in pack-only mode), including semantic equality for every JSON resource and unchanged decompressed texture data/color metadata. Published and uploaded from checked main ac0e925215f2. Anonymous download matches production SHA-1 6009a5c22fe29576e330f0813f3a870a4ca255db and passes ZIP integrity. Activation awaits the manual restart. Next action: restart PebbleHost and reconnect to apply the compact pack.
 
 
 
 ## DevWorld decorations and natural-spawn policy (2026-11-13)
 
-DevWorld survival edits now bypass only the frozen planet-backup requirement; territory, clan and event cancellations remain authoritative. Reproduced placement failure on the old build, then verified all four helmets and the Rancor skull on six faces, exact item recovery, cancellation/refund handling, and custom/breeding/command spawn exemptions in an isolated full-stack server (827 assertions). The global natural-spawn switch now suppresses all living vanilla types through both spawn hooks and new-chunk handling. All 318 Java tests pass. Production activation remains pending its manual restart. Next action: merge the checked hotfix and verify its automatic upload.
+DevWorld survival edits now bypass only the frozen planet-backup requirement; territory, clan and event cancellations remain authoritative. Reproduced placement failure on the old build, then verified all four helmets and the Rancor skull on six faces, exact item recovery, cancellation/refund handling, and custom/breeding/command spawn exemptions in an isolated full-stack server (827 assertions). The global natural-spawn switch now suppresses all living vanilla types through both spawn hooks and new-chunk handling. All 318 Java tests pass. Production activation remains pending its manual restart. Checked main ac0e925215f2 was uploaded successfully; the production receipt confirms restartRequired=true. No restart was sent. Next action: manually restart PebbleHost, then test helmet sneak-placement and skull placement in DevWorld.
 
 
 ## Scoreboard player-name hotfix (2026-11-12)
@@ -30,7 +30,7 @@ The main b2c6e07 runtime is activated on PebbleHost with the old server retained
 
 ## Voting banner (2026-11-12)
 
-Added `docs/assets/server-banner.png` beside the server icon on the main checkout. Original pixel art drawn directly at 468 × 60; copied byte-for-byte without scaling. Verified PNG dimensions and source equality. No unfinished asset work. Next action: upload the banner to the voting-site listings.
+Added `docs/assets/server-banner.png` beside the server icon on the main checkout. Original pixel art drawn directly at 468 × 60; copied byte-for-byte without scaling. Verified PNG dimensions and source equality. Uploaded and saved on all five voting listings on 2026-11-13: Minecraft-MP, Minecraft Server List, MinecraftServers.org, Minecraft.Buzz and Planet Minecraft. The JPG-only Minecraft Server List uses a high-quality format conversion at the same 468×60 size; the others use the original PNG. Public pages or save confirmations were verified. No unfinished banner work. Next action: observe listing traffic during alpha.
 
 ## Voting migration addition (2026-11-12)
 
