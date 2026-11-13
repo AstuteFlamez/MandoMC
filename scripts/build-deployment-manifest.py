@@ -15,6 +15,7 @@ def entries():
         'agents/MandoMC-RedstoneAgent.jar': 'redstone-agent/target/MandoMC-RedstoneAgent.jar',
         'plugins/CoreProtect/config.yml': 'server/config/common/coreprotect.yml',
     }
+    files['plugins/VotingPlugin/VoteSites.yml'] = 'server/config/common/votingplugin/VoteSites.yml'
     resources = ROOT / 'plugin/src/main/resources'
     for source in sorted(resources.rglob('*.yml')):
         relative = source.relative_to(resources)

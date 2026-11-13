@@ -8,6 +8,8 @@ from pathlib import Path
 import shutil
 import subprocess
 import tempfile
+import secrets
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -29,7 +31,7 @@ def properties(text, updates):
     return '\n'.join(result) + '\n'
 
 
-def prepare(runtime, destination, port=25565):
+def prepare(runtime, destination, port=25565, public=False, voting_identity=None):
     runtime = runtime.resolve()
     if destination.exists():
         raise ValueError('Use a fresh output directory so older snapshots remain intact.')
@@ -65,7 +67,7 @@ def prepare(runtime, destination, port=25565):
         (destination / 'plugins').mkdir()
         lock = json.loads((ROOT / 'server/plugins.lock.json').read_text())
         allowed_dirs = ('MandoMC', 'MandoAccess', 'CoreProtect', 'ModelEngine', 'MechanicsCore',
-                        'WeaponMechanics', 'MythicMobs', 'WorldEdit', 'WorldGuard', 'Factions', 'Vault')
+                        'WeaponMechanics', 'MythicMobs', 'WorldEdit', 'WorldGuard', 'Factions', 'Vault', 'VotingPlugin', 'Votifier')
         for name in allowed_dirs:
             source = runtime / 'plugins' / name
             if source.is_dir():
@@ -94,6 +96,28 @@ def prepare(runtime, destination, port=25565):
         source_access = ROOT / 'access/src/main/resources/config.yml'
         (destination / 'plugins/MandoAccess').mkdir(exist_ok=True)
         shutil.copyfile(source_access, destination / 'plugins/MandoAccess/config.yml')
+        if public:
+            maintenance = destination / 'plugins/MandoAccess/maintenance.yml'
+            state = yaml.safe_load(maintenance.read_text()) if maintenance.exists() else {}
+            state['enabled'] = False
+            maintenance.write_text(yaml.safe_dump(state, sort_keys=False))
+        if voting_identity:
+            listener = destination / 'plugins/Votifier'
+            (listener / 'rsa').mkdir(parents=True, exist_ok=True)
+            for name in ('private.key', 'public.key'):
+                source = voting_identity / 'rsa' / name
+                shutil.copyfile(source, listener / 'rsa' / name)
+                (listener / 'rsa' / name).chmod(0o600)
+            config = dict(host='0.0.0.0', port=19132,
+                          **{'disable-v1-protocol': False},
+                          tokens={'default': secrets.token_urlsafe(32)}, forwarding={'method': 'none'})
+            (listener / 'config.yml').write_text(yaml.safe_dump(config, sort_keys=False))
+            (listener / 'config.yml').chmod(0o600)
+            votes = destination / 'plugins/VotingPlugin'
+            votes.mkdir(exist_ok=True)
+            (votes / 'Config.yml').write_text(yaml.safe_dump(dict(
+                AutoCreateVoteSites=False, AllowUnjoined=False, DataStorage='SQLITE',
+                ProcessRewards=True), sort_keys=False))
         # Routine deployment overrides are applied from the selected source tree.
         config = ROOT / 'server/config/common/mandomc'
         for source in config.rglob('*.yml'):
@@ -106,7 +130,8 @@ def prepare(runtime, destination, port=25565):
         props.write_text(properties(props.read_text(), {
             'server-ip': '', 'server-port': str(port), 'enable-rcon': 'false',
             'rcon.password': '', 'rcon.port': '25575', 'enable-query': 'false',
-            'query.port': str(port), 'online-mode': 'true'}))
+            'query.port': str(port), 'online-mode': 'true',
+            **({'white-list': 'false', 'enforce-whitelist': 'false'} if public else {})}))
         # Carry the established owner's access records with the rebuilt server;
         # the independent MandoAccess maintenance state remains private.
         for name in ('ops.json', 'banned-ips.json', 'banned-players.json', 'whitelist.json'):
@@ -146,7 +171,9 @@ if __name__ == '__main__':
     parser.add_argument('--runtime', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--port', type=int, default=25565)
+    parser.add_argument('--public', action='store_true')
+    parser.add_argument('--voting-identity', type=Path, help='Private existing Votifier directory containing rsa keys')
     args = parser.parse_args()
     if not 1 <= args.port <= 65535:
         parser.error('Port must be between 1 and 65535')
-    prepare(args.runtime, args.output, args.port)
+    prepare(args.runtime, args.output, args.port, args.public, args.voting_identity)

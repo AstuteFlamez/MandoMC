@@ -1917,6 +1917,7 @@
     }
   },
   "sources": {
+    "vote_crate_key": "<gray>Vote for MandoMC using /vote.\n<gray>Each accepted vote grants one Voting Crate Key.\n<gray>Use /crates open vote or a placed Voting Crate.",
     "bantha_hide": "<gray>Tatooine: Banthas drop 1–3 hides.\n<gray>Brown Jawa shop on Tatooine: Utility supplies.\n<gray>Also craft four rabbit hides; click for recipe.",
     "purple_xwing": "<gray>Not currently obtainable through crafting or loot.",
     "money_note": "<gray>Not currently obtainable through crafting or loot.",

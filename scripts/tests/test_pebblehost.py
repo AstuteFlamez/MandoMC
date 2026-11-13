@@ -66,7 +66,9 @@ class SftpSafetyTests(unittest.TestCase):
             root = Path(temporary)
             (root / 'deployment').mkdir()
             (root / 'source.yml').write_text('config')
-            for target in ('ops.json', 'dev_world/level.dat', 'plugins/MandoMC/data/state.yml'):
+            for target in ('ops.json', 'dev_world/level.dat', 'plugins/MandoMC/data/state.yml',
+                           'plugins/Votifier/config.yml', 'plugins/Votifier/rsa/private.key',
+                           'plugins/VotingPlugin/Config.yml'):
                 (root / 'deployment/files.json').write_text(json.dumps({'files': [
                     {'source': 'source.yml', 'target': target}]}))
                 with self.assertRaises(ValueError):

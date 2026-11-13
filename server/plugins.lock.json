@@ -90,6 +90,26 @@
       "bytes": 1113283,
       "verifiedPublishedHashes": [],
       "distribution": "Official freely available Community Edition attachment linked by the upstream GitHub release; exact bytes tested on Paper 26.1.2 Java 25."
+    },
+    {
+      "id": "nuvotifier",
+      "name": "NuVotifier-2.7.3.jar",
+      "version": "2.7.3",
+      "url": "https://github.com/NuVotifier/NuVotifier/releases/download/v2.7.3/nuvotifier.jar",
+      "sha256": "5fe5457e9ba7989dc9446f522a690e4e877236ba2fc5e90ed66fad33d3c69f39",
+      "bytes": 2863588,
+      "verifiedPublishedHashes": []
+    },
+    {
+      "id": "votingplugin",
+      "name": "VotingPlugin-7.1.1.jar",
+      "version": "7.1.1",
+      "url": "https://nexus.bencodez.com/repository/maven-public/com/bencodez/votingplugin/7.1.1/votingplugin-7.1.1.jar",
+      "sha256": "ca0afd4776bbba7a1a9c8be435522ea4a2d77f3cf11e9b5fba3b0f3d89e220be",
+      "bytes": 6051899,
+      "verifiedPublishedHashes": [
+        "sha1"
+      ]
     }
   ],
   "pending": [],

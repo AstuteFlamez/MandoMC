@@ -203,6 +203,7 @@ def payload(root=ROOT):
                 (target.startswith('plugins/MandoMC/') and target.endswith('.yml')) or
                 target == 'plugins/MandoAccess/config.yml' or
                 target == 'plugins/CoreProtect/config.yml' or
+                target == 'plugins/VotingPlugin/VoteSites.yml' or
                 (target.startswith('plugins/ModelEngine/blueprints/') and target.endswith('.bbmodel')) or
                 (target.startswith(('plugins/MythicMobs/Mobs/', 'plugins/MythicMobs/Skills/',
                                     'plugins/MythicMobs/RandomSpawns/',
@@ -380,6 +381,8 @@ def verify_startup(sftp):
 def download(sftp, remote, destination, resume=False):
     """Read-only recursive download; never follows server-controlled symlinks."""
     for item in sftp.listdir_attr(remote):
+        if item.filename in {'tmp', '.paper-remapped'} or item.filename.endswith(('.tmp', '.lock', '.jfr')):
+            continue
         if item.filename in ('.', '..') or '/' in item.filename or '\\' in item.filename:
             raise ValueError('Unsafe remote filename')
         source = f'{remote}/{item.filename}'
@@ -390,7 +393,7 @@ def download(sftp, remote, destination, resume=False):
             target.mkdir(mode=0o700, exist_ok=resume)
             download(sftp, source, target, resume)
         elif stat.S_ISREG(item.st_mode):
-            if resume and target.is_file() and target.stat().st_size == item.st_size and item.st_size >= 1048576:
+            if resume and target.is_file() and target.stat().st_size == item.st_size and item.st_mtime <= target.stat().st_mtime:
                 continue
             try:
                 sftp.get(source, str(target), max_concurrent_prefetch_requests=32)
@@ -412,7 +415,8 @@ def pull(config, sftp, resume=None):
     destination.mkdir(parents=True, mode=0o700, exist_ok=bool(resume))
     print(f'Downloading into {destination}. A running server is not a consistent world backup.', flush=True)
     generated = {'.mandomc', '.cache', '.java', 'cache', 'libraries', 'versions', 'logs', 'debug', '.trash', '.ufs-tmp'}
-    items = [item for item in sftp.listdir_attr('.') if item.filename not in generated]
+    items = [item for item in sftp.listdir_attr('.') if item.filename not in generated
+             and '.mandomc-upload' not in item.filename and '.mandomc-previous' not in item.filename]
 
     def worker(group):
         client, channel = connect(config)
@@ -424,7 +428,7 @@ def pull(config, sftp, resume=None):
                     target.mkdir(mode=0o700, exist_ok=bool(resume))
                     download(channel, name, target, bool(resume))
                 elif stat.S_ISREG(item.st_mode):
-                    if resume and target.is_file() and target.stat().st_size == item.st_size and item.st_size >= 1048576:
+                    if resume and target.is_file() and target.stat().st_size == item.st_size and item.st_mtime <= target.stat().st_mtime:
                         continue
                     channel.get(name, str(target), max_concurrent_prefetch_requests=32)
                     target.chmod(0o600)

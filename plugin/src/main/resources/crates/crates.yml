@@ -28,16 +28,47 @@ crates:
       amount: 1
       weight: 1
   koth:
-    name: '<gold>KOTH Crate'
+    name: <gold>KOTH Crate
     key-item: koth_crate_key
     key-mode: virtual
     blocks: []
     rewards:
-      - {item: durasteel_sheet, amount: 16, weight: 35}
-      - {item: agrinium_sheet, amount: 24, weight: 30}
-      - {item: beskar_scrap, amount: 4, weight: 20}
-      - {item: phrik_sheet, amount: 4, weight: 10}
-      - {item: beskar_sheet, amount: 4, weight: 5}
+    - item: durasteel_sheet
+      amount: 16
+      weight: 35
+    - item: agrinium_sheet
+      amount: 24
+      weight: 30
+    - item: beskar_scrap
+      amount: 4
+      weight: 20
+    - item: phrik_sheet
+      amount: 4
+      weight: 10
+    - item: beskar_sheet
+      amount: 4
+      weight: 5
+  vote:
+    name: <aqua>Voting Crate
+    key-item: vote_crate_key
+    key-mode: virtual
+    blocks: []
+    rewards:
+    - item: agrinium_scrap
+      amount: 8
+      weight: 40
+    - item: electrum_scrap
+      amount: 8
+      weight: 30
+    - item: durasteel_scrap
+      amount: 4
+      weight: 20
+    - item: beskar_scrap
+      amount: 1
+      weight: 8
+    - item: white_kyber
+      amount: 1
+      weight: 2
 messages:
   block-hint: '<gray>Left-click: Preview <dark_gray>• <aqua>Right-click: Open'
   denied: <red>You cannot manage crate keys.
@@ -69,3 +100,7 @@ messages:
   container: <yellow>Look at a chest, barrel, shulker box, or ender chest within five
     blocks.
   bound: <aqua>Container registered as a crate. Existing contents were preserved.
+  binding-saving: <gray>Saving crate location…
+  binding-busy: <yellow>A crate location is still being saved. Try again shortly.
+  binding-failed: <red>The location could not be saved. Existing crate locations are
+    unchanged.

@@ -1,6 +1,5 @@
 package net.mandomc.gameplay.crates;
 
-import java.io.File;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,9 +61,13 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
     private final List<org.bukkit.entity.TextDisplay> labels=new ArrayList<>();
     private final java.util.Set<org.bukkit.Chunk> labelChunks=new java.util.HashSet<>();
     private final SecureRandom random = new SecureRandom();
+    private CrateBindings bindings;
+    private boolean bindingPending;
+    private final java.util.concurrent.ExecutorService bindingWrites = java.util.concurrent.Executors.newSingleThreadExecutor(
+            task -> { var thread = new Thread(task, "MandoMC-CrateBindings"); thread.setDaemon(true); return thread; });
     private final BukkitTask ticker;
     private long tick;
-    private boolean closed;
+    private volatile boolean closed;
 
     public CrateService(JavaPlugin plugin, ItemCatalog items, YamlConfiguration config,
                         Predicate<Player> restricted, Predicate<Player> combat) {
@@ -80,6 +83,12 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
             crates.put(id, crate);
         }
         if (crates.isEmpty()) throw new IllegalArgumentException("No crates configured");
+        try {
+            bindings = CrateBindings.load(plugin.getDataFolder().toPath().resolve("data/crate-blocks.yml"), definitions);
+        } catch (Exception error) {
+            bindingWrites.shutdown();
+            throw new IllegalStateException("Cannot load server-owned crate locations", error);
+        }
         registerBlocks();
         var command = java.util.Objects.requireNonNull(plugin.getCommand("crates"));
         command.setExecutor(this);
@@ -101,7 +110,7 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
         labels.forEach(Entity->Entity.remove());labels.clear();
         for(var chunk:labelChunks)chunk.removePluginChunkTicket(plugin);labelChunks.clear();
         blocks.clear();
-        for (String id : crates.keySet()) for (var entry : config.getMapList("crates."+id+".blocks")) {
+        for (String id : crates.keySet()) for (var entry : bindings.maps(id)) {
             var key = NamespacedKey.fromString(String.valueOf(entry.get("world")));
             var world = key == null ? null : Bukkit.getWorld(key);
             if (world == null) throw new IllegalArgumentException("Crate block world unavailable: " + entry);
@@ -337,18 +346,34 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
             }
             if (action.equals("setblock")) {
                 if (!player.hasPermission("mandomc.crates.admin") || args.length!=2) { send(player,"admin-usage");return true; }
+                if (bindingPending) { send(player,"binding-busy");return true; }
                 var crate=crate(args[1]);var block=player.getTargetBlockExact(5);
                 if (block==null || (!(block.getState() instanceof Container) && block.getType()!=Material.ENDER_CHEST)) { send(player,"container");return true; }
-                var positions=new ArrayList<>(config.getMapList("crates."+crate.id()+".blocks"));
-                positions.add(Map.of("world",block.getWorld().getKey().toString(),"x",block.getX(),"y",block.getY(),"z",block.getZ()));
-                config.set("crates."+crate.id()+".blocks",positions);
-                config.save(new File(plugin.getDataFolder(),"crates/crates.yml"));registerBlocks();send(player,"bound");return true;
+                var next=bindings.bind(crate.id(), new CrateBindings.Point(block.getWorld().getKey().toString(),
+                        block.getX(),block.getY(),block.getZ()));
+                bindingPending=true;send(player,"binding-saving");
+                bindingWrites.execute(()->{
+                    Exception failure=null;
+                    try { next.save(); } catch(Exception error) { failure=error; }
+                    final Exception result=failure;
+                    if(closed)return;
+                    Bukkit.getScheduler().runTask(plugin,()->{
+                        bindingPending=false;
+                        if(result!=null) {
+                            plugin.getLogger().log(java.util.logging.Level.SEVERE,"Crate location save failed; previous locations retained",result);
+                            if(player.isOnline())send(player,"binding-failed");
+                            return;
+                        }
+                        bindings=next;registerBlocks();if(player.isOnline())send(player,"bound");
+                    });
+                });
+                return true;
             }
             if (args.length==2 && (action.equals("preview") || action.equals("open"))) {
                 if (action.equals("preview")) preview(player,crate(args[1]));else open(player,crate(args[1]));return true;
             }
             send(sender,"usage");
-        } catch (IllegalArgumentException | java.io.IOException error) { sender.sendMessage(Component.text(error.getMessage())); }
+        } catch (IllegalArgumentException error) { sender.sendMessage(Component.text(error.getMessage())); }
         return true;
     }
 
@@ -395,7 +420,7 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
         Bukkit.getScheduler().runTaskLater(plugin,()->{if(event.getPlayer().isOnline())claim(event.getPlayer());},40);
     }
     @Override public void close() {
-        closed=true;ticker.cancel();
+        closed=true;ticker.cancel();bindingWrites.shutdown();
         for (var entry:List.copyOf(menus.entrySet())) {
             var player=Bukkit.getPlayer(entry.getKey());
             if (player!=null) { player.closeInventory();finishPending(player); }

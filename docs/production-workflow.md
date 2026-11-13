@@ -149,3 +149,5 @@ Each upload preserves the server's existing host-specific properties while updat
 only the main resource-pack URL/hash/identity/prompt and the source MOTD. Previous
 server.properties and PebbleHost startup settings are backed up with the managed files.
 The host's jar auto-update is disabled so its pinned Paper version remains deliberate.
+
+Voting setup, private listener keys and crate placement are documented in [voting](features/voting.md). Prepare the initial public image with `--public --voting-identity <private-existing-votifier-directory>`; the listener identity stays outside Git.

@@ -1,0 +1,5 @@
+# Reviewed false positives: three item-key asset SHA256 digests and a public Figma file ID.
+82529da25bc99eca9d3d11f07f8a36dfe72e632d:resource-pack/boba-equipment-live-preservation.json:generic-api-key:10
+82529da25bc99eca9d3d11f07f8a36dfe72e632d:resource-pack/boba-equipment-live-preservation.json:generic-api-key:19
+82529da25bc99eca9d3d11f07f8a36dfe72e632d:resource-pack/boba-equipment-live-preservation.json:generic-api-key:32
+5671b9f17e0e55d370ee46b57b956b16c9e63ead:planning/decisions.json:generic-api-key:5

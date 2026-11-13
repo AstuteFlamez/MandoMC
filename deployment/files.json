@@ -430,6 +430,10 @@
       "target": "plugins/MythicMobs/Skills/rancor-skills.yml"
     },
     {
+      "source": "server/config/common/votingplugin/VoteSites.yml",
+      "target": "plugins/VotingPlugin/VoteSites.yml"
+    },
+    {
       "source": "server/config/common/weaponmechanics/ionized_energy_cells.yml",
       "target": "plugins/WeaponMechanics/ammos/ionized_energy_cells.yml"
     },

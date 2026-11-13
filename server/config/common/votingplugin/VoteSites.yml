@@ -1,0 +1,97 @@
+VoteSites:
+  MinecraftMP:
+    Enabled: true
+    Name: Minecraft-MP.com
+    Priority: 1
+    ServiceSite: Minecraft-MP.com
+    VoteURL: https://minecraft-mp.com/server/366773/vote/
+    VoteDelay: 24h
+    WaitUntilVoteDelay: false
+    ForceOffline: false
+    DisplayItem:
+      Material: TRIPWIRE_HOOK
+      Amount: 1
+    Rewards:
+      Commands:
+      - mandomc:credits give %player% 500
+      - mandomc:crates key give vote %player% 1
+      Messages:
+        Player: '&bThanks for voting! &fYou received 500 credits and a Voting Crate
+          key.'
+  MinecraftServerList:
+    Enabled: true
+    Name: MCSL
+    Priority: 2
+    ServiceSite: MCSL
+    VoteURL: https://minecraft-server-list.com/server/524921/vote/
+    VoteDelay: 24h
+    WaitUntilVoteDelay: false
+    ForceOffline: false
+    DisplayItem:
+      Material: TRIPWIRE_HOOK
+      Amount: 1
+    Rewards:
+      Commands:
+      - mandomc:credits give %player% 500
+      - mandomc:crates key give vote %player% 1
+      Messages:
+        Player: '&bThanks for voting! &fYou received 500 credits and a Voting Crate
+          key.'
+  MinecraftServers:
+    Enabled: true
+    Name: MinecraftServers.org
+    Priority: 3
+    ServiceSite: MinecraftServers.org
+    VoteURL: https://minecraftservers.org/vote/696079
+    VoteDelay: 24h
+    WaitUntilVoteDelay: false
+    ForceOffline: false
+    DisplayItem:
+      Material: TRIPWIRE_HOOK
+      Amount: 1
+    Rewards:
+      Commands:
+      - mandomc:credits give %player% 500
+      - mandomc:crates key give vote %player% 1
+      Messages:
+        Player: '&bThanks for voting! &fYou received 500 credits and a Voting Crate
+          key.'
+  PlanetMinecraft:
+    Enabled: true
+    Name: PlanetMinecraft.com
+    Priority: 4
+    ServiceSite: PlanetMinecraft.com
+    VoteURL: https://www.planetminecraft.com/server/galaxies-horizon/vote/
+    VoteDelay: 24h
+    WaitUntilVoteDelay: false
+    ForceOffline: false
+    DisplayItem:
+      Material: TRIPWIRE_HOOK
+      Amount: 1
+    Rewards:
+      Commands:
+      - mandomc:credits give %player% 500
+      - mandomc:crates key give vote %player% 1
+      Messages:
+        Player: '&bThanks for voting! &fYou received 500 credits and a Voting Crate
+          key.'
+  MinecraftBuzz:
+    Enabled: true
+    Name: Minecraft.Buzz
+    Priority: 5
+    ServiceSite: Minecraft.Buzz
+    VoteURL: https://minecraft.buzz/vote/mandomc
+    VoteDelay: 24h
+    WaitUntilVoteDelay: false
+    ForceOffline: false
+    DisplayItem:
+      Material: TRIPWIRE_HOOK
+      Amount: 1
+    Rewards:
+      Commands:
+      - mandomc:credits give %player% 500
+      - mandomc:crates key give vote %player% 1
+      Messages:
+        Player: '&bThanks for voting! &fYou received 500 credits and a Voting Crate
+          key.'
+EverySiteReward: {}
