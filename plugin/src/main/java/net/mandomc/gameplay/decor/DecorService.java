@@ -85,6 +85,11 @@ public final class DecorService implements Listener,AutoCloseable {
         String id=entity.getPersistentDataContainer().get(MARKER,PersistentDataType.STRING);
         var value=id==null?null:live.get(id);return value!=null&&value.base.getUniqueId().equals(entity.getUniqueId())?value:null;
     }
+    @EventHandler public void chunk(org.bukkit.event.world.ChunkLoadEvent event){
+        for(var entity:event.getChunk().getEntities())if(entity.getPersistentDataContainer().has(MARKER,PersistentDataType.STRING)&&owned(entity)==null){
+            var modeled=ModelEngineAPI.getModeledEntity(entity.getUniqueId());if(modeled!=null)modeled.destroy();entity.remove();
+        }
+    }
     private void tick(){
         if(closing)return;
         long now=System.currentTimeMillis();
@@ -92,6 +97,9 @@ public final class DecorService implements Listener,AutoCloseable {
             var value=live.get(definition.id());
             if(value==null||!value.base.isValid()||value.base.isDead()){
                 if(value!=null)value.model.close();spawn(definition);continue;
+            }
+            if(!value.model.valid()){
+                value.model.close();value=new Live(definition,value.base,new DecorModel(value.base,definition));live.put(definition.id(),value);
             }
             Location at=definition.location();var base=value.base;
             if(!base.getWorld().equals(at.getWorld())||base.getLocation().distanceSquared(at)>.000001){

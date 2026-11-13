@@ -160,3 +160,63 @@ placements:
     pitch: 0.48860472
   mode: stationary
   animations: []
+
+- id: brown_jawa_01
+  name: Jawa
+  type: jawa_brown
+  model: jawa_brown
+  scale: 1
+  location:
+    world: minecraft:spawnworld
+    x: -5.403046981270816
+    y: 93.0
+    z: 34.40807852444705
+    yaw: -127.69224500000001
+    pitch: 0
+  mode: stationary_idle
+  animations:
+  - idle
+  dialogue:
+  - Utinni! Keep your tools close.
+  - Every little piece has a story.
+  - Quiet feet find the best scrap.
+
+- id: brown_jawa_02
+  name: Jawa
+  type: jawa_brown
+  model: jawa_brown
+  scale: 1
+  location:
+    world: minecraft:spawnworld
+    x: -4.416865618655401
+    y: 93.0
+    z: 32.00444662250574
+    yaw: -7.692244999999957
+    pitch: 0
+  mode: stationary_idle
+  animations:
+  - idle
+  dialogue:
+  - A careful eye spots what others leave behind.
+  - Utinni! This outpost has good stories.
+  - Keep your pack tidy. You never know what you will find.
+
+- id: brown_jawa_03
+  name: Jawa
+  type: jawa_brown
+  model: jawa_brown
+  scale: 1
+  location:
+    world: minecraft:spawnworld
+    x: -2.8283500115352265
+    y: 93.0
+    z: 34.0603206862401
+    yaw: 112.30775500000004
+    pitch: 0
+  mode: stationary_idle
+  animations:
+  - idle
+  dialogue:
+  - Watch the sky. There is always another ship coming.
+  - Some travelers talk too much. I prefer to listen.
+  - Utinni! Safe travels, friend.

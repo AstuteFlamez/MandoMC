@@ -15,7 +15,10 @@ public final class DecorModel implements AutoCloseable {
     private final ActiveModel active;
     public DecorModel(ArmorStand base,DecorDefinition definition){
         if(ModelEngineAPI.getBlueprint(definition.model())==null)throw new IllegalStateException("Missing decor blueprint "+definition.model());
-        modeled=ModelEngineAPI.getOrCreateModeledEntity(base);modeled.setSaved(false);modeled.setBaseEntityVisible(false);
+        var existing=ModelEngineAPI.getModeledEntity(base);
+        if(existing!=null&&existing.isDestroyed())ModelEngineAPI.removeModeledEntity(base);
+        modeled=ModelEngineAPI.getOrCreateModeledEntity(base);
+        modeled.getModel(definition.model()).ifPresent(old->{modeled.removeModel(definition.model());if(!old.isDestroyed())old.destroy();});modeled.setSaved(false);modeled.setBaseEntityVisible(false);
         active=ModelEngineAPI.createActiveModel(definition.model());active.setScale(definition.scale());
         // This flag sends an invisible INTERACTION target to clients; it does not show the native base.
         active.setCanHurt(false);active.setHitboxVisible(definition.npc());active.setMainHitbox(false);active.setRenderFire(false);
@@ -63,6 +66,12 @@ public final class DecorModel implements AutoCloseable {
             refreshHeadChildren(child);
         }
     }
+    public boolean valid(){return !modeled.isDestroyed()&&!active.isDestroyed()&&!active.isRemoved()
+            &&ModelEngineAPI.getModeledEntity(modeled.getBase().getUUID())==modeled
+            &&modeled.getModel(active.getBlueprint().getName()).orElse(null)==active;}
     public ModeledEntity modeled(){return modeled;}
-    @Override public void close(){modeled.destroy();}
+    @Override public void close(){
+        if(ModelEngineAPI.getModeledEntity(modeled.getBase().getUUID())==modeled)ModelEngineAPI.removeModeledEntity(modeled.getBase().getUUID());
+        if(!modeled.isDestroyed())modeled.destroy();
+    }
 }
