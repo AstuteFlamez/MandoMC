@@ -1,5 +1,9 @@
 # Resume here
 
+## Durasteel hand orientation staged (2026-11-12)
+
+On `bilal/durasteel-hand-orientation`, Durasteel now uses the existing Beskar/Stormtrooper first- and third-person hand transforms, addressing its missing hand pose. All other Durasteel model data and all 1177 unrelated pack entries are unchanged. Resource-pack build, eight model checks and `./scripts/build.sh` pass. Publication and in-client verification remain pending. See [feature](features/durasteel-hand-orientation.md). Next action: apply the tested pack to development and check Durasteel in both hands beside the working helmets.
+
 ## Production live; automated upload validation (2026-11-12)
 
 The rebuilt server is live on PebbleHost from checked main 55748b04ad5fa3750aa67248a60c7e1939656473. The executable-JAR launcher loads the required redstone agent before unchanged pinned Paper 26.1.2-74 on Java 25. Production logs show all gameplay readiness markers and zero startup errors; every managed file matches its checked source hash. Public Minecraft and NuVotifier endpoints respond at 142.4.206.185 ports 25565 and 19132, with play.mandomc.net resolving to the dedicated IP. Maintenance and whitelists are disabled while owner records stay private.

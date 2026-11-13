@@ -266,6 +266,35 @@
         0.95,
         0.95
       ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        68,
+        60,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        -180,
+        67,
+        -180
+      ],
+      "translation": [
+        -0.5,
+        3.75,
+        -0.5
+      ],
+      "scale": [
+        0.8,
+        0.8,
+        0.8
+      ]
     }
   }
 }
