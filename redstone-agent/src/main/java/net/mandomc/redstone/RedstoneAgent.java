@@ -26,6 +26,11 @@ public final class RedstoneAgent {
             "net/minecraft/world/level/block/DaylightDetectorBlock", Set.of("updateSignalStrength"),
             "net/minecraft/world/level/block/piston/PistonBaseBlock", Set.of("triggerEvent"));
 
+    /** Java's executable-JAR agent entry point, before Paper loads any native classes. */
+    public static void agentmain(String arguments, Instrumentation instrumentation) {
+        premain(arguments, instrumentation);
+    }
+
     public static void premain(String arguments, Instrumentation instrumentation) {
         instrumentation.addTransformer(new ClassFileTransformer() {
             @Override
