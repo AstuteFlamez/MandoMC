@@ -432,6 +432,7 @@ public final class ParkourService implements Listener, AutoCloseable {
         }
         keepDisplayChunk(location(config.getList("leaderboard")));
         leaderboard=world.spawn(location(config.getList("leaderboard")),TextDisplay.class,e->{
+            e.setDefaultBackground(false);e.setBackgroundColor(org.bukkit.Color.fromARGB(0));
             e.setBillboard(Display.Billboard.CENTER);e.setShadowed(true);e.setPersistent(false);e.setViewRange(.7f);
         });displays.add(leaderboard);updateLeaderboard();
         for(var data:config.getMapList("npcs")){
@@ -510,6 +511,7 @@ public final class ParkourService implements Listener, AutoCloseable {
     }
     private void updateLeaderboard() {
         if(leaderboard==null||!leaderboard.isValid())return;
+        leaderboard.setDefaultBackground(false);leaderboard.setBackgroundColor(org.bukkit.Color.fromARGB(0));
         Component text=message("leaderboard-title");int rank=0;
         for(var entry:top())text=text.append(Component.newline()).append(message("top-row","rank",Integer.toString(++rank),"name",entry.getValue().name(),"time",format(entry.getValue().millis())));
         if(rank==0)text=text.append(Component.newline()).append(message("empty-top"));

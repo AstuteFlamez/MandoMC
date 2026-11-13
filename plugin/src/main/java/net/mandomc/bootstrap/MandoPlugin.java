@@ -215,6 +215,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             bobaEquipmentMenu = new net.mandomc.gameplay.boba.JetpackEquipmentMenu(this, items, bobaEquipment,
                     language.getConfigurationSection("boba-equipment"));
             bobaEquipmentMenu.register(root);
+            getLogger().info("Boba equipment ready: Jetpack enchantment and flamethrower.");
             var jabbaConfig = loadFeature("mobs/drops/jabba.yml");
             if (jabbaConfig.getBoolean("enabled", false)) {
                 new net.mandomc.integrations.mobs.JabbaDrops(this, items,
@@ -234,7 +235,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                         mobConfig.getDouble("weapon-drops.chance", 0.10));
                 new net.mandomc.integrations.mobs.BanthaDrops(this, items, hideConfig.getConfigurationSection("drops"));
                 mobs = new net.mandomc.gameplay.mobs.SandySpawns(this, settings, mythic);
-                getLogger().info("Sandy mobs ready: five types, levelled encounters and shared population limits.");
+                getLogger().info("Sandy mobs ready: five types, base stats and shared population limits.");
             }
             var vehicleProtection = new net.mandomc.integrations.regions.VehicleProtection();
             explosions = new net.mandomc.gameplay.explosions.TemporaryExplosions(this,
@@ -272,7 +273,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             net.mandomc.commands.ArrivalCommands.register(this, arrival, destinations, travel);
             warps = new net.mandomc.gameplay.travel.WarpService(this, travel, destinations, loadFeature("travel/warps.yml"));
             events = new net.mandomc.gameplay.events.EventManager(this, warps);
-            getLogger().info("Legacy events and public warps ready: KOTH, Black Spire Outpost, Hoth and Tatooine; rewards disabled.");
+            getLogger().info("Native events and public warps ready: configured destinations and event rewards loaded.");
             getLogger().info("Arrival enabled: protected Batuu spawn; /spawn and temporary /tutorial ready.");
         } catch (Exception | LinkageError error) {
             failed = true;

@@ -292,7 +292,7 @@ def deploy(sftp, commit, apply=False):
         raise ValueError('A full source commit SHA is required')
     # This receipt can only be installed after the separate one-time migration.
     receipt = read_remote(sftp, '.mandomc/bootstrap.json')
-    if receipt is None or json.loads(receipt).get('schemaVersion') != 1:
+    if receipt is None or json.loads(receipt).get('schemaVersion') != 1 or not json.loads(receipt).get('verifiedStartup'):
         raise ValueError('Initial migration has not been verified; automatic upload is blocked.')
     previous_raw = read_remote(sftp, REMOTE_STATE)
     if previous_raw is None:
@@ -342,7 +342,42 @@ def deploy(sftp, commit, apply=False):
         sftp.rmdir('.mandomc/deploy.lock')
 
 
-def download(sftp, remote, destination):
+def verify_startup(sftp):
+    raw = read_remote(sftp, '.mandomc/bootstrap.json')
+    if raw is None:
+        raise ValueError('No migration receipt; activate the prepared runtime first.')
+    receipt = json.loads(raw)
+    log_path = 'logs/latest.log'
+    if sftp.lstat(log_path).st_mtime < sftp.lstat('.mandomc/bootstrap.json').st_mtime:
+        raise ValueError('The current log predates the cutover. Start the server manually first.')
+    log = (read_remote(sftp, log_path) or b'').decode('utf-8', errors='replace')
+    required = ('Running Java 25', 'Loading Paper 26.1.2-74', 'Done (',
+                'Arrival enabled:', 'Native clans ready:', 'Native crates ready;',
+                'Redstone circuits disabled in all worlds', 'Travel guides ready:',
+                'Ambient Massiffs ready:', 'World leaderboards ready:')
+    missing = [text for text in required if text not in log]
+    if missing or '/ERROR]' in log or '/SEVERE]' in log:
+        raise ValueError('Startup not healthy; inspect latest.log. Missing markers: ' + ', '.join(missing))
+    state_raw = read_remote(sftp, REMOTE_STATE)
+    if state_raw is None:
+        raise ValueError('Missing managed-file receipt')
+    state = json.loads(state_raw)
+    drift = []
+    for target, expected in state['files'].items():
+        current = read_remote(sftp, installed_path(target))
+        if sha(current) != expected:
+            drift.append(target)
+    if drift:
+        raise ValueError('Startup changed managed bytes; review before enabling upload: ' + ', '.join(drift))
+    receipt['verifiedStartup'] = True
+    receipt['verifiedAt'] = datetime.now(timezone.utc).isoformat()
+    state['restartRequired'] = False
+    atomic_write(sftp, '.mandomc/bootstrap.json', json.dumps(receipt).encode())
+    atomic_write(sftp, REMOTE_STATE, json.dumps(state).encode())
+    print('Paper, Java, gameplay startup and managed hashes verified. No power command was sent.')
+
+
+def download(sftp, remote, destination, resume=False):
     """Read-only recursive download; never follows server-controlled symlinks."""
     for item in sftp.listdir_attr(remote):
         if item.filename in ('.', '..') or '/' in item.filename or '\\' in item.filename:
@@ -352,18 +387,32 @@ def download(sftp, remote, destination):
         if stat.S_ISLNK(item.st_mode):
             print(f'Skipping symbolic link: {source}')
         elif stat.S_ISDIR(item.st_mode):
-            target.mkdir(mode=0o700)
-            download(sftp, source, target)
+            target.mkdir(mode=0o700, exist_ok=resume)
+            download(sftp, source, target, resume)
         elif stat.S_ISREG(item.st_mode):
-            sftp.get(source, str(target), max_concurrent_prefetch_requests=32)
+            if resume and target.is_file() and target.stat().st_size == item.st_size and item.st_size >= 1048576:
+                continue
+            try:
+                sftp.get(source, str(target), max_concurrent_prefetch_requests=32)
+            except OSError:
+                # Some Wings SFTP servers reject pipelined reads on a changing
+                # file. Retry with plain reads and retain the failing path.
+                try:
+                    sftp.get(source, str(target), prefetch=False)
+                except Exception as exc:
+                    raise OSError(f'Download failed at {source}: {exc}') from exc
             target.chmod(0o600)
+            os.utime(target, (item.st_atime, item.st_mtime))
 
 
-def pull(config, sftp):
-    destination = PRIVATE / 'downloads' / datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
-    destination.mkdir(parents=True, mode=0o700)
+def pull(config, sftp, resume=None):
+    destination = Path(resume).resolve() if resume else PRIVATE / 'downloads' / datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+    if resume and (PRIVATE / 'downloads').resolve() not in destination.parents:
+        raise ValueError('Resume only into an existing private download directory.')
+    destination.mkdir(parents=True, mode=0o700, exist_ok=bool(resume))
     print(f'Downloading into {destination}. A running server is not a consistent world backup.', flush=True)
-    items = [item for item in sftp.listdir_attr('.') if item.filename != '.mandomc']
+    generated = {'.mandomc', '.cache', '.java', 'cache', 'libraries', 'versions', 'logs', 'debug', '.trash', '.ufs-tmp'}
+    items = [item for item in sftp.listdir_attr('.') if item.filename not in generated]
 
     def worker(group):
         client, channel = connect(config)
@@ -372,11 +421,14 @@ def pull(config, sftp):
                 name = safe_path(item.filename)
                 target = destination / name
                 if stat.S_ISDIR(item.st_mode):
-                    target.mkdir(mode=0o700)
-                    download(channel, name, target)
+                    target.mkdir(mode=0o700, exist_ok=bool(resume))
+                    download(channel, name, target, bool(resume))
                 elif stat.S_ISREG(item.st_mode):
+                    if resume and target.is_file() and target.stat().st_size == item.st_size and item.st_size >= 1048576:
+                        continue
                     channel.get(name, str(target), max_concurrent_prefetch_requests=32)
                     target.chmod(0o600)
+                    os.utime(target, (item.st_atime, item.st_mtime))
                 else:
                     continue
                 print(f'Downloaded {name}', flush=True)
@@ -389,7 +441,8 @@ def pull(config, sftp):
         for future in [pool.submit(worker, items[index::4]) for index in range(4)]:
             future.result()
     private_write(destination / '.download-complete.json', json.dumps(dict(
-        completedAt=datetime.now(timezone.utc).isoformat(), consistentSnapshot=False)))
+        completedAt=datetime.now(timezone.utc).isoformat(), consistentSnapshot=False,
+        excludedGeneratedPaths=sorted(generated), resumed=bool(resume))))
     print(f'Download complete: {destination}', flush=True)
 
 
@@ -398,7 +451,9 @@ def main():
     commands = parser.add_subparsers(dest='command', required=True)
     commands.add_parser('configure')
     commands.add_parser('check')
-    commands.add_parser('pull')
+    pull_command = commands.add_parser('pull')
+    pull_command.add_argument('--resume', type=Path)
+    commands.add_parser('verify-startup')
     release = commands.add_parser('deploy')
     release.add_argument('--commit', required=True)
     release.add_argument('--apply', action='store_true')
@@ -413,7 +468,9 @@ def main():
             print(f'Connected. {len(sftp.listdir("."))} server-root items.')
             print('Migration receipt:', 'present' if read_remote(sftp, '.mandomc/bootstrap.json') else 'absent')
         elif args.command == 'pull':
-            pull(config, sftp)
+            pull(config, sftp, args.resume)
+        elif args.command == 'verify-startup':
+            verify_startup(sftp)
         else:
             deploy(sftp, args.commit, args.apply)
     finally:

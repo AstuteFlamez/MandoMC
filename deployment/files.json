@@ -194,6 +194,10 @@
       "target": "plugins/MandoMC/language/territory.yml"
     },
     {
+      "source": "server/config/common/mandomc/leaderboards/world.yml",
+      "target": "plugins/MandoMC/leaderboards/world.yml"
+    },
+    {
       "source": "server/config/common/mandomc/mobs/bossk.yml",
       "target": "plugins/MandoMC/mobs/bossk.yml"
     },

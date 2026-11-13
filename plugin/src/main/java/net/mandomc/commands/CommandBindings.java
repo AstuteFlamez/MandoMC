@@ -30,11 +30,13 @@ public final class CommandBindings implements AutoCloseable {
         catch(Exception error){throw new IllegalStateException("Native clan initialization failed",error);}
         messaging=new net.mandomc.gameplay.messaging.MessagingFeature(plugin);
         decor=new net.mandomc.gameplay.decor.DecorFeature((net.mandomc.bootstrap.MandoPlugin)plugin);
+        net.mandomc.gameplay.leaderboards.LeaderboardFeature.start((net.mandomc.bootstrap.MandoPlugin)plugin);
     }
     private void claim(String label, Command command) {
         previous.put(label, known.put(label, command)); owned.put(label, command);
     }
     @Override public void close() {
+        net.mandomc.gameplay.leaderboards.LeaderboardFeature.stop();
         decor.close();
         messaging.close();
         clans.close();

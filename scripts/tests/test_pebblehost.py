@@ -147,7 +147,7 @@ class SftpSafetyTests(unittest.TestCase):
         from unittest.mock import patch
         target = 'plugins/update/MandoMC.jar'
         old_state = json.dumps({'files': {target: module.sha(b'old')}}).encode()
-        remote = Remote({'.mandomc/bootstrap.json': b'{"schemaVersion":1}',
+        remote = Remote({'.mandomc/bootstrap.json': b'{"schemaVersion":1,"verifiedStartup":true}',
                          '.mandomc/deployed.json': old_state, 'plugins/MandoMC.jar': b'old',
                          'server.properties': b'online-mode=true\n', 'pebblehost.yml': b'javaversion=25\n'})
         with patch.object(module, 'payload', return_value={target: b'new'}), \
