@@ -1,0 +1,11 @@
+# One development world in native travel
+
+The native world list exposes DevWorld only. `minecraft:devworld` keeps its existing flat development terrain, spawn and aliases. The primary `minecraft:overworld` entry and its `dev_world` alias are removed from `worlds/worlds.yml`, including bundled defaults and the server override. The Galaxy Map already contains neither development world.
+
+Minecraft still loads its required primary overworld. The `level-name=dev_world` storage root contains every planet dimension and player data; retain this root and all overworld terrain/entities in place. This change does not unload, delete or rename any world. Privileged vanilla dimension commands can still address `minecraft:overworld`.
+
+First join and fallback respawn remain SpawnWorld. Native saved locations resolve stable dimension keys directly through Bukkit, so existing homes/back locations remain valid. The historical overworld landing protection in territory/maps.yml remains intact. Existing claims and frozen wilderness data are unchanged.
+
+Deployment replaces only the existing JAR's `worlds/worlds.yml` resource and the matching runtime config. The obsolete root `worlds.yml` is already empty and remains byte-identical. Every class and unrelated resource is preserved, including the latest starting-credits rollout. Backup the replaced JAR/config before a clean restart; rollback restores those two files during a stopped window.
+
+Verification (2026-11-11): source build passes 199 tests. YAML parsing confirms only worlds.overworld was removed and all seven retained entries are identical. One ordinary restart completed at 23:15 local, with no ERROR/SEVERE entries. Read-only native time queries resolve DevWorld, SpawnWorld, Hoth, Tatooine, Mandalore, Ilum and TatooineLegacy; dev_world, overworld and minecraft:overworld are rejected. Startup validates protected arrivals, four claims, nine decor placements and 2115/2115 frozen Hoth chunks. All 2,205 checked configurations/claims/frozen files match their stopped-server hashes. The previously active Jabba event was restored. Native suggestions use WorldService.names() and therefore omit the removed entry; visual client confirmation remains the next check. Installed JAR SHA-256: 73f996553cdf1878ee3a45be1816e9a9ed09820808cc2f6c9dad921dfddf39cd.
