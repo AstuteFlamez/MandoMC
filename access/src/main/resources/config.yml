@@ -1,0 +1,5 @@
+schema-version: 1
+# Only used for the first state creation; requires this account in verified online-mode ops.
+initial-owner: AstuteFlamez
+denied: '<gold>MandoMC</gold><newline><gray>Maintenance is in progress. Please try again later.</gray>'
+unavailable: '<gold>MandoMC</gold><newline><gray>Access is temporarily unavailable. Please try again later.</gray>'

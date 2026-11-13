@@ -189,6 +189,33 @@ public final class VehicleService implements Listener, AutoCloseable {
                 && (attacker == null || !live.model.riders().contains(attacker));
     }
 
+    /** Snapshot the launch platform; dismounting must not turn an in-flight shot into ordinary PvP. */
+    public Entity combatVehicle(Entity source) {
+        if (source == null) return null;
+        String launch = source.getPersistentDataContainer().get(
+                new NamespacedKey("mandomc", "vehicle_source"), org.bukkit.persistence.PersistentDataType.STRING);
+        if (launch != null) {
+            var live = active.get(UUID.fromString(launch));
+            // Retain a denied source even after packing/destruction; never fall back to ordinary PvP.
+            return live == null ? source : live.entity;
+        }
+        if (managed(source)) return source;
+        if (source instanceof org.bukkit.entity.Projectile projectile
+                && projectile.getShooter() instanceof Entity shooter) return combatVehicle(shooter);
+        if (source instanceof org.bukkit.entity.TNTPrimed tnt && tnt.getSource() != source)
+            return combatVehicle(tnt.getSource());
+        if (source instanceof Player player)
+            for (Live live : active.values()) if (live.model.riders().contains(player)) return live.entity;
+        return null;
+    }
+
+    public boolean mayUse(Entity vehicle, Entity shooter, Location target) {
+        return vehicle == null || (managed(vehicle) && vehicle.isValid() && !vehicle.isDead()
+                && protection.use(vehicle.getLocation())
+                && (shooter == null || protection.use(shooter.getLocation()))
+                && protection.use(target));
+    }
+
     private Live live(Entity entity) {
         return entity == null ? null : active.get(entities.get(entity.getUniqueId()));
     }
@@ -571,7 +598,8 @@ public final class VehicleService implements Listener, AutoCloseable {
 
     public boolean mayShoot(Player player) {
         for (Live live : active.values()) {
-            if (live.model.riders().contains(player)) return live.model.mayShoot(player);
+            if (live.model.riders().contains(player)) return live.model.mayShoot(player)
+                    && mayUse(live.entity, player, player.getLocation());
         }
         return true;
     }
@@ -716,10 +744,43 @@ public final class VehicleService implements Listener, AutoCloseable {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void launch(org.bukkit.event.entity.ProjectileLaunchEvent event) {
+        var projectile = event.getEntity();
+        if (!(projectile.getShooter() instanceof Entity shooter)) return;
+        Entity vehicle = combatVehicle(shooter);
+        if (vehicle == null) return;
+        if (!mayUse(vehicle, shooter, projectile.getLocation())) { event.setCancelled(true); return; }
+        projectile.getPersistentDataContainer().set(new NamespacedKey("mandomc", "vehicle_source"),
+                org.bukkit.persistence.PersistentDataType.STRING, identity(vehicle).toString());
+    }
+
+    private boolean vehicleBlast(Entity entity) {
+        return entity != null && entity.getPersistentDataContainer().has(
+                new NamespacedKey("mandomc", "vehicle_blast"), org.bukkit.persistence.PersistentDataType.BYTE);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void explosion(org.bukkit.event.entity.EntityExplodeEvent event) {
+        Entity vehicle = combatVehicle(event.getEntity());
+        if (!mayUse(vehicle, event.getEntity(), event.getLocation())
+                || (vehicleBlast(event.getEntity()) && !protection.use(event.getLocation()))) {
+            event.setCancelled(true); return;
+        }
+        if (vehicle != null || vehicleBlast(event.getEntity()))
+            event.blockList().removeIf(block -> !protection.use(block.getLocation()));
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void damage(EntityDamageEvent e) {
+        Entity attacker = e.getDamageSource().getCausingEntity();
+        Entity direct = e.getDamageSource().getDirectEntity();
+        Entity vehicle = combatVehicle(direct);
+        if (vehicle == null) vehicle = combatVehicle(attacker);
+        if (!mayUse(vehicle, attacker, e.getEntity().getLocation())
+                || (vehicleBlast(direct) && (!protection.use(direct.getLocation())
+                    || !protection.use(e.getEntity().getLocation())))) e.setCancelled(true);
         if (!managed(e.getEntity())) return;
         var cause = e.getCause();
-        Entity attacker = e.getDamageSource().getCausingEntity();
         if (!(e instanceof EntityDamageByEntityEvent)
                 && cause != EntityDamageEvent.DamageCause.BLOCK_EXPLOSION
                 && cause != EntityDamageEvent.DamageCause.ENTITY_EXPLOSION
@@ -757,7 +818,7 @@ public final class VehicleService implements Listener, AutoCloseable {
         remove(live);
         // Remove ownership/indexes first so chained native explosions cannot kill this identity
         // twice.
-        if (protection.damage(location)) explosions.explode(location, attacker);
+        if (protection.use(location)) explosions.explodeVehicle(location, attacker);
     }
 
     private void remove(Live live) {

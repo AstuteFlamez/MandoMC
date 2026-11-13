@@ -28,7 +28,7 @@ def main():
             data = faithful.read(source)
             image = Image.open(io.BytesIO(data))
             hue = (0.0, 0.18) if "iron_ore" in source else (0.05, 0.23) if "gold_ore" in source else (0.40, 0.61)
-            result, pixels = metal.tint(image, palettes[name], ore, soften, mineral_hue=hue, shadow_floor=(96 if name == "electrum" and "deepslate_" not in source else 80) if ore and ("deepslate_" in source or name == "electrum") else None)
+            result, pixels = metal.tint(image, palettes[name], ore, soften, mineral_hue=hue, shadow_floor=(96 if name == "electrum" and "deepslate_" not in source else 80) if ore and ("deepslate_" in source or name == "electrum") else None, rock_base=Image.open(io.BytesIO(faithful.read("assets/minecraft/textures/block/deepslate.png"))) if ore and "deepslate_" in source else None)
             path = ASSETS / target
             path.parent.mkdir(parents=True, exist_ok=True)
             result.save(path)

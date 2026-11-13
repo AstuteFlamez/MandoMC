@@ -6,6 +6,11 @@ if [[ ! -f paper.jar ]]; then
     echo "Missing server/runtime/paper.jar; install the artifact in server/paper.lock.json." >&2
     exit 1
 fi
+if [[ ! -f agents/MandoMC-RedstoneAgent.jar ]]; then
+    echo "Missing server/runtime/agents/MandoMC-RedstoneAgent.jar; install the matching redstone agent." >&2
+    exit 1
+fi
 python3 "$MANDOMC_ROOT/scripts/sync-resource-pack.py"
 cp "$MANDOMC_ROOT/docs/assets/server-icon.png" server-icon.png
-exec "$JAVA_HOME/bin/java" -Xms1G -Xmx"${MANDOMC_MAX_MEMORY:-4G}" -jar paper.jar --nogui "$@"
+exec "$JAVA_HOME/bin/java" -javaagent:agents/MandoMC-RedstoneAgent.jar \
+    -Xms1G -Xmx"${MANDOMC_MAX_MEMORY:-4G}" -jar paper.jar --nogui "$@"

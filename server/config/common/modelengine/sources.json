@@ -17,13 +17,13 @@
       "source": "ModelEngine/blueprints/Bantha.bbmodel",
       "sha256": "2aa084cca1b9cdf29340b97a8b3791df9bc91d6c2f11eb3986e5e13e8019d4e7",
       "destination": "server/config/common/modelengine/blueprints/bantha.bbmodel",
-      "changes": "Normalize model ID; remove local texture path metadata; preserve embedded textures, geometry and animation."
+      "changes": "Normalize model ID; remove local texture path metadata; preserve embedded textures, geometry and animation. Add separate saddle geometry and a body-parented driver locator; reuse the original Bantha atlas for brown leather. Original cubes, texture UVs and animation keyframes remain unchanged."
     },
     {
       "source": "ModelEngine/blueprints/Dewback.bbmodel",
       "sha256": "3ed9cf7d45c806ccaeb8e456f263e179370cd9867ce4952e374652508a5f9f92",
       "destination": "server/config/common/modelengine/blueprints/dewback.bbmodel",
-      "changes": "Normalize model ID; remove local texture path metadata; preserve embedded textures, geometry and animation."
+      "changes": "Normalize model ID; remove local texture path metadata; preserve embedded textures, geometry and animation. Add separate saddle geometry and a body-parented driver locator; reuse the original Bantha atlas for brown leather. Original cubes, texture UVs and animation keyframes remain unchanged. User requested larger body collision: expand only the hidden hitbox cube from head-only bounds to [-13,0,-34]..[13,36,22]; visible cubes, UVs and keyframes unchanged."
     },
     {
       "source": "ModelEngine/blueprints/massiff.bbmodel",
@@ -66,6 +66,18 @@
       "sha256": "d1924c408712f2fe9314ba6643a575f1f27dedba5978bfe6a63a8e068f8f1174",
       "destination": "server/config/common/modelengine/blueprints/rancor.bbmodel",
       "changes": "Normalize ID, strip local texture paths and finish attack clips. Original geometry, embedded textures, hitbox, keyframes and Override flags retained. Original scale 2 is applied by model attachment."
+    },
+    {
+      "source": "ModelEngine/blueprints/jawa_brown.bbmodel",
+      "sha256": "71d5da87d77f2ac89ed3381a08395ef5a91b3e59c56a1b183eeb3844f7b8604d",
+      "destination": "server/config/common/modelengine/blueprints/jawa_brown.bbmodel",
+      "changes": "Preserve original rig, embedded texture and keyframes. Strip local texture paths; enable animation override; attack/death finish once."
+    },
+    {
+      "source": "ModelEngine/blueprints/jawa_black.bbmodel",
+      "sha256": "a6d5c0f86e0f5dc4831f374bde97690c4d3ee3b9710c4d078a7e8ef40382a125",
+      "destination": "server/config/common/modelengine/blueprints/jawa_black.bbmodel",
+      "changes": "Rebuilt with the working brown Jawa geometry, full bone hierarchy and unchanged animations. Preserve original gray robe atlas; use the brown face atlas on the restored face bone only. Runtime face-only red tint and full brightness produce red eyes without tinting the gray hood."
     }
   ]
 }

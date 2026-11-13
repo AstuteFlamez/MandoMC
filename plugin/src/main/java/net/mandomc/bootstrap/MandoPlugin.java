@@ -6,7 +6,7 @@ import net.kyori.adventure.text.Component;
 import net.mandomc.gameplay.arrival.ArrivalDestinations;
 import net.mandomc.gameplay.arrival.ArrivalListener;
 import net.mandomc.gameplay.arrival.ArrivalSettings;
-import net.mandomc.integrations.regions.WorldGuardArrivalProtection;
+import net.mandomc.integrations.regions.NativeArrivalProtection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,6 +17,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class MandoPlugin extends JavaPlugin implements Listener {
     private net.mandomc.gameplay.ranks.RankService ranks;
     private net.mandomc.integrations.permissions.WorldEditRanks worldEditRanks;
+    private net.mandomc.gameplay.jawa.JawaTraders jawas;
+    public net.mandomc.gameplay.jawa.JawaTraders jawas() { return jawas; }
     private net.mandomc.gameplay.credits.CreditService credits;
     private net.mandomc.gameplay.hud.PlayerHud hud;
     public net.mandomc.gameplay.ranks.RankService ranks() { return ranks; }
@@ -37,6 +39,8 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     public net.mandomc.gameplay.events.EventManager events() { return events; }
     public net.mandomc.gameplay.travel.WarpService warps() { return warps; }
     public net.mandomc.gameplay.travel.TeleportService travel() { return travel; }
+    public net.mandomc.gameplay.territory.TerritoryService territories() { return territories; }
+    private net.mandomc.gameplay.territory.TerritoryService territories;
     private net.mandomc.gameplay.worlds.WorldService worlds;
     private net.mandomc.commands.CommandBindings commandBindings;
     private net.mandomc.gameplay.admin.AdminService admin;
@@ -57,6 +61,9 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     private ArrivalListener arrival;
     private ArrivalDestinations destinations;
     private boolean failed;
+    private net.mandomc.gameplay.boba.BobaEquipment bobaEquipment;
+    private net.mandomc.gameplay.boba.JetpackEquipmentMenu bobaEquipmentMenu;
+    public net.mandomc.gameplay.boba.BobaEquipment bobaEquipment() { return bobaEquipment; }
     private net.mandomc.gameplay.mobs.RancorSlam rancorSlam;
     private net.mandomc.gameplay.mobs.BosskDioxis bosskDioxis;
     private net.mandomc.integrations.weapons.BosskAim bosskAim;
@@ -79,7 +86,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(this, this);
-        for (var name : new String[] {"tutorial", "survival", "spawn"}) {
+        for (var name : new String[] {"tutorial", "spawn"}) {
             Objects.requireNonNull(getCommand(name)).setExecutor((sender, command, label, arguments) -> {
                 sender.sendMessage(Component.text("Travel is unavailable. Please contact a server administrator."));
                 return true;
@@ -100,6 +107,9 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                     java.nio.charset.StandardCharsets.UTF_8)) {
                 language.setDefaults(YamlConfiguration.loadConfiguration(reader));
             }
+            territories = new net.mandomc.gameplay.territory.TerritoryService(this,
+                    loadFeature("territory/maps.yml"), loadFeature("language/territory.yml"));
+            new net.mandomc.integrations.weapons.TerritoryWeapons(this, territories);
             worlds = new net.mandomc.gameplay.worlds.WorldService(this, loadFeature("worlds/worlds.yml"));
             var root = new net.mandomc.commands.RootCommand(this, sender -> {
                 try {
@@ -109,7 +119,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                     if (destinations != null) {
                         destinations.validate();
                         sender.sendMessage(Component.text("MandoMC arrival ready: " + destinations.spawn()
-                                + " -> " + destinations.survival()));
+                                + (destinations.hasSurvival() ? " -> " + destinations.survival() : "")));
                     } else {
                         sender.sendMessage(Component.text("MandoMC foundation enabled; arrival is disabled."));
                     }
@@ -123,7 +133,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 worldEditRanks = new net.mandomc.integrations.permissions.WorldEditRanks(this, ranks);
             new net.mandomc.commands.RankCommands(root, ranks, language.getConfigurationSection("ranks"));
             credits = new net.mandomc.gameplay.credits.CreditService(this, loadFeature("economy/credits.yml"));
-            for (var resource : new String[] {"items/catalog.yml", "items/definitions/vehicles.yml", "items/definitions/vehicle-ammo.yml", "items/definitions/legacy.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/jabba.yml", "items/definitions/jabba-loot.yml", "items/definitions/dioxis.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
+            for (var resource : new String[] {"items/catalog.yml", "items/definitions/vehicles.yml", "items/definitions/vehicle-ammo.yml", "items/definitions/legacy.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/jabba.yml", "items/definitions/jabba-loot.yml", "items/definitions/dioxis.yml", "items/definitions/boba-equipment.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
                 if (!new File(getDataFolder(), resource).isFile()) saveResource(resource, false);
             }
             // Add only missing badges and vendor registrations; preserve local overrides.
@@ -199,24 +209,33 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                         bosskPose::position,items);
                 new net.mandomc.integrations.mobs.BosskCombat(this,items,bosskMobs::type,boundaryProtection::allowed);
             }
+            bobaEquipment = new net.mandomc.gameplay.boba.BobaEquipment(this, items,
+                    net.mandomc.gameplay.boba.BobaEquipmentSettings.read(loadFeature("equipment/boba.yml")),
+                    language.getConfigurationSection("boba-equipment"), boundaryProtection::allowed);
+            bobaEquipmentMenu = new net.mandomc.gameplay.boba.JetpackEquipmentMenu(this, items, bobaEquipment,
+                    language.getConfigurationSection("boba-equipment"));
+            bobaEquipmentMenu.register(root);
+            getLogger().info("Boba equipment ready: Jetpack enchantment and flamethrower.");
             var jabbaConfig = loadFeature("mobs/drops/jabba.yml");
             if (jabbaConfig.getBoolean("enabled", false)) {
                 new net.mandomc.integrations.mobs.JabbaDrops(this, items,
                         net.mandomc.gameplay.mobs.JabbaDropsSettings.read(jabbaConfig));
                 getLogger().info("Jabba generic guard drops ready; dungeon spawning is not enabled.");
             }
+            jawas = new net.mandomc.gameplay.jawa.JawaTraders(this, loadFeature("mobs/jawas.yml"), root);
             var mobConfig = loadFeature("mobs/spawning.yml");
             if (mobConfig.getBoolean("enabled", false)) {
                 var settings = net.mandomc.gameplay.mobs.SandySettings.read(mobConfig);
                 var mythic = new net.mandomc.integrations.mobs.MythicMobAccess();
                 new net.mandomc.integrations.mobs.MassiffDrops(this, items);
                 new net.mandomc.integrations.mobs.DewbackDrops(this, items);
+                HerdBootstrap.enable(this);
                 new net.mandomc.integrations.weapons.MobWeaponDamage(this, mythic, settings);
                 new net.mandomc.integrations.mobs.TuskenDrops(this, items,
                         mobConfig.getDouble("weapon-drops.chance", 0.10));
                 new net.mandomc.integrations.mobs.BanthaDrops(this, items, hideConfig.getConfigurationSection("drops"));
                 mobs = new net.mandomc.gameplay.mobs.SandySpawns(this, settings, mythic);
-                getLogger().info("Sandy mobs ready: five types, levelled encounters and shared population limits.");
+                getLogger().info("Sandy mobs ready: five types, base stats and shared population limits.");
             }
             var vehicleProtection = new net.mandomc.integrations.regions.VehicleProtection();
             explosions = new net.mandomc.gameplay.explosions.TemporaryExplosions(this,
@@ -245,20 +264,17 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 getLogger().info("Foundation enabled; arrival is disabled.");
                 return;
             }
-            if (!getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
-                throw new IllegalStateException("arrival.enabled requires WorldGuard");
-            }
             var settings = new ArrivalSettings(getConfig().getString("arrival.spawn-world"),
                     getConfig().getString("arrival.survival-world"));
-            destinations = new ArrivalDestinations(settings, new WorldGuardArrivalProtection(), worlds::spawn);
+            destinations = new ArrivalDestinations(settings, new NativeArrivalProtection(), worlds::spawn);
             destinations.validate();
             arrival = new ArrivalListener(this, settings, destinations, language);
             getServer().getPluginManager().registerEvents(arrival, this);
             net.mandomc.commands.ArrivalCommands.register(this, arrival, destinations, travel);
             warps = new net.mandomc.gameplay.travel.WarpService(this, travel, destinations, loadFeature("travel/warps.yml"));
             events = new net.mandomc.gameplay.events.EventManager(this, warps);
-            getLogger().info("Legacy events and public warps ready: KOTH, Black Spire Outpost, Earth, Hoth and Tatooine; rewards disabled.");
-            getLogger().info("Arrival enabled: protected SpawnWorld -> survival; /spawn, /survival and temporary /tutorial ready.");
+            getLogger().info("Native events and public warps ready: configured destinations and event rewards loaded.");
+            getLogger().info("Arrival enabled: protected Batuu spawn; /spawn and temporary /tutorial ready.");
         } catch (Exception | LinkageError error) {
             failed = true;
             getLogger().severe("Arrival unavailable; player logins blocked until repaired: " + error.getMessage());
@@ -283,6 +299,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         if (hud != null) hud.close();
+        if (jawas != null) jawas.close();
         if (credits != null) credits.close();
         if (worldEditRanks != null) worldEditRanks.close();
         if (ranks != null) ranks.close();
@@ -290,7 +307,10 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
         if (vehicleCannons != null) vehicleCannons.close();
         if (vehicles != null) vehicles.close();
         if (explosions != null) explosions.close();
+        if (bobaEquipmentMenu != null) bobaEquipmentMenu.close();
+        if (bobaEquipment != null) bobaEquipment.close();
         if (commandBindings != null) commandBindings.close();
+        if (territories != null) territories.close();
         if (requests != null) requests.close();
         if (admin != null) admin.close();
         if(rancorSlam!=null)rancorSlam.close();

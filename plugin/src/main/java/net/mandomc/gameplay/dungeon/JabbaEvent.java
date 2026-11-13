@@ -7,7 +7,7 @@ import org.bukkit.*;import org.bukkit.block.Container;import org.bukkit.block.da
 import org.bukkit.entity.*;import org.bukkit.event.*;import org.bukkit.event.block.*;import org.bukkit.event.entity.*;import org.bukkit.event.player.PlayerInteractEvent;import org.bukkit.event.world.EntitiesLoadEvent;import org.bukkit.inventory.*;import org.bukkit.persistence.PersistentDataType;import org.bukkit.plugin.java.JavaPlugin;
 
 /** One shared, scheduled palace run. Mythic owns mobs; this class owns room/cache/gate progression. */
-public final class JabbaEvent implements ManagedEvent,Listener {
+public final class JabbaEvent implements ManagedEvent,Listener,net.mandomc.gameplay.events.EventCaches {
  private record Cache(JabbaSettings.Chest spec,List<ItemStack> loot){}
  private final boolean broadcastStart;private final JavaPlugin plugin;private final ItemCatalog items;private final JabbaSettings settings;private final ConfigurationSection messages;private final MythicMobAccess mythic;private final DungeonProgress progress;private final Path journal;private final NamespacedKey ownerKey;private final String tag;
  private final Set<String> reserved=new HashSet<>();private final Set<UUID> owned=new HashSet<>();private final Map<String,Cache> caches=new HashMap<>();private final List<Chunk> chunks=new ArrayList<>();private World world;private NativeGates gates;private boolean running;private String run;private int spawnedAt;
@@ -17,6 +17,7 @@ public final class JabbaEvent implements ManagedEvent,Listener {
   for(String s:List.of("start","caches","opened","complete","stopped","looted"))if(messages==null||!messages.isString(s))throw new IllegalArgumentException("jabba: missing message "+s);
   mythic=new MythicMobAccess();journal=plugin.getDataFolder().toPath().resolve("jabba/"+settings.profile()+"-run.yml");ownerKey=new NamespacedKey(plugin,"jabba_run");tag="mandomc_jabba_"+settings.profile();
   recover();plugin.getServer().getPluginManager().registerEvents(this,plugin);
+  plugin.getServer().getServicesManager().register(net.mandomc.gameplay.events.EventCaches.class,this,plugin,org.bukkit.plugin.ServicePriority.Normal);
  }
  public String id(){return "jabba";}public String displayName(){return "Jabba's Palace";}public boolean running(){return running;}public DungeonProgress progress(){return progress;}
  public boolean relevant(Player player){return settings.contains(player.getLocation());}
@@ -48,10 +49,28 @@ public final class JabbaEvent implements ManagedEvent,Listener {
   for(var cache:prepared.values()){var b=cache.spec.pos().location(world).getBlock();if(!b.getType().isAir())throw new IllegalStateException("Stash position was obstructed: "+cache.spec.pos().key());b.setType(Material.CHEST,false);var data=(Directional)b.getBlockData();data.setFacing(cache.spec.face());b.setBlockData(data,false);}
   caches.putAll(prepared);
  }
- @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true) public void click(PlayerInteractEvent e){if(!running||e.getClickedBlock()==null||e.getClickedBlock().getWorld()!=world)return;String key=key(e.getClickedBlock().getLocation());var cache=caches.get(key);if(cache==null)return;e.setCancelled(true);if(e.getHand()!=EquipmentSlot.HAND||e.getAction()!=Action.RIGHT_CLICK_BLOCK)return;
-  if(e.getPlayer().getGameMode()==GameMode.SPECTATOR)return;caches.remove(key);e.getClickedBlock().setType(Material.AIR,false);for(var item:cache.loot){var left=e.getPlayer().getInventory().addItem(item.clone());left.values().forEach(stack->world.dropItemNaturally(e.getPlayer().getLocation(),stack));}
+ public boolean mayClaim(PlayerInteractEvent e){return running&&e.getAction()==Action.RIGHT_CLICK_BLOCK
+  &&e.getHand()==EquipmentSlot.HAND&&e.getPlayer().getGameMode()!=GameMode.SPECTATOR
+  &&e.getClickedBlock()!=null&&e.getClickedBlock().getWorld()==world&&e.getClickedBlock().getType()==Material.CHEST
+  &&caches.containsKey(key(e.getClickedBlock().getLocation()));}
+ @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true) public void click(PlayerInteractEvent e){
+  if(!running||e.getClickedBlock()==null||e.getClickedBlock().getWorld()!=world)return;
+  String key=key(e.getClickedBlock().getLocation());var cache=caches.get(key);if(cache==null)return;
+  boolean claim=mayClaim(e);e.setCancelled(true);if(!claim)return;
+  var inventory=e.getPlayer().getInventory();var original=copy(inventory.getStorageContents());
+  var staged=Bukkit.createInventory(null,36);staged.setContents(copy(original));
+  for(var item:cache.loot)if(!staged.addItem(item.clone()).isEmpty()){
+   e.getPlayer().sendActionBar(MiniMessage.miniMessage().deserialize(messages.getString("inventory-full",
+    "<red>Make room in your inventory before looting this cache.")));return;
+  }
+  // Prepare the complete reward first. No world drops: failed/full delivery retains the same cache roll.
+  try{inventory.setStorageContents(staged.getContents());e.getClickedBlock().setType(Material.AIR,false);}
+  catch(RuntimeException error){inventory.setStorageContents(original);plugin.getLogger().log(java.util.logging.Level.SEVERE,
+   "Could not deliver Jabba cache at "+key+"; reward retained",error);return;}
+  caches.remove(key);
   var loc=cache.spec.pos().location(world).add(0.5,0.7,0.5);world.spawnParticle(Particle.TOTEM_OF_UNDYING,loc,30,0.3,0.3,0.3,0.05);world.playSound(loc,Sound.ENTITY_PLAYER_LEVELUP,1,1.2f);e.getPlayer().sendMessage(text("looted",progress.room(),caches.size()));
  }
+ private static ItemStack[] copy(ItemStack[] contents){return Arrays.stream(contents).map(item->item==null?null:item.clone()).toArray(ItemStack[]::new);}
  private boolean reserved(Location loc){return loc.getWorld().getKey().toString().equals(settings.world())&&(reserved.contains(key(loc))||allChests().stream().anyMatch(c->c.pos().key().equals(key(loc))));}
  @EventHandler(ignoreCancelled=true)public void breakBlock(BlockBreakEvent e){if(reserved(e.getBlock().getLocation()))e.setCancelled(true);}
  @EventHandler(ignoreCancelled=true)public void place(BlockPlaceEvent e){if(reserved(e.getBlock().getLocation()))e.setCancelled(true);}
@@ -72,5 +91,5 @@ public final class JabbaEvent implements ManagedEvent,Listener {
     for(UUID id:owned){var e=Bukkit.getEntity(id);if(e!=null)mythic.remove(e);}for(var c:allChests())c.pos().location(world).getBlock().setType(Material.AIR,false);if(gates!=null)gates.reset();
    }
   }catch(Exception e){plugin.getLogger().log(java.util.logging.Level.SEVERE,"Jabba cleanup checkpoint retained for recovery",e);}finally{if(gates!=null){gates.close();gates=null;}chunks.forEach(c->c.removePluginChunkTicket(plugin));chunks.clear();owned.clear();caches.clear();progress.reset();}}
- public void close(){stop(false);HandlerList.unregisterAll(this);}
+ public void close(){stop(false);HandlerList.unregisterAll(this);plugin.getServer().getServicesManager().unregister(net.mandomc.gameplay.events.EventCaches.class,this);}
 }

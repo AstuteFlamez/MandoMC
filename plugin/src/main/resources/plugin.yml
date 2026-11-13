@@ -4,8 +4,27 @@ main: net.mandomc.bootstrap.MandoPlugin
 api-version: '26.1.2'
 author: AstuteFlamez
 description: MandoMC gameplay
-softdepend: [ WorldEdit, WorldGuard, WeaponMechanics, MythicMobs, ModelEngine]
+softdepend: [ packetevents, WorldEdit, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
+  crates:
+    description: Preview and open crates
+    usage: /crates [preview|open|keys|claim|key|setblock]
+    aliases: [crate]
+    permission: mandomc.crates.play
+  parkour:
+    description: Enter the original Ilum trials
+    usage: /parkour [start|leave|checkpoint|restart|status|top]
+    aliases: [ilum]
+    permission: mandomc.parkour.play
+  parkourfinish:
+    description: Finish an eligible Ilum run at Obi-Wan
+    usage: /parkourfinish <player>
+    permission: mandomc.parkour.admin
+  c:
+    description: Manage your clan, claims and rivalries
+    usage: /c [create|invite|join|claim|home|warpoints|map]
+    aliases: [clan, cl]
+    permission: mandomc.clan.map
   auctionhouse:
     description: Buy and sell items with other players
     usage: /ah [sell <price> [amount]|selling|collect]
@@ -35,8 +54,8 @@ commands:
     usage: /credits <give|take|set> <player|UUID> <amount>
     permission: mandomc.credits.admin
   warp:
-    description: Choose Batuu, Earth, Hoth or Tatooine
-    usage: /warp [batuu|earth|hoth|tatooine]
+    description: Choose Batuu, Hoth or Tatooine
+    usage: /warp [batuu|hoth|tatooine]
     aliases: [warps, travel]
     permission: mandomc.travel.warp
   event:
@@ -61,10 +80,6 @@ commands:
     description: Read the MandoMC introduction
     usage: /tutorial
     permission: mandomc.arrival
-  survival:
-    description: Travel to SurvivalWorld after standing still
-    usage: /survival
-    permission: mandomc.travel.survival
   flyspeed:
     description: Set flight speed
     usage: '/flyspeed <0-10> [player]'
@@ -208,6 +223,19 @@ commands:
     usage: '/tpcancel'
     permission: mandomc.travel.tpcancel
 permissions:
+  mandomc.crates.play:
+    default: true
+  mandomc.crates.admin:
+    default: op
+  mandomc.parkour.play:
+    default: true
+  mandomc.parkour.admin:
+    default: op
+  mandomc.territory.edit:
+    description: Edit protected terrain while in Creative mode
+    default: op
+  mandomc.clan.map:
+    default: true
   mandomc.auction:
     default: true
   mandomc.ranks.manage:
@@ -238,8 +266,6 @@ permissions:
     description: Reload custom item definitions
     default: op
   mandomc.travel.spawn:
-    default: true
-  mandomc.travel.survival:
     default: true
   mandomc.admin.status:
     default: op
@@ -307,3 +333,5 @@ permissions:
     default: op
   mandomc.travel.homes.unlimited:
     default: op
+  mandomc.equipment:
+    default: true

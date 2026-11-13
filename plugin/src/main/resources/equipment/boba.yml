@@ -1,0 +1,19 @@
+schema-version: 1
+jetpack:
+  # Coal cost is fixed at one hotbar COAL per 0.1 real seconds of powered flight.
+  speed: 0.9
+  steering: 0.28
+  launch: 0.6
+  launch-ticks: 6
+  double-sneak-ticks: 7
+flamethrower:
+  range: 9.0
+  burst-ticks: 20
+  emit-interval: 2
+  projectile-speed: 0.5
+  hit-radius: 0.5
+  damage: 1.0
+  damage-interval: 10
+  burn-ticks: 100
+  cooldown-ticks: 60
+# Terrain ignition/block changes are deliberately unsupported.

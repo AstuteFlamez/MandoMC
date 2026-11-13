@@ -1,47 +1,49 @@
-schema-version: 1
-listing-limit: 8
-listing-hours: 48
-minimum-price: '1.00'
-maximum-price: '1000000.00'
-# No listing fees, sale tax, bidding or automatic deletion of unclaimed items.
-text:
-  title: '<dark_gray>Auction House'
-  mine-title: '<dark_gray>Your Listings'
-  claims-title: '<dark_gray>Collect Items'
-  confirm-title: '<dark_gray>Confirm Auction Action'
-  price: '<gray>Stack price: <gold>$<price>'
-  seller: '<gray>Seller: <white><seller>'
-  buy-hint: '<yellow>Click to review purchase.'
-  cancel-hint: '<yellow>Click to cancel your listing.'
-  claim-hint: '<yellow>Click to collect this item.'
-  mine: '<yellow>Your Listings / All Listings'
-  claims: '<yellow>Collect Items'
-  previous: '<yellow>Previous Page'
-  next: '<yellow>Next Page'
-  refresh: '<yellow>Browse / Refresh'
-  close: '<red>Close'
-  confirm: '<green>Confirm'
-  cancel: '<red>Back'
-  usage: '<gray>/ah · /ah sell <price> [amount] · /ah selling · /ah collect · /ah search <name>'
-  players-only: '<red>Use the auction house in game.'
-  denied: '<red>You do not have permission.'
-  mode: '<red>Use Survival or Adventure mode to trade.'
-  combat: '<red>Wait until you are out of combat to trade.'
-  busy: '<yellow>Your previous auction action is being saved.'
-  empty-hand: '<red>Hold the item you want to sell.'
-  amount: '<red>Use a price from $1 to $1,000,000 with at most two decimals and a valid held quantity.'
-  listing-limit: '<red>You already have eight active listings.'
-  stale: '<red>That listing is no longer available. Refresh the market.'
-  self-buy: '<red>You cannot buy your own listing.'
-  insufficient: '<red>You do not have enough credits.'
-  limit: '<red>That sale exceeds an account balance limit.'
-  save-failed: '<red>The action could not be saved. Your escrow remains recoverable; use /ah collect.'
-  listed: '<green>Your item is listed for 48 hours.'
-  bought: '<green>Purchase complete. Your item is ready to collect.'
-  cancelled: '<yellow>Listing cancelled. Your item is ready to collect.'
-  claimed: '<green>Item collected.'
-  inventory-full: '<yellow>Make room in your inventory, then use /ah collect.'
-  recovered: '<green>Your pending items were recovered.'
-  remaining: '<gray>Time left: <white><minutes> min'
-  sort-price: '<yellow>Sort by Price'
-  sort-newest: '<yellow>Sort by Newest'
+{
+  "schema-version": 1,
+  "listing-limit": 8,
+  "listing-hours": 48,
+  "minimum-price": "1.00",
+  "maximum-price": "1000000.00",
+  "text": {
+    "title": "<dark_gray>Auction House",
+    "mine-title": "<dark_gray>Your Listings",
+    "claims-title": "<dark_gray>Collect Items",
+    "confirm-title": "<dark_gray>Confirm Auction Action",
+    "price": "<gray>Stack price: <gold>$<price>",
+    "seller": "<gray>Seller: <white><seller>",
+    "buy-hint": "<yellow>Click to review purchase.",
+    "cancel-hint": "<yellow>Click to cancel your listing.",
+    "claim-hint": "<yellow>Click to collect this item.",
+    "mine": "<yellow>Your Listings / All Listings",
+    "claims": "<yellow>Collect Items",
+    "previous": "<yellow>Previous Page",
+    "next": "<yellow>Next Page",
+    "refresh": "<yellow>Browse / Refresh",
+    "close": "<red>Close",
+    "confirm": "<green>Confirm",
+    "cancel": "<red>Back",
+    "usage": "<gray>/ah \u00b7 /ah sell <price> [amount] \u00b7 /ah selling \u00b7 /ah collect \u00b7 /ah search <name>",
+    "players-only": "<red>Use the auction house in game.",
+    "denied": "<red>You do not have permission.",
+    "mode": "<red>Use Survival or Adventure mode to trade.",
+    "combat": "<red>Wait until you are out of combat to trade.",
+    "busy": "<yellow>Your previous auction action is being saved.",
+    "empty-hand": "<red>Hold the item you want to sell.",
+    "amount": "<red>Use a price from $1 to $1,000,000 with at most two decimals and a valid held quantity.",
+    "listing-limit": "<red>You already have eight active listings.",
+    "stale": "<red>That listing is no longer available. Refresh the market.",
+    "self-buy": "<red>You cannot buy your own listing.",
+    "insufficient": "<red>You do not have enough credits.",
+    "limit": "<red>That sale exceeds an account balance limit.",
+    "save-failed": "<red>The action could not be saved. Your escrow remains recoverable; use /ah collect.",
+    "listed": "<green>Your item is listed for 48 hours.",
+    "bought": "<green>Purchase complete. Your item is ready to collect.",
+    "cancelled": "<yellow>Listing cancelled. Your item is ready to collect.",
+    "claimed": "<green>Item collected.",
+    "inventory-full": "<yellow>Make room in your inventory, then use /ah collect.",
+    "recovered": "<green>Your pending items were recovered.",
+    "remaining": "<gray>Time left: <white><minutes> min",
+    "sort-price": "<yellow>Sort by Price",
+    "sort-newest": "<yellow>Sort by Newest"
+  }
+}

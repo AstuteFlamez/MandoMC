@@ -1,0 +1,14 @@
+schema-version: 1
+items:
+  ilum_kyber_crate_key:
+    material: ECHO_SHARD
+    name: <aqua>Kyber Crate Key
+    custom-model-data: 0
+    rarity: rare
+    category: keys
+    item-model: mandomc:keys/ilum_kyber_crate_key
+    lore:
+    - <gray>Earned by completing the trials of Ilum.
+    - <gray>Opens the Kyber Crate at Batuu.
+    - ''
+    - <yellow>Use /crates preview kyber to view rewards.

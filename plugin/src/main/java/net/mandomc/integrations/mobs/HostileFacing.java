@@ -11,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /** Console-only skill bridge; Mythic owns targets, wind-up timing and repeat lifetimes. */
 public final class HostileFacing {
-    private static final Set<String> TYPES=Set.of("BobaFett","Bossk","Rancor","GamorreanGuard","QuarrenGuard","TwilekGuard","TuskenRaiderSniper","TuskenRaiderMelee","Massiff");
+    private static final Set<String> TYPES=Set.of("JawaBrown","BobaFett","Bossk","Rancor","GamorreanGuard","QuarrenGuard","TwilekGuard","TuskenRaiderSniper","TuskenRaiderMelee","Massiff");
     public HostileFacing(JavaPlugin plugin,RootCommand root) throws ReflectiveOperationException {
         var models=new ModelFacing();var mobs=new MythicMobAccess();
         root.register("mobface","mandomc.admin.status",(sender,args)->{

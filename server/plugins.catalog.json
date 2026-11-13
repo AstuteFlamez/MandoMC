@@ -68,34 +68,6 @@
       "installed": true
     },
     {
-      "id": "factionsuuid",
-      "name": "FactionsUUID",
-      "status": "boot-verified-gameplay-pending",
-      "owns": "Membership, relations and claims",
-      "source": "https://factions.support/developers/",
-      "version": "4.6.0",
-      "sha256": "907ce30a607342e178a905669bb859f481626347fc7379ddf35a00dbecd14091",
-      "knownDependencies": [],
-      "dependencyListComplete": true,
-      "admissionCheck": "Narrow custom breach hook and disabled conflicting raid/power mechanics",
-      "installed": true
-    },
-    {
-      "id": "worldguard",
-      "name": "WorldGuard",
-      "status": "boot-verified-gameplay-pending",
-      "owns": "Static region protection",
-      "source": "https://worldguard.enginehub.org/en/latest/developer/regions/",
-      "version": "7.0.18",
-      "sha256": "08f3ef58bc521c635d8c78aedaca96f151d2d397e7cd8018584955dd7468eb05",
-      "knownDependencies": [
-        "worldedit"
-      ],
-      "dependencyListComplete": true,
-      "admissionCheck": "Custom damage and block edits respect protected regions",
-      "installed": true
-    },
-    {
       "id": "worldedit",
       "name": "WorldEdit",
       "status": "boot-verified-gameplay-pending",
@@ -133,6 +105,19 @@
       "installed": true,
       "status": "boot-verified-gameplay-pending",
       "dependencyListComplete": true
+    },
+    {
+      "id": "coreprotect",
+      "name": "CoreProtect",
+      "version": "24.1",
+      "sha256": "a2acef7c06ef201355cef07d591a6055dfed358ad768faaaaaf4e276865ecc97",
+      "source": "https://github.com/PlayPro/CoreProtect/releases/tag/v24.1",
+      "knownDependencies": [],
+      "dependencyListComplete": true,
+      "status": "audit-rollback-verified",
+      "installed": true,
+      "owns": "Standard player block/container/item/explosion audit history, inspection and scoped rollback; private embedded SQLite",
+      "admissionCheck": "Paper 26.1.2 Java25; lookup and disposable block rollback verified, container removal/explosion logging verified. Production rollback never used as a test."
     }
   ],
   "checkedOn": "2026-11-09"

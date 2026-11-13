@@ -11,9 +11,10 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class CreditService implements AutoCloseable {
+public final class CreditService implements AutoCloseable, org.bukkit.event.Listener {
     private final JavaPlugin plugin;
     private final CreditLedger ledger;
+    private final long initialBalance;
     private final ConfigurationSection messages;
     private final ExecutorService writer = Executors.newSingleThreadExecutor();
     private final Set<UUID> pending = new HashSet<>();
@@ -26,11 +27,16 @@ public final class CreditService implements AutoCloseable {
                 java.nio.charset.StandardCharsets.UTF_8)) {
             config.getRoot().setDefaults(org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(reader));
         }
+        try { initialBalance = CreditLedger.amount(config.getString("initial-balance", "2500.00")); }
+        catch (IllegalArgumentException error) {
+            throw new IllegalArgumentException("economy/credits.yml: invalid initial-balance", error);
+        }
         messages = Objects.requireNonNull(config.getConfigurationSection("messages"), "credits.yml: missing messages");
         for (String key : List.of("balance", "paid", "received", "adjusted", "top-title", "top-row", "top-empty", "amount", "self-pay", "insufficient", "limit", "usage", "player-missing", "players-only", "denied", "saving", "save-failed"))
             if (!messages.isString(key)) throw new IllegalArgumentException("credits.yml: missing messages." + key);
         ledger = new CreditLedger(plugin.getDataFolder().toPath().resolve("data/credits-data.yml"));
         auctions = new net.mandomc.gameplay.auction.AuctionHouse(plugin, this);
+        Bukkit.getPluginManager().registerEvents(this, plugin);
         for (String command : List.of("balance", "pay", "balancetop", "credits")) {
             var binding = Objects.requireNonNull(plugin.getCommand(command));
             binding.setExecutor((sender, cmd, label, args) -> { execute(sender, cmd.getName(), args); return true; });
@@ -45,6 +51,16 @@ public final class CreditService implements AutoCloseable {
             });
         }
     }
+    @org.bukkit.event.EventHandler(priority = org.bukkit.event.EventPriority.MONITOR)
+    public void onJoin(org.bukkit.event.player.PlayerJoinEvent event) {
+        UUID id = event.getPlayer().getUniqueId();
+        boolean newPlayer = !event.getPlayer().hasPlayedBefore();
+        // Snapshot Paper's first-play status before moving disk work to the sole economy writer.
+        auctionTask(() -> ledger.initializeAccount(id, newPlayer, initialBalance), (created, error) -> {
+            if (error != null) plugin.getLogger().log(java.util.logging.Level.SEVERE,
+                    "Credits account initialization failed for " + id + "; balance unchanged", error);
+        });
+    }
     public CreditLedger ledger() { return ledger; }
     public net.mandomc.gameplay.auction.AuctionHouse auctions() { return auctions; }
     /** All credit and market mutations share this one writer; callbacks run on the server thread. */
@@ -58,7 +74,7 @@ public final class CreditService implements AutoCloseable {
         });
     }
     private void send(CommandSender sender, String key, String name, String amount) {
-        sender.sendMessage(MiniMessage.miniMessage().deserialize(messages.getString(key),
+        net.mandomc.gameplay.messaging.ChatMessages.send(sender,"economy/credits.yml","messages."+key,MiniMessage.miniMessage().deserialize(messages.getString(key),
                 Placeholder.unparsed("player", name), Placeholder.unparsed("amount", amount)));
     }
     private void execute(CommandSender sender, String command, String[] args) {
@@ -127,6 +143,7 @@ public final class CreditService implements AutoCloseable {
         });
     }
     @Override public void close() {
+        org.bukkit.event.HandlerList.unregisterAll(this);
         if (auctions != null) auctions.close();
         closed = true; writer.shutdown();
         try { if (!writer.awaitTermination(10, TimeUnit.SECONDS)) plugin.getLogger().severe("Credits save is still finishing."); }

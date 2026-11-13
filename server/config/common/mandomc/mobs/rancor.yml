@@ -1,6 +1,6 @@
 schema-version: 1
 enabled: true
-# Shared debris/range budget. MandoMC owns the forward slam and directional swipe launch.
+# Visual-only debris. Legacy Mythic skills own damage and knockback.
 slam:
   radius: 14
   ring-step: 2

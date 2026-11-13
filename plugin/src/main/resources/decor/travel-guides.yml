@@ -1,0 +1,45 @@
+schema-version: 1
+enabled: true
+time-zone: America/Chicago
+messages:
+  delivered: 'Here is your current field handbook. Come back for more advice.'
+  full: 'Make room for your handbook, then speak to me again.'
+  busy: 'Clear your cursor and crafting grid, then speak to me again.'
+hints:
+- 'Use /warp to open the Galaxy Map and choose a planet.'
+- 'Public travel can be interrupted by movement or combat. Find a quiet place first.'
+- 'Use /tutorial whenever you need your current handbook again.'
+- 'Keep your handbook handy for the current server commands and activities.'
+npcs:
+  rebel_pilot:
+    title: Click to Travel
+    world: minecraft:spawnworld
+    x: 12.481200700988325
+    y: 93.0
+    z: 2.0938902873735747
+    yaw: 144.45006
+    pitch: 3.450011
+    texture: ewogICJ0aW1lc3RhbXAiIDogMTc5NDUyNTIyODIwOSwKICAicHJvZmlsZUlkIiA6ICJmYjZkM2E5Zjk3MWY0ZTdlYmQ0MjE2Yjk0MjE5NDA3NCIsCiAgInByb2ZpbGVOYW1lIiA6ICJHb2xkZW5BcHBsZUdIRyIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS83Mzg4NmQxNmQxN2ZjYTM3OTA2ZDU5NTEwMjM2Zjg1MTgyNzI2YjE4ZThhZjkwYmE3ZGY2MWRmNzA1OGRmMGZiIgogICAgfQogIH0KfQ==
+    signature: UAO+5EDsHMQ4CcV0kUNw6hoS7iQUOKRnGZNDtn3xc3NlLsAUAzpSa1q+um5F+DKQUqgaph4qQYi3W5i365KLwwLbhtrsa2RNJs234BdhAJn1tuK8VoFZL1VBdn+U5WHvdNvzflskmATIrc2X7oCWxLa3J1IOuwIUtYp7se5JIAwcWrCguoBhRXiwvbXeSl6Y7zH/dWEtZlleEvO6Mx+T2JtZm7DvLlDeohCGuyU2u/8mkBJxTSONyS5hoqJDabZjo1ULWBdMlsp3DcWclRtEsU4haP7X/EXBJkVyvbUd0XdugtNaKRi9QVaDsAH/u2UX2biphTKEdez/+MmlKHxN3tKKrrJuEq0QKVxnlt5KKQfNZsQgeMMk7jTFkRC1kVvoFx0n/mi7LN8VFDAFRf1XeKzfbBNL2wsxdCzUDUsQOAIMizjqltpo6NHxDo03BDJ/RpoHJVvcjFymJpNRJyHtjKwIYxug0lR/mzatHXGqJ0/fREgVGX/C9A0wC8Pi4mOS0CtRaoY34lstMTAyTW5fi8An7e5WB09ixoC6nFaiNE0XLKSxeXNOMaEqpPoW12Tsrk0KM7moz8TwqRIP5T9hWHrZm5EkZdG9LgvwzklaFbz9eWIuCd8JtQ+MQQ7jWYiVJezHwnQyfiiVE/pHQTk8YxGm66jSietgk5EZnXH10sk=
+  cassian_andor:
+    title: Cassian Andor
+    world: minecraft:spawnworld
+    x: -4.382061352772387
+    y: 93.0
+    z: -14.50740707472801
+    yaw: -111.15001
+    pitch: 1.49999
+    texture: ewogICJ0aW1lc3RhbXAiIDogMTc4MjE5NDc1NDE0MiwKICAicHJvZmlsZUlkIiA6ICIyZDFhMzI0YjRhNDE0ODJmODNjYzk3YTA2NzY5YjI2ZiIsCiAgInByb2ZpbGVOYW1lIiA6ICJMRUFUSEVSX0xFR0dJTkdTIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlLzZlOGZiNDNlNWMwZjM2ZDM2M2NlMzVjM2U0ODU3MWE5MjdhMGI0NmMyNTdmYTc0MmI2NzFlNmZkODc2ZjhjYTEiCiAgICB9CiAgfQp9
+    signature: ULum2N/NPor772JLqAZBLKBPY7dsMZVpSqjk62nfOGNSkKBVLzaoHoJ9Z4A72xOq7BQR15hSkdo6nE0HTa+4wnOzOZTvDMhBqMoo1cxFXf1guvwYt2xPQBol1Zt/kMFzSJkoIBh3AGC9DHNpmIv8GBQwxxVzC4e3Vpftqxzfq6+1xisTcjMHsWDk1q4KBIZCpGJkBeKCOnY6EYyghVPWR48jeaikYOi6JmfGxPvr86fPp5ECi4AtW3E4NtuaUXbAl7tS+uNAq8nnqeZuy7+SSDqbyVaV3IdcF+TSin4GQSSZhn7TWrChpNRRndFXIw41+BbFnCTJI/9orayKJlF1iSiyiFiSCfXPXqty8jH457m3PbfpUNN/Kgqk6NWHRDle40VCgtf8aLCTOUuKEzpkfAfDhvOv+RcbxYBv/qjuMRUUUnhXb9LjZvCp8im/o8UNFz+L3bjq+QyN4Dyr7dwwnj7LO9KD6MtBl1w8od3i6O6k1yz84GOlpRzvtV5jYYylp2d4S7pdYmwEOTjL0uKMjFYgEt30G0h2I2baKMg4Y2FayQKte6+JCJXpUe4/kiZV8/wHG67/grIaFeuwFF2+rF58E5d/GuNFmQRcI4HSHgPJ/KtUb4dhwpLEUX9OLLTWRq7QqRkuj9tFh2+9trmByEApX+jQ+teUSukkZggipgc=
+massiffs:
+  enabled: true
+  world: minecraft:spawnworld
+  min-x: 2
+  max-x: 18
+  min-z: -24
+  max-z: -6
+  y: 93
+  starts:
+  - {x: 4.5, z: -20.5}
+  - {x: 11.5, z: -12.5}
+  - {x: 15.5, z: -21.5}

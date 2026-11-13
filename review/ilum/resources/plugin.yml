@@ -1,0 +1,12 @@
+name: IlumReview
+version: 1.0.0
+main: net.mandomc.review.ilum.IlumReview
+api-version: '26.1.2'
+depend: [MandoMC]
+commands:
+  ilumreview:
+    description: Play the safe Ilum adventure review
+    usage: /ilumreview [start|resume|retry|status|leave|reset|help]
+permissions:
+  ilumreview.play:
+    default: true

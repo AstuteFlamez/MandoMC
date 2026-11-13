@@ -65,3 +65,17 @@ The user requested durability-based reflection feedback and a large, fast gradua
 
 ## Pause note
 Durability behavior is deployed and server-verified. Next action: client-check the durability bar while blocking ranged Tuskens and throwing the saber. Saber acquisition recipes remain open.
+
+## Visible projectile reflection correction (2026-11-11)
+
+The defender's current eye direction remains the reflection direction. The pinned WeaponMechanics 4.3.1 adapter now launches the replacement through `Projectile.shoot(existingBolt, origin)`, which creates the configured visible disguise before scheduling that same defender-owned damaging bolt. The wrapper retains the incoming settings/sticky/through/bouncy values and supplies no firing mechanics, so a block does not replay the original firing action.
+
+Bukkit can return negative zero in level/cardinal look vectors. MechanicsCore 4.3.1's slab ray code treats `-0.0` as nonnegative before taking its reciprocal, which makes those reflected rays miss. Canonicalizing exact zero components to positive zero preserves direction and speed while restoring collisions. Removed projectiles also have any remaining precomputed same-tick damage events cancelled; the vendor can otherwise continue its through-hit list after `remove()`.
+
+The scoped release changes only `SaberProjectiles.class` against the latest deployed JAR. Guard eligibility/cone/charge/overheat, speed, weapon damage/type, defender attribution and native territory/clan/vehicle policy remain owned by their existing code. No pack or configuration changes.
+
+`./scripts/build.sh -o` passes 107 tests. The disposable Paper regression passes 116 assertions across five real incoming-collision/reflected-render/damage cases: level aim, two oblique angles, straight up and straight down. It verifies visible disguise displacement and damage-ray movement, actual target damage/defender kill credit, NPC null-stack recovery, settings/impact-speed retention, one reflection, protected source/victim cancellation, and a fast original bolt's same-tick bystander damage being prevented. The old build reproduced the missing disguise; the intermediate visible fix exposed the signed-zero miss and fast through-hit issue.
+
+Build the regression with `scripts/build-saber-reflection-probe.sh`. Run it only on a disposable copy of the runtime on port 25641; it refuses other ports and shuts the test server down. It uses native synthetic players and real vendor collision/disguise APIs, without a connected Minecraft client. Client appearance/feel remains a playtest.
+
+Deployment: normal shared-server restart completed on November 11 after the assigned coordinator window. Live JAR SHA-256 `623cf474cf7fbca7a452aa302bb2d6c080dc0bfc5e6cb773732ceaaa2d74c334` overlays baseline `304e258a1f04338e8c19c6616d27706eb9cd53ff75b06a0b4d19067a5f407d58`; every other ZIP entry is byte-identical. The installed class matches the native-tested class SHA-256 `96dc37bdde3f90a083d952535218a5b06a3a97de65a82d1edb1fae3bd86f1ed1`. Existing pack properties are unchanged. Arrival health/startup passed; active Jabba and queued KOTH were restored. No test plugins or actors were installed on the shared server.

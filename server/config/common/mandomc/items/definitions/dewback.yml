@@ -1,0 +1,12 @@
+schema-version: 1
+items:
+  dewback_leg:
+    material: COOKED_BEEF
+    food-nutrition: 8
+    name: '<green>Dewback Leg'
+    custom-model-data: 1
+    item-model: mandomc:consumables/dewback_leg
+    rarity: uncommon
+    category: consumables
+    lore:
+      - '<gray>A hearty roasted dewback leg.'

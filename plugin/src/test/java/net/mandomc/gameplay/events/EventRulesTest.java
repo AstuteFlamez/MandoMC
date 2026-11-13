@@ -103,18 +103,25 @@ public class EventRulesTest {
         assertThrows(IllegalArgumentException.class,()->KothSettings.read(fraction));
     }
     @Test public void onlyCurrentWorldsAndTheirLegacyAliasesResolve() {
-        assertEquals(List.of("spawn","earth","hoth","tatooine"),WarpService.ids());
+        assertEquals(List.of("spawn","hoth","tatooine","mandalore","ilum","crates"),WarpService.ids());
+        assertEquals("mandalore",WarpService.canonical("Mandalore"));
+        assertEquals("ilum",WarpService.canonical("Ilum"));
         assertEquals("spawn",WarpService.canonical("BlackSpireOutpost"));
         assertEquals("spawn",WarpService.canonical("Batuu"));
         assertEquals("spawn",WarpService.canonical("SpawnWorld"));
-        assertEquals("earth",WarpService.canonical("SurvivalWorld"));
-        assertEquals("earth",WarpService.canonical("Earth"));assertEquals("hoth",WarpService.canonical("HOTH"));
+        assertNull(WarpService.canonical("SurvivalWorld"));
+        assertNull(WarpService.canonical("Earth"));assertEquals("hoth",WarpService.canonical("HOTH"));
         assertEquals("tatooine",WarpService.canonical("TATOOINE"));
-        for(String excluded:List.of("alderaan","ilum","endor","jabba","devworld"))
+        assertEquals("ilum",WarpService.canonical("Ilum"));
+        assertEquals("crates",WarpService.canonical("crate"));
+        assertEquals("crates",WarpService.canonical("CRATES"));
+        assertEquals("mandalore",WarpService.canonical("MandaloreReview"));
+        for(String excluded:List.of("alderaan","endor","jabba","devworld","survival"))
             assertNull(WarpService.canonical(excluded));
     }
-    @Test public void rewardsAreExplicitlyDisabled() {
-        assertFalse(koth().getBoolean("rewards.enabled",true));
+    @Test public void rewardsUseTheSharedKothCrate() {
+        assertTrue(koth().getBoolean("rewards.enabled",false));
+        assertEquals("koth",koth().getString("rewards.crate"));
         assertTrue(koth().getStringList("settings.reward-commands").isEmpty());
     }
 }

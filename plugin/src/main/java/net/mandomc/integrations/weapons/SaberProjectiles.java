@@ -17,8 +17,8 @@ public final class SaberProjectiles implements Listener {
     private final JavaPlugin plugin;
     private final SaberService sabers;
     private final Constructor<?> constructor;
-    private final Object spawner;
-    private final Method spawn;
+    private final Constructor<?> definitionConstructor;
+    private final Method shoot;
     private final Class<?> projectileDamageSource;
     private static final String REFLECTIONS="mandomc_saber_reflections";
 
@@ -30,9 +30,10 @@ public final class SaberProjectiles implements Listener {
         var loader=vendor.getClass().getClassLoader();
         var projectile=Class.forName("me.deecaad.weaponmechanics.weapon.projectile.weaponprojectile.WeaponProjectile",true,loader);
         constructor=java.util.Arrays.stream(projectile.getConstructors()).filter(c->c.getParameterCount()==10).findFirst().orElseThrow();
-        spawner=vendor.getClass().getMethod("getProjectileSpawner").invoke(vendor);
-        spawn=Class.forName("me.deecaad.weaponmechanics.weapon.projectile.ProjectileSpawner",true,loader)
-                .getMethod("spawn",Class.forName("me.deecaad.weaponmechanics.weapon.projectile.AProjectile",true,loader));
+        var definition=Class.forName("me.deecaad.weaponmechanics.weapon.projectile.weaponprojectile.Projectile",true,loader);
+        definitionConstructor=java.util.Arrays.stream(definition.getConstructors())
+                .filter(c->c.getParameterCount()==5).findFirst().orElseThrow();
+        shoot=definition.getMethod("shoot",projectile,Location.class);
         projectileDamageSource=Class.forName("me.deecaad.weaponmechanics.weapon.damage.ProjectileDamageSource",true,loader);
         // HIGH listeners apply mob level scaling; the vendor then calculates hit-location/armor modifiers.
         var event=(Class<? extends Event>)Class.forName("me.deecaad.weaponmechanics.weapon.weaponevents.WeaponDamageEntityEvent",true,loader);
@@ -64,6 +65,11 @@ public final class SaberProjectiles implements Listener {
     /** Creates, but does not schedule, a new bolt with the defender as its immutable shooter. */
     public Object createReflection(Object bolt,Player player) throws ReflectiveOperationException {
         Vector direction=player.getEyeLocation().getDirection();
+        // Location can return -0.0 at level/cardinal aim. The pinned vendor slab-ray code
+        // compares that as nonnegative, then divides by it as negative infinity and misses hits.
+        if(direction.getX()==0d)direction.setX(0d);
+        if(direction.getY()==0d)direction.setY(0d);
+        if(direction.getZ()==0d)direction.setZ(0d);
         Vector incoming=(Vector)call(bolt,"getMotion");
         Location origin=player.getEyeLocation().add(direction.clone().multiply(0.8));
         // MythicMobs fires through WeaponMechanics' NPC API, which supplies no inventory stack.
@@ -76,12 +82,23 @@ public final class SaberProjectiles implements Listener {
         reflected.getClass().getMethod("setIntTag",String.class,int.class).invoke(reflected,REFLECTIONS,count+1);
         return reflected;
     }
+    /** Uses the vendor launch lifecycle so the moving damage ray also has its configured visible bolt. */
+    public void shootReflection(Object reflected) throws ReflectiveOperationException {
+        // Keep this bolt's settings, including NPC/custom variants, without replaying firing mechanics.
+        Object definition=definitionConstructor.newInstance(call(reflected,"getProjectileSettings"),
+                call(reflected,"getSticky"),call(reflected,"getThrough"),call(reflected,"getBouncy"),null);
+        Location origin=(Location)call(reflected,"getBukkitLocation");
+        origin.setDirection((Vector)call(reflected,"getMotion"));
+        shoot.invoke(definition,reflected,origin);
+    }
     public void hit(Event event) {
         try {
             if (((Cancellable)event).isCancelled()) return;
             Object source=call(event,"getSource");
             if (!projectileDamageSource.isInstance(source)) return;
             Object bolt=call(source,"getProjectile");
+            // The vendor can keep iterating this tick's precomputed through-hit list after remove().
+            if((boolean)call(bolt,"isDead")) {((Cancellable)event).setCancelled(true);return;}
             var victim=(LivingEntity)call(event,"getVictim");
             var shooter=(LivingEntity)call(bolt,"getShooter");
             int count=(int)bolt.getClass().getMethod("getIntTag",String.class).invoke(bolt,REFLECTIONS);
@@ -100,8 +117,8 @@ public final class SaberProjectiles implements Listener {
             Bukkit.getScheduler().runTask(plugin,()-> {
                 if(!player.isOnline()||player.isDead()||!player.getWorld().equals(location.getWorld())||!sabers.allowed(player.getLocation())||!sabers.allowed(location))return;
                 try {
-                    // The shooter field is immutable: create a new bolt owned by the defender.
-                    spawn.invoke(spawner,reflected);
+                    // The vendor creates the disguise and schedules this same defender-owned bolt once.
+                    shootReflection(reflected);
                 } catch(ReflectiveOperationException error) {plugin.getLogger().log(java.util.logging.Level.SEVERE,"Cannot spawn reflected bolt",error);}
             });
         } catch(ReflectiveOperationException | RuntimeException error) {

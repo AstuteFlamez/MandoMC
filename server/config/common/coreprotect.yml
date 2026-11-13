@@ -1,0 +1,103 @@
+# CoreProtect CE 24.1. Private embedded SQLite, no external service or credentials.
+use-mysql: false
+check-updates: false
+error-reporting: false
+api-enabled: true
+block-place: true
+block-break: true
+item-transactions: true
+hopper-transactions: true
+item-drops: true
+item-pickups: true
+explosions: true
+entity-change: true
+player-interactions: true
+rollback-items: true
+rollback-entities: true
+player-sessions: true
+username-changes: true
+player-messages: false
+player-commands: false
+worldedit: true
+default-radius: 10
+max-radius: 100
+
+# CoreProtect is donationware. Obtain a donation key from coreprotect.net/donate/
+donation-key:
+table-prefix: co_
+mysql-host: 127.0.0.1
+mysql-port: 3306
+mysql-database: database
+mysql-username: root
+mysql-password:
+
+# If modified, will automatically attempt to translate languages phrases.
+# List of language codes: https://coreprotect.net/languages/
+language: en
+
+# If enabled, extra data is displayed during rollbacks and restores.
+# Can be manually triggered by adding "#verbose" to your rollback command.
+verbose: true
+
+# If enabled, generic data, like zombies burning in daylight, won't be logged.
+skip-generic-data: true
+
+# Logs blocks that break off of other blocks; for example, a sign or torch
+# falling off of a dirt block that a player breaks. This is required for
+# beds/doors to properly rollback.
+natural-break: true
+
+# Properly track block movement, such as sand or gravel falling.
+block-movement: true
+
+# Properly track blocks moved by pistons.
+pistons: true
+
+# Logs blocks that burn up in a fire.
+block-burn: true
+
+# Logs when a block naturally ignites, such as from fire spreading.
+block-ignite: true
+
+# Logs when fire naturally extinguishes.
+fire-extinguish: false
+
+# Logs killed entities, such as killed cows and enderman.
+entity-kills: true
+
+# Logs text on signs. If disabled, signs will be blank when rolled back.
+sign-text: true
+
+# Logs lava and water sources placed/removed by players who are using buckets.
+buckets: true
+
+# Logs natural tree leaf decay.
+leaf-decay: true
+
+# Logs tree growth. Trees are linked to the player who planted the sapling.
+tree-growth: true
+
+# Logs mushroom growth.
+mushroom-growth: true
+
+# Logs natural vine growth.
+vine-growth: true
+
+# Logs the spread of sculk blocks from sculk catalysts.
+sculk-spread: true
+
+# Logs when portals such as Nether portals generate naturally.
+portals: true
+
+# Logs water flow. If water destroys other blocks, such as torches,
+# this allows it to be properly rolled back.
+water-flow: true
+
+# Logs lava flow. If lava destroys other blocks, such as torches,
+# this allows it to be properly rolled back.
+lava-flow: true
+
+# Allows liquid to be properly tracked and linked to players.
+# For example, if a player places water which flows and destroys torches,
+# it can all be properly restored by rolling back that single player.
+liquid-tracking: true

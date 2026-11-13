@@ -297,5 +297,28 @@
         "name": "mandomc:vehicles/xwing_shoot"
       }
     ]
+  },
+  "mobs.jawa1": {
+    "sounds": [
+      "mandomc:mobs/jawa1"
+    ]
+  },
+  "mobs.jawa2": {
+    "sounds": [
+      "mandomc:mobs/jawa2"
+    ]
+  },
+  "mobs.jawa3": {
+    "sounds": [
+      "mandomc:mobs/jawa3"
+    ]
+  },
+  "shoot.dc-15": {
+    "sounds": [
+      {
+        "name": "mandomc:shoot/dc-15"
+      }
+    ],
+    "subtitle": "Blaster fires"
   }
 }

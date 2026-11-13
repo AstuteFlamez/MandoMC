@@ -6,6 +6,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import net.mandomc.gameplay.items.ItemCatalog;
 import org.bukkit.Bukkit;
+import net.mandomc.gameplay.mobs.HerdAge;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
@@ -31,9 +32,11 @@ public final class DewbackDrops implements Listener {
         var mobType = type.getMethod("getMobType");
         var name = mobType.getReturnType().getMethod("getInternalName");
         var drops = type.getMethod("getDrops");
+        var entity = type.getMethod("getEntity");
         Bukkit.getPluginManager().registerEvent(type, this, EventPriority.HIGH, (listener, event) -> {
             try {
                 if ("Dewback".equals(name.invoke(mobType.invoke(event)))
+                        && !HerdAge.baby((org.bukkit.entity.Entity) entity.invoke(event))
                         && ThreadLocalRandom.current().nextDouble() < chance) {
                     ((List<ItemStack>) drops.invoke(event)).add(items.create(id));
                 }

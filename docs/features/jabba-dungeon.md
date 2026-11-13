@@ -34,3 +34,23 @@ Resource pack `resource-pack-26.1.2-5ce4bfd2dde0`, SHA-1 `3ffb9eb5e6115aac5067b3
 102 Java tests and 14 pack tests pass. The updated 62-check isolated live probe exercises all-caches-at-start, real legacy panel parsing, actual animated/physical gate movement, last-owned-kill progression with unopened caches, independent one-click/offhand/duplicate claims, correct boss spawning, final-room open state, end cleanup, interrupted-run recovery and animation cancellation. Palace coordinates are read-validated without destructive automated room completion. Full route/door presentation and item balance are player playtests.
 
 Before scheduled closure, palace/entrance occupants receive the shared final-ten-second title countdown and event-name subtitle. Outside Tatooine players and distant Tatooine players are excluded; completing the rooms still leaves the operation open until its scheduled end.
+
+## Cache interaction protection repair
+
+Protected palace containers previously cancelled the native Bukkit interaction before the event's
+`ignoreCancelled` loot listener ran. The active event now registers an `EventCaches` owner. Territory
+protection permits only that owner's registered, still-present cache, main-hand right-click and
+non-Spectator claimant. Other protection denials remain authoritative. Unregistered and decorative
+containers retain their protection; coordinates, room progression and the migration transform are unchanged.
+
+Rewards are staged into a copy of the player's storage inventory before committing. An incomplete fit
+leaves inventory, chest and the original rolled reward unchanged. Delivery failures roll back inventory;
+no overflow drops are created. Successful claims remove ownership and the chest once. Event cleanup and
+restart recovery retain their existing journal/reset ownership.
+
+Build with `scripts/build.sh`. The disposable `scripts/build-jabba-cache-probe.sh` native integration probe
+must run only in a private copy of the current runtime/map. It uses `ServerPlayerGameMode.useItemOn`,
+including the actual Bukkit listener chain, rather than directly invoking the loot handler. Run with
+`-Dmandomc.cache.reproduce=true` to reproduce against the previous runtime JAR; normal mode verifies the
+fix, exact rewards, cancellation boundaries, capacity/failure retry, duplicates, recovery and reset cells.
+Never install this probe on the shared player server: it starts/stops events and consumes private caches.

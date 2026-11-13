@@ -77,16 +77,18 @@ class ModelAtlasTests(unittest.TestCase):
 
 
 class HelmetPoseTests(unittest.TestCase):
-    def test_every_helmet_icon_has_horizontal_and_vertical_tilt(self):
+    def test_helmet_gui_faces_forward_without_roll_and_preserves_worn_scale(self):
         import json
         root = Path(__file__).resolve().parents[2] / 'resource-pack/src/assets/mandomc/models/item/armor'
         for family in ('plastoid', 'durasteel', 'beskar', 'robes'):
             with self.subTest(family=family):
                 model = json.loads((root / (family + '_helmet.json')).read_text())
-                x, y, _ = model['display']['gui']['rotation']
-                self.assertNotEqual(0, x)
-                self.assertNotEqual(0, y)
-                if family != 'robes':
+                x, y, roll = model['display']['gui']['rotation']
+                self.assertEqual(0, roll, 'head-style GUI must remain upright')
+                if family == 'robes':
+                    self.assertEqual([0, 0, 0], [x, y, roll], 'flat hood should face the camera')
+                else:
+                    self.assertGreater(x, 0, 'head-style view shows the crown')
                     import math
                     self.assertGreater(-math.cos(math.radians(y)), 0, 'front face must face the GUI camera')
                     self.assertEqual([1.811] * 3, model['display']['head']['scale'])

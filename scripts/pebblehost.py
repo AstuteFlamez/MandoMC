@@ -13,6 +13,7 @@ import re
 import stat
 import subprocess
 import sys
+import uuid
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 
@@ -145,15 +146,37 @@ def atomic_write(sftp, path, data):
     parent = str(PurePosixPath(path).parent)
     if parent != '.':
         mkdirs(sftp, parent)
-    # A fixed temp file is safe because a remote lock serializes deployments.
-    temporary = path + '.mandomc-upload'
+    suffix = uuid.uuid4().hex
+    temporary = path + '.mandomc-upload-' + suffix
     with sftp.open(temporary, 'wb') as target:
         target.write(data)
     if read_remote(sftp, temporary) != data:
         raise ValueError(f'Remote checksum verification failed: {path}')
-    # The OpenSSH posix-rename extension replaces a file atomically. Fail closed
-    # if unsupported; do not fall back to deleting a live file first.
-    sftp.posix_rename(temporary, path)
+    try:
+        sftp.posix_rename(temporary, path)
+        return
+    except OSError:
+        # PebbleHost's SFTP implementation rejects overwrite renames. A failed
+        # response might still mean success after a connection interruption.
+        if read_remote(sftp, path) == data:
+            return
+        if read_remote(sftp, temporary) != data:
+            raise ValueError(f'Upload temporary file unavailable: {path}')
+    existing = read_remote(sftp, path)
+    if existing is None:
+        sftp.rename(temporary, path)
+        return
+    previous = path + '.mandomc-previous-' + suffix
+    sftp.rename(path, previous)
+    try:
+        sftp.rename(temporary, path)
+    except Exception:
+        # Restore the old name on a bounded rename failure. Both byte sets are
+        # retained for recovery; never truncate or delete the previous file.
+        sftp.rename(previous, path)
+        raise
+    if read_remote(sftp, path) != data:
+        raise ValueError(f'Installed checksum verification failed: {path}')
 
 
 def sha(data):
@@ -166,16 +189,33 @@ def payload(root=ROOT):
     for item in manifest['files']:
         source = root / safe_path(item['source'])
         target = safe_path(item['target'])
+        if target == 'agents/MandoMC-RedstoneAgent.jar':
+            target = f'agents/MandoMC-RedstoneAgent-{sha(source.read_bytes())}.jar'
         if target in result:
             raise ValueError(f'Duplicate deployment target: {target}')
         if not source.is_file() or source.is_symlink():
             raise ValueError(f'Missing or unsafe source file: {source}')
         if root.resolve() not in source.resolve().parents:
             raise ValueError('Source must be inside the checkout')
-        if not (target == 'plugins/update/MandoMC.jar' or
-                (target.startswith('plugins/MandoMC/') and target.endswith('.yml'))):
+        if not (target in {'plugins/update/MandoMC.jar', 'plugins/update/MandoAccess.jar',
+                           'start.sh'} or
+                re.fullmatch(r'agents/MandoMC-RedstoneAgent-[a-f0-9]{64}\.jar', target) or
+                (target.startswith('plugins/MandoMC/') and target.endswith('.yml')) or
+                target == 'plugins/MandoAccess/config.yml' or
+                target == 'plugins/CoreProtect/config.yml' or
+                target == 'plugins/VotingPlugin/VoteSites.yml' or
+                (target.startswith('plugins/ModelEngine/blueprints/') and target.endswith('.bbmodel')) or
+                (target.startswith(('plugins/MythicMobs/Mobs/', 'plugins/MythicMobs/Skills/',
+                                    'plugins/MythicMobs/RandomSpawns/',
+                                    'plugins/WeaponMechanics/weapons/mandomc/',
+                                    'plugins/WeaponMechanics/ammos/', 'plugins/WeaponMechanics/projectiles/'))
+                 and target.endswith('.yml')) or target == 'plugins/WeaponMechanics/weapons/ee3.yml' or
+                (target.startswith('dev_world/datapacks/mandomc-jetpack/') and
+                 (target.endswith('.json') or target.endswith('/pack.mcmeta')))):
             raise ValueError(f'Target is outside the deployment allowlist: {target}')
-        if any(part in {'data', 'playerdata', 'runtime', 'cache', 'logs'} for part in PurePosixPath(target).parts):
+        parts = PurePosixPath(target).parts
+        datapack = target.startswith('dev_world/datapacks/mandomc-jetpack/')
+        if any(part in {'playerdata', 'runtime', 'cache', 'logs'} for part in parts) or ('data' in parts and not datapack):
             raise ValueError('Runtime/player data cannot be deployed')
         result[target] = source.read_bytes()
     if 'plugins/update/MandoMC.jar' not in result:
@@ -184,15 +224,18 @@ def payload(root=ROOT):
 
 
 def plan(sftp, files, previous):
-    removed = set(previous['files']) - set(files)
+    removed = {name for name in set(previous['files']) - set(files)
+               if not re.fullmatch(r'agents/MandoMC-RedstoneAgent-[a-f0-9]{64}\.jar', name)}
     if removed:
         raise ValueError('Managed file removal needs a reviewed migration: ' + ', '.join(sorted(removed)))
     changes = []
     for target, data in files.items():
         current = read_remote(sftp, target)
         # Paper consumes the update JAR at startup; compare its installed copy.
-        if target == 'plugins/update/MandoMC.jar' and current is None:
-            current = read_remote(sftp, 'plugins/MandoMC.jar')
+        if current is None:
+            installed = installed_path(target)
+            if installed != target:
+                current = read_remote(sftp, installed)
         if sha(current) == sha(data):
             continue
         if sha(current) != previous['files'].get(target):
@@ -201,18 +244,70 @@ def plan(sftp, files, previous):
     return changes
 
 
+def installed_path(target):
+    return {'plugins/update/MandoMC.jar': 'plugins/MandoMC.jar',
+            'plugins/update/MandoAccess.jar': 'plugins/MandoAccess.jar'}.get(target, target)
+
+
+def host_settings(original, files):
+    agents = [target for target in files if re.fullmatch(r'agents/MandoMC-RedstoneAgent-[a-f0-9]{64}\.jar', target)]
+    if len(agents) != 1:
+        raise ValueError('Expected one immutable redstone agent in deployment')
+    lines = original.decode('utf-8').splitlines()
+    flags = next((line.partition('=')[2] for line in lines if line.startswith('startupflags=')), '')
+    flags = re.sub(r'(?<!\S)-javaagent:agents/MandoMC-RedstoneAgent[^\s]*', '', flags).strip()
+    updates = dict(javaversion='25', autoupdate='false',
+                   startupflags=(flags + ' -javaagent:' + agents[0]).strip())
+    lines = [line for line in lines if line.partition('=')[0] not in updates]
+    lines.extend(f'{key}={value}' for key, value in updates.items())
+    return ('\n'.join(lines) + '\n').encode('utf-8')
+
+
+def production_properties(original, commit, root=ROOT):
+    report = json.loads((root / 'resource-pack/build/MandoMC.json').read_text())
+    hosting = json.loads((root / 'resource-pack/hosting.json').read_text())
+    if not re.fullmatch('[a-f0-9]{40}', commit) or not re.fullmatch('[a-f0-9]{40}', report['sha1']):
+        raise ValueError('Invalid source commit or pack hash')
+    tag = f'resource-pack-{report["minecraftVersion"]}-{commit[:12]}'
+    motd = next(line.partition('=')[2] for line in
+                (root / 'server/runtime/server.properties.template').read_text().splitlines()
+                if line.startswith('motd='))
+    # Java .properties supports ASCII Unicode escapes. Preserve literal \n
+    # separators in the template; do not double-escape their backslashes.
+    motd = ''.join(character if ord(character) < 128 else f'\\u{ord(character):04x}' for character in motd)
+    updates = {
+        'resource-pack': f'https://github.com/{hosting["repository"]}/releases/download/{tag}/MandoMC.zip',
+        'resource-pack-sha1': report['sha1'], 'resource-pack-id': hosting['packId'],
+        'require-resource-pack': str(hosting['required']).lower(),
+        'resource-pack-prompt': json.dumps(dict(text=hosting['prompt']), ensure_ascii=True),
+        'motd': motd,
+    }
+    lines = [line for line in original.decode('utf-8').splitlines()
+             if line.partition('=')[0] not in updates]
+    lines.extend(f'{key}={value}' for key, value in updates.items())
+    return ('\n'.join(lines) + '\n').encode('utf-8')
+
+
 def deploy(sftp, commit, apply=False):
     if not re.fullmatch('[0-9a-f]{40}', commit):
         raise ValueError('A full source commit SHA is required')
     # This receipt can only be installed after the separate one-time migration.
     receipt = read_remote(sftp, '.mandomc/bootstrap.json')
-    if receipt is None or json.loads(receipt).get('schemaVersion') != 1:
+    if receipt is None or json.loads(receipt).get('schemaVersion') != 1 or not json.loads(receipt).get('verifiedStartup'):
         raise ValueError('Initial migration has not been verified; automatic upload is blocked.')
     previous_raw = read_remote(sftp, REMOTE_STATE)
     if previous_raw is None:
         raise ValueError('Migration must seed the production file hashes first.')
     previous = json.loads(previous_raw)
     files = payload()
+    properties_before = read_remote(sftp, 'server.properties')
+    if properties_before is None:
+        raise ValueError('Missing production server.properties')
+    properties_after = production_properties(properties_before, commit)
+    host_before = read_remote(sftp, 'pebblehost.yml')
+    if host_before is None:
+        raise ValueError('Missing PebbleHost startup configuration')
+    host_after = host_settings(host_before, files)
     mkdirs(sftp, '.mandomc')
     # mkdir is an atomic cross-runner lock; a stale lock needs human inspection.
     sftp.mkdir('.mandomc/deploy.lock')
@@ -227,14 +322,20 @@ def deploy(sftp, commit, apply=False):
         backup = f'.mandomc/backups/{datetime.now(timezone.utc):%Y%m%dT%H%M%SZ}-{commit[:12]}'
         # Preserve the complete previous managed set and its receipt before mutation.
         atomic_write(sftp, f'{backup}/deployed.json', previous_raw)
+        atomic_write(sftp, f'{backup}/files/server.properties', properties_before)
+        atomic_write(sftp, f'{backup}/files/pebblehost.yml', host_before)
         for target, _, current in changes:
             if current is not None:
                 atomic_write(sftp, f'{backup}/files/{target}', current)
         for target, data, _ in changes:
             atomic_write(sftp, target, data)
+        if properties_after != properties_before:
+            atomic_write(sftp, 'server.properties', properties_after)
+        if host_after != host_before:
+            atomic_write(sftp, 'pebblehost.yml', host_after)
         state = dict(schemaVersion=1, sourceCommit=commit,
                      files={target: sha(data) for target, data in files.items()},
-                     restartRequired=bool(changes) or previous.get('restartRequired', False),
+                     restartRequired=bool(changes) or properties_after != properties_before or previous.get('restartRequired', False),
                      previousBackup=backup)
         atomic_write(sftp, REMOTE_STATE, json.dumps(state, indent=2).encode())
         print('Uploaded and hash-verified. Click Restart in PebbleHost when ready.')
@@ -242,9 +343,48 @@ def deploy(sftp, commit, apply=False):
         sftp.rmdir('.mandomc/deploy.lock')
 
 
-def download(sftp, remote, destination):
+def verify_startup(sftp):
+    raw = read_remote(sftp, '.mandomc/bootstrap.json')
+    if raw is None:
+        raise ValueError('No migration receipt; activate the prepared runtime first.')
+    receipt = json.loads(raw)
+    log_path = 'logs/latest.log'
+    if sftp.lstat(log_path).st_mtime < sftp.lstat('.mandomc/bootstrap.json').st_mtime:
+        raise ValueError('The current log predates the cutover. Start the server manually first.')
+    log = (read_remote(sftp, log_path) or b'').decode('utf-8', errors='replace')
+    required = ('Running Java 25', 'Loading Paper 26.1.2-74', 'Done (',
+                'Arrival enabled:', 'Native clans ready:', 'Native crates ready;',
+                'Redstone circuits disabled in all worlds', 'Travel guides ready:',
+                'Ambient Massiffs ready:', 'World leaderboards ready:',
+                '[Votifier] Votifier enabled on socket /0.0.0.0:19132.',
+                '[VotingPlugin] Enabled VotingPlugin 7.1.1')
+    missing = [text for text in required if text not in log]
+    if missing or '/ERROR]' in log or '/SEVERE]' in log:
+        raise ValueError('Startup not healthy; inspect latest.log. Missing markers: ' + ', '.join(missing))
+    state_raw = read_remote(sftp, REMOTE_STATE)
+    if state_raw is None:
+        raise ValueError('Missing managed-file receipt')
+    state = json.loads(state_raw)
+    drift = []
+    for target, expected in state['files'].items():
+        current = read_remote(sftp, installed_path(target))
+        if sha(current) != expected:
+            drift.append(target)
+    if drift:
+        raise ValueError('Startup changed managed bytes; review before enabling upload: ' + ', '.join(drift))
+    receipt['verifiedStartup'] = True
+    receipt['verifiedAt'] = datetime.now(timezone.utc).isoformat()
+    state['restartRequired'] = False
+    atomic_write(sftp, '.mandomc/bootstrap.json', json.dumps(receipt).encode())
+    atomic_write(sftp, REMOTE_STATE, json.dumps(state).encode())
+    print('Paper, Java, gameplay startup and managed hashes verified. No power command was sent.')
+
+
+def download(sftp, remote, destination, resume=False):
     """Read-only recursive download; never follows server-controlled symlinks."""
     for item in sftp.listdir_attr(remote):
+        if item.filename in {'tmp', '.paper-remapped'} or item.filename.endswith(('.tmp', '.lock', '.jfr')):
+            continue
         if item.filename in ('.', '..') or '/' in item.filename or '\\' in item.filename:
             raise ValueError('Unsafe remote filename')
         source = f'{remote}/{item.filename}'
@@ -252,18 +392,33 @@ def download(sftp, remote, destination):
         if stat.S_ISLNK(item.st_mode):
             print(f'Skipping symbolic link: {source}')
         elif stat.S_ISDIR(item.st_mode):
-            target.mkdir(mode=0o700)
-            download(sftp, source, target)
+            target.mkdir(mode=0o700, exist_ok=resume)
+            download(sftp, source, target, resume)
         elif stat.S_ISREG(item.st_mode):
-            sftp.get(source, str(target), max_concurrent_prefetch_requests=32)
+            if resume and target.is_file() and target.stat().st_size == item.st_size and item.st_mtime <= target.stat().st_mtime:
+                continue
+            try:
+                sftp.get(source, str(target), max_concurrent_prefetch_requests=32)
+            except OSError:
+                # Some Wings SFTP servers reject pipelined reads on a changing
+                # file. Retry with plain reads and retain the failing path.
+                try:
+                    sftp.get(source, str(target), prefetch=False)
+                except Exception as exc:
+                    raise OSError(f'Download failed at {source}: {exc}') from exc
             target.chmod(0o600)
+            os.utime(target, (item.st_atime, item.st_mtime))
 
 
-def pull(config, sftp):
-    destination = PRIVATE / 'downloads' / datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
-    destination.mkdir(parents=True, mode=0o700)
+def pull(config, sftp, resume=None):
+    destination = Path(resume).resolve() if resume else PRIVATE / 'downloads' / datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+    if resume and (PRIVATE / 'downloads').resolve() not in destination.parents:
+        raise ValueError('Resume only into an existing private download directory.')
+    destination.mkdir(parents=True, mode=0o700, exist_ok=bool(resume))
     print(f'Downloading into {destination}. A running server is not a consistent world backup.', flush=True)
-    items = [item for item in sftp.listdir_attr('.') if item.filename != '.mandomc']
+    generated = {'.mandomc', '.cache', '.java', 'cache', 'libraries', 'versions', 'logs', 'debug', '.trash', '.ufs-tmp'}
+    items = [item for item in sftp.listdir_attr('.') if item.filename not in generated
+             and '.mandomc-upload' not in item.filename and '.mandomc-previous' not in item.filename]
 
     def worker(group):
         client, channel = connect(config)
@@ -272,11 +427,14 @@ def pull(config, sftp):
                 name = safe_path(item.filename)
                 target = destination / name
                 if stat.S_ISDIR(item.st_mode):
-                    target.mkdir(mode=0o700)
-                    download(channel, name, target)
+                    target.mkdir(mode=0o700, exist_ok=bool(resume))
+                    download(channel, name, target, bool(resume))
                 elif stat.S_ISREG(item.st_mode):
+                    if resume and target.is_file() and target.stat().st_size == item.st_size and item.st_mtime <= target.stat().st_mtime:
+                        continue
                     channel.get(name, str(target), max_concurrent_prefetch_requests=32)
                     target.chmod(0o600)
+                    os.utime(target, (item.st_atime, item.st_mtime))
                 else:
                     continue
                 print(f'Downloaded {name}', flush=True)
@@ -289,7 +447,8 @@ def pull(config, sftp):
         for future in [pool.submit(worker, items[index::4]) for index in range(4)]:
             future.result()
     private_write(destination / '.download-complete.json', json.dumps(dict(
-        completedAt=datetime.now(timezone.utc).isoformat(), consistentSnapshot=False)))
+        completedAt=datetime.now(timezone.utc).isoformat(), consistentSnapshot=False,
+        excludedGeneratedPaths=sorted(generated), resumed=bool(resume))))
     print(f'Download complete: {destination}', flush=True)
 
 
@@ -298,7 +457,9 @@ def main():
     commands = parser.add_subparsers(dest='command', required=True)
     commands.add_parser('configure')
     commands.add_parser('check')
-    commands.add_parser('pull')
+    pull_command = commands.add_parser('pull')
+    pull_command.add_argument('--resume', type=Path)
+    commands.add_parser('verify-startup')
     release = commands.add_parser('deploy')
     release.add_argument('--commit', required=True)
     release.add_argument('--apply', action='store_true')
@@ -313,7 +474,9 @@ def main():
             print(f'Connected. {len(sftp.listdir("."))} server-root items.')
             print('Migration receipt:', 'present' if read_remote(sftp, '.mandomc/bootstrap.json') else 'absent')
         elif args.command == 'pull':
-            pull(config, sftp)
+            pull(config, sftp, args.resume)
+        elif args.command == 'verify-startup':
+            verify_startup(sftp)
         else:
             deploy(sftp, args.commit, args.apply)
     finally:

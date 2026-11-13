@@ -1,0 +1,9 @@
+schema-version: 1
+drops:
+  minimum: 1
+  maximum: 3
+recipes:
+  robes_helmet: ['BBB', 'B B']
+  robes_chestplate: ['B B', 'BBB', 'BBB']
+  robes_leggings: ['BBB', 'B B', 'B B']
+  robes_boots: ['B B', 'B B']

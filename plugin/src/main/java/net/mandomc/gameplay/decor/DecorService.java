@@ -1,0 +1,166 @@
+package net.mandomc.gameplay.decor;
+
+import java.util.*;
+import com.ticxo.modelengine.api.ModelEngineAPI;
+import com.ticxo.modelengine.api.events.BaseEntityInteractEvent;
+import com.ticxo.modelengine.api.events.ModelMountEvent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import net.mandomc.bootstrap.MandoPlugin;
+import net.mandomc.integrations.models.DecorModel;
+import org.bukkit.*;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Vector;
+
+/** Config-owned scenery; player vehicle records and Mythic combat instances are never used. */
+public final class DecorService implements Listener,AutoCloseable {
+    public static final NamespacedKey MARKER=new NamespacedKey("mandomc","spawn_decor_id");
+    private record Live(DecorDefinition definition,ArmorStand base,DecorModel model){}
+    private final MandoPlugin plugin;
+    private final YamlConfiguration config;
+    private final Map<String,DecorDefinition> definitions=new LinkedHashMap<>();
+    private final Map<String,Live> live=new LinkedHashMap<>();
+    private final Map<UUID,Long> interactions=new HashMap<>();
+    private final Map<UUID,Map<String,Integer>> dialogueCursor=new HashMap<>();
+    private final Set<Chunk> chunks=new HashSet<>();
+    private final Set<UUID> internalTeleports=new HashSet<>();
+    private final BukkitTask ticker;
+    private final double lookRange;
+    private final Map<String,UUID> lookTargets=new HashMap<>();
+    private boolean closing;
+    public DecorService(MandoPlugin plugin,YamlConfiguration config){
+        this.plugin=plugin;this.config=config;
+        if(config.getInt("schema-version")!=1)throw new IllegalArgumentException("decor/placements.yml: schema-version1 required");
+        lookRange=config.getDouble("look-range",5);
+        if(!Double.isFinite(lookRange)||lookRange<1||lookRange>8)throw new IllegalArgumentException("Invalid decor look range/step");
+        for(var entry:config.getMapList("placements")){
+            var definition=DecorDefinition.read(entry);
+            if(definitions.putIfAbsent(definition.id(),definition)!=null)throw new IllegalArgumentException("Duplicate decor id "+definition.id());
+            var at=definition.location();
+            if(!at.getWorld().getWorldBorder().isInside(at)||at.getY()<at.getWorld().getMinHeight()||at.getY()+2>=at.getWorld().getMaxHeight())throw new IllegalArgumentException("Decor outside world bounds: "+definition.id());
+            if(ModelEngineAPI.getBlueprint(definition.model())==null)throw new IllegalArgumentException("Missing decor model "+definition.model());
+        }
+        if(definitions.isEmpty()||definitions.size()>32)throw new IllegalArgumentException("Decor requires 1..32 placements");
+        try{
+            for(var definition:definitions.values()){
+                var chunk=definition.location().getChunk();if(chunk.addPluginChunkTicket(plugin))chunks.add(chunk);
+            }
+            // Remove only prior instances carrying this feature's private marker; user vehicles/NPCs stay untouched.
+            for(var world:Bukkit.getWorlds())for(var entity:List.copyOf(world.getEntities())){
+                if(entity.getPersistentDataContainer().has(MARKER,PersistentDataType.STRING)){
+                    var modeled=ModelEngineAPI.getModeledEntity(entity.getUniqueId());if(modeled!=null)modeled.destroy();entity.remove();
+                }
+            }
+            for(var definition:definitions.values())spawn(definition);
+        }catch(RuntimeException error){removeAll();throw error;}
+        Bukkit.getPluginManager().registerEvents(this,plugin);
+        ticker=Bukkit.getScheduler().runTaskTimer(plugin,this::tick,2,2);
+        plugin.getLogger().info("Spawn decor ready: "+live.size()+" fixed model placements; no combat AI or player vehicle ownership.");
+    }
+    private void spawn(DecorDefinition definition){
+        Location at=definition.location();
+        var territory=Objects.requireNonNull(Bukkit.getServicesManager().load(net.mandomc.gameplay.territory.TerritoryService.class));
+        var base=territory.spawnNpc(EntityType.ARMOR_STAND,at,()->at.getWorld().spawn(at,ArmorStand.class,entity->{
+            entity.setVisible(false);entity.setGravity(false);entity.setInvulnerable(true);entity.setSilent(true);entity.setCollidable(false);
+            entity.setPersistent(false);entity.setRemoveWhenFarAway(false);entity.setArms(false);entity.setBasePlate(false);
+            entity.setCanMove(false);entity.setCanTick(false);entity.setFireTicks(0);
+            entity.getPersistentDataContainer().set(MARKER,PersistentDataType.STRING,definition.id());
+        }));
+        try{live.put(definition.id(),new Live(definition,base,new DecorModel(base,definition)));}
+        catch(RuntimeException error){base.remove();throw error;}
+    }
+    public List<DecorDefinition> definitions(){return List.copyOf(definitions.values());}
+    public Map<String,ArmorStand> bases(){var result=new LinkedHashMap<String,ArmorStand>();live.forEach((id,value)->result.put(id,value.base));return Map.copyOf(result);}
+    public UUID lookTarget(String id){return lookTargets.get(id);}
+    public DecorModel model(String id){return live.get(id).model;}
+    private Live owned(Entity entity){
+        String id=entity.getPersistentDataContainer().get(MARKER,PersistentDataType.STRING);
+        var value=id==null?null:live.get(id);return value!=null&&value.base.getUniqueId().equals(entity.getUniqueId())?value:null;
+    }
+    @EventHandler public void chunk(org.bukkit.event.world.ChunkLoadEvent event){
+        for(var entity:event.getChunk().getEntities())if(entity.getPersistentDataContainer().has(MARKER,PersistentDataType.STRING)&&owned(entity)==null){
+            var modeled=ModelEngineAPI.getModeledEntity(entity.getUniqueId());if(modeled!=null)modeled.destroy();entity.remove();
+        }
+    }
+    private void tick(){
+        if(closing)return;
+        long now=System.currentTimeMillis();
+        for(var definition:definitions.values()){
+            var value=live.get(definition.id());
+            if(value==null||!value.base.isValid()||value.base.isDead()){
+                if(value!=null)value.model.close();spawn(definition);continue;
+            }
+            if(!value.model.valid()){
+                value.model.close();value=new Live(definition,value.base,new DecorModel(value.base,definition));live.put(definition.id(),value);
+            }
+            Location at=definition.location();var base=value.base;
+            if(!base.getWorld().equals(at.getWorld())||base.getLocation().distanceSquared(at)>.000001){
+                internalTeleports.add(base.getUniqueId());try{base.teleport(at);}finally{internalTeleports.remove(base.getUniqueId());}
+            }
+            if(definition.npc()){
+                var candidates=at.getWorld().getPlayers().stream()
+                        .filter(p->p.getGameMode()!=GameMode.SPECTATOR&&p.isOnline()&&!p.isDead())
+                        .filter(p->p.getMetadata("vanished").stream().noneMatch(v->v.asBoolean()))
+                        .filter(p->p.getLocation().distanceSquared(at)<lookRange*lookRange)
+                         .sorted(Comparator.comparingDouble((Player p)->p.getLocation().distanceSquared(at)).thenComparing(Player::getUniqueId)).toList();
+                Player viewer=candidates.isEmpty()?null:candidates.getFirst();
+                var retained=candidates.stream().filter(p->p.getUniqueId().equals(lookTargets.get(definition.id()))).findFirst().orElse(null);
+                if(retained!=null&&viewer!=null&&retained.getLocation().distanceSquared(at)<=viewer.getLocation().distanceSquared(at)+1)viewer=retained;
+                if(viewer==null)lookTargets.remove(definition.id());else lookTargets.put(definition.id(),viewer.getUniqueId());
+                var direction=viewer==null?at:at.clone().setDirection(viewer.getEyeLocation().toVector().subtract(base.getEyeLocation().toVector()));
+                value.model.face(base,direction.getYaw(),direction.getPitch(),viewer!=null);
+            }else base.setRotation(at.getYaw(),at.getPitch());
+            base.setVelocity(new Vector());base.setFireTicks(0);
+
+        }
+        interactions.entrySet().removeIf(entry->entry.getValue()<now-60_000);
+    }
+    private void talk(Player player,Live value){
+        if(!value.definition.npc()||!player.getWorld().equals(value.base.getWorld())||player.getLocation().distanceSquared(value.base.getLocation())>36)return;
+        long now=System.currentTimeMillis();if(now-interactions.getOrDefault(player.getUniqueId(),0L)<3000)return;
+        interactions.put(player.getUniqueId(),now);
+        int lineIndex=dialogueCursor.computeIfAbsent(player.getUniqueId(),id->new HashMap<>()).merge(value.definition.id(),1,Integer::sum)-1;
+        String line=value.definition.dialogue().get(Math.floorMod(lineIndex,value.definition.dialogue().size()));
+        Component text=MiniMessage.miniMessage().deserialize(config.getString("messages.npc-line"),
+                Placeholder.unparsed("npc",value.definition.name()),Placeholder.unparsed("line",line));
+        // Chat presentation is optional; rendering/placement has no dependency on its implementation.
+        try{
+            var type=Class.forName("net.mandomc.gameplay.messaging.MessageService",true,plugin.getClass().getClassLoader());
+            Object service=Bukkit.getServicesManager().load(type);
+            if(service!=null)text=(Component)type.getMethod("known",String.class,String.class,Component.class).invoke(service,"decor/placements.yml","messages.npc-line",text);
+        }catch(ClassNotFoundException absent){/* Independent feature build retains its original dialogue. */}
+        catch(ReflectiveOperationException error){throw new IllegalStateException("Cannot format decorative NPC dialogue",error);}
+        player.sendMessage(text);
+    }
+    @EventHandler(priority=EventPriority.HIGHEST) public void interact(PlayerInteractEntityEvent event){
+        var value=owned(event.getRightClicked());if(value==null)return;event.setCancelled(true);
+        if(event.getHand()==EquipmentSlot.HAND)talk(event.getPlayer(),value);
+    }
+    @EventHandler public void quit(PlayerQuitEvent event){interactions.remove(event.getPlayer().getUniqueId());dialogueCursor.remove(event.getPlayer().getUniqueId());}
+    @EventHandler public void modelInteract(BaseEntityInteractEvent event){
+        var value=live.values().stream().filter(v->v.base.getUniqueId().equals(event.getBaseEntity().getUUID())).findFirst().orElse(null);
+        if(value!=null&&event.getSlot()==EquipmentSlot.HAND&&event.getAction()!=BaseEntityInteractEvent.Action.ATTACK)talk(event.getPlayer(),value);
+    }
+    @EventHandler(priority=EventPriority.HIGHEST) public void mount(ModelMountEvent event){
+        UUID id=event.getVehicle().getModeledEntity().getBase().getUUID();
+        if(live.values().stream().anyMatch(v->v.base.getUniqueId().equals(id)))event.setCancelled(true);
+    }
+    @EventHandler(priority=EventPriority.HIGHEST) public void nativeMount(EntityMountEvent event){if(owned(event.getMount())!=null)event.setCancelled(true);}
+    @EventHandler(priority=EventPriority.HIGHEST) public void teleport(EntityTeleportEvent event){if(owned(event.getEntity())!=null&&!internalTeleports.contains(event.getEntity().getUniqueId()))event.setCancelled(true);}
+    @EventHandler(priority=EventPriority.HIGHEST) public void manipulate(PlayerArmorStandManipulateEvent event){if(owned(event.getRightClicked())!=null)event.setCancelled(true);}
+    @EventHandler(priority=EventPriority.LOWEST) public void damage(EntityDamageEvent event){if(owned(event.getEntity())!=null)event.setCancelled(true);}
+    @EventHandler(priority=EventPriority.HIGHEST) public void burn(EntityCombustEvent event){if(owned(event.getEntity())!=null)event.setCancelled(true);}
+    private void removeAll(){
+        for(var value:List.copyOf(live.values())){value.model.close();value.base.remove();}live.clear();
+        chunks.forEach(chunk->chunk.removePluginChunkTicket(plugin));chunks.clear();
+    }
+    @Override public void close(){closing=true;ticker.cancel();HandlerList.unregisterAll(this);removeAll();interactions.clear();dialogueCursor.clear();lookTargets.clear();}
+}

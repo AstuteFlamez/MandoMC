@@ -53,7 +53,10 @@ def activate(sftp, metadata):
     for name, expected in metadata['files'].items():
         if transfer.sha(transfer.read_remote(sftp, f'{base}/{name}')) != expected:
             raise ValueError(f'Staged checksum mismatch: {name}')
-    keep = {'.mandomc', '.java', '.server-uuid', 'pebblehost.yml'}
+    keep = {'.mandomc', '.java', '.server-uuid', 'pebblehost.yml', 'start.sh'}
+    host_before = transfer.read_remote(sftp, 'pebblehost.yml')
+    if host_before is None:
+        raise ValueError('Missing host startup settings')
     archive = f'.mandomc/legacy/{datetime.now(timezone.utc):%Y%m%dT%H%M%SZ}'
     transfer.mkdirs(sftp, archive)
     moved_old = []
@@ -76,9 +79,11 @@ def activate(sftp, metadata):
         # puts the JAR in plugins/ directly. The uploader understands that alias.
         files = transfer.payload()
         for target, data in files.items():
-            installed = 'plugins/MandoMC.jar' if target == 'plugins/update/MandoMC.jar' else target
+            installed = transfer.installed_path(target)
             if transfer.read_remote(sftp, installed) != data:
                 raise ValueError(f'Installed content differs from the selected source: {installed}')
+        transfer.atomic_write(sftp, archive + '/pebblehost.yml', host_before)
+        transfer.atomic_write(sftp, 'pebblehost.yml', transfer.host_settings(host_before, files))
         receipt = dict(schemaVersion=1, sourceCommit=commit,
                        files={name: transfer.sha(data) for name, data in files.items()},
                        restartRequired=True, legacyArchive=archive)
@@ -86,6 +91,7 @@ def activate(sftp, metadata):
         transfer.atomic_write(sftp, '.mandomc/bootstrap.json', json.dumps(dict(
             schemaVersion=1, sourceCommit=commit, verifiedStartup=False, legacyArchive=archive)).encode())
     except Exception:
+        transfer.atomic_write(sftp, 'pebblehost.yml', host_before)
         # Reverse the directory cutover; retain all new and old bytes.
         for name in reversed(moved_new):
             sftp.rename(name, f'{base}/{name}')

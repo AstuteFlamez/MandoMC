@@ -1,0 +1,4 @@
+schema-version: 1
+# One leg per Dewback death; adjust chance here when balancing.
+item: dewback_leg
+chance: 1.0

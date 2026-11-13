@@ -71,8 +71,8 @@ public final class VehicleCannons implements Listener, AutoCloseable {
         var weapon = weapons.get(vehicles.mountedType(player));
         if (weapon == null || player.isDead()) return false;
         var platform = vehicles.firingPlatform(player, weapon.bones());
-        if (platform == null || !protection.damage(player.getLocation())
-                || !protection.damage(platform.entity().getLocation())) return false;
+        if (platform == null || !protection.use(player.getLocation())
+                || !protection.use(platform.entity().getLocation())) return false;
         long now = System.nanoTime() / 1_000_000;
         if (now < recharge.getOrDefault(player.getUniqueId(), 0L)) {
             message(player, "weapon-recharging", "seconds", String.format(Locale.ROOT, "%.1f",
@@ -82,7 +82,7 @@ public final class VehicleCannons implements Listener, AutoCloseable {
         if (lastSwing.getOrDefault(player.getUniqueId(), -1) == Bukkit.getCurrentTick()
                 || bolts.size() + weapon.bones().size() > MAX_BOLTS) return false;
         for (Location muzzle : platform.muzzles())
-            if (!loaded(muzzle) || !protection.damage(muzzle)) return false;
+            if (!loaded(muzzle) || !protection.use(muzzle)) return false;
         var template = items.create(weapon.ammo());
         if (!consume(player, template, weapon.ammoCost())) {
             message(player, "weapon-ammo", "ammo", net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(template.getItemMeta().displayName()));
@@ -148,13 +148,13 @@ public final class VehicleCannons implements Listener, AutoCloseable {
         for (Bolt bolt : List.copyOf(bolts)) {
             if (!bolt.display().isValid() || !bolt.shooter().isOnline() || bolt.shooter().isDead()
                     || bolt.shooter().getWorld() != bolt.location().getWorld()
-                    || !protection.damage(bolt.shooter().getLocation())) { remove(bolt); continue; }
+                    || !vehicles.mayUse(bolt.platform().entity(), bolt.shooter(), bolt.location())) { remove(bolt); continue; }
             double distance = Math.min(bolt.remaining(), bolt.motion().length());
             var direction = bolt.motion().clone().normalize();
             boolean clear = true;
             for (double step = 0; step <= distance + .249; step += .25) {
                 var point = bolt.location().clone().add(direction.clone().multiply(Math.min(step, distance)));
-                if (!loaded(point) || !protection.damage(point)) { clear = false; break; }
+                if (!loaded(point) || !protection.use(point)) { clear = false; break; }
             }
             if (!clear) { remove(bolt); continue; }
             var hit = bolt.location().getWorld().rayTrace(bolt.location(), direction, distance,
@@ -174,6 +174,7 @@ public final class VehicleCannons implements Listener, AutoCloseable {
     }
 
     private void impact(Bolt bolt, Location location, Entity direct) {
+        if (!vehicles.mayUse(bolt.platform().entity(), bolt.shooter(), location)) return;
         var victims = new LinkedHashSet<LivingEntity>();
         if (direct instanceof LivingEntity living) victims.add(living);
         double radius = bolt.settings().radius();
@@ -182,7 +183,7 @@ public final class VehicleCannons implements Listener, AutoCloseable {
                     && living.getBoundingBox().getCenter().distanceSquared(location.toVector()) <= radius * radius) victims.add(living);
         for (LivingEntity victim : victims) {
             if (!victim.isValid() || victim.isDead() || victim.isInvulnerable() || excluded(bolt, victim)
-                    || !protection.damage(victim.getLocation())) continue;
+                    || !protection.use(victim.getLocation())) continue;
             var center = victim.getBoundingBox().getCenter().toLocation(victim.getWorld());
             if (!clearSplash(location, center)) continue;
             victim.damage(bolt.settings().damage(), bolt.shooter());
@@ -226,7 +227,7 @@ public final class VehicleCannons implements Listener, AutoCloseable {
         double length = delta.length();
         for (double step = .25; step < length; step += .25) {
             var point = start.clone().add(delta.clone().multiply(step / length));
-            if (!loaded(point) || !protection.damage(point)) return false;
+            if (!loaded(point) || !protection.use(point)) return false;
         }
         return length < .01 || start.getWorld().rayTraceBlocks(start, delta, length, FluidCollisionMode.NEVER, true) == null;
     }

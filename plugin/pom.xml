@@ -11,6 +11,12 @@
     <name>MandoMC</name>
     <dependencies>
         <dependency>
+            <groupId>com.github.retrooper</groupId>
+            <artifactId>packetevents-spigot</artifactId>
+            <version>2.14.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.ticxo.modelengine</groupId>
             <artifactId>ModelEngine</artifactId>
             <version>R4.1.1</version>
@@ -23,16 +29,13 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.sk89q.worldguard</groupId>
-            <artifactId>worldguard-bukkit</artifactId>
-            <version>7.0.18</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
             <version>7.4.6</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion><groupId>org.bstats</groupId><artifactId>bstats-bukkit</artifactId></exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

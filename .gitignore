@@ -5,6 +5,25 @@ reference/
 .env
 .env.*
 !.env.example
+# Live credentials, private signing material and vote-listener identity.
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+**/plugins/Votifier/**
+**/plugins/NuVotifier/**
+**/plugins/VotifierPlus/**
+**/plugins/VotingPlugin/**
+**/Votifier/rsa/**
+**/NuVotifier/rsa/**
+**/VotifierPlus/rsa/**
+**/Votifier/config.yml
+**/NuVotifier/config.yml
+**/VotifierPlus/config.yml
+!*.example.pem
+!*.example.key
 # Builds and editor state
 **/target/
 **/build/
@@ -37,6 +56,7 @@ __pycache__/
 !/server/plugins.lock.json
 !/server/plugins.catalog.json
 !/server/config/
+!/server/datapacks/
 # Never track installed plugins or world payloads, even inside config subfolders.
 /server/**/plugins/
 /server/**/worlds/

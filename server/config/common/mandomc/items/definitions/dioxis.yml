@@ -1,0 +1,14 @@
+schema-version: 1
+items:
+  dioxis_grenade:
+    material: ECHO_SHARD
+    name: '<green>Dioxis Grenade'
+    custom-model-data: 30
+    item-model: mandomc:grenades/dioxis_grenade
+    rarity: rare
+    category: weapons
+    lore:
+      - '<gray>Releases a choking cloud of dioxis gas.'
+      - '<gray>Briefly stuns enemies and leaves them poisoned.'
+      - ''
+      - '<yellow>[Right Click] Throw'
