@@ -59,7 +59,7 @@ def main():
         dest = ASSETS / 'minecraft/textures/block/redstone_block.png'
         assert Image.open(source).size == (32, 32)
         dest.write_bytes(source.read_bytes())
-        records.append({'target': str(dest.relative_to(ASSETS)), 'generatedSource': 'art-sources/electrum-block-32.png',
+        records.append({'target': str(dest.relative_to(ASSETS)), 'artSource': 'art-sources/electrum-block-32.png',
                         'sourceSha256': hashlib.sha256(source.read_bytes()).hexdigest(),
                         'outputSha256': hashlib.sha256(dest.read_bytes()).hexdigest()})
         source = ASSETS / 'mandomc/textures/item/legacy/metals/ingots/electrum.png'

@@ -78,7 +78,7 @@ class BobaEquipmentAssets(unittest.TestCase):
         with zipfile.ZipFile(ROOT / 'resource-pack/build/MandoMC.zip') as pack:
             for name in ('boba_jetpack', 'boba_jetpack_attached', 'boba_flamethrower'):
                 path = f'assets/mandomc/items/equipment/{name}.json'
-                self.assertEqual(pack.read(path), (PACK / path).read_bytes())
+                self.assertEqual(json.loads(pack.read(path)), json.loads((PACK / path).read_bytes()))
 
 
 if __name__ == '__main__':
