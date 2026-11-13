@@ -1,5 +1,5 @@
 # Feature: World leaderboards
-Status: fixed-height presentation verified locally; production activation pending.
+Status: deployed to local development with automatic restart on 2026-11-13; client visual confirmation pending.
 Branch: bilal/leaderboard-style.
 
 ## Player experience
