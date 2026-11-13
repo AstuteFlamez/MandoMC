@@ -32,7 +32,7 @@
         0.18
       ],
       "shadowFloorLuma": 80,
-      "outputSha256": "28c669797de5f061e1bcce21169177a4c949cfa049ae2a3608151dfd4b37476f"
+      "outputSha256": "1f549df780347713b423e992732f1afd3d490dec3900228e63ddd7f61972a151"
     },
     {
       "target": "minecraft/textures/block/iron_block.png",
@@ -117,7 +117,7 @@
         0.23
       ],
       "shadowFloorLuma": 80,
-      "outputSha256": "042acbd4a7f9b4c88457bba4dbb18afc7b476b0ce836e1fe34939c137aa2978a"
+      "outputSha256": "6a2f080b309a2d5345aadbf905f8e13a78e90f14fd13e8a486b965c948888ce3"
     },
     {
       "target": "minecraft/textures/block/redstone_block.png",
