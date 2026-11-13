@@ -1,0 +1,97 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    {
+      "source": "plugin/target/MandoMC.jar",
+      "target": "plugins/update/MandoMC.jar"
+    },
+    {
+      "source": "server/config/common/mandomc/admin/utilities.yml",
+      "target": "plugins/MandoMC/admin/utilities.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/arrival/starter-kit.yml",
+      "target": "plugins/MandoMC/arrival/starter-kit.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/combat/combat.yml",
+      "target": "plugins/MandoMC/combat/combat.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/config.yml",
+      "target": "plugins/MandoMC/config.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/economy/auction-house.yml",
+      "target": "plugins/MandoMC/economy/auction-house.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/economy/credits.yml",
+      "target": "plugins/MandoMC/economy/credits.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/events/jabba.yml",
+      "target": "plugins/MandoMC/events/jabba.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/events/koth.yml",
+      "target": "plugins/MandoMC/events/koth.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/events/schedule.yml",
+      "target": "plugins/MandoMC/events/schedule.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/interface/hud.yml",
+      "target": "plugins/MandoMC/interface/hud.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/jabba-loot.yml",
+      "target": "plugins/MandoMC/items/definitions/jabba-loot.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/recipes.yml",
+      "target": "plugins/MandoMC/items/recipes.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/mobs/bossk.yml",
+      "target": "plugins/MandoMC/mobs/bossk.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/mobs/drops/jabba.yml",
+      "target": "plugins/MandoMC/mobs/drops/jabba.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/mobs/rancor.yml",
+      "target": "plugins/MandoMC/mobs/rancor.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/mobs/spawning.yml",
+      "target": "plugins/MandoMC/mobs/spawning.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/ranks/ranks.yml",
+      "target": "plugins/MandoMC/ranks/ranks.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/rules/survival.yml",
+      "target": "plugins/MandoMC/rules/survival.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/travel/teleport.yml",
+      "target": "plugins/MandoMC/travel/teleport.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/travel/warps.yml",
+      "target": "plugins/MandoMC/travel/warps.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/vehicles/weapons.yml",
+      "target": "plugins/MandoMC/vehicles/weapons.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/worlds/worlds.yml",
+      "target": "plugins/MandoMC/worlds/worlds.yml"
+    }
+  ]
+}

@@ -2,18 +2,18 @@
 ## One playable change at a time
 1. Describe the player outcome using docs/templates/feature.md.
 2. Set its rules and smallest playable content example.
-3. Create bilal/<feature> from current main.
+3. Create bilal/<feature> from current dev.
 4. Implement the necessary system and parameters; adapt useful legacy pieces.
 5. Include public-plugin config, validation and docs with the code.
 6. Build, exercise it in-server and adjust its feel with the user.
-7. Merge the satisfactory feature and start the next from the integrated main.
+7. Merge the satisfactory feature into dev. Promote tested dev into main for production.
 
-Recovery branches hold reference material, not ready-to-merge implementations; see recovery.md. The arrival branch introduces the first gameplay module; other legacy features remain recovery material.
+Use hotfix for urgent production fixes based on current main, then merge main back into dev. See [production workflow](production-workflow.md) for branch rules, private file downloads, automatic uploads and manual restarts. Legacy recovery tips are preserved as archive tags; see recovery.md.
 
 ## Local build
 Run ./scripts/build.sh to verify the Maven reactor and produce plugin/target/MandoMC.jar. Select Java 25 using MANDOMC_JAVA_HOME, the local JDK, or JAVA_HOME. Wrapper and dependency downloads stay under ignored .local.
 
-No automatic copy-to-server step exists. Runtime files live in `server/runtime/`, separately from `plugin/` and `resource-pack/`. See [server instructions](../server/README.md). Bind the laptop server to loopback until access is intentionally changed. Stop it before switching deployed code/configs; branches do not preserve runtime world/player state. Use restarts for code/vendor changes, not Bukkit /reload.
+After the initial production migration is verified, checked pushes to main upload only the explicit production allowlist. Restart PebbleHost manually to activate its next JAR. Runtime files live in `server/runtime/`, separately from `plugin/` and `resource-pack/`. See [server instructions](../server/README.md). Bind the laptop server to loopback until access is intentionally changed. Stop it before switching deployed code/configs; branches do not preserve runtime world/player state. Use restarts for code/vendor changes, not Bukkit /reload.
 
 Build pack sources with `./scripts/build-resource-pack.py`; output stays in ignored `resource-pack/build/`. Source models, textures and provenance live on main alongside code. Pack/tooling changes on main publish via GitHub Actions. Wait for publication, then restart Paper to synchronize the hosted URL/hash; reconnect to apply the pack. See resource-pack/README.md for caching and preview behavior. Validate model appearance in a matching Minecraft client before calling an asset complete.
 
