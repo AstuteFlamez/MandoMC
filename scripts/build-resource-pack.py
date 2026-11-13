@@ -5,10 +5,47 @@ import json
 from pathlib import Path
 import re
 import zipfile
+import struct
+import zlib
 
 ROOT = Path(__file__).resolve().parents[1]
 PACK = ROOT / 'resource-pack'
 SOURCE = PACK / 'src'
+
+
+def packed_bytes(path):
+    """Compact transport bytes without changing resource values or texture pixels."""
+    data = path.read_bytes()
+    if path.suffix in ('.json', '.mcmeta'):
+        return json.dumps(read_json(path), ensure_ascii=False, separators=(',', ':')).encode('utf-8')
+    if path.suffix != '.png':
+        return data
+    if not data.startswith(b'\x89PNG\r\n\x1a\n'):
+        raise SystemExit(f'Invalid PNG: {path.relative_to(ROOT)}')
+    chunks = []
+    offset = 8
+    while offset < len(data):
+        length = struct.unpack_from('>I', data, offset)[0]
+        kind = data[offset + 4:offset + 8]
+        end = offset + length + 12
+        if end > len(data):
+            raise SystemExit(f'Truncated PNG: {path.relative_to(ROOT)}')
+        # Text, timestamps and camera metadata have no texture-rendering role.
+        if kind not in (b'tEXt', b'zTXt', b'iTXt', b'tIME', b'eXIf'):
+            chunks.append((kind, data[offset + 8:end - 4], data[offset:end]))
+        offset = end
+    if not any(kind == b'acTL' for kind, _, _ in chunks):
+        compressed = b''.join(value for kind, value, _ in chunks if kind == b'IDAT')
+        if compressed:
+            compact = zlib.compress(zlib.decompress(compressed), level=9)
+            original_size = sum(len(raw) for kind, _, raw in chunks if kind == b'IDAT')
+            if len(compact) + 12 < original_size:
+                encoded = struct.pack('>I', len(compact)) + b'IDAT' + compact
+                encoded += struct.pack('>I', zlib.crc32(b'IDAT' + compact))
+                first = next(i for i, (kind, _, _) in enumerate(chunks) if kind == b'IDAT')
+                chunks = [entry for i, entry in enumerate(chunks) if entry[0] != b'IDAT' or i == first]
+                chunks[first] = (b'IDAT', compact, encoded)
+    return data[:8] + b''.join(raw for _, _, raw in chunks)
 
 
 def read_json(path):
@@ -162,7 +199,7 @@ def main():
             info.compress_type = zipfile.ZIP_DEFLATED
             info.create_system = 3
             info.external_attr = 0o100644 << 16
-            archive.writestr(info, path.read_bytes())
+            archive.writestr(info, packed_bytes(path), compresslevel=9)
     temporary.replace(output)
     data = output.read_bytes()
     hashes = {name: hashlib.new(name, data).hexdigest() for name in ('sha1', 'sha256')}

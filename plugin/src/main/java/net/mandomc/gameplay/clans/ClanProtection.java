@@ -23,6 +23,9 @@ final class ClanProtection implements Listener {
         if(staff(p)){clans.land().staffEdit(block);return true;}
         if(!clans.canEdit(p,block.getLocation())){p.sendActionBar(clans.message("protected"));return false;}
         if(p.getGameMode()!=GameMode.SURVIVAL)return true;
+        // DevWorld is the development sandbox, outside the frozen planet wilderness scope.
+        // Clan ownership and territory protection still apply before this exemption.
+        if(block.getWorld().getKey().equals(org.bukkit.NamespacedKey.minecraft("devworld")))return true;
         if(!clans.land().prepare(block.getWorld(),block.getX()>>4,block.getZ()>>4)) {
             p.sendActionBar(clans.message("unprepared"));return false;
         }

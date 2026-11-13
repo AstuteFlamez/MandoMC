@@ -13,5 +13,6 @@
     "CAMEL_HUSK",
     "PARCHED"
   ],
-  "disable-vanilla-armor-crafting": true
+  "disable-vanilla-armor-crafting": true,
+  "disable-all-natural-mobs": true
 }

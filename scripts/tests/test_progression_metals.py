@@ -40,7 +40,7 @@ class ProgressionMetalTests(unittest.TestCase):
         self.assertIn('diamond_ore', sources['durasteel'])
         self.assertIn('emerald_ore', sources['beskar'])
         block = next(row for row in progression if row['target'].endswith('/redstone_block.png'))
-        self.assertEqual(block['generatedSource'], 'art-sources/electrum-block-32.png')
+        self.assertEqual(block['artSource'], 'art-sources/electrum-block-32.png')
 
     def test_deepslate_and_electrum_stone_shadows_use_visible_gray_floor(self):
         base = json.loads((ROOT / 'resource-pack/metal-block-sources.json').read_text())['blocks']
