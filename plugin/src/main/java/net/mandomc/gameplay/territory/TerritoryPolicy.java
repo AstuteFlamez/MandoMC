@@ -79,9 +79,10 @@ public final class TerritoryPolicy {
     public boolean combat(String world,int x,int y,int z) { return zone(world,x,y,z)!=Zone.SAFEZONE; }
     public boolean spawning(String world,int x,int y,int z) { return combat(world,x,y,z) && !world.equals(hoth); }
     public boolean wildernessChunk(String world,int x,int z) {
-        if (safeWorlds.containsKey(world) || world.equals(hoth)) return false;
+        if (safeWorlds.containsKey(world)) return false;
         var atlas = world.equals(mandalore.world()) ? mandalore : additionalMaps.get(world);
-        if (atlas != null) return atlas.zone(x,z)=='.';
+        if (atlas != null) return (!world.equals(hoth) || atlas.contains(x,z)) && atlas.zone(x,z)=='.';
+        if (world.equals(hoth)) return false;
         if (world.equals(landing)) return (long)x*16+15<landingMin.get(0) || (long)x*16>landingMax.get(0)
                 || (long)z*16+15<landingMin.get(2) || (long)z*16>landingMax.get(2);
         return true;

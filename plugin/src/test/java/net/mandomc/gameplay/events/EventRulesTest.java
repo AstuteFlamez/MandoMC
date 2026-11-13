@@ -104,6 +104,8 @@ public class EventRulesTest {
     }
     @Test public void onlyCurrentWorldsAndTheirLegacyAliasesResolve() {
         assertEquals(List.of("spawn","hoth","tatooine","mandalore","ilum","crates"),WarpService.ids());
+        assertEquals("mandalore",WarpService.canonical("Mandalore"));
+        assertEquals("ilum",WarpService.canonical("Ilum"));
         assertEquals("spawn",WarpService.canonical("BlackSpireOutpost"));
         assertEquals("spawn",WarpService.canonical("Batuu"));
         assertEquals("spawn",WarpService.canonical("SpawnWorld"));

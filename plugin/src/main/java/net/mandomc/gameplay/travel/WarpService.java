@@ -89,7 +89,7 @@ public final class WarpService implements Listener, AutoCloseable {
     private boolean configured(String id) {return config.isConfigurationSection("warps."+id);}
     public Location destination(String id) {
         return switch(id) {case "spawn"->arrivals.spawn();case "hoth"->arrivals.protectedWorld("minecraft:hoth");
-            case "tatooine"->arrivals.adventureWorld("minecraft:tatooine");
+            case "tatooine"->arrivals.adventureWorld("minecraft:tatooine_review");
             case "mandalore"->arrivals.adventureWorld("minecraft:mandalore_review");
             case "ilum"->arrivals.adventureWorld("minecraft:ilum");
             case "crates"->crateDestination();
