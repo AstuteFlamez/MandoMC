@@ -8,7 +8,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/** Scales the NPC's shot without changing the cycler item or the player's weapon damage. */
+/** Applies the NPC's configured base shot damage without changing the cycler item or the player's weapon damage. */
 public final class MobWeaponDamage implements Listener {
     @SuppressWarnings("unchecked")
     public MobWeaponDamage(JavaPlugin plugin, MythicMobAccess mobs, SandySettings settings) throws ReflectiveOperationException {
@@ -32,7 +32,7 @@ public final class MobWeaponDamage implements Listener {
                     return;
                 }
                 if ("TuskenRaiderSniper".equals(mobs.type(shooter)) && "CyclerRifle".equals(titleMethod.invoke(event))) {
-                    damageMethod.invoke(event, settings.rifleDamage(mobs.level(shooter)));
+                    damageMethod.invoke(event, settings.rifleBase());
                 }
             } catch (ReflectiveOperationException | RuntimeException error) {
                 ((Cancellable) event).setCancelled(true);

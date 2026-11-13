@@ -15,7 +15,7 @@ public class EncounterPlanTest {
     private YamlConfiguration config() {
         return YamlConfiguration.loadConfiguration(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/mobs/spawning.yml"))));
     }
-    @Test public void patrolBudgetsAndLevelBandsHoldAcrossManyRolls() {
+    @Test public void patrolBudgetsUseBaseStatsAcrossManyRolls() {
         var settings = SandySettings.read(config());
         var random = new Random(20391);
         var leaders = new HashSet<Integer>();
@@ -30,13 +30,13 @@ public class EncounterPlanTest {
             assertTrue(plan.members().stream().anyMatch(m -> m.type().equals("TuskenRaiderMelee")));
             for (String companion : List.of("Bantha", "Massiff")) assertTrue(plan.members().stream().filter(m -> m.type().equals(companion)).count() <= 2);
             for (var member : plan.members()) {
-                assertTrue(member.level() >= 1 && member.level() <= 5);
+                assertEquals(1, member.level());
                 assertTrue(Math.abs(member.level() - plan.leaderLevel()) <= 1);
             }
             full |= plan.members().size() == 6;
             noCompanions |= plan.members().size() == raiders;
         }
-        assertEquals(Set.of(1, 2, 3, 4, 5), leaders);
+        assertEquals(Set.of(1), leaders);
         assertTrue(full && noCompanions);
     }
     @Test public void wildlifeNeverMixesSpeciesAndIncludesSingles() {
@@ -60,16 +60,16 @@ public class EncounterPlanTest {
         assertFalse(plan.fits(6, 91, settings));
     }
     @Test public void rejectsUnboundedOrInconsistentConfiguration() {
-        for (var entry : Map.of("population.group-cap", 1000, "spawn.attempts", 1000, "levels.minimum", 0,
+        for (var entry : Map.of("population.group-cap", 1000, "spawn.attempts", 1000,
                 "patrol.raiders-min", 1, "population.nearby-cap", 3).entrySet()) {
             var c = config(); c.set(entry.getKey(), entry.getValue());
             assertThrows(IllegalArgumentException.class, () -> SandySettings.read(c));
         }
     }
-    @Test public void rifleScalesWithinTheConfiguredBand() {
+    @Test public void rifleUsesConfiguredBaseRegardlessOfLegacyLevel() {
         var settings = SandySettings.read(config());
         assertEquals(6, settings.rifleDamage(1), 0);
-        assertEquals(8, settings.rifleDamage(5), 0);
-        assertEquals(8, settings.rifleDamage(100), 0);
+        assertEquals(6, settings.rifleDamage(5), 0);
+        assertEquals(6, settings.rifleDamage(100), 0);
     }
 }
