@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def entries():
     files = {
+        'server.jar': 'redstone-agent/target/MandoMC-Launcher.jar',
         'plugins/update/MandoMC.jar': 'plugin/target/MandoMC.jar',
         'plugins/update/MandoAccess.jar': 'access/target/MandoAccess.jar',
         'plugins/MandoAccess/config.yml': 'access/src/main/resources/config.yml',

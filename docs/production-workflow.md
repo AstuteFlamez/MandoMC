@@ -62,14 +62,18 @@ separate from tracked source and are not automatically committed or uploaded.
 
 `deployment/files.json` is the explicit allowlist. Regenerate it with `python scripts/build-deployment-manifest.py` after adding managed source files.
 It includes the gameplay/access JARs, reviewed plugin configuration and model blueprints,
-the jetpack datapack, and an immutable version of the redstone startup agent. Worlds, player inventories,
+the jetpack datapack, the executable-JAR launcher, and an immutable standalone redstone agent. Worlds, player inventories,
 claims, balances, vendor JARs, credentials, and operator lists,
 and arbitrary runtime files are excluded from routine deployment.
 
 Paper's `plugins/update/` receives the next gameplay and access JARs, leaving their running
-files intact until restart. Each agent is uploaded to a new content-addressed filename;
-`pebblehost.yml` selects that agent and Java 25 for the next manual restart. The current
-JVM's agent file is retained. The bootstrap must retain the configured
+files intact until restart. `server.jar` is a small MandoMC-owned executable launcher whose
+`Launcher-Agent-Class` manifest loads the bundled redstone agent before the unchanged,
+hash-pinned `paper.jar`. This works without host-supplied JVM flags. The standalone
+agent is also retained under a content-addressed filename for direct local launches;
+`pebblehost.yml` selects Java 25 and removes obsolete duplicate MandoMC agent flags.
+Launcher replacement retains the old file before renaming the verified new file into place;
+the running Linux JVM keeps its existing open file. The next manual start uses the new launcher. The bootstrap must retain the configured
 `settings.update-folder: update` in `bukkit.yml`. YAML files are uploaded
 to verified temporary files and renamed into place; do not run a config reload between an
 upload and its restart. An already-running system may independently reread a
@@ -110,9 +114,9 @@ PebbleHost files before moving its obsolete plugins/worlds aside. The cutover re
 entries under `.mandomc/legacy/`; it never permanently deletes them. Keep the
 old copy outside the active plugin/world paths. Copy only the desired rebuilt
 runtime, preserving PebbleHost's host-managed files. Set the panel startup JAR
-to the new Paper filename and its Java runtime to 25. The current dedicated server allocation is
+to `server.jar` and its Java runtime to 25. The original Paper bytes remain in `paper.jar`. The current dedicated server allocation is
 142.4.206.185:25565 and the bind address must not be laptop loopback. The preparer disables RCON/query and excludes probe plugins. The rebuilt server's
-existing owner/maintenance/whitelist state is retained privately.
+owner state is retained privately; `--public` disables maintenance and both whitelist restrictions.
 
 Verify startup, world loading, dependency enablement, non-op player join and
 the resource-pack download on PebbleHost. Seed the managed file hashes in
@@ -134,13 +138,13 @@ Prepare from a stopped rebuilt runtime, stage the resulting private image, then 
 only after PebbleHost is visibly stopped:
 
 ```bash
-python scripts/prepare-production.py --runtime PATH --output .local/pebblehost/production --port 25565
+.local/tools/bin/python scripts/prepare-production.py --runtime PATH --output .local/pebblehost/production --port 25565 --public --voting-identity PRIVATE_VOTIFIER_DIRECTORY
 .local/tools/bin/python scripts/migrate-pebblehost.py stage --runtime .local/pebblehost/production
 .local/tools/bin/python scripts/migrate-pebblehost.py activate --runtime .local/pebblehost/production --server-stopped
 ```
 
 Select `server.jar` in PebbleHost settings; the host config chooses Java 25 and the
-matching immutable agent. After the explicit migration start, run
+bundled manifest agent runs before Paper. After the explicit migration start, run
 `.local/tools/bin/python scripts/pebblehost.py verify-startup`. This checks startup
 markers and managed hashes before enabling routine uploads. Authenticated client
 playtesting remains a separate human check. The launcher never sends a restart.
@@ -151,3 +155,5 @@ server.properties and PebbleHost startup settings are backed up with the managed
 The host's jar auto-update is disabled so its pinned Paper version remains deliberate.
 
 Voting setup, private listener keys and crate placement are documented in [voting](features/voting.md). Prepare the initial public image with `--public --voting-identity <private-existing-votifier-directory>`; the listener identity stays outside Git.
+
+The preparer canonicalizes every managed path component to the manifest spelling, including MythicMobs folders, before recording inventory. This avoids macOS case-insensitive paths silently producing different Linux deployment paths. Startup verification accepts both IPv4 and IPv6 wildcard voting sockets on allocated port 19132.

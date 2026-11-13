@@ -1,5 +1,9 @@
 # Resume here
 
+## PebbleHost startup correction in verification (2026-11-12)
+
+The main b2c6e07 runtime is activated on PebbleHost with the old server retained at `.mandomc/legacy/20261113T021045Z`; its approximately 13 GB local download is complete through the visible PebbleHost-files shortcut. Paper 26.1.2 / Java 25 and NuVotifier are externally reachable, but the host does not apply the configured custom Java-agent flag, so native gameplay correctly blocks player entry. A standard executable-JAR manifest launcher now loads the exact same redstone agent before unchanged pinned Paper; the disposable full-stack boot succeeds without any custom agent flags. Added canonical path spelling for Linux, IPv6 wildcard listener checks and launcher packaging validation. All 72 Python checks pass; gameplay code remains the prior passing 317-test baseline. All five voting-site endpoints are saved, including the user-completed Minecraft.Buzz CAPTCHA. Next action: promote the checked startup fix, replace the production launcher while stopped, verify complete gameplay startup and enable automatic uploads.
+
 ## Voting banner (2026-11-12)
 
 Added `docs/assets/server-banner.png` beside the server icon on the main checkout. Original pixel art drawn directly at 468 × 60; copied byte-for-byte without scaling. Verified PNG dimensions and source equality. No unfinished asset work. Next action: upload the banner to the voting-site listings.

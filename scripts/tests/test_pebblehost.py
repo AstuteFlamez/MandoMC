@@ -56,6 +56,12 @@ class Remote:
 
 
 class SftpSafetyTests(unittest.TestCase):
+    def test_public_voting_listener_accepts_linux_ipv6_and_ipv4_wildcards(self):
+        for address in ('0.0.0.0', '[0:0:0:0:0:0:0:0%0]', '[0:0:0:0:0:0:0:0]'):
+            self.assertTrue(module.voting_listener_ready('[Votifier] Votifier enabled on socket /' + address + ':19132.'))
+        for address in ('127.0.0.1:19132', '0.0.0.0:8192', '[::1]:19132'):
+            self.assertFalse(module.voting_listener_ready('[Votifier] Votifier enabled on socket /' + address + '.'))
+
     def test_rejects_path_traversal_and_absolute_paths(self):
         for path in ('/etc/passwd', '../world', 'plugins/../ops.json', './plugins', 'a\\b', '', 'a//b'):
             with self.subTest(path=path), self.assertRaises(ValueError):
@@ -136,14 +142,15 @@ class SftpSafetyTests(unittest.TestCase):
                          [(new, b'new', None)])
         self.assertEqual(remote.files[old], b'old')
 
-    def test_host_startup_selects_java25_and_exact_immutable_agent(self):
+    def test_host_startup_uses_java25_and_removes_duplicate_custom_agent_flag(self):
         target = 'agents/MandoMC-RedstoneAgent-' + 'a' * 64 + '.jar'
         old = b'javaversion=21\nstartupflags=--enable-preview -javaagent:agents/MandoMC-RedstoneAgent.jar\nautoupdate=true\nheaplimited=1\n'
         updated = module.host_settings(old, {target: b'agent'})
         self.assertIn(b'javaversion=25\n', updated)
         self.assertIn(b'autoupdate=false\n', updated)
         self.assertIn(b'heaplimited=1\n', updated)
-        self.assertIn(('startupflags=--enable-preview -javaagent:' + target).encode(), updated)
+        self.assertIn(b'startupflags=--enable-preview\n', updated)
+        self.assertNotIn(b'-javaagent:', updated)
 
     def test_backup_precedes_overwrite_and_no_restart_is_sent(self):
         from unittest.mock import patch
