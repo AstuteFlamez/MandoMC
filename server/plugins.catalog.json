@@ -105,6 +105,19 @@
       "installed": true,
       "status": "boot-verified-gameplay-pending",
       "dependencyListComplete": true
+    },
+    {
+      "id": "coreprotect",
+      "name": "CoreProtect",
+      "version": "24.1",
+      "sha256": "a2acef7c06ef201355cef07d591a6055dfed358ad768faaaaaf4e276865ecc97",
+      "source": "https://github.com/PlayPro/CoreProtect/releases/tag/v24.1",
+      "knownDependencies": [],
+      "dependencyListComplete": true,
+      "status": "audit-rollback-verified",
+      "installed": true,
+      "owns": "Standard player block/container/item/explosion audit history, inspection and scoped rollback; private embedded SQLite",
+      "admissionCheck": "Paper 26.1.2 Java25; lookup and disposable block rollback verified, container removal/explosion logging verified. Production rollback never used as a test."
     }
   ],
   "checkedOn": "2026-11-09"

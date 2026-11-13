@@ -79,6 +79,17 @@
       "version": "R4.1.1",
       "verifiedPublishedHashes": [],
       "distribution": "Licensed Premium R4.1.1 supplied by the server owner; obtain through the official account. The JAR is not redistributed."
+    },
+    {
+      "id": "coreprotect",
+      "name": "CoreProtect-CE-24.1.jar",
+      "version": "24.1",
+      "url": "https://www.patreon.com/file?h=170398122&m=750939085",
+      "source": "https://github.com/PlayPro/CoreProtect/releases/tag/v24.1",
+      "sha256": "a2acef7c06ef201355cef07d591a6055dfed358ad768faaaaaf4e276865ecc97",
+      "bytes": 1113283,
+      "verifiedPublishedHashes": [],
+      "distribution": "Official freely available Community Edition attachment linked by the upstream GitHub release; exact bytes tested on Paper 26.1.2 Java 25."
     }
   ],
   "pending": [],

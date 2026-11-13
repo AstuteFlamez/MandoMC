@@ -1,0 +1,23 @@
+# CoreProtect CE 24.1. Private embedded SQLite, no external service or credentials.
+use-mysql: false
+check-updates: false
+error-reporting: false
+api-enabled: true
+block-place: true
+block-break: true
+item-transactions: true
+hopper-transactions: true
+item-drops: true
+item-pickups: true
+explosions: true
+entity-change: true
+player-interactions: true
+rollback-items: true
+rollback-entities: true
+player-sessions: true
+username-changes: true
+player-messages: false
+player-commands: false
+worldedit: true
+default-radius: 10
+max-radius: 100

@@ -17,5 +17,6 @@ level-name=dev_world
 gamemode=survival
 force-gamemode=false
 difficulty=normal
-white-list=false
+white-list=true
+enforce-whitelist=true
 require-resource-pack=true
