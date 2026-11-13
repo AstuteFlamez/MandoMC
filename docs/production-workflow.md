@@ -2,8 +2,9 @@
 
 `main` is the production source. `dev` is the integration branch. `hotfix` is the
 short path for urgent production fixes. Normal feature branches use
-`bilal/<feature>` and merge into `dev`; promote a tested `dev` into `main` with a
-pull request. Start hotfix work from the latest `main`, merge through `hotfix`
+`bilal/<feature>` and merge into `dev`. Deploy checked features to the local development
+server and restart it automatically for playtesting. Promote a tested `dev` into `main`
+with a pull request only when the user requests production promotion. Start hotfix work from the latest `main`, merge through `hotfix`
 into `main`, then merge `main` back into `dev` and `hotfix`. Never force-push.
 
 The GitHub `Server checks` job builds Java 25, runs the Java and Python tests,
