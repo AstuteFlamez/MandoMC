@@ -7,10 +7,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /** Claims the requested bare labels while preserving every vendor's namespaced command. */
 public final class CommandBindings implements AutoCloseable {
+    private final net.mandomc.gameplay.ilum.IlumFeature ilum;
     private final Map<String, Command> known;
     private final Map<String, Command> previous = new HashMap<>();
     private final Map<String, Command> owned = new HashMap<>();
     public CommandBindings(JavaPlugin plugin) {
+        new net.mandomc.gameplay.territory.ClanMapCommand(plugin);
         known = plugin.getServer().getCommandMap().getKnownCommands();
         plugin.getDescription().getCommands().forEach((name, description) -> {
             var command = plugin.getCommand(name);
@@ -20,11 +22,13 @@ public final class CommandBindings implements AutoCloseable {
                 for (var alias : list) claim(alias.toString(), command);
             } else if (aliases instanceof String alias) claim(alias, command);
         });
+        ilum = new net.mandomc.gameplay.ilum.IlumFeature((net.mandomc.bootstrap.MandoPlugin) plugin);
     }
     private void claim(String label, Command command) {
         previous.put(label, known.put(label, command)); owned.put(label, command);
     }
     @Override public void close() {
+        ilum.close();
         owned.forEach((label, command) -> {
             if (known.get(label) != command) return;
             var original = previous.get(label);

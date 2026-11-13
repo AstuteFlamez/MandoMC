@@ -1,9 +1,9 @@
 schema-version: 1
-# Existing dimensions only. Coordinates and facing migrated from Multiverse.
 worlds:
   devworld:
     key: minecraft:devworld
-    aliases: [DevWorld]
+    aliases:
+    - DevWorld
     weather: true
     pvp: true
     difficulty: normal
@@ -15,7 +15,8 @@ worlds:
       pitch: 0.0
   hoth:
     key: minecraft:hoth
-    aliases: [Hoth]
+    aliases:
+    - Hoth
     weather: false
     pvp: true
     difficulty: normal
@@ -27,7 +28,8 @@ worlds:
       pitch: -1.65
   overworld:
     key: minecraft:overworld
-    aliases: [dev_world, SurvivalWorld, earth, survival]
+    aliases:
+    - dev_world
     weather: true
     pvp: true
     difficulty: normal
@@ -39,7 +41,10 @@ worlds:
       pitch: 0.0
   spawnworld:
     key: minecraft:spawnworld
-    aliases: [SpawnWorld, batuu, spawn]
+    aliases:
+    - SpawnWorld
+    - batuu
+    - spawn
     weather: false
     pvp: false
     difficulty: normal
@@ -51,7 +56,8 @@ worlds:
       pitch: -0.9
   tatooine:
     key: minecraft:tatooine
-    aliases: [Tatooine]
+    aliases:
+    - Tatooine
     weather: false
     pvp: true
     difficulty: normal
@@ -61,3 +67,16 @@ worlds:
       z: 2201.7401780545574
       yaw: 81.4468
       pitch: -11.09995
+  ilum:
+    key: minecraft:ilum
+    aliases:
+    - Ilum
+    weather: false
+    pvp: false
+    difficulty: peaceful
+    spawn:
+      x: 11.639
+      y: -60.0
+      z: -55.57
+      yaw: 0.0
+      pitch: 0.0

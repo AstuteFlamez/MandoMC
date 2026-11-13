@@ -6,7 +6,7 @@ import net.kyori.adventure.text.Component;
 import net.mandomc.gameplay.arrival.ArrivalDestinations;
 import net.mandomc.gameplay.arrival.ArrivalListener;
 import net.mandomc.gameplay.arrival.ArrivalSettings;
-import net.mandomc.integrations.regions.WorldGuardArrivalProtection;
+import net.mandomc.integrations.regions.NativeArrivalProtection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -37,6 +37,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     public net.mandomc.gameplay.events.EventManager events() { return events; }
     public net.mandomc.gameplay.travel.WarpService warps() { return warps; }
     public net.mandomc.gameplay.travel.TeleportService travel() { return travel; }
+    private net.mandomc.gameplay.territory.TerritoryService territories;
     private net.mandomc.gameplay.worlds.WorldService worlds;
     private net.mandomc.commands.CommandBindings commandBindings;
     private net.mandomc.gameplay.admin.AdminService admin;
@@ -79,7 +80,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     public void onEnable() {
         saveDefaultConfig();
         getServer().getPluginManager().registerEvents(this, this);
-        for (var name : new String[] {"tutorial", "survival", "spawn"}) {
+        for (var name : new String[] {"tutorial", "spawn"}) {
             Objects.requireNonNull(getCommand(name)).setExecutor((sender, command, label, arguments) -> {
                 sender.sendMessage(Component.text("Travel is unavailable. Please contact a server administrator."));
                 return true;
@@ -100,6 +101,9 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                     java.nio.charset.StandardCharsets.UTF_8)) {
                 language.setDefaults(YamlConfiguration.loadConfiguration(reader));
             }
+            territories = new net.mandomc.gameplay.territory.TerritoryService(this,
+                    loadFeature("territory/maps.yml"), loadFeature("language/territory.yml"));
+            new net.mandomc.integrations.weapons.TerritoryWeapons(this, territories);
             worlds = new net.mandomc.gameplay.worlds.WorldService(this, loadFeature("worlds/worlds.yml"));
             var root = new net.mandomc.commands.RootCommand(this, sender -> {
                 try {
@@ -109,7 +113,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                     if (destinations != null) {
                         destinations.validate();
                         sender.sendMessage(Component.text("MandoMC arrival ready: " + destinations.spawn()
-                                + " -> " + destinations.survival()));
+                                + (destinations.hasSurvival() ? " -> " + destinations.survival() : "")));
                     } else {
                         sender.sendMessage(Component.text("MandoMC foundation enabled; arrival is disabled."));
                     }
@@ -245,20 +249,17 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 getLogger().info("Foundation enabled; arrival is disabled.");
                 return;
             }
-            if (!getServer().getPluginManager().isPluginEnabled("WorldGuard")) {
-                throw new IllegalStateException("arrival.enabled requires WorldGuard");
-            }
             var settings = new ArrivalSettings(getConfig().getString("arrival.spawn-world"),
                     getConfig().getString("arrival.survival-world"));
-            destinations = new ArrivalDestinations(settings, new WorldGuardArrivalProtection(), worlds::spawn);
+            destinations = new ArrivalDestinations(settings, new NativeArrivalProtection(), worlds::spawn);
             destinations.validate();
             arrival = new ArrivalListener(this, settings, destinations, language);
             getServer().getPluginManager().registerEvents(arrival, this);
             net.mandomc.commands.ArrivalCommands.register(this, arrival, destinations, travel);
             warps = new net.mandomc.gameplay.travel.WarpService(this, travel, destinations, loadFeature("travel/warps.yml"));
             events = new net.mandomc.gameplay.events.EventManager(this, warps);
-            getLogger().info("Legacy events and public warps ready: KOTH, Black Spire Outpost, Earth, Hoth and Tatooine; rewards disabled.");
-            getLogger().info("Arrival enabled: protected SpawnWorld -> survival; /spawn, /survival and temporary /tutorial ready.");
+            getLogger().info("Legacy events and public warps ready: KOTH, Black Spire Outpost, Hoth and Tatooine; rewards disabled.");
+            getLogger().info("Arrival enabled: protected Batuu spawn; /spawn and temporary /tutorial ready.");
         } catch (Exception | LinkageError error) {
             failed = true;
             getLogger().severe("Arrival unavailable; player logins blocked until repaired: " + error.getMessage());
@@ -291,6 +292,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
         if (vehicles != null) vehicles.close();
         if (explosions != null) explosions.close();
         if (commandBindings != null) commandBindings.close();
+        if (territories != null) territories.close();
         if (requests != null) requests.close();
         if (admin != null) admin.close();
         if(rancorSlam!=null)rancorSlam.close();

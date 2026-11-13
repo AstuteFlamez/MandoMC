@@ -2,15 +2,15 @@
 Status: working design, not a finalized feature order.
 
 ## Confirmed foundation
-Players use Java Minecraft and a required resource pack. They form player groups, build on the main survival world, and encounter PvP outside designated safe areas. Death drops carried items, weapons and armor. KOTH and Jabba are proven activities. A base can be vulnerable, including offline, to a rival group that has earned the required pairwise net-kill lead. Force powers and resource planets are deferred.
+Players use Java Minecraft and a required resource pack. They form player groups, build in claimable wilderness on Tatooine and Hoth, and encounter PvP outside designated safe areas. Death drops carried items, weapons and armor. KOTH and Jabba are proven activities. A base can be vulnerable, including offline, to a rival group that has earned the required pairwise net-kill lead. Force powers and resource planets are deferred.
 
 ## Player-facing group identity
-Clans is the accepted name (2026-11-08). `/clan` and `/cl` remain proposed command names. Player-facing commands, help, menus and messages must replace Factions and `/f` consistently when implemented.
+Clans is the accepted name. `/c map` is the first native command, with `/clan map` and `/cl map` aliases.
 
-The user has deferred FactionsUUID-dependent work: clan creation/membership, claims, clan homes and group-aware respawn. FactionsUUID remains the intended state owner. Do not replace this deferral with a custom clan implementation. Clan relations, pairwise warpoints and group event ownership must be integrated when clan work resumes.
+The user replaced the FactionsUUID direction on 2026-11-10: remove the vendor and implement clans in MandoMC. The current slice is a read-only chunk map; membership, claims, relations, clan homes and group-aware respawn remain deferred. Mandalore's single spawn outpost is safezone, central caves and approaches are warzone, and the remaining land/builds are wilderness. All of Batuu is safezone. MandoMC now enforces zones natively, replacing WorldGuard. Entering a different zone shows a title: orange Safezone, dark red Warzone or gray Wilderness.
 
 ## Confirmed first session and recovery
-New players arrive in SpawnWorld, an existing map file the user already has. The arrival slice uses a short replayable chat tutorial, shown after the required pack loads. Their first goal is to travel to survival and establish a base. Survival arrivals use a fixed protected landing zone.
+New players arrive in SpawnWorld, an existing map file the user already has. The arrival slice uses a short replayable chat tutorial, shown after the required pack loads. Batuu stays the protected spawn hub. Players use /warp to visit Tatooine or Hoth. Each planet will have safe zones, warzones and claimable wilderness; the user will supply the boundaries. The standalone Survival/Earth route is retired.
 
 A solo player can create a group and claim a starter base on eligible land outside the spawn safe zone, without a credit requirement. A group creation cooldown of around three hours was suggested tentatively; neither the cooldown nor its duration is decided. Claim capacity and other later territory rules remain open.
 
@@ -127,3 +127,6 @@ The latest user decision supersedes earlier chest-gated proposals: spawn every c
 
 ## Accepted progression follow-up (2026-11-09)
 The user delegated finished-saber recipes and a conventional player auction house, then required the auction implementation inside MandoMC with no additional plugin. Native `/ah` uses existing credits, eight 48-hour fixed-price listings, no fees/tax, confirmation and permanent item claims. All themed ores yield catalog scraps before ingot refining. Four-metal storage has visible reciprocal 9:1 conversions; iron utility recipes use Agrinium Sheets. Blaster/ammo recipes and final-world generation are explicitly deferred. These decisions supersede the earlier undecided auction/saber holds above. See the ordered progression queue for verification and rollout state.
+
+## Deferred planet content
+See [planet wilderness direction](features/planet-wilderness.md) for Hoth creatures, Mandalore, the beskar ore event and possible trooper enemies. All are deferred.

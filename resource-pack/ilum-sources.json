@@ -1,0 +1,17 @@
+{
+  "purpose": "Recovered Ilum Galaxy Map icon and original Kyber Crate Key artwork",
+  "assets": [
+    {
+      "file": "src/assets/mandomc/textures/item/planets/ilum.png",
+      "source": "User-provided legacy MANDOMC TEXTURES/world icons/ilum.png",
+      "sha256": "7ee4be375dcd5b6d70c54805e3edca74190aa17e6efc5db7564a327ae9251cba",
+      "pixels": "unchanged"
+    },
+    {
+      "file": "src/assets/mandomc/textures/item/keys/ilum_kyber_crate_key.png",
+      "source": "User-provided legacy MANDOMC TEXTURES/keys/ilum_kyber_crate_key.png",
+      "sha256": "860c617b3103f2a5d2e8d92b3ca1e556303e1d986c437df4e81997a413447a70",
+      "pixels": "unchanged"
+    }
+  ]
+}

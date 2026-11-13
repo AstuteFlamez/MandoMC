@@ -3,7 +3,7 @@ package net.mandomc.gameplay.arrival;
 public record ArrivalSettings(String spawnWorld, String survivalWorld) {
     public ArrivalSettings {
         validateWorld("arrival.spawn-world", spawnWorld);
-        validateWorld("arrival.survival-world", survivalWorld);
+        if (survivalWorld != null) validateWorld("arrival.survival-world", survivalWorld);
         if (spawnWorld.equals(survivalWorld)) {
             throw new IllegalArgumentException("config.yml: arrival worlds must be different");
         }

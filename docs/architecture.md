@@ -1,9 +1,16 @@
 # Gameplay architecture
+
+## Planet direction — 2026-11-09
+Batuu remains protected spawn. Tatooine and Hoth replace the standalone Survival world
+as the future safe-zone/warzone/claimable-wilderness planets. Boundaries come from the
+user. FactionsUUID remains the claim owner; no new claim system or regions are activated
+by the travel removal. See [planet wilderness](features/planet-wilderness.md).
+
 The user accepted this division on 2026-11-05. The pinned versions boot together; gameplay integration hooks still need runtime verification. Components may be replaced while preserving player behavior and content contracts.
 
 Design the [player experience](player-experience.md) first, choose the playable order, implement parameterized systems, then configure content.
 
-Player-facing group naming and commands must replace Factions and `/f`; the final identity is pending. FactionsUUID remains the selected state owner. Verify its supported command and language customization or an adapter when implementing the group interface, including help and menu output. A display-name change alone does not complete the requirement.
+MandoMC owns the native Clans direction selected on 2026-11-10. FactionsUUID is removed. The first command is `/c map` (aliases `/clan map`, `/cl map`); the chunk atlas is shared by native map/protection rules. Membership, claims and related gameplay remain deferred.
 
 Resource planets are deferred. Initial gathering and credit income use ordinary survival resources plus activity rewards. Keep future resource-planet support outside the current milestone; the ownership table below records responsibilities, not a requirement to build every capability now.
 
@@ -28,8 +35,8 @@ The new pack lives in `resource-pack/` in this repository. Its build targets the
 | Blasters and grenades | WeaponMechanics and dependencies | Acquisition, saber interaction, combat policy |
 | Animated models | ModelEngine | Vehicle controls, ownership, seats, health |
 | Dungeon mobs | MythicMobs | Runs, objectives, doors, cleanup, completion rewards |
-| Factions | FactionsUUID | Warpoints, vulnerability, controlled breaches |
-| Protected regions | WorldGuard with WorldEdit | Enforcement for every custom action |
+| Clans | Paper APIs | Native membership/claims when implemented; chunk atlas, warpoints and raids |
+| Protected territories | Paper APIs; WorldEdit retained for staff tools | Native classification, enforcement, titles and every custom action |
 | Worlds | Paper APIs | Existing dimension loading, exact arrivals, aliases and travel |
 | Credits | MandoMC native ledger | Atomic balances, payments and admin adjustments; auction-house/reward integration deferred |
 | Items, armor, crafting | Paper APIs and resource-pack/ | Stable IDs, recipes, custom behavior |
@@ -38,8 +45,8 @@ The new pack lives in `resource-pack/` in this repository. Its build targets the
 The catalog in server/plugins.catalog.json records admission status. Installed versions and artifact hashes are in server/plugins.lock.json. Boot validation does not establish gameplay compatibility. EssentialsX and Multiverse-Core are removed. MandoMC owns the selected utility commands and migration; their old runtime data is retained for rollback. Native rank badges now format tab, nameplates and the existing chat renderer; voting remains deferred.
 
 ## Contracts
-- FactionsUUID owns membership, relations and claims. MandoMC owns pairwise warpoints keyed by stable group IDs; vendor faction power is not the raid authority. Do not mirror claims into WorldGuard.
-- WorldGuard owns static regions. Raids never override spawn/adventure-map protection.
+- MandoMC owns clan state when implemented. The atlas stores native static chunk zones, not membership or claims. TerritoryPolicy/TerritoryService own classification and enforcement; Bukkit services expose one authority to existing attack, vehicle, mob and arrival adapters. Pairwise warpoints remain keyed by stable group IDs.
+- MandoMC owns static territory protection. Raids never override safezone/warzone terrain rules. WorldGuard is removed; its local data is archived.
 - The native CreditLedger owns current credit balances. Future auction currency/integration details require approval; do not introduce a second balance writer or restore the old SQL mirror.
 - WeaponMechanics generates its weapons and handles projectiles. MandoMC references vendor IDs instead of duplicating weapon definitions.
 - MythicMobs owns mob definitions/AI. MandoMC tracks run-owned instances. Each reward has exactly one writer.
@@ -74,7 +81,7 @@ Do not unclaim a base, grant broad bypass, or indiscriminately uncancel another 
 ## Dependency verification
 For each enabled slice, record exact JAR/API versions, hashes, sources and transitive dependencies. Test boot, a non-op account, restart persistence and protection boundaries. Pin versions between intentional upgrades.
 
-Current FactionsUUID changed names, packages and coordinates from the old source. Port that boundary deliberately.
+FactionsUUID runtime data is archived outside Git for rollback; it is not read by the native atlas.
 
 ## References
 - [WeaponMechanics API](https://cjcrafter.gitbook.io/weaponmechanics/developer-api)
@@ -97,3 +104,5 @@ WorldService owns the existing dimension registry and exact arrivals in worlds.y
 
 ## Native ranks, HUD and credits
 RankService owns UUID memberships and Bukkit permission attachments. WorldEdit/WorldGuard query the same native grants through the supported WEPIF provider; no LuckPerms or Vault permission fallback. PlayerHud owns one sidebar per viewer while mirroring existing gameplay teams. CreditLedger commits integer-cent account changes on one IO worker with atomic durable replacement; the HUD reads only committed balances. The user requested fresh accounts on 2026-11-09: everyone defaults to Default and zero credits; only AstuteFlamez is explicitly MandoStudios. No legacy account import runs at startup. See [feature brief](features/native-hud-ranks-credits.md).
+
+Native territory rules are configured in territory/maps.yml. Safezone blocks damage, firing, edits and creature spawning; Warzone permits combat but protects terrain/containers. Wilderness permits ordinary combat and building. Explicit Creative staff edit permission never bypasses combat protection. Hoth retains its exact legacy PvP cuboid and protected outer arrival; Batuu is safe at every position. Native title transitions are deduplicated per player and cleared on quit.

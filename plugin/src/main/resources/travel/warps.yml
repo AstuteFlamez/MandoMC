@@ -3,7 +3,7 @@ gui-title: '<dark_gray>Galaxy Map'
 gui-size: 54
 messages:
   players-only: '<red>Open warps in game.'
-  unknown: '<red>Choose Batuu, Earth, Hoth or Tatooine.'
+  unknown: '<red>Choose Batuu, Hoth or Tatooine.'
   unavailable: '<red>This destination is unavailable.'
   click: '<yellow>Click to travel.'
 warps:
@@ -14,13 +14,6 @@ warps:
     slot: 28
     badges: '<white>đġ'
     description: '<gray>Black Spire Outpost. Protected spawn hub.'
-  earth:
-    name: '<green>Earth'
-    material: STICK
-    item-model: mandomc:planets/earth
-    slot: 1
-    badges: '<white>đġ'
-    description: '<gray>Unknown Regions. Survival, building and gathering.'
   hoth:
     name: '<white>Hoth'
     material: STICK

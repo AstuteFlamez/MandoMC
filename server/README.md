@@ -29,19 +29,18 @@ Exact official download URLs, versions and locally verified hashes are in `plugi
 | PacketEvents | 2.14.0 |
 | ModelEngine | R4.1.1, owner-supplied Premium |
 | MythicMobs | 5.14.0 official Modrinth release |
-| FactionsUUID | 4.6.0 official public Maven artifact |
-| WorldEdit / WorldGuard | 7.4.6 / 7.0.18 |
+| WorldEdit | 7.4.6 |
 | Vault (inactive economy bridge) | 1.7.3-b131 |
 | MandoMC | 0.1.0-SNAPSHOT, built locally |
 
-FactionsUUID's [official Maven repository](https://factions.support/developers/) publishes a complete runnable shadowJar; 4.6.0 was its latest published artifact at setup time and declares API 26.1.2. Newer source tags exist, but were not substituted for this boot-tested binary. MythicMobs' published 5.14.0 artifact internally reports `5.14.0-SNAPSHOT-local`; its downloaded bytes matched the official release hashes. ModelEngine Premium is required for the combined mob/vehicle set. The free R4.1.1 build stops importing after 12 models; the full roster has 15 custom blueprints plus the engine fire model. Its licensed JAR stays outside Git.
+FactionsUUID was removed on 2026-11-10; its local JAR/data are archived for rollback. Native clans start with `/c map`. MythicMobs' published 5.14.0 artifact internally reports `5.14.0-SNAPSHOT-local`; its downloaded bytes matched the official release hashes. ModelEngine Premium is required for the combined mob/vehicle set. The free R4.1.1 build stops importing after 12 models; the full roster has 15 custom blueprints plus the engine fire model. Its licensed JAR stays outside Git.
 
 Historical baseline: all 12 plugins enabled together. Verified `/mandomc`, console plugin list, FactionsUUID list, the EssentialsX economy bridge through Vault, clean stop/restart and a Minecraft protocol status request. The GitHub pack publication also passed, its ZIP downloaded anonymously with matching hashes, and Paper restarted with required-pack delivery configured. The user confirmed a successful client join before the arrival work. The new arrival flow and pack/map appearance still need a client playtest.
 
 Expected startup notices: newer Minecraft/Paper is available; ModelEngine has no MineSkin API key for optional skin generation; Java reports a third-party Unsafe deprecation. These did not prevent startup.
 
 ## What is ready
-SpawnWorld, a protected survival landing, a replayable tutorial and shared `/spawn` and `/survival` travel are deployed locally. KOTH, Jabba and the legacy transport vehicles are implemented. Group branding and raids remain deferred. E-11, Desert Robes, the accepted Vader throw, first-join kit and combat basics are implemented; see the feature briefs. Default FactionsUUID rules and commands are temporary vendor behavior. This remains a local development build.
+SpawnWorld, a protected survival landing, a replayable tutorial and shared `/spawn` and `/survival` travel are deployed locally. KOTH, Jabba and the legacy transport vehicles are implemented. Group branding and raids remain deferred. E-11, Desert Robes, the accepted Vader throw, first-join kit and combat basics are implemented; see the feature briefs. Native `/c map` is available; membership and claims remain deferred. This remains a local development build.
 
 EssentialsX and Multiverse-Core are removed. MandoMC supplies the selected administration, personal travel and world-loading features. Credits are deferred; Vault has no economy provider. Removed plugin userdata/balances remain archived for rollback.
 
@@ -111,3 +110,5 @@ See [native utilities](../docs/features/native-utilities.md) for commands and pe
 
 ## Native Jabba operation
 The nine-room operation uses `events/jabba.yml`, original loot items in `items/definitions/jabba-loot.yml`, and the current plugin. Supply private gate panels with `scripts/import-jabba-doors.py LEGACY_ROOT server/runtime/plugins/MandoMC/jabba/doors.yml`; retain the private closed-state checkpoints and map backups. BigDoors is not installed or required. `/event start jabba` begins the run; `/event stop` resets it. See [operation details](../docs/features/jabba-dungeon.md) for the latest kills-only progression, cache timing, native door animation and recovery.
+
+WorldGuard was replaced on 2026-11-10 by native territory protection and its local JAR/data archived. Keep WorldEdit installed for staff tools. `/c map` uses the same native zone policy as combat, edits, spawning and protected arrival validation.
