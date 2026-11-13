@@ -227,12 +227,23 @@ public final class TemporaryExplosions implements Listener, AutoCloseable {
      * carrier.
      */
     public void explode(Location center, Entity attacker) {
+        explode(center, attacker, false);
+    }
+
+    public void explodeVehicle(Location center, Entity attacker) {
+        explode(center, attacker, true);
+    }
+
+    private void explode(Location center, Entity attacker, boolean vehicle) {
         var carrier =
                 center.getWorld()
                         .spawn(
                                 center,
                                 org.bukkit.entity.TNTPrimed.class,
                                 tnt -> {
+                                    if (vehicle) tnt.getPersistentDataContainer().set(
+                                            new org.bukkit.NamespacedKey("mandomc", "vehicle_blast"),
+                                            org.bukkit.persistence.PersistentDataType.BYTE, (byte) 1);
                                     tnt.setFuseTicks(Integer.MAX_VALUE);
                                     tnt.setGravity(false);
                                     tnt.setPersistent(false);

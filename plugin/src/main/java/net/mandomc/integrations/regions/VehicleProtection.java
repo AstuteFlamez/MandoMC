@@ -5,6 +5,11 @@ public final class VehicleProtection {
     public boolean damage(Location location) {
         var territories=NativeTerritoryAccess.current();return territories!=null&&territories.combat(location);
     }
+    /** Vehicle weapons follow vehicle placement zones, independently of ordinary PvP. */
+    public boolean use(Location location) {
+        var territories = NativeTerritoryAccess.current();
+        return territories != null && territories.edits(location);
+    }
     public boolean blocks(Location location) {
         var territories=NativeTerritoryAccess.current();return territories!=null&&territories.edits(location);
     }
