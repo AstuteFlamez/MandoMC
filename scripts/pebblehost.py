@@ -189,6 +189,8 @@ def payload(root=ROOT):
     for item in manifest['files']:
         source = root / safe_path(item['source'])
         target = safe_path(item['target'])
+        if target == 'agents/MandoMC-RedstoneAgent.jar':
+            target = f'agents/MandoMC-RedstoneAgent-{sha(source.read_bytes())}.jar'
         if target in result:
             raise ValueError(f'Duplicate deployment target: {target}')
         if not source.is_file() or source.is_symlink():
@@ -196,7 +198,8 @@ def payload(root=ROOT):
         if root.resolve() not in source.resolve().parents:
             raise ValueError('Source must be inside the checkout')
         if not (target in {'plugins/update/MandoMC.jar', 'plugins/update/MandoAccess.jar',
-                           '.mandomc/pending/MandoMC-RedstoneAgent.jar', 'start.sh'} or
+                           'start.sh'} or
+                re.fullmatch(r'agents/MandoMC-RedstoneAgent-[a-f0-9]{64}\.jar', target) or
                 (target.startswith('plugins/MandoMC/') and target.endswith('.yml')) or
                 target == 'plugins/MandoAccess/config.yml' or
                 target == 'plugins/CoreProtect/config.yml' or
@@ -220,7 +223,8 @@ def payload(root=ROOT):
 
 
 def plan(sftp, files, previous):
-    removed = set(previous['files']) - set(files)
+    removed = {name for name in set(previous['files']) - set(files)
+               if not re.fullmatch(r'agents/MandoMC-RedstoneAgent-[a-f0-9]{64}\.jar', name)}
     if removed:
         raise ValueError('Managed file removal needs a reviewed migration: ' + ', '.join(sorted(removed)))
     changes = []
@@ -241,8 +245,21 @@ def plan(sftp, files, previous):
 
 def installed_path(target):
     return {'plugins/update/MandoMC.jar': 'plugins/MandoMC.jar',
-            'plugins/update/MandoAccess.jar': 'plugins/MandoAccess.jar',
-            '.mandomc/pending/MandoMC-RedstoneAgent.jar': 'agents/MandoMC-RedstoneAgent.jar'}.get(target, target)
+            'plugins/update/MandoAccess.jar': 'plugins/MandoAccess.jar'}.get(target, target)
+
+
+def host_settings(original, files):
+    agents = [target for target in files if re.fullmatch(r'agents/MandoMC-RedstoneAgent-[a-f0-9]{64}\.jar', target)]
+    if len(agents) != 1:
+        raise ValueError('Expected one immutable redstone agent in deployment')
+    lines = original.decode('utf-8').splitlines()
+    flags = next((line.partition('=')[2] for line in lines if line.startswith('startupflags=')), '')
+    flags = re.sub(r'(?<!\S)-javaagent:agents/MandoMC-RedstoneAgent[^\s]*', '', flags).strip()
+    updates = dict(javaversion='25', autoupdate='false',
+                   startupflags=(flags + ' -javaagent:' + agents[0]).strip())
+    lines = [line for line in lines if line.partition('=')[0] not in updates]
+    lines.extend(f'{key}={value}' for key, value in updates.items())
+    return ('\n'.join(lines) + '\n').encode('utf-8')
 
 
 def production_properties(original, commit, root=ROOT):
@@ -286,6 +303,10 @@ def deploy(sftp, commit, apply=False):
     if properties_before is None:
         raise ValueError('Missing production server.properties')
     properties_after = production_properties(properties_before, commit)
+    host_before = read_remote(sftp, 'pebblehost.yml')
+    if host_before is None:
+        raise ValueError('Missing PebbleHost startup configuration')
+    host_after = host_settings(host_before, files)
     mkdirs(sftp, '.mandomc')
     # mkdir is an atomic cross-runner lock; a stale lock needs human inspection.
     sftp.mkdir('.mandomc/deploy.lock')
@@ -301,6 +322,7 @@ def deploy(sftp, commit, apply=False):
         # Preserve the complete previous managed set and its receipt before mutation.
         atomic_write(sftp, f'{backup}/deployed.json', previous_raw)
         atomic_write(sftp, f'{backup}/files/server.properties', properties_before)
+        atomic_write(sftp, f'{backup}/files/pebblehost.yml', host_before)
         for target, _, current in changes:
             if current is not None:
                 atomic_write(sftp, f'{backup}/files/{target}', current)
@@ -308,6 +330,8 @@ def deploy(sftp, commit, apply=False):
             atomic_write(sftp, target, data)
         if properties_after != properties_before:
             atomic_write(sftp, 'server.properties', properties_after)
+        if host_after != host_before:
+            atomic_write(sftp, 'pebblehost.yml', host_after)
         state = dict(schemaVersion=1, sourceCommit=commit,
                      files={target: sha(data) for target, data in files.items()},
                      restartRequired=bool(changes) or properties_after != properties_before or previous.get('restartRequired', False),

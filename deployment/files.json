@@ -3,7 +3,7 @@
   "files": [
     {
       "source": "redstone-agent/target/MandoMC-RedstoneAgent.jar",
-      "target": ".mandomc/pending/MandoMC-RedstoneAgent.jar"
+      "target": "agents/MandoMC-RedstoneAgent.jar"
     },
     {
       "source": "server/datapacks/mandomc-jetpack/data/mandomc/enchantment/jetpack.json",
@@ -476,10 +476,6 @@
     {
       "source": "plugin/target/MandoMC.jar",
       "target": "plugins/update/MandoMC.jar"
-    },
-    {
-      "source": "deployment/start.sh",
-      "target": "start.sh"
     }
   ]
 }

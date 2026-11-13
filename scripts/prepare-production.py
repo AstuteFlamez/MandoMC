@@ -29,7 +29,7 @@ def properties(text, updates):
     return '\n'.join(result) + '\n'
 
 
-def prepare(runtime, destination):
+def prepare(runtime, destination, port=25565):
     runtime = runtime.resolve()
     if destination.exists():
         raise ValueError('Use a fresh output directory so older snapshots remain intact.')
@@ -91,7 +91,6 @@ def prepare(runtime, destination):
         (destination / 'agents').mkdir()
         shutil.copyfile(ROOT / 'redstone-agent/target/MandoMC-RedstoneAgent.jar',
                         destination / 'agents/MandoMC-RedstoneAgent.jar')
-        shutil.copyfile(ROOT / 'deployment/start.sh', destination / 'start.sh')
         source_access = ROOT / 'access/src/main/resources/config.yml'
         (destination / 'plugins/MandoAccess').mkdir(exist_ok=True)
         shutil.copyfile(source_access, destination / 'plugins/MandoAccess/config.yml')
@@ -105,9 +104,9 @@ def prepare(runtime, destination):
         verified(runtime / 'paper.jar', destination / 'server.jar', paper['checksums']['sha256'])
         props = destination / 'server.properties'
         props.write_text(properties(props.read_text(), {
-            'server-ip': '', 'server-port': '25570', 'enable-rcon': 'false',
+            'server-ip': '', 'server-port': str(port), 'enable-rcon': 'false',
             'rcon.password': '', 'rcon.port': '25575', 'enable-query': 'false',
-            'query.port': '25570', 'online-mode': 'true'}))
+            'query.port': str(port), 'online-mode': 'true'}))
         # Carry the established owner's access records with the rebuilt server;
         # the independent MandoAccess maintenance state remains private.
         for name in ('ops.json', 'banned-ips.json', 'banned-players.json', 'whitelist.json'):
@@ -146,5 +145,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--runtime', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--port', type=int, default=25565)
     args = parser.parse_args()
-    prepare(args.runtime, args.output)
+    if not 1 <= args.port <= 65535:
+        parser.error('Port must be between 1 and 65535')
+    prepare(args.runtime, args.output, args.port)

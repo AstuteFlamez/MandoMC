@@ -12,8 +12,7 @@ def entries():
         'plugins/update/MandoMC.jar': 'plugin/target/MandoMC.jar',
         'plugins/update/MandoAccess.jar': 'access/target/MandoAccess.jar',
         'plugins/MandoAccess/config.yml': 'access/src/main/resources/config.yml',
-        '.mandomc/pending/MandoMC-RedstoneAgent.jar': 'redstone-agent/target/MandoMC-RedstoneAgent.jar',
-        'start.sh': 'deployment/start.sh',
+        'agents/MandoMC-RedstoneAgent.jar': 'redstone-agent/target/MandoMC-RedstoneAgent.jar',
         'plugins/CoreProtect/config.yml': 'server/config/common/coreprotect.yml',
     }
     resources = ROOT / 'plugin/src/main/resources'

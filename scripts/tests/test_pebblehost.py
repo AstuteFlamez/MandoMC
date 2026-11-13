@@ -126,11 +126,22 @@ class SftpSafetyTests(unittest.TestCase):
         previous = [value for name, value in remote.files.items() if '.mandomc-previous-' in name]
         self.assertEqual(previous, [b'old'])
 
-    def test_staged_agent_compares_the_installed_agent_after_restart(self):
-        target = '.mandomc/pending/MandoMC-RedstoneAgent.jar'
-        remote = Remote({'agents/MandoMC-RedstoneAgent.jar': b'old'})
-        self.assertEqual(module.plan(remote, {target: b'new'}, {'files': {target: module.sha(b'old')}}),
-                         [(target, b'new', b'old')])
+    def test_new_immutable_agent_keeps_running_agent_untouched(self):
+        old = 'agents/MandoMC-RedstoneAgent-' + module.sha(b'old') + '.jar'
+        new = 'agents/MandoMC-RedstoneAgent-' + module.sha(b'new') + '.jar'
+        remote = Remote({old: b'old'})
+        self.assertEqual(module.plan(remote, {new: b'new'}, {'files': {old: module.sha(b'old')}}),
+                         [(new, b'new', None)])
+        self.assertEqual(remote.files[old], b'old')
+
+    def test_host_startup_selects_java25_and_exact_immutable_agent(self):
+        target = 'agents/MandoMC-RedstoneAgent-' + 'a' * 64 + '.jar'
+        old = b'javaversion=21\nstartupflags=--enable-preview -javaagent:agents/MandoMC-RedstoneAgent.jar\nautoupdate=true\nheaplimited=1\n'
+        updated = module.host_settings(old, {target: b'agent'})
+        self.assertIn(b'javaversion=25\n', updated)
+        self.assertIn(b'autoupdate=false\n', updated)
+        self.assertIn(b'heaplimited=1\n', updated)
+        self.assertIn(('startupflags=--enable-preview -javaagent:' + target).encode(), updated)
 
     def test_backup_precedes_overwrite_and_no_restart_is_sent(self):
         from unittest.mock import patch
@@ -138,15 +149,17 @@ class SftpSafetyTests(unittest.TestCase):
         old_state = json.dumps({'files': {target: module.sha(b'old')}}).encode()
         remote = Remote({'.mandomc/bootstrap.json': b'{"schemaVersion":1}',
                          '.mandomc/deployed.json': old_state, 'plugins/MandoMC.jar': b'old',
-                         'server.properties': b'online-mode=true\n'})
+                         'server.properties': b'online-mode=true\n', 'pebblehost.yml': b'javaversion=25\n'})
         with patch.object(module, 'payload', return_value={target: b'new'}), \
-                patch.object(module, 'production_properties', side_effect=lambda data, commit: data):
+                patch.object(module, 'production_properties', side_effect=lambda data, commit: data), \
+                patch.object(module, 'host_settings', side_effect=lambda data, files: data):
             module.deploy(remote, 'a' * 40, apply=True)
         destinations = [target for _, target in remote.renames]
         self.assertIn('/files/server.properties', destinations[1])
-        self.assertIn('/files/plugins/update/MandoMC.jar', destinations[2])
-        self.assertEqual(destinations[3], target)
-        self.assertEqual(destinations[4], '.mandomc/deployed.json')
+        self.assertIn('/files/pebblehost.yml', destinations[2])
+        self.assertIn('/files/plugins/update/MandoMC.jar', destinations[3])
+        self.assertEqual(destinations[4], target)
+        self.assertEqual(destinations[5], '.mandomc/deployed.json')
         state = json.loads(remote.files['.mandomc/deployed.json'])
         self.assertTrue(state['restartRequired'])
         self.assertNotIn('.mandomc/deploy.lock', remote.directories)
