@@ -85,9 +85,9 @@ MandoMC overrides JustTimm, which overrides the separately delivered, unmodified
 
 ## Native Naboo icon
 
-Naboo's 32×32 legacy texture is retained under art-sources/planets. The direct
-pixel refinement in scripts/content/build-naboo-icon.py preserves that grid and
-silhouette without resizing, adds restrained green/blue shading and small cloud
-accents, and writes the namespaced mandomc:planets/naboo model. Its provenance is
-in planet-icon-sources.json. Development publication preserves every existing
-pack entry and adds only Naboo's texture and two model definitions.
+Naboo's legacy 32×32 texture is retained under art-sources/planets. The current
+scripts/content/build-naboo-icon.py paints directly on a new native 32×32 grid:
+spherical lighting, forests and meadows, blue water, warm shores, cloud pixels,
+and a small Theed-style ivory/green landmark matching active planet detail.
+No resizing occurs. Provenance is in planet-icon-sources.json. The refinement
+release replaces only Naboo's PNG and preserves every other active pack entry.

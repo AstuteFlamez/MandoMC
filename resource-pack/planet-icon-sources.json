@@ -26,7 +26,7 @@
     "tatooine": "ONE Minecraft inventory icon for TATOOINE. Match the attached 32x32 Hoth and Tatooine reference icons' tiny shaded round globe style. Improve Tatooine as a warm ochre/tan and orange desert sphere with dune-like pixel clusters and a small unmistakable Jabba's Palace landmark integrated into its lower-front surface: a sand-coloured rounded dome/rotunda and one narrow tall cylindrical tower with dark slit windows, readable as a compact 8-11 logical-pixel motif. No huge building illustration or scenery outside the sphere. Keep circular planet silhouette, upper-left highlights and dark lower-right shading, chunky crisp square pixels on an enlarged exact 32x32 logical grid, 4 logical pixels of genuine transparent margin. No text, badge, stars, exterior glow, smooth painting, or black outline."
   },
   "naboo": {
-    "method": "Direct pixel editing of the native 32x32 legacy Naboo asset; no resizing or downscaling",
+    "method": "Direct pixel painting on a native 32x32 RGBA canvas; no resizing or downscaling",
     "source": "art-sources/planets/naboo-legacy.png",
     "legacyArchiveEntry": "assets/minecraft/textures/custom/planets/naboo.png",
     "generator": "scripts/content/build-naboo-icon.py",
@@ -34,6 +34,6 @@
       32,
       32
     ],
-    "changes": "Preserved globe and continent pixels; restrained green/blue palette, stepped upper-left lighting, lower-right shading and six cloud highlight pixels."
+    "changes": "New spherical upper-left lighting and curved lower-right shading, coherent forest/meadow clusters, deep blue lakes, warm shoreline pixels, wispy clouds and a small ivory/green Theed-style landmark. Matches the detail and landmark treatment of active Hoth/Tatooine icons."
   }
 }

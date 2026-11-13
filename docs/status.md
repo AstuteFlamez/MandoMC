@@ -1,5 +1,10 @@
 # Resume here
 
+## Naboo island and icon refinement staged (2026-11-13)
+
+The user moved the warp to their captured island position and approved whole-island safezone while explicitly retaining the existing border. The new footprint covers 100 chunks; the exact position/facing is preserved. Native scope changes from 3138 to 3117 active originals while retaining every archived original; one pristine original restores the former safe arrival to wilderness. Repainted Naboo directly at 32×32 with spherical lighting, forest/water detail and a Theed-style landmark to match active planets. Only the Naboo PNG changes in the prepared pack. 314 gameplay plus 4 access tests, 72 Python checks and pack build pass; private native checks and dev activation are in progress. Next action: finish the native island check and apply the backed-up update to dev.
+
+
 ## Naboo playable on development (2026-11-13)
 
 On `bilal/naboo-dev`, added the selected legacy Naboo forest/lakeshore with a 500×500 border centered at (-13552,3440). `/warp naboo` and Galaxy Map slot 15 use the protected arrival (-13550.5,101,3359.5). Only chunk (-847,209) is safe at every height; all other locations are wilderness. The legacy icon is refined directly at native 32×32 with no resizing. Its approved versioned development pack is published, anonymously hash-verified and applied while preserving all 1178 prior entries. A stopped full-runtime backup precedes the scoped four-entry JAR/configuration/map rollout. All 2115 previous originals and frozen receipts, plus other plugin JARs, remain byte-identical; 1023 Naboo originals are added, total 3138/3138. Private restart and actual dev checks each pass 2392 assertions; 314 gameplay plus 4 access tests, 72 Python checks and pack build pass. Temporary probes are removed for normal play. Alderaan was cancelled and never deployed. Code is retained locally; the external branch push was blocked by approval review. Production is unaffected. See [Naboo](features/naboo.md). Next action: join development and walk `/warp naboo` to assess the forest/lakeshore and native icon in client.

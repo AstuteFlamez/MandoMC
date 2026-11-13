@@ -111,11 +111,11 @@ worlds:
     pvp: true
     difficulty: normal
     spawn:
-      x: -13550.5
-      y: 101.0
-      z: 3359.5
-      yaw: 180.0
-      pitch: 0.0
+      x: -13341.430043026525
+      y: 59.0
+      z: 3209.6097442130404
+      yaw: 36.899933
+      pitch: -3.6000152
     border:
       center-x: -13552.0
       center-z: 3440.0
