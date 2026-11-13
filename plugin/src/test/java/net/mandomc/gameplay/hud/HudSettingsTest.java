@@ -49,6 +49,20 @@ public class HudSettingsTest {
         config.set("combat-lines",java.util.List.of("no timer"));
         assertThrows(IllegalArgumentException.class,()->HudSettings.read(config));
     }
+    @Test public void shippedLayoutsResolvePlayerNameWithTheSupportedPlaceholder() {
+        var production = YamlConfiguration.loadConfiguration(
+                new java.io.File("../server/config/common/mandomc/interface/hud.yml"));
+        for (var source : java.util.List.of(config(), production)) {
+            var settings = HudSettings.read(source);
+            for (var lines : java.util.List.of(settings.lines(), settings.combatLines())) {
+                var rendered = net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(
+                        lines.get(3),
+                        net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed("player", "AstuteFlamez"));
+                assertEquals("AstuteFlamez",
+                        net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(rendered));
+            }
+        }
+    }
     @Test public void timerAlwaysHasOneDecimal() {
         assertEquals("15.0", HudSettings.seconds(150)); assertEquals("0.1", HudSettings.seconds(1)); assertEquals("0.0", HudSettings.seconds(0));
     }

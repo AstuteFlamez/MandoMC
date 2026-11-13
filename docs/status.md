@@ -1,5 +1,10 @@
 # Resume here
 
+## Scoreboard player-name hotfix (2026-11-12)
+
+Production HUD overrides used unsupported `<sidebar-player>` in both normal and combat layouts, while PlayerHud and bundled defaults use `<player>`. Replaced both override tags with the supported placeholder. Added a regression test that renders the actual name row from bundled and production configurations in both layouts. `./scripts/build.sh` passes all 318 Java tests (314 gameplay, 4 access). Production upload/restart and in-client verification remain pending. Next action: promote the checked hotfix through hotfix into main, then manually restart PebbleHost and verify the name in both scoreboard layouts.
+
+
 ## Production live; automated upload validation (2026-11-12)
 
 The rebuilt server is live on PebbleHost from checked main 55748b04ad5fa3750aa67248a60c7e1939656473. The executable-JAR launcher loads the required redstone agent before unchanged pinned Paper 26.1.2-74 on Java 25. Production logs show all gameplay readiness markers and zero startup errors; every managed file matches its checked source hash. Public Minecraft and NuVotifier endpoints respond at 142.4.206.185 ports 25565 and 19132, with play.mandomc.net resolving to the dedicated IP. Maintenance and whitelists are disabled while owner records stay private.
