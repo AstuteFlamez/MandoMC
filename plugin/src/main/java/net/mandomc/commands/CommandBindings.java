@@ -9,6 +9,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class CommandBindings implements AutoCloseable {
     private final net.mandomc.gameplay.ilum.IlumFeature ilum;
     private final net.mandomc.gameplay.clans.ClanFeature clans;
+    private final net.mandomc.gameplay.decor.DecorFeature decor;
+    private final net.mandomc.gameplay.messaging.MessagingFeature messaging;
     private final Map<String, Command> known;
     private final Map<String, Command> previous = new HashMap<>();
     private final Map<String, Command> owned = new HashMap<>();
@@ -26,11 +28,15 @@ public final class CommandBindings implements AutoCloseable {
         ilum = new net.mandomc.gameplay.ilum.IlumFeature((net.mandomc.bootstrap.MandoPlugin) plugin);
         try { clans=new net.mandomc.gameplay.clans.ClanFeature((net.mandomc.bootstrap.MandoPlugin)plugin); }
         catch(Exception error){throw new IllegalStateException("Native clan initialization failed",error);}
+        messaging=new net.mandomc.gameplay.messaging.MessagingFeature(plugin);
+        decor=new net.mandomc.gameplay.decor.DecorFeature((net.mandomc.bootstrap.MandoPlugin)plugin);
     }
     private void claim(String label, Command command) {
         previous.put(label, known.put(label, command)); owned.put(label, command);
     }
     @Override public void close() {
+        decor.close();
+        messaging.close();
         clans.close();
         ilum.close();
         owned.forEach((label, command) -> {

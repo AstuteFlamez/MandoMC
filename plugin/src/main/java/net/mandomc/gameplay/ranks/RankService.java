@@ -99,12 +99,10 @@ public final class RankService implements Listener, AutoCloseable {
     }
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void chat(io.papermc.paper.event.player.AsyncChatEvent event) {
-        // The immutable membership snapshot is safe on Paper's chat thread; preserve the existing renderer.
+        // Paper retains message signatures and the existing event recipients; only the renderer changes.
         var rank = rank(event.getPlayer());
-        var original = event.renderer();
-        event.renderer((source, name, message, viewer) -> original.render(source,
-                rank.badge(true).append(net.kyori.adventure.text.Component.text(" ")).append(name.color(rank.color())),
-                message, viewer));
+        event.renderer((source, name, message, viewer) ->
+                net.mandomc.gameplay.messaging.PlayerChat.render(rank, name, message));
     }
     @EventHandler(priority = EventPriority.LOWEST) public void join(PlayerJoinEvent event) { apply(event.getPlayer()); }
     @EventHandler(priority = EventPriority.MONITOR) public void quit(PlayerQuitEvent event) { remove(event.getPlayer()); }

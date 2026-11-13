@@ -16,5 +16,7 @@ public final class CommandMessages {
         return MiniMessage.miniMessage().deserialize(template, Placeholder.unparsed("value", value));
     }
     public void send(CommandSender sender, String key) { send(sender, key, ""); }
-    public void send(CommandSender sender, String key, String value) { sender.sendMessage(text(key, value)); }
+    public void send(CommandSender sender, String key, String value) {
+        net.mandomc.gameplay.messaging.ChatMessages.send(sender,"language/messages.yml","utilities."+key,text(key,value));
+    }
 }
