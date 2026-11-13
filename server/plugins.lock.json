@@ -114,5 +114,5 @@
   ],
   "pending": [],
   "runtimeTested": true,
-  "verificationScope": "Seven vendor plugins and MandoMC enable without WorldGuard, FactionsUUID, EssentialsX or Multiverse-Core. Native territory protection passes 5179 focused Paper assertions; 175 Java tests pass. Normal restart removes the checker, preserves existing worlds/pack and restores KOTH. Client title/protection playtest remains."
+  "verificationScope": "Ten pinned vendor plugins plus MandoMC and MandoAccess enable on Linux Paper 26.1.2-74 / Java 25. Required bundled agent, gameplay readiness markers and managed hashes verified on PebbleHost with zero startup errors. 317 Java tests and 72 tooling checks pass; an encrypted fixture vote awards exactly 500 native credits and one key. Authenticated client presentation playtesting remains."
 }
