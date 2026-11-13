@@ -41,3 +41,6 @@ spawn:
   attempts: 32
 cycler:
   mob-base-damage: 6.0
+
+weapon-drops:
+  chance: 0.10

@@ -2,3 +2,6 @@ schema-version: 1
 drops:
   minimum: 1
   maximum: 3
+  # Ordinary vanilla brown wool, independent of the existing hide roll.
+  wool-minimum: 1
+  wool-maximum: 3

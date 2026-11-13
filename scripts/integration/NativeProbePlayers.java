@@ -25,11 +25,12 @@ public final class NativeProbePlayers implements AutoCloseable {
         var nameField=Class.forName("net.minecraft.server.players.PlayerList").getDeclaredField("playersByName");nameField.setAccessible(true);names=(Map<String,Object>)nameField.get(list);
         serverPlayers=(List<Object>)list.getClass().getMethod("getPlayers").invoke(list);
     }
-    public Player create(Location location)throws Exception{
+    public Player create(Location location)throws Exception{return create(location,UUID.randomUUID());}
+    public Player create(Location location,UUID playerId)throws Exception{
         Class<?> serverClass=Class.forName("net.minecraft.server.MinecraftServer"),levelClass=Class.forName("net.minecraft.server.level.ServerLevel"),
                 profileClass=Class.forName("com.mojang.authlib.GameProfile"),infoClass=Class.forName("net.minecraft.server.level.ClientInformation"),playerClass=Class.forName("net.minecraft.server.level.ServerPlayer");
         Object server=Bukkit.getServer().getClass().getMethod("getServer").invoke(Bukkit.getServer()),level=location.getWorld().getClass().getMethod("getHandle").invoke(location.getWorld());
-        Object profile=profileClass.getConstructor(UUID.class,String.class).newInstance(UUID.randomUUID(),prefix+players.size());
+        Object profile=profileClass.getConstructor(UUID.class,String.class).newInstance(playerId,prefix+players.size());
         Object handle=playerClass.getConstructor(serverClass,levelClass,profileClass,infoClass).newInstance(server,level,profile,infoClass.getMethod("createDefault").invoke(null));
         Class.forName("net.minecraft.world.entity.Entity").getField("valid").setBoolean(handle,true);
         Class<?> flow=Class.forName("net.minecraft.network.protocol.PacketFlow"),connectionType=Class.forName("net.minecraft.network.Connection");

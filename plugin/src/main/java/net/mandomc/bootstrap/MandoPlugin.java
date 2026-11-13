@@ -228,6 +228,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 var mythic = new net.mandomc.integrations.mobs.MythicMobAccess();
                 new net.mandomc.integrations.mobs.MassiffDrops(this, items);
                 new net.mandomc.integrations.mobs.DewbackDrops(this, items);
+                HerdBootstrap.enable(this);
                 new net.mandomc.integrations.weapons.MobWeaponDamage(this, mythic, settings);
                 new net.mandomc.integrations.mobs.TuskenDrops(this, items,
                         mobConfig.getDouble("weapon-drops.chance", 0.10));
