@@ -1,10 +1,13 @@
 from pathlib import Path
 import unittest
+import os
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[2]
 
 
+@unittest.skipIf(os.environ.get('MANDOMC_PACK_ONLY') == 'true',
+                   'Compiled launcher packaging is checked in the Java server-build job')
 class PackagedAgentLauncherTests(unittest.TestCase):
     def test_executable_jar_loads_the_same_agent_before_unmodified_paper(self):
         with zipfile.ZipFile(ROOT / 'redstone-agent/target/MandoMC-Launcher.jar') as launcher, \
