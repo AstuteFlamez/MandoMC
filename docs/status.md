@@ -1,5 +1,9 @@
 # Resume here
 
+## Voting banner (2026-11-12)
+
+Added `docs/assets/server-banner.png` beside the server icon on the main checkout. Original pixel art drawn directly at 468 × 60; copied byte-for-byte without scaling. Verified PNG dimensions and source equality. No unfinished asset work. Next action: upload the banner to the voting-site listings.
+
 ## JustTimm integration history (2026-11-12)
 
 Merged the remaining `bilal/justtimm-saber-pack` commit dcbfca4 by full-history merge after the user approved its integration. All 78 catalog entries, item wrappers and pinned official upstream model references were already present on `main`. Preserved the exact current font JSON bytes: the merge's only proposed content change was equivalent Unicode escaping. All other existing pack assets, GUI art, fonts, credits and gameplay remain byte-identical to the previously verified integration. The JustTimm branch name and its dirty worktree are retained. No upstream artwork was downloaded, copied or rehosted; no pack publication or server deployment/restart is part of this follow-up. Verification: all 32 Python tooling tests and pack build pass; gameplay/build inputs are unchanged from the prior 174-test Java build. Next action: reconcile remaining deployed feature overlays before any full-JAR deployment.
