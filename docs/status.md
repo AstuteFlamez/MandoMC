@@ -1,5 +1,10 @@
 # Resume here
 
+## DevWorld decorations and natural-spawn policy (2026-11-13)
+
+DevWorld survival edits now bypass only the frozen planet-backup requirement; territory, clan and event cancellations remain authoritative. Reproduced placement failure on the old build, then verified all four helmets and the Rancor skull on six faces, exact item recovery, cancellation/refund handling, and custom/breeding/command spawn exemptions in an isolated full-stack server (827 assertions). The global natural-spawn switch now suppresses all living vanilla types through both spawn hooks and new-chunk handling. All 318 Java tests pass. Production activation remains pending its manual restart. Next action: merge the checked hotfix and verify its automatic upload.
+
+
 ## Scoreboard player-name hotfix (2026-11-12)
 
 Production HUD overrides used unsupported `<sidebar-player>` in both normal and combat layouts, while PlayerHud and bundled defaults use `<player>`. Replaced both override tags with the supported placeholder. Added a regression test that renders the actual name row from bundled and production configurations in both layouts. `./scripts/build.sh` passes all 318 Java tests (314 gameplay, 4 access). Production upload/restart and in-client verification remain pending. Next action: promote the checked hotfix through hotfix into main, then manually restart PebbleHost and verify the name in both scoreboard layouts.
