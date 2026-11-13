@@ -82,7 +82,7 @@ public final class NabooProbe extends JavaPlugin {
         check(menu[0] != null && menu[0].getSize() == 54, "Galaxy Map opens");
         var icon = menu[0].getItem(15);
         check(icon != null && NamespacedKey.fromString("mandomc:planets/naboo").equals(icon.getItemMeta().getItemModel()), "Modern Naboo icon at slot 15");
-        check(plugin.getCommand("warp").tabComplete(actor,"warp",new String[]{"ald"}).contains("naboo"), "Warp completion");
+        check(plugin.getCommand("warp").tabComplete(actor,"warp",new String[]{"nab"}).contains("naboo"), "Warp completion");
         for (String existing : new String[]{"spawn","hoth","tatooine","mandalore","ilum"})
             check(plugin.warps().destination(existing).getWorld() != null, "Existing warp " + existing);
         var clans = Bukkit.getServicesManager().load(net.mandomc.gameplay.clans.ClanService.class);
@@ -92,6 +92,16 @@ public final class NabooProbe extends JavaPlugin {
             check(clans.land().supported(chunk) == !(x == -847 && z == 209), "Claim scope near arrival");
             check(clans.land().ready(chunk) == !(x == -847 && z == 209), "Durable originals near arrival");
         }
+        for (int x = -863; x <= -832; x++) for (int z = 199; z <= 230; z++) {
+            var chunk = new net.mandomc.gameplay.clans.ClanState.Chunk("minecraft:naboo",x,z);
+            boolean wilderness = !(x == -847 && z == 209);
+            check(clans.land().supported(chunk) == wilderness, "Complete finite claim scope");
+            check(clans.land().ready(chunk) == wilderness, "Every wilderness original durable");
+        }
+        check(clans.land().prepare(world,-846,209), "Survival edits have a durable original");
+        check(!clans.wilderness(new net.mandomc.gameplay.clans.ClanState.Chunk("minecraft:naboo",-863,199)), "Partial border chunk cannot be claimed");
+        check(world.getGameRuleValue(GameRules.RANDOM_TICK_SPEED) == 0, "Authored vegetation preserved");
+        check(!world.getGameRuleValue(GameRules.COMMAND_BLOCKS_WORK), "Legacy command blocks disabled");
         check(world.getWorldBorder().getSize() == 500, "500-block border");
         check(world.getWorldBorder().getCenter().getX() == -13552 && world.getWorldBorder().getCenter().getZ() == 3440, "Border center");
         check(!world.getWorldBorder().isInside(new Location(world,-13803,101,3440)), "West boundary");

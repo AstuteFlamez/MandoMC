@@ -1,9 +1,8 @@
 # Resume here
 
-## Naboo selected; isolated capture in progress (2026-11-13)
+## Naboo playable on development (2026-11-13)
 
-On `bilal/naboo-dev`, replaced the cancelled Alderaan plan with a forested lakeshore section of the legacy Naboo map. The 500×500 border centers at (-13552,3440); only arrival chunk (-847,209) is safe, with wilderness elsewhere. Added protected `/warp naboo`, Galaxy Map slot 15 and a refined legacy icon edited directly at native 32×32 without resizing. The reactor passes 314 gameplay plus 4 access tests; all 72 Python checks and the pack build pass. A private Paper rehearsal is capturing 1023 Naboo originals while retaining 2115 previous originals. No Alderaan changes were applied to dev, and no production files are involved. Next action: finish native capture/checks, then apply the backed-up Naboo-only release to development.
-
+On `bilal/naboo-dev`, added the selected legacy Naboo forest/lakeshore with a 500×500 border centered at (-13552,3440). `/warp naboo` and Galaxy Map slot 15 use the protected arrival (-13550.5,101,3359.5). Only chunk (-847,209) is safe at every height; all other locations are wilderness. The legacy icon is refined directly at native 32×32 with no resizing. Its approved versioned development pack is published, anonymously hash-verified and applied while preserving all 1178 prior entries. A stopped full-runtime backup precedes the scoped four-entry JAR/configuration/map rollout. All 2115 previous originals and frozen receipts, plus other plugin JARs, remain byte-identical; 1023 Naboo originals are added, total 3138/3138. Private restart and actual dev checks each pass 2392 assertions; 314 gameplay plus 4 access tests, 72 Python checks and pack build pass. Temporary probes are removed for normal play. Alderaan was cancelled and never deployed. Code is retained locally; the external branch push was blocked by approval review. Production is unaffected. See [Naboo](features/naboo.md). Next action: join development and walk `/warp naboo` to assess the forest/lakeshore and native icon in client.
 
 ## Production live; automated upload validation (2026-11-12)
 

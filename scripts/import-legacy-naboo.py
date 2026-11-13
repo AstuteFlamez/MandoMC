@@ -43,6 +43,11 @@ def main():
             'structure_overrides': T.List[T.String]([])})})
     (args.output / 'data/minecraft').mkdir()
     worldgen.save(args.output / 'data/minecraft/world_gen_settings.dat', gzipped=True)
+    nbtlib.File({'DataVersion': T.Int(4790), 'data': T.Compound({
+        'minecraft:random_tick_speed': T.Int(0),
+        'minecraft:command_blocks_work': T.Byte(0),
+        'minecraft:fire_spread_radius_around_player': T.Int(0)
+    })}).save(args.output / 'data/minecraft/game_rules.dat', gzipped=True)
     record = {'world': 'minecraft:naboo', 'legacy-world': 'Naboo', 'regions': receipt,
               'terrain-byte-identical': True, 'legacy-entities-and-player-data-imported': False,
               'new-chunks': 'void', 'arrival': [-13550.5, 101.0, 3359.5], 'safe-chunk': [-847, 209]}

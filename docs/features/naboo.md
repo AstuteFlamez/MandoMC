@@ -1,5 +1,5 @@
 # Naboo
-Status: isolated verification; development deployment pending.
+Status: playable on the local development server.
 Branch: bilal/naboo-dev
 
 ## Player experience
@@ -22,7 +22,9 @@ WarpService uses protected arrival validation and the shared travel policy.
 Native territory/clan services remain the sole protection and ownership authority.
 The private importer copies the four original region files intersecting the
 selected square, preserving their bytes before Paper's ordinary format upgrade.
-Legacy player/entity files and plugin configuration are not imported. Outside
+Legacy player/entity files and plugin configuration are not imported. Random
+ticks and fire spread are disabled to preserve authored scenery, and legacy
+command blocks cannot execute. Outside
 retained regions, new chunks are void; the 500-block border is the play area.
 
 All 1023 non-safe chunks intersecting the square receive native pristine terrain
@@ -41,7 +43,19 @@ The publication overlays only the three new Naboo texture/model entries onto
 the current verified development pack, preserving all existing entries.
 
 ## Verification and next action
-The reactor, icon contract, pack builder and native Paper probe verify rules,
-arrival safety, menu/completion, border size, existing warps and durable originals.
-Complete the isolated snapshot capture and native checks, then apply the backed-up
-Naboo-only changes to the local development server.
+314 gameplay and 4 access tests pass, alongside 72 Python checks and the pack
+builder. A clean isolated restart and the actual development server each pass
+2392 native assertions for rules, exact safe arrival, menu/completion, border,
+all 1023 durable wilderness originals and the existing warps. Native snapshots
+complete 3138/3138: 2115 previous originals retained, 1023 Naboo originals added.
+Prior originals and frozen receipts and every other plugin JAR are byte-identical.
+The scoped gameplay JAR changes only WarpService and three configuration defaults.
+
+The approved versioned development pack is published and its ZIP/manifest were
+verified through anonymous downloads. All 1178 earlier pack entries are unchanged.
+A full stopped-runtime backup and deployment receipts remain private. Temporary
+verification plugins are removed before normal development play. Repository code
+remains on the local feature branch; the external branch push was not authorized.
+
+Next action: join development, use `/warp naboo`, and walk the lakeshore/forest
+border. In-client terrain and icon appearance await that player check.
