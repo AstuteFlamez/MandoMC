@@ -12,7 +12,8 @@ public final class LeaderboardLayout {
 
     public static Component render(Component title, Component subtitle, List<? extends Component> rows,
                                    IntFunction<Component> emptyRow) {
-        Component text = title.append(Component.newline()).append(subtitle).append(Component.newline());
+        Component text = Component.empty().append(title).append(Component.newline()).append(subtitle)
+                .append(Component.newline());
         for (int slot = 0; slot < SLOTS; slot++) {
             text = text.append(Component.newline()).append(slot < rows.size() ? rows.get(slot) : emptyRow.apply(slot + 1));
         }
