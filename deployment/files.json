@@ -182,6 +182,10 @@
       "target": "plugins/MandoMC/language/handbook.yml"
     },
     {
+      "source": "plugin/src/main/resources/language/herd.yml",
+      "target": "plugins/MandoMC/language/herd.yml"
+    },
+    {
       "source": "server/config/common/mandomc/language/messages.yml",
       "target": "plugins/MandoMC/language/messages.yml"
     },
@@ -208,6 +212,10 @@
     {
       "source": "server/config/common/mandomc/mobs/drops/massiff.yml",
       "target": "plugins/MandoMC/mobs/drops/massiff.yml"
+    },
+    {
+      "source": "plugin/src/main/resources/mobs/herd.yml",
+      "target": "plugins/MandoMC/mobs/herd.yml"
     },
     {
       "source": "server/config/common/mandomc/mobs/jawas.yml",
