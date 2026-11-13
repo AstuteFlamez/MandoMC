@@ -47,12 +47,35 @@ public final class NabooCavesProbe extends JavaPlugin {
             check(input.read()==-1,"No trailing expected terrain data");input.close();input=null;
             verifyArchitecture();
             for(String row:Files.readAllLines(getDataFolder().toPath().resolve("rooms.txt"))) {
-                int[] p=coords(row);ArrivalDestinations.safeSpawn(new Location(world,p[0]+.5,p[1],p[2]+.5));checks++;
+                int[] p=coords(row);try { ArrivalDestinations.safeSpawn(new Location(world,p[0]+.5,p[1],p[2]+.5)); }
+                catch (RuntimeException error) { throw new IllegalStateException("Cave anchor " + row, error); }
+                checks++;
             }
             for(String row:Files.readAllLines(getDataFolder().toPath().resolve("lights.txt"))) {
                 int[] p=coords(row);var b=world.getBlockAt(p[0],p[1],p[2]);
                 check(b.getType()==Material.GLOW_LICHEN,"Supported cave lichen retained");
                 check(b.getLightFromBlocks()>0,"Cave relighting complete");
+            }
+            Path decorations = getDataFolder().toPath().resolve("decorations.txt");
+            if (Files.exists(decorations)) {
+                for (String row : Files.readAllLines(decorations)) {
+                    int[] p = coords(row);
+                    var block = world.getBlockAt(p[0], p[1], p[2]);
+                    check(block.getBlockData().isSupported(block), "Cave decoration physically supported: " + row);
+                }
+            }
+            Path pools = getDataFolder().toPath().resolve("pools.txt");
+            if (Files.exists(pools)) {
+                for (String row : Files.readAllLines(pools)) {
+                    int[] p = coords(row);
+                    var block = world.getBlockAt(p[0], p[1], p[2]);
+                    check(block.getType() == Material.WATER, "Pool water retained: " + row);
+                    check(block.getRelative(0, -1, 0).getType().isOccluding(), "Pool has a solid floor: " + row);
+                    for (int[] face : new int[][] {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}) {
+                        Material side = block.getRelative(face[0], 0, face[1]).getType();
+                        check(side == Material.WATER || side.isOccluding(), "Pool waterline enclosed: " + row);
+                    }
+                }
             }
             done=true;release();Files.writeString(getDataFolder().toPath().resolve("PASSED.txt"),"NABOO TERRAIN PASSED: "+checks);getLogger().info("NABOO TERRAIN PASSED: "+checks);
         }catch(Throwable error){fail(error);}

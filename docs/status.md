@@ -1,5 +1,12 @@
 # Resume here
 
+## Naboo native cave redesign live (2026-11-13)
+
+On `bilal/naboo-dev`, replaced the shared-floor cave generator with real native Minecraft cave geometry from a bounded private 1,024-chunk reference. Naboo now has winding narrow passages, broad caverns, pillars, ledges, drops and separate systems, with 1,636,976 excavated cells across 175 systems and floors at 120 elevations. Added 12 mossy grottos, six dripstone areas, 18 fully contained shallow pools and 450 supported glow-lichen lights. The exact Agrinium/Durasteel/Electrum host budgets are retained; no new ore families, mobs, loot or foreign biomes/structures are imported. The surface, foundation margins, building recolor, island/warp, zones, 500×500 border, atlas and pinned resource pack are preserved.
+
+Private and dev native checks each pass 3,806,771 assertions, including every changed block, 193 dry standing anchors, physical decoration support, pool containment, relighting and unchanged building collision/properties; map/pack checks pass 14 each. The 3,801,315-cell sparse replacement in 801 chunks round-trips 78,741,504 cells. All 801 prior originals and matching journals are archived; untouched originals and other plugin JARs remain identical. New scope `wilderness-naboo-vanilla-20261113` is complete at 3017/3017. Reactor passes 316 gameplay plus four access tests; all 74 Python checks pass. Dev is back on normal startup with temporary probes removed; production is untouched and code stays local. See [Naboo](features/naboo.md). Next action: explore the native caves and their lush/dripstone/pool landmarks on dev, using normal mining/climbing for vertical passages and separate systems.
+
+
 ## Naboo organic caves, protected district and UI repairs live (2026-11-13)
 
 On `bilal/naboo-dev`, the island warp uses the user's exact captured position/facing; all 100 island chunks are Safezone. The 100-chunk building district is Warzone with PvP permitted and building/container/door interaction locked. The original 500×500 border stays unchanged. The final terrain has 94 irregular merged caverns, 124 winding passages, rolling natural floors, 450 native lights and Durasteel/Electrum/Agrinium veins. All main rooms connect on foot. Recolored 17,116 building blocks, including acacia/jungle timber and terracotta, preserving positions, properties and native collision geometry. The organic follow-up versions 702 originals with all older versions archived; current scope is complete at 3017/3017.

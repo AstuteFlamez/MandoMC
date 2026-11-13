@@ -19,19 +19,29 @@ interactions are protected. The rest is Wilderness, including the former arrival
 Creative staff with the existing edit permission retain maintenance access.
 
 ## Caves and ores
-The organic underground network has 94 major asymmetric, merged caverns,
-124 connecting passages and 1,203,771 new air cells. Room placement is irregular;
-variable-width passages wind through the terrain, and shared rolling floor fields
-replace the original flat galleries and artificial walking shelves. Gradual natural
-slopes connect the loose depth bands. All 94 main chamber floors are reachable by
-one-block steps: 121,522 of 121,616 generated floor tiles are in the main walking
-component. All new cave air is one connected component.
+The current underground terrain uses actual native Minecraft cave geometry from
+1,024 privately generated chunks (seed 2026111303, pinned Paper 26.1.2).
+Only the cave void shapes are adapted, shifted vertically to respect legacy
+Naboo's Y=0 bedrock. No source ores, entities, structures, loot or biomes are
+imported. The 1,636,976-cell excavated volume includes winding spaghetti/noodle
+tunnels, broad cheese caverns, native pillars, ledges, sloping passages, drops
+and dead ends. There are 175 meaningful connected air systems; the two largest
+contain 1,108,616 and 192,284 cells. Floors span 120 elevations instead of shared
+artificial levels. Vertical passages and separate systems retain normal Minecraft
+mining/climbing exploration; every ledge is not promised to connect on foot.
 
-There are 2,635 new Agrinium hosts, 2,095 Durasteel hosts and 2,294 Electrum hosts
-in 990 veins. Existing native mappings use iron, diamond and redstone ore for
-those metals; current drops, pickaxe rules and active pack textures apply.
-Every original ore count is retained. Stone, andesite and pale diorite form
-coherent wall patches, with 450 supported glow-lichen lights.
+Twelve mossy grottos feature moss, small azaleas and supported hanging roots;
+six dripstone regions have supported stalactites/stalagmites. Eighteen shallow
+sumps are enclosed at their waterline with solid floors. Native stone, andesite,
+tuff and pale calcite form coherent geological patches. There are 450 supported
+glow-lichen lights. This adds scenery, not mobs, loot, magical materials or new
+mineral families. Existing server spawning and combat rules remain authoritative.
+
+The previous mineral budget is preserved exactly: 2,635 new Agrinium hosts,
+2,095 Durasteel hosts and 2,294 Electrum hosts, now arranged in 978 veins.
+Existing native mappings use iron, diamond and redstone ore for those metals;
+current drops, pickaxe rules and active pack textures apply. Every original
+ore count is retained.
 
 Caves remain inside the exact play border. The island and building columns,
 plus structural foundation margins, are not excavated. Bedrock and at least the
@@ -47,12 +57,11 @@ block position remain intact. Every original property string is retained, includ
 shape, slab type/waterlogging and pillar axis. Native shape comparison verifies
 all 104 changed state pairs have identical collision geometry.
 
-The final pristine-to-authored terrain changes 1,643,955 cells in 641 chunks.
-The organic follow-up is applied as an exact 2,442,376-cell sparse replacement
-in 702 chunks; its 69,009,408-cell round trip preserves unrelated blocks,
-block entities, biomes and heightmaps. Fresh before-state checks prevent
-replacing concurrent player edits. Saved player positions are checked before
-replacing old cave space; nobody is forcibly relocated.
+The vanilla geometry revision replaces 3,801,315 cells in 801 chunks relative
+to the prior organic caves. Its 78,741,504-cell section round trip preserves
+unrelated blocks, block entities, biomes and heightmaps. Fresh before-state
+checks prevent replacing concurrent player edits. Saved player positions are
+checked before replacing old cave space; nobody is forcibly relocated.
 
 ## Ownership and protection
 WorldService owns the existing `minecraft:naboo` dimension and precise arrival;
@@ -71,13 +80,17 @@ terrain/recolor deltas, retaining every untouched pristine cell. Before each
 terrain version, prior originals, metadata, scopes and journals are archived
 with matching bytes. The first cave rollout versions 545 originals and adds
 the former arrival original; the organic follow-up versions 702 existing
-originals. All unchanged active originals stay byte-identical. The current
-scope is wilderness-naboo-organic-20261113, complete at 3017/3017. Restoration
-therefore retains the organic caves and palette instead of restoring an older
+originals, and the native-geometry revision versions 801 existing originals. All unchanged active originals stay byte-identical. The current
+scope is wilderness-naboo-vanilla-20261113, complete at 3017/3017. Restoration
+therefore retains the native caves and palette instead of restoring an older
 terrain version. Maps, archives, full stopped-runtime backups and receipts stay
 private.
 
-The source tools are extract-naboo-terrain.py, generate-naboo-caves.py,
+The disposable integration fixture NabooCaveReference generates the bounded
+reference on a private server only; extract-naboo-cave-reference.py exports it.
+Pass that private directory to generate-naboo-caves.py using --reference-dir;
+retain the reference.npy/reference.json files in the validation work directory.
+The source tools also include extract-naboo-terrain.py, generate-naboo-caves.py,
 validate-naboo-caves.py, recolor-naboo-builds.py, migrate-naboo-originals.py and
 apply-naboo-terrain.py under scripts/. Numerical dependencies are listed in
 scripts/map_tools/requirements.txt. Use private stopped copies and new work
@@ -110,16 +123,17 @@ the world border.
 ## Verification and next action
 316 gameplay and 4 access tests pass, alongside 74 Python checks and pack
 validation. The initial zone/interaction rollout passed 48,104 live assertions.
-The organic cave/complete recolor passes 2,443,580 native checks both privately
-and on dev, including every changed cell, all 94 safe room anchors, all native
+The native cave revision passes 3,806,771 terrain, standing, decoration support,
+pool containment, lighting and unchanged building geometry checks both privately
+and on dev, including every changed cell, all 193 dry standing anchors, all native
 lights, and identical collision geometry/properties for 104 material-state pairs.
 The actual `/c map` command and selected cached pack pass 14 private/live checks.
-Both previous terrain versions' originals and journals remain archived with
+All previous terrain versions' originals and journals remain archived with
 identical bytes; untouched active originals and unrelated plugin JARs are verified.
 
 The last normal development startup has no errors, retains the repaired pinned
 pack and complete 3017-chunk scope, and has no temporary probe JARs/directories.
 Code remains local on the feature branch; production is unaffected.
 
-Next action: reconnect to dev for the repaired resource pack, then walk the island,
-recolored Warzone district and organic caves and inspect `/c map` in client.
+Next action: explore the native cave networks and lush/dripstone/pool landmarks
+on dev; use normal mining/climbing for vertical passages and separate systems.
