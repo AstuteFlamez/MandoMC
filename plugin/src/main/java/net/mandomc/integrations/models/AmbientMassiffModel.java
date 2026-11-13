@@ -20,16 +20,29 @@ public final class AmbientMassiffModel implements AutoCloseable {
         modeled.setSaved(false); modeled.setBaseEntityVisible(false);
         active = ModelEngineAPI.createActiveModel("massiff");
         active.setCanHurt(false); active.setHitboxVisible(false); active.setMainHitbox(false); active.setRenderFire(false);
+        // The native default state machine otherwise starts/stops these same clips between
+        // movement samples. Its aliases must not own the ambient controller's idle/walk keys.
+        var handler = active.getAnimationHandler();
+        for (var state : com.ticxo.modelengine.api.animation.ModelState.values())
+            handler.setDefaultProperty(new com.ticxo.modelengine.api.animation.handler.AnimationHandler.DefaultProperty(
+                    state, "mandomc_ambient_manual", 0, 0, 1));
         modeled.addModel(active, false);
         active.getMountManager().ifPresent(m -> { m.setCanDrive(false); m.setCanRide(false); });
         active.getAnimationHandler().forceStopAllAnimations(); walk(false);
     }
     public void walk(boolean move) {
-        if (walking != null && walking == move) return;
-        active.getAnimationHandler().forceStopAllAnimations();
-        var animation = active.getAnimationHandler().playAnimation(move ? "walk" : "idle", 3, 3, 1, true);
-        if (animation == null) throw new IllegalStateException("Missing Massiff ambient animation");
-        animation.setForceLoopMode(com.ticxo.modelengine.api.animation.BlueprintAnimation.LoopMode.LOOP);
+        var handler = active.getAnimationHandler();
+        String clip = move ? "walk" : "idle";
+        String other = move ? "idle" : "walk";
+        if (handler.isPlayingAnimation(other)) handler.forceStopAnimation(other);
+        var animation = handler.getAnimation(clip);
+        // Cached intent is insufficient after a vendor reload or lost animation property.
+        // Keep a healthy loop advancing instead of restarting its first frame every tick.
+        if (walking == null || walking != move || animation == null || animation.isEnded() || animation.isFinished()) {
+            animation = handler.playAnimation(clip, 3, 3, 1, true);
+            if (animation == null) throw new IllegalStateException("Missing Massiff ambient animation");
+            animation.setForceLoopMode(com.ticxo.modelengine.api.animation.BlueprintAnimation.LoopMode.LOOP);
+        }
         walking = move;
     }
     public static void removeStale(org.bukkit.entity.Entity entity) {

@@ -30,3 +30,13 @@ The final recovery run passed 1,106 combined native assertions. All three destro
 
 ## Pause note
 All five NPCs are live; the shared server is healthy and the window is released. Native validation is complete; real-client visual feedback remains. Next action: right-click the pilot and Cassian, then observe the three Massiffs walking around the spawn plaza.
+
+
+## Massiff gait and spacing follow-up (2026-11-12)
+Staged fix after client feedback. ModelEngine's default idle/walk state machine and the ambient controller owned the same clip keys. On the old code, 13 of 383 naturally moving-foot samples lacked a walk clip; removing the actual walk property left 83 of 488 moving samples without it. The cached walking flag could not recover a clip stopped by the default state machine.
+
+The model adapter now redirects automatic state aliases away from the manually owned clips, retains healthy loops, and repairs a missing property. A separate one-tick animation sampler uses actual horizontal displacement with three stationary ticks of hysteresis. Navigation retains its five-tick cadence, original speed and exact roam bounds. Native navigation intent alone cannot animate a blocked body as walking.
+
+The original rig reaches 20 model pixels from its center, so paths reserve 2.75 blocks of clearance between body centers. Goals/routes avoid current dogs and remaining native paths. A closing-course check yields/repaths through native navigation, with stable-ID priority, without teleports or custom push vectors. Reciprocal dog-only collision exemptions retain player noncollision. Body recovery chooses a clear safe spawn and refreshes the reciprocal identities.
+
+Build passes 189 Java tests. Focused renderer checks pass 1,145 assertions: 861 moving-foot samples with zero missing walk, actual visible leg transform changes for all three dogs, starts/stops, turns, blocked bodies, property loss and rig recovery. Four native spacing scenarios pass 17,841 assertions over approaching, crossing, standing and sustained wandering. Minimum measured center distances were 5.84, 6.19, 4.24 and 3.16 blocks respectively; sustained progress was 14.65–15.25 blocks per dog. No measured step exceeded normal native movement, and the nearby player was not pushed. Only three existing class entries change; no pack/config, guide, decor, tutorial or travel entries change. Deployment awaits the coordinated window. Next action: deploy the staged three-entry overlay after window assignment.
