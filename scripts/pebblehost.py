@@ -198,7 +198,7 @@ def payload(root=ROOT):
         if root.resolve() not in source.resolve().parents:
             raise ValueError('Source must be inside the checkout')
         if not (target in {'plugins/update/MandoMC.jar', 'plugins/update/MandoAccess.jar',
-                           'start.sh'} or
+                           'start.sh', 'server.jar'} or
                 re.fullmatch(r'agents/MandoMC-RedstoneAgent-[a-f0-9]{64}\.jar', target) or
                 (target.startswith('plugins/MandoMC/') and target.endswith('.yml')) or
                 target == 'plugins/MandoAccess/config.yml' or
@@ -257,7 +257,7 @@ def host_settings(original, files):
     flags = next((line.partition('=')[2] for line in lines if line.startswith('startupflags=')), '')
     flags = re.sub(r'(?<!\S)-javaagent:agents/MandoMC-RedstoneAgent[^\s]*', '', flags).strip()
     updates = dict(javaversion='25', autoupdate='false',
-                   startupflags=(flags + ' -javaagent:' + agents[0]).strip())
+                   startupflags=flags)
     lines = [line for line in lines if line.partition('=')[0] not in updates]
     lines.extend(f'{key}={value}' for key, value in updates.items())
     return ('\n'.join(lines) + '\n').encode('utf-8')
@@ -343,6 +343,10 @@ def deploy(sftp, commit, apply=False):
         sftp.rmdir('.mandomc/deploy.lock')
 
 
+def voting_listener_ready(log):
+    return bool(re.search(r'\[Votifier\] Votifier enabled on socket /(?:0\.0\.0\.0|\[0:0:0:0:0:0:0:0(?:%0)?\]):19132\.', log))
+
+
 def verify_startup(sftp):
     raw = read_remote(sftp, '.mandomc/bootstrap.json')
     if raw is None:
@@ -356,9 +360,10 @@ def verify_startup(sftp):
                 'Arrival enabled:', 'Native clans ready:', 'Native crates ready;',
                 'Redstone circuits disabled in all worlds', 'Travel guides ready:',
                 'Ambient Massiffs ready:', 'World leaderboards ready:',
-                '[Votifier] Votifier enabled on socket /0.0.0.0:19132.',
                 '[VotingPlugin] Enabled VotingPlugin 7.1.1')
     missing = [text for text in required if text not in log]
+    if not voting_listener_ready(log):
+        missing.append('public voting listener on allocated port 19132')
     if missing or '/ERROR]' in log or '/SEVERE]' in log:
         raise ValueError('Startup not healthy; inspect latest.log. Missing markers: ' + ', '.join(missing))
     state_raw = read_remote(sftp, REMOTE_STATE)

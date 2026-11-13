@@ -61,7 +61,7 @@ VoteSites:
     Name: PlanetMinecraft.com
     Priority: 4
     ServiceSite: PlanetMinecraft.com
-    VoteURL: https://www.planetminecraft.com/server/galaxies-horizon/vote/
+    VoteURL: https://www.planetminecraft.com/server/mandomc/vote/
     VoteDelay: 24h
     WaitUntilVoteDelay: false
     ForceOffline: false
