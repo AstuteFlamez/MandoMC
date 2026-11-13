@@ -1,5 +1,9 @@
 # Resume here
 
+## Development economy and voting sync (2026-11-13)
+
+User clarified that new features deploy to dev and restart automatically; production promotion/restart remains separate. Added /eco and /economy aliases, give/add, take/remove, set, reset-to-starting-balance and help through the existing native credit writer and admin permission. Development voting plugins/configuration, saved Voting Crate location, fixed leaderboards, natural-spawn policy and DevWorld placement exemption are being reconciled with the active local runtime while preserving its Boba overlay and private player/world state. All 319 Java tests and 30 real economy-command assertions pass. Scoped candidate changes only 19 JAR entries and preserves every unrelated entry, including active Boba work. DevWorld and encrypted-vote verification are in progress. Next action: verify the scoped candidate, merge into dev, deploy and automatically restart the local development server.
+
 ## Fixed-height leaderboard style (2026-11-13)
 
 Kills, balance and Ilum now use uppercase title/subtitle, a spacer, and ten permanent numbered positions; vacant slots contain only the rank. Red/green/purple text stays transparent and upright. A configurable 0.35-block lift preserves saved ground anchors while keeping the fixed panel clear of the ground. Ranking/stat/credit owners and Ilum chat output are unchanged. All 319 Java tests pass. The isolated Paper probe passes 72 assertions across all three boards and shuts down cleanly; production activation remains pending. See [feature](features/world-leaderboards.md). Next action: complete native verification and promote the checked presentation update.

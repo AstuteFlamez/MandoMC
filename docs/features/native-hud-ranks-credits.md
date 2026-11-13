@@ -26,3 +26,11 @@ Combined build: 132 Java tests and 19 script tests pass. The 515-file pack valid
 Deployed from implementation commit `0163011` on `bilal/native-hud-ranks`, including the latest vehicle changes. Public release `resource-pack-26.1.2-01630112d11a` was verified anonymously; normal server restarted at 16:40 local, with KOTH restored and no probes installed. The tested/deployed JAR and hosted hashes match. Live console confirms AstuteFlamez is MandoStudios with $0.00; all other accounts default to Default/zero. No legacy assignments or balances were imported. Rollback files remain in ignored `.local/rollout-backup`.
 
 Next action: client-check rank/tab/nameplate appearance, combat sidebar and warp lore; use `/balance` and `/pay` to try credits.
+
+## Economy admin command aliases (2026-11-13)
+`/eco` and `/economy` share the existing `/credits` owner and `mandomc.credits.admin` permission
+(operator by default). Give/add credits, take/remove credits, set an exact balance, or reset one
+player to the configured 2,500-credit starting balance. `/eco help` lists syntax. Use exact known
+names or UUIDs; zero is valid for set. Invalid amounts, insufficient funds, failed saves and
+unprivileged requests leave balances unchanged. All writes use the existing serialized durable
+credit ledger and audit logging; admin help/confirmation use the red italic chat category.

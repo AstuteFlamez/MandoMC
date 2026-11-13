@@ -36,6 +36,7 @@ sources:
   category: ECONOMY
   admin-paths:
   - messages.adjusted
+  - messages.admin-usage
 - file: economy/auction-house.yml
   category: ECONOMY
 - file: mobs/jawas.yml
