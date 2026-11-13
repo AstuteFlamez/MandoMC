@@ -1,0 +1,54 @@
+# Feature: Jetpack chestplate enchantment
+Status: Agrinium-Anvil-only update LIVE since 2026-11-12 17:19 America/Chicago; supersedes the earlier crafting-grid flow below.
+Branch: bilal/boba-equipment
+
+## Current anvil flow
+Use a placed Agrinium Anvil to combine two Jetpack I books into Jetpack II, or put a chestplate in the left slot and a Jetpack book in the right slot to apply/upgrade it. Level cap II, book drops, armor tooltip and fuel rates remain unchanged. Crafting-grid routes are removed, including their recipe-book registrations. `/mmc equipment` and the books explain the anvil requirement.
+
+Agrinium Anvil is the existing server name for native ANVIL/CHIPPED_ANVIL/DAMAGED_ANVIL; its existing recipe returns minecraft:anvil. No second block-identity system is added. Upgrade preparation and pickup require a real nearby anvil block. Virtual menus and a station removed before pickup reject. Native anvil pickup owns XP, input consumption, inventory-capacity handling and anvil wear. Native displayed XP cost and prior-work growth are retained. The exception is limited to pure Jetpack-book operations; unrelated enchanting remains disabled by the existing survival policy. Existing ordinary anvil repairs/renames remain native.
+
+Eight fuel tests pass. A disposable full-current-runtime native probe passed 76 assertions through the real ServerGamePacketListener container-click handler, using an isolated valid native player with an in-memory channel. Tests include all three anvil damage states, normal/shift pickup, exact displayed XP cost, insufficient XP, full inventory, repeated clicks, removed station, virtual menu, grid rejection, tier cap, unchanged general enchanting restriction, chestplate metadata, native flight/fuel and flame behavior. The deprecated openAnvil fixture API uses force-open for worn block variants but production validation independently checks the real block/range. No real client or production test actor is used.
+
+Deployed exact JAR `5a6406c1145b4f912fc4c9fc04cfcee84b4734f5ba75746dc5ee06676b1e0e62` with one clean restart/full stopped backup. All 45 production read-only checks passed. Resource/data packs and native agent/launcher are unchanged; all unowned JAR entries and APIs retained. KOTH active / next None restored and verified. Temporary audit removed; gear window released. Next action: user tests the native Agrinium Anvil UI.
+
+## Earlier implementation and rollout history
+
+## Player experience
+Boba now drops a vanilla enchanted book named Jetpack I, containing the real stored Jetpack I enchantment. Craft two I books into one II book. Combine a book with one chestplate, in any positions in either crafting grid. The result is the same chestplate with the native `mandomc:jetpack` enchantment, displayed as Jetpack. Wear it in the chest slot and double-tap sneak to toggle thrust. The offhand remains free. There is no attached model or jetpack exhaust particle effect; normal armor appearance remains.
+
+The jetpack ingredient is consumed. The chestplate retains its material, durability, name, lore, other enchantments, trim, persistent data and unrelated native components. All seven native chestplate materials and custom armor based on those materials are supported. The flamethrower is unchanged.
+
+## Rules
+- One valid Jetpack book plus one chestplate, or two I books for the II-book recipe. Extra ingredients, ordinary echo shards and upgrades beyond II reject the recipe. No layout requirement; both 2x2 and 3x3 crafting work.
+- Minecraft owns normal/shift-click output transfers and ingredient consumption. The plugin validates the live matrix/result; it does not implement a second consumption path.
+- Existing double-sneak controls, movement policy, speed, cooldowns and fuel rules remain: level I buys 0.1 real seconds per hotbar coal, level II buys 0.2 seconds; charcoal/storage coal excluded; purchased fractions persist; warning at five seconds. No separate visual preference affects ability.
+- Native grindstone disenchanting removes Jetpack and the glide flag introduced by it. An independently preexisting glide flag is retained. Native crafting repair may strip enchantments as usual; orphaned upgrade flags are cleaned from crafting/anvil/grindstone results.
+- Armor removal/breakage, death, logout and existing travel/disable boundaries stop powered flight with the existing credit persistence. Normal native armor/drop/keep-inventory rules own item loss. No virtual jetpack storage or duplicate item exists.
+- Legacy offhand jetpacks become ingredients; their previous offhand glider/equippable components are cleared when carried. Already-stored ingredients remain craftable without requiring exact old lore/components. Ingredient hints update when carried.
+- `/mmc equipment` and right-clicking an ingredient explain crafting. `/mmc jetpacktest` and the visual controller are no longer registered. Deprecated getters remain binary-compatible but return no attachment/controller. Historical rendering classes/assets are inert.
+
+## Smallest playable version
+Craft a named, damaged, enchanted/trimmed netherite chestplate with a Boba jetpack. Its original properties remain and Jetpack appears in the native enchantment tooltip. Equip it with a shield in the offhand, put coal in the hotbar and double-tap sneak. Flight consumes coal and no display/armorstand/cloud spawns.
+
+## Ownership and integrations
+The native enchantment registry is declared by the small version-pinned data pack under `server/datapacks/mandomc-jetpack`. Install it into the primary world's datapacks directory while stopped, before enabling the feature. `scripts/install-jetpack-enchantment.py --runtime <runtime>` derives the primary world from server.properties. The pinned 26.1.2 data version is 101.1. Missing registration fails explicitly at feature bootstrap; no fake lore-only fallback is used. The enchantment has no enchantment-table/trade tags and no independent native effects; gameplay remains in the existing equipment service.
+
+`JetpackChestplate` owns the seven native shapeless registrations, exact catalog identity validation and upgrade-owned component cleanup. `BobaEquipment` reads the worn chestplate's native enchantment; the existing fuel/flight service remains the sole ability writer. Armor and the flamethrower retain their existing owners. The registry pack is a server data pack, so the resource pack is unchanged.
+
+## Parameters
+Existing equipment/boba.yml movement/flame settings remain in force. Fuel cost and recipe cost are fixed user rules. Crafting guidance is in equipment/jetpack-chestplate.yml. Code and registry changes require a restart.
+
+## Verification
+Six deterministic fuel tests pass. The exact-candidate disposable full runtime tests real registry loading, all seven material recipes, rejection cases, native 3x3 consumption, actual 2x2 normal and shift result clicks, repeated-click duplication prevention, full item-component preservation, native grindstone preparation, prior-glider retention, offhand migration/rejection, chest-slot native glide and zero visual entities. Registered flame/ammo/collision behavior is also exercised. Native result is 57 assertions passed. The real-time depletion check uses elapsed nanoseconds rather than assuming startup catch-up ticks take a fixed wall-clock duration.
+
+## Pause note
+Deployed exact JAR `f067c786195b454e0f3d0f9d9413447138458c8ce87ecb477c4b8d3ad7da6cfb` and the native enchantment data pack with one clean restart and a full stopped backup. All 41 production read-only checks passed, including native enchantment, all chestplate recipes, removed test route/controller, existing loot, NPCs/decor/boards, frozen baselines, pack and native agent. The pack is unchanged. Jabba active / next None was separately restored and read back. Temporary audit removed; gear window released. Next action: user verifies ordinary crafting and chest-slot flight in the connected client.
+
+## Book and tooltip refinement
+The native enchantment is capped at II, so vanilla enchantment descriptions include the I/II suffix. Two separate I-book ingredients produce one II book; II + II does not create III. A book applies its level to an unupgraded chestplate; native-style I + I on an existing chestplate also becomes II. Upgrades beyond II reject. Level II changes only the paid fuel interval; speed, steering and all other flight rules stay unchanged. Purchased nanoseconds are retained when changing levels, rather than rescaled into free fuel.
+
+Catalog armor now hides the native enchantment block that precedes lore and reproduces all normally visible enchantment names below the original rarity/category badge row. Generated rows carry an invisible component insertion marker, allowing idempotent refresh and exact removal without deleting original descriptions. Original enchantment-hide flags are remembered and restored. Already-hidden unrelated enchantments stay hidden; actual enchantment data remains unchanged. Vanilla armor without badge lore keeps vanilla tooltip rendering.
+
+Legacy model ingredients migrate to native books in carried inventories and on spawn/open. A grindstoned plain book is never recreated as an enchanted book. The native resource pack remains unchanged. Eight deterministic fuel tests and 81 exact-candidate native assertions pass, including actual book drops, normal/shift book consumption, direct II application/cap, screenshot-regression checks on real Beskar armor, exact tooltip/lore restoration, migration and real level-II activation with 0.2 seconds per coal. Connected-client appearance remains a manual confirmation.
+
+The book/II/tooltip refinement is live as JAR `58a6238614d85e0875cc7775c53e5f74403b53ea2b3d79ba013d0afefd282423`, with one clean restart and a full stopped backup. All 44 production read-only preservation/registration checks passed; KOTH active / next None was restored and separately read back. Resource pack and mandatory native agent/launcher remain unchanged. Temporary audit removed; gear window released. Next action: connected-client book/tooltip confirmation and manual I+I crafting.

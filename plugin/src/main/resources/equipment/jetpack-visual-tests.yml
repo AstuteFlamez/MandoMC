@@ -1,0 +1,36 @@
+title: '<dark_gray>Jetpack visual tests'
+hmc:
+  name: '<yellow>1 — HMC-style separate self model'
+  lore:
+    - '<gray>Elevated carrier with a lowered self model.'
+    - '<gray>Compare first person and both F5 views.'
+    - '<gray>Turns with yaw; does not lean with flight.'
+mythic:
+  name: '<aqua>2 — Mythic-style torso display'
+  lore:
+    - '<gray>Current close fit with full torso animation.'
+    - '<gray>Separate wearer offset for comparison.'
+magic:
+  name: '<light_purple>3 — Magic-style helmet carrier'
+  lore:
+    - '<gray>Invisible carrier with the model on its head.'
+    - '<gray>Turns with yaw; does not lean with flight.'
+hide:
+  name: '<yellow>Hide from me'
+  lore:
+    - '<gray>Hides your self model in first person AND F5.'
+    - '<gray>Other players can still see the jetpack.'
+show:
+  name: '<green>Show to me'
+  lore:
+    - '<gray>Restore your self model for camera testing.'
+offset:
+  name: '<yellow>Cycle self offset: close / +0.15 / +0.30'
+  lore:
+    - '<gray>Move only your view of the model backward.'
+    - '<gray>Click cycles through the three distances.'
+reset:
+  name: '<red>Restore current look'
+  lore:
+    - '<gray>Torso display, visible to you, close fit.'
+offset-current: '<gray>Current self offset: <yellow><distance> blocks'

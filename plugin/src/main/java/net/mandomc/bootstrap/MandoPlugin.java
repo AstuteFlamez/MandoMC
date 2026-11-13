@@ -58,6 +58,9 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     private ArrivalListener arrival;
     private ArrivalDestinations destinations;
     private boolean failed;
+    private net.mandomc.gameplay.boba.BobaEquipment bobaEquipment;
+    private net.mandomc.gameplay.boba.JetpackEquipmentMenu bobaEquipmentMenu;
+    public net.mandomc.gameplay.boba.BobaEquipment bobaEquipment() { return bobaEquipment; }
     private net.mandomc.gameplay.mobs.RancorSlam rancorSlam;
     private net.mandomc.gameplay.mobs.BosskDioxis bosskDioxis;
     private net.mandomc.integrations.weapons.BosskAim bosskAim;
@@ -127,7 +130,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 worldEditRanks = new net.mandomc.integrations.permissions.WorldEditRanks(this, ranks);
             new net.mandomc.commands.RankCommands(root, ranks, language.getConfigurationSection("ranks"));
             credits = new net.mandomc.gameplay.credits.CreditService(this, loadFeature("economy/credits.yml"));
-            for (var resource : new String[] {"items/catalog.yml", "items/definitions/vehicles.yml", "items/definitions/vehicle-ammo.yml", "items/definitions/legacy.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/jabba.yml", "items/definitions/jabba-loot.yml", "items/definitions/dioxis.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
+            for (var resource : new String[] {"items/catalog.yml", "items/definitions/vehicles.yml", "items/definitions/vehicle-ammo.yml", "items/definitions/legacy.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/jabba.yml", "items/definitions/jabba-loot.yml", "items/definitions/dioxis.yml", "items/definitions/boba-equipment.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
                 if (!new File(getDataFolder(), resource).isFile()) saveResource(resource, false);
             }
             // Add only missing badges and vendor registrations; preserve local overrides.
@@ -203,6 +206,12 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                         bosskPose::position,items);
                 new net.mandomc.integrations.mobs.BosskCombat(this,items,bosskMobs::type,boundaryProtection::allowed);
             }
+            bobaEquipment = new net.mandomc.gameplay.boba.BobaEquipment(this, items,
+                    net.mandomc.gameplay.boba.BobaEquipmentSettings.read(loadFeature("equipment/boba.yml")),
+                    language.getConfigurationSection("boba-equipment"), boundaryProtection::allowed);
+            bobaEquipmentMenu = new net.mandomc.gameplay.boba.JetpackEquipmentMenu(this, items, bobaEquipment,
+                    language.getConfigurationSection("boba-equipment"));
+            bobaEquipmentMenu.register(root);
             var jabbaConfig = loadFeature("mobs/drops/jabba.yml");
             if (jabbaConfig.getBoolean("enabled", false)) {
                 new net.mandomc.integrations.mobs.JabbaDrops(this, items,
@@ -291,6 +300,8 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
         if (vehicleCannons != null) vehicleCannons.close();
         if (vehicles != null) vehicles.close();
         if (explosions != null) explosions.close();
+        if (bobaEquipmentMenu != null) bobaEquipmentMenu.close();
+        if (bobaEquipment != null) bobaEquipment.close();
         if (commandBindings != null) commandBindings.close();
         if (territories != null) territories.close();
         if (requests != null) requests.close();
