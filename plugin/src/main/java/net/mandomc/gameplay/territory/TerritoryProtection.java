@@ -31,6 +31,8 @@ public final class TerritoryProtection implements Listener {
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void interact(PlayerInteractEvent e){
         Block b=e.getClickedBlock();if(b==null||!blocked(b)||staff(e.getPlayer()))return;
+        // Only the active event can authorize its registered one-click cache claim.
+        if(net.mandomc.gameplay.events.EventCaches.allowed(e))return;
         boolean physical=e.getAction()==Action.PHYSICAL;
         boolean container=b.getState() instanceof Container;
         String item=e.getMaterial().name();
