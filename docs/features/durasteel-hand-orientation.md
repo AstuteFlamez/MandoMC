@@ -1,5 +1,5 @@
 # Feature: Durasteel helmet hand orientation
-Status: implementation; client verification pending
+Status: deployed to development; visual verification pending
 Branch: bilal/durasteel-hand-orientation
 
 ## Player experience
@@ -23,6 +23,11 @@ the pack in the client.
 Resource-pack build, eight existing model checks and ./scripts/build.sh pass.
 Compared all 1178 built ZIP entries to the branch baseline: only the Durasteel
 model differs, and removing the two added display contexts restores the exact
-original parsed model. Publication and client verification remain pending.
-Next action: apply the tested pack to development and compare Durasteel with
+original parsed model. All 72 tooling checks pass. Published and anonymously
+verified resource-pack-26.1.2-90a420b3eb34, SHA-1
+f3d9224251a21eb3123e07621619129643c3c98a. Normal development restart completed
+without startup errors; the owner's client reports the pack successfully loaded.
+The latest hosted baseline's ten existing map/ore texture changes also reach
+development. Installed JARs/launchers are unchanged; production was not modified.
+Next action: compare Durasteel with
 Beskar/Stormtrooper in both hands in first and third person.
