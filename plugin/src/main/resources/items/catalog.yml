@@ -1,26 +1,27 @@
 {
   "schema-version": 1,
   "rarities": {
-    "common": "\u0111",
-    "uncommon": "\u0116",
-    "rare": "\u0115",
-    "epic": "\u0112",
-    "legendary": "\u0113",
-    "mythic": "\u0114"
+    "common": "đ",
+    "uncommon": "Ė",
+    "rare": "ĕ",
+    "epic": "Ē",
+    "legendary": "ē",
+    "mythic": "Ĕ"
   },
   "categories": {
-    "vehicles": "\u010f",
-    "materials": "\u010c",
-    "armor": "\u0109",
-    "consumables": "\u010b",
-    "weapons": "\u0110",
-    "components": "\u010a",
-    "crystals": "\u010e",
-    "fuel": "\u0122",
-    "keys": "\u0124",
-    "metals": "\u010d",
+    "vehicles": "ď",
+    "materials": "Č",
+    "armor": "ĉ",
+    "consumables": "ċ",
+    "weapons": "Đ",
+    "components": "Ċ",
+    "crystals": "Ď",
+    "fuel": "Ģ",
+    "keys": "Ĥ",
+    "metals": "č",
     "tokens": "<gray>[Tokens]",
-    "tools": "\u0138"
+    "tools": "ĸ",
+    "trophies": "<font:mandomc:trophies></font>"
   },
   "external-items": {
     "e11": {

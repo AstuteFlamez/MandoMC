@@ -1,0 +1,100 @@
+{
+  "source": "server/config/common/modelengine/blueprints/rancor.bbmodel",
+  "sourceSha256": "9a19e3dea2939a9af72c1073d37ae7fa96ab84556158459142c6925ab775b1e8",
+  "sourceAtlas": "resource-pack/src/assets/modelengine/textures/entity/models/rancor.png",
+  "atlasSha256": "03641195fdd3eafd0a006be7fd6b6feffa3ee64ce1a619d394b69adab7990c67",
+  "sourceBone": "h_head",
+  "sourceSizePixels": [
+    24,
+    24,
+    24
+  ],
+  "trophySizeBlocks": [
+    0.875,
+    0.875,
+    0.875
+  ],
+  "reservedSpaceBlocks": [
+    1,
+    1,
+    1
+  ],
+  "faceOrientationTrace": {
+    "north": {
+      "sourceFace": "west",
+      "sourceUV": [
+        24,
+        130,
+        48,
+        154
+      ],
+      "respectSignedUV": true,
+      "clockwiseRotation": 0
+    },
+    "east": {
+      "sourceFace": "north",
+      "sourceUV": [
+        126,
+        100,
+        150,
+        124
+      ],
+      "respectSignedUV": true,
+      "clockwiseRotation": 0
+    },
+    "south": {
+      "sourceFace": "east",
+      "sourceUV": [
+        110,
+        126,
+        134,
+        150
+      ],
+      "respectSignedUV": true,
+      "clockwiseRotation": 0,
+      "completion": "Original crown contours extended over the exposed rear, with exact adjoining skin boundaries and original-palette quantization; no noise"
+    },
+    "west": {
+      "sourceFace": "south",
+      "sourceUV": [
+        0,
+        130,
+        24,
+        154
+      ],
+      "respectSignedUV": true,
+      "clockwiseRotation": 0
+    },
+    "up": {
+      "sourceFace": "up",
+      "sourceUV": [
+        156,
+        48,
+        132,
+        24
+      ],
+      "respectSignedUV": true,
+      "clockwiseRotation": 90
+    },
+    "down": {
+      "sourceFace": "down",
+      "sourceUV": [
+        158,
+        124,
+        134,
+        148
+      ],
+      "respectSignedUV": true,
+      "clockwiseRotation": 270
+    }
+  },
+  "changes": [
+    "Uniformly scale original head to14 pixels per axis",
+    "Rotate original head -90 degrees around Y, retaining all signed face UVs",
+    "Match exact original Rancor skin palette and front pixels",
+    "Complete flat rear attachment from adjacent original skin boundaries",
+    "Remove all four added fang cubes",
+    "Center GUI three-quarter front presentation independently of placed transforms"
+  ],
+  "bossAssetsModified": false
+}

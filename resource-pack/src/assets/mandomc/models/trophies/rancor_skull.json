@@ -1,0 +1,165 @@
+{
+  "credit": "Derived from the owner-supplied Rancor Beast head; MandoMC continuous UV wrap, original skin colors.",
+  "textures": {
+    "0": "mandomc:item/trophies/rancor_skull",
+    "particle": "#0"
+  },
+  "elements": [
+    {
+      "name": "Rancor head",
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        14,
+        15
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0.0,
+            0.0,
+            3.0,
+            6.0
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            3.0,
+            0.0,
+            6.0,
+            6.0
+          ],
+          "texture": "#0"
+        },
+        "south": {
+          "uv": [
+            6.0,
+            0.0,
+            9.0,
+            6.0
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            0.0,
+            6.0,
+            3.0,
+            12.0
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            3.0,
+            6.0,
+            6.0,
+            12.0
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            6.0,
+            6.0,
+            9.0,
+            12.0
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        25,
+        -135,
+        0
+      ],
+      "translation": [
+        0,
+        1,
+        0
+      ],
+      "scale": [
+        0.7,
+        0.7,
+        0.7
+      ]
+    },
+    "ground": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        75,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        2.5,
+        0
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
+    },
+    "firstperson_righthand": {
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.5,
+        0.5,
+        0.5
+      ]
+    }
+  }
+}

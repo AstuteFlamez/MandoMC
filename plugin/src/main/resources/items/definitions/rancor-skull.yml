@@ -1,0 +1,14 @@
+schema-version: 1
+items:
+  rancor_skull:
+    material: SKELETON_SKULL
+    name: '<gold>Rancor Skull'
+    rarity: legendary
+    category: trophies
+    custom-model-data: 0
+    item-model: mandomc:trophies/rancor_skull
+    lore:
+      - '<gray>A fearsome trophy taken from a defeated Rancor.'
+      - ''
+      - '<yellow>[<key:key.use>] Place on any block face'
+      - '<gray>Floor, wall or ceiling. Break to recover.'
