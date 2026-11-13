@@ -53,6 +53,7 @@ jobs:
             plugin/target/MandoMC.jar
             access/target/MandoAccess.jar
             redstone-agent/target/MandoMC-RedstoneAgent.jar
+            redstone-agent/target/MandoMC-Launcher.jar
             resource-pack/build/MandoMC.zip
             resource-pack/build/MandoMC.json
 

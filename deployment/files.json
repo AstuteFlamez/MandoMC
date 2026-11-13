@@ -492,6 +492,10 @@
     {
       "source": "plugin/target/MandoMC.jar",
       "target": "plugins/update/MandoMC.jar"
+    },
+    {
+      "source": "redstone-agent/target/MandoMC-Launcher.jar",
+      "target": "server.jar"
     }
   ]
 }

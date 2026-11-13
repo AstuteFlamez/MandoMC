@@ -10,6 +10,7 @@ import subprocess
 import tempfile
 import secrets
 import yaml
+import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -29,6 +30,28 @@ def properties(text, updates):
             result.append(line)
     result.extend(f'{key}={value}' for key, value in updates.items())
     return '\n'.join(result) + '\n'
+
+
+
+def canonical_target(root, relative):
+    """Materialize manifest spelling even on a case-insensitive source volume."""
+    if Path(relative).is_absolute() or any(part in ('', '.', '..') for part in relative.split('/')):
+        raise ValueError('Unsafe prepared target')
+    cursor = root
+    for part in relative.split('/'):
+        matches = [entry for entry in cursor.iterdir() if entry.name.casefold() == part.casefold()] if cursor.is_dir() else []
+        if len(matches) > 1:
+            raise ValueError(f'Case-colliding prepared paths: {relative}')
+        if matches:
+            existing = matches[0]
+            if existing.is_symlink():
+                raise ValueError('Linked prepared target')
+            if existing.name != part:
+                temporary = cursor / ('.mandomc-case-' + uuid.uuid4().hex)
+                existing.rename(temporary)
+                temporary.rename(cursor / part)
+        cursor = cursor / part
+    return cursor
 
 
 def prepare(runtime, destination, port=25565, public=False, voting_identity=None):
@@ -125,7 +148,7 @@ def prepare(runtime, destination, port=25565, public=False, voting_identity=None
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(source, target)
         paper = json.loads((ROOT / 'server/paper.lock.json').read_text())['server']
-        verified(runtime / 'paper.jar', destination / 'server.jar', paper['checksums']['sha256'])
+        verified(runtime / 'paper.jar', destination / 'paper.jar', paper['checksums']['sha256'])
         props = destination / 'server.properties'
         props.write_text(properties(props.read_text(), {
             'server-ip': '', 'server-port': str(port), 'enable-rcon': 'false',
@@ -146,7 +169,7 @@ def prepare(runtime, destination, port=25565, public=False, voting_identity=None
         transfer = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(transfer)
         for target, data in transfer.payload().items():
-            installed = destination / transfer.installed_path(target)
+            installed = canonical_target(destination, transfer.installed_path(target))
             installed.parent.mkdir(parents=True, exist_ok=True)
             installed.write_bytes(data)
         commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
@@ -155,6 +178,8 @@ def prepare(runtime, destination, port=25565, public=False, voting_identity=None
         shutil.copyfile(runtime / 'eula.txt', destination / 'eula.txt')
         inventory = {str(path.relative_to(destination)): hashlib.sha256(path.read_bytes()).hexdigest()
                      for path in destination.rglob('*') if path.is_file()}
+        if any(transfer.installed_path(target) not in inventory for target in transfer.payload()):
+            raise ValueError('Prepared filenames differ from exact deployment manifest spelling')
         (destination / '.prepared.json').write_text(json.dumps(dict(
             schemaVersion=1, sourceCommit=commit, files=inventory), indent=2) + '\n')
         print(f'Prepared private runtime: {destination}')
