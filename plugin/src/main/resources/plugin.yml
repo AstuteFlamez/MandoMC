@@ -51,7 +51,8 @@ commands:
     permission: mandomc.credits.top
   credits:
     description: Administer credit balances
-    usage: /credits <give|take|set> <player|UUID> <amount>
+    usage: /eco <give|add|take|remove|set> <player|UUID> <amount> or /eco reset <player|UUID>
+    aliases: [eco, economy]
     permission: mandomc.credits.admin
   warp:
     description: Choose Batuu, Hoth or Tatooine

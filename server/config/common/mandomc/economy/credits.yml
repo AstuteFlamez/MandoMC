@@ -4,6 +4,7 @@ messages:
   balance: '<gray><player>: <gold>$<amount>'
   paid: '<gray>Paid <gold>$<amount> <gray>to <white><player><gray>.'
   received: '<gray>Received <gold>$<amount> <gray>from <white><player><gray>.'
+  admin-usage: '<red><italic>/eco give|add|take|remove|set <player|UUID> \<amount> · /eco reset <player|UUID> (restores $<amount>) · /eco help</italic></red>'
   adjusted: '<gray><player> now has <gold>$<amount><gray>.'
   top-title: '<gold><bold>Richest players'
   top-row: '<gray><player> <dark_gray>» <gold>$<amount>'
