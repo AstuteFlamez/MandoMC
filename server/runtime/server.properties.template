@@ -16,7 +16,8 @@ generate-structures=true
 level-name=dev_world
 gamemode=survival
 difficulty=normal
-white-list=false
+white-list=true
+enforce-whitelist=true
 require-resource-pack=true
 
 # WorldGuard owns the configured safe zones.

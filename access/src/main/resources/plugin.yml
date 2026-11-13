@@ -1,0 +1,21 @@
+name: MandoAccess
+version: '0.1.0'
+main: net.mandomc.access.AccessPlugin
+api-version: '26.1.2'
+load: STARTUP
+author: AstuteFlamez
+description: Independent MandoMC maintenance access
+commands:
+  maintenance:
+    description: Manage maintenance access
+    usage: '/maintenance on|off|status|list|add <player>|remove <player>'
+    aliases: [maint]
+    permission: mandomc.admin.maintenance
+  adminhelp:
+    description: Private administration command reference
+    permission: mandomc.admin.help
+permissions:
+  mandomc.admin.maintenance:
+    default: op
+  mandomc.admin.help:
+    default: op
