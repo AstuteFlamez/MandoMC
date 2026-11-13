@@ -13,3 +13,5 @@ disabled-natural-mobs: [SLIME, HUSK, RABBIT, CAMEL, CAMEL_HUSK, PARCHED]
 
 # Paper pre-spawn blocks natural candidates before cavalry initialization.
 # New-chunk initial vanilla entities are suppressed; existing chunks and custom/command/breeding/spawner entities stay.
+
+disable-all-natural-mobs: true

@@ -1,5 +1,21 @@
 # Resume here
 
+## Compact resource pack (2026-11-13)
+
+Removed generator-specific artwork notes, prompts and unused high-resolution source export from the current resource-pack files. Kept the final texture and third-party credits/licenses. Build output minifies JSON, removes non-rendering PNG metadata and recompresses unchanged scanlines with level-nine DEFLATE. ZIP decreases from 2,626,531 to 2,525,650 bytes (100,881 bytes); 1,173,055 unused repository bytes removed. All 73 pack/tooling checks pass (one compiled-launcher check skipped in pack-only mode), including semantic equality for every JSON resource and unchanged decompressed texture data/color metadata. Published and uploaded from checked main ac0e925215f2. Anonymous download matches production SHA-1 6009a5c22fe29576e330f0813f3a870a4ca255db and passes ZIP integrity. Activation awaits the manual restart. Next action: restart PebbleHost and reconnect to apply the compact pack.
+
+
+
+## DevWorld decorations and natural-spawn policy (2026-11-13)
+
+DevWorld survival edits now bypass only the frozen planet-backup requirement; territory, clan and event cancellations remain authoritative. Reproduced placement failure on the old build, then verified all four helmets and the Rancor skull on six faces, exact item recovery, cancellation/refund handling, and custom/breeding/command spawn exemptions in an isolated full-stack server (827 assertions). The global natural-spawn switch now suppresses all living vanilla types through both spawn hooks and new-chunk handling. All 318 Java tests pass. Production activation remains pending its manual restart. Checked main ac0e925215f2 was uploaded successfully; the production receipt confirms restartRequired=true. No restart was sent. Next action: manually restart PebbleHost, then test helmet sneak-placement and skull placement in DevWorld.
+
+
+## Scoreboard player-name hotfix (2026-11-12)
+
+Production HUD overrides used unsupported `<sidebar-player>` in both normal and combat layouts, while PlayerHud and bundled defaults use `<player>`. Replaced both override tags with the supported placeholder. Added a regression test that renders the actual name row from bundled and production configurations in both layouts. `./scripts/build.sh` passes all 318 Java tests (314 gameplay, 4 access). Production upload/restart and in-client verification remain pending. Next action: promote the checked hotfix through hotfix into main, then manually restart PebbleHost and verify the name in both scoreboard layouts.
+
+
 ## Production live; automated upload validation (2026-11-12)
 
 The rebuilt server is live on PebbleHost from checked main 55748b04ad5fa3750aa67248a60c7e1939656473. The executable-JAR launcher loads the required redstone agent before unchanged pinned Paper 26.1.2-74 on Java 25. Production logs show all gameplay readiness markers and zero startup errors; every managed file matches its checked source hash. Public Minecraft and NuVotifier endpoints respond at 142.4.206.185 ports 25565 and 19132, with play.mandomc.net resolving to the dedicated IP. Maintenance and whitelists are disabled while owner records stay private.
@@ -14,7 +30,7 @@ The main b2c6e07 runtime is activated on PebbleHost with the old server retained
 
 ## Voting banner (2026-11-12)
 
-Added `docs/assets/server-banner.png` beside the server icon on the main checkout. Original pixel art drawn directly at 468 × 60; copied byte-for-byte without scaling. Verified PNG dimensions and source equality. No unfinished asset work. Next action: upload the banner to the voting-site listings.
+Added `docs/assets/server-banner.png` beside the server icon on the main checkout. Original pixel art drawn directly at 468 × 60; copied byte-for-byte without scaling. Verified PNG dimensions and source equality. Uploaded and saved on all five voting listings on 2026-11-13: Minecraft-MP, Minecraft Server List, MinecraftServers.org, Minecraft.Buzz and Planet Minecraft. The JPG-only Minecraft Server List uses a high-quality format conversion at the same 468×60 size; the others use the original PNG. Public pages or save confirmations were verified. No unfinished banner work. Next action: observe listing traffic during alpha.
 
 ## Voting migration addition (2026-11-12)
 

@@ -400,7 +400,7 @@ public final class ProgressionProbe extends JavaPlugin implements Listener {
         location.getChunk().load();
         for(EntityType type:List.of(EntityType.SLIME,EntityType.HUSK,EntityType.RABBIT,EntityType.CAMEL,EntityType.CAMEL_HUSK,EntityType.PARCHED)) {
             for(var reason:CreatureSpawnEvent.SpawnReason.values()) {
-                boolean expected=reason==CreatureSpawnEvent.SpawnReason.NATURAL || reason==CreatureSpawnEvent.SpawnReason.CHUNK_GEN;
+                boolean expected=switch(reason){case NATURAL, CHUNK_GEN, PATROL, REINFORCEMENTS, VILLAGE_DEFENSE, VILLAGE_INVASION, JOCKEY, MOUNT, OCELOT_BABY, NETHER_PORTAL, SILVERFISH_BLOCK -> true; default -> false;};
                 check(mando.rules().disabledNaturalSpawn(type,reason)==expected,"natural-only blacklist " + type + " " + reason);
             }
             var before=new com.destroystokyo.paper.event.entity.PreCreatureSpawnEvent(location,type,CreatureSpawnEvent.SpawnReason.NATURAL);
@@ -411,8 +411,9 @@ public final class ProgressionProbe extends JavaPlugin implements Listener {
                 var explicit=location.getWorld().spawnEntity(location,type,reason);check(explicit.isValid(),"explicit spawn retained " + type + " " + reason);explicit.remove();
             }
         }
-        check(!mando.rules().disabledNaturalSpawn(EntityType.PIG,CreatureSpawnEvent.SpawnReason.NATURAL)
-                && !mando.rules().disabledNaturalSpawn(EntityType.ZOMBIE,CreatureSpawnEvent.SpawnReason.NATURAL),"custom model hosts and generic mobs not globally banned");
+        check(mando.rules().disabledNaturalSpawn(EntityType.PIG,CreatureSpawnEvent.SpawnReason.NATURAL)
+                && mando.rules().disabledNaturalSpawn(EntityType.ZOMBIE,CreatureSpawnEvent.SpawnReason.NATURAL)
+                && !mando.rules().disabledNaturalSpawn(EntityType.PIG,CreatureSpawnEvent.SpawnReason.CUSTOM),"all vanilla natural mobs blocked while custom model hosts remain allowed");
         var generated=location.getWorld().spawnEntity(location,EntityType.CAMEL,CreatureSpawnEvent.SpawnReason.DEFAULT);
         var custom=location.getWorld().spawnEntity(location.clone().add(1,0,0),EntityType.CAMEL,CreatureSpawnEvent.SpawnReason.CUSTOM);
         var named=location.getWorld().spawnEntity(location.clone().add(2,0,0),EntityType.CAMEL,CreatureSpawnEvent.SpawnReason.DEFAULT);named.customName(Component.text("Keep named fixture"));

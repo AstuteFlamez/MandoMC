@@ -23,4 +23,4 @@ Official base pack delivered unmodified from Modrinth. Diamond/netherite block a
 
 Original animated green laser: recovered unchanged from the pinned MandoPack archive; namespaced model references only.
 
-Electrum storage-block plate: original AI-generated artwork, created with OpenAI imagegen for MandoMC (2026-11-09), normalized to 32px.
+Electrum storage-block plate: MandoMC, 32px.

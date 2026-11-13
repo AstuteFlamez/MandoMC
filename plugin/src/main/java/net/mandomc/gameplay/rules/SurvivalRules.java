@@ -44,6 +44,7 @@ public final class SurvivalRules implements Listener {
     private final boolean vanillaWeapons;
     private final boolean dimensions;
     private final boolean vanillaArmorCrafting;
+    private final boolean allNaturalMobs;
     private final Set<EntityType> disabledNaturalMobs = EnumSet.noneOf(EntityType.class);
     private final Predicate<ItemStack> saber;
     private final ItemCatalog items;
@@ -61,6 +62,7 @@ public final class SurvivalRules implements Listener {
         vanillaWeapons = config.getBoolean("disable-vanilla-weapons", true);
         dimensions = config.getBoolean("disable-nether-and-end", true);
         vanillaArmorCrafting = config.getBoolean("disable-vanilla-armor-crafting", true);
+        allNaturalMobs = config.getBoolean("disable-all-natural-mobs", true);
         var disabled = config.contains("disabled-natural-mobs")
                 ? config.getStringList("disabled-natural-mobs")
                 : List.of("SLIME", "HUSK", "RABBIT", "CAMEL", "CAMEL_HUSK", "PARCHED");
@@ -70,6 +72,9 @@ public final class SurvivalRules implements Listener {
             } catch (IllegalArgumentException error) {
                 throw new IllegalArgumentException("rules/survival.yml: invalid disabled-natural-mobs entry " + type, error);
             }
+        }
+        if (allNaturalMobs) for (var type : EntityType.values()) {
+            if (type.isAlive()) disabledNaturalMobs.add(type);
         }
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         new net.mandomc.integrations.paper.RedstoneCircuitBoundary(plugin);
@@ -84,7 +89,12 @@ public final class SurvivalRules implements Listener {
 
     public boolean disabledNaturalSpawn(EntityType type, CreatureSpawnEvent.SpawnReason reason) {
         return disabledNaturalMobs.contains(type) && (reason == CreatureSpawnEvent.SpawnReason.NATURAL
-                || reason == CreatureSpawnEvent.SpawnReason.CHUNK_GEN);
+                || reason == CreatureSpawnEvent.SpawnReason.CHUNK_GEN
+                || allNaturalMobs && switch (reason) {
+                    case PATROL, REINFORCEMENTS, VILLAGE_DEFENSE, VILLAGE_INVASION,
+                            JOCKEY, MOUNT, OCELOT_BABY, NETHER_PORTAL, SILVERFISH_BLOCK -> true;
+                    default -> false;
+                });
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
