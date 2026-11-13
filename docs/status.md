@@ -1,5 +1,10 @@
 # Resume here
 
+## Compact resource pack (2026-11-13)
+
+Removed generator-specific artwork notes, prompts and unused high-resolution source export from the current resource-pack files. Kept the final texture and third-party credits/licenses. Build output minifies JSON, removes non-rendering PNG metadata and recompresses unchanged scanlines with level-nine DEFLATE. ZIP decreases from 2,626,531 to 2,525,650 bytes (100,881 bytes); 1,173,055 unused repository bytes removed. All 73 pack/tooling checks pass (one compiled-launcher check skipped in pack-only mode), including semantic equality for every JSON resource and unchanged decompressed texture data/color metadata. Publication is pending. Next action: merge and publish the compact pack through the standard workflow.
+
+
 ## Scoreboard player-name hotfix (2026-11-12)
 
 Production HUD overrides used unsupported `<sidebar-player>` in both normal and combat layouts, while PlayerHud and bundled defaults use `<player>`. Replaced both override tags with the supported placeholder. Added a regression test that renders the actual name row from bundled and production configurations in both layouts. `./scripts/build.sh` passes all 318 Java tests (314 gameplay, 4 access). Production upload/restart and in-client verification remain pending. Next action: promote the checked hotfix through hotfix into main, then manually restart PebbleHost and verify the name in both scoreboard layouts.

@@ -11,7 +11,7 @@
     28,
     28
   ],
-  "postProcessing": "Crop transparent source bounds; nearest-neighbour resize to fit 24x24; centre in a 32x32 RGBA canvas. Larger generated originals are artwork sources, not deployed textures.",
+  "postProcessing": "Crop transparent source bounds; nearest-neighbour resize to fit 24x24; centre in a 32x32 RGBA canvas. Full-resolution source artwork is not included in deployed textures.",
   "referenceStyle": [
     "Existing Hoth and Tatooine 32px planet icons"
   ],

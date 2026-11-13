@@ -121,7 +121,7 @@
     },
     {
       "target": "minecraft/textures/block/redstone_block.png",
-      "generatedSource": "art-sources/electrum-block-32.png",
+      "artSource": "art-sources/electrum-block-32.png",
       "sourceSha256": "c7f1e908551dfd07f275c44cf4c7923ca29c338e3f0e07bb1a594bee4a91d136",
       "outputSha256": "c7f1e908551dfd07f275c44cf4c7923ca29c338e3f0e07bb1a594bee4a91d136"
     },
