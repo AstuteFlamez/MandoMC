@@ -1,5 +1,9 @@
 # Resume here
 
+## Fixed-height leaderboard style (2026-11-13)
+
+Kills, balance and Ilum now use uppercase title/subtitle, a spacer, and ten permanent numbered positions; vacant slots contain only the rank. Red/green/purple text stays transparent and upright. A configurable 0.35-block lift preserves saved ground anchors while keeping the fixed panel clear of the ground. Ranking/stat/credit owners and Ilum chat output are unchanged. All 319 Java tests pass. The isolated Paper probe passes 72 assertions across all three boards and shuts down cleanly; production activation remains pending. See [feature](features/world-leaderboards.md). Next action: complete native verification and promote the checked presentation update.
+
 ## Compact resource pack (2026-11-13)
 
 Removed generator-specific artwork notes, prompts and unused high-resolution source export from the current resource-pack files. Kept the final texture and third-party credits/licenses. Build output minifies JSON, removes non-rendering PNG metadata and recompresses unchanged scanlines with level-nine DEFLATE. ZIP decreases from 2,626,531 to 2,525,650 bytes (100,881 bytes); 1,173,055 unused repository bytes removed. All 73 pack/tooling checks pass (one compiled-launcher check skipped in pack-only mode), including semantic equality for every JSON resource and unchanged decompressed texture data/color metadata. Published and uploaded from checked main ac0e925215f2. Anonymous download matches production SHA-1 6009a5c22fe29576e330f0813f3a870a4ca255db and passes ZIP integrity. Activation awaits the manual restart. Next action: restart PebbleHost and reconnect to apply the compact pack.
