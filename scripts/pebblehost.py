@@ -355,7 +355,9 @@ def verify_startup(sftp):
     required = ('Running Java 25', 'Loading Paper 26.1.2-74', 'Done (',
                 'Arrival enabled:', 'Native clans ready:', 'Native crates ready;',
                 'Redstone circuits disabled in all worlds', 'Travel guides ready:',
-                'Ambient Massiffs ready:', 'World leaderboards ready:')
+                'Ambient Massiffs ready:', 'World leaderboards ready:',
+                '[Votifier] Votifier enabled on socket /0.0.0.0:19132.',
+                '[VotingPlugin] Enabled VotingPlugin 7.1.1')
     missing = [text for text in required if text not in log]
     if missing or '/ERROR]' in log or '/SEVERE]' in log:
         raise ValueError('Startup not healthy; inspect latest.log. Missing markers: ' + ', '.join(missing))
