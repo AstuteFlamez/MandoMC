@@ -21,6 +21,8 @@ jobs:
         with:
           python-version: '3.12'
       - name: Test pack deployment
+        env:
+          MANDOMC_PACK_ONLY: 'true'
         run: |
           python3 -m pip install -r deployment/requirements.txt
           python3 scripts/build-resource-pack.py
