@@ -1,5 +1,10 @@
 # Resume here
 
+## Naboo selected; isolated capture in progress (2026-11-13)
+
+On `bilal/naboo-dev`, replaced the cancelled Alderaan plan with a forested lakeshore section of the legacy Naboo map. The 500×500 border centers at (-13552,3440); only arrival chunk (-847,209) is safe, with wilderness elsewhere. Added protected `/warp naboo`, Galaxy Map slot 15 and a refined legacy icon edited directly at native 32×32 without resizing. The reactor passes 314 gameplay plus 4 access tests; all 72 Python checks and the pack build pass. A private Paper rehearsal is capturing 1023 Naboo originals while retaining 2115 previous originals. No Alderaan changes were applied to dev, and no production files are involved. Next action: finish native capture/checks, then apply the backed-up Naboo-only release to development.
+
+
 ## Production live; automated upload validation (2026-11-12)
 
 The rebuilt server is live on PebbleHost from checked main 55748b04ad5fa3750aa67248a60c7e1939656473. The executable-JAR launcher loads the required redstone agent before unchanged pinned Paper 26.1.2-74 on Java 25. Production logs show all gameplay readiness markers and zero startup errors; every managed file matches its checked source hash. Public Minecraft and NuVotifier endpoints respond at 142.4.206.185 ports 25565 and 19132, with play.mandomc.net resolving to the dedicated IP. Maintenance and whitelists are disabled while owner records stay private.

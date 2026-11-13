@@ -24,5 +24,16 @@
     "batuu": "Create ONE Minecraft inventory planet icon of BATUU, NOT NABOO. Style references: attached Hoth and Tatooine icons only determine the tiny spherical 32x32 pixel-art style, lighting and transparent margin. Subject: a round Batuu world: muted olive and forest-green terrain, warm ochre/tan exposed valleys, deep muted blue waterways, and a few very readable charcoal-black petrified spire silhouettes integrated into the globe surface, referencing Black Spire Outpost. Do not use Naboo's smooth green-and-blue Earth-like continental pattern. Keep the silhouette essentially circular; no big scenery outside the globe. Icon-grade chunky pixel clusters on an exact 32-by-32 logical grid shown enlarged, crisp square pixels, upper-left light, dark lower-right shading, no smooth illustration. A 3-4 logical pixel transparent margin, centred. No text, no label, no badge, no stars, no external glow. Genuinely transparent background.",
     "hoth": "ONE Minecraft inventory icon for HOTH. Match the attached 32x32 Hoth and Tatooine icons' tiny round globe style. Improve Hoth into a shaded icy blue and white sphere, cracked snowfields and glacier facets, with a tiny but legible dark recessed Rebel Echo Base hangar doorway and snowy bunker silhouette integrated into the lower-front part of the sphere. The motif is a subtle readable 7-10 logical-pixel landmark, not a large separate illustration or scenery spilling outside the globe. Keep a circular planet silhouette, upper-left highlight, lower-right deep blue shade, limited icy pixel palette, chunky precise 32x32 logical pixel-art grid enlarged with sharp square pixels. Centre the globe with 4 logical pixels of transparent margin matching reference. No text, badges, stars, exterior glow, smooth painting, or outlines. Genuinely transparent background.",
     "tatooine": "ONE Minecraft inventory icon for TATOOINE. Match the attached 32x32 Hoth and Tatooine reference icons' tiny shaded round globe style. Improve Tatooine as a warm ochre/tan and orange desert sphere with dune-like pixel clusters and a small unmistakable Jabba's Palace landmark integrated into its lower-front surface: a sand-coloured rounded dome/rotunda and one narrow tall cylindrical tower with dark slit windows, readable as a compact 8-11 logical-pixel motif. No huge building illustration or scenery outside the sphere. Keep circular planet silhouette, upper-left highlights and dark lower-right shading, chunky crisp square pixels on an enlarged exact 32x32 logical grid, 4 logical pixels of genuine transparent margin. No text, badge, stars, exterior glow, smooth painting, or black outline."
+  },
+  "naboo": {
+    "method": "Direct pixel editing of the native 32x32 legacy Naboo asset; no resizing or downscaling",
+    "source": "art-sources/planets/naboo-legacy.png",
+    "legacyArchiveEntry": "assets/minecraft/textures/custom/planets/naboo.png",
+    "generator": "scripts/content/build-naboo-icon.py",
+    "dimensions": [
+      32,
+      32
+    ],
+    "changes": "Preserved globe and continent pixels; restrained green/blue palette, stepped upper-left lighting, lower-right shading and six cloud highlight pixels."
   }
 }

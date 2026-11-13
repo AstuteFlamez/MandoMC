@@ -149,3 +149,11 @@ UNIDENTIFIED LEGACY ROOT WORLD
   Buy/download: [IDENTIFY WORLD AND ADD SOURCE].
   Installation: not selected; do not import until identified.
   Replacement: omit until its purpose is known.
+
+Naboo selected development slice (2026-11-13)
+  Source: Operator-supplied legacy Naboo world; the original archive stays private.
+  Key: minecraft:naboo; four original region files intersect the selected 500x500 area.
+  Border: center (-13552,3440), size 500 blocks. Forested lakeshore, meadows and hills.
+  Arrival: (-13550.5,101,3359.5); only chunk (-847,209) is safezone.
+  Existing full wilderness chunks receive native originals before play; no seed regeneration.
+  See docs/features/naboo.md. This replaces the cancelled Alderaan request.
