@@ -32,7 +32,7 @@ public final class MassiffMotionSmoke extends JavaPlugin {
    boolean walking=Math.pow(at.getX()-old.getX(),2)+Math.pow(at.getZ()-old.getZ(),2)>1e-7;
    still.put(id,walking?0:still.getOrDefault(id,0)+1);
    var handler=dogs.model(id).active().getAnimationHandler();var walk=handler.getAnimation("walk");
-   if(walking&&samples>5)check(walk!=null&&!walk.isEnded()&&!walk.isFinished(),"Every moving sample retains walk");
+   if(walking&&samples>5)check(walk!=null&&!walk.isEnded()&&walk.getPhase()!=com.ticxo.modelengine.api.animation.property.IAnimationProperty.Phase.LERPOUT,"Every moving sample retains walk");
    if(still.get(id)>10)check(handler.isPlayingAnimation("idle")&&!handler.isPlayingAnimation("walk"),"Stationary feet use idle");
    check(handler.getAnimations().size()<=1,"No competing animation loops");
    var renderer=(DisplayRenderer)dogs.model(id).active().getModelRenderer();var foot=renderer.getRendered().get("left_front_leg");var torso=renderer.getRendered().get("body");

@@ -37,10 +37,14 @@ public final class AmbientMassiffModel implements AutoCloseable {
         if (handler.isPlayingAnimation(other)) handler.forceStopAnimation(other);
         var animation = handler.getAnimation(clip);
         // Cached intent is insufficient after a vendor reload or lost animation property.
-        // Keep a healthy loop advancing instead of restarting its first frame every tick.
-        if (walking == null || walking != move || animation == null || animation.isEnded() || animation.isFinished()) {
-            animation = handler.playAnimation(clip, 3, 3, 1, true);
+        // A LOOP property may report isFinished() at its length boundary before wrapping;
+        // only an ended/stopping property is lost. Replacing a boundary frame restarts lerp-in.
+        if (walking == null || walking != move || animation == null || animation.isEnded() || animation.getPhase() == com.ticxo.modelengine.api.animation.property.IAnimationProperty.Phase.LERPOUT) {
+            animation = handler.playAnimation(clip, .1, .1, 1, true);
             if (animation == null) throw new IllegalStateException("Missing Massiff ambient animation");
+            // API blend durations are seconds, not ticks. Merge the short transition
+            // into the advancing gait rather than holding its first pose during lerp-in.
+            animation.setMergeLerp(true);
             animation.setForceLoopMode(com.ticxo.modelengine.api.animation.BlueprintAnimation.LoopMode.LOOP);
         }
         walking = move;
