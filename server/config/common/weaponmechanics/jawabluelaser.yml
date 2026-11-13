@@ -1,0 +1,24 @@
+jawabluelaser:
+  Projectile_Settings:
+    Type: ARMOR_STAND
+    Projectile_Item_Or_Block:
+      Type: ECHO_SHARD
+      Custom_Model_Data: 41
+      Item_Model: mandomc:projectiles/jawabluelaser
+    Minimum:
+      Speed: 60
+    Gravity: 0
+    Drag:
+      Base: 0.99
+      In_Water: 0.96
+      When_Raining_Or_Snowing: 0.98
+  Through:
+    Maximum_Through_Amount: 2
+    Blocks:
+      Default_Speed_Multiplier: 0.8
+      Whitelist: true
+      List:
+      - $GLASS
+    Entities:
+      Allow_Any: true
+      Default_Speed_Multiplier: 0.7

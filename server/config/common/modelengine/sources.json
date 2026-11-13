@@ -66,6 +66,18 @@
       "sha256": "d1924c408712f2fe9314ba6643a575f1f27dedba5978bfe6a63a8e068f8f1174",
       "destination": "server/config/common/modelengine/blueprints/rancor.bbmodel",
       "changes": "Normalize ID, strip local texture paths and finish attack clips. Original geometry, embedded textures, hitbox, keyframes and Override flags retained. Original scale 2 is applied by model attachment."
+    },
+    {
+      "source": "ModelEngine/blueprints/jawa_brown.bbmodel",
+      "sha256": "71d5da87d77f2ac89ed3381a08395ef5a91b3e59c56a1b183eeb3844f7b8604d",
+      "destination": "server/config/common/modelengine/blueprints/jawa_brown.bbmodel",
+      "changes": "Preserve original rig, embedded texture and keyframes. Strip local texture paths; enable animation override; attack/death finish once."
+    },
+    {
+      "source": "ModelEngine/blueprints/jawa_black.bbmodel",
+      "sha256": "a6d5c0f86e0f5dc4831f374bde97690c4d3ee3b9710c4d078a7e8ef40382a125",
+      "destination": "server/config/common/modelengine/blueprints/jawa_black.bbmodel",
+      "changes": "Rebuilt with the working brown Jawa geometry, full bone hierarchy and unchanged animations. Preserve original gray robe atlas; use the brown face atlas on the restored face bone only. Runtime face-only red tint and full brightness produce red eyes without tinting the gray hood."
     }
   ]
 }

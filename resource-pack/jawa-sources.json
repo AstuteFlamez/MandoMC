@@ -1,0 +1,65 @@
+{
+  "source": "Pinned public MandoPack archive; legacy rigs recorded in ModelEngine sources.json",
+  "files": [
+    {
+      "source": "assets/minecraft/models/item/blasters/ion/ion.json",
+      "sha256": "35c3793e033cb250c8a62bff1f7fd5add0a01a5a9fe5a68cfbaef67a3bb1b847",
+      "destination": "resource-pack/src/assets/mandomc/models/item/blasters/jawa_ionization.json"
+    },
+    {
+      "source": "assets/minecraft/models/item/blasters/ion/ionscope.json",
+      "sha256": "d35534e5402ba155924047a0b9af5f6b64a1939efda41c80daf1766939abcf7b",
+      "destination": "resource-pack/src/assets/mandomc/models/item/blasters/jawa_ionization_scope.json"
+    },
+    {
+      "source": "assets/minecraft/models/item/blasters/ion/ionsprint.json",
+      "sha256": "f32ac16740dee0c9f3ebea309d55397f1803debd271aa7768c331dff79f151a0",
+      "destination": "resource-pack/src/assets/mandomc/models/item/blasters/jawa_ionization_sprint.json"
+    },
+    {
+      "source": "assets/minecraft/textures/custom/blasters/ion.png",
+      "sha256": "b948bb52a901159a0c43500da88da98d94899e72dc7f633be79ed6fa75575620",
+      "destination": "resource-pack/src/assets/mandomc/textures/item/blasters/jawa_ionization.png"
+    },
+    {
+      "source": "assets/minecraft/models/item/ammos/ionized_energy_cells.json",
+      "sha256": "90dfddf19e73ceda2b2581886440ca5e56fa40cd9ada1bb733a40d43b9cd7c28",
+      "destination": "resource-pack/src/assets/mandomc/models/item/ammo/ionized_energy_cells.json"
+    },
+    {
+      "source": "assets/minecraft/textures/custom/ammos/ionized_energy_cells.png",
+      "sha256": "1a4dbd3c6cff3d9b4fbf801cee9c2b336ca5140c7a59d17167f422f1db6c7d19",
+      "destination": "resource-pack/src/assets/mandomc/textures/item/ammo/ionized_energy_cells.png"
+    },
+    {
+      "source": "assets/minecraft/models/item/projectiles/bluelaser.json",
+      "sha256": "96ef42dcff92182b3ee8add109c04a6ec2247b1f43c47a15743091b883fc482b",
+      "destination": "resource-pack/src/assets/mandomc/models/item/projectiles/jawabluelaser.json"
+    },
+    {
+      "source": "assets/minecraft/textures/custom/projectiles/energy_blue.png",
+      "sha256": "5f960561c8b41e0c38bf03c374a34ceb469ac85b8a034423be56204f5f2413c8",
+      "destination": "resource-pack/src/assets/mandomc/textures/item/projectiles/jawabluelaser.png"
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/jawa1.ogg",
+      "sha256": "d0a3f8c84453bfe3a6b67de4127176687ebee4d107035dda22f1997ba8c4d3cc",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/jawa1.ogg"
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/jawa2.ogg",
+      "sha256": "1d5c85a8d03d7ab27a0bb24c180695ce1b0be449bc3fba4319213c8ef5f7cf5d",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/jawa2.ogg"
+    },
+    {
+      "source": "assets/minecraft/sounds/mobs/jawa3.ogg",
+      "sha256": "f1e8febc3b1c44a20c4a548c2b4f9dbf6c1f20d006296671a45e1cf0c01439a4",
+      "destination": "resource-pack/src/assets/mandomc/sounds/mobs/jawa3.ogg"
+    },
+    {
+      "source": "assets/minecraft/sounds/shoot/dc-15.ogg",
+      "sha256": "e122a8f1f554e93533b370e91a6a7d9f7ca7855bf14d2fb6fd1901ec5dad20ff",
+      "destination": "resource-pack/src/assets/mandomc/sounds/shoot/dc-15.ogg"
+    }
+  ]
+}
