@@ -1,0 +1,17 @@
+{
+  "schema-version": 1,
+  "items": {
+    "gamorrean_axe": {
+      "material": "IRON_AXE",
+      "name": "<green>Gamorrean Axe",
+      "custom-model-data": 1,
+      "item-model": "mandomc:melee/gamorrean_axe",
+      "rarity": "uncommon",
+      "category": "weapons",
+      "lore": [
+        "<gray>A heavy melee weapon,",
+        "<gray>wielded by Gamorrean Guards."
+      ]
+    }
+  }
+}

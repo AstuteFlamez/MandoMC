@@ -72,6 +72,7 @@ public final class SurvivalRules implements Listener {
             }
         }
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        new net.mandomc.integrations.paper.RedstoneCircuitBoundary(plugin);
         plugin.getServer().getPluginManager().registerEvents(new net.mandomc.gameplay.items.OreDrops(items), plugin);
         plugin.getServer().getPluginManager().registerEvents(new net.mandomc.gameplay.items.MetalMaterials(items), plugin);
     }

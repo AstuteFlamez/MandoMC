@@ -1,0 +1,10 @@
+schema-version: 1
+# Working food choices; used by native pathfinding attraction in either hand.
+bantha-food: HAY_BLOCK
+dewback-food: CACTUS
+# One food per valid attempt; Creative players retain food.
+tame-chance: 0.3333333333333333
+healing: 4
+baby-growth-fraction: 0.1
+love-ticks: 600
+breed-cooldown-ticks: 6000

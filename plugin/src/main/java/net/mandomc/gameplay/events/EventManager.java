@@ -93,6 +93,17 @@ public final class EventManager implements Listener, AutoCloseable {
         var nextEvents=new LinkedHashMap<String,ManagedEvent>();
         var nextEntries=new LinkedHashMap<String,EventRotation.Entry>();
         var kothConfig=read("events/koth.yml");
+        // One-time migration of the previously deferred reward. Later operator overrides remain explicit.
+        if(kothConfig.getInt("clan-rewards-version",0)<1) {
+            kothConfig.set("clan-rewards-version",1);kothConfig.set("rewards.enabled",true);
+            kothConfig.set("rewards.crate","koth");
+            try(var reader=new java.io.InputStreamReader(java.util.Objects.requireNonNull(plugin.getResource("events/koth.yml")),
+                    java.nio.charset.StandardCharsets.UTF_8)) {
+                var defaults=YamlConfiguration.loadConfiguration(reader);
+                if(!kothConfig.isString("messages.reward"))kothConfig.set("messages.reward",defaults.getString("messages.reward"));
+            }
+            kothConfig.save(new File(plugin.getDataFolder(),"events/koth.yml"));
+        }
         if(!"koth".equals(kothConfig.getString("id"))) throw new IllegalArgumentException("events/koth.yml: expected id koth");
         var koth=new KothEvent(plugin,kothConfig);
         nextEvents.put(koth.id(),koth);
@@ -104,6 +115,10 @@ public final class EventManager implements Listener, AutoCloseable {
             var jabba=new net.mandomc.gameplay.dungeon.JabbaEvent(plugin,catalog,jabbaConfig);
             nextEvents.put(jabba.id(),jabba);
             nextEntries.put(jabba.id(),new EventRotation.Entry(jabba.id(),jabbaConfig.getInt("weight",-1),jabbaConfig.getInt("cooldown-cycles",-1),jabbaConfig.getBoolean("enabled",false)));
+            var beskarConfig=read("events/beskar.yml");
+            var beskar=new net.mandomc.gameplay.events.beskar.BeskarEvent(plugin,catalog,beskarConfig);
+            nextEvents.put(beskar.id(),beskar);
+            nextEntries.put(beskar.id(),new EventRotation.Entry(beskar.id(),beskarConfig.getInt("weight",0),beskarConfig.getInt("cooldown-cycles",1),beskarConfig.getBoolean("enabled",false)));
         } catch(Exception error) {nextEvents.values().forEach(ManagedEvent::close);throw error;}
         events.values().forEach(ManagedEvent::close);
         config=nextConfig;zone=nextZone;schedule=nextSchedule;startMinute=nextMinute;
@@ -211,9 +226,14 @@ public final class EventManager implements Listener, AutoCloseable {
     private ItemStack icon(Material material,Component name,List<Component> lore) {
         var item=new ItemStack(material);var meta=item.getItemMeta();meta.displayName(name);meta.lore(lore);item.setItemMeta(meta);return item;
     }
+    private List<Component> eventLore(String id,Component... base) {
+        var result=new java.util.ArrayList<Component>(List.of(base));
+        if(id!=null&&events.get(id) instanceof net.mandomc.gameplay.events.beskar.BeskarEvent beskar)result.add(beskar.status());
+        return List.copyOf(result);
+    }
     private void decorate(Inventory inventory) {
-        inventory.setItem(11,icon(Material.BEACON,text("current",name(active),""),List.of(text(active==null?"idle":"click","",""))));
-        inventory.setItem(13,icon(Material.CLOCK,text("next",name(queued),""),List.of(text("starts-in","",""),text("click","",""))));
+        inventory.setItem(11,icon(Material.BEACON,text("current",name(active),""),eventLore(active,text(active==null?"idle":"click","",""))));
+        inventory.setItem(13,icon(Material.CLOCK,text("next",name(queued),""),eventLore(queued,text("starts-in","",""),text("click","",""))));
         int total=entries.values().stream().filter(EventRotation.Entry::enabled).mapToInt(EventRotation.Entry::weight).sum();
         var chances=entries.values().stream().filter(EventRotation.Entry::enabled)
                 .map(e->text("chance-entry",name(e.id()),String.format(Locale.ROOT,"%.1f",total==0?0:100d*e.weight()/total))).toList();
@@ -224,7 +244,7 @@ public final class EventManager implements Listener, AutoCloseable {
         if(!menus.containsValue(e.getView().getTopInventory()))return;
         e.setCancelled(true);
         if(e.getWhoClicked() instanceof Player p && e.isLeftClick() && !e.isShiftClick()
-                && (e.getRawSlot()==11 || e.getRawSlot()==13)) {String target=e.getRawSlot()==11?active:queued;p.closeInventory();if(target!=null)warps.request(p,target.equals("jabba")?"tatooine":"hoth");}
+                && (e.getRawSlot()==11 || e.getRawSlot()==13)) {String target=e.getRawSlot()==11?active:queued;p.closeInventory();if(target!=null)warps.request(p,target.equals("beskar")?"mandalore":target.equals("jabba")?"tatooine":"hoth");}
     }
     @EventHandler public void drag(InventoryDragEvent e) {if(menus.containsValue(e.getView().getTopInventory()))e.setCancelled(true);}
     @EventHandler public void closed(InventoryCloseEvent e) {menus.remove(e.getPlayer().getUniqueId(),e.getInventory());}

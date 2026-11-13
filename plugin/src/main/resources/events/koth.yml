@@ -1,4 +1,5 @@
 schema-version: 1
+clan-rewards-version: 1
 id: koth
 enabled: true
 display-name: KOTH
@@ -14,11 +15,13 @@ settings:
   capture-seconds: 180
   maximum-seconds: 3300
 rewards:
-  enabled: false
+  enabled: true
+  crate: koth
 messages:
   start: '<gold><bold>KOTH</bold> has started on Hoth! Hold the canyon at -148, 27, 141. Use /warp hoth.'
   capturing: '<yellow><player> is capturing the canyon!'
   winner: '<green><player> captured the canyon!'
+  reward: '<gold><clan> won KOTH! <yellow><recipient> received one KOTH Crate Key. <gray>/crates open koth'
   timeout: '<yellow>KOTH ended with no winner.'
   stopped: '<yellow>KOTH was stopped.'
   waiting: '<gold>KOTH <gray>— Hold the canyon!'

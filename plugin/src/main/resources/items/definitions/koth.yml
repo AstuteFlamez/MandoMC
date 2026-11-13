@@ -1,0 +1,13 @@
+schema-version: 1
+items:
+  koth_crate_key:
+    material: TRIPWIRE_HOOK
+    custom-model-data: 0
+    name: '<gold>KOTH Crate Key'
+    rarity: epic
+    category: keys
+    lore:
+      - '<gray>Earned by winning King of the Hill.'
+      - ''
+      - '<yellow>/crates open koth'
+    item-model: mandomc:legacy/wayfarer_crate_key

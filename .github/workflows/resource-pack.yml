@@ -1,17 +1,7 @@
 name: Publish resource pack
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'resource-pack/src/**'
-      - 'resource-pack/sources.json'
-      - 'resource-pack/hosting.json'
-      - 'scripts/build-resource-pack.py'
-      - 'scripts/sync-resource-pack.py'
-      - 'scripts/tests/**'
-      - 'server/paper.lock.json'
-      - '.github/workflows/resource-pack.yml'
+  workflow_call:
   workflow_dispatch:
 
 permissions:
@@ -31,7 +21,10 @@ jobs:
         with:
           python-version: '3.12'
       - name: Test pack deployment
-        run: python3 -m unittest discover -s scripts/tests -v
+        run: |
+          python3 -m pip install -r deployment/requirements.txt
+          python3 scripts/build-resource-pack.py
+          python3 -m unittest discover -s scripts/tests -v
       - name: Build and describe pack
         run: |
           python3 scripts/build-resource-pack.py

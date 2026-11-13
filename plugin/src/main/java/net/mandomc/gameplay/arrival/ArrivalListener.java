@@ -17,7 +17,7 @@ import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/** Temporary introduction and arrival validation; the future library tutorial will replace this presentation. */
+/** Arrival validation/first-join chat; the explicit tutorial command delivers the native handbook. */
 public final class ArrivalListener implements Listener {
     private final JavaPlugin plugin;
     private final ArrivalDestinations destinations;
@@ -25,10 +25,12 @@ public final class ArrivalListener implements Listener {
     private final List<Component> tutorial;
     private final Map<String, Component> messages = new HashMap<>();
     private final org.bukkit.Location firstSpawn;
+    private final net.mandomc.gameplay.tutorial.TutorialHandbook handbook;
 
     public ArrivalListener(JavaPlugin plugin, ArrivalSettings settings, ArrivalDestinations destinations,
             YamlConfiguration language) {
         this.plugin = plugin;
+        this.handbook = new net.mandomc.gameplay.tutorial.TutorialHandbook(plugin);
         this.destinations = destinations;
         this.firstSpawn = destinations.spawn(); // Snapshot on the main thread for the async connection event.
         this.tutorialSeen = new NamespacedKey(plugin, "arrival_tutorial_v1");
@@ -80,12 +82,7 @@ public final class ArrivalListener implements Listener {
     }
 
     public boolean tutorial(CommandSender sender) {
-        if (sender instanceof Player player) {
-            showTutorial(player);
-        } else {
-            sender.sendMessage(messages.get("players-only"));
-        }
-        return true;
+        return handbook.command(sender);
     }
 
     private void showTutorial(Player player) {

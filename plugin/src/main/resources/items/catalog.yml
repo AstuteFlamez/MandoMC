@@ -20,7 +20,8 @@
     "keys": "Ĥ",
     "metals": "č",
     "tokens": "<gray>[Tokens]",
-    "tools": "ĸ"
+    "tools": "ĸ",
+    "trophies": "<font:mandomc:trophies></font>"
   },
   "external-items": {
     "e11": {
@@ -56,6 +57,11 @@
     "ee3": {
       "kind": "weapon",
       "vendor-id": "EE3",
+      "category": "weapons"
+    },
+    "jawa_ionization_blaster": {
+      "kind": "weapon",
+      "vendor-id": "Jawa_Ionization_Blaster",
       "category": "weapons"
     },
     "ionized_energy_cells": {

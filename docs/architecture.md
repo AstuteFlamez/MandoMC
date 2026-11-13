@@ -1,9 +1,16 @@
 # Gameplay architecture
+
+## Planet direction — 2026-11-09
+Batuu remains protected spawn. Tatooine and Hoth replace the standalone Survival world
+as the future safe-zone/warzone/claimable-wilderness planets. Boundaries come from the
+user. FactionsUUID remains the claim owner; no new claim system or regions are activated
+by the travel removal. See [planet wilderness](features/planet-wilderness.md).
+
 The user accepted this division on 2026-11-05. The pinned versions boot together; gameplay integration hooks still need runtime verification. Components may be replaced while preserving player behavior and content contracts.
 
 Design the [player experience](player-experience.md) first, choose the playable order, implement parameterized systems, then configure content.
 
-Player-facing group naming and commands must replace Factions and `/f`; the final identity is pending. FactionsUUID remains the selected state owner. Verify its supported command and language customization or an adapter when implementing the group interface, including help and menu output. A display-name change alone does not complete the requirement.
+MandoMC owns the native Clans direction selected on 2026-11-10. FactionsUUID is removed. The first command is `/c map` (aliases `/clan map`, `/cl map`); the chunk atlas is shared by native map/protection rules. Membership, claims and related gameplay remain deferred.
 
 Resource planets are deferred. Initial gathering and credit income use ordinary survival resources plus activity rewards. Keep future resource-planet support outside the current milestone; the ownership table below records responsibilities, not a requirement to build every capability now.
 
@@ -28,8 +35,8 @@ The new pack lives in `resource-pack/` in this repository. Its build targets the
 | Blasters and grenades | WeaponMechanics and dependencies | Acquisition, saber interaction, combat policy |
 | Animated models | ModelEngine | Vehicle controls, ownership, seats, health |
 | Dungeon mobs | MythicMobs | Runs, objectives, doors, cleanup, completion rewards |
-| Factions | FactionsUUID | Warpoints, vulnerability, controlled breaches |
-| Protected regions | WorldGuard with WorldEdit | Enforcement for every custom action |
+| Clans | Paper APIs | Native membership/claims, chunk atlas, warpoints, raids and land restoration |
+| Protected territories | Paper APIs; WorldEdit retained for staff tools | Native classification, enforcement, titles and every custom action |
 | Worlds | Paper APIs | Existing dimension loading, exact arrivals, aliases and travel |
 | Credits | MandoMC native ledger | Atomic balances, payments and admin adjustments; auction-house/reward integration deferred |
 | Items, armor, crafting | Paper APIs and resource-pack/ | Stable IDs, recipes, custom behavior |
@@ -38,8 +45,8 @@ The new pack lives in `resource-pack/` in this repository. Its build targets the
 The catalog in server/plugins.catalog.json records admission status. Installed versions and artifact hashes are in server/plugins.lock.json. Boot validation does not establish gameplay compatibility. EssentialsX and Multiverse-Core are removed. MandoMC owns the selected utility commands and migration; their old runtime data is retained for rollback. Native rank badges now format tab, nameplates and the existing chat renderer; voting remains deferred.
 
 ## Contracts
-- FactionsUUID owns membership, relations and claims. MandoMC owns pairwise warpoints keyed by stable group IDs; vendor faction power is not the raid authority. Do not mirror claims into WorldGuard.
-- WorldGuard owns static regions. Raids never override spawn/adventure-map protection.
+- ClanState/ClanStorage own native clan membership, claims, homes, activity and rivalry state. The atlas stores only static chunk zones. LandRestoration owns pre-edit terrain baselines and gradual wilderness/abandonment reset. TerritoryPolicy/TerritoryService own classification and enforcement; Bukkit services expose one authority to existing attack, vehicle, mob and arrival adapters. Pairwise warpoints remain keyed by stable group IDs.
+- MandoMC owns static territory protection. Raids never override safezone/warzone terrain rules. WorldGuard is removed; its local data is archived.
 - The native CreditLedger owns current credit balances. Future auction currency/integration details require approval; do not introduce a second balance writer or restore the old SQL mirror.
 - WeaponMechanics generates its weapons and handles projectiles. MandoMC references vendor IDs instead of duplicating weapon definitions.
 - MythicMobs owns mob definitions/AI. MandoMC tracks run-owned instances. Each reward has exactly one writer.
@@ -61,20 +68,20 @@ KOTH owns a continuous capture timer keyed to the capturing group's stable ID, o
 
 Warpoints start at zero per pair of groups. An attributed opposing-group PvP kill adds one to the killer group's net score against the victim group; the reverse view decreases by one. Store one consistent rivalry result and apply each death once, including combat-logout deaths. Event PvP counts; unrelated group relationships do not change. Death retains normal full-loot behavior. Unaffiliated and non-attributed deaths need explicit handling.
 
-Initial raid eligibility is directional: `score(attackerGroup, defenderGroup) >= configuredThreshold`, with a positive threshold whose numeric value is not yet chosen. This can authorize an attack while defenders are offline. During an active raid, a drop below the threshold starts a configurable continuation window for that attacker/defender pair. The expiry is measured from the score drop, not the initial breach. Further raid actions require either a qualifying current score or the valid continuation window. Active-raid detection and refresh/retrigger semantics still need a feature-brief decision. The source event implementations are recovery material, not the authoritative specification.
+Raid eligibility is directional at +10. The first successful approved explosive breach starts a fixed one-hour raid, resets that rivalry to zero and freezes scoring for that pair until expiry. Other pairs continue scoring. Further breaches cannot extend the deadline; defenders may be offline and retain ownership. After expiry the attacker needs ten fresh net kills. This 2026-11-10 user decision supersedes the earlier score-drop continuation-window design. Unaffiliated, same-clan and unattributed deaths do not change rivalries. See [native clans](features/native-clans.md).
 
 ## Custom damage
 A weapon adapter receives an attributed hit, asks combat policy about regions, factions and defenses, then cancels or modifies a supported vendor event. Exactly one path applies damage. Vehicles and area damage follow the same policy and preserve attacker attribution.
 
 ## Explosive raiding
-Check world/static protection, claim owner, attributed attacking group, the pairwise score or valid continuation window, and explosive type. Only approved explosions may breach an eligible rival's base, including offline. Claims retain their owners. Hand-breaking and takeover remain denied; looting accessible chests is allowed for eligible attackers. Unrelated groups may enter an existing hole and pick up dropped items, but may not break blocks or open the owner's chests. Evaluate block damage, container access and item pickup separately; an eligible pair's permissions must not grant a global bypass. Change only approved blocks; decide entity damage separately.
+Check world/static protection, claim owner, attributed attacking group, the qualifying pairwise score or its active one-hour raid, and explosive type. Only approved explosions may breach an eligible rival's base, including offline. Claims retain their owners. Hand-breaking and takeover remain denied; looting accessible chests is allowed for eligible attackers. Unrelated groups may enter an existing hole and pick up dropped items, but may not break blocks or open the owner's chests. Evaluate block damage, container access and item pickup separately; an eligible pair's permissions must not grant a global bypass. Change only approved blocks; decide entity damage separately.
 
 Do not unclaim a base, grant broad bypass, or indiscriminately uncancel another plugin's event. Prove the selected hooks and ordering in an integration spike before implementing raids.
 
 ## Dependency verification
 For each enabled slice, record exact JAR/API versions, hashes, sources and transitive dependencies. Test boot, a non-op account, restart persistence and protection boundaries. Pin versions between intentional upgrades.
 
-Current FactionsUUID changed names, packages and coordinates from the old source. Port that boundary deliberately.
+FactionsUUID runtime data is archived outside Git for rollback; it is not read by the native atlas.
 
 ## References
 - [WeaponMechanics API](https://cjcrafter.gitbook.io/weaponmechanics/developer-api)
@@ -97,3 +104,5 @@ WorldService owns the existing dimension registry and exact arrivals in worlds.y
 
 ## Native ranks, HUD and credits
 RankService owns UUID memberships and Bukkit permission attachments. WorldEdit/WorldGuard query the same native grants through the supported WEPIF provider; no LuckPerms or Vault permission fallback. PlayerHud owns one sidebar per viewer while mirroring existing gameplay teams. CreditLedger commits integer-cent account changes on one IO worker with atomic durable replacement; the HUD reads only committed balances. The user requested fresh accounts on 2026-11-09: everyone defaults to Default and zero credits; only AstuteFlamez is explicitly MandoStudios. No legacy account import runs at startup. See [feature brief](features/native-hud-ranks-credits.md).
+
+Native territory rules are configured in territory/maps.yml. Safezone blocks damage, firing, edits and creature spawning; Warzone permits combat but protects terrain/containers. Wilderness permits ordinary combat and building. Explicit Creative staff edit permission never bypasses combat protection. Hoth retains its exact legacy PvP cuboid and protected outer arrival; Batuu is safe at every position. Native title transitions are deduplicated per player and cleared on quit.

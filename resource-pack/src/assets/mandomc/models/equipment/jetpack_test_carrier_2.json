@@ -1,0 +1,17 @@
+{
+  "parent": "mandomc:equipment/boba_jetpack_attached",
+  "display": {
+    "head": {
+      "translation": [
+        0,
+        -62.281600000000005,
+        9.108
+      ],
+      "scale": [
+        1.6,
+        1.6,
+        1.6
+      ]
+    }
+  }
+}

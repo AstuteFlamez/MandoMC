@@ -1,5 +1,7 @@
 schema-version: 1
-# New accounts start at zero. Balances are stored as integer cents in credits-data.yml.
+# First-time players only; existing accounts and returning players keep their balances.
+initial-balance: '2500.00'
+# Balances are stored as integer cents in data/credits-data.yml.
 messages:
   balance: '<gray><player>: <gold>$<amount>'
   paid: '<gray>Paid <gold>$<amount> <gray>to <white><player><gray>.'

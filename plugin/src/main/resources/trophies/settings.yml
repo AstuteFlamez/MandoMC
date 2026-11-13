@@ -1,0 +1,22 @@
+schema-version: 1
+maximum-records: 4096
+text:
+  space: '<red>The skull needs one clear block, with no one standing inside it.'
+  support: '<red>Place the skull on the top of a full, sturdy block.'
+  denied: '<red>You cannot place or recover a trophy here.'
+  busy: '<yellow>Your trophy is still being saved. Try again in a moment.'
+  placing: '<gray>Placing your Rancor Skull…'
+  placed: '<gold>Rancor Skull placed. Break it to recover your trophy.'
+  returned: '<gold>Your Rancor Skull has been returned.'
+  pending: '<yellow>Your trophy is saved. Make room in your inventory to collect it.'
+  save-failed: '<red>The trophy could not be saved. Its custody is retained safely; please contact staff.'
+helmet-text:
+  space: '<red>The helmet needs one clear block, with no one standing inside it.'
+  support: '<red>Choose a block face for your helmet decoration.'
+  denied: '<red>You cannot place or recover a helmet here.'
+  busy: '<yellow>Your helmet is still being saved. Try again in a moment.'
+  placing: '<gray>Placing your helmet…'
+  placed: '<gold>Helmet placed. Break it to recover the item.'
+  returned: '<gold>Your helmet has been returned.'
+  pending: '<yellow>Your helmet is saved. Make room in your inventory to collect it.'
+  save-failed: '<red>The helmet could not be saved. Its custody is retained safely; please contact staff.'

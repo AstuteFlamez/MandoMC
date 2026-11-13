@@ -2,23 +2,23 @@
 Status: working design, not a finalized feature order.
 
 ## Confirmed foundation
-Players use Java Minecraft and a required resource pack. They form player groups, build on the main survival world, and encounter PvP outside designated safe areas. Death drops carried items, weapons and armor. KOTH and Jabba are proven activities. A base can be vulnerable, including offline, to a rival group that has earned the required pairwise net-kill lead. Force powers and resource planets are deferred.
+Players use Java Minecraft and a required resource pack. They form player groups, build in claimable wilderness on Tatooine and Hoth, and encounter PvP outside designated safe areas. Death drops carried items, weapons and armor. KOTH and Jabba are proven activities. A base can be vulnerable, including offline, to a rival group that has earned the required pairwise net-kill lead. Force powers and resource planets are deferred.
 
 ## Player-facing group identity
-Clans is the accepted name (2026-11-08). `/clan` and `/cl` remain proposed command names. Player-facing commands, help, menus and messages must replace Factions and `/f` consistently when implemented.
+Clans is the accepted name. `/c map` is the first native command, with `/clan map` and `/cl map` aliases.
 
-The user has deferred FactionsUUID-dependent work: clan creation/membership, claims, clan homes and group-aware respawn. FactionsUUID remains the intended state owner. Do not replace this deferral with a custom clan implementation. Clan relations, pairwise warpoints and group event ownership must be integrated when clan work resumes.
+The user replaced the FactionsUUID direction on 2026-11-10: remove the vendor and implement clans in MandoMC. Native membership, four-player clans, four-chunk claims, clan homes, group-aware respawn, pairwise raiding and gradual land restoration are deployed and ready for client playtesting; see [native clans](features/native-clans.md). Mandalore's single spawn outpost is safezone, central caves and approaches are warzone, and the remaining land/builds are wilderness. All of Batuu is safezone. MandoMC now enforces zones natively, replacing WorldGuard. Entering a different zone shows a title: orange Safezone, dark red Warzone or gray Wilderness.
 
 ## Confirmed first session and recovery
-New players arrive in SpawnWorld, an existing map file the user already has. The arrival slice uses a short replayable chat tutorial, shown after the required pack loads. Their first goal is to travel to survival and establish a base. Survival arrivals use a fixed protected landing zone.
+New players arrive in SpawnWorld, an existing map file the user already has. The arrival slice uses a short replayable chat tutorial, shown after the required pack loads. Batuu stays the protected spawn hub. Players use /warp to visit Tatooine or Hoth. Each planet will have safe zones, warzones and claimable wilderness; the user will supply the boundaries. The standalone Survival/Earth route is retired.
 
-A solo player can create a group and claim a starter base on eligible land outside the spawn safe zone, without a credit requirement. A group creation cooldown of around three hours was suggested tentatively; neither the cooldown nor its duration is decided. Claim capacity and other later territory rules remain open.
+A solo player can create a group and claim a starter base on eligible land outside the spawn safe zone, without a credit requirement. A group creation cooldown of around three hours was suggested tentatively; neither the cooldown nor its duration is decided. Clans now have at most four players and four claims, with one full intervening chunk between rivals or static safezones/warzones, including diagonals.
 
 Death loses only what the player carries. Respawn priority is group home, then a valid bed, then SpawnWorld. If no valid group home or bed is available, use SpawnWorld. A player with stored group supplies can re-equip from that stockpile. Otherwise they repeat the same acquisition process used to obtain the gear originally; there is no separate replacement mechanic. Voluntary return travel and specific recipes/prices remain open.
 
 Combat blocks voluntary teleporting. Logging out while in combat causes death, with the normal carried-item loss. An uncancelled positive-damage player/mob or player/player hit refreshes a 15-second tag for involved players. Show the remaining time to one decimal on the scoreboard. Clean server shutdowns are exempt from logout punishment.
 
-The first join grants a stone pickaxe, axe, shovel and hoe, 64 steak, four Desert Robes pieces, an E-11 and 64 standard plasma cells. Equipment is granted only once, not on subsequent joins or deaths. Starting credits are possible but neither their inclusion nor amount is decided.
+The first join grants a stone pickaxe, axe, shovel and hoe, 64 steak, four Desert Robes pieces, an E-11 and 64 standard plasma cells. Equipment is granted only once, not on subsequent joins or deaths. Genuinely new accounts start with 2,500 credits exactly once; returning balances are preserved.
 
 The first friends playtest should bring the in-scope gameplay systems together in a rough, integrated version. The development slices below are incremental building and checking steps toward that target. The precise content depth for each system still needs agreement; force powers and resource planets are excluded for now.
 
@@ -84,7 +84,7 @@ Jabba is one shared dungeon with PvP competition, opened through a server-wide s
 
 KOTH capture progress and victory belong to a player group; an unaffiliated solo player can compete as their own contestant. Players who die during either event may re-equip and return as often as they can while it remains active. Normal full-loot death and respawn priority apply.
 
-The user delegated the KOTH rules to a conventional model. Selected baseline: continuous capture, adapted to groups. The first eligible contestant to take control owns the timer. It continues while at least one member remains alive and eligible inside; it resets when that contestant is entirely cleared out. Enemy presence alone does not pause or reset the timer: opponents must kill or push the holders out. Each fresh capture starts from zero, with no accumulated score. Start with a configurable three-minute timer. KOTH reward delivery and ownership are still open; group victory does not by itself decide who receives physical loot.
+The user delegated the KOTH rules to a conventional model. Selected baseline: continuous capture, adapted to groups. The first eligible contestant to take control owns the timer. It continues while at least one member remains alive and eligible inside; it resets when that contestant is entirely cleared out. Enemy presence alone does not pause or reset the timer: opponents must kill or push the holders out. Each fresh capture starts from zero, with no accumulated score. Start with a configurable three-minute timer. KOTH awards one saved KOTH Crate Key to a random eligible winning clan member currently inside the hill, announcing both clan and recipient publicly. It uses the shared Kyber crate engine with a material reward pool.
 
 This differs from the recovered `KothActiveTask`, which resets immediately when multiple contestants occupy the zone. Change that rule deliberately during porting. Published precedents checked 2026-11-05: [AxKoth capture mode](https://docs.artillex-studios.com/axkoth-capture.html) uses uninterrupted occupancy and a three-minute default; [Netherite's KOTH guide](https://netherite.gg/wiki/lifesteal/combat/koth) describes losing capture on leaving, death or disconnect. The group adaptation and starting duration are advisor-selected under the user's delegation; these examples do not establish a measured majority of servers.
 
@@ -93,24 +93,24 @@ Warpoints are specific to each pair of opposing groups, not a global group power
 
 `score(A, B) = kills by A against B - kills by B against A`; `score(B, A) = -score(A, B)`.
 
-A configurable positive net-kill threshold unlocks A's permission to raid B. Only the group that earned that advantage may breach the rival's base; it does not make the base globally vulnerable. Killing that same rival's members recovers the losing side's score. Passive time-based recovery is not part of the selected model. The numeric threshold is undecided; five was only an explanatory example.
+A configurable positive net-kill threshold unlocks A's permission to raid B. Only the group that earned that advantage may breach the rival's base; it does not make the base globally vulnerable. Killing that same rival's members recovers the losing side's score. Passive time-based recovery is not part of the selected model. The accepted threshold is +10 (2026-11-10).
 
 Event PvP kills/deaths at KOTH and Jabba count toward the corresponding rivalry. Losses therefore risk both carried equipment and the survival base. Raid eligibility can persist while the defending group is offline.
 
 Eligible attackers may breach using approved explosives and loot accessible chests. Defenders retain land ownership. This does not permit takeover, unclaiming or unrestricted hand-breaking. Approved explosive types and block-damage limits remain configurable design work. Safe spawn/adventure regions remain protected.
 
-If the attacker's score drops below the threshold during an active raid, a configurable continuation window begins at that score drop. The existing attacker retains raid permissions during the window; the timer does not start at the initial breach. After it expires, the attacker needs a qualifying current score to continue. The window remains specific to the attacker/defender pair.
+The first successful explosive breach starts a fixed one-hour raid. That pair's warpoints immediately reset to zero and stop changing for the hour, including at KOTH/Jabba. Other rivalries keep scoring. Additional attacks cannot extend the hour. When it expires, ten fresh net kills are needed for another raid. This supersedes the old continuation-window proposal.
 
 An unrelated group may enter through an existing breach and pick up dropped items, but cannot break blocks or open the defender's chests. An eligible raider's permissions do not transfer to other groups. This base protection rule is distinct from Jabba's open chest/boss loot.
 
-Still open for the raid feature brief: the threshold and continuation duration, active-raid detection, timer refresh/retrigger behavior, explosive/block limits, and attribution/handling for unaffiliated players or deaths without an opposing group. These choices must not be inferred from the old generic faction-power behavior.
+Clanmates cannot damage one another. Seven days with nobody online starts an irreversible 24-hour public-loot announcement/window; then the clan disbands, claims become wilderness and blocks gradually return to their pre-edit baseline. Wilderness resets 24 hours after the latest Survival edit in its chunk, with snapshots preserving imported terrain. See [native clans](features/native-clans.md) for permissions, timers and restoration limits.
 
 ## Public world travel
 The legacy warp/menu system is adapted for exactly Batuu / Black Spire Outpost (SpawnWorld), Earth (the existing survival world) and Hoth. `/warp` (`/warps`, `/travel`) opens the menu; `/warp batuu|earth|hoth` selects directly. `/spawn` and temporary `/survival` retain the same shared three-second stationary warmup. Movement, damage, mounts and combat prevent travel. All public arrivals are safe and protected, using MandoMC worlds.yml as their exact arrival authority. Other legacy planets are excluded.
 
-The recovered Hoth map is protected against edits/explosions, with the old warzone's PvP boundary and a safe arrival. KOTH/events use the recovered hourly framework. Current capture is solo while clan integration is deferred; the accepted three-minute continuous hold and removal-based reset apply. Rewards are explicitly deferred by the user: no chest, credits, key or item is granted yet. The event menu shows current/next/selection chances and routes travel through the same service. See [KOTH and warps](features/koth-and-warps.md).
+The recovered Hoth map is protected against edits/explosions, with the old warzone's PvP boundary and a safe arrival. KOTH/events use the recovered hourly framework. Native clan capture and a random present-member KOTH crate key are implemented; the accepted three-minute continuous hold and last-member-removal reset apply. Shared-server deployment completed on 2026-11-10. The event menu shows current/next/selection chances and routes travel through the same service. See [KOTH and warps](features/koth-and-warps.md).
 
-Group-home travel and themed terminals remain deferred. Personal homes and death-return were approved on 2026-11-09 and use the shared public travel policy.
+Clan-home travel is implemented through the shared travel policy; themed terminals remain deferred. Personal homes and death-return were approved on 2026-11-09 and use the shared public travel policy.
 
 ## Survival mob content
 Use existing Tusken Raider, bantha, dewback and massiff models in Desert, Badlands and Eroded Badlands in SurvivalWorld. Beaches and Wooded Badlands remain unchanged. Random encounter levels are 1–5; group members remain within one level of the leader. No distance-from-spawn or player-dependent scaling.
@@ -127,3 +127,6 @@ The latest user decision supersedes earlier chest-gated proposals: spawn every c
 
 ## Accepted progression follow-up (2026-11-09)
 The user delegated finished-saber recipes and a conventional player auction house, then required the auction implementation inside MandoMC with no additional plugin. Native `/ah` uses existing credits, eight 48-hour fixed-price listings, no fees/tax, confirmation and permanent item claims. All themed ores yield catalog scraps before ingot refining. Four-metal storage has visible reciprocal 9:1 conversions; iron utility recipes use Agrinium Sheets. Blaster/ammo recipes and final-world generation are explicitly deferred. These decisions supersede the earlier undecided auction/saber holds above. See the ordered progression queue for verification and rollout state.
+
+## Deferred planet content
+See [planet wilderness direction](features/planet-wilderness.md) for Hoth creatures, Mandalore, the beskar ore event and possible trooper enemies. All are deferred.

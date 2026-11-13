@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "checkedOn": "2026-11-09",
+  "checkedOn": "2026-11-10",
   "minecraftVersion": "26.1.2",
   "artifacts": [
     {
@@ -14,18 +14,6 @@
       ],
       "bytes": 7870216,
       "version": "7.4.6"
-    },
-    {
-      "id": "worldguard",
-      "name": "worldguard-bukkit-7.0.18.jar",
-      "url": "https://cdn.modrinth.com/data/DKY9btbd/versions/btHBavWa/worldguard-bukkit-7.0.18.jar",
-      "sha256": "08f3ef58bc521c635d8c78aedaca96f151d2d397e7cd8018584955dd7468eb05",
-      "verifiedPublishedHashes": [
-        "sha1",
-        "sha512"
-      ],
-      "bytes": 1198472,
-      "version": "7.0.18"
     },
     {
       "id": "mythicmobs",
@@ -93,17 +81,38 @@
       "distribution": "Licensed Premium R4.1.1 supplied by the server owner; obtain through the official account. The JAR is not redistributed."
     },
     {
-      "id": "factionsuuid",
-      "name": "FactionsUUID-4.6.0.jar",
-      "version": "4.6.0",
-      "url": "https://dependency.download/releases/dev/kitteh/factions/4.6.0/factions-4.6.0.jar",
-      "sha256": "907ce30a607342e178a905669bb859f481626347fc7379ddf35a00dbecd14091",
-      "bytes": 3467403,
+      "id": "coreprotect",
+      "name": "CoreProtect-CE-24.1.jar",
+      "version": "24.1",
+      "url": "https://www.patreon.com/file?h=170398122&m=750939085",
+      "source": "https://github.com/PlayPro/CoreProtect/releases/tag/v24.1",
+      "sha256": "a2acef7c06ef201355cef07d591a6055dfed358ad768faaaaaf4e276865ecc97",
+      "bytes": 1113283,
       "verifiedPublishedHashes": [],
-      "distribution": "Official public Maven shadowJar; latest artifact listed in this repository at setup time."
+      "distribution": "Official freely available Community Edition attachment linked by the upstream GitHub release; exact bytes tested on Paper 26.1.2 Java 25."
+    },
+    {
+      "id": "nuvotifier",
+      "name": "NuVotifier-2.7.3.jar",
+      "version": "2.7.3",
+      "url": "https://github.com/NuVotifier/NuVotifier/releases/download/v2.7.3/nuvotifier.jar",
+      "sha256": "5fe5457e9ba7989dc9446f522a690e4e877236ba2fc5e90ed66fad33d3c69f39",
+      "bytes": 2863588,
+      "verifiedPublishedHashes": []
+    },
+    {
+      "id": "votingplugin",
+      "name": "VotingPlugin-7.1.1.jar",
+      "version": "7.1.1",
+      "url": "https://nexus.bencodez.com/repository/maven-public/com/bencodez/votingplugin/7.1.1/votingplugin-7.1.1.jar",
+      "sha256": "ca0afd4776bbba7a1a9c8be435522ea4a2d77f3cf11e9b5fba3b0f3d89e220be",
+      "bytes": 6051899,
+      "verifiedPublishedHashes": [
+        "sha1"
+      ]
     }
   ],
   "pending": [],
   "runtimeTested": true,
-  "verificationScope": "Nine vendor plugins and MandoMC enable without EssentialsX or Multiverse-Core. 99 Java tests, 170 utility and 54 arrival/WorldGuard Paper assertions pass. Clean normal restart, exact world spawns, command ownership and permission defaults verified. Credits/economy provider deferred; Vault retained without a provider. Client playtest remains."
+  "verificationScope": "Seven vendor plugins and MandoMC enable without WorldGuard, FactionsUUID, EssentialsX or Multiverse-Core. Native territory protection passes 5179 focused Paper assertions; 175 Java tests pass. Normal restart removes the checker, preserves existing worlds/pack and restores KOTH. Client title/protection playtest remains."
 }

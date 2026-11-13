@@ -2,7 +2,7 @@
 # Legacy drop odds live in jabba-mobs.yml and use the catalog death adapter.
 GamorreanGuard:
   Type: ZOMBIE
-  Display: '&bLvl. &b<caster.level> &7- &2Gamorrean Guard'
+  Display: '&2Gamorrean Guard'
   Health: 30
   Damage: 0
   Armor: 8
@@ -16,9 +16,6 @@ GamorreanGuard:
     Silent: true
     PreventSunburn: true     # ✅ Stops sunlight damage
     PreventOtherDrops: true
-  LevelModifiers:
-    Health: 3
-    #Damage: 0.5
   AIGoalSelectors:
     - 0 clear
     - 1 meleeattack
@@ -47,14 +44,11 @@ GamorreanGuard:
 
 QuarrenGuard:
   Type: ZOMBIE
-  Display: '&bLvl. &b<caster.level> &7- &6Quarren Guard'
+  Display: '&6Quarren Guard'
   Health: 25
   Damage: 0
   Armor: 4
   Faction: Hutts
-  LevelModifiers:
-    Health: 3
-    Damage: 0.5
 
   Options:
     PreventItemPickup: true
@@ -96,14 +90,11 @@ QuarrenGuard:
 
 TwilekGuard:
   Type: ZOMBIE
-  Display: '&bLvl. &b<caster.level> &7- &3Twilek Guard'
+  Display: '&3Twilek Guard'
   Health: 25
   Damage: 0
   Armor: 4
   Faction: Hutts
-  LevelModifiers:
-    Health: 3
-    Damage: 0.5
   Options:
     PreventItemPickup: true
     PreventTransformation: true

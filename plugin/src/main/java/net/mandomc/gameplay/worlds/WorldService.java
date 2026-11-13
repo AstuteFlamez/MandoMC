@@ -23,6 +23,7 @@ public final class WorldService implements Listener {
     private record Entry(NamespacedKey key, List<String> aliases, Location spawn, boolean weather) { }
     private final Map<NamespacedKey, Entry> entries = new LinkedHashMap<>();
     private final Map<String, NamespacedKey> aliases = new LinkedHashMap<>();
+    private final java.util.List<String> publicNames = new java.util.ArrayList<>();
 
     public WorldService(JavaPlugin plugin, ConfigurationSection config) {
         if (config.getInt("schema-version", -1) != 1) {
@@ -58,11 +59,22 @@ public final class WorldService implements Listener {
             var location = new Location(world, x, y, z, yaw, pitch);
             var entry = new Entry(key, data.getStringList("aliases"), location, data.getBoolean("weather", true));
             entries.put(key, entry);
-            alias(id, key); alias(key.toString(), key); alias(world.getName(), key);
+            alias(id, key); alias(key.toString(), key);
+            if (!data.getBoolean("legacy", false)) alias(world.getName(), key);
+            if (data.getBoolean("listed", true)) publicNames.add(entry.aliases().isEmpty() ? id : entry.aliases().getFirst());
             for (String name : entry.aliases()) alias(name, key);
             world.setPVP(data.getBoolean("pvp", true));
             world.setDifficulty(Difficulty.valueOf(data.getString("difficulty", "NORMAL").toUpperCase(Locale.ROOT)));
             world.setSpawnLocation(location);
+            if (data.isConfigurationSection("border")) {
+                double centerX = number(data, "border.center-x");
+                double centerZ = number(data, "border.center-z");
+                double size = number(data, "border.size");
+                if (size < 1 || size > 59999968 || Math.abs(centerX) > 29999984 || Math.abs(centerZ) > 29999984)
+                    throw new IllegalArgumentException("worlds/worlds.yml: invalid border for " + key);
+                world.getWorldBorder().setCenter(centerX, centerZ);
+                world.getWorldBorder().setSize(size);
+            }
             if (!entry.weather()) { world.setStorm(false); world.setThundering(false); }
             plugin.getLogger().info("Loaded existing world " + key + " with MandoMC arrival settings.");
         }
@@ -96,7 +108,7 @@ public final class WorldService implements Listener {
         return entries.get(world.getKey()).spawn().clone();
     }
 
-    public List<String> names() { return List.copyOf(aliases.keySet()); }
+    public List<String> names() { return List.copyOf(publicNames); }
 
     private boolean weatherAllowed(World world) {
         var entry = entries.get(world.getKey());

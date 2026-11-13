@@ -1,4 +1,105 @@
 schema-version: 1
-# Import existing Paper dimensions and configure exact arrivals before enabling arrival.
-# See server/config/common/worlds.yml for this server's deployed worlds.
-worlds: {}
+worlds:
+  devworld:
+    key: minecraft:devworld
+    aliases:
+    - DevWorld
+    weather: true
+    pvp: true
+    difficulty: normal
+    spawn:
+      x: 0.0
+      y: -60.0
+      z: 0.0
+      yaw: 0.0
+      pitch: 0.0
+  hoth:
+    key: minecraft:hoth
+    aliases:
+    - Hoth
+    weather: false
+    pvp: true
+    difficulty: normal
+    spawn:
+      x: -47.0
+      y: 80.0
+      z: -153.0
+      yaw: -18.75
+      pitch: -1.65
+    border:
+      center-x: 0.0
+      center-z: 0.0
+      size: 512.0
+  spawnworld:
+    key: minecraft:spawnworld
+    aliases:
+    - SpawnWorld
+    - batuu
+    - spawn
+    weather: false
+    pvp: false
+    difficulty: normal
+    spawn:
+      x: -0.25
+      y: 93.0
+      z: -16.25
+      yaw: -9.0
+      pitch: -0.9
+  ilum:
+    key: minecraft:ilum
+    aliases:
+    - Ilum
+    weather: false
+    pvp: false
+    difficulty: peaceful
+    spawn:
+      x: 11.639
+      y: -60.0
+      z: -55.57
+      yaw: 0.0
+      pitch: 0.0
+  tatooine_legacy:
+    key: minecraft:tatooine
+    aliases:
+    - TatooineLegacy
+    weather: false
+    pvp: true
+    difficulty: normal
+    spawn:
+      x: 1711.845046707056
+      y: 100.0
+      z: 2201.7401780545574
+      yaw: 81.4468
+      pitch: -11.09995
+    legacy: true
+    listed: false
+  tatooine:
+    key: minecraft:tatooine_review
+    aliases:
+    - Tatooine
+    - TatooineReview
+    - tatooine_review
+    weather: false
+    pvp: true
+    difficulty: normal
+    spawn:
+      x: -122.95567934671374
+      y: 70.0
+      z: -118.82338196932402
+      yaw: 5.0999756
+      pitch: -0.90000015
+  mandalore:
+    key: minecraft:mandalore_review
+    aliases:
+    - Mandalore
+    - MandaloreReview
+    - mandalore_review
+    weather: false
+    pvp: true
+    difficulty: peaceful
+    spawn:
+      x: -17.5
+      y: 70.0
+      z: -191.5
+      yaw: 0.0
+      pitch: 0.0

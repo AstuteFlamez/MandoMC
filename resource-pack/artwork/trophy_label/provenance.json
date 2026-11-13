@@ -1,0 +1,92 @@
+{
+  "word": "TROPHY",
+  "font": "mandomc:trophies",
+  "glyph": "U+E000",
+  "size": [
+    80,
+    18
+  ],
+  "frame": "weapon.png",
+  "frameCenterColumn": 20,
+  "letters": [
+    {
+      "letter": "T",
+      "source": "material.png",
+      "sourceColumns": [
+        31,
+        41
+      ],
+      "targetColumns": [
+        9,
+        19
+      ],
+      "sourceSha256": "1dd001b0fd4e411e00da8de78edca3ea3fbc8e8c3bc415dd17da25eed6633f5d"
+    },
+    {
+      "letter": "R",
+      "source": "material.png",
+      "sourceColumns": [
+        53,
+        61
+      ],
+      "targetColumns": [
+        21,
+        29
+      ],
+      "sourceSha256": "1dd001b0fd4e411e00da8de78edca3ea3fbc8e8c3bc415dd17da25eed6633f5d"
+    },
+    {
+      "letter": "O",
+      "source": "armor.png",
+      "sourceColumns": [
+        41,
+        49
+      ],
+      "targetColumns": [
+        31,
+        39
+      ],
+      "sourceSha256": "cb4d5efefcb384aa5803ed1fb98bd3125ae4e0cca04e856bc8e36ad7a765f132"
+    },
+    {
+      "letter": "P",
+      "source": "weapon.png",
+      "sourceColumns": [
+        41,
+        49
+      ],
+      "targetColumns": [
+        41,
+        49
+      ],
+      "sourceSha256": "ac1829dd89cd25b2edbdef43051f75952fb69e7fc8f323248563da07b0a50dc4"
+    },
+    {
+      "letter": "H",
+      "source": "mythic.png",
+      "sourceColumns": [
+        45,
+        53
+      ],
+      "targetColumns": [
+        51,
+        59
+      ],
+      "sourceSha256": "a0377e7705b486d2c4d5508149c51e8165958915e140f6a45af470cc0306d8ba"
+    },
+    {
+      "letter": "Y",
+      "source": "key.png",
+      "sourceColumns": [
+        29,
+        39
+      ],
+      "targetColumns": [
+        61,
+        71
+      ],
+      "sourceSha256": "ac7da7507888925240e295aab6990d82e164e5983080fd791a3389c2671a8469"
+    }
+  ],
+  "newLetterPixels": false
+}

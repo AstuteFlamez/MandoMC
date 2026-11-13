@@ -1,0 +1,19 @@
+schema-version: 1
+# Fixed Mojang texture references; no username lookups during menu rendering.
+heads:
+  rebel-pilot:
+    title: 'Rebel Pilot'
+    texture: '24194b080568119460a05221f355b07134b5cd269065c7fa924928417a6b7c62'
+    source: 'https://mcheads.ru/en/humans/bbur'
+  tie-pilot:
+    title: 'TIE Fighter Pilot'
+    texture: '62dd6e84e418fb56405d63ef3f4c21a817c16b4ef5659d59149ac945f5917'
+    source: 'https://mcheads.ru/en/humans/xkgz'
+  speeder-pilot:
+    title: 'Speederbike Pilot'
+    texture: '6972abe82ca65537227e76cf91377c5cb4145c79fb2480252f5f38ddee5e7850'
+    source: 'https://mcheads.ru/en/humans/gzmy'
+  rebel-gunner:
+    title: 'Rebel Gunner'
+    texture: '41ba80fded37ae567b426588ff234b5953d01ab2366c04552cb695d9989d4d'
+    source: 'https://mcheads.ru/en/humans/jres'

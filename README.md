@@ -24,6 +24,7 @@ Build the pack with `./scripts/build-resource-pack.py` (Python 3). Pack changes 
 - [First feature: arrival and protection](docs/features/arrival-and-protection.md)
 - [Gameplay architecture](docs/architecture.md)
 - [Development workflow](docs/development.md)
+- [Local files, branches and PebbleHost production](docs/production-workflow.md)
 - [Style guide](docs/style-guide.md)
 - [Legacy feature recovery](docs/recovery.md)
 - [Feature brief](docs/templates/feature.md)
@@ -43,7 +44,7 @@ planning/        Diagram sources and legacy file inventory
 
 The new pack is maintained in this repository. [MandoPack](https://github.com/AstuteFlamez/MandoPack) is the pinned legacy asset source; recover only the assets needed by each feature. Pack source textures are versioned; generated ZIPs, maps and plugin JARs stay outside Git.
 
-The original history is preserved. The full previous main is available at bilal/legacy-main-2026-11-05 and tag legacy/pre-rebuild-2026-11-05.
+The original history is preserved. The full previous main is available at tags archive/bilal/legacy-main-2026-11-05 and legacy/pre-rebuild-2026-11-05. Legacy remote branches were archived as tags before removal.
 
 Map acquisition, installation and replacement notes: [WORLD_SOURCES.txt](WORLD_SOURCES.txt).
 

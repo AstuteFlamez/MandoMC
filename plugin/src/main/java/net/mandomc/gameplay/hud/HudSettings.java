@@ -28,9 +28,9 @@ public record HudSettings(boolean enabled, DateTimeFormatter date, String header
                             java.nio.charset.StandardCharsets.UTF_8));
             combatLines = defaults.getStringList("combat-lines");
         }
-        if (combatLines.size() != lines.size()
+        if (combatLines.isEmpty() || combatLines.size() > 15
                 || combatLines.stream().filter(line -> line.contains("<combat-or-kills>")).count() != 1)
-            throw new IllegalArgumentException("hud.yml: combat-lines must match lines and contain exactly one timer row");
+            throw new IllegalArgumentException("hud.yml: combat-lines must contain 1..15 entries and exactly one timer row");
         var animations = new HashMap<String, Animation>();
         for (String id : List.of("logo", "bar", "serverinfo")) {
             long interval = config.getLong("animations." + id + ".interval-ms", 0);

@@ -6,6 +6,8 @@
     "bossk",
     "dewback",
     "gamorrean_guard",
+    "jawa_black",
+    "jawa_brown",
     "massiff",
     "melee_raider",
     "quarren_guard",
@@ -49,6 +51,10 @@
     {
       "path": "assets/modelengine/items/bantha/right_rear_leg.json",
       "sha256": "071b3963f67b93113037cbf2502571c76ae7e781fb9efe0a5f66ee6ef550ca57"
+    },
+    {
+      "path": "assets/modelengine/items/bantha/saddle.json",
+      "sha256": "53a8fd5bed969a45bdb1bce639e92da64916726c7d03c83ab5838b6780ebf180"
     },
     {
       "path": "assets/modelengine/items/bantha/tail.json",
@@ -207,6 +213,10 @@
       "sha256": "b45cd315f93e0f6e9c29f304601bea63350989e78af1b32699891c5e9cd74d42"
     },
     {
+      "path": "assets/modelengine/items/dewback/saddle.json",
+      "sha256": "a7fcfcd89059a4d28f6c82f363f9a799713ccdac9c859653d15d9e88802add21"
+    },
+    {
       "path": "assets/modelengine/items/dewback/top_jaw.json",
       "sha256": "b1f360dcaa0df37e538f1c486099a52c4818a76f60f7e8a0162c964f34eb2d75"
     },
@@ -249,6 +259,62 @@
     {
       "path": "assets/modelengine/items/internal_fire/fire_1.json",
       "sha256": "48e46be2d7d31ba71aba01db5814f1ef2bf402919b0b94c35cd37caf63bd5b03"
+    },
+    {
+      "path": "assets/modelengine/items/jawa_black/blaster.json",
+      "sha256": "d6285734b6e915193bb90d58578d1a4afd0d9d58f37ebc0cad89be7dc37cbb8b"
+    },
+    {
+      "path": "assets/modelengine/items/jawa_black/body.json",
+      "sha256": "179f85d820deeda475aa9826029d6409d262a362964f0b0a9e64ccbe4a6e4192"
+    },
+    {
+      "path": "assets/modelengine/items/jawa_black/face.json",
+      "sha256": "bd32162b995a42ad3b35e9e9abe09ea8186d0b1746fe143fb08c034ee152181b"
+    },
+    {
+      "path": "assets/modelengine/items/jawa_black/head.json",
+      "sha256": "cdb53e34b244b3df21dd805f34071ad54642ee4549fa415db759ac015f742ebf"
+    },
+    {
+      "path": "assets/modelengine/items/jawa_black/left_arm.json",
+      "sha256": "f5a9bd424ac0cc7181b4d385923042606bb0c54cfa8a4c820d39f4bb92d81d3b"
+    },
+    {
+      "path": "assets/modelengine/items/jawa_black/right_arm.json",
+      "sha256": "e8a3f09fe86911097d7bcb3977a7d589a29589327cb5698f11e3aeccecc632f0"
+    },
+    {
+      "path": "assets/modelengine/items/jawa_black/tip.json",
+      "sha256": "9c6bb17cf36359650b5ecc09a9fc36874c032f61e503d5c1ceeb67ef2c308f1d"
+    },
+    {
+      "path": "assets/modelengine/items/jawa_brown/blaster.json",
+      "sha256": "ffc7599aacff186627e4acd1b5180ebf3faf885c3ffd8c9cdd1c4a495b903a32"
+    },
+    {
+      "path": "assets/modelengine/items/jawa_brown/body.json",
+      "sha256": "a29c50345a089cbd883ac1308875c29e0b6a758761f366ca7992865b62b4a328"
+    },
+    {
+      "path": "assets/modelengine/items/jawa_brown/face.json",
+      "sha256": "a1b9eae3873c2b753db23a8b46de8fe174b570ddb028b3d8ba0df243fed35a0b"
+    },
+    {
+      "path": "assets/modelengine/items/jawa_brown/head.json",
+      "sha256": "4d20c0b561a25503247681052b8bd212c2c09d5166fc6172bee7e4ced1161cb6"
+    },
+    {
+      "path": "assets/modelengine/items/jawa_brown/left_arm.json",
+      "sha256": "b21ba1fb8dbec14040eabfbeb0ca1b2d8687ce3029860c03c1c8b4d149614c8b"
+    },
+    {
+      "path": "assets/modelengine/items/jawa_brown/right_arm.json",
+      "sha256": "4a733baa50223b41a8db5412e2034641edca609eb7ee9dc1248148a621446bb5"
+    },
+    {
+      "path": "assets/modelengine/items/jawa_brown/tip.json",
+      "sha256": "26b011906e89fcce00d27af681daee88a2422d03662ae6d7ea4f0dfab480eeae"
     },
     {
       "path": "assets/modelengine/items/massiff/body.json",
@@ -603,6 +669,10 @@
       "sha256": "8c21718099acd23f8859fa4f646784a004e633e3a952504be5d14a25ec2f1352"
     },
     {
+      "path": "assets/modelengine/models/bantha/saddle.json",
+      "sha256": "63f5c344225da6c453f7c10c42b9b879ac521ce7f8334bc2c19c1f6bfb3e927e"
+    },
+    {
       "path": "assets/modelengine/models/bantha/tail.json",
       "sha256": "a0df366a3ce5dda3c16d95c0edaa5f37fc8efa8259ef66454c21b97aea4415c7"
     },
@@ -735,6 +805,10 @@
       "sha256": "b92be75118eafd569f2c19fdf6b976d4f641d8ec63f0878b9e0dce0e0f761107"
     },
     {
+      "path": "assets/modelengine/models/dewback/bone2.json",
+      "sha256": "9037d007d2ec603f74ee7451ff130fdc01143e1bf6686149c4e309a74c6d67cb"
+    },
+    {
       "path": "assets/modelengine/models/dewback/bone2/1.json",
       "sha256": "2f12e6945ba52eba929a584a46d35f76ecd20cfda8e258e14c1a2dec72f91997"
     },
@@ -743,12 +817,12 @@
       "sha256": "6160f89f58e16394ed4e6bbd1bb20022b2bc0b819a2bdce746e1a3b51119adb3"
     },
     {
-      "path": "assets/modelengine/models/dewback/bone2.json",
-      "sha256": "9037d007d2ec603f74ee7451ff130fdc01143e1bf6686149c4e309a74c6d67cb"
-    },
-    {
       "path": "assets/modelengine/models/dewback/bone3.json",
       "sha256": "a1fd88183c606ed72587afc229b831740d640ff2ebf752b4e1a5d5cd19b7c7be"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone4.json",
+      "sha256": "baa12a038d1c202c44be47950a20c5ab12c019ff7267fa1a3904dcf875dce2cf"
     },
     {
       "path": "assets/modelengine/models/dewback/bone4/1.json",
@@ -759,12 +833,12 @@
       "sha256": "81773127e9262fc170624c779f76c90555058c134b19a88922f17d42316185a9"
     },
     {
-      "path": "assets/modelengine/models/dewback/bone4.json",
-      "sha256": "baa12a038d1c202c44be47950a20c5ab12c019ff7267fa1a3904dcf875dce2cf"
-    },
-    {
       "path": "assets/modelengine/models/dewback/bone5.json",
       "sha256": "de856deb5b96e31914dcf9b1502ce73856260af024fe388d5abbbd76be4aafd2"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone6.json",
+      "sha256": "b1850a93c00a8436b6b2f33801391efb2837d74009fc97c776f42b0535319bc6"
     },
     {
       "path": "assets/modelengine/models/dewback/bone6/1.json",
@@ -775,12 +849,12 @@
       "sha256": "6c8ecf039cfd1b343a6e168aa80ee76391544a68d076c525e4a723e26be2fd14"
     },
     {
-      "path": "assets/modelengine/models/dewback/bone6.json",
-      "sha256": "b1850a93c00a8436b6b2f33801391efb2837d74009fc97c776f42b0535319bc6"
-    },
-    {
       "path": "assets/modelengine/models/dewback/bone7.json",
       "sha256": "fbc72a68969041f995e91fa250712028a92d379993bfe8e8ce91e84953eab1b0"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/bone8.json",
+      "sha256": "650aec924f00e0f4cafc2907d4988031e543c710aa6263b7b828770dc6daf1c8"
     },
     {
       "path": "assets/modelengine/models/dewback/bone8/1.json",
@@ -791,10 +865,6 @@
       "sha256": "21a2e0182350e6b1e387a52fc94a36fa972aade529ad66b14b4d8dd904f2b333"
     },
     {
-      "path": "assets/modelengine/models/dewback/bone8.json",
-      "sha256": "650aec924f00e0f4cafc2907d4988031e543c710aa6263b7b828770dc6daf1c8"
-    },
-    {
       "path": "assets/modelengine/models/dewback/bone9.json",
       "sha256": "0b8d14e5f13a557d5b66020f3c504d6c1f15d3576a67e6a59270acdc8ddaf4ea"
     },
@@ -803,12 +873,12 @@
       "sha256": "51b4b79cf0f98733a0718aa5262c6ab1ef9c57a7c57defc9f4425a4f568884b3"
     },
     {
-      "path": "assets/modelengine/models/dewback/head/1.json",
-      "sha256": "7c536a2966b25067b2947fe0378801ea32cb47d2a5ac117c064cb3e22816f08e"
-    },
-    {
       "path": "assets/modelengine/models/dewback/head.json",
       "sha256": "df2cd328962e37fd157be28d78ef5d896b79180cbd1187d2000e66579b66fcb8"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/head/1.json",
+      "sha256": "7c536a2966b25067b2947fe0378801ea32cb47d2a5ac117c064cb3e22816f08e"
     },
     {
       "path": "assets/modelengine/models/dewback/left_back_leg.json",
@@ -825,6 +895,10 @@
     {
       "path": "assets/modelengine/models/dewback/right_front_leg.json",
       "sha256": "6ba0d99dc12829d9f1ecf91b762857b9b5ecd4a2309b4b3015d627ae78895170"
+    },
+    {
+      "path": "assets/modelengine/models/dewback/saddle.json",
+      "sha256": "4310df6661a9547b27e056b1a794798eb23dd6606f211bcaed10f16149b6f0c1"
     },
     {
       "path": "assets/modelengine/models/dewback/top_jaw.json",
@@ -869,6 +943,62 @@
     {
       "path": "assets/modelengine/models/internal_fire/fire_1.json",
       "sha256": "efca233b56d76d68cec93b9ecc545cde7126a2328e71a7453ef4d19ddc8e48d9"
+    },
+    {
+      "path": "assets/modelengine/models/jawa_black/blaster.json",
+      "sha256": "6ad3da92f8314aa83f61010ed817f077bea5eb862b815655ead2f76008d2bf83"
+    },
+    {
+      "path": "assets/modelengine/models/jawa_black/body.json",
+      "sha256": "abbdd6b7b5685ed714b1d5708906c2870c9a0364222070c68b87f16dac05cf4a"
+    },
+    {
+      "path": "assets/modelengine/models/jawa_black/face.json",
+      "sha256": "59c0b325a94ad107009f4886ec68f85cfe10dcd41305f96699abcc86d54edce3"
+    },
+    {
+      "path": "assets/modelengine/models/jawa_black/head.json",
+      "sha256": "a05c6d9edd6fa9d97ed4d1ebd27600ff0d6a6b2a3276c0ce0ce6afec6da08a01"
+    },
+    {
+      "path": "assets/modelengine/models/jawa_black/left_arm.json",
+      "sha256": "9b100446636614e7169a48bddf3784f3367a914282acc667d6a2855bccad86bd"
+    },
+    {
+      "path": "assets/modelengine/models/jawa_black/right_arm.json",
+      "sha256": "cf1958dec4289e27cabe6e8852537db5393255a9adfba3992d55b50e9a4fb43b"
+    },
+    {
+      "path": "assets/modelengine/models/jawa_black/tip.json",
+      "sha256": "cecafc41223e3e4ade53f58eed40a179a4c13b1dd3027d39e991051416faf067"
+    },
+    {
+      "path": "assets/modelengine/models/jawa_brown/blaster.json",
+      "sha256": "35abc812d6f65ecc5aaaa529f074bd46abc336a855c890744d1fce7c5cdc6da5"
+    },
+    {
+      "path": "assets/modelengine/models/jawa_brown/body.json",
+      "sha256": "ee9dc68916d5fdee8840984ffa579df2a2f4b3323335325b3a4c21303b65c533"
+    },
+    {
+      "path": "assets/modelengine/models/jawa_brown/face.json",
+      "sha256": "a11a493ea6258ce91aa22b0749e949d441a497e92160f196e21f0cc8fda311d6"
+    },
+    {
+      "path": "assets/modelengine/models/jawa_brown/head.json",
+      "sha256": "a2bd47b88c23a6565f33250717d525686bd3fd4372d82fdb2026c4bbbb879e81"
+    },
+    {
+      "path": "assets/modelengine/models/jawa_brown/left_arm.json",
+      "sha256": "154a4e1ed89e6530342407cd04507cedb9478157c33cd567b370218647de7691"
+    },
+    {
+      "path": "assets/modelengine/models/jawa_brown/right_arm.json",
+      "sha256": "9764a1060da6ba9c7d9cb334d6f03c4b151f6e98d0efc4029478d0d2aa6b7b64"
+    },
+    {
+      "path": "assets/modelengine/models/jawa_brown/tip.json",
+      "sha256": "cd167a379b0db7087eb09c722e3b6d75832dea6d8eeff705535d109ed82bf13a"
     },
     {
       "path": "assets/modelengine/models/massiff/body.json",
@@ -1205,6 +1335,22 @@
     {
       "path": "assets/modelengine/textures/entity/models/gamorrean_guard.png",
       "sha256": "29c5545f0c7e420caac92b6a8a8441bd2873c54e52aa503b2dfc5e862fb8f231"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/jawa_black.png",
+      "sha256": "2152a20ca56764067b8d6fc7c2aec406ab5e122d2393c3f9bc706079940bdf5c"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/jawa_brown.png",
+      "sha256": "7762f2fd5e10a72275f5b0c5e579710f23911428206d390044612939c328c66f"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/jawa_face.png",
+      "sha256": "7762f2fd5e10a72275f5b0c5e579710f23911428206d390044612939c328c66f"
+    },
+    {
+      "path": "assets/modelengine/textures/entity/models/herd_saddle.png",
+      "sha256": "408e6873ace2e126e39b7dfb382b807454538b37434e117319ce0b5e0768aba7"
     },
     {
       "path": "assets/modelengine/textures/entity/models/massiff.png",

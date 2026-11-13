@@ -22,7 +22,8 @@ public record EncounterPlan(List<Member> members, int leaderLevel) {
     }
 
     public static EncounterPlan roll(Kind kind, RandomGenerator random, SandySettings settings) {
-        int leader = random.nextInt(settings.minLevel(), settings.maxLevel() + 1);
+        // Compatibility fields stay at the vendor base level; no level roll is performed.
+        int leader = 1;
         var types = new ArrayList<String>();
         if (kind == Kind.PATROL) {
             int raiders = random.nextInt(settings.raidersMin(), settings.raidersMax() + 1);
@@ -51,9 +52,7 @@ public record EncounterPlan(List<Member> members, int leaderLevel) {
         }
         var members = new ArrayList<Member>();
         for (int i = 0; i < types.size(); i++) {
-            int level = i == 0 ? leader : Math.clamp(leader + random.nextInt(-1, 2),
-                    settings.minLevel(), settings.maxLevel());
-            members.add(new Member(types.get(i), level));
+            members.add(new Member(types.get(i), 1));
         }
         return new EncounterPlan(members, leader);
     }

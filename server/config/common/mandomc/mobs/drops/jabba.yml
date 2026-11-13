@@ -1,7 +1,5 @@
 schema-version: 1
-# Recovered Jabba mobs; manual Mythic summons until dungeon placement is implemented.
 enabled: true
-# One weapon roll per death. Ranged guards also roll three single cells independently.
 drops:
   GamorreanGuard:
     weapon: gamorrean_axe
@@ -9,19 +7,37 @@ drops:
     ammo-rolls: 0
   QuarrenGuard:
     weapon: se14c
-    weapon-chance: 0.20
+    weapon-chance: 0.2
     ammo: standard_plasma_cells
-    ammo-chance: 0.50
+    ammo-chance: 0.5
     ammo-rolls: 3
   TwilekGuard:
     weapon: a280
-    weapon-chance: 0.20
+    weapon-chance: 0.2
     ammo: standard_plasma_cells
-    ammo-chance: 0.50
+    ammo-chance: 0.5
     ammo-rolls: 3
   BobaFett:
     weapon: ee3
-    weapon-chance: 0.50
+    weapon-chance: 0.5
     ammo: standard_plasma_cells
-    ammo-chance: 0.50
+    ammo-chance: 0.5
     ammo-rolls: 3
+    equipment:
+      boba_jetpack: 0.1
+      boba_flamethrower: 0.15
+  JawaBrown:
+    weapon: jawa_ionization_blaster
+    weapon-chance: 0.12
+    ammo: ionized_energy_cells
+    ammo-chance: 0.5
+    ammo-rolls: 3
+    salvage:
+      minimum: 1
+      maximum: 2
+      pool:
+      - wiring_coil
+      - basic_power_cell
+      - rough_power_cell
+      - basic_emitter_coil
+      - makeshift_recoil_buffer

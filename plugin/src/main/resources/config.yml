@@ -3,4 +3,3 @@ schema-version: 1
 arrival:
   enabled: false
   spawn-world: minecraft:spawnworld
-  survival-world: minecraft:overworld

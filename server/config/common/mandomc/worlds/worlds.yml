@@ -1,9 +1,9 @@
 schema-version: 1
-# Existing dimensions only. Coordinates and facing migrated from Multiverse.
 worlds:
   devworld:
     key: minecraft:devworld
-    aliases: [DevWorld]
+    aliases:
+    - DevWorld
     weather: true
     pvp: true
     difficulty: normal
@@ -15,7 +15,8 @@ worlds:
       pitch: 0.0
   hoth:
     key: minecraft:hoth
-    aliases: [Hoth]
+    aliases:
+    - Hoth
     weather: false
     pvp: true
     difficulty: normal
@@ -25,21 +26,16 @@ worlds:
       z: -153.0
       yaw: -18.75
       pitch: -1.65
-  overworld:
-    key: minecraft:overworld
-    aliases: [dev_world, SurvivalWorld, earth, survival]
-    weather: true
-    pvp: true
-    difficulty: normal
-    spawn:
-      x: -135.5
-      y: 73.0
-      z: -135.5
-      yaw: 0.0
-      pitch: 0.0
+    border:
+      center-x: 0.0
+      center-z: 0.0
+      size: 512.0
   spawnworld:
     key: minecraft:spawnworld
-    aliases: [SpawnWorld, batuu, spawn]
+    aliases:
+    - SpawnWorld
+    - batuu
+    - spawn
     weather: false
     pvp: false
     difficulty: normal
@@ -49,9 +45,23 @@ worlds:
       z: -16.25
       yaw: -9.0
       pitch: -0.9
-  tatooine:
+  ilum:
+    key: minecraft:ilum
+    aliases:
+    - Ilum
+    weather: false
+    pvp: false
+    difficulty: peaceful
+    spawn:
+      x: 11.639
+      y: -60.0
+      z: -55.57
+      yaw: 0.0
+      pitch: 0.0
+  tatooine_legacy:
     key: minecraft:tatooine
-    aliases: [Tatooine]
+    aliases:
+    - TatooineLegacy
     weather: false
     pvp: true
     difficulty: normal
@@ -61,3 +71,35 @@ worlds:
       z: 2201.7401780545574
       yaw: 81.4468
       pitch: -11.09995
+    legacy: true
+    listed: false
+  tatooine:
+    key: minecraft:tatooine_review
+    aliases:
+    - Tatooine
+    - TatooineReview
+    - tatooine_review
+    weather: false
+    pvp: true
+    difficulty: normal
+    spawn:
+      x: -122.95567934671374
+      y: 70.0
+      z: -118.82338196932402
+      yaw: 5.0999756
+      pitch: -0.90000015
+  mandalore:
+    key: minecraft:mandalore_review
+    aliases:
+    - Mandalore
+    - MandaloreReview
+    - mandalore_review
+    weather: false
+    pvp: true
+    difficulty: peaceful
+    spawn:
+      x: -17.5
+      y: 70.0
+      z: -191.5
+      yaw: 0.0
+      pitch: 0.0

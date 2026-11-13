@@ -29,13 +29,16 @@ public final class ArrivalDestinations {
         return resolve(settings.spawnWorld());
     }
 
+    public boolean hasSurvival() { return settings.survivalWorld() != null; }
+
     public Location survival() {
+        if (!hasSurvival()) throw new IllegalStateException("Standalone survival travel is disabled");
         return resolve(settings.survivalWorld());
     }
 
     public void validate() {
         spawn();
-        survival();
+        if (hasSurvival()) survival();
     }
 
     private Location resolve(String key) {

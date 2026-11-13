@@ -1,0 +1,71 @@
+{
+  "beskar": {
+    "rawBounds": [
+      [
+        3.0,
+        4.0,
+        4.0
+      ],
+      [
+        13.0,
+        13.0,
+        12.0
+      ]
+    ],
+    "geometryDimensions": [
+      10.0,
+      9.0,
+      8.0
+    ],
+    "beforeScale": 0.5,
+    "recommendedScale": 1.0,
+    "projectedAreaRatioAfterGeometricMean": 1.0,
+    "projectionSamples": 48
+  },
+  "durasteel": {
+    "rawBounds": [
+      [
+        3.0,
+        4.0,
+        4.0
+      ],
+      [
+        13.0,
+        13.0,
+        12.0
+      ]
+    ],
+    "geometryDimensions": [
+      10.0,
+      9.0,
+      8.0
+    ],
+    "beforeScale": 1,
+    "recommendedScale": 1.0,
+    "projectedAreaRatioAfterGeometricMean": 1.0,
+    "projectionSamples": 48
+  },
+  "plastoid": {
+    "rawBounds": [
+      [
+        2.99,
+        2.8388237731519776,
+        2.680602337443566
+      ],
+      [
+        13.01,
+        12.0,
+        12.0
+      ]
+    ],
+    "geometryDimensions": [
+      10.02,
+      9.161176226848022,
+      9.319397662556433
+    ],
+    "beforeScale": 0.5,
+    "recommendedScale": 0.9414,
+    "projectedAreaRatioAfterGeometricMean": 0.9999336855711201,
+    "projectionSamples": 48
+  }
+}

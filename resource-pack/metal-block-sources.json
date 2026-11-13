@@ -3,7 +3,7 @@
   "source": "Faithful 32x 26.1 June 2026, official unmodified Modrinth version Fj5GKJnf",
   "website": "https://faithfulpack.net/",
   "license": "src/faithful-license.txt",
-  "scope": "Block textures only. Native block IDs, world generation, drops, armor and tool textures are unchanged. Ore rock backgrounds retain Faithful pixels except the requested deepslate dark-tone floor; only each source ore\u2019s saturated mineral pixels are recolored. Distinct Faithful diamond and emerald mineral geometries distinguish Durasteel and Beskar.",
+  "scope": "Block textures only. Native block IDs, world generation, drops, armor and tool textures are unchanged. Ore rock backgrounds retain the exact normal Faithful rock pixels. The deepslate tone floor is restricted to mineral/recess pixels; saturated mineral pixels retain the accepted recoloring. Distinct Faithful diamond and emerald mineral geometries distinguish Durasteel and Beskar.",
   "blocks": [
     {
       "name": "durasteel_block",
@@ -54,7 +54,7 @@
         0.61
       ],
       "shadowFloorLuma": 80,
-      "outputSha256": "3aa62b31758a363a0c50ef1f59ce2faeb6d5bfc4e186ef954b595a8ee2211d88"
+      "outputSha256": "1d3fea5312a5518e96b148c5e55dee2a0f96bc53a096b856d63a7113a581325b"
     },
     {
       "name": "beskar_block",
@@ -106,7 +106,7 @@
         0.49
       ],
       "shadowFloorLuma": 80,
-      "outputSha256": "cdd410dedc9149f1108065626e61229c812b1962f5ecc81b03cc9a4f337c0849"
+      "outputSha256": "9491dad19b597a10af800664eb93a07e942f9ab6336c59d2c315dcb68b40f7a0"
     }
   ]
 }

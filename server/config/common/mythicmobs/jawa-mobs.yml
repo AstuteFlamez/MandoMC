@@ -1,0 +1,70 @@
+JawaBrown:
+  Type: PIG
+  Display: '&6Jawa Trader'
+  Health: 10
+  Damage: 0
+  Faction: Jawa
+  Options:
+    Silent: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    PreventLeashing: true
+    PreventRenaming: true
+    PreventJockeyMounts: true
+    MovementSpeed: 0.32
+    FollowRange: 32
+    Despawn: true
+    Invincible: false
+    Collidable: true
+  AIGoalSelectors:
+  - clear
+  - lookattarget
+  - moveWithinDistanceOfTarget{speed=1;minrange=8;maxrange=16}
+  - randomstroll
+  - lookatplayers
+  AITargetSelectors:
+  - clear
+  - hurtbytarget
+  Modules:
+    ThreatTable: true
+  DamageModifiers:
+  - FALL 0
+  Skills:
+  - model{mid=jawa_brown;h=false} @self ~onSpawn
+  - model{mid=jawa_brown;h=false} @self ~onLoad
+  - skill{s=JawaVoice} @self ~onTimer:150 0.75
+JawaGray:
+  Type: PIG
+  Display: '&7Jawa Salvage Buyer'
+  Health: 10
+  Damage: 0
+  Faction: Jawa
+  Options:
+    Silent: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    PreventLeashing: true
+    PreventRenaming: true
+    PreventJockeyMounts: true
+    MovementSpeed: 0
+    FollowRange: 32
+    Despawn: false
+    Invincible: true
+    Collidable: false
+  AIGoalSelectors:
+  - clear
+  AITargetSelectors:
+  - clear
+  Modules:
+    ThreatTable: false
+  DamageModifiers:
+  - FALL 0
+  Skills:
+  - model{mid=jawa_black;h=false} @self ~onSpawn
+  - model{mid=jawa_black;h=false} @self ~onLoad
+  - tint{mid=jawa_black;part=face;exactmatch=true;color=FF0000} @self ~onSpawn
+  - brightness{mid=jawa_black;part=face;block=15;sky=15} @self ~onSpawn
+  - tint{mid=jawa_black;part=face;exactmatch=true;color=FF0000} @self ~onLoad
+  - brightness{mid=jawa_black;part=face;block=15;sky=15} @self ~onLoad

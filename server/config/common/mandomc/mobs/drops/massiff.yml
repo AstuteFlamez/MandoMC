@@ -1,0 +1,4 @@
+schema-version: 1
+# One edible rib item on 75% of deaths, matching the legacy Massiff.
+item: massiff_ribs
+chance: 0.75

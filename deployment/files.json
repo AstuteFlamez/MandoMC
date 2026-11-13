@@ -1,0 +1,497 @@
+{
+  "schemaVersion": 1,
+  "files": [
+    {
+      "source": "redstone-agent/target/MandoMC-RedstoneAgent.jar",
+      "target": "agents/MandoMC-RedstoneAgent.jar"
+    },
+    {
+      "source": "server/datapacks/mandomc-jetpack/data/mandomc/enchantment/jetpack.json",
+      "target": "dev_world/datapacks/mandomc-jetpack/data/mandomc/enchantment/jetpack.json"
+    },
+    {
+      "source": "server/datapacks/mandomc-jetpack/pack.mcmeta",
+      "target": "dev_world/datapacks/mandomc-jetpack/pack.mcmeta"
+    },
+    {
+      "source": "server/config/common/coreprotect.yml",
+      "target": "plugins/CoreProtect/config.yml"
+    },
+    {
+      "source": "access/src/main/resources/config.yml",
+      "target": "plugins/MandoAccess/config.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/admin/utilities.yml",
+      "target": "plugins/MandoMC/admin/utilities.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/arrival/starter-kit.yml",
+      "target": "plugins/MandoMC/arrival/starter-kit.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/clans/settings.yml",
+      "target": "plugins/MandoMC/clans/settings.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/combat/combat.yml",
+      "target": "plugins/MandoMC/combat/combat.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/combat/sabers.yml",
+      "target": "plugins/MandoMC/combat/sabers.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/config.yml",
+      "target": "plugins/MandoMC/config.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/crates/crates.yml",
+      "target": "plugins/MandoMC/crates/crates.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/decor/placements.yml",
+      "target": "plugins/MandoMC/decor/placements.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/decor/travel-guides.yml",
+      "target": "plugins/MandoMC/decor/travel-guides.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/economy/auction-house.yml",
+      "target": "plugins/MandoMC/economy/auction-house.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/economy/credits.yml",
+      "target": "plugins/MandoMC/economy/credits.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/equipment/boba.yml",
+      "target": "plugins/MandoMC/equipment/boba.yml"
+    },
+    {
+      "source": "plugin/src/main/resources/equipment/jetpack-chestplate.yml",
+      "target": "plugins/MandoMC/equipment/jetpack-chestplate.yml"
+    },
+    {
+      "source": "plugin/src/main/resources/equipment/jetpack-visual-tests.yml",
+      "target": "plugins/MandoMC/equipment/jetpack-visual-tests.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/events/beskar.yml",
+      "target": "plugins/MandoMC/events/beskar.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/events/jabba.yml",
+      "target": "plugins/MandoMC/events/jabba.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/events/koth.yml",
+      "target": "plugins/MandoMC/events/koth.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/events/schedule.yml",
+      "target": "plugins/MandoMC/events/schedule.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/interface/hud.yml",
+      "target": "plugins/MandoMC/interface/hud.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/catalog.yml",
+      "target": "plugins/MandoMC/items/catalog.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/boba-equipment.yml",
+      "target": "plugins/MandoMC/items/definitions/boba-equipment.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/crates.yml",
+      "target": "plugins/MandoMC/items/definitions/crates.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/dewback.yml",
+      "target": "plugins/MandoMC/items/definitions/dewback.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/dioxis.yml",
+      "target": "plugins/MandoMC/items/definitions/dioxis.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/jabba-loot.yml",
+      "target": "plugins/MandoMC/items/definitions/jabba-loot.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/jabba.yml",
+      "target": "plugins/MandoMC/items/definitions/jabba.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/koth.yml",
+      "target": "plugins/MandoMC/items/definitions/koth.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/legacy.yml",
+      "target": "plugins/MandoMC/items/definitions/legacy.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/massiff.yml",
+      "target": "plugins/MandoMC/items/definitions/massiff.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/materials.yml",
+      "target": "plugins/MandoMC/items/definitions/materials.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/rancor-skull.yml",
+      "target": "plugins/MandoMC/items/definitions/rancor-skull.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/robes.yml",
+      "target": "plugins/MandoMC/items/definitions/robes.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/sabers.yml",
+      "target": "plugins/MandoMC/items/definitions/sabers.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/tusken.yml",
+      "target": "plugins/MandoMC/items/definitions/tusken.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/vehicle-ammo.yml",
+      "target": "plugins/MandoMC/items/definitions/vehicle-ammo.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/vehicles.yml",
+      "target": "plugins/MandoMC/items/definitions/vehicles.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/recipes.yml",
+      "target": "plugins/MandoMC/items/recipes.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/language/chat-style.yml",
+      "target": "plugins/MandoMC/language/chat-style.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/language/clans.yml",
+      "target": "plugins/MandoMC/language/clans.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/language/handbook.yml",
+      "target": "plugins/MandoMC/language/handbook.yml"
+    },
+    {
+      "source": "plugin/src/main/resources/language/herd.yml",
+      "target": "plugins/MandoMC/language/herd.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/language/messages.yml",
+      "target": "plugins/MandoMC/language/messages.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/language/territory.yml",
+      "target": "plugins/MandoMC/language/territory.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/leaderboards/world.yml",
+      "target": "plugins/MandoMC/leaderboards/world.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/mobs/bossk.yml",
+      "target": "plugins/MandoMC/mobs/bossk.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/mobs/drops/bantha.yml",
+      "target": "plugins/MandoMC/mobs/drops/bantha.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/mobs/drops/dewback.yml",
+      "target": "plugins/MandoMC/mobs/drops/dewback.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/mobs/drops/jabba.yml",
+      "target": "plugins/MandoMC/mobs/drops/jabba.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/mobs/drops/massiff.yml",
+      "target": "plugins/MandoMC/mobs/drops/massiff.yml"
+    },
+    {
+      "source": "plugin/src/main/resources/mobs/herd.yml",
+      "target": "plugins/MandoMC/mobs/herd.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/mobs/jawas.yml",
+      "target": "plugins/MandoMC/mobs/jawas.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/mobs/rancor.yml",
+      "target": "plugins/MandoMC/mobs/rancor.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/mobs/spawning.yml",
+      "target": "plugins/MandoMC/mobs/spawning.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/parkour/ilum.yml",
+      "target": "plugins/MandoMC/parkour/ilum.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/ranks/ranks.yml",
+      "target": "plugins/MandoMC/ranks/ranks.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/rules/survival.yml",
+      "target": "plugins/MandoMC/rules/survival.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/territory/maps.yml",
+      "target": "plugins/MandoMC/territory/maps.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/travel/teleport.yml",
+      "target": "plugins/MandoMC/travel/teleport.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/travel/warps.yml",
+      "target": "plugins/MandoMC/travel/warps.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/trophies/settings.yml",
+      "target": "plugins/MandoMC/trophies/settings.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/vehicles/menu.yml",
+      "target": "plugins/MandoMC/vehicles/menu.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/vehicles/repairs.yml",
+      "target": "plugins/MandoMC/vehicles/repairs.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/vehicles/settings.yml",
+      "target": "plugins/MandoMC/vehicles/settings.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/vehicles/speederbike.yml",
+      "target": "plugins/MandoMC/vehicles/speederbike.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/vehicles/tiefighter.yml",
+      "target": "plugins/MandoMC/vehicles/tiefighter.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/vehicles/uwing.yml",
+      "target": "plugins/MandoMC/vehicles/uwing.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/vehicles/weapons.yml",
+      "target": "plugins/MandoMC/vehicles/weapons.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/vehicles/xwing.yml",
+      "target": "plugins/MandoMC/vehicles/xwing.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/worlds/explosions.yml",
+      "target": "plugins/MandoMC/worlds/explosions.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/worlds/worlds.yml",
+      "target": "plugins/MandoMC/worlds/worlds.yml"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/bantha.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/bantha.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/boba_fett.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/boba_fett.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/bossk.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/bossk.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/dewback.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/dewback.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/gamorrean_guard.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/gamorrean_guard.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/jawa_black.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/jawa_black.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/jawa_brown.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/jawa_brown.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/massiff.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/massiff.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/melee_raider.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/melee_raider.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/quarren_guard.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/quarren_guard.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/rancor.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/rancor.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/ranged_raider.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/ranged_raider.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/speederbike.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/speederbike.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/tiefighter.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/tiefighter.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/twilek_guard.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/twilek_guard.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/uwing.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/uwing.bbmodel"
+    },
+    {
+      "source": "server/config/common/modelengine/blueprints/xwing.bbmodel",
+      "target": "plugins/ModelEngine/blueprints/xwing.bbmodel"
+    },
+    {
+      "source": "server/config/common/mythicmobs/boba-mob.yml",
+      "target": "plugins/MythicMobs/Mobs/boba-mob.yml"
+    },
+    {
+      "source": "server/config/common/mythicmobs/bossk-mob.yml",
+      "target": "plugins/MythicMobs/Mobs/mandomc-bossk.yml"
+    },
+    {
+      "source": "server/config/common/mythicmobs/jabba-mobs.yml",
+      "target": "plugins/MythicMobs/Mobs/mandomc-jabba.yml"
+    },
+    {
+      "source": "server/config/common/mythicmobs/jawa-mobs.yml",
+      "target": "plugins/MythicMobs/Mobs/mandomc-jawa.yml"
+    },
+    {
+      "source": "server/config/common/mythicmobs/sandy-mobs.yml",
+      "target": "plugins/MythicMobs/Mobs/mandomc-sandy.yml"
+    },
+    {
+      "source": "server/config/common/mythicmobs/rancor-mob.yml",
+      "target": "plugins/MythicMobs/Mobs/rancor-mob.yml"
+    },
+    {
+      "source": "server/config/common/mythicmobs/randomspawns/ExampleRandomSpawns.yml",
+      "target": "plugins/MythicMobs/RandomSpawns/ExampleRandomSpawns.yml"
+    },
+    {
+      "source": "server/config/common/mythicmobs/boba-skills.yml",
+      "target": "plugins/MythicMobs/Skills/boba-skills.yml"
+    },
+    {
+      "source": "server/config/common/mythicmobs/hostile-facing.yml",
+      "target": "plugins/MythicMobs/Skills/hostile-facing.yml"
+    },
+    {
+      "source": "server/config/common/mythicmobs/bossk-skills.yml",
+      "target": "plugins/MythicMobs/Skills/mandomc-bossk.yml"
+    },
+    {
+      "source": "server/config/common/mythicmobs/jabba-skills.yml",
+      "target": "plugins/MythicMobs/Skills/mandomc-jabba.yml"
+    },
+    {
+      "source": "server/config/common/mythicmobs/jawa-skills.yml",
+      "target": "plugins/MythicMobs/Skills/mandomc-jawa.yml"
+    },
+    {
+      "source": "server/config/common/mythicmobs/massiff-skills.yml",
+      "target": "plugins/MythicMobs/Skills/mandomc-massiff.yml"
+    },
+    {
+      "source": "server/config/common/mythicmobs/sandy-skills.yml",
+      "target": "plugins/MythicMobs/Skills/mandomc-sandy.yml"
+    },
+    {
+      "source": "server/config/common/mythicmobs/rancor-skills.yml",
+      "target": "plugins/MythicMobs/Skills/rancor-skills.yml"
+    },
+    {
+      "source": "server/config/common/votingplugin/VoteSites.yml",
+      "target": "plugins/VotingPlugin/VoteSites.yml"
+    },
+    {
+      "source": "server/config/common/weaponmechanics/ionized_energy_cells.yml",
+      "target": "plugins/WeaponMechanics/ammos/ionized_energy_cells.yml"
+    },
+    {
+      "source": "server/config/common/weaponmechanics/standard_plasma_cells.yml",
+      "target": "plugins/WeaponMechanics/ammos/standard_plasma_cells.yml"
+    },
+    {
+      "source": "server/config/common/weaponmechanics/jawabluelaser.yml",
+      "target": "plugins/WeaponMechanics/projectiles/jawabluelaser.yml"
+    },
+    {
+      "source": "server/config/common/weaponmechanics/redlaser.yml",
+      "target": "plugins/WeaponMechanics/projectiles/redlaser.yml"
+    },
+    {
+      "source": "server/config/common/weaponmechanics/ee3.yml",
+      "target": "plugins/WeaponMechanics/weapons/ee3.yml"
+    },
+    {
+      "source": "server/config/common/weaponmechanics/a280.yml",
+      "target": "plugins/WeaponMechanics/weapons/mandomc/a280.yml"
+    },
+    {
+      "source": "server/config/common/weaponmechanics/a280_guard.yml",
+      "target": "plugins/WeaponMechanics/weapons/mandomc/a280_guard.yml"
+    },
+    {
+      "source": "server/config/common/weaponmechanics/cycler.yml",
+      "target": "plugins/WeaponMechanics/weapons/mandomc/cycler.yml"
+    },
+    {
+      "source": "server/config/common/weaponmechanics/e11.yml",
+      "target": "plugins/WeaponMechanics/weapons/mandomc/e11.yml"
+    },
+    {
+      "source": "server/config/common/weaponmechanics/jawa_ionization.yml",
+      "target": "plugins/WeaponMechanics/weapons/mandomc/jawa_ionization.yml"
+    },
+    {
+      "source": "server/config/common/weaponmechanics/relbyv10.yml",
+      "target": "plugins/WeaponMechanics/weapons/mandomc/relbyv10.yml"
+    },
+    {
+      "source": "server/config/common/weaponmechanics/se14c.yml",
+      "target": "plugins/WeaponMechanics/weapons/mandomc/se14c.yml"
+    },
+    {
+      "source": "server/config/common/weaponmechanics/se14c_guard.yml",
+      "target": "plugins/WeaponMechanics/weapons/mandomc/se14c_guard.yml"
+    },
+    {
+      "source": "access/target/MandoAccess.jar",
+      "target": "plugins/update/MandoAccess.jar"
+    },
+    {
+      "source": "plugin/target/MandoMC.jar",
+      "target": "plugins/update/MandoMC.jar"
+    }
+  ]
+}

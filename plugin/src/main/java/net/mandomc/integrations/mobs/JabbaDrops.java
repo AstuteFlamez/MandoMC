@@ -21,7 +21,9 @@ public final class JabbaDrops implements Listener {
             throw new IllegalStateException("jabba-mobs.enabled requires MythicMobs");
         }
         for (var rule : settings.mobs().values()) {
-            if (!items.ids().contains(rule.weapon()) || (rule.ammoRolls() > 0 && !items.ids().contains(rule.ammo()))) {
+            if (rule.extras().stream().anyMatch(extra -> !items.ids().contains(extra.item()))
+                    || !items.ids().containsAll(rule.salvage().pool())
+                    || !items.ids().contains(rule.weapon()) || (rule.ammoRolls() > 0 && !items.ids().contains(rule.ammo()))) {
                 throw new IllegalArgumentException("mobs/drops/jabba.yml: unknown catalog weapon or ammo item");
             }
         }
@@ -47,5 +49,6 @@ public final class JabbaDrops implements Listener {
                 plugin.getLogger().log(java.util.logging.Level.SEVERE, "Jabba mob drop failed", error);
             }
         }, plugin);
+        new RancorTrophyDrops(plugin,items);
     }
 }

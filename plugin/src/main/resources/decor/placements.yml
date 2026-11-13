@@ -1,0 +1,222 @@
+schema-version: 1
+enabled: true
+look-range: 5
+messages:
+  npc-line: <gold><npc></gold> <dark_gray>»</dark_gray> <gray><line>
+placements:
+- id: point1_u_wing
+  name: U-Wing
+  type: u_wing
+  model: uwing
+  scale: 1
+  location:
+    world: minecraft:spawnworld
+    x: 11.695954251385313
+    y: 93.0
+    z: -30.509730416635392
+    yaw: 18.749952
+    pitch: 0.4886691
+  mode: landing
+  animations:
+  - dismount
+  open-doors: true
+- id: point2_x_wing
+  name: X-Wing
+  type: x_wing
+  model: xwing
+  scale: 1
+  location:
+    world: minecraft:spawnworld
+    x: 19.24688483103097
+    y: 93.0
+    z: 1.1653419729913017
+    yaw: 113.84991
+    pitch: -0.26132476
+  mode: landing
+  animations:
+  - dismount
+- id: point3_boba_fett
+  # Baseline capture remains immutable; three model pixels forward along saved yaw.
+  forward-offset-pixels: 3
+  name: Boba Fett
+  type: boba_fett
+  model: boba_fett
+  scale: 1
+  location:
+    world: minecraft:spawnworld
+    x: 13.699999988079071
+    y: 93.0
+    z: 20.836308565903398
+    yaw: 92.54987
+    pitch: 2.1386168
+  mode: stationary_idle
+  animations:
+  - idle
+  dialogue:
+  - Keep your eyes open. Trouble never announces itself.
+  - Every job has a price. Make sure you know yours.
+  - A quiet outpost is usually hiding something.
+- id: point4_bossk
+  name: Bossk
+  type: bossk
+  model: bossk
+  scale: 1
+  location:
+    world: minecraft:spawnworld
+    x: 14.37886593560656
+    y: 93.0
+    z: 19.492625355917877
+    yaw: 80.54982
+    pitch: -1.1614023
+  mode: stationary_idle
+  animations:
+  - idle
+  dialogue:
+  - A good hunter knows when to wait.
+  - There is always another contract.
+  - Mind your footing. Some trails lead nowhere.
+- id: point5_gamorrean
+  name: Gamorrean Guard
+  type: gamorrean
+  model: gamorrean_guard
+  scale: 1
+  location:
+    world: minecraft:spawnworld
+    x: -54.76367544627096
+    y: 96.0
+    z: -18.549852054947298
+    yaw: -57.600037
+    pitch: 4.238596
+  mode: stationary_idle
+  animations:
+  - idle
+  dialogue:
+  - Hrrmph. No trouble here.
+  - Keep walking. The gate is watched.
+  - Food first. Questions later.
+- id: point6_quarren
+  name: Quarren
+  type: quarren
+  model: quarren_guard
+  scale: 1
+  location:
+    world: minecraft:spawnworld
+    x: -14.573530431857867
+    y: 93.0
+    z: 7.47932286486537
+    yaw: -150.60008
+    pitch: -1.7614032
+  mode: stationary_idle
+  animations:
+  - idle
+  dialogue:
+  - The docks hear more than the cantina.
+  - Travel light, and keep your credits close.
+  - Ask the right question. Quietly.
+- id: point7_twilek
+  name: Twi'lek
+  type: twilek
+  model: twilek_guard
+  scale: 1
+  location:
+    world: minecraft:spawnworld
+    x: -10.95147900673488
+    y: 93.0
+    z: 9.391972808180382
+    yaw: -154.19997
+    pitch: -0.8614033
+  mode: stationary_idle
+  animations:
+  - idle
+  dialogue:
+  - A friendly face can open more doors than a blaster.
+  - New arrivals always have the best stories.
+  - If you need directions, try asking before you get lost.
+- id: point8_tie_fighter
+  name: TIE Fighter
+  type: tie_fighter
+  model: tiefighter
+  scale: 1
+  location:
+    world: minecraft:spawnworld
+    x: 29.843560502398436
+    y: 92.0
+    z: 104.22759579963517
+    yaw: -135.89964
+    pitch: -1.161387
+  mode: stationary
+  animations: []
+- id: point9_speeder_bike
+  name: 74-Z Speeder Bike
+  type: speeder_bike
+  model: speederbike
+  scale: 2
+  location:
+    world: minecraft:spawnworld
+    x: 27.078748827884958
+    y: 91.0
+    z: 93.71572830330047
+    yaw: 56.85031
+    pitch: 0.48860472
+  mode: stationary
+  animations: []
+
+- id: brown_jawa_01
+  name: Jawa
+  type: jawa_brown
+  model: jawa_brown
+  scale: 1
+  location:
+    world: minecraft:spawnworld
+    x: -5.403046981270816
+    y: 93.0
+    z: 34.40807852444705
+    yaw: -127.69224500000001
+    pitch: 0
+  mode: stationary_idle
+  animations:
+  - idle
+  dialogue:
+  - Utinni! Keep your tools close.
+  - Every little piece has a story.
+  - Quiet feet find the best scrap.
+
+- id: brown_jawa_02
+  name: Jawa
+  type: jawa_brown
+  model: jawa_brown
+  scale: 1
+  location:
+    world: minecraft:spawnworld
+    x: -4.416865618655401
+    y: 93.0
+    z: 32.00444662250574
+    yaw: -7.692244999999957
+    pitch: 0
+  mode: stationary_idle
+  animations:
+  - idle
+  dialogue:
+  - A careful eye spots what others leave behind.
+  - Utinni! This outpost has good stories.
+  - Keep your pack tidy. You never know what you will find.
+
+- id: brown_jawa_03
+  name: Jawa
+  type: jawa_brown
+  model: jawa_brown
+  scale: 1
+  location:
+    world: minecraft:spawnworld
+    x: -2.8283500115352265
+    y: 93.0
+    z: 34.0603206862401
+    yaw: 112.30775500000004
+    pitch: 0
+  mode: stationary_idle
+  animations:
+  - idle
+  dialogue:
+  - Watch the sky. There is always another ship coming.
+  - Some travelers talk too much. I prefer to listen.
+  - Utinni! Safe travels, friend.

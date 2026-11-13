@@ -36,6 +36,15 @@ public final class CreditLedger {
     private static void validate(long cents) { if (cents < 0 || cents > MAX) throw new IllegalArgumentException("amount"); }
     public static String format(long cents) { return String.format(Locale.US, "%,d.%02d", cents / 100, cents % 100); }
     public long balance(UUID id) { return balances.getOrDefault(id, 0L); }
+    /** First login only: an existing account, including a zero balance, is never replaced. */
+    public synchronized boolean initializeAccount(UUID id, boolean newPlayer, long initialCents) throws Exception {
+        validate(initialCents);
+        if (balances.containsKey(id)) return false;
+        var updated = new HashMap<>(balances);
+        updated.put(id, newPlayer ? initialCents : 0L);
+        save(updated);
+        return newPlayer;
+    }
     public List<Map.Entry<UUID, Long>> top(int limit) {
         return balances.entrySet().stream().sorted(Map.Entry.<UUID, Long>comparingByValue().reversed()
                 .thenComparing(e -> e.getKey().toString())).limit(limit).toList();
@@ -61,6 +70,32 @@ public final class CreditLedger {
         if (next < 0) throw new IllegalArgumentException("insufficient");
         if (next > MAX) throw new IllegalArgumentException("limit");
         var updated = new HashMap<>(balances); updated.put(id, next); save(updated);
+    }
+    /** Shop credit and inventory claims share the same atomic snapshot and receipt namespace as auctions. */
+    public synchronized void supply(UUID transaction, UUID owner, String item, long price, boolean buying) throws Exception {
+        validate(price);
+        if (price == 0 || auctions.accepted().contains(transaction)) throw new IllegalArgumentException("stale");
+        long balance = balance(owner);
+        if (buying && balance < price) throw new IllegalArgumentException("insufficient");
+        if (!buying && balance > MAX - price) throw new IllegalArgumentException("limit");
+        var updated = new HashMap<>(balances);
+        updated.put(owner, buying ? balance - price : balance + price);
+        var accepted = new HashSet<>(auctions.accepted()); accepted.add(transaction);
+        var claims = new HashMap<>(auctions.claims());
+        if (buying) {
+            if (item == null || Base64.getDecoder().decode(item).length == 0) throw new IllegalArgumentException("amount");
+            claims.put(transaction, new net.mandomc.gameplay.auction.AuctionBook.Claim(transaction, owner, item));
+        }
+        save(updated, new net.mandomc.gameplay.auction.AuctionBook(auctions.listings(), claims, accepted));
+    }
+    /** Every deposited stack is accepted in the same durable snapshot as the one total payout. */
+    public synchronized void sellSupplies(UUID owner, Set<UUID> receipts, long price) throws Exception {
+        validate(price);
+        if(price==0 || receipts.isEmpty() || !Collections.disjoint(auctions.accepted(),receipts))throw new IllegalArgumentException("stale");
+        if(balance(owner)>MAX-price)throw new IllegalArgumentException("limit");
+        var updated=new HashMap<>(balances);updated.put(owner,balance(owner)+price);
+        var accepted=new HashSet<>(auctions.accepted());accepted.addAll(receipts);
+        save(updated,new net.mandomc.gameplay.auction.AuctionBook(auctions.listings(),auctions.claims(),accepted));
     }
     public synchronized void listAuction(net.mandomc.gameplay.auction.AuctionBook.Listing row, int limit, long now) throws Exception {
         validate(row.price());
