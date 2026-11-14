@@ -1,5 +1,9 @@
 # Resume here
 
+## Reconciled ready updates for both servers (2026-11-13)
+
+Merged complete Naboo source/history and the Durasteel hand-pose fix into current dev without dropping the newer eco, leaderboard, voting, DevWorld or pack-compaction changes. Existing Boba equipment source matches its completed feature checkout. Combined reactor passes 322 Java tests and all 75 tooling checks; the compact pack includes all 1,181 assets. An isolated current-dev snapshot is checking the full Naboo terrain/map and cross-feature lifecycle. Production migration will add only the new Naboo dimension and 902 approved Naboo originals; all 2,115 existing frozen-scope entries, other worlds and player data remain preserved. Next action: finish the combined runtime check, merge the checked release, and stage Naboo's world migration before production restart.
+
 ## Durasteel hand orientation deployed to development (2026-11-12)
 
 Published `resource-pack-26.1.2-90a420b3eb34` from the tested feature branch and anonymously verified ZIP/manifest SHA-1 `f3d9224251a21eb3123e07621619129643c3c98a`. Only Durasteel's two hand transforms differ from the latest hosted pack; its ten existing map/ore texture updates also reach the older development runtime. All 72 tooling checks pass. Normal development restart completed with zero startup errors, and the owner's client reports MandoMC SUCCESSFULLY_LOADED. All 14 installed binary/launcher hashes are unchanged; only pack URL/hash property values changed. Production runtime was not modified. Visual pose confirmation remains pending. Next action: client-check Durasteel in first person/offhand beside Beskar and Stormtrooper.
