@@ -118,3 +118,12 @@ See [native utilities](../docs/features/native-utilities.md) for commands and pe
 The nine-room operation uses `events/jabba.yml`, original loot items in `items/definitions/jabba-loot.yml`, and the current plugin. Supply private gate panels with `scripts/import-jabba-doors.py LEGACY_ROOT server/runtime/plugins/MandoMC/jabba/doors.yml`; retain the private closed-state checkpoints and map backups. BigDoors is not installed or required. `/event start jabba` begins the run; `/event stop` resets it. See [operation details](../docs/features/jabba-dungeon.md) for the latest kills-only progression, cache timing, native door animation and recovery.
 
 WorldGuard was replaced on 2026-11-10 by native territory protection and its local JAR/data archived. Keep WorldEdit installed for staff tools. `/c map` uses the same native zone policy as combat, edits, spawning and protected arrival validation.
+
+## Explicit development pack selection
+
+When `server/runtime/resource-packs/pinned.json` exists, startup verifies and uses
+that exact versioned release instead of automatically selecting the latest main
+release. This keeps local-feature assets such as Naboo available across restarts.
+The same version/format/repository/checksum validation applies, and an invalid pin
+fails closed. Update or remove the pin only when deliberately choosing another
+verified pack. Without a pin, the existing latest-release/cache workflow applies.

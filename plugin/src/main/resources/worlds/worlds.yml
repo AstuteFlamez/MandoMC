@@ -103,3 +103,20 @@ worlds:
       z: -191.5
       yaw: 0.0
       pitch: 0.0
+  naboo:
+    key: minecraft:naboo
+    aliases:
+    - Naboo
+    weather: false
+    pvp: true
+    difficulty: normal
+    spawn:
+      x: -13341.430043026525
+      y: 59.0
+      z: 3209.6097442130404
+      yaw: 36.899933
+      pitch: -3.6000152
+    border:
+      center-x: -13552.0
+      center-z: 3440.0
+      size: 500.0
