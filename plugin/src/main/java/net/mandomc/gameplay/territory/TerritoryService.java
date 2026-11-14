@@ -54,6 +54,10 @@ public final class TerritoryService implements Listener, AutoCloseable {
                 () -> plugin.getServer().getOnlinePlayers().forEach(this::announce), 10, 10);
     }
     public TerritoryPolicy policy() { return policy; }
+    public boolean interactions(Location location) {
+        return location != null && location.getWorld() != null && policy.interactions(
+                location.getWorld().getKey().toString(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
+    }
     public boolean mechanisms(Location location) {
         return location != null && location.getWorld() != null && policy.mechanisms(location.getWorld().getKey().toString());
     }
