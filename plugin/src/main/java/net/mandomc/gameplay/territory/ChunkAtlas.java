@@ -33,5 +33,23 @@ public record ChunkAtlas(String world, String name, int minX, int minZ, int maxX
     }
 
     public boolean contains(int x, int z) { return x >= minX && x <= maxX && z >= minZ && z <= maxZ; }
+
+    /** A finite world-border projection; protection outside that view remains authoritative. */
+    public static ChunkAtlas borderView(TerritoryPolicy policy,String world,String name,
+                                       double centerX,double centerZ,double size,int y) {
+        if(!Double.isFinite(size)||size<=0||size>1024||!Double.isFinite(centerX)||!Double.isFinite(centerZ))return null;
+        int minX=(int)Math.floor((centerX-size/2)/16),maxX=(int)Math.ceil((centerX+size/2)/16)-1;
+        int minZ=(int)Math.floor((centerZ-size/2)/16),maxZ=(int)Math.ceil((centerZ+size/2)/16)-1;
+        if((long)maxX-minX>=64||(long)maxZ-minZ>=64)return null;
+        var rows=new java.util.ArrayList<String>();
+        for(int z=minZ;z<=maxZ;z++) {
+            var row=new StringBuilder();
+            for(int x=minX;x<=maxX;x++)row.append(switch(policy.zone(world,x*16+8,y,z*16+8)) {
+                case SAFEZONE->'S';case WARZONE->'W';case WILDERNESS->'.';
+            });
+            rows.add(row.toString());
+        }
+        return new ChunkAtlas(world,name,minX,minZ,maxX,maxZ,rows);
+    }
     public char zone(int x, int z) { return contains(x, z) ? rows.get(z - minZ).charAt(x - minX) : '.'; }
 }
