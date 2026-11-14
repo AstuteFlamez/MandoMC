@@ -1,5 +1,14 @@
 # Resume here
 
+## Durasteel hand orientation deployed to development (2026-11-12)
+
+Published `resource-pack-26.1.2-90a420b3eb34` from the tested feature branch and anonymously verified ZIP/manifest SHA-1 `f3d9224251a21eb3123e07621619129643c3c98a`. Only Durasteel's two hand transforms differ from the latest hosted pack; its ten existing map/ore texture updates also reach the older development runtime. All 72 tooling checks pass. Normal development restart completed with zero startup errors, and the owner's client reports MandoMC SUCCESSFULLY_LOADED. All 14 installed binary/launcher hashes are unchanged; only pack URL/hash property values changed. Production runtime was not modified. Visual pose confirmation remains pending. Next action: client-check Durasteel in first person/offhand beside Beskar and Stormtrooper.
+
+## Durasteel hand orientation staged (2026-11-12)
+
+On `bilal/durasteel-hand-orientation`, Durasteel now uses the existing Beskar/Stormtrooper first- and third-person hand transforms, addressing its missing hand pose. All other Durasteel model data and all 1177 unrelated pack entries are unchanged. Resource-pack build, eight model checks and `./scripts/build.sh` pass. Publication and in-client verification remain pending. See [feature](features/durasteel-hand-orientation.md). Next action: apply the tested pack to development and check Durasteel in both hands beside the working helmets.
+
+
 ## Naboo native cave redesign live (2026-11-13)
 
 On `bilal/naboo-dev`, replaced the shared-floor cave generator with real native Minecraft cave geometry from a bounded private 1,024-chunk reference. Naboo now has winding narrow passages, broad caverns, pillars, ledges, drops and separate systems, with 1,636,976 excavated cells across 175 systems and floors at 120 elevations. Added 12 mossy grottos, six dripstone areas, 18 fully contained shallow pools and 450 supported glow-lichen lights. The exact Agrinium/Durasteel/Electrum host budgets are retained; no new ore families, mobs, loot or foreign biomes/structures are imported. The surface, foundation margins, building recolor, island/warp, zones, 500×500 border, atlas and pinned resource pack are preserved.
