@@ -1,10 +1,12 @@
 # Resume here
 
-## Interactive tutorial implemented (2026-11-15)
+## Interactive tutorial deployed to development (2026-11-15)
 
-On `bilal/interactive-tutorial`, replaced the book-only `/tutorial` with sequential private practice: warp selection, real clan map, isolated clan create/claim/disband, three native Gamorrean kills, Vader saber throw, practice Jawa purchase/sale, recipes, ten airborne X-wing seconds, a cannon target and the three event explanations. New players enter after the complete resource-pack stack loads. `/tutorial end` restores normal inventory; first completion grants 5,000 credits and the existing once-only starter kit. Five warm private worlds expand to a bounded sixteen; unrelated commands, crates and inventories are blocked. Inventory escrow survives reconnects and reward receipts commit atomically with credits.
+Merged PR #28 into dev (`c0ea13d`), replacing the book-only `/tutorial` with sequential private practice: warp selection, real clan map, isolated clan create/claim/disband, three native Gamorrean kills, Vader saber throw, practice Jawa purchase/sale, recipes, ten airborne X-wing seconds, a cannon target and the three event explanations. New players enter after the complete resource-pack stack loads. `/tutorial end` restores normal inventory; first completion grants 5,000 credits and the existing once-only starter kit. Five warm private worlds expand to a bounded sixteen; unrelated commands, crates and inventories are blocked. Inventory escrow survives reconnects and reward receipts commit atomically with credits.
 
-The reactor passes 329 Java tests and all 75 tooling checks. The original full native walkthrough passed 222 assertions; expanded clan, reload-exit and process-restart checks are in progress. Visual layout and physical client controls remain unverified. See [interactive tutorial](features/interactive-tutorial.md). Next action: finish native lifecycle checks and deploy the exact checked artifact to backed-up local development.
+The reactor passes 329 Java tests and all 75 tooling checks; GitHub checks pass. The final native walkthrough passes 240 assertions, including real vendor combat/models/flight, separate players, preserved real clans, reload-exit cancellation and deferred physical crate keys. Actual JVM restart recovery passes 51 assertions, restoring inventory and reconciling a lost reward callback without duplicate credits.
+
+The local dev server was stopped cleanly, fully backed up and restarted with the exact checked JAR and scoped configuration. Startup has no errors, `/tutorial` resolves and five warm worlds load. All twelve other binary hashes and the pinned resource-pack URL/hash remain unchanged; shared dev has no probe JAR. The backup and deployment receipt are retained in ignored local storage. Client layout and physical keyboard/mouse controls remain unverified. See [interactive tutorial](features/interactive-tutorial.md). Next action: client-play `/tutorial` on dev and check hologram readability, models and flight/shoot controls.
 
 ## Reconciled ready updates for both servers (2026-11-13)
 
