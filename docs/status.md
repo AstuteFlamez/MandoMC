@@ -1,5 +1,11 @@
 # Resume here
 
+## Compact tutorial action bars (2026-11-15)
+
+On `bilal/tutorial-actionbar-fit`, tutorial objectives and hints now use short single-action lines; longer explanations remain in holograms/chat. Event action bars contain only the event name and countdown, and flight shows separate boarding, takeoff and airborne-progress prompts. Tutorial vehicle notices and the starter-kit confirmation are also shortened. Template checks cover all tutorial action bars at maximum counters with a conservative standard-font width budget.
+
+The reactor passes 331 Java tests and all 75 tooling checks. The complete native walkthrough passes 492 assertions, checking assembled action-bar width at each observed step plus separate boarding, takeoff and airborne progress. The verified JAR SHA-256 is `e69a733d7dbff6439ed0aec3a5dbed802dbd7a171c6c93fa3dcc2d4d8b56a41f`; development activation uses the scoped JAR/tutorial-config update with a full stopped-runtime backup and local deployment receipt. Next action: client-check the compact prompts with the preferred GUI scale.
+
 ## Tutorial playtest refinements deployed (2026-11-15)
 
 Merged PR #30 into dev (`95b2218`). The tutorial now renders the normal Galaxy Map with only its central diamond enabled, uses normal territory-change titles during the clan lessons, returns players to the safezone starting point facing level before recipes, requires placing the supplied TIE fighter item before full-world flight, and shows automatic event-page countdowns in its boss bar and holograms. The saber must return and remain held for a full second before continuing; gray Jawas are identified as Batuu/spawn buyers. A bright 17-block bullseye replaces the small target. Real clans, vehicle ownership and inventory escrow remain isolated.

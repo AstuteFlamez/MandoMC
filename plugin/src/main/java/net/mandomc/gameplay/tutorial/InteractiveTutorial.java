@@ -118,6 +118,14 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         player.sendActionBar(message);
     }
     public void denied(Player player) { hint(player, "denied"); }
+    public void vehicleMessage(Player player, String key) {
+        hint(player, switch (key) {
+            case "cannon-controls" -> "cannons";
+            case "occupied" -> "seat-busy";
+            case "unavailable" -> "vehicle-unavailable";
+            default -> "denied";
+        });
+    }
     public boolean lockDismount(Player player) {
         var session = sessions.get(player.getUniqueId());
         return session != null && session.vehicle != null && !internal.contains(player.getUniqueId());
@@ -304,12 +312,19 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         session.entities.add(display);
     }
     private Component instruction(Session session) {
-        if (session.progress.step() == Step.EVENTS) return text("events." + session.eventPage + ".action")
-                .append(Component.text(" · ")).append(countdown(session));
+        if (session.progress.step() == Step.EVENTS) return text("events." + session.eventPage + ".action",
+                "seconds", Integer.toString(remainingSeconds(session)));
         if (session.progress.step() == Step.SABER && session.transitioning) return text(
                 plugin.sabers().busy(session.player) ? "messages.saber-return" : "messages.saber-hold");
+        if (session.progress.step() == Step.FLIGHT) {
+            if (!plugin.vehicles().occupant(session.vehicle, session.player.getUniqueId())) return text("steps.board");
+            var vehicle = plugin.vehicles().entity(session.vehicle);
+            if (vehicle != null && VehicleModels.grounded(vehicle)) return text("steps.takeoff");
+        }
         return text("steps." + session.progress.step().name().toLowerCase(Locale.ROOT),
-                "kills", String.valueOf(session.progress.kills()), "seconds", String.valueOf(Math.min(config.getInt("flight-seconds"), session.progress.flightMillis() / 1000)));
+                "kills", String.valueOf(session.progress.kills()),
+                "seconds", String.valueOf(Math.min(config.getInt("flight-seconds"), session.progress.flightMillis() / 1000)),
+                "total", Integer.toString(config.getInt("flight-seconds")));
     }
     private int remainingSeconds(Session session) {
         long remaining = config.getInt("event-page-seconds") * 1000L - (System.currentTimeMillis() - session.pageAt);
