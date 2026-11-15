@@ -1,8 +1,10 @@
 # Resume here
 
-## November 15 production promotion prepared (2026-11-15)
+## November 15 production promotion live (2026-11-15)
 
-The owner requested every recent development update on production, the placed SpawnWorld Crates Sign, and a complete fresh-player gameplay reset. Promotion includes the interactive tutorial, compact prompts and sign release. A read-only production audit also found the earlier Naboo import still queued for its next startup. The account reset and exact three-cell sign import pass against an isolated copy of actual production account data and the affected SpawnWorld region; other accounts and staff access are preserved. No live account/world mutations have been applied yet. See [production promotion](features/november-15-production.md). Next action: finish required checks and payload verification, then perform the backed-up stopped-server cutover.
+Promoted all recent development changes through PR #35 (`495bc11`): interactive tutorial/playtest refinements, compact prompts and the command-only Crates Sign. The exact placed SpawnWorld sign is imported, and the owner's production gameplay state is reset with private stopped-state backups. Other accounts and staff access are preserved. Native production verification confirms one sign/three owned cells and the account's fresh-player status; 276 custom items and five tutorial worlds load without errors. The earlier queued Naboo payload is active: 902 new originals, 2,126 existing files preserved and 3,017 prepared chunks.
+
+The first activation uncovered stale retained update JARs being consumed by Paper. Those archives are preserved outside the scan folders and the exact CI artifact is restored. The uploader now stages temporaries/previous bytes under `.mandomc/transfers/`; all 79 tooling tests pass, including regression and rollback coverage. Gameplay remains the same 333-test build with prior 492 tutorial and 152 sign native assertions. See [production promotion](features/november-15-production.md). Next action: client-play the fresh production tutorial and visually verify the imported sign.
 
 ## Crates sign deployed to development (2026-11-15)
 

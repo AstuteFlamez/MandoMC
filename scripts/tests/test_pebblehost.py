@@ -131,8 +131,46 @@ class SftpSafetyTests(unittest.TestCase):
         remote = PebbleRemote({'start.sh': b'old'})
         module.atomic_write(remote, 'start.sh', b'new')
         self.assertEqual(remote.files['start.sh'], b'new')
-        previous = [value for name, value in remote.files.items() if '.mandomc-previous-' in name]
+        previous = [value for name, value in remote.files.items() if name.endswith('/previous')]
         self.assertEqual(previous, [b'old'])
+
+    def test_repeated_plugin_updates_never_leave_backup_archives_in_paper_scan(self):
+        class PebbleRemote(Remote):
+            def posix_rename(self, source, target):
+                raise OSError(errno.ENOTSUP, 'extension unsupported')
+
+            def rename(self, source, target):
+                if target in self.files:
+                    raise OSError(errno.EEXIST, 'exists')
+                self.files[target] = self.files.pop(source)
+                self.renames.append((source, target))
+
+        target = 'plugins/update/MandoMC.jar'
+        remote = PebbleRemote({target: b'old'})
+        module.atomic_write(remote, target, b'first release')
+        module.atomic_write(remote, target, b'latest release')
+        self.assertEqual({k: v for k, v in remote.files.items() if k.startswith('plugins/')},
+                         {target: b'latest release'})
+        self.assertCountEqual([v for k, v in remote.files.items() if k.endswith('/previous')],
+                              [b'old', b'first release'])
+
+    def test_failed_plugin_install_restores_active_name_and_retains_new_bytes_outside_scan(self):
+        class FailingRemote(Remote):
+            def posix_rename(self, source, target):
+                raise OSError(errno.ENOTSUP, 'extension unsupported')
+
+            def rename(self, source, target):
+                if source.endswith('/upload'):
+                    raise OSError('installation failed')
+                self.files[target] = self.files.pop(source)
+
+        target = 'plugins/update/MandoMC.jar'
+        remote = FailingRemote({target: b'old'})
+        with self.assertRaisesRegex(OSError, 'installation failed'):
+            module.atomic_write(remote, target, b'new')
+        self.assertEqual({k: v for k, v in remote.files.items() if k.startswith('plugins/')},
+                         {target: b'old'})
+        self.assertEqual([v for k, v in remote.files.items() if k.endswith('/upload')], [b'new'])
 
     def test_new_immutable_agent_keeps_running_agent_untouched(self):
         old = 'agents/MandoMC-RedstoneAgent-' + module.sha(b'old') + '.jar'
