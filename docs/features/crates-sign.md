@@ -1,5 +1,5 @@
 # Feature: Crates building sign
-Status: implemented and native-tested; development installation pending
+Status: playable on development; client visual review pending
 Branch: bilal/crates-sign
 
 ## Player experience
@@ -26,4 +26,8 @@ One `crates_sign` item using the supplied six-element Java Blockbench model and 
 Run `./scripts/build.sh`, the Python tooling suite, and `scripts/build-resource-pack.py`. `CratesSignProbe` exercises actual `/mmc give`, native block interactions on all six faces, every break position, chunk-border footprints, denied outer-cell placement/break, obstruction, piston/explosion protection, full-inventory return, and an actual second JVM startup. It is guarded to isolated localhost port 25593.
 
 ## Pause note
-The reactor passes 333 Java tests and the tooling suite passes 77 checks. The isolated Paper 26.1.2 fixture passes 132 native lifecycle assertions and 20 assertions after an actual JVM restart. A final combined-build run preserves the latest deployed tutorial changes. The three new pack files leave all 1,181 existing entries byte-identical. Client appearance remains a separate check. Next action: install the tested build and pack on development, then check the sign visually outside the crates building.
+The reactor passes 333 Java tests and the tooling suite passes 77 checks. The isolated Paper 26.1.2 fixture passes 132 native lifecycle assertions and 20 assertions after an actual JVM restart. The same lifecycle and actual-restart probes pass on the final combined build, preserving the latest deployed tutorial changes. The three new pack files leave all 1,181 existing entries byte-identical. Client appearance remains a separate check. Development now runs the exact tested JAR and verified hosted pack after a clean stop and full backup. Startup loads 276 items without errors; the owner’s client successfully loads the new pack. All twelve other binary hashes remain unchanged. Production was not modified. Next action: check the sign visually outside the crates building.
+
+## Development release
+
+Published pack: `resource-pack-26.1.2-07f26e6b02cb`; SHA-1: `fdf1f4ee0eaf7b7f3c3ba20e2516b0bb6435351f`. The public manifest and ZIP were downloaded anonymously and verified against the built bytes before installation. Private deployment and full-backup receipts are retained locally. Rollback to an older plugin must restore its matching pre-migration trophy journal from the coherent backup, because older code does not understand schema 3.

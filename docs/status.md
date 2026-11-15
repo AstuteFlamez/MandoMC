@@ -1,10 +1,10 @@
 # Resume here
 
-## Crates sign implemented (2026-11-15)
+## Crates sign deployed to development (2026-11-15)
 
 Added the supplied 3×1 Blockbench sign as `crates_sign`, available only through the permission-gated `/mmc give` path, with no recipe/reward/drop entry. One persistent model occupies three protected collision cells; all six placement faces, breaking any part, single-item return, full-inventory recovery and restart custody are covered. Journal schema 3 preserves old one-block helmet/skull records. The pack adds three files and preserves all 1,181 existing entries byte-for-byte. Current dev tutorial updates are retained.
 
-Verification: 333 Java tests, 77 tooling checks, resource-pack build, 132 native Paper lifecycle assertions and 20 actual-restart assertions pass. Development installation is authorized and in progress; client appearance is pending. See [Crates sign](features/crates-sign.md). Next action: publish the tested pack, back up and restart development with the matching JAR, then verify startup and the give command.
+Verification: 333 Java tests, 77 tooling checks, resource-pack build, 132 native Paper lifecycle assertions and 20 actual-restart assertions pass. Development was stopped cleanly, fully backed up, and restarted with the exact native-tested JAR and the verified published pack `resource-pack-26.1.2-07f26e6b02cb` (SHA-1 `fdf1f4ee0eaf7b7f3c3ba20e2516b0bb6435351f`). All twelve other binaries are unchanged. Startup has no errors, 276 custom items load, and the owner’s client reports MandoMC SUCCESSFULLY_LOADED. Production was not modified. See [Crates sign](features/crates-sign.md). Next action: use `/mmc give crates_sign` on development and visually check placement outside the crates building.
 
 ## Compact tutorial action bars (2026-11-15)
 
