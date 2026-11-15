@@ -1,5 +1,5 @@
 # Feature: Interactive tutorial
-Status: implemented; final lifecycle verification and development rollout in progress
+Status: playable on local development; client appearance/control verification pending
 Branch: bilal/interactive-tutorial
 
 ## Player experience
@@ -31,11 +31,16 @@ The existing handbook stays in the starter kit as a reference. `/tutorial` now s
 Configuration: `tutorial/tutorial.yml`; changes require restart. Defaults: five warm worlds, sixteen maximum concurrent lessons, 5,000 completion credits, three guards, ten seconds of airborne piloting and nine seconds per event page. Item IDs and all instructional text live in that file. Instance geometry and the ordered curriculum are versioned code.
 
 ## Verification
-The reactor passes 325 gameplay tests and four access tests; all 75 tooling checks pass. Unit tests cover forbidden step skips, three-guard completion, airborne/pilot timing, bounded elapsed time, terminal completion, clan-name validation, credit receipt persistence, failed-write retry and the balance limit.
+The reactor passes 325 gameplay tests and four access tests; all 75 tooling checks pass. The final native walkthrough passes 240 assertions and actual JVM restart recovery passes 51. GitHub Server checks pass for the merged feature. Unit tests cover forbidden step skips, three-guard completion, airborne/pilot timing, bounded elapsed time, terminal completion, clan-name validation, credit receipt persistence, failed-write retry and the balance limit.
 
 `scripts/build-tutorial-probe.sh` builds a disposable localhost:25590 probe with native players. It exercises real command/menu dispatch, concurrent worlds, isolated clans/claims, guard deaths, the native saber throw, practice purchase/sale, the real recipe guide, actual ModelEngine boarding, airborne time, native cannon impacts, completion, replay, inventory restoration, reward retry, deferred external crate keys, real-clan preservation and exit during a real weapon reload. A second JVM boot reinstates a captured mid-tutorial player.dat and verifies all slots and the persisted credit receipt. Never install this mutation probe on the shared dev or production server.
 
 Client rendering and physical keyboard/mouse interaction require an ordinary Minecraft playthrough; native callbacks are not presented as visual verification.
 
+## Development deployment
+Merged through PR #28 into dev (`c0ea13d`). The local development server was stopped cleanly, fully backed up, updated with the exact native-tested MandoMC JAR and new tutorial configuration, then restarted. Existing handbook/travel-guide wording was patched without replacing private placements. All twelve other binary hashes and the pinned resource-pack URL/hash remain unchanged. No test probe was installed on shared development. Startup has no errors, the tutorial command resolves, and all five warm worlds load.
+
+Deployed MandoMC SHA-256: `f7c0d973c843f0c9b6766949aacd082c11e009a54fff2dbdf8f754ce91bd85f8`. The full runtime backup, native logs and deployment receipt are retained locally under ignored `.local`; no runtime data is tracked. Production was not changed.
+
 ## Pause note
-Next action: finish the native integration checks, deploy the checked artifact to the local development server, and verify startup and runtime hashes.
+Next action: play `/tutorial` in an ordinary Minecraft client on dev, checking hologram readability, model appearance and physical flight/shoot controls, then adjust from that feedback.
