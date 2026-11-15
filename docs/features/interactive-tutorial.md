@@ -50,4 +50,4 @@ Next action: play `/tutorial` in an ordinary Minecraft client on dev, checking h
 ## Playtest follow-up (2026-11-15)
 The Galaxy Map now shares the regular menu renderer; tutorial input remains isolated. Territory presentation reads a session-only claim identity without touching real clans. TIE fighter placement goes through the normal block-interaction entry point and still creates only an ephemeral training vehicle. The recipe return resets position, yaw and pitch before rendering its instructions. Event timers refresh each second and retain the exit command in the boss bar.
 
-The reactor passes 330 Java tests and all 75 tooling checks. Expanded native assertions exercise the original five changes plus the returned-saber pause, Batuu buyer explanation and full-world TIE flight; final runtime results are recorded in the next status entry.
+The reactor passes 330 Java tests and all 75 tooling checks. The expanded native walkthrough passes 412 assertions, including the original five changes plus the returned-saber pause, Batuu buyer explanation and full-world TIE flight. Actual JVM restart recovery passes 51 assertions.

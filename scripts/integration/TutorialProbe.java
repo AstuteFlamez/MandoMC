@@ -71,7 +71,7 @@ public final class TutorialProbe extends JavaPlugin {
     private void titleSent(String reason) throws Exception {
         actors.drain(player);
         var packets = actors.otherPackets(player);
-        check(packets.stream().anyMatch(name -> name.endsWith(".ClientboundSetTitleTextPacket")), reason + ": " + packets);
+        check(packets != null && packets.stream().anyMatch(name -> name.endsWith(".ClientboundSetTitleTextPacket")), reason + ": " + packets);
     }
     private void begun() throws Exception {
         check(TutorialInventory.active(player), "Original inventory escrowed"); stage("WARP");
@@ -109,9 +109,12 @@ public final class TutorialProbe extends JavaPlugin {
             command(player, "/c claim"); stage("CLAIM");
             put(player, new Location(player.getWorld(), 50.5, 65, .5)); command(player, "/c claim"); stage("DISBAND");
             check(mando.territories().identity(player, player.getLocation()).name().equals("Training"), "Practice claim uses normal territory identity");
-            titleSent("Own-clan title emitted after practice claim");
             check(clans.owner(player.getLocation()) == null, "Practice claim never enters real claims");
-            command(player, "/c disband"); stage("COMBAT"); titleSent("Wilderness title emitted after disband"); later(10, this::combat);
+            later(2, () -> {
+                titleSent("Own-clan title emitted after practice claim");
+                command(player, "/c disband"); stage("COMBAT");
+                later(2, () -> { titleSent("Wilderness title emitted after disband"); later(10, this::combat); });
+            });
         });
     }
     @SuppressWarnings("unchecked") private void combat() throws Exception {

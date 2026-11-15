@@ -4,7 +4,7 @@
 
 On `bilal/tutorial-playtest-fixes`, the tutorial now renders the normal Galaxy Map with only its central diamond enabled, uses normal territory-change titles during the clan lessons, returns players to the safezone starting point facing level before recipes, requires placing the supplied TIE fighter item before full-world flight, and shows automatic event-page countdowns in its boss bar and holograms. The saber must return and remain held for a full second before continuing; gray Jawas are identified as Batuu/spawn buyers. A bright 17-block bullseye replaces the small target. Real clans, vehicle ownership and inventory escrow remain isolated.
 
-The reactor passes 330 Java tests and all 75 tooling checks. Expanded native walkthrough and restart verification are in progress. Next action: finish the native checks, merge into dev and deploy the scoped update with a stopped-runtime backup.
+The reactor passes 330 Java tests and all 75 tooling checks. The expanded native walkthrough passes 412 assertions, and actual JVM restart recovery passes 51. Next action: merge into dev and deploy the scoped update with a stopped-runtime backup.
 
 ## Interactive tutorial deployed to development (2026-11-15)
 
