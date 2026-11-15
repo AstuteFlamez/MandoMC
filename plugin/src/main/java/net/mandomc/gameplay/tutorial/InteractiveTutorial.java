@@ -51,8 +51,8 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         UUID vehicle, target, brown, gray;
         TextDisplay hologram;
         String clan;
-        int claimX, claimZ, eventPage;
-        long pageAt, messageUntil;
+        int claimX, claimZ, eventPage, eventSeconds = -1;
+        long pageAt, messageUntil, saberHeldMillis;
         Component message;
         boolean recipeSeen, transitioning;
         int wallet = 100;
@@ -66,9 +66,11 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         final UUID owner;
         final MenuKind kind;
         final Inventory inventory;
-        Menu(Player player, MenuKind kind, Component title) {
+        final int continueSlot;
+        Menu(Player player, MenuKind kind, Component title, net.mandomc.gameplay.travel.WarpService warps) {
             this.owner = player.getUniqueId(); this.kind = kind;
-            inventory = Bukkit.createInventory(this, kind == MenuKind.WARP ? 27 : 36, title);
+            inventory = kind == MenuKind.WARP ? warps.createMenu(this) : Bukkit.createInventory(this, 36, title);
+            continueSlot = ((inventory.getSize() / 9 - 1) / 2) * 9 + 4;
             MenuItems.fill(inventory);
             if (kind == MenuKind.SELL) for (int i = 0; i < 27; i++) inventory.setItem(i, null);
         }
@@ -83,7 +85,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
             throw new IllegalArgumentException("tutorial/tutorial.yml: invalid lesson parameters");
         for (var step : Step.values()) if (step != Step.COMPLETE && !config.isString("steps." + step.name().toLowerCase(Locale.ROOT)))
             throw new IllegalArgumentException("Missing tutorial instruction " + step);
-        for (var id : List.of("blaster", "ammo", "saber", "junk", "vehicle-ammo"))
+        for (var id : List.of("blaster", "ammo", "saber", "junk", "vehicle-ammo", "vehicle"))
             if (!plugin.items().ids().contains(config.getString("items." + id))) throw new IllegalArgumentException("Unknown tutorial item " + id);
         var saberConfig = YamlConfiguration.loadConfiguration(new java.io.File(plugin.getDataFolder(), "combat/sabers.yml"));
         for (String path : List.of("main-pack-id", "id", "base-pack.id"))
@@ -239,11 +241,14 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
                 var gray = mobs.spawn("JawaGray", at(session, 120.5, 65, -8.5, 90), 1);
                 prepareNpc(session, gray); session.gray = gray.getUniqueId();
             }
-            case FLIGHT -> {
-                clearItems(session); give(player, "vehicle-ammo", 64, 1);
+            case RECIPES -> {
+                clearItems(session);
+                if (!teleport(player, at(session, 8.5, 65, .5, -90))) throw new IllegalStateException("Recipe lesson teleport cancelled");
+            }
+            case PLACE -> {
+                clearItems(session); give(player, "vehicle", 1, 0); give(player, "vehicle-ammo", 64, 1);
+                player.getInventory().setHeldItemSlot(0);
                 if (!teleport(player, at(session, 44.5, 65, 44.5, 0))) throw new IllegalStateException("Hangar teleport cancelled");
-                session.vehicle = plugin.vehicles().deployTutorial(player, at(session, 48.5, 65, 48.5, 0));
-                if (session.vehicle == null) throw new IllegalStateException("Training X-wing could not deploy");
             }
             case TARGET -> spawnTarget(session);
             case EVENTS -> {
@@ -255,6 +260,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
             default -> { }
         }
         if (step != Step.MAP && step != Step.WILDERNESS) hologram(session);
+        plugin.territories().announce(player);
         player.sendActionBar(instruction(session));
     }
     private void prepareNpc(Session session, LivingEntity entity) {
@@ -270,35 +276,71 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         session.guards.add(entity.getUniqueId()); session.entities.add(entity);
     }
     private void spawnTarget(Session session) {
-        var target = session.world.spawn(at(session, 48.5, 82, 86, 180), Slime.class, slime -> {
-            slime.setSize(5); slime.setAI(false); slime.setGravity(false); slime.setInvisible(true);
-            slime.setInvulnerable(true); slime.setPersistent(false); slime.setSilent(true);
+        // A 17-block luminous bullseye at the center of the full private flight range.
+        var target = session.world.spawn(at(session, 48.5, 92, .5, 180), Slime.class, slime -> {
+            slime.setSize(32); slime.setAI(false); slime.setGravity(false); slime.setInvisible(true);
+            slime.setInvulnerable(true); slime.setCollidable(false); slime.setPersistent(false); slime.setSilent(true);
         });
         session.target = target.getUniqueId(); session.entities.add(target);
-        for (int x = -2; x <= 2; x++) for (int y = 0; y < 5; y++) {
-            Material color = Math.max(Math.abs(x), Math.abs(y - 2)) % 2 == 0 ? Material.RED_CONCRETE : Material.WHITE_CONCRETE;
-            var display = session.world.spawn(at(session, 48 + x, 82 + y, 87, 0), BlockDisplay.class, block -> {
-                block.setBlock(color.createBlockData()); block.setPersistent(false);
-            }); session.entities.add(display);
+        // Four rectangular bars per ring keep this large target inexpensive to render.
+        for (int ring = 0; ring < 4; ring++) {
+            int size = 17 - ring * 4;
+            double x = 40 + ring * 2, y = 92 + ring * 2;
+            Material color = ring % 2 == 0 ? Material.SEA_LANTERN : Material.RED_CONCRETE;
+            targetPart(session, x, y, size, 2, color);
+            targetPart(session, x, y + size - 2, size, 2, color);
+            targetPart(session, x, y + 2, 2, size - 4, color);
+            targetPart(session, x + size - 2, y + 2, 2, size - 4, color);
         }
+        targetPart(session, 48, 100, 1, 1, Material.SEA_LANTERN);
+    }
+    private void targetPart(Session session, double x, double y, float width, float height, Material material) {
+        var display = session.world.spawn(at(session, x, y, .5, 0), BlockDisplay.class, block -> {
+            block.setBlock(material.createBlockData()); block.setPersistent(false); block.setViewRange(8);
+            block.setBrightness(new Display.Brightness(15, 15));
+            block.setTransformation(new org.bukkit.util.Transformation(new org.joml.Vector3f(),
+                    new org.joml.Quaternionf(), new org.joml.Vector3f(width, height, .25f), new org.joml.Quaternionf()));
+        });
+        session.entities.add(display);
     }
     private Component instruction(Session session) {
-        if (session.progress.step() == Step.EVENTS) return text("events." + session.eventPage + ".action");
+        if (session.progress.step() == Step.EVENTS) return text("events." + session.eventPage + ".action")
+                .append(Component.text(" · ")).append(countdown(session));
+        if (session.progress.step() == Step.SABER && session.transitioning) return text(
+                plugin.sabers().busy(session.player) ? "messages.saber-return" : "messages.saber-hold");
         return text("steps." + session.progress.step().name().toLowerCase(Locale.ROOT),
                 "kills", String.valueOf(session.progress.kills()), "seconds", String.valueOf(Math.min(config.getInt("flight-seconds"), session.progress.flightMillis() / 1000)));
     }
+    private int remainingSeconds(Session session) {
+        long remaining = config.getInt("event-page-seconds") * 1000L - (System.currentTimeMillis() - session.pageAt);
+        return (int) Math.max(0, (remaining + 999) / 1000);
+    }
+    private Component countdown(Session session) {
+        return text(session.eventPage == 2 ? "messages.event-finish" : "messages.event-next",
+                "seconds", Integer.toString(remainingSeconds(session)));
+    }
+    private void eventTimer(Session session) {
+        int seconds = remainingSeconds(session);
+        if (seconds == session.eventSeconds) return;
+        session.eventSeconds = seconds;
+        session.bar.name(text("messages.event-bar", "page", Integer.toString(session.eventPage + 1),
+                "seconds", Integer.toString(seconds)));
+        session.bar.progress(Math.max(0, Math.min(1, (float) seconds / config.getInt("event-page-seconds"))));
+        if (session.hologram != null) session.hologram.text(hologramText(session));
+    }
     private void hologram(Session session) {
-        var location = session.progress.step() == Step.TARGET ? at(session, 48.5, 89, 86, 0)
+        var location = session.progress.step() == Step.TARGET ? at(session, 48.5, 112, .5, 0)
                 : session.player.getLocation().add(session.player.getLocation().getDirection().setY(0).normalize().multiply(5)).add(0, 2.8, 0);
         session.hologram = session.world.spawn(location, TextDisplay.class, display -> {
             display.setPersistent(false); display.setBillboard(Display.Billboard.CENTER);
             display.setAlignment(TextDisplay.TextAlignment.CENTER); display.setLineWidth(280);
-            display.setSeeThrough(false); display.setShadowed(true); display.setViewRange(3);
+            display.setSeeThrough(false); display.setShadowed(true); display.setViewRange(session.progress.step() == Step.TARGET ? 8 : 3);
             display.text(hologramText(session));
         }); session.entities.add(session.hologram);
     }
     private Component hologramText(Session session) {
-        if (session.progress.step() == Step.EVENTS) return text("events." + session.eventPage + ".hologram");
+        if (session.progress.step() == Step.EVENTS) return text("events." + session.eventPage + ".hologram")
+                .append(Component.newline()).append(countdown(session));
         String key = "holograms." + session.progress.step().name().toLowerCase(Locale.ROOT);
         return config.isString(key) ? text(key) : instruction(session);
     }
@@ -307,6 +349,30 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         return session != null && session.progress.step() == Step.DISBAND && session.world.getKey().toString().equals(world)
                 && session.claimX == x && session.claimZ == z ? session.clan : null;
     }
+    public boolean territoryTitles(Player player) {
+        var session = sessions.get(player.getUniqueId());
+        return session != null && session.progress.step().ordinal() >= Step.MAP.ordinal()
+                && session.progress.step().ordinal() <= Step.DISBAND.ordinal();
+    }
+    /** Uses normal placement input, but the vehicle remains owned only by this tutorial session. */
+    public void placeVehicle(Player player, ItemStack item, Location location) {
+        var session = sessions.get(player.getUniqueId());
+        if (session == null || session.progress.step() != Step.PLACE || session.vehicle != null
+                || !config.getString("items.vehicle").equals(plugin.items().identify(item))
+                || location.getWorld() != session.world || location.getX() < 36 || location.getX() > 64
+                || location.getZ() < 36 || location.getZ() > 64 || location.getY() != 65
+                || location.distanceSquared(player.getLocation()) > 36
+                || !location.getBlock().isPassable() || !location.clone().add(0, 1, 0).getBlock().isPassable()
+                || location.clone().subtract(0, 1, 0).getBlock().isPassable()) {
+            hint(player, "place-position"); return;
+        }
+        try {
+            session.vehicle = plugin.vehicles().deployTutorial(player, config.getString("items.vehicle"), location);
+            if (session.vehicle == null) throw new IllegalStateException("Training ship could not deploy");
+            item.subtract(1);
+            advance(session, Step.PLACE);
+        } catch (RuntimeException error) { fail(player, error); end(player, false); }
+    }
     public void mapShown(Player player) {
         var session = sessions.get(player.getUniqueId()); if (session != null) advance(session, Step.MAP);
     }
@@ -314,7 +380,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         var session = sessions.get(player.getUniqueId());
         if (session == null || session.progress.step() != Step.SABER || session.transitioning) return;
         session.transitioning = true;
-        later(session, Step.SABER, 35, () -> advance(session, Step.SABER));
+        session.saberHeldMillis = 0;
     }
     public void board(Player player, UUID vehicle) {
         var session = sessions.get(player.getUniqueId());
@@ -345,6 +411,12 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
                         if (entity == null || !entity.isValid()) { session.guards.remove(id); spawnGuard(session, session.guards.size()); }
                     }
                 }
+                if (step == Step.SABER && session.transitioning) {
+                    boolean held = !plugin.sabers().busy(player)
+                            && config.getString("items.saber").equals(plugin.items().identify(player.getInventory().getItemInMainHand()));
+                    session.saberHeldMillis = held ? session.saberHeldMillis + Math.max(0, Math.min(250, elapsed)) : 0;
+                    if (session.saberHeldMillis >= 1000) advance(session, Step.SABER);
+                }
                 if (step == Step.FLIGHT || step == Step.TARGET) {
                     replenish(player, "vehicle-ammo", 1);
                     var vehicle = plugin.vehicles().entity(session.vehicle);
@@ -354,8 +426,9 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
                 }
                 if (step == Step.EVENTS && now - session.pageAt >= config.getInt("event-page-seconds") * 1000L) {
                     if (++session.eventPage == 3) { advance(session, Step.EVENTS); continue; }
-                    session.pageAt = now; if (session.hologram != null) session.hologram.text(hologramText(session));
+                    session.pageAt = now; session.eventSeconds = -1;
                 }
+                if (step == Step.EVENTS) eventTimer(session);
                 if (Bukkit.getCurrentTick() % 5 == 0) player.sendActionBar(now < session.messageUntil ? session.message : instruction(session));
             } catch (RuntimeException error) { fail(session.player, error); end(session.player, false); }
         }
@@ -453,8 +526,8 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         var item = new ItemStack(material); item.editMeta(meta -> meta.displayName(text(key))); return item;
     }
     private void warp(Player player) {
-        var menu = new Menu(player, MenuKind.WARP, text("menus.warp"));
-        menu.inventory.setItem(13, icon(Material.DIAMOND, "menus.tutorial")); player.openInventory(menu.inventory);
+        var menu = new Menu(player, MenuKind.WARP, text("menus.warp"), plugin.warps());
+        menu.inventory.setItem(menu.continueSlot, icon(Material.DIAMOND, "menus.tutorial")); player.openInventory(menu.inventory);
     }
     public void jawa(Player player, LivingEntity entity) {
         var session = sessions.get(player.getUniqueId());
@@ -462,13 +535,13 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
                 || entity.getLocation().distanceSquared(player.getLocation()) > 100) { denied(player); return; }
         var step = session.progress.step();
         if (step == Step.BUY && mobs.type(entity).equals("JawaBrown")) {
-            var menu = new Menu(player, MenuKind.BUY, text("menus.buy"));
+            var menu = new Menu(player, MenuKind.BUY, text("menus.buy"), plugin.warps());
             var sapling = new ItemStack(Material.OAK_SAPLING, 4);
             sapling.editMeta(meta -> { meta.displayName(text("menus.saplings")); meta.lore(List.of(text("menus.buy-hint"))); });
             menu.inventory.setItem(13, sapling); menu.inventory.setItem(31, icon(Material.GOLD_NUGGET, "menus.wallet"));
             player.openInventory(menu.inventory);
         } else if (step == Step.SELL && entity.getUniqueId().equals(session.gray)) {
-            var menu = new Menu(player, MenuKind.SELL, text("menus.sell"));
+            var menu = new Menu(player, MenuKind.SELL, text("menus.sell"), plugin.warps());
             menu.inventory.setItem(27, icon(Material.BOOK, "menus.sell-hint"));
             menu.inventory.setItem(31, icon(Material.EMERALD, "menus.sell-button"));
             menu.inventory.setItem(35, icon(Material.BARRIER, "menus.close"));
@@ -506,7 +579,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
                 advance(session, Step.CLAIM); return;
             }
             if (parts.length == 2 && parts[1].equalsIgnoreCase("disband") && step == Step.DISBAND) {
-                session.clan = null; advance(session, Step.DISBAND); return;
+                session.clan = null; plugin.territories().announce(player); advance(session, Step.DISBAND); return;
             }
         }
         if (root.equals("recipes") && parts.length == 1 && step == Step.RECIPES) {
@@ -535,7 +608,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
             event.setCancelled(true);
             if (event.getClick() != ClickType.LEFT && event.getClick() != ClickType.SHIFT_LEFT) return;
             int slot = event.getRawSlot();
-            if (menu.kind == MenuKind.WARP && slot == 13 && session.progress.step() == Step.WARP) {
+            if (menu.kind == MenuKind.WARP && slot == menu.continueSlot && session.progress.step() == Step.WARP) {
                 Bukkit.getScheduler().runTask(plugin, () -> { if (sessions.get(player.getUniqueId()) == session) { player.closeInventory(); advance(session, Step.WARP); } });
             } else if (menu.kind == MenuKind.BUY && slot == 13 && session.progress.step() == Step.BUY && session.wallet >= 40) {
                 session.wallet -= 40; player.getInventory().setItem(0, new ItemStack(Material.OAK_SAPLING, 4));
@@ -597,9 +670,14 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
     @EventHandler(priority = EventPriority.LOWEST)
     public void interact(PlayerInteractEvent event) {
         if (!TutorialInventory.active(event.getPlayer())) return;
+        var session = sessions.get(event.getPlayer().getUniqueId());
+        // Let the normal vehicle placement handler validate this one training item and clicked surface.
+        if (session != null && session.progress.step() == Step.PLACE
+                && config.getString("items.vehicle").equals(plugin.items().identify(event.getItem()))) {
+            event.setUseItemInHand(Event.Result.DENY); return;
+        }
         // Block containers/blocks, but keep the weapon's item action and reload controls available.
         event.setUseInteractedBlock(Event.Result.DENY);
-        var session = sessions.get(event.getPlayer().getUniqueId());
         if (session == null || !Set.of(Step.COMBAT, Step.SABER, Step.FLIGHT, Step.TARGET).contains(session.progress.step()))
             event.setUseItemInHand(Event.Result.DENY);
     }
@@ -669,8 +747,9 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
             case MAP -> to.getX() < 0 || to.getX() >= 30 || Math.abs(to.getZ()) > 10;
             case WILDERNESS, CREATE, CLAIM, DISBAND -> to.getX() < 0 || to.getX() >= 64 || Math.abs(to.getZ()) > 10;
             case COMBAT, SABER -> to.getX() < 64 || to.getX() > 90 || Math.abs(to.getZ()) > 16;
+            case PLACE -> to.getX() < 34 || to.getX() > 66 || to.getZ() < 34 || to.getZ() > 66;
             case BUY -> to.getX() < 100 || to.getX() > 132 || to.getZ() < -43 || to.getZ() > -21;
-            case SELL, RECIPES -> to.getX() < 100 || to.getX() > 132 || to.getZ() < -20 || to.getZ() > 3;
+            case SELL -> to.getX() < 100 || to.getX() > 132 || to.getZ() < -20 || to.getZ() > 3;
             default -> to.getX() < 0 || to.getX() > 30 || Math.abs(to.getZ()) > 10;
         };
         if (outside) { event.setTo(event.getFrom()); denied(event.getPlayer()); }

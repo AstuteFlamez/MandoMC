@@ -2,7 +2,7 @@ package net.mandomc.gameplay.tutorial;
 
 /** Only observed, successful actions advance the ordered lesson. */
 public final class TutorialProgress {
-    public enum Step { WARP, MAP, WILDERNESS, CREATE, CLAIM, DISBAND, COMBAT, SABER, BUY, SELL, RECIPES, FLIGHT, TARGET, EVENTS, COMPLETE }
+    public enum Step { WARP, MAP, WILDERNESS, CREATE, CLAIM, DISBAND, COMBAT, SABER, BUY, SELL, RECIPES, PLACE, FLIGHT, TARGET, EVENTS, COMPLETE }
     private Step step = Step.WARP;
     private int kills;
     private long flightMillis;

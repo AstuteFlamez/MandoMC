@@ -68,6 +68,11 @@ public final class TutorialProbe extends JavaPlugin {
         for (int i = 0; i < wanted.length; i++) check(Objects.equals(emptyToNull(wanted[i]), emptyToNull(actual[i])), reason + " slot " + i + " expected=" + wanted[i] + " actual=" + actual[i]);
     }
     private static ItemStack emptyToNull(ItemStack item) { return item == null || item.isEmpty() ? null : item; }
+    private void titleSent(String reason) throws Exception {
+        actors.drain(player);
+        var packets = actors.otherPackets(player);
+        check(packets.stream().anyMatch(name -> name.endsWith(".ClientboundSetTitleTextPacket")), reason + ": " + packets);
+    }
     private void begun() throws Exception {
         check(TutorialInventory.active(player), "Original inventory escrowed"); stage("WARP");
         check(TutorialInventory.world(player.getWorld()), "Player in isolated tutorial dimension");
@@ -81,24 +86,32 @@ public final class TutorialProbe extends JavaPlugin {
             crates.enqueueKey(second, "kyber", 1); second.saveData(); crates.claim(second);
             check(second.getInventory().isEmpty(), "External physical crate key stays in mail during tutorial");
             command(player, "/crates open kyber"); stage("WARP");
-            command(player, "/mandomc:warp"); check(player.getOpenInventory().getTopInventory().getItem(13).getType() == Material.DIAMOND, "Central Tutorial diamond");
+            command(player, "/mandomc:warp"); check(player.getOpenInventory().getTopInventory().getItem(22).getType() == Material.DIAMOND, "Central Tutorial diamond");
+            var trainingMap = player.getOpenInventory().getTopInventory();
+            var normalMap = mando.warps().createMenu(null);
+            check(trainingMap.getSize() == normalMap.getSize(), "Tutorial uses normal warp menu dimensions");
+            for (int slot = 0; slot < normalMap.getSize(); slot++) if (slot != 22)
+                check(Objects.equals(trainingMap.getItem(slot), normalMap.getItem(slot)), "Normal warp layout preserved at " + slot);
+            click(player, 20); stage("WARP"); check(player.getOpenInventory().getTopInventory() == trainingMap, "Normal destination cannot close or escape tutorial menu");
             click(player, 12); stage("WARP"); player.closeInventory(); stage("WARP");
-            command(player, "/warp"); click(player, 13); later(3, this::map);
+            command(player, "/warp"); click(player, 22); later(3, this::map);
         });
     }
     private void map() throws Exception {
-        stage("MAP"); command(player, "/c create Early"); stage("MAP");
+        stage("MAP"); titleSent("Safezone title emitted on lesson arrival"); command(player, "/c create Early"); stage("MAP");
         check(field(session(player), "hologram") == null, "Map lesson has no hologram");
         command(player, "/c map"); stage("WILDERNESS");
         check(mando.territories().zone(player.getLocation()) == net.mandomc.gameplay.territory.TerritoryPolicy.Zone.SAFEZONE, "Map uses real safezone classification");
         put(player, new Location(player.getWorld(), 33.5, 65, .5)); later(3, () -> {
-            stage("CREATE"); command(player, "/c create Training"); stage("CLAIM");
+            stage("CREATE"); titleSent("Wilderness title emitted across boundary"); command(player, "/c create Training"); stage("CLAIM");
             var clans = Bukkit.getServicesManager().load(net.mandomc.gameplay.clans.ClanService.class);
             check(clans.member(player) == null, "Practice clan never enters real clan storage");
             command(player, "/c claim"); stage("CLAIM");
             put(player, new Location(player.getWorld(), 50.5, 65, .5)); command(player, "/c claim"); stage("DISBAND");
+            check(mando.territories().identity(player, player.getLocation()).name().equals("Training"), "Practice claim uses normal territory identity");
+            titleSent("Own-clan title emitted after practice claim");
             check(clans.owner(player.getLocation()) == null, "Practice claim never enters real claims");
-            command(player, "/c disband"); stage("COMBAT"); later(10, this::combat);
+            command(player, "/c disband"); stage("COMBAT"); titleSent("Wilderness title emitted after disband"); later(10, this::combat);
         });
     }
     @SuppressWarnings("unchecked") private void combat() throws Exception {
@@ -121,9 +134,20 @@ public final class TutorialProbe extends JavaPlugin {
             later(100, () -> {
                 stage("SABER"); check(mando.items().identify(player.getInventory().getItem(0)).equals("vader"), "Vader saber supplied");
                 player.setSneaking(true); check(mando.sabers().launch(player), "Real saber throw launches"); player.setSneaking(false);
-                later(45, this::shops);
+                later(1, () -> awaitSaberReturn(0));
             });
         });
+    }
+    private void awaitSaberReturn(int ticks) throws Exception {
+        check(ticks < 150, "Saber returns within native timeout");
+        if (mando.sabers().busy(player)) { stage("SABER"); later(1, () -> awaitSaberReturn(ticks + 1)); return; }
+        stage("SABER");
+        check("vader".equals(mando.items().identify(player.getInventory().getItemInMainHand())), "Returned saber is actually held");
+        later(10, () -> {
+            stage("SABER");
+            check("vader".equals(mando.items().identify(player.getInventory().getItemInMainHand())), "Returned saber remains held before one second");
+        });
+        later(25, this::shops);
     }
     private void shops() throws Exception {
         stage("BUY"); var brown = (LivingEntity) Bukkit.getEntity((UUID) field(session(player), "brown"));
@@ -140,15 +164,37 @@ public final class TutorialProbe extends JavaPlugin {
             player.closeInventory(); check(mando.items().identify(player.getInventory().getItem(1)).equals("agrinium_scrap"), "Closing returns unsold scrap");
             mando.jawas().open(player, gray); click(player, 64); click(player, 31);
             later(3, () -> {
-                stage("RECIPES"); check(mando.credits().ledger().balance(player.getUniqueId()) == balance, "Practice sale leaves real credits unchanged");
+                stage("RECIPES");
+                check(player.getLocation().distanceSquared(new Location(player.getWorld(), 8.5, 65, .5)) < .01, "Sale returns to lesson starting point");
+                check(player.getLocation().getPitch() == 0 && player.getLocation().getYaw() == -90, "Recipe lesson faces straight ahead");
+                check(mando.credits().ledger().balance(player.getUniqueId()) == balance, "Practice sale leaves real credits unchanged");
                 command(player, "/recipes"); check(net.mandomc.gameplay.items.RecipeGuide.isMenu(player.getOpenInventory().getTopInventory()), "Actual recipe guide opens");
                 stage("RECIPES"); player.closeInventory(); later(5, this::flight);
             });
         });
     }
     private void flight() throws Exception {
-        stage("FLIGHT"); UUID id = (UUID) field(session(player), "vehicle");
-        var entity = mando.vehicles().entity(id); check(entity != null, "Real modeled X-wing created");
+        stage("PLACE");
+        check(field(session(player), "vehicle") == null, "No TIE fighter blocks arrival instructions");
+        check("tiefighter".equals(mando.items().identify(player.getInventory().getItemInMainHand())), "Training TIE fighter supplied in inventory");
+        check(progress(player).flightMillis() == 0, "Placement has no flight progress");
+        // Drive the ordinary vehicle block-interaction event; only a valid placement advances.
+        var block = player.getWorld().getBlockAt(48, 64, 46);
+        var denied = new PlayerInteractEvent(player, org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK,
+                player.getInventory().getItemInMainHand(), block, org.bukkit.block.BlockFace.UP, EquipmentSlot.HAND);
+        denied.setUseInteractedBlock(org.bukkit.event.Event.Result.DENY);
+        Bukkit.getPluginManager().callEvent(denied); stage("PLACE");
+        var placed = new PlayerInteractEvent(player, org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK,
+                player.getInventory().getItemInMainHand(), block, org.bukkit.block.BlockFace.UP, EquipmentSlot.HAND);
+        Bukkit.getPluginManager().callEvent(placed); stage("FLIGHT");
+        check(player.getInventory().getItemInMainHand().isEmpty(), "Placement consumes training TIE fighter item");
+        UUID id = (UUID) field(session(player), "vehicle");
+        var entity = mando.vehicles().entity(id); check(entity != null, "Real modeled TIE fighter created");
+        var movement = mando.vehicles().getClass().getDeclaredMethod("movement", UUID.class, Location.class, Location.class);
+        movement.setAccessible(true);
+        for (var destination : List.of(new Location(entity.getWorld(), -35, 90, -80), new Location(entity.getWorld(), 130, 150, 80)))
+            check((boolean) movement.invoke(mando.vehicles(), id, entity.getLocation(), destination), "Full training world permits flight outside former runway");
+        check(new net.mandomc.integrations.regions.VehicleProtection().use(new Location(entity.getWorld(), 8, 100, 0)), "Training cannon use includes former lesson safezone");
         var journal = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.File(mando.getDataFolder(), "data/vehicles.yml"));
         check(!journal.contains("vehicles." + id), "Training ship is not real vehicle ownership");
         mando.tutorial().board(player, id); check(mando.vehicles().occupant(id, player.getUniqueId()), "Player boards real ModelEngine pilot seat");
@@ -163,13 +209,34 @@ public final class TutorialProbe extends JavaPlugin {
     private void target() throws Exception {
         stage("TARGET"); var session = session(player); UUID vehicle = (UUID) field(session, "vehicle");
         var target = (LivingEntity) Bukkit.getEntity((UUID) field(session, "target")); check(target != null, "Stationary target exists");
+        check(target.getBoundingBox().getWidthX() >= 16 && target.getBoundingBox().getHeight() >= 16, "Target has a much larger hittable area");
+        check(target.getLocation().distanceSquared(new Location(player.getWorld(), 48.5, 92, .5)) < .01, "Large target is centered over training world");
+        var parts = player.getWorld().getEntitiesByClass(BlockDisplay.class);
+        check(parts.size() == 17 && parts.stream().allMatch(part -> part.getBrightness().getBlockLight() == 15 && part.getViewRange() >= 8), "Large target stays bright and visible across full range");
         mando.tutorial().cannonHit(player, UUID.randomUUID(), target); stage("TARGET");
-        var platform = mando.vehicles().firingPlatform(player, List.of("weapon_one", "weapon_two", "weapon_three", "weapon_four"));
-        check(platform != null, "Native X-wing muzzles resolve");
+        var platform = mando.vehicles().firingPlatform(player, List.of("weapon_one", "weapon_two"));
+        check(platform != null, "Native TIE fighter muzzles resolve");
         // Put the invisible collision target on the native muzzle ray to test actual swept cannon impact.
         target.teleport(platform.muzzles().getFirst().clone().add(platform.direction().clone().multiply(8)).add(0, -1, 0));
         check(mando.vehicleCannons().fire(player), "Native cannons emit and consume supplied ammo");
-        later(50, () -> { stage("EVENTS"); check(mando.vehicles().entity(vehicle) == null, "Training ship cleaned up after target"); later(580, this::completed); });
+        later(50, () -> {
+            stage("EVENTS"); check(mando.vehicles().entity(vehicle) == null, "Training ship cleaned up after target");
+            var bar = (net.kyori.adventure.bossbar.BossBar) field(session(player), "bar");
+            var plain = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText();
+            check(plain.serialize(bar.name()).contains("Auto-continue") && plain.serialize(bar.name()).contains("/tutorial end"), "Event bossbar explains automatic timing and exit");
+            var hologram = (TextDisplay) field(session(player), "hologram");
+            check(plain.serialize(hologram.text()).contains("No action needed"), "Event hologram clearly requires no action");
+            int firstSeconds = (int) field(session(player), "eventSeconds");
+            later(25, () -> {
+                check((int) field(session(player), "eventSeconds") < firstSeconds, "Visible countdown decreases");
+                check(bar.progress() < 1, "Event timer bar drains");
+            });
+            later(380, () -> {
+                check((int) field(session(player), "eventPage") == 2, "Event pages advance without player input");
+                check(plain.serialize(((TextDisplay) field(session(player), "hologram")).text()).contains("Tutorial completes in"), "Final page explains timed completion");
+            });
+            later(580, this::completed);
+        });
     }
     private void completed() throws Exception {
         check(!TutorialInventory.active(player), "Completion exits tutorial");
@@ -229,7 +296,7 @@ public final class TutorialProbe extends JavaPlugin {
         var clan = clans.state().create("Existing" + checks, second.getUniqueId(), System.currentTimeMillis());
         mando.tutorial().request(second);
         later(25, () -> {
-            command(second, "/warp"); click(second, 13);
+            command(second, "/warp"); click(second, 22);
             later(3, () -> {
                 command(second, "/c map"); put(second, new Location(second.getWorld(), 50.5, 65, .5));
                 later(3, () -> {

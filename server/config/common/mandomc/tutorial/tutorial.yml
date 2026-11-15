@@ -10,11 +10,18 @@ items:
   ammo: standard_plasma_cells
   saber: vader
   junk: agrinium_scrap
-  vehicle-ammo: proton_torpedo
+  vehicle-ammo: tibanna_gas_cells
+  vehicle: tiefighter
 messages:
   players-only: '<gray>Join the server to start /tutorial.'
   usage: '<yellow>/tutorial <gray>to start · <yellow>/tutorial end <gray>to leave'
   bossbar: '<gold>Tutorial <gray>· <white>/tutorial end <gray>to leave'
+  saber-return: '<gold>Nice throw! <gray>Wait for your saber to return.'
+  saber-hold: '<gold>Hold your returned saber <gray>for a moment before continuing.'
+  event-bar: '<gold>Event <page>/3 <gray>· <white>Auto-continue in <seconds>s <gray>· /tutorial end to leave'
+  event-next: '<yellow>No action needed · Next page automatically in <seconds>s'
+  event-finish: '<yellow>No action needed · Tutorial completes in <seconds>s'
+  place-position: '<yellow>Hold your TIE fighter and right-click the nearby flat training pad to place it.'
   loading-bar: '<gold>Preparing your tutorial <gray>· <white>/tutorial end <gray>to cancel'
   loading: '<yellow>Preparing your private training area…'
   pack: '<yellow>Wait for the resource pack to finish loading, then use /tutorial.'
@@ -45,10 +52,11 @@ steps:
   combat: '<gold>Defeat the Gamorrean guards: <yellow><kills>/3 <gray>· Use to fire · Drop key to reload'
   saber: '<gold>Kyber crystals come from Ilum. <yellow>Sneak + attack <gray>to throw Vader’s saber'
   buy: '<gold>Right-click a brown Jawa <gray>and buy the Oak Saplings with your practice credits'
-  sell: '<gold>Right-click the gray Jawa <gray>· Put your 8 Agrinium Scrap in the tray, then Sell'
+  sell: '<gold>Gray Jawas are on Batuu (spawn). <gray>Right-click this buyer <gray>· Put your 8 Agrinium Scrap in the tray, then Sell'
   recipes: '<gold>Open <yellow>/recipes <gray>and explore the guide. Close it when you are ready.'
-  flight: '<gold>Board the X-wing <gray>· Forward + Jump to take off · Fly: <yellow><seconds>/10 seconds'
-  target: '<gold>Hit the red-and-white target <gray>with the X-wing cannons: <yellow>Attack / left-click'
+  place: '<gold>Place your TIE fighter <gray>· Hold it and right-click the nearby training pad'
+  flight: '<gold>Board the TIE fighter <gray>· Forward + Jump to take off · Fly: <yellow><seconds>/10 seconds'
+  target: '<gold>Hit the giant glowing target above the center of the world <gray>with the TIE fighter cannons: <yellow>Attack / left-click'
   events: '<gold>See the three server events with <yellow>/events'
 menus:
   warp: '<gold>Galaxy Map'
@@ -69,10 +77,11 @@ holograms:
   combat: '<gold>Blaster training<newline><white>Defeat all three Gamorrean guards.<newline><yellow>Use: fire · Drop key: reload<newline><gray>You cannot die here. Ammo refills when empty.'
   saber: '<gold>Lightsabers & Ilum<newline><white>Complete Ilum’s course for a Kyber key.<newline><white>Open the Kyber crate to obtain crystals.<newline><yellow>Sneak + attack to throw your saber once.'
   buy: '<gold>Tatooine · Brown Jawa supplies<newline><white>Right-click a brown Jawa to browse.<newline><yellow>Buy Oak Saplings ×4 for $40.<newline><gray>Your practice wallet has $100.'
-  sell: '<gold>Gray Jawas buy salvage<newline><white>Right-click the buyer.<newline><yellow>Click your scrap to add it, then click Sell.<newline><gray>Closing the window returns unsold items.'
+  sell: '<gold>Gray Jawas buy salvage<newline><white>Find gray Jawas on Batuu (spawn).<newline><white>Right-click the buyer.<newline><yellow>Click your scrap to add it, then click Sell.<newline><gray>Closing the window returns unsold items.'
   recipes: '<gold>Craft your equipment<newline><yellow>/recipes<newline><white>Explore items, ingredients and their sources.<newline><gray>Close the guide to continue.'
-  flight: '<gold>X-wing flight training<newline><white>Right-click the X-wing to board.<newline><yellow>Forward + Jump: take off · Look to steer<newline><white>Fly airborne for 10 seconds.<newline><gray>The training ship cannot be lost.'
-  target: '<gold>Gunnery target<newline><white>Aim your X-wing at the bullseye.<newline><yellow>Attack / left-click: fire cannons<newline><gray>A direct cannon hit completes the exercise.'
+  place: '<gold>TIE fighter deployment<newline><white>Your TIE fighter is in your hotbar.<newline><yellow>Hold it and right-click the training pad.<newline><gray>Place it first, then board and fly.'
+  flight: '<gold>TIE fighter flight training<newline><white>Right-click the TIE fighter to board.<newline><yellow>Forward + Jump: take off · Look to steer<newline><white>Fly anywhere inside this world’s border for 10 seconds.<newline><gray>The training ship cannot be lost.'
+  target: '<gold>Gunnery target<newline><white>Aim your TIE fighter at the bullseye.<newline><yellow>Attack / left-click: fire cannons<newline><gray>A direct cannon hit completes the exercise.'
 events:
   0:
     action: '<gold>/events · KOTH <gray>— Hold the hill with your clan to win a crate key.'

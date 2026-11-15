@@ -18,6 +18,12 @@ public class TutorialProgressTest {
         progress.advance(Step.DISBAND); assertFalse(progress.kill(3)); assertFalse(progress.kill(3));
         assertTrue(progress.kill(3)); assertEquals(Step.SABER, progress.step()); assertFalse(progress.kill(3));
     }
+    @Test public void placementMustCompleteBeforeFlightCanCount() {
+        var progress = new TutorialProgress(); while (progress.step() != Step.PLACE) progress.advance(progress.step());
+        assertFalse(progress.fly(true, true, 250, 100)); assertEquals(0, progress.flightMillis());
+        assertFalse(progress.advance(Step.FLIGHT)); assertTrue(progress.advance(Step.PLACE));
+        assertEquals(Step.FLIGHT, progress.step());
+    }
     @Test public void onlyAirbornePilotingCountsAndServerStallsAreBounded() {
         var progress = new TutorialProgress(); while (progress.step() != Step.FLIGHT) progress.advance(progress.step());
         assertFalse(progress.fly(false, true, 200, 10_000)); assertFalse(progress.fly(true, false, 200, 10_000));
