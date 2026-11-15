@@ -1,5 +1,9 @@
 # Resume here
 
+## November 15 production promotion prepared (2026-11-15)
+
+The owner requested every recent development update on production, the placed SpawnWorld Crates Sign, and a complete fresh-player gameplay reset. Promotion includes the interactive tutorial, compact prompts and sign release. A read-only production audit also found the earlier Naboo import still queued for its next startup. The account reset and exact three-cell sign import pass against an isolated copy of actual production account data and the affected SpawnWorld region; other accounts and staff access are preserved. No live account/world mutations have been applied yet. See [production promotion](features/november-15-production.md). Next action: finish required checks and payload verification, then perform the backed-up stopped-server cutover.
+
 ## Crates sign deployed to development (2026-11-15)
 
 Added the supplied 3×1 Blockbench sign as `crates_sign`, available only through the permission-gated `/mmc give` path, with no recipe/reward/drop entry. One persistent model occupies three protected collision cells; all six placement faces, breaking any part, single-item return, full-inventory recovery and restart custody are covered. Journal schema 3 preserves old one-block helmet/skull records. The pack adds three files and preserves all 1,181 existing entries byte-for-byte. Current dev tutorial updates are retained.
