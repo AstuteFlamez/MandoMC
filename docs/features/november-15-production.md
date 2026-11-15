@@ -16,7 +16,7 @@ Perform only while production is stopped. Preserve a matching snapshot of all af
 The new tutorial uses the first-join flag and starts after the required resource-pack stack loads. Joining early during a partially completed migration is not permitted: the one-shot helper stops the server if its validation fails.
 
 ## Verification
-The current development reactor passes 333 Java tests; 77 tooling checks and resource-pack validation pass. Prior native coverage includes 492 tutorial assertions and 152 sign lifecycle/restart assertions. A fresh isolated copy containing production's actual account files and affected SpawnWorld region passes the reset and sign migration checks. All unrelated SQLite rows and staff files are verified unchanged by the reset rehearsal.
+The current development reactor passes 333 Java tests; 77 tooling checks and resource-pack validation pass. Prior native coverage includes 492 tutorial assertions and 152 sign lifecycle/restart assertions. A fresh isolated copy containing production's actual account files and affected SpawnWorld region passes the reset and sign migration checks, including a second JVM startup with exactly one retained visual and three owned cells. All unrelated SQLite rows and staff files are verified unchanged by the reset rehearsal.
 
 Before activation, validate the pending Naboo payload against its pinned SHA-256 and previous frozen-scope hash. Its existing helper and payload match the earlier successful native rehearsal and preserve all previous originals. The production release uses the exact checked main CI artifacts, published pack, managed-upload receipt and a clean restart. Record startup, migration receipts, item registration and account-reset verification after activation.
 
