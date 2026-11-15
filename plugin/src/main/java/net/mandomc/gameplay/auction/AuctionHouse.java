@@ -79,6 +79,7 @@ public final class AuctionHouse implements Listener, AutoCloseable {
     }
     private void send(Player player, String key) { player.sendMessage(text(key)); }
     private boolean allowed(Player player) {
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return false;
         if (!player.hasPermission("mandomc.auction")) { send(player, "denied"); return false; }
         if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR) { send(player, "mode"); return false; }
         var combat = ((MandoPlugin) plugin).combat();
@@ -139,9 +140,13 @@ public final class AuctionHouse implements Listener, AutoCloseable {
         } catch (IllegalArgumentException error) { send(player, "amount"); }
     }
     /** A writer barrier prevents a reconnect from refunding escrow whose listing commit is still queued. */
+    public void recoverAfterTutorial(Player player) { recover(player, p -> {}); }
+    public boolean pending(Player player) { return busy.contains(player.getUniqueId()); }
     private void recover(Player player, Consumer<Player> after) {
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return;
         if (busy.contains(player.getUniqueId())) return;
         work(player, () -> null, online -> {
+            if (net.mandomc.gameplay.tutorial.TutorialInventory.active(online)) return;
             var pending = receipts(online, escrow); boolean changed = false;
             for (var entry : List.copyOf(pending.entrySet())) {
                 if (credits.ledger().auctions().accepted().contains(entry.getKey()) || give(online, decode(entry.getValue()))) {

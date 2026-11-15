@@ -1,5 +1,37 @@
 # Resume here
 
+## November 15 production promotion prepared (2026-11-15)
+
+The owner requested every recent development update on production, the placed SpawnWorld Crates Sign, and a complete fresh-player gameplay reset. Promotion includes the interactive tutorial, compact prompts and sign release. A read-only production audit also found the earlier Naboo import still queued for its next startup. The account reset and exact three-cell sign import pass against an isolated copy of actual production account data and the affected SpawnWorld region; other accounts and staff access are preserved. No live account/world mutations have been applied yet. See [production promotion](features/november-15-production.md). Next action: finish required checks and payload verification, then perform the backed-up stopped-server cutover.
+
+## Crates sign deployed to development (2026-11-15)
+
+Added the supplied 3×1 Blockbench sign as `crates_sign`, available only through the permission-gated `/mmc give` path, with no recipe/reward/drop entry. One persistent model occupies three protected collision cells; all six placement faces, breaking any part, single-item return, full-inventory recovery and restart custody are covered. Journal schema 3 preserves old one-block helmet/skull records. The pack adds three files and preserves all 1,181 existing entries byte-for-byte. Current dev tutorial updates are retained.
+
+Verification: 333 Java tests, 77 tooling checks, resource-pack build, 132 native Paper lifecycle assertions and 20 actual-restart assertions pass. Development was stopped cleanly, fully backed up, and restarted with the exact native-tested JAR and the verified published pack `resource-pack-26.1.2-07f26e6b02cb` (SHA-1 `fdf1f4ee0eaf7b7f3c3ba20e2516b0bb6435351f`). All twelve other binaries are unchanged. Startup has no errors, 276 custom items load, and the owner’s client reports MandoMC SUCCESSFULLY_LOADED. Production was not modified. See [Crates sign](features/crates-sign.md). Next action: use `/mmc give crates_sign` on development and visually check placement outside the crates building.
+
+## Compact tutorial action bars (2026-11-15)
+
+On `bilal/tutorial-actionbar-fit`, tutorial objectives and hints now use short single-action lines; longer explanations remain in holograms/chat. Event action bars contain only the event name and countdown, and flight shows separate boarding, takeoff and airborne-progress prompts. Tutorial vehicle notices and the starter-kit confirmation are also shortened. Template checks cover all tutorial action bars at maximum counters with a conservative standard-font width budget.
+
+The reactor passes 331 Java tests and all 75 tooling checks. The complete native walkthrough passes 492 assertions, checking assembled action-bar width at each observed step plus separate boarding, takeoff and airborne progress. The verified JAR SHA-256 is `e69a733d7dbff6439ed0aec3a5dbed802dbd7a171c6c93fa3dcc2d4d8b56a41f`; development activation uses the scoped JAR/tutorial-config update with a full stopped-runtime backup and local deployment receipt. Next action: client-check the compact prompts with the preferred GUI scale.
+
+## Tutorial playtest refinements deployed (2026-11-15)
+
+Merged PR #30 into dev (`95b2218`). The tutorial now renders the normal Galaxy Map with only its central diamond enabled, uses normal territory-change titles during the clan lessons, returns players to the safezone starting point facing level before recipes, requires placing the supplied TIE fighter item before full-world flight, and shows automatic event-page countdowns in its boss bar and holograms. The saber must return and remain held for a full second before continuing; gray Jawas are identified as Batuu/spawn buyers. A bright 17-block bullseye replaces the small target. Real clans, vehicle ownership and inventory escrow remain isolated.
+
+The reactor passes 330 Java tests and all 75 tooling checks. The expanded native walkthrough passes 412 assertions, and actual JVM restart recovery passes 51. GitHub checks pass. The exact checked JAR and tutorial configuration are deployed after a clean stop and full runtime backup; startup is error-free and five warm worlds load. The other twelve binary hashes and pinned resource pack are unchanged.
+
+The requested full dev progression reset is complete for AstuteFlamez: native inventory/location/stats/advancements, credits/tutorial eligibility, clan membership, owned vehicles, pending auction delivery, trophy, Ilum times and weapon statistics were cleared. Staff access and other players’ records are preserved; the backup and reset receipt are retained locally. Next action: client-play the fresh first-join tutorial and verify the updated text, placement and larger target visually.
+
+## Interactive tutorial deployed to development (2026-11-15)
+
+Merged PR #28 into dev (`c0ea13d`), replacing the book-only `/tutorial` with sequential private practice: warp selection, real clan map, isolated clan create/claim/disband, three native Gamorrean kills, Vader saber throw, practice Jawa purchase/sale, recipes, ten airborne X-wing seconds, a cannon target and the three event explanations. New players enter after the complete resource-pack stack loads. `/tutorial end` restores normal inventory; first completion grants 5,000 credits and the existing once-only starter kit. Five warm private worlds expand to a bounded sixteen; unrelated commands, crates and inventories are blocked. Inventory escrow survives reconnects and reward receipts commit atomically with credits.
+
+The reactor passes 329 Java tests and all 75 tooling checks; GitHub checks pass. The final native walkthrough passes 240 assertions, including real vendor combat/models/flight, separate players, preserved real clans, reload-exit cancellation and deferred physical crate keys. Actual JVM restart recovery passes 51 assertions, restoring inventory and reconciling a lost reward callback without duplicate credits.
+
+The local dev server was stopped cleanly, fully backed up and restarted with the exact checked JAR and scoped configuration. Startup has no errors, `/tutorial` resolves and five warm worlds load. All twelve other binary hashes and the pinned resource-pack URL/hash remain unchanged; shared dev has no probe JAR. The backup and deployment receipt are retained in ignored local storage. Client layout and physical keyboard/mouse controls remain unverified. See [interactive tutorial](features/interactive-tutorial.md). Next action: client-play `/tutorial` on dev and check hologram readability, models and flight/shoot controls.
+
 ## Reconciled ready updates for both servers (2026-11-13)
 
 Merged complete Naboo source/history and the Durasteel hand-pose fix into current dev without dropping the newer eco, leaderboard, voting, DevWorld or pack-compaction changes. Existing Boba equipment source matches its completed feature checkout. Combined reactor passes 322 Java tests and all 75 tooling checks; the compact pack includes all 1,181 assets. An isolated current-dev snapshot is checking the full Naboo terrain/map and cross-feature lifecycle. Production migration will add only the new Naboo dimension and 902 approved Naboo originals; all 2,115 existing frozen-scope entries, other worlds and player data remain preserved. Next action: finish the combined runtime check, merge the checked release, and stage Naboo's world migration before production restart.

@@ -70,7 +70,7 @@ rules:
   enchanting-disabled: '<red>Enchanting is disabled. Anvil repairs are still available.</red>'
   dimension-disabled: '<red>The Nether and End are disabled.</red>'
 starter-kit:
-  received: '<green>Starter kit received: stone tools, steak, robes, an E-11 and 64 plasma cells.</green>'
+  received: '<green>Starter kit received!</green>'
 
 utilities:
   players-only: '<red>Specify an online player, or run this command in game.'

@@ -74,13 +74,17 @@ public final class ClanMapCommand implements CommandExecutor, TabCompleter {
                 boolean here = x == playerX && z == playerZ;
                 var clans=pluginClans();
                 var owner=clans==null?null:clans.state().owner(new net.mandomc.gameplay.clans.ClanState.Chunk(world,x,z));
-                var color = here ? NamedTextColor.YELLOW : owner!=null ? NamedTextColor.LIGHT_PURPLE : switch (zone) {
+                var ownerPlugin = org.bukkit.plugin.java.JavaPlugin.getProvidingPlugin(ClanMapCommand.class);
+                String practice = ownerPlugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null
+                        ? mando.tutorial().practiceClaim(player, world, x, z) : null;
+                var color = here ? NamedTextColor.YELLOW : owner!=null || practice!=null ? NamedTextColor.LIGHT_PURPLE : switch (zone) {
                     case 'S' -> net.kyori.adventure.text.format.TextColor.color(0xFFAA00);
                     case 'W' -> NamedTextColor.DARK_RED;
                     default -> NamedTextColor.DARK_GRAY;
                 };
                 String zoneKey = switch (zone) { case 'S' -> "safezone"; case 'W' -> "warzone"; default -> "wilderness"; };
                 Component hover = owner==null?message(zoneKey):Component.text(owner.name,NamedTextColor.LIGHT_PURPLE);
+                if (practice != null) hover = Component.text(practice, NamedTextColor.LIGHT_PURPLE);
                 hover=hover
                         .append(Component.text(" | " + x + ", " + z + "\nX " + (x * 16) + ".." + (x * 16 + 15)
                                 + " | Z " + (z * 16) + ".." + (z * 16 + 15), NamedTextColor.WHITE));
@@ -107,6 +111,9 @@ public final class ClanMapCommand implements CommandExecutor, TabCompleter {
                 + " | X " + atlas.minX() + ".." + atlas.maxX() + " | Z " + atlas.minZ() + ".." + atlas.maxZ(), NamedTextColor.WHITE)));
         if (policy.wholeWorldSafe(world)) player.sendMessage(message("whole-world-safezone"));
         if (!atlas.contains(playerX, playerZ)) player.sendMessage(message("outside"));
+        var plugin = org.bukkit.plugin.java.JavaPlugin.getProvidingPlugin(ClanMapCommand.class);
+        if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null)
+            mando.tutorial().mapShown(player);
         return true;
     }
 

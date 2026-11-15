@@ -71,6 +71,7 @@ public final class RecipeGuide implements Listener, AutoCloseable {
                         .filter(id -> id.startsWith(args[0])).toList() : List.of());
     }
 
+    public static boolean isMenu(org.bukkit.inventory.Inventory inventory) { return inventory.getHolder() instanceof Menu; }
     private void categories(Player player) {
         var menu = new Menu(player, text("title", ""));
         button(menu, 10, Material.KNOWLEDGE_BOOK, "all", "", p -> open(p, null, 0));

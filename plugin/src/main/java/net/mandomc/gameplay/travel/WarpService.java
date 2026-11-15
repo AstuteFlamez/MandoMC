@@ -117,8 +117,9 @@ public final class WarpService implements Listener, AutoCloseable {
         return MiniMessage.miniMessage().deserialize(config.getString("warps." + id + ".badges", fallback))
                 .decoration(TextDecoration.ITALIC, false);
     }
-    public void open(Player player) {
-        Inventory inventory=plugin.getServer().createInventory(null,size,text("gui-title"));
+    /** Same configured Galaxy Map, with input ownership supplied by the caller. */
+    public Inventory createMenu(org.bukkit.inventory.InventoryHolder holder) {
+        Inventory inventory=plugin.getServer().createInventory(holder,size,text("gui-title"));
         slots.forEach((slot,id)-> {
             String path="warps."+id+".";
             var item=new ItemStack(Material.matchMaterial(config.getString(path+"material")));
@@ -129,6 +130,10 @@ public final class WarpService implements Listener, AutoCloseable {
             inventory.setItem(slot,item);
         });
         MenuItems.fill(inventory);
+        return inventory;
+    }
+    public void open(Player player) {
+        var inventory=createMenu(null);
         player.openInventory(inventory);menus.put(player.getUniqueId(),inventory);
     }
     private boolean owns(Inventory inventory) {return menus.containsValue(inventory);}

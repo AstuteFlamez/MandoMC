@@ -1,0 +1,99 @@
+schema-version: 1
+warm-worlds: 5
+maximum-worlds: 16
+reward-credits: 5000
+guards: 3
+flight-seconds: 10
+event-page-seconds: 9
+items:
+  blaster: se14c
+  ammo: standard_plasma_cells
+  saber: vader
+  junk: agrinium_scrap
+  vehicle-ammo: tibanna_gas_cells
+  vehicle: tiefighter
+messages:
+  players-only: '<gray>Join the server to start /tutorial.'
+  usage: '<yellow>/tutorial <gray>| <yellow>/tutorial end'
+  bossbar: '<gold>Tutorial <gray>· <white>/tutorial end <gray>to leave'
+  cannons: '<yellow>Attack: fire cannons'
+  seat-busy: '<yellow>That seat is unavailable.'
+  vehicle-unavailable: '<red>Training ship unavailable.'
+  saber-return: '<gold>Wait for your saber to return.'
+  saber-hold: '<gold>Hold your saber for a moment.'
+  event-bar: '<gold>Event <page>/3 <gray>· <white>Auto-continue in <seconds>s <gray>· /tutorial end to leave'
+  event-next: '<yellow>No action needed · Next page automatically in <seconds>s'
+  event-finish: '<yellow>No action needed · Tutorial completes in <seconds>s'
+  place-position: '<yellow>Right-click the flat training pad.'
+  loading-bar: '<gold>Preparing your tutorial <gray>· <white>/tutorial end <gray>to cancel'
+  loading: '<yellow>Preparing your training area...'
+  pack: '<yellow>Load the pack, then use /tutorial.'
+  already: '<yellow>Follow your current objective.'
+  unsafe: '<yellow>Finish combat or your activity.'
+  cursor: '<yellow>Clear cursor and crafting grid.'
+  full: '<yellow>Rooms full. Try /tutorial later.'
+  denied: '<yellow>Not allowed during the tutorial.'
+  outside: '<gray>Use <yellow>/tutorial <gray>to start.'
+  ended: '<gold>Ended. <gray>Inventory restored.'
+  complete: '<gold>Complete! <gray>Inventory restored.'
+  reward: '<gold>First completion: +$5,000!'
+  kit-space: '<yellow>Free space for your starter kit.'
+  error: '<red>Tutorial stopped. Inventory saved.'
+  recovery: '<yellow>Your tutorial inventory is being recovered. Please reconnect.'
+  map-intro: '<gold>Safezone: <gray>you are protected here. Type <yellow>/c map <gray>to see zones and claims.'
+  map-walk: '<gray>The orange squares are Safezone. Walk east along the path, across the yellow line, into Wilderness.'
+  clan-name: '<yellow>Name: 3-16 letters, digits or _'
+  claim-position: '<yellow>Walk to X 48-63, then /c claim.'
+  sell-junk: '<yellow>Add all 8 scrap, then click Sell.'
+steps:
+  warp: '<yellow>/warp <gray>| Click Tutorial'
+  map: '<yellow>/c map <gray>| View the zone map'
+  wilderness: '<gold>Walk east across the yellow line.'
+  create: '<gold>Create clan: <yellow>/c create <name>'
+  claim: '<gold>At X 48-63: <yellow>/c claim'
+  disband: '<gold>Disband clan: <yellow>/c disband'
+  combat: '<gold>Defeat guards: <yellow><kills>/3'
+  saber: '<yellow>Sneak + attack: throw your saber'
+  buy: '<gold>Brown Jawa: buy 4 Oak Saplings'
+  sell: '<gold>Gray Jawa: add 8 scrap, then Sell'
+  recipes: '<yellow>/recipes <gray>| Close it to continue'
+  place: '<gold>Hold TIE; right-click the ground.'
+  flight: '<gold>Fly: <yellow><seconds>/<total>s <gray>| Look to steer'
+  target: '<yellow>Attack: shoot the glowing target'
+  events: '<gold>Read the event guide. No action.'
+  board: '<gold>Right-click TIE fighter to board.'
+  takeoff: '<yellow>Forward + Jump: take off'
+menus:
+  warp: '<gold>Galaxy Map'
+  tutorial: '<aqua>Tutorial'
+  buy: '<gold>Brown Jawa · Supplies'
+  saplings: '<green>Oak Saplings ×4'
+  buy-hint: '<yellow>Left-click to buy for $40 in practice credits.'
+  wallet: '<gold>Practice balance: $100'
+  sell: '<gray>Jawa salvage buyer'
+  sell-hint: '<yellow>Click the scrap in your inventory to add it; click Sell to finish.'
+  sell-button: '<green>Sell items » $6'
+  close: '<red>Return items & close'
+holograms:
+  warp: '<gold><bold>Welcome to MandoMC</bold><newline><white>Your own training area. Learn by doing.<newline><yellow>/warp <gray>→ choose the Tutorial diamond<newline><gray>You can leave any time: /tutorial end'
+  create: '<gold>Make a home with your clan<newline><white>/c create <name><newline><gray>This practice clan will not affect your real clan.'
+  claim: '<gold>Protect your base<newline><white>Walk along the path to X 48–63.<newline><yellow>/c claim<newline><gray>Leave one empty chunk beside protected land.'
+  disband: '<gold>Your practice chunk is claimed<newline><white>/c disband<newline><gray>Disbanding removes the practice clan and its claim.'
+  combat: '<gold>Blaster training<newline><white>Defeat all three Gamorrean guards.<newline><yellow>Use: fire · Drop key: reload<newline><gray>You cannot die here. Ammo refills when empty.'
+  saber: '<gold>Lightsabers & Ilum<newline><white>Complete Ilum’s course for a Kyber key.<newline><white>Open the Kyber crate to obtain crystals.<newline><yellow>Sneak + attack to throw your saber once.'
+  buy: '<gold>Tatooine · Brown Jawa supplies<newline><white>Right-click a brown Jawa to browse.<newline><yellow>Buy Oak Saplings ×4 for $40.<newline><gray>Your practice wallet has $100.'
+  sell: '<gold>Gray Jawas buy salvage<newline><white>Find gray Jawas on Batuu (spawn).<newline><white>Right-click the buyer.<newline><yellow>Click your scrap to add it, then click Sell.<newline><gray>Closing the window returns unsold items.'
+  recipes: '<gold>Craft your equipment<newline><yellow>/recipes<newline><white>Explore items, ingredients and their sources.<newline><gray>Close the guide to continue.'
+  place: '<gold>TIE fighter deployment<newline><white>Your TIE fighter is in your hotbar.<newline><yellow>Hold it and right-click the training pad.<newline><gray>Place it first, then board and fly.'
+  flight: '<gold>TIE fighter flight training<newline><white>Right-click the TIE fighter to board.<newline><yellow>Forward + Jump: take off · Look to steer<newline><white>Fly anywhere inside this world’s border for 10 seconds.<newline><gray>The training ship cannot be lost.'
+  target: '<gold>Gunnery target<newline><white>Aim your TIE fighter at the bullseye.<newline><yellow>Attack / left-click: fire cannons<newline><gray>A direct cannon hit completes the exercise.'
+events:
+  0:
+    action: '<gold>KOTH <gray>| Next in <seconds>s'
+    hologram: '<gold><bold>KOTH</bold><newline><white>Hold the hill for 3 uninterrupted minutes.<newline><white>Clear all holders to reset their capture.<newline><gray>A random winning member on the hill gets a key.<newline><yellow>/events shows the schedule.'
+  1:
+    action: '<gold>Jabba’s Palace <gray>| Next in <seconds>s'
+    hologram: '<gold><bold>Jabba’s Palace</bold><newline><white>Clear the guards, rooms and bosses.<newline><white>Defeat the Rancor, then collect your loot.<newline><gray>Watch for rival players: the loot is shared.<newline><yellow>/events shows when it opens.'
+  2:
+    action: '<gold>Beskar Rush <gray>| Finish in <seconds>s'
+    hologram: '<gold><bold>Beskar Rush</bold><newline><white>Mine the event’s limited Beskar deposits.<newline><white>Compete with other players on Mandalore.<newline><gray>Bring equipment and watch your surroundings.<newline><yellow>/events shows the next event.'

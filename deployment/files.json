@@ -106,6 +106,10 @@
       "target": "plugins/MandoMC/items/definitions/boba-equipment.yml"
     },
     {
+      "source": "plugin/src/main/resources/items/definitions/crates-sign.yml",
+      "target": "plugins/MandoMC/items/definitions/crates-sign.yml"
+    },
+    {
       "source": "server/config/common/mandomc/items/definitions/crates.yml",
       "target": "plugins/MandoMC/items/definitions/crates.yml"
     },
@@ -260,6 +264,10 @@
     {
       "source": "server/config/common/mandomc/trophies/settings.yml",
       "target": "plugins/MandoMC/trophies/settings.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/tutorial/tutorial.yml",
+      "target": "plugins/MandoMC/tutorial/tutorial.yml"
     },
     {
       "source": "server/config/common/mandomc/vehicles/menu.yml",

@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public final class CreditLedger {
     public static final long MAX = 9_000_000_000_000_000L;
     private final Path file;
+    private volatile Set<UUID> tutorialRewards = Set.of();
     private volatile Map<UUID, Long> balances;
     private volatile net.mandomc.gameplay.auction.AuctionBook auctions = net.mandomc.gameplay.auction.AuctionBook.empty();
     public net.mandomc.gameplay.auction.AuctionBook auctions() { return auctions; }
@@ -25,6 +26,8 @@ public final class CreditLedger {
             long cents = ((Number) raw).longValue();
             validate(cents); result.put(UUID.fromString(id), cents);
         }
+        tutorialRewards = yaml.getStringList("tutorial-rewards").stream().map(UUID::fromString)
+                .collect(java.util.stream.Collectors.toUnmodifiableSet());
         balances = Map.copyOf(result);
         auctions = net.mandomc.gameplay.auction.AuctionBook.read(yaml.getConfigurationSection("auction-house"));
     }
@@ -123,13 +126,28 @@ public final class CreditLedger {
     public synchronized void completeAuctionClaims(UUID owner, Set<UUID> ids) throws Exception {
         save(balances, auctions.complete(owner, ids));
     }
+    public boolean tutorialRewarded(UUID owner) { return tutorialRewards.contains(owner); }
+    public synchronized boolean rewardTutorial(UUID owner, long cents) throws Exception {
+        validate(cents);
+        if (tutorialRewards.contains(owner)) return false;
+        if (balance(owner) > MAX - cents) throw new IllegalArgumentException("limit");
+        var updated = new HashMap<>(balances); updated.put(owner, balance(owner) + cents);
+        var receipts = new HashSet<>(tutorialRewards); receipts.add(owner);
+        save(updated, auctions, Set.copyOf(receipts));
+        return true;
+    }
     private void save(Map<UUID, Long> updated) throws Exception { save(updated, auctions); }
     private void save(Map<UUID, Long> updated, net.mandomc.gameplay.auction.AuctionBook market) throws Exception {
+        save(updated, market, tutorialRewards);
+    }
+    private void save(Map<UUID, Long> updated, net.mandomc.gameplay.auction.AuctionBook market, Set<UUID> rewards) throws Exception {
         var yaml = new YamlConfiguration(); yaml.set("schema-version", 1); yaml.createSection("balances");
+        yaml.set("tutorial-rewards", rewards.stream().map(UUID::toString).sorted().toList());
         updated.forEach((id, cents) -> yaml.set("balances." + id, cents));
         market.write(yaml);
         net.mandomc.config.AtomicData.write(file, yaml.saveToString());
         balances = Map.copyOf(updated);
         auctions = market;
+        tutorialRewards = rewards;
     }
 }

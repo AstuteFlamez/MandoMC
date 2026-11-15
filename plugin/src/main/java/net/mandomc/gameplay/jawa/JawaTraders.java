@@ -171,6 +171,9 @@ public final class JawaTraders implements Listener, AutoCloseable {
         var entity=event.getEntity();Bukkit.getScheduler().runTask(plugin,()->{if(entity.isValid() && brown(entity) && entity instanceof Mob mob)combatants.put(entity.getUniqueId(),mob);});
     }
     public void open(Player player,LivingEntity entity) {
+        if (plugin.tutorial() != null && net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) {
+            plugin.tutorial().jawa(player, entity); return;
+        }
         boolean buying=brown(entity);
         if(!buying && !gray(entity))return;
         if(!buying){buyer.open(player,entity);return;}
