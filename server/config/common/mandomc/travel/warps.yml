@@ -61,6 +61,13 @@
         "pitch": 0.59998304
       },
       "show-in-menu": false
+    },
+    "naboo": {
+      "name": "<green>Naboo",
+      "material": "STICK",
+      "item-model": "mandomc:planets/naboo",
+      "slot": 15,
+      "description": "<gray>Forested lakeshores, meadows and rolling hills."
     }
   }
 }

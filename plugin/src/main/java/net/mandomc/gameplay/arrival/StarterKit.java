@@ -20,6 +20,8 @@ public final class StarterKit implements Listener {
     private record Entry(String item, int amount, boolean custom) { }
     private final JavaPlugin plugin;
     private final ItemCatalog catalog;
+    private boolean tutorialRequired;
+    public void tutorialRequired(boolean required) { tutorialRequired = required; }
     private final NamespacedKey granted;
     private final NamespacedKey pending;
     private final List<Entry> entries = new ArrayList<>();
@@ -51,6 +53,7 @@ public final class StarterKit implements Listener {
 
     @EventHandler public void join(PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        if (tutorialRequired) return;
         if ((!player.hasPlayedBefore() || player.getPersistentDataContainer().has(pending))
                 && !player.getPersistentDataContainer().has(granted)) {
             player.getPersistentDataContainer().set(pending, PersistentDataType.BYTE, (byte) 1);
@@ -62,6 +65,7 @@ public final class StarterKit implements Listener {
 
     /** Atomic delivery: construct everything, check capacity, then add it and record ownership. */
     public boolean grant(Player player) {
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return false;
         if (player.getPersistentDataContainer().has(granted)) return false;
         var kit = new ArrayList<ItemStack>();
         try {
@@ -98,13 +102,14 @@ public final class StarterKit implements Listener {
             }
             if (!hasHandbook) kit.add(handbook.create());
             if (!trial.addItem(kit.stream().map(ItemStack::clone).toArray(ItemStack[]::new)).isEmpty()) {
-                throw new IllegalStateException("not enough inventory space");
+                return false;
             }
             player.getInventory().setStorageContents(trial.getContents());
             if (refreshedOffhand != null) player.getInventory().setItemInOffHand(refreshedOffhand);
             player.getPersistentDataContainer().set(granted, PersistentDataType.BYTE, (byte) 1);
             player.getPersistentDataContainer().remove(pending);
-            player.sendMessage(MiniMessage.miniMessage().deserialize(message));
+            player.saveData();
+            player.sendActionBar(MiniMessage.miniMessage().deserialize(message));
             return true;
         } catch (RuntimeException error) {
             plugin.getLogger().severe("Starter kit not delivered to " + player.getUniqueId() + ": " + error.getMessage());

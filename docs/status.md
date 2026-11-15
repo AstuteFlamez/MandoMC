@@ -1,14 +1,99 @@
 # Resume here
 
+## Blast furnace progression hotfix (2026-11-15)
+
+Changed the blast furnace recipe to use five Agrinium ingots instead of sheets, removing the dependency on the furnace needed to make those sheets. Bundled defaults and managed server overrides match. Verification and rollout are in progress; next action: verify checks and activate the recipe on production and development.
+
+## November 15 production promotion live (2026-11-15)
+
+Promoted all recent development changes through PR #35 (`495bc11`): interactive tutorial/playtest refinements, compact prompts and the command-only Crates Sign. The exact placed SpawnWorld sign is imported, and the owner's production gameplay state is reset with private stopped-state backups. Other accounts and staff access are preserved. Native production verification confirms one sign/three owned cells and the account's fresh-player status; 276 custom items and five tutorial worlds load without errors. The earlier queued Naboo payload is active: 902 new originals, 2,126 existing files preserved and 3,017 prepared chunks.
+
+The first activation uncovered stale retained update JARs being consumed by Paper. Those archives are preserved outside the scan folders and the exact CI artifact is restored. The uploader now stages temporaries/previous bytes under `.mandomc/transfers/`; all 79 tooling tests pass, including regression and rollback coverage. Gameplay remains the same 333-test build with prior 492 tutorial and 152 sign native assertions. See [production promotion](features/november-15-production.md). Next action: client-play the fresh production tutorial and visually verify the imported sign.
+
+## Crates sign deployed to development (2026-11-15)
+
+Added the supplied 3×1 Blockbench sign as `crates_sign`, available only through the permission-gated `/mmc give` path, with no recipe/reward/drop entry. One persistent model occupies three protected collision cells; all six placement faces, breaking any part, single-item return, full-inventory recovery and restart custody are covered. Journal schema 3 preserves old one-block helmet/skull records. The pack adds three files and preserves all 1,181 existing entries byte-for-byte. Current dev tutorial updates are retained.
+
+Verification: 333 Java tests, 77 tooling checks, resource-pack build, 132 native Paper lifecycle assertions and 20 actual-restart assertions pass. Development was stopped cleanly, fully backed up, and restarted with the exact native-tested JAR and the verified published pack `resource-pack-26.1.2-07f26e6b02cb` (SHA-1 `fdf1f4ee0eaf7b7f3c3ba20e2516b0bb6435351f`). All twelve other binaries are unchanged. Startup has no errors, 276 custom items load, and the owner’s client reports MandoMC SUCCESSFULLY_LOADED. Production was not modified. See [Crates sign](features/crates-sign.md). Next action: use `/mmc give crates_sign` on development and visually check placement outside the crates building.
+
+## Compact tutorial action bars (2026-11-15)
+
+On `bilal/tutorial-actionbar-fit`, tutorial objectives and hints now use short single-action lines; longer explanations remain in holograms/chat. Event action bars contain only the event name and countdown, and flight shows separate boarding, takeoff and airborne-progress prompts. Tutorial vehicle notices and the starter-kit confirmation are also shortened. Template checks cover all tutorial action bars at maximum counters with a conservative standard-font width budget.
+
+The reactor passes 331 Java tests and all 75 tooling checks. The complete native walkthrough passes 492 assertions, checking assembled action-bar width at each observed step plus separate boarding, takeoff and airborne progress. The verified JAR SHA-256 is `e69a733d7dbff6439ed0aec3a5dbed802dbd7a171c6c93fa3dcc2d4d8b56a41f`; development activation uses the scoped JAR/tutorial-config update with a full stopped-runtime backup and local deployment receipt. Next action: client-check the compact prompts with the preferred GUI scale.
+
+## Tutorial playtest refinements deployed (2026-11-15)
+
+Merged PR #30 into dev (`95b2218`). The tutorial now renders the normal Galaxy Map with only its central diamond enabled, uses normal territory-change titles during the clan lessons, returns players to the safezone starting point facing level before recipes, requires placing the supplied TIE fighter item before full-world flight, and shows automatic event-page countdowns in its boss bar and holograms. The saber must return and remain held for a full second before continuing; gray Jawas are identified as Batuu/spawn buyers. A bright 17-block bullseye replaces the small target. Real clans, vehicle ownership and inventory escrow remain isolated.
+
+The reactor passes 330 Java tests and all 75 tooling checks. The expanded native walkthrough passes 412 assertions, and actual JVM restart recovery passes 51. GitHub checks pass. The exact checked JAR and tutorial configuration are deployed after a clean stop and full runtime backup; startup is error-free and five warm worlds load. The other twelve binary hashes and pinned resource pack are unchanged.
+
+The requested full dev progression reset is complete for AstuteFlamez: native inventory/location/stats/advancements, credits/tutorial eligibility, clan membership, owned vehicles, pending auction delivery, trophy, Ilum times and weapon statistics were cleared. Staff access and other players’ records are preserved; the backup and reset receipt are retained locally. Next action: client-play the fresh first-join tutorial and verify the updated text, placement and larger target visually.
+
+## Interactive tutorial deployed to development (2026-11-15)
+
+Merged PR #28 into dev (`c0ea13d`), replacing the book-only `/tutorial` with sequential private practice: warp selection, real clan map, isolated clan create/claim/disband, three native Gamorrean kills, Vader saber throw, practice Jawa purchase/sale, recipes, ten airborne X-wing seconds, a cannon target and the three event explanations. New players enter after the complete resource-pack stack loads. `/tutorial end` restores normal inventory; first completion grants 5,000 credits and the existing once-only starter kit. Five warm private worlds expand to a bounded sixteen; unrelated commands, crates and inventories are blocked. Inventory escrow survives reconnects and reward receipts commit atomically with credits.
+
+The reactor passes 329 Java tests and all 75 tooling checks; GitHub checks pass. The final native walkthrough passes 240 assertions, including real vendor combat/models/flight, separate players, preserved real clans, reload-exit cancellation and deferred physical crate keys. Actual JVM restart recovery passes 51 assertions, restoring inventory and reconciling a lost reward callback without duplicate credits.
+
+The local dev server was stopped cleanly, fully backed up and restarted with the exact checked JAR and scoped configuration. Startup has no errors, `/tutorial` resolves and five warm worlds load. All twelve other binary hashes and the pinned resource-pack URL/hash remain unchanged; shared dev has no probe JAR. The backup and deployment receipt are retained in ignored local storage. Client layout and physical keyboard/mouse controls remain unverified. See [interactive tutorial](features/interactive-tutorial.md). Next action: client-play `/tutorial` on dev and check hologram readability, models and flight/shoot controls.
+
+## Reconciled ready updates for both servers (2026-11-13)
+
+Merged complete Naboo source/history and the Durasteel hand-pose fix into current dev without dropping the newer eco, leaderboard, voting, DevWorld or pack-compaction changes. Existing Boba equipment source matches its completed feature checkout. Combined reactor passes 322 Java tests and all 75 tooling checks; the compact pack includes all 1,181 assets. An isolated current-dev snapshot is checking the full Naboo terrain/map and cross-feature lifecycle. Production migration will add only the new Naboo dimension and 902 approved Naboo originals; all 2,115 existing frozen-scope entries, other worlds and player data remain preserved. Next action: finish the combined runtime check, merge the checked release, and stage Naboo's world migration before production restart.
+
+## Durasteel hand orientation deployed to development (2026-11-12)
+
+Published `resource-pack-26.1.2-90a420b3eb34` from the tested feature branch and anonymously verified ZIP/manifest SHA-1 `f3d9224251a21eb3123e07621619129643c3c98a`. Only Durasteel's two hand transforms differ from the latest hosted pack; its ten existing map/ore texture updates also reach the older development runtime. All 72 tooling checks pass. Normal development restart completed with zero startup errors, and the owner's client reports MandoMC SUCCESSFULLY_LOADED. All 14 installed binary/launcher hashes are unchanged; only pack URL/hash property values changed. Production runtime was not modified. Visual pose confirmation remains pending. Next action: client-check Durasteel in first person/offhand beside Beskar and Stormtrooper.
+
+## Durasteel hand orientation staged (2026-11-12)
+
+On `bilal/durasteel-hand-orientation`, Durasteel now uses the existing Beskar/Stormtrooper first- and third-person hand transforms, addressing its missing hand pose. All other Durasteel model data and all 1177 unrelated pack entries are unchanged. Resource-pack build, eight model checks and `./scripts/build.sh` pass. Publication and in-client verification remain pending. See [feature](features/durasteel-hand-orientation.md). Next action: apply the tested pack to development and check Durasteel in both hands beside the working helmets.
+
+
+## Naboo native cave redesign live (2026-11-13)
+
+On `bilal/naboo-dev`, replaced the shared-floor cave generator with real native Minecraft cave geometry from a bounded private 1,024-chunk reference. Naboo now has winding narrow passages, broad caverns, pillars, ledges, drops and separate systems, with 1,636,976 excavated cells across 175 systems and floors at 120 elevations. Added 12 mossy grottos, six dripstone areas, 18 fully contained shallow pools and 450 supported glow-lichen lights. The exact Agrinium/Durasteel/Electrum host budgets are retained; no new ore families, mobs, loot or foreign biomes/structures are imported. The surface, foundation margins, building recolor, island/warp, zones, 500×500 border, atlas and pinned resource pack are preserved.
+
+Private and dev native checks each pass 3,806,771 assertions, including every changed block, 193 dry standing anchors, physical decoration support, pool containment, relighting and unchanged building collision/properties; map/pack checks pass 14 each. The 3,801,315-cell sparse replacement in 801 chunks round-trips 78,741,504 cells. All 801 prior originals and matching journals are archived; untouched originals and other plugin JARs remain identical. New scope `wilderness-naboo-vanilla-20261113` is complete at 3017/3017. Reactor passes 316 gameplay plus four access tests; all 74 Python checks pass. Dev is back on normal startup with temporary probes removed; production is untouched and code stays local. See [Naboo](features/naboo.md). Next action: explore the native caves and their lush/dripstone/pool landmarks on dev, using normal mining/climbing for vertical passages and separate systems.
+
+
+## Naboo organic caves, protected district and UI repairs live (2026-11-13)
+
+On `bilal/naboo-dev`, the island warp uses the user's exact captured position/facing; all 100 island chunks are Safezone. The 100-chunk building district is Warzone with PvP permitted and building/container/door interaction locked. The original 500×500 border stays unchanged. The final terrain has 94 irregular merged caverns, 124 winding passages, rolling natural floors, 450 native lights and Durasteel/Electrum/Agrinium veins. All main rooms connect on foot. Recolored 17,116 building blocks, including acacia/jungle timber and terracotta, preserving positions, properties and native collision geometry. The organic follow-up versions 702 originals with all older versions archived; current scope is complete at 3017/3017.
+
+Fixed `/c map` to show actual border-intersecting rows/columns with clipped-edge hover ranges. A concurrent main release had dropped all Naboo pack entries; repaired its newer pack by adding only the three already-approved public Naboo files. The verified dev pack is explicitly pinned across restarts, with native 32×32 artwork and no resizing. Private and actual dev each pass 2,443,580 terrain/material checks plus 14 real-command/selected-pack checks; prior zone rollout passed 48,104 checks. 316 gameplay and 4 access tests, 74 Python checks and pack validation pass. All historical originals/journals and untouched active originals are verified; unrelated plugin JARs are unchanged. Final normal dev startup is ready with no errors or temporary probes. Code remains local; no production changes. See [Naboo](features/naboo.md). Next action: reconnect for the repaired pack and client-walk `/warp naboo`, the protected Warzone district and organic caves.
+
+
+## Naboo island and icon refinement staged (2026-11-13)
+
+The user moved the warp to their captured island position and approved whole-island safezone while explicitly retaining the existing border. The new footprint covers 100 chunks; the exact position/facing is preserved. Native scope changes from 3138 to 3117 active originals while retaining every archived original; one pristine original restores the former safe arrival to wilderness. Repainted Naboo directly at 32×32 with spherical lighting, forest/water detail and a Theed-style landmark to match active planets. Only the Naboo PNG changes in the prepared pack. 314 gameplay plus 4 access tests, 72 Python checks and pack build pass; private native checks and dev activation are in progress. Next action: finish the native island check and apply the backed-up update to dev.
+
+
+## Naboo playable on development (2026-11-13)
+
+On `bilal/naboo-dev`, added the selected legacy Naboo forest/lakeshore with a 500×500 border centered at (-13552,3440). `/warp naboo` and Galaxy Map slot 15 use the protected arrival (-13550.5,101,3359.5). Only chunk (-847,209) is safe at every height; all other locations are wilderness. The legacy icon is refined directly at native 32×32 with no resizing. Its approved versioned development pack is published, anonymously hash-verified and applied while preserving all 1178 prior entries. A stopped full-runtime backup precedes the scoped four-entry JAR/configuration/map rollout. All 2115 previous originals and frozen receipts, plus other plugin JARs, remain byte-identical; 1023 Naboo originals are added, total 3138/3138. Private restart and actual dev checks each pass 2392 assertions; 314 gameplay plus 4 access tests, 72 Python checks and pack build pass. Temporary probes are removed for normal play. Alderaan was cancelled and never deployed. Code is retained locally; the external branch push was blocked by approval review. Production is unaffected. See [Naboo](features/naboo.md). Next action: join development and walk `/warp naboo` to assess the forest/lakeshore and native icon in client.
+
+
+## Development economy and voting sync deployed (2026-11-13)
+
+Local development restarted automatically with /eco and /economy give/add, take/remove, set, reset-to-starting-balance and help. The sole native credit writer, admin permission, audit log and red italic admin feedback remain authoritative. NuVotifier/VotingPlugin and five reward/site entries now match production; the vote crate binding is mirrored while Kyber/KOTH placement, existing player state, worlds and the active Boba overlay are preserved. The listener binds only to loopback with its own identity; public website votes still target production.
+
+Fixed leaderboards, global natural-spawn suppression, the DevWorld frozen-terrain exemption and the previously missing native trophy startup hook are active on local dev. The scoped candidate changes 20 JAR entries; every unrelated entry is byte-identical, and only the trophy startup call was added to the existing Jabba drop constructor. Full stopped-runtime rollback clone and checksum receipt are private. All 319 Java tests, 30 native economy command assertions and 827 DevWorld placement/recovery/spawn assertions pass. A real encrypted fixture vote awards exactly 500 credits and one key. Live startup, active JAR hash, eco help, native crates readiness, saved vote binding and private listener handshake are verified. No temporary probe is installed on dev. No production promotion or restart was performed for this addition. New features now deploy to dev with automatic restart; production remains explicit promotion/manual restart. Next action: reconnect to local dev and playtest /eco, the fixed boards, DevWorld helmet/skull placement and the Voting Crate.
+
+## Fixed-height leaderboard style (2026-11-13)
+
+Kills, balance and Ilum now use uppercase title/subtitle, a spacer, and ten permanent numbered positions; vacant slots contain only the rank. Red/green/purple text stays transparent and upright. A configurable 0.35-block lift preserves saved ground anchors while keeping the fixed panel clear of the ground. Ranking/stat/credit owners and Ilum chat output are unchanged. All 319 Java tests pass. The isolated Paper probe passes 72 assertions across all three boards and shuts down cleanly; production activation remains pending. See [feature](features/world-leaderboards.md). Deployed to local dev with automatic restart during the economy/voting sync. Next action: inspect all three fixed-height boards in the Minecraft client.
+
 ## Compact resource pack (2026-11-13)
 
-Removed generator-specific artwork notes, prompts and unused high-resolution source export from the current resource-pack files. Kept the final texture and third-party credits/licenses. Build output minifies JSON, removes non-rendering PNG metadata and recompresses unchanged scanlines with level-nine DEFLATE. ZIP decreases from 2,626,531 to 2,525,650 bytes (100,881 bytes); 1,173,055 unused repository bytes removed. All 73 pack/tooling checks pass (one compiled-launcher check skipped in pack-only mode), including semantic equality for every JSON resource and unchanged decompressed texture data/color metadata. Publication is pending. Next action: merge and publish the compact pack through the standard workflow.
+Removed generator-specific artwork notes, prompts and unused high-resolution source export from the current resource-pack files. Kept the final texture and third-party credits/licenses. Build output minifies JSON, removes non-rendering PNG metadata and recompresses unchanged scanlines with level-nine DEFLATE. ZIP decreases from 2,626,531 to 2,525,650 bytes (100,881 bytes); 1,173,055 unused repository bytes removed. All 73 pack/tooling checks pass (one compiled-launcher check skipped in pack-only mode), including semantic equality for every JSON resource and unchanged decompressed texture data/color metadata. Published and uploaded from checked main ac0e925215f2. Anonymous download matches production SHA-1 6009a5c22fe29576e330f0813f3a870a4ca255db and passes ZIP integrity. Activation awaits the manual restart. Next action: restart PebbleHost and reconnect to apply the compact pack.
 
 
 
 ## DevWorld decorations and natural-spawn policy (2026-11-13)
 
-DevWorld survival edits now bypass only the frozen planet-backup requirement; territory, clan and event cancellations remain authoritative. Reproduced placement failure on the old build, then verified all four helmets and the Rancor skull on six faces, exact item recovery, cancellation/refund handling, and custom/breeding/command spawn exemptions in an isolated full-stack server (827 assertions). The global natural-spawn switch now suppresses all living vanilla types through both spawn hooks and new-chunk handling. All 318 Java tests pass. Production activation remains pending its manual restart. Next action: merge the checked hotfix and verify its automatic upload.
+DevWorld survival edits now bypass only the frozen planet-backup requirement; territory, clan and event cancellations remain authoritative. Reproduced placement failure on the old build, then verified all four helmets and the Rancor skull on six faces, exact item recovery, cancellation/refund handling, and custom/breeding/command spawn exemptions in an isolated full-stack server (827 assertions). The global natural-spawn switch now suppresses all living vanilla types through both spawn hooks and new-chunk handling. All 318 Java tests pass. Production activation remains pending its manual restart. Checked main ac0e925215f2 was uploaded successfully; the production receipt confirms restartRequired=true. No restart was sent. Next action: manually restart PebbleHost, then test helmet sneak-placement and skull placement in DevWorld.
 
 
 ## Scoreboard player-name hotfix (2026-11-12)
@@ -30,7 +115,7 @@ The main b2c6e07 runtime is activated on PebbleHost with the old server retained
 
 ## Voting banner (2026-11-12)
 
-Added `docs/assets/server-banner.png` beside the server icon on the main checkout. Original pixel art drawn directly at 468 × 60; copied byte-for-byte without scaling. Verified PNG dimensions and source equality. No unfinished asset work. Next action: upload the banner to the voting-site listings.
+Added `docs/assets/server-banner.png` beside the server icon on the main checkout. Original pixel art drawn directly at 468 × 60; copied byte-for-byte without scaling. Verified PNG dimensions and source equality. Uploaded and saved on all five voting listings on 2026-11-13: Minecraft-MP, Minecraft Server List, MinecraftServers.org, Minecraft.Buzz and Planet Minecraft. The JPG-only Minecraft Server List uses a high-quality format conversion at the same 468×60 size; the others use the original PNG. Public pages or save confirmations were verified. No unfinished banner work. Next action: observe listing traffic during alpha.
 
 ## Voting migration addition (2026-11-12)
 

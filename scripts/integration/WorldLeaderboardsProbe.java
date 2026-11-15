@@ -34,8 +34,8 @@ public final class WorldLeaderboardsProbe extends JavaPlugin {
         var plugin = (MandoPlugin) Bukkit.getPluginManager().getPlugin("MandoMC");
         var owner = Objects.requireNonNull(Bukkit.getServicesManager().load(WorldLeaderboards.class));
         check(boards().size() == 2, "Exactly two owned boards at startup/restart");
-        check(board("kills").getLocation().equals(new Location(board("kills").getWorld(), -59.50074498169203, 96.0625, 13.431550557182451)), "Exact saved kills anchor, no height offset");
-        check(board("balance").getLocation().equals(new Location(board("balance").getWorld(), -63.44204842969489, 96.0625, 10.63073610449501)), "Exact saved balance anchor, no height offset");
+        check(board("kills").getLocation().equals(new Location(board("kills").getWorld(), -59.50074498169203, 96.4125, 13.431550557182451)), "Exact saved kills anchor, raised display baseline");
+        check(board("balance").getLocation().equals(new Location(board("balance").getWorld(), -63.44204842969489, 96.4125, 10.63073610449501)), "Exact saved balance anchor, raised display baseline");
         for (var board : boards()) {
             check(!board.isDefaultBackground() && board.getBackgroundColor().getAlpha() == 0, "Explicit transparent background");
             check(board.getBillboard() == Display.Billboard.VERTICAL && board.getPitch() == 0, "Upright billboard ignores captured down-look pitch");
@@ -44,15 +44,15 @@ public final class WorldLeaderboardsProbe extends JavaPlugin {
         String phase = new java.io.File(getDataFolder(), "phase2").exists() ? "restart" : "initial";
         if (phase.equals("initial")) {
             var rows = text("kills").lines().toList();
-            check(rows.size() == 12, "Title, ten ranked rows, footer");
+            check(rows.size() == 13, "Title, subtitle, spacer and ten ranked rows");
             for (int rank = 1; rank <= 10; rank++)
-                check(rows.get(rank).startsWith(rank + ". ") && rows.get(rank).endsWith(" • " + (13 - rank)), "Offline native kill ranking " + rank);
-            check(text("balance").contains("1. ") && text("balance").contains(" • 15.00"), "Offline committed ledger balances rendered in credits");
+                check(rows.get(rank + 2).startsWith(rank + ". ") && rows.get(rank + 2).endsWith(": " + (13 - rank)), "Offline native kill ranking " + rank);
+            check(text("balance").contains("1. ") && text("balance").contains(": $15.00"), "Offline committed ledger balances rendered in credits");
             var tie = plugin.credits().ledger().top(2);
             check(tie.get(0).getKey().toString().endsWith("00000000000b") && tie.get(1).getKey().toString().endsWith("00000000000c"), "Existing credit ledger UUID tie order retained");
         } else {
-            check(text("kills").lines().skip(1).findFirst().orElseThrow().endsWith(" • 100"), "Native offline kill statistic survives restart");
-            check(text("balance").lines().skip(1).findFirst().orElseThrow().endsWith(" • 9,999.99"), "Committed credit balance survives restart");
+            check(text("kills").lines().skip(3).findFirst().orElseThrow().endsWith(": 100"), "Native offline kill statistic survives restart");
+            check(text("balance").lines().skip(3).findFirst().orElseThrow().endsWith(": $9,999.99"), "Committed credit balance survives restart");
         }
         var unrelated = new HashMap<UUID, String>();
         for (var world : Bukkit.getWorlds()) for (var e : world.getEntitiesByClass(TextDisplay.class))
@@ -62,8 +62,8 @@ public final class WorldLeaderboardsProbe extends JavaPlugin {
         Bukkit.getOfflinePlayer(first).setStatistic(Statistic.PLAYER_KILLS, 100);
         plugin.credits().ledger().adjust(first, "set", 999999);
         owner.refresh();
-        check(text("kills").lines().skip(1).findFirst().orElseThrow().endsWith(" • 100"), "Native stat mutation appears on existing display");
-        check(text("balance").lines().skip(1).findFirst().orElseThrow().endsWith(" • 9,999.99"), "Committed ledger mutation appears on existing display");
+        check(text("kills").lines().skip(3).findFirst().orElseThrow().endsWith(": 100"), "Native stat mutation appears on existing display");
+        check(text("balance").lines().skip(3).findFirst().orElseThrow().endsWith(": $9,999.99"), "Committed ledger mutation appears on existing display");
         check(ids.equals(boards().stream().map(Entity::getUniqueId).collect(java.util.stream.Collectors.toSet())), "Refresh retains display entities");
         LeaderboardFeature.start(plugin); LeaderboardFeature.start(plugin); owner.refresh();
         check(boards().size() == 2 && Bukkit.getServicesManager().load(WorldLeaderboards.class) == owner, "Duplicate startup/refresh retains sole owner and two boards");

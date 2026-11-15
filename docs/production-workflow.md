@@ -2,8 +2,9 @@
 
 `main` is the production source. `dev` is the integration branch. `hotfix` is the
 short path for urgent production fixes. Normal feature branches use
-`bilal/<feature>` and merge into `dev`; promote a tested `dev` into `main` with a
-pull request. Start hotfix work from the latest `main`, merge through `hotfix`
+`bilal/<feature>` and merge into `dev`. Deploy checked features to the local development
+server and restart it automatically for playtesting. Promote a tested `dev` into `main`
+with a pull request only when the user requests production promotion. Start hotfix work from the latest `main`, merge through `hotfix`
 into `main`, then merge `main` back into `dev` and `hotfix`. Never force-push.
 
 The GitHub `Server checks` job builds Java 25, runs the Java and Python tests,
@@ -84,9 +85,9 @@ Unexpected remote edits stop the upload. A remote mkdir lock serializes
 deployments, including local CLI use. Previous bytes and the deployment receipt
 are retained in `.mandomc/backups/<timestamp>-<commit>/`. Each uploaded file is
 read back and verified before replacement. PebbleHost rejects overwrite renames, so the
-old name is moved to a retained sibling first, then the verified new file is renamed
+old name is moved to a retained `.mandomc/transfers/<id>/previous` file first, then the verified new file is renamed
 into place. A failed second rename restores the old name. There is a short interval
-where the replaced path is absent; this is not a bundle-wide atomic transaction. A mid-upload connection failure
+where the replaced path is absent; this is not a bundle-wide atomic transaction. Upload temporaries also live under `.mandomc/transfers/`, outside active plugin/config folders. Paper can consume backup archives in `plugins/update/` even when their names no longer end in `.jar`; never retain old JARs there. A mid-upload connection failure
 can leave a partial config set; inspect the receipt, backup and lock before
 recovery. Do not restart blindly after a failed deployment. Managed file
 deletions require a reviewed migration; the upload job never deletes them.

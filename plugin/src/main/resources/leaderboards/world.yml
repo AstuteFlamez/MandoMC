@@ -7,9 +7,13 @@ boards:
   balance:
     world: minecraft:spawnworld
     location: [-63.44204842969489, 96.0625, 10.63073610449501]
+display-height-offset: 0.35
 messages:
-  kills-title: '<aqua><bold>KILLS LEADERBOARD</bold></aqua>'
-  balance-title: '<aqua><bold>BALANCE LEADERBOARD</bold></aqua>'
-  row: '<gray><rank>. <aqua><name></aqua> <gray>• <value>'
-  empty: '<gray>No records yet.'
-  footer: '<gray>Top 10 players'
+  kills-title: '<#e45c75><bold>KILLS LEADERBOARD</bold></#e45c75>'
+  kills-subtitle: '<#e45c75>TOP TEN PLAYERS</#e45c75>'
+  kills-row: '<#e45c75><rank>. <name>: <value></#e45c75>'
+  kills-empty-row: '<#e45c75><rank>.</#e45c75>'
+  balance-title: '<#55dd77><bold>BALANCE LEADERBOARD</bold></#55dd77>'
+  balance-subtitle: '<#55dd77>TOP TEN PLAYERS</#55dd77>'
+  balance-row: '<#55dd77><rank>. <name>: $<value></#55dd77>'
+  balance-empty-row: '<#55dd77><rank>.</#55dd77>'

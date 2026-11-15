@@ -149,3 +149,15 @@ UNIDENTIFIED LEGACY ROOT WORLD
   Buy/download: [IDENTIFY WORLD AND ADD SOURCE].
   Installation: not selected; do not import until identified.
   Replacement: omit until its purpose is known.
+
+Naboo selected development slice (2026-11-13)
+  Source: Operator-supplied legacy Naboo world; originals and all generated terrain remain private.
+  Key: minecraft:naboo; four retained region files cover the selected play area.
+  Border: unchanged center (-13552,3440), size 500 blocks.
+  Arrival: (-13341.430043026525,59,3209.6097442130404), yaw36.899933, pitch-3.6000152.
+  Zones: the 100-chunk island is Safezone; the 100-chunk district is Warzone; the rest is Wilderness.
+  Current terrain: 94 organic main caverns, 124 passages and three native metal ore families.
+  Building palette includes pale stone, green roofs, birch/spruce timber and cream ceramics;
+  every recolor retains its original position, properties and collision shape.
+  Native originals are explicitly versioned and archived for each approved terrain update.
+  See docs/features/naboo.md. Alderaan was cancelled and never deployed.

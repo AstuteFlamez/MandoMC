@@ -12,6 +12,7 @@ public final class TerritoryPolicy {
     private final Map<String, ChunkAtlas> additionalMaps;
     private final Map<String, String> safeWorlds;
     private final java.util.Set<String> mechanismWorlds;
+    private final java.util.Set<String> lockedInteractionWorlds;
     private final String hoth;
     private final String landing;
     private final List<Integer> hothMin, hothMax, landingMin, landingMax;
@@ -38,6 +39,9 @@ public final class TerritoryPolicy {
         }
         safeWorlds = Map.copyOf(safe);
         mechanismWorlds = java.util.Set.copyOf(config.getStringList("mechanism-worlds"));
+        lockedInteractionWorlds = java.util.Set.copyOf(config.getStringList("locked-interaction-worlds"));
+        for (String world : lockedInteractionWorlds) if (!world.matches("[a-z0-9_-]+:[a-z0-9_/-]+"))
+            throw new IllegalArgumentException("territory/maps.yml: invalid locked-interaction world " + world);
         if (!safeWorlds.keySet().containsAll(mechanismWorlds))
             throw new IllegalArgumentException("territory/maps.yml: mechanism-worlds must be whole safezone worlds");
         hoth = requiredWorld(config, "hoth.world");
@@ -63,6 +67,7 @@ public final class TerritoryPolicy {
         return x>=min.get(0) && x<=max.get(0) && y>=min.get(1) && y<=max.get(1) && z>=min.get(2) && z<=max.get(2);
     }
     public Zone zone(String world,int x,int y,int z) {
+        if (world.matches("mandomc:tutorial_[0-9]+")) return x < 32 && z < 32 ? Zone.SAFEZONE : Zone.WILDERNESS;
         if (safeWorlds.containsKey(world)) return Zone.SAFEZONE;
         if (world.equals(mandalore.world())) return switch(mandalore.zone(Math.floorDiv(x,16),Math.floorDiv(z,16))) {
             case 'S' -> Zone.SAFEZONE; case 'W' -> Zone.WARZONE; default -> Zone.WILDERNESS;
@@ -76,6 +81,10 @@ public final class TerritoryPolicy {
         return Zone.WILDERNESS;
     }
     public boolean edits(String world,int x,int y,int z) { return zone(world,x,y,z)==Zone.WILDERNESS; }
+    /** Optional scenery protection locks interactive blocks without extending terrain or combat zones. */
+    public boolean interactions(String world,int x,int y,int z) {
+        return !lockedInteractionWorlds.contains(world) || zone(world,x,y,z)==Zone.WILDERNESS;
+    }
     public boolean combat(String world,int x,int y,int z) { return zone(world,x,y,z)!=Zone.SAFEZONE; }
     public boolean spawning(String world,int x,int y,int z) { return combat(world,x,y,z) && !world.equals(hoth); }
     public boolean wildernessChunk(String world,int x,int z) {

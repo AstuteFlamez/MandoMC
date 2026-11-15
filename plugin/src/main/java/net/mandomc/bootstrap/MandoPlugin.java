@@ -58,6 +58,8 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     public net.mandomc.gameplay.vehicles.VehicleRepairs vehicleRepairs() { return vehicleRepairs; }
     public net.mandomc.gameplay.vehicles.VehicleService vehicles() { return vehicles; }
     public net.mandomc.gameplay.explosions.TemporaryExplosions explosions() { return explosions; }
+    private net.mandomc.gameplay.tutorial.InteractiveTutorial tutorial;
+    public net.mandomc.gameplay.tutorial.InteractiveTutorial tutorial() { return tutorial; }
     private ArrivalListener arrival;
     private ArrivalDestinations destinations;
     private boolean failed;
@@ -133,7 +135,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 worldEditRanks = new net.mandomc.integrations.permissions.WorldEditRanks(this, ranks);
             new net.mandomc.commands.RankCommands(root, ranks, language.getConfigurationSection("ranks"));
             credits = new net.mandomc.gameplay.credits.CreditService(this, loadFeature("economy/credits.yml"));
-            for (var resource : new String[] {"items/catalog.yml", "items/definitions/vehicles.yml", "items/definitions/vehicle-ammo.yml", "items/definitions/legacy.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/jabba.yml", "items/definitions/jabba-loot.yml", "items/definitions/dioxis.yml", "items/definitions/boba-equipment.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
+            for (var resource : new String[] {"items/catalog.yml", "items/definitions/vehicles.yml", "items/definitions/crates-sign.yml", "items/definitions/vehicle-ammo.yml", "items/definitions/legacy.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/jabba.yml", "items/definitions/jabba-loot.yml", "items/definitions/dioxis.yml", "items/definitions/boba-equipment.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
                 if (!new File(getDataFolder(), resource).isFile()) saveResource(resource, false);
             }
             // Add only missing badges and vendor registrations; preserve local overrides.
@@ -274,6 +276,9 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             warps = new net.mandomc.gameplay.travel.WarpService(this, travel, destinations, loadFeature("travel/warps.yml"));
             events = new net.mandomc.gameplay.events.EventManager(this, warps);
             getLogger().info("Native events and public warps ready: configured destinations and event rewards loaded.");
+            tutorial = new net.mandomc.gameplay.tutorial.InteractiveTutorial(this, loadFeature("tutorial/tutorial.yml"));
+            starterKit.tutorialRequired(true);
+            getLogger().info("Interactive tutorial ready: private worlds, isolated inventory and once-only completion rewards.");
             getLogger().info("Arrival enabled: protected Batuu spawn; /spawn and temporary /tutorial ready.");
         } catch (Exception | LinkageError error) {
             failed = true;
@@ -298,6 +303,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (tutorial != null) tutorial.close();
         if (hud != null) hud.close();
         if (jawas != null) jawas.close();
         if (credits != null) credits.close();

@@ -431,9 +431,9 @@ public final class ParkourService implements Listener, AutoCloseable {
             });displays.add(text);
         }
         keepDisplayChunk(location(config.getList("leaderboard")));
-        leaderboard=world.spawn(location(config.getList("leaderboard")),TextDisplay.class,e->{
+        leaderboard=world.spawn(location(config.getList("leaderboard")).add(0,config.getDouble("leaderboard-height-offset",.35),0),TextDisplay.class,e->{
             e.setDefaultBackground(false);e.setBackgroundColor(org.bukkit.Color.fromARGB(0));
-            e.setBillboard(Display.Billboard.CENTER);e.setShadowed(true);e.setPersistent(false);e.setViewRange(.7f);
+            e.setBillboard(Display.Billboard.VERTICAL);e.setLineWidth(300);e.setShadowed(true);e.setPersistent(false);e.setViewRange(.7f);
         });displays.add(leaderboard);updateLeaderboard();
         for(var data:config.getMapList("npcs")){
             var at=location((List<?>)data.get("location"));keepDisplayChunk(at);
@@ -512,10 +512,11 @@ public final class ParkourService implements Listener, AutoCloseable {
     private void updateLeaderboard() {
         if(leaderboard==null||!leaderboard.isValid())return;
         leaderboard.setDefaultBackground(false);leaderboard.setBackgroundColor(org.bukkit.Color.fromARGB(0));
-        Component text=message("leaderboard-title");int rank=0;
-        for(var entry:top())text=text.append(Component.newline()).append(message("top-row","rank",Integer.toString(++rank),"name",entry.getValue().name(),"time",format(entry.getValue().millis())));
-        if(rank==0)text=text.append(Component.newline()).append(message("empty-top"));
-        leaderboard.text(text.append(Component.newline()).append(message("leaderboard-footer")));
+        List<Component> rows=new ArrayList<>();int rank=0;
+        for(var entry:top())rows.add(message("leaderboard-row","rank",Integer.toString(++rank),"name",entry.getValue().name(),"time",format(entry.getValue().millis())));
+        leaderboard.text(net.mandomc.gameplay.leaderboards.LeaderboardLayout.render(
+                message("leaderboard-title"),message("leaderboard-subtitle"),rows,
+                slot->message("leaderboard-empty-row","rank",Integer.toString(slot))));
     }
     private void saveLeaderboard() {
         var yaml=new YamlConfiguration();var players=new ArrayList<Map<String,Object>>();

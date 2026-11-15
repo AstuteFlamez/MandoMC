@@ -82,3 +82,17 @@ All eight legacy rank names and small icons are recovered unchanged, with ascent
 
 ## Required pack hierarchy and metal blocks
 MandoMC overrides JustTimm, which overrides the separately delivered, unmodified official Faithful 32x base. The loader sends the client one required replacement stack in bottom-to-top insertion order. Faithful is pinned to its matching 26.1 June 2026 Modrinth release; see dependencies.json and combat/sabers.yml. Selected native metal blocks use credited palette edits on Faithful layouts, with the unchanged license in the distributed ZIP. See docs/features/faithful-metal-blocks.md for the exact user-selected mappings and first-pass scope.
+
+## Native Naboo icon
+
+Naboo's legacy 32×32 texture is retained under art-sources/planets. The current
+scripts/content/build-naboo-icon.py paints directly on a new native 32×32 grid:
+spherical lighting, forests and meadows, blue water, warm shores, cloud pixels,
+and a small Theed-style ivory/green landmark matching active planet detail.
+No resizing occurs. Provenance is in planet-icon-sources.json. The refinement
+release replaces only Naboo's PNG and preserves every other active pack entry.
+
+Naboo's current development delivery composes the latest published main pack with
+its three already-approved Naboo files, preserving every main-pack entry. Its
+local verified pin prevents subsequent main-only releases from silently removing
+the local-feature icon before source integration.

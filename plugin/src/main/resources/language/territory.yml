@@ -21,3 +21,6 @@ titles:
   claim-raid: '<red><clan>'
 
 claims-legend: '<light_purple>■ Clan claim <gray>— hover to see its owner.'
+
+border-size: '<gray>Border: <white><size> × <size> <gray>blocks; edge chunks are clipped.'
+border-edge: '<gray>Inside border: X <min_x>..<max_x> | Z <min_z>..<max_z>'

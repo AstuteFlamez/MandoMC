@@ -54,6 +54,10 @@ public final class TerritoryService implements Listener, AutoCloseable {
                 () -> plugin.getServer().getOnlinePlayers().forEach(this::announce), 10, 10);
     }
     public TerritoryPolicy policy() { return policy; }
+    public boolean interactions(Location location) {
+        return location != null && location.getWorld() != null && policy.interactions(
+                location.getWorld().getKey().toString(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
+    }
     public boolean mechanisms(Location location) {
         return location != null && location.getWorld() != null && policy.mechanisms(location.getWorld().getKey().toString());
     }
@@ -66,6 +70,13 @@ public final class TerritoryService implements Listener, AutoCloseable {
     public boolean spawning(Location l) { return l!=null && l.getWorld()!=null && policy.spawning(l.getWorld().getKey().toString(),l.getBlockX(),l.getBlockY(),l.getBlockZ()); }
     public Component message(String key) { return MiniMessage.miniMessage().deserialize(language.getString(key,key)); }
     public TerritoryIdentity identity(Player player, Location location) {
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)
+                && plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null) {
+            String claim = mando.tutorial().practiceClaim(player, location.getWorld().getKey().toString(),
+                    location.getBlockX() >> 4, location.getBlockZ() >> 4);
+            if (claim != null) return new TerritoryIdentity(zone(location), player.getUniqueId(), claim, TerritoryIdentity.Relation.OWN);
+            return TerritoryIdentity.read(zone(location), null, null, null, System.currentTimeMillis());
+        }
         var clans = plugin.getServer().getServicesManager().load(ClanService.class);
         return TerritoryIdentity.read(zone(location), clans == null ? null : clans.owner(location),
                 clans == null ? null : clans.member(player), clans == null ? null : clans.state(),
@@ -80,6 +91,11 @@ public final class TerritoryService implements Listener, AutoCloseable {
                 Placeholder.unparsed("clan",identity.name()));
     }
     public void announce(Player player) {
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)
+                && (!(plugin instanceof net.mandomc.bootstrap.MandoPlugin mando) || mando.tutorial() == null
+                || !mando.tutorial().territoryTitles(player))) {
+            shown.remove(player.getUniqueId()); return;
+        }
         var identity=identity(player,player.getLocation());
         if(identity.equals(shown.put(player.getUniqueId(),identity)))return;
         var title = label(identity);

@@ -1128,7 +1128,7 @@
       ],
       "ingredients": {
         "#": "minecraft:smooth_stone",
-        "I": "agrinium_sheet",
+        "I": "agrinium",
         "X": "minecraft:furnace"
       }
     },

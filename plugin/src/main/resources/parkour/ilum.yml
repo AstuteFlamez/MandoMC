@@ -33,6 +33,7 @@ checkpoints:
   - -120
   - -37
   - -230
+leaderboard-height-offset: 0.35
 leaderboard:
 - -2.024
 - -57.675
@@ -180,5 +181,7 @@ messages:
   finish-usage: <gray>/parkourfinish <online player> — requires all checkpoints and the finish location.
   offline: <yellow>That player must be online.
   status: <gray>Ilum checkpoint {checkpoint}/4 • {time}
-  leaderboard-title: <aqua><bold>ILUM LEADERBOARD</bold></aqua>
-  leaderboard-footer: <gray>Finish the trials • one key every 24 hours
+  leaderboard-title: '<#b58aff><bold>ILUM LEADERBOARD</bold></#b58aff>'
+  leaderboard-subtitle: '<#b58aff>TOP TEN PLAYERS</#b58aff>'
+  leaderboard-row: '<#b58aff>{rank}. {name}: {time}</#b58aff>'
+  leaderboard-empty-row: '<#b58aff>{rank}.</#b58aff>'

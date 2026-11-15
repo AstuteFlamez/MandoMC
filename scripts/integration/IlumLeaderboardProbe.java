@@ -68,7 +68,7 @@ public final class IlumLeaderboardProbe extends JavaPlugin {
         try {
             spawn.invoke(null, fresh);
             check(transparent(fresh), "New display callback sets explicit zero-alpha/default-background false");
-            check(fresh.isShadowed() && fresh.getBillboard() == org.bukkit.entity.Display.Billboard.CENTER
+            check(fresh.isShadowed() && fresh.getBillboard() == org.bukkit.entity.Display.Billboard.VERTICAL
                     && fresh.getViewRange() == .7f && !fresh.isPersistent(), "New display retains owner defaults");
         } finally { fresh.remove(); }
         check("1:01.0".equals(ParkourService.format(61_001)), "Deployed timer formatter correction retained");

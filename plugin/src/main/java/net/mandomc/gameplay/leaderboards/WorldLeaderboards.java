@@ -73,7 +73,7 @@ public final class WorldLeaderboards implements AutoCloseable, Listener {
     private TextDisplay display(String id) {
         var existing = displays.get(id);
         if (existing != null && existing.isValid()) return existing;
-        var at = anchors.get(id);
+        var at = anchors.get(id).clone().add(0, config.getDouble("display-height-offset", .35), 0);
         var created = at.getWorld().spawn(at, TextDisplay.class, entity -> {
             entity.getPersistentDataContainer().set(TAG, PersistentDataType.STRING, id);
             entity.setDefaultBackground(false); entity.setBackgroundColor(Color.fromARGB(0));
@@ -89,14 +89,14 @@ public final class WorldLeaderboards implements AutoCloseable, Listener {
         for (String id : anchors.keySet()) {
             var rows = id.equals("kills") ? kills() : plugin.credits().ledger().top(10).stream()
                     .map(entry -> new Row(entry.getKey(), name(entry.getKey()), entry.getValue())).toList();
-            Component text = message(id + "-title"); int rank = 0;
-            for (var row : rows) text = text.append(Component.newline()).append(message("row",
+            List<Component> lines = new ArrayList<>(); int rank = 0;
+            for (var row : rows) lines.add(message(id + "-row",
                     Placeholder.unparsed("rank", Integer.toString(++rank)), Placeholder.unparsed("name", row.name()),
                     Placeholder.unparsed("value", id.equals("kills") ? Long.toString(row.value()) : CreditLedger.format(row.value()))));
-            if (rows.isEmpty()) text = text.append(Component.newline()).append(message("empty"));
             var entity = display(id);
             entity.setDefaultBackground(false); entity.setBackgroundColor(Color.fromARGB(0));
-            entity.text(text.append(Component.newline()).append(message("footer")));
+            entity.text(LeaderboardLayout.render(message(id + "-title"), message(id + "-subtitle"), lines,
+                    slot -> message(id + "-empty-row", Placeholder.unparsed("rank", Integer.toString(slot)))));
         }
     }
 

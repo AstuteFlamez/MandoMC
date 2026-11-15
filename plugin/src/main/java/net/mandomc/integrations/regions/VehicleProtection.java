@@ -7,6 +7,8 @@ public final class VehicleProtection {
     }
     /** Vehicle weapons follow vehicle placement zones, independently of ordinary PvP. */
     public boolean use(Location location) {
+        // The entire private training world is a firing range; normal world protection is unchanged.
+        if (location != null && net.mandomc.gameplay.tutorial.TutorialInventory.world(location.getWorld())) return true;
         var territories = NativeTerritoryAccess.current();
         return territories != null && territories.edits(location);
     }

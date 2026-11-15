@@ -58,7 +58,14 @@ public final class ClanMapCommand implements CommandExecutor, TabCompleter {
         ChunkAtlas atlas = policy.map(world, playerX, playerZ);
         if (atlas == null) atlas = policy.nearbyMap(world,player.getWorld().getName(),playerX,playerZ,
                 player.getLocation().getBlockY());
+        var border=player.getWorld().getWorldBorder();
+        var borderView=policy.wholeWorldSafe(world)?null:ChunkAtlas.borderView(policy,world,atlas.name(),
+                border.getCenter().getX(),border.getCenter().getZ(),border.getSize(),player.getLocation().getBlockY());
+        if(borderView!=null)atlas=borderView;
         player.sendMessage(message("title").append(Component.text(" " + atlas.name(), NamedTextColor.WHITE)));
+        if(borderView!=null)player.sendMessage(MiniMessage.miniMessage().deserialize(language.getString("border-size",
+                "<gray>Border: <white><size> × <size> <gray>blocks; edge chunks are clipped."),
+                net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed("size",String.format(java.util.Locale.ROOT,"%.0f",border.getSize()))));
         player.sendMessage(message("orientation"));
         for (int z = atlas.minZ(); z <= atlas.maxZ(); z++) {
             Component row = Component.text(String.format(java.util.Locale.ROOT, "%3d ", z), NamedTextColor.GRAY);
@@ -67,16 +74,33 @@ public final class ClanMapCommand implements CommandExecutor, TabCompleter {
                 boolean here = x == playerX && z == playerZ;
                 var clans=pluginClans();
                 var owner=clans==null?null:clans.state().owner(new net.mandomc.gameplay.clans.ClanState.Chunk(world,x,z));
-                var color = here ? NamedTextColor.YELLOW : owner!=null ? NamedTextColor.LIGHT_PURPLE : switch (zone) {
+                var ownerPlugin = org.bukkit.plugin.java.JavaPlugin.getProvidingPlugin(ClanMapCommand.class);
+                String practice = ownerPlugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null
+                        ? mando.tutorial().practiceClaim(player, world, x, z) : null;
+                var color = here ? NamedTextColor.YELLOW : owner!=null || practice!=null ? NamedTextColor.LIGHT_PURPLE : switch (zone) {
                     case 'S' -> net.kyori.adventure.text.format.TextColor.color(0xFFAA00);
                     case 'W' -> NamedTextColor.DARK_RED;
                     default -> NamedTextColor.DARK_GRAY;
                 };
                 String zoneKey = switch (zone) { case 'S' -> "safezone"; case 'W' -> "warzone"; default -> "wilderness"; };
                 Component hover = owner==null?message(zoneKey):Component.text(owner.name,NamedTextColor.LIGHT_PURPLE);
+                if (practice != null) hover = Component.text(practice, NamedTextColor.LIGHT_PURPLE);
                 hover=hover
                         .append(Component.text(" | " + x + ", " + z + "\nX " + (x * 16) + ".." + (x * 16 + 15)
                                 + " | Z " + (z * 16) + ".." + (z * 16 + 15), NamedTextColor.WHITE));
+                if(borderView!=null) {
+                    int insideMinX=Math.max(x*16,(int)Math.ceil(border.getCenter().getX()-border.getSize()/2));
+                    int insideMaxX=Math.min(x*16+15,(int)Math.ceil(border.getCenter().getX()+border.getSize()/2)-1);
+                    int insideMinZ=Math.max(z*16,(int)Math.ceil(border.getCenter().getZ()-border.getSize()/2));
+                    int insideMaxZ=Math.min(z*16+15,(int)Math.ceil(border.getCenter().getZ()+border.getSize()/2)-1);
+                    if(insideMinX!=x*16||insideMaxX!=x*16+15||insideMinZ!=z*16||insideMaxZ!=z*16+15)
+                        hover=hover.append(Component.newline()).append(MiniMessage.miniMessage().deserialize(language.getString("border-edge",
+                                "<gray>Inside border: X <min_x>..<max_x> | Z <min_z>..<max_z>"),
+                                net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed("min_x",String.valueOf(insideMinX)),
+                                net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed("max_x",String.valueOf(insideMaxX)),
+                                net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed("min_z",String.valueOf(insideMinZ)),
+                                net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed("max_z",String.valueOf(insideMaxZ))));
+                }
                 row = row.append(Component.text(here ? "+" : "■", color).hoverEvent(HoverEvent.showText(hover)));
             }
             player.sendMessage(row);
@@ -87,6 +111,9 @@ public final class ClanMapCommand implements CommandExecutor, TabCompleter {
                 + " | X " + atlas.minX() + ".." + atlas.maxX() + " | Z " + atlas.minZ() + ".." + atlas.maxZ(), NamedTextColor.WHITE)));
         if (policy.wholeWorldSafe(world)) player.sendMessage(message("whole-world-safezone"));
         if (!atlas.contains(playerX, playerZ)) player.sendMessage(message("outside"));
+        var plugin = org.bukkit.plugin.java.JavaPlugin.getProvidingPlugin(ClanMapCommand.class);
+        if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null)
+            mando.tutorial().mapShown(player);
         return true;
     }
 

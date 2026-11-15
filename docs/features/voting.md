@@ -11,3 +11,10 @@ NuVotifier listens on the allocated TCP port 19132. Private RSA keys and the V2 
 Plugin artifacts are hash-pinned in `server/plugins.lock.json`. Only reviewed `VoteSites.yml` is deployed from Git; listener configuration, credentials, vote databases and crate placement are excluded. The secret scanner checks Git history before CI builds. Four exact historical false positives (asset hashes and a public Figma ID) are documented in `.gitleaksignore`.
 
 For a disposable full-runtime check, compile `VotingProbe.java` alongside `NativeProbePlayers.java` using the candidate and Paper library classpath, install only into a loopback fixture, then run `scripts/test-vote-listener.py --runtime <fixture>`. The probe requires one encrypted TCP vote to produce exactly 500 credits and one key. Probe plugins must never enter a production image.
+
+## Development parity (2026-11-13)
+Development uses the same pinned voting plugins, five site links, 500-credit reward and native
+Voting Crate definition as production. Its NuVotifier listener binds to loopback with its own
+private identity. Public websites retain the production endpoint. Only the vote crate's saved
+block binding is mirrored; player balances, vote history and existing Kyber/KOTH placements
+remain owned by each server. New feature deployments and restarts happen on development first.

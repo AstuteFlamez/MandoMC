@@ -43,7 +43,8 @@ public final class CreditService implements AutoCloseable, org.bukkit.event.List
             binding.setTabCompleter((sender, cmd, label, args) -> {
                 if (!cmd.testPermissionSilent(sender)) return List.of();
                 if (cmd.getName().equals("credits") && args.length == 1)
-                    return List.of("give", "take", "set").stream().filter(s -> s.startsWith(args[0])).toList();
+                    return List.of("give", "add", "take", "remove", "set", "reset", "help").stream()
+                            .filter(s -> s.startsWith(args[0].toLowerCase(Locale.ROOT))).toList();
                 int index = cmd.getName().equals("credits") ? 2 : 1;
                 if (args.length != index || cmd.getName().equals("balancetop")) return List.of();
                 return Bukkit.getOnlinePlayers().stream().filter(p -> !(sender instanceof Player viewer) || viewer.canSee(p))
@@ -81,6 +82,9 @@ public final class CreditService implements AutoCloseable, org.bukkit.event.List
         try {
             String permission = switch (command) { case "credits" -> "admin"; case "balancetop" -> "top"; default -> command; };
             if (!sender.hasPermission("mandomc.credits." + permission)) throw new IllegalArgumentException("denied");
+            if (command.equals("credits") && (args.length == 0 || args.length == 1 && args[0].equalsIgnoreCase("help"))) {
+                send(sender, "admin-usage", "", CreditLedger.format(initialBalance)); return;
+            }
             if (command.equals("balance")) {
                 if (args.length > 1) throw new IllegalArgumentException("usage");
                 KnownPlayer target;
@@ -114,15 +118,26 @@ public final class CreditService implements AutoCloseable, org.bukkit.event.List
                     if (recipient != null) send(recipient, "received", name, CreditLedger.format(cents));
                 });
             } else {
-                if (args.length != 3 || !List.of("give", "take", "set").contains(args[0])) throw new IllegalArgumentException("usage");
-                var target = KnownPlayer.find(sender, args[1]); long cents = CreditLedger.amount(args[2]);
-                String actor = sender.getName(); String operation = args[0];
+                if (args.length == 0) throw new IllegalArgumentException("admin-usage");
+                String operation = switch (args[0].toLowerCase(Locale.ROOT)) {
+                    case "give", "add" -> "give";
+                    case "take", "remove" -> "take";
+                    case "set", "reset" -> "set";
+                    default -> throw new IllegalArgumentException("admin-usage");
+                };
+                boolean reset = args[0].equalsIgnoreCase("reset");
+                if (args.length != (reset ? 2 : 3)) throw new IllegalArgumentException("admin-usage");
+                var target = KnownPlayer.find(sender, args[1]);
+                long cents = reset ? initialBalance : CreditLedger.amount(args[2]);
+                String actor = sender.getName();
                 submit(sender, target.id(), () -> ledger.adjust(target.id(), operation, cents), () -> {
                     plugin.getLogger().info("Credits: " + actor + " " + operation + " " + CreditLedger.format(cents) + " for " + target.id());
                     send(sender, "adjusted", target.name(), CreditLedger.format(ledger.balance(target.id())));
                 });
             }
-        } catch (IllegalArgumentException error) { send(sender, error.getMessage(), "", ""); }
+        } catch (IllegalArgumentException error) {
+            send(sender, error.getMessage(), "", error.getMessage().equals("admin-usage") ? CreditLedger.format(initialBalance) : "");
+        }
     }
     @FunctionalInterface private interface Change { void run() throws Exception; }
     private void submit(CommandSender sender, UUID key, Change change, Runnable success) {

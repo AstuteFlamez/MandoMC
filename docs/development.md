@@ -6,9 +6,17 @@
 4. Implement the necessary system and parameters; adapt useful legacy pieces.
 5. Include public-plugin config, validation and docs with the code.
 6. Build, exercise it in-server and adjust its feel with the user.
-7. Merge the satisfactory feature into dev. Promote tested dev into main for production.
+7. Merge the satisfactory feature into dev, deploy the tested scoped change to the local development runtime and restart it automatically. Promote into main/production only when requested.
 
 Use hotfix for urgent production fixes based on current main, then merge main back into dev. See [production workflow](production-workflow.md) for branch rules, private file downloads, automatic uploads and manual restarts. Legacy recovery tips are preserved as archive tags; see recovery.md.
+
+## Development deployment policy (2026-11-13)
+New features go to dev and the local development server first. Once checks pass, agents perform
+stop → backed-up scoped deployment → start automatically, then verify startup and report what is
+ready to test. Preserve concurrent development overlays and private worlds/player state. Production
+remains on explicit promotion and manual restart. A dev world name does not mean the production
+server: confirm the actual runtime before diagnosing or deploying. Voting plugins/rewards and crate
+placement are also required in development; keep its listener private and preserve production data.
 
 ## Local build
 Run ./scripts/build.sh to verify the Maven reactor and produce plugin/target/MandoMC.jar. Select Java 25 using MANDOMC_JAVA_HOME, the local JDK, or JAVA_HOME. Wrapper and dependency downloads stay under ignored .local.

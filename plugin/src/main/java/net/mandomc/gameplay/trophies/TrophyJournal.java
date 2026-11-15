@@ -12,16 +12,23 @@ public final class TrophyJournal {
     public record Cell(String world,int x,int y,int z) {
         public Cell { if(world==null || !world.matches("[a-z0-9_.-]+:[a-z0-9_./-]+"))throw new IllegalArgumentException("Invalid trophy world"); }
     }
-    public record Entry(UUID id,UUID owner,Cell cell,int yaw,Face face,String item,Phase phase) {
+    public record Entry(UUID id,UUID owner,Cell cell,int yaw,Face face,String item,Phase phase,int width) {
         public Entry {
             Objects.requireNonNull(id);Objects.requireNonNull(owner);Objects.requireNonNull(cell);Objects.requireNonNull(face);Objects.requireNonNull(phase);
+            if(width!=1 && width!=3)throw new IllegalArgumentException("Invalid decoration width");
             if(yaw<0 || yaw>=360 || yaw%90!=0 || item==null || item.isBlank() || item.length()>1_400_000)
                 throw new IllegalArgumentException("Invalid trophy entry");
             if(Base64.getDecoder().decode(item).length==0)throw new IllegalArgumentException("Empty trophy item");
         }
+        public Entry(UUID id,UUID owner,Cell cell,int yaw,Face face,String item,Phase phase){this(id,owner,cell,yaw,face,item,phase,1);}
+        public List<Cell> cells(){
+            var result=new ArrayList<Cell>();
+            for(int offset=-(width/2);offset<=width/2;offset++)result.add(new Cell(cell.world(),cell.x()+(yaw%180==0?offset:0),cell.y(),cell.z()+(yaw%180==0?0:offset)));
+            return List.copyOf(result);
+        }
         public Entry(UUID id,UUID owner,Cell cell,int yaw,String item,Phase phase){this(id,owner,cell,yaw,Face.UP,item,phase);}
-        public Entry placed(){return new Entry(id,owner,cell,yaw,face,item,Phase.PLACED);}
-        public Entry returning(UUID recipient){return new Entry(id,recipient,cell,yaw,face,item,Phase.RETURNING);}
+        public Entry placed(){return new Entry(id,owner,cell,yaw,face,item,Phase.PLACED,width);}
+        public Entry returning(UUID recipient){return new Entry(id,recipient,cell,yaw,face,item,Phase.RETURNING,width);}
         public String placeReceipt(){return "place:"+id;}
         public String returnReceipt(){return "return:"+id;}
     }
@@ -32,23 +39,24 @@ public final class TrophyJournal {
         this.file=file;this.limit=limit;if(limit<1 || limit>100000)throw new IllegalArgumentException("Invalid trophy limit");
         if(!Files.exists(file))return;
         var yaml=new YamlConfiguration();yaml.load(file.toFile());
-        if(yaml.getInt("schema-version")!=1 && yaml.getInt("schema-version")!=2)throw new IllegalArgumentException("trophies.yml: unsupported journal schema");
+        if(yaml.getInt("schema-version")!=1 && yaml.getInt("schema-version")!=2 && yaml.getInt("schema-version")!=3)throw new IllegalArgumentException("trophies.yml: unsupported journal schema");
         var rows=yaml.getConfigurationSection("entries");var loaded=new HashMap<UUID,Entry>();
         if(rows!=null)for(String key:rows.getKeys(false)) {
             String p=key+".";var row=rows;
             var entry=new Entry(UUID.fromString(key),UUID.fromString(row.getString(p+"owner","")),
                     new Cell(row.getString(p+"world"),row.getInt(p+"x"),row.getInt(p+"y"),row.getInt(p+"z")),
-                    row.getInt(p+"yaw"),Face.valueOf(row.getString(p+"face","UP")),row.getString(p+"item"),Phase.valueOf(row.getString(p+"phase","")));
+                    row.getInt(p+"yaw"),Face.valueOf(row.getString(p+"face","UP")),row.getString(p+"item"),Phase.valueOf(row.getString(p+"phase","")),row.getInt(p+"width",1));
             loaded.put(entry.id(),entry);
         }
         validate(loaded);entries=Map.copyOf(loaded);
     }
     public Map<UUID,Entry> entries(){return entries;}
-    public Entry at(Cell cell){return entries.values().stream().filter(e->e.phase()!=Phase.RETURNING && e.cell().equals(cell)).findFirst().orElse(null);}
+    public Entry at(Cell cell){return entries.values().stream().filter(e->e.phase()!=Phase.RETURNING && e.cells().contains(cell)).findFirst().orElse(null);}
     private void validate(Map<UUID,Entry> values) {
         if(values.size()>limit)throw new IllegalStateException("Trophy journal limit reached");
         var occupied=new HashSet<Cell>();
-        for(var e:values.values())if(e.phase()!=Phase.RETURNING && !occupied.add(e.cell()))throw new IllegalStateException("Overlapping trophy reservations");
+        for(var e:values.values())if(e.phase()!=Phase.RETURNING)for(var cell:e.cells())
+            if(!occupied.add(cell))throw new IllegalStateException("Overlapping trophy reservations");
     }
     public synchronized void reserve(Entry entry)throws Exception {
         if(entry.phase()!=Phase.PREPARED || entries.containsKey(entry.id()))throw new IllegalStateException("Invalid trophy reservation");
@@ -56,7 +64,7 @@ public final class TrophyJournal {
     }
     public synchronized void replace(Entry expected,Entry next)throws Exception {
         if(!Objects.equals(entries.get(expected.id()),expected) || !expected.id().equals(next.id()) || !expected.cell().equals(next.cell())
-                || !expected.item().equals(next.item()) || expected.yaw()!=next.yaw() || expected.face()!=next.face()
+                || !expected.item().equals(next.item()) || expected.yaw()!=next.yaw() || expected.face()!=next.face() || expected.width()!=next.width()
                 || next.phase()==Phase.PREPARED || expected.phase()==Phase.RETURNING
                 || next.phase()==Phase.PLACED && !expected.owner().equals(next.owner()))throw new IllegalStateException("Stale or invalid trophy transfer");
         var updated=new HashMap<>(entries);updated.put(next.id(),next);save(updated);
@@ -66,11 +74,11 @@ public final class TrophyJournal {
         var updated=new HashMap<>(entries);updated.remove(expected.id());save(updated);
     }
     private void save(Map<UUID,Entry> updated)throws Exception {
-        validate(updated);var yaml=new YamlConfiguration();yaml.set("schema-version",2);yaml.createSection("entries");
+        validate(updated);var yaml=new YamlConfiguration();yaml.set("schema-version",3);yaml.createSection("entries");
         for(var e:updated.values()) {
             String p="entries."+e.id()+".";yaml.set(p+"owner",e.owner().toString());yaml.set(p+"world",e.cell().world());
             yaml.set(p+"x",e.cell().x());yaml.set(p+"y",e.cell().y());yaml.set(p+"z",e.cell().z());yaml.set(p+"yaw",e.yaw());
-            yaml.set(p+"face",e.face().name());yaml.set(p+"item",e.item());yaml.set(p+"phase",e.phase().name());
+            yaml.set(p+"width",e.width());yaml.set(p+"face",e.face().name());yaml.set(p+"item",e.item());yaml.set(p+"phase",e.phase().name());
         }
         AtomicData.write(file,yaml.saveToString());entries=Map.copyOf(updated);
     }

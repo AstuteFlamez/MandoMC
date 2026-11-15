@@ -85,6 +85,21 @@ def render_properties(text, settings):
     return '\n'.join(lines) + '\n'
 
 
+def pinned_pack(path, cache_dir, repository, version, offline=False):
+    manifest = json.loads(path.read_text())
+    prefix = f'https://github.com/{repository}/releases/download/resource-pack-{version}-'
+    if not re.fullmatch(re.escape(prefix) + r'[0-9a-f]{12}/MandoMC\.zip', manifest.get('url', '')):
+        raise ValueError('Pinned pack URL is not a versioned download in the configured repository')
+    checksum = manifest.get('sha256', '')
+    if not re.fullmatch(r'[0-9a-f]{64}', checksum):
+        raise ValueError('Invalid pinned pack hash')
+    cached = cache_dir / (checksum + '.zip')
+    if not cached.is_file() and offline:
+        raise ValueError('Pinned pack is not cached')
+    data = cached.read_bytes() if cached.is_file() else fetch(manifest['url'], MAX_PACK_BYTES)
+    return manifest, data
+
+
 def atomic_write(path, data):
     temporary = path.with_name(path.name + '.tmp')
     temporary.write_bytes(data)
@@ -127,20 +142,26 @@ def main():
     cache_dir = args.properties.parent / 'resource-packs'
     cache_manifest = cache_dir / 'current.json'
 
-    try:
-        if args.offline:
-            raise OSError('Offline mode requested')
-        manifest, data = latest_pack(config['repository'], version, cache_dir)
+    pin = cache_dir / 'pinned.json'
+    if pin.is_file():
+        manifest, data = pinned_pack(pin, cache_dir, config['repository'], version, args.offline)
         verify_pack(data, manifest, version, target['resourceFormat'], config['repository'])
-    except (OSError, ValueError, KeyError, TypeError, zipfile.BadZipFile) as error:
-        if not cache_manifest.is_file():
-            raise ValueError(f'No verified pack is cached. {error}') from error
-        print(f'Pack refresh unavailable ({error}); using the last verified release.', file=sys.stderr)
-        manifest = json.loads(cache_manifest.read_text())
-        if not re.fullmatch(r'[0-9a-f]{64}', manifest['sha256']):
-            raise ValueError('Invalid cached pack hash')
-        data = (cache_dir / (manifest['sha256'] + '.zip')).read_bytes()
-        verify_pack(data, manifest, version, target['resourceFormat'], config['repository'])
+        print(f'Using explicitly pinned development pack: {manifest["url"]}')
+    else:
+        try:
+            if args.offline:
+                raise OSError('Offline mode requested')
+            manifest, data = latest_pack(config['repository'], version, cache_dir)
+            verify_pack(data, manifest, version, target['resourceFormat'], config['repository'])
+        except (OSError, ValueError, KeyError, TypeError, zipfile.BadZipFile) as error:
+            if not cache_manifest.is_file():
+                raise ValueError(f'No verified pack is cached. {error}') from error
+            print(f'Pack refresh unavailable ({error}); using the last verified release.', file=sys.stderr)
+            manifest = json.loads(cache_manifest.read_text())
+            if not re.fullmatch(r'[0-9a-f]{64}', manifest['sha256']):
+                raise ValueError('Invalid cached pack hash')
+            data = (cache_dir / (manifest['sha256'] + '.zip')).read_bytes()
+            verify_pack(data, manifest, version, target['resourceFormat'], config['repository'])
 
     cache_dir.mkdir(parents=True, exist_ok=True)
     atomic_write(cache_dir / (manifest['sha256'] + '.zip'), data)
