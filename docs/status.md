@@ -1,5 +1,9 @@
 # Resume here
 
+## Blast furnace progression hotfix (2026-11-15)
+
+Changed the blast furnace recipe to use five Agrinium ingots instead of sheets, removing the dependency on the furnace needed to make those sheets. Bundled defaults and managed server overrides match. Verification and rollout are in progress; next action: verify checks and activate the recipe on production and development.
+
 ## November 15 production promotion live (2026-11-15)
 
 Promoted all recent development changes through PR #35 (`495bc11`): interactive tutorial/playtest refinements, compact prompts and the command-only Crates Sign. The exact placed SpawnWorld sign is imported, and the owner's production gameplay state is reset with private stopped-state backups. Other accounts and staff access are preserved. Native production verification confirms one sign/three owned cells and the account's fresh-player status; 276 custom items and five tutorial worlds load without errors. The earlier queued Naboo payload is active: 902 new originals, 2,126 existing files preserved and 3,017 prepared chunks.
