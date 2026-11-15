@@ -1,5 +1,5 @@
 # November 15 production promotion
-Status: verified rehearsal; production cutover pending
+Status: live on production; authenticated client walkthrough pending
 Branch: bilal/nov15-production
 
 ## Scope
@@ -18,7 +18,11 @@ The new tutorial uses the first-join flag and starts after the required resource
 ## Verification
 The current development reactor passes 333 Java tests; 77 tooling checks and resource-pack validation pass. Prior native coverage includes 492 tutorial assertions and 152 sign lifecycle/restart assertions. A fresh isolated copy containing production's actual account files and affected SpawnWorld region passes the reset and sign migration checks, including a second JVM startup with exactly one retained visual and three owned cells. All unrelated SQLite rows and staff files are verified unchanged by the reset rehearsal.
 
-Before activation, validate the pending Naboo payload against its pinned SHA-256 and previous frozen-scope hash. Its existing helper and payload match the earlier successful native rehearsal and preserve all previous originals. The production release uses the exact checked main CI artifacts, published pack, managed-upload receipt and a clean restart. Record startup, migration receipts, item registration and account-reset verification after activation.
+Production release `495bc11` uses the exact checked main CI artifact (gameplay SHA-256 `43a578b3a2a5ba14f2806b94c8886c6163b051486cb1e727628d8c180ec45757`) and published pack (SHA-1 `fdf1f4ee0eaf7b7f3c3ba20e2516b0bb6435351f`), also verified by anonymous download. The stopped-state snapshot and all five removed native/Mythic player files are retained privately on the server and locally. Six gameplay data files changed; other SQLite rows and five staff/access files are preserved.
+
+The final startup loads 276 items and five tutorial worlds with no errors. The native migration receipt verifies exactly one placed sign with three owned collision cells and a fresh-player account before first join. Naboo's pinned payload applied 902 new originals while preserving 2,126 existing files, producing 3,017 prepared chunks. Completion receipts and temporary helpers are retained as private rollout evidence.
+
+The first activation exposed an existing uploader defect: retained backup archives in `plugins/update/` were consumed by Paper as old updates, even with non-`.jar` suffixes. The guarded helper stopped that incompatible build before gameplay use. After a clean stop, all four stale archives were moved outside the plugin folders and the exact checked artifact restored. Upload temporaries and fallback backups now stay under `.mandomc/transfers/`; 79 tooling tests pass, including repeated-update isolation and failed-install recovery. No gameplay source changed during this repair.
 
 ## Next action
-Complete the checked main promotion, stopped-state backup/reset and one-shot sign import, then verify the fresh production login and tutorial.
+Join production, allow the resource-pack stack to load, and play the automatically offered fresh-player tutorial; visually check the sign outside the crates building.

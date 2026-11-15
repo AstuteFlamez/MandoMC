@@ -147,7 +147,12 @@ def atomic_write(sftp, path, data):
     if parent != '.':
         mkdirs(sftp, parent)
     suffix = uuid.uuid4().hex
-    temporary = path + '.mandomc-upload-' + suffix
+    # Paper scans update-folder archives by their contents, even when the name
+    # no longer ends in .jar. Keep both partial uploads and previous bytes out
+    # of every active plugin/config directory.
+    staging = '.mandomc/transfers/' + suffix
+    mkdirs(sftp, staging)
+    temporary = staging + '/upload'
     with sftp.open(temporary, 'wb') as target:
         target.write(data)
     if read_remote(sftp, temporary) != data:
@@ -166,7 +171,7 @@ def atomic_write(sftp, path, data):
     if existing is None:
         sftp.rename(temporary, path)
         return
-    previous = path + '.mandomc-previous-' + suffix
+    previous = staging + '/previous'
     sftp.rename(path, previous)
     try:
         sftp.rename(temporary, path)
