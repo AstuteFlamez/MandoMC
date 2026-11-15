@@ -206,6 +206,7 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
         return bytes==null ? new ItemStack[0] : ItemStack.deserializeItemsFromBytes(bytes);
     }
     public void claim(Player player) {
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return;
         if (restricted.test(player)) return;
         var viewing=menus.get(player.getUniqueId());
         if(viewing!=null&&viewing.rolling())return;
@@ -309,6 +310,7 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
         }
     }
     public void finishPending(Player player) {
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return;
         if (restricted.test(player)) return;
         var data=player.getPersistentDataContainer();
         var bytes=data.get(PENDING,PersistentDataType.BYTE_ARRAY);

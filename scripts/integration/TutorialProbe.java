@@ -65,8 +65,9 @@ public final class TutorialProbe extends JavaPlugin {
     }
     private void sameInventory(Player p, ItemStack[] wanted, String reason) {
         var actual = p.getInventory().getContents(); check(wanted.length == actual.length, reason + " length");
-        for (int i = 0; i < wanted.length; i++) check(Objects.equals(wanted[i], actual[i]), reason + " slot " + i);
+        for (int i = 0; i < wanted.length; i++) check(Objects.equals(emptyToNull(wanted[i]), emptyToNull(actual[i])), reason + " slot " + i + " expected=" + wanted[i] + " actual=" + actual[i]);
     }
+    private static ItemStack emptyToNull(ItemStack item) { return item == null || item.isEmpty() ? null : item; }
     private void begun() throws Exception {
         check(TutorialInventory.active(player), "Original inventory escrowed"); stage("WARP");
         check(TutorialInventory.world(player.getWorld()), "Player in isolated tutorial dimension");
@@ -76,6 +77,9 @@ public final class TutorialProbe extends JavaPlugin {
         second = actors.create(origin); packs(second); mando.tutorial().request(second);
         later(25, () -> {
             check(TutorialInventory.active(second), "Second player enters"); check(second.getWorld() != player.getWorld(), "Concurrent players have separate worlds");
+            var crates = Bukkit.getServicesManager().load(net.mandomc.gameplay.crates.CrateService.class);
+            crates.enqueueKey(second, "kyber", 1); second.saveData(); crates.claim(second);
+            check(second.getInventory().isEmpty(), "External physical crate key stays in mail during tutorial");
             command(player, "/crates open kyber"); stage("WARP");
             command(player, "/mandomc:warp"); check(player.getOpenInventory().getTopInventory().getItem(13).getType() == Material.DIAMOND, "Central Tutorial diamond");
             click(player, 12); stage("WARP"); player.closeInventory(); stage("WARP");
@@ -203,6 +207,10 @@ public final class TutorialProbe extends JavaPlugin {
                 check(TutorialInventory.active(second), "Other player remains in their own lesson");
                 command(second, "/tutorial end"); check(!TutorialInventory.has(second, TutorialInventory.COMPLETED), "Quit is not completion");
                 check(mando.credits().ledger().balance(second.getUniqueId()) == 0, "Quit gives no credits");
+                check(second.getInventory().isEmpty(), "Quit restores original inventory before crate mail");
+                var crates = Bukkit.getServicesManager().load(net.mandomc.gameplay.crates.CrateService.class);
+                crates.claim(second);
+                check("ilum_kyber_crate_key".equals(mando.items().identify(second.getInventory().getItem(0))), "Deferred physical key reaches normal inventory");
                 recoveryCheck();
             });
         });
