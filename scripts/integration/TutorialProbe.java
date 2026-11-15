@@ -30,7 +30,19 @@ public final class TutorialProbe extends JavaPlugin {
     private Object field(Object target, String name) throws Exception { var f = target.getClass().getDeclaredField(name); f.setAccessible(true); return f.get(target); }
     @SuppressWarnings("unchecked") private Object session(Player p) throws Exception { return ((Map<UUID, ?>) field(mando.tutorial(), "sessions")).get(p.getUniqueId()); }
     private TutorialProgress progress(Player p) throws Exception { return (TutorialProgress) field(session(p), "progress"); }
-    private void stage(String name) throws Exception { getLogger().info("Checking tutorial step " + name); check(progress(player).step().name().equals(name), "Expected stage " + name + ", got " + progress(player).step()); }
+    private void stage(String name) throws Exception {
+        getLogger().info("Checking tutorial step " + name);
+        check(progress(player).step().name().equals(name), "Expected stage " + name + ", got " + progress(player).step());
+        String line = instruction();
+        check(!line.contains("\n") && line.codePoints().map(c -> c < 128 ? 7 : 10).sum() <= 240,
+                "Action bar stays compact at " + name + ": " + line);
+    }
+    private String instruction() throws Exception {
+        var session = session(player);
+        var method = InteractiveTutorial.class.getDeclaredMethod("instruction", session.getClass()); method.setAccessible(true);
+        return net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText()
+                .serialize((Component) method.invoke(mando.tutorial(), session));
+    }
     private void command(Player p, String raw) { var event = new PlayerCommandPreprocessEvent(p, raw); Bukkit.getPluginManager().callEvent(event); check(event.isCancelled(), "Tutorial owns " + raw); }
     private void click(Player p, int raw) { Bukkit.getPluginManager().callEvent(new InventoryClickEvent(p.getOpenInventory(), InventoryType.SlotType.CONTAINER, raw, ClickType.LEFT, InventoryAction.PICKUP_ALL)); }
     private void put(Player p, Location location) throws Exception {
@@ -200,12 +212,15 @@ public final class TutorialProbe extends JavaPlugin {
         check(new net.mandomc.integrations.regions.VehicleProtection().use(new Location(entity.getWorld(), 8, 100, 0)), "Training cannon use includes former lesson safezone");
         var journal = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.File(mando.getDataFolder(), "data/vehicles.yml"));
         check(!journal.contains("vehicles." + id), "Training ship is not real vehicle ownership");
+        check(instruction().contains("board"), "Flight first shows only boarding instruction");
         mando.tutorial().board(player, id); check(mando.vehicles().occupant(id, player.getUniqueId()), "Player boards real ModelEngine pilot seat");
         check(mando.tutorial().lockDismount(player), "Dismount locked during flight");
         later(25, () -> {
             check(progress(player).flightMillis() == 0, "Grounded time does not count");
+            check(instruction().contains("take off"), "Grounded pilot sees concise takeoff instruction");
             // Native mounted vehicle, raised into a hover; no client input is fabricated.
             entity.teleport(entity.getLocation().add(0, 13, 0));
+            later(5, () -> { check(instruction().startsWith("Fly:"), "Airborne pilot sees compact progress"); stage("FLIGHT"); });
             later(225, this::target);
         });
     }

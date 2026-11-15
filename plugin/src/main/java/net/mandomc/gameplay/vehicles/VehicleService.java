@@ -223,7 +223,9 @@ public final class VehicleService implements Listener, AutoCloseable {
 
     private void message(Player player, String key) {
         var message = MiniMessage.miniMessage().deserialize(Objects.requireNonNull(messages.getString(key), "vehicles." + key));
-        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) player.sendActionBar(message);
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)
+                && plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null)
+            mando.tutorial().vehicleMessage(player, key);
         else player.sendMessage(message);
     }
 
