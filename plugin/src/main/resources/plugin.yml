@@ -79,7 +79,7 @@ commands:
     permission: mandomc.travel.spawn
   tutorial:
     description: Read the MandoMC introduction
-    usage: /tutorial
+    usage: /tutorial [end]
     permission: mandomc.arrival
   flyspeed:
     description: Set flight speed

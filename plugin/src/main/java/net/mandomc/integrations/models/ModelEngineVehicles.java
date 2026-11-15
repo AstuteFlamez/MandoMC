@@ -64,6 +64,13 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
                         || (e.isDriver() && !model.access.mayPilot(p)))) e.setCancelled(true);
     }
 
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void tutorialDismount(ModelDismountEvent event) {
+        if (event.getPassenger() instanceof Player player && plugin instanceof net.mandomc.bootstrap.MandoPlugin mando
+                && mando.tutorial() != null && mando.tutorial().lockDismount(player)) {
+            event.setCancelled(true); mando.tutorial().denied(player);
+        }
+    }
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void dismount(ModelDismountEvent e) {
         var model = models.get(e.getVehicle().getModeledEntity().getBase().getUUID());
@@ -122,6 +129,9 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
                     new MountControllerType((rider, mount) -> new Controller(rider, mount, this));
         }
 
+        private void tutorialDenied(Player player) {
+            if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null) mando.tutorial().denied(player);
+        }
         private void stopSound() {
             for (Player player : soundListeners) player.stopSound(definition.sound());
             soundListeners.clear();
@@ -299,6 +309,10 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
                                     eye.getPitch()),
                             VehicleModels.grounded(model.entity),
                             controller.getVelocity().getY());
+            if (step.dismount() && net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) {
+                model.tutorialDenied(player);
+                controller.setVelocity(0, 0, 0); return;
+            }
             if (step.dismount()) {
                 motion.stop();
                 controller.setVelocity(0, 0, 0);

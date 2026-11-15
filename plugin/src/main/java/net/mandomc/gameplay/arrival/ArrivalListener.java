@@ -60,6 +60,7 @@ public final class ArrivalListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPack(PlayerResourcePackStatusEvent event) {
+        if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null) return;
         var player = event.getPlayer();
         if (event.getStatus() == PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED
                 && !player.getPersistentDataContainer().has(tutorialSeen, PersistentDataType.BYTE)) {

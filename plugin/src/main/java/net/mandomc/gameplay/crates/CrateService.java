@@ -230,6 +230,7 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
         var item=items.create(reward.item());item.setAmount(reward.amount());return item;
     }
     public void open(Player player, CrateDefinition crate) {
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return;
         if (!allowed(player)) return;
         var current=menus.get(player.getUniqueId());
         if (current!=null && current.rolling()) return;

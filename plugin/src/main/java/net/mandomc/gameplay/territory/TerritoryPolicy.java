@@ -67,6 +67,7 @@ public final class TerritoryPolicy {
         return x>=min.get(0) && x<=max.get(0) && y>=min.get(1) && y<=max.get(1) && z>=min.get(2) && z<=max.get(2);
     }
     public Zone zone(String world,int x,int y,int z) {
+        if (world.matches("mandomc:tutorial_[0-9]+")) return x < 32 && z < 32 ? Zone.SAFEZONE : Zone.WILDERNESS;
         if (safeWorlds.containsKey(world)) return Zone.SAFEZONE;
         if (world.equals(mandalore.world())) return switch(mandalore.zone(Math.floorDiv(x,16),Math.floorDiv(z,16))) {
             case 'S' -> Zone.SAFEZONE; case 'W' -> Zone.WARZONE; default -> Zone.WILDERNESS;

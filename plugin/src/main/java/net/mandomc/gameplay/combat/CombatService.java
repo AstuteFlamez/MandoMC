@@ -56,7 +56,7 @@ public final class CombatService implements Listener, AutoCloseable {
     public int remainingTenths(Player player) { return tags.tenths(player.getUniqueId()); }
 
     public void tag(Player player) {
-        if (closed || player.isDead()) return;
+        if (closed || player.isDead() || net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return;
         boolean fresh = !tagged(player);
         tags.tag(player.getUniqueId());
         taggedPlayers.put(player.getUniqueId(), player);
@@ -122,7 +122,7 @@ public final class CombatService implements Listener, AutoCloseable {
     @EventHandler(priority = EventPriority.LOWEST)
     public void quit(PlayerQuitEvent event) {
         var player = event.getPlayer();
-        if (!closed && !plugin.getServer().isStopping() && tagged(player) && !player.isDead()) {
+        if (!closed && !net.mandomc.gameplay.tutorial.TutorialInventory.active(player) && !plugin.getServer().isStopping() && tagged(player) && !player.isDead()) {
             returnSaber.accept(player.getUniqueId());
             // Closing returns the cursor stack before snapshotting inventory, armor and offhand.
             player.closeInventory();

@@ -175,6 +175,8 @@ public final class VehicleCannons implements Listener, AutoCloseable {
 
     private void impact(Bolt bolt, Location location, Entity direct) {
         if (!vehicles.mayUse(bolt.platform().entity(), bolt.shooter(), location)) return;
+        if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null)
+            mando.tutorial().cannonHit(bolt.shooter(), bolt.platform().id(), direct);
         var victims = new LinkedHashSet<LivingEntity>();
         if (direct instanceof LivingEntity living) victims.add(living);
         double radius = bolt.settings().radius();

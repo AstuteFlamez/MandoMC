@@ -262,6 +262,10 @@
       "target": "plugins/MandoMC/trophies/settings.yml"
     },
     {
+      "source": "server/config/common/mandomc/tutorial/tutorial.yml",
+      "target": "plugins/MandoMC/tutorial/tutorial.yml"
+    },
+    {
       "source": "server/config/common/mandomc/vehicles/menu.yml",
       "target": "plugins/MandoMC/vehicles/menu.yml"
     },

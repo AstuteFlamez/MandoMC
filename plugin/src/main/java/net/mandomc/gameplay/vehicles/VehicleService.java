@@ -40,6 +40,7 @@ public final class VehicleService implements Listener, AutoCloseable {
     }
 
     private static final class Record {
+        boolean tutorial;
         UUID id, owner, token;
         String type;
         State state;
@@ -221,17 +222,16 @@ public final class VehicleService implements Listener, AutoCloseable {
     }
 
     private void message(Player player, String key) {
-        player.sendMessage(
-                MiniMessage.miniMessage()
-                        .deserialize(
-                                Objects.requireNonNull(
-                                        messages.getString(key), "vehicles." + key)));
+        var message = MiniMessage.miniMessage().deserialize(Objects.requireNonNull(messages.getString(key), "vehicles." + key));
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) player.sendActionBar(message);
+        else player.sendMessage(message);
     }
 
     private void save() {
         var data = new YamlConfiguration();
         data.set("schema-version", 1);
         for (Record r : records.values()) {
+            if (r.tutorial) continue;
             String p = "vehicles." + r.id + ".";
             data.set(p + "owner", r.owner.toString());
             data.set(p + "token", r.token.toString());
@@ -374,6 +374,12 @@ public final class VehicleService implements Listener, AutoCloseable {
 
     private boolean movement(UUID id, Location from, Location to) {
         var live = active.get(id);
+        if (live != null && live.record.tutorial && (to.getX() < -32 || to.getX() > 128
+                || to.getZ() < 33 || to.getZ() > 80 || to.getY() < 65 || to.getY() > 125)) {
+            for (var rider : live.model.riders()) if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null)
+                mando.tutorial().denied(rider);
+            return false;
+        }
         if (live == null || !from.getWorld().equals(to.getWorld())) return false;
         boolean tagged = live.model.riders().stream().anyMatch(combat::tagged);
         int samples = Math.max(1, (int) Math.ceil(from.distance(to) * 4));
@@ -416,7 +422,24 @@ public final class VehicleService implements Listener, AutoCloseable {
         deploy(p, item, location);
     }
 
+    public UUID deployTutorial(Player player, Location location) {
+        if (!net.mandomc.gameplay.tutorial.TutorialInventory.active(player)
+                || !net.mandomc.gameplay.tutorial.TutorialInventory.world(location.getWorld())) return null;
+        var record = new Record(); record.tutorial = true;
+        record.id = UUID.randomUUID(); record.owner = player.getUniqueId(); record.token = UUID.randomUUID();
+        record.type = "xwing"; record.state = State.DEPLOYED; record.health = definitions.get("xwing").health();
+        record.location = location.clone(); records.put(record.id, record);
+        try { spawn(record); return record.id; }
+        catch (RuntimeException error) { records.remove(record.id); throw error; }
+    }
+    public void removeTutorial(UUID id) {
+        var record = records.get(id);
+        if (record == null || !record.tutorial) return;
+        var live = active.get(id); if (live != null) remove(live);
+        records.remove(id); refreshTickets();
+    }
     public UUID deploy(Player p, ItemStack item, Location location) {
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(p)) return null;
         String type = items.identify(item);
         if (!definitions.containsKey(type)) return null;
         if (p.isInsideVehicle()
@@ -511,6 +534,11 @@ public final class VehicleService implements Listener, AutoCloseable {
                 || p.getLocation().distanceSquared(entity.getLocation()) > 400) return;
         if (interactions.getOrDefault(p.getUniqueId(), -1) == Bukkit.getCurrentTick()) return;
         interactions.put(p.getUniqueId(), Bukkit.getCurrentTick());
+        if (live.record.tutorial) {
+            if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null)
+                mando.tutorial().board(p, live.record.id);
+            return;
+        }
         if (p.isSneaking() && repairs != null && repairs.isWrench(p.getInventory().getItemInMainHand())) {
             repairs.start(p, live.record.id);
             return;
@@ -913,7 +941,7 @@ public final class VehicleService implements Listener, AutoCloseable {
             live.record.location = live.entity.getLocation();
             live.record.health = live.entity.getHealth();
             for (Player p : live.model.riders())
-                p.sendActionBar(
+                if (!net.mandomc.gameplay.tutorial.TutorialInventory.active(p)) p.sendActionBar(
                         MiniMessage.miniMessage()
                                 .deserialize(
                                         messages.getString("hud"),

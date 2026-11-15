@@ -285,7 +285,9 @@ public final class SaberService implements Listener {
         display.setTransformation(flight.blade.transformation(flight.variant.center()));
         reserve(flight);p.clearActiveItem();
         guard(p).thrown(settings);
-        cooldowns.put(p.getUniqueId(),tick+settings.cooldown());sound(p.getLocation(),"throw");return true;
+        cooldowns.put(p.getUniqueId(),tick+settings.cooldown());sound(p.getLocation(),"throw");
+        if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null) mando.tutorial().saberThrown(p);
+        return true;
     }
     private void tick() {
         tick++;

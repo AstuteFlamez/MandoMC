@@ -1,5 +1,11 @@
 # Resume here
 
+## Interactive tutorial implemented (2026-11-15)
+
+On `bilal/interactive-tutorial`, replaced the book-only `/tutorial` with sequential private practice: warp selection, real clan map, isolated clan create/claim/disband, three native Gamorrean kills, Vader saber throw, practice Jawa purchase/sale, recipes, ten airborne X-wing seconds, a cannon target and the three event explanations. New players enter after the complete resource-pack stack loads. `/tutorial end` restores normal inventory; first completion grants 5,000 credits and the existing once-only starter kit. Five warm private worlds expand to a bounded sixteen; unrelated commands, crates and inventories are blocked. Inventory escrow survives reconnects and reward receipts commit atomically with credits.
+
+The reactor passes 329 Java tests and all 75 tooling checks. The original full native walkthrough passed 222 assertions; expanded clan, reload-exit and process-restart checks are in progress. Visual layout and physical client controls remain unverified. See [interactive tutorial](features/interactive-tutorial.md). Next action: finish native lifecycle checks and deploy the exact checked artifact to backed-up local development.
+
 ## Reconciled ready updates for both servers (2026-11-13)
 
 Merged complete Naboo source/history and the Durasteel hand-pose fix into current dev without dropping the newer eco, leaderboard, voting, DevWorld or pack-compaction changes. Existing Boba equipment source matches its completed feature checkout. Combined reactor passes 322 Java tests and all 75 tooling checks; the compact pack includes all 1,181 assets. An isolated current-dev snapshot is checking the full Naboo terrain/map and cross-feature lifecycle. Production migration will add only the new Naboo dimension and 902 approved Naboo originals; all 2,115 existing frozen-scope entries, other worlds and player data remain preserved. Next action: finish the combined runtime check, merge the checked release, and stage Naboo's world migration before production restart.

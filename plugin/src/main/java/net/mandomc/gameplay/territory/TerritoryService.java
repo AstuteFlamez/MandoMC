@@ -84,6 +84,7 @@ public final class TerritoryService implements Listener, AutoCloseable {
                 Placeholder.unparsed("clan",identity.name()));
     }
     public void announce(Player player) {
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return;
         var identity=identity(player,player.getLocation());
         if(identity.equals(shown.put(player.getUniqueId(),identity)))return;
         var title = label(identity);
