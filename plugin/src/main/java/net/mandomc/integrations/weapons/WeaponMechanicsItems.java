@@ -10,6 +10,28 @@ public final class WeaponMechanicsItems {
     private Method weapon;
     private Method ammo;
 
+    /** Reload callbacks may mutate inventory; do not swap inventories while one is running. */
+    public static boolean reloading(org.bukkit.entity.LivingEntity player) {
+        var plugin = Bukkit.getPluginManager().getPlugin("WeaponMechanics");
+        if (plugin == null || !plugin.isEnabled()) return false;
+        try {
+            var api = Class.forName("me.deecaad.weaponmechanics.WeaponMechanicsAPI", true, plugin.getClass().getClassLoader());
+            return (boolean) api.getMethod("isReloading", org.bukkit.entity.LivingEntity.class).invoke(null, player);
+        } catch (ReflectiveOperationException error) { throw new IllegalStateException("Cannot check active weapon reload", error); }
+    }
+    /** Cancel both vendor hand tasks before restoring an unrelated inventory. */
+    public static void stopActions(org.bukkit.entity.LivingEntity player) {
+        var plugin = Bukkit.getPluginManager().getPlugin("WeaponMechanics");
+        if (plugin == null || !plugin.isEnabled()) return;
+        try {
+            var wrapper = plugin.getClass().getMethod("getEntityWrapper", org.bukkit.entity.LivingEntity.class).invoke(plugin, player);
+            if (wrapper == null) return;
+            for (String hand : java.util.List.of("getMainHandData", "getOffHandData")) {
+                var data = wrapper.getClass().getMethod(hand).invoke(wrapper);
+                data.getClass().getMethod("cancelTasks").invoke(data);
+            }
+        } catch (ReflectiveOperationException error) { throw new IllegalStateException("Cannot stop tutorial weapon tasks", error); }
+    }
     public ItemStack generate(String kind, String id) {
         var plugin = Bukkit.getPluginManager().getPlugin("WeaponMechanics");
         if (plugin == null || !plugin.isEnabled()) throw new IllegalStateException("WeaponMechanics is unavailable");

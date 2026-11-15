@@ -94,6 +94,7 @@ public final class JawaSellInventory implements Listener, AutoCloseable {
     private void persist(Player player,Tray tray){journal(player,tray);player.saveData();}
     /** Remaining overflow stays in player data; no ground drops and no metadata changes. */
     public void recover(Player player) {
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return;
         if(sessions.containsKey(player.getUniqueId()))return;
         var pending=saved(player);if(pending.isEmpty())return;
         var remaining=new ArrayList<ItemStack>();

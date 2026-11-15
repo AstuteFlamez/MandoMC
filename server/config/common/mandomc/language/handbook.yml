@@ -4,13 +4,13 @@ author: MandoMC
 page-count: 11
 lore:
 - A quick guide to life on the server.
-- Use /tutorial for a fresh copy.
+- Use /tutorial for guided practice.
 messages:
-  given: <gold>Handbook added. <gray>Open it any time, or use /tutorial again.
+  given: <gold>Handbook added. <gray>Open it any time, or use /tutorial for guided practice.
   updated: <gold>Your handbook is up to date.
-  full: <yellow>Your inventory is full. <gray>Read the handbook now; free a slot and use /tutorial to keep a copy.
+  full: <yellow>Your inventory is full. <gray>Read the handbook now; make room for your starter kit.
   busy: <yellow>Put away your cursor item and crafting ingredients, then use /tutorial.
-  players-only: <gray>Use /tutorial in game to get the handbook.
+  players-only: <gray>Join the server to read the handbook.
 pages:
 - id: travel
   topic: Getting Started & Travel
