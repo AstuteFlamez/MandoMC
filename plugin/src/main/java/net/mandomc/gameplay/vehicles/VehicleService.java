@@ -374,12 +374,6 @@ public final class VehicleService implements Listener, AutoCloseable {
 
     private boolean movement(UUID id, Location from, Location to) {
         var live = active.get(id);
-        if (live != null && live.record.tutorial && (to.getX() < -32 || to.getX() > 128
-                || to.getZ() < 33 || to.getZ() > 80 || to.getY() < 65 || to.getY() > 125)) {
-            for (var rider : live.model.riders()) if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null)
-                mando.tutorial().denied(rider);
-            return false;
-        }
         if (live == null || !from.getWorld().equals(to.getWorld())) return false;
         boolean tagged = live.model.riders().stream().anyMatch(combat::tagged);
         int samples = Math.max(1, (int) Math.ceil(from.distance(to) * 4));
@@ -419,15 +413,19 @@ public final class VehicleService implements Listener, AutoCloseable {
         var location =
                 e.getClickedBlock().getRelative(e.getBlockFace()).getLocation().add(.5, 0, .5);
         location.setYaw(p.getLocation().getYaw());
-        deploy(p, item, location);
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(p)
+                && plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null)
+            mando.tutorial().placeVehicle(p, item, location);
+        else deploy(p, item, location);
     }
 
-    public UUID deployTutorial(Player player, Location location) {
+    public UUID deployTutorial(Player player, String type, Location location) {
         if (!net.mandomc.gameplay.tutorial.TutorialInventory.active(player)
-                || !net.mandomc.gameplay.tutorial.TutorialInventory.world(location.getWorld())) return null;
+                || !net.mandomc.gameplay.tutorial.TutorialInventory.world(location.getWorld())
+                || !definitions.containsKey(type)) return null;
         var record = new Record(); record.tutorial = true;
         record.id = UUID.randomUUID(); record.owner = player.getUniqueId(); record.token = UUID.randomUUID();
-        record.type = "xwing"; record.state = State.DEPLOYED; record.health = definitions.get("xwing").health();
+        record.type = type; record.state = State.DEPLOYED; record.health = definitions.get(type).health();
         record.location = location.clone(); records.put(record.id, record);
         try { spawn(record); return record.id; }
         catch (RuntimeException error) { records.remove(record.id); throw error; }

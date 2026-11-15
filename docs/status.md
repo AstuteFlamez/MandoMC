@@ -1,5 +1,11 @@
 # Resume here
 
+## Tutorial playtest feedback implemented (2026-11-15)
+
+On `bilal/tutorial-playtest-fixes`, the tutorial now renders the normal Galaxy Map with only its central diamond enabled, uses normal territory-change titles during the clan lessons, returns players to the safezone starting point facing level before recipes, requires placing the supplied TIE fighter item before full-world flight, and shows automatic event-page countdowns in its boss bar and holograms. The saber must return and remain held for a full second before continuing; gray Jawas are identified as Batuu/spawn buyers. A bright 17-block bullseye replaces the small target. Real clans, vehicle ownership and inventory escrow remain isolated.
+
+The reactor passes 330 Java tests and all 75 tooling checks. The expanded native walkthrough passes 412 assertions, and actual JVM restart recovery passes 51. Next action: merge into dev and deploy the scoped update with a stopped-runtime backup.
+
 ## Interactive tutorial deployed to development (2026-11-15)
 
 Merged PR #28 into dev (`c0ea13d`), replacing the book-only `/tutorial` with sequential private practice: warp selection, real clan map, isolated clan create/claim/disband, three native Gamorrean kills, Vader saber throw, practice Jawa purchase/sale, recipes, ten airborne X-wing seconds, a cannon target and the three event explanations. New players enter after the complete resource-pack stack loads. `/tutorial end` restores normal inventory; first completion grants 5,000 credits and the existing once-only starter kit. Five warm private worlds expand to a bounded sixteen; unrelated commands, crates and inventories are blocked. Inventory escrow survives reconnects and reward receipts commit atomically with credits.
