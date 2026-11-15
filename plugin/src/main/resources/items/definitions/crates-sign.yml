@@ -1,0 +1,14 @@
+schema-version: 1
+items:
+  crates_sign:
+    material: PAPER
+    name: '<gold>Crates Sign'
+    rarity: common
+    category: trophies
+    custom-model-data: 0
+    item-model: mandomc:decor/crates_sign
+    lore:
+      - '<gray>A three-block-wide sign for the crates building.'
+      - ''
+      - '<yellow>[<key:key.use>] Place on a block face'
+      - '<gray>Needs three clear blocks. Break any part to recover.'

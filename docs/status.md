@@ -1,5 +1,11 @@
 # Resume here
 
+## Crates sign implemented (2026-11-15)
+
+Added the supplied 3×1 Blockbench sign as `crates_sign`, available only through the permission-gated `/mmc give` path, with no recipe/reward/drop entry. One persistent model occupies three protected collision cells; all six placement faces, breaking any part, single-item return, full-inventory recovery and restart custody are covered. Journal schema 3 preserves old one-block helmet/skull records. The pack adds three files and preserves all 1,181 existing entries byte-for-byte. Current dev tutorial updates are retained.
+
+Verification: 333 Java tests, 77 tooling checks, resource-pack build, 132 native Paper lifecycle assertions and 20 actual-restart assertions pass. Development installation is authorized and in progress; client appearance is pending. See [Crates sign](features/crates-sign.md). Next action: publish the tested pack, back up and restart development with the matching JAR, then verify startup and the give command.
+
 ## Compact tutorial action bars (2026-11-15)
 
 On `bilal/tutorial-actionbar-fit`, tutorial objectives and hints now use short single-action lines; longer explanations remain in holograms/chat. Event action bars contain only the event name and countdown, and flight shows separate boarding, takeoff and airborne-progress prompts. Tutorial vehicle notices and the starter-kit confirmation are also shortened. Template checks cover all tutorial action bars at maximum counters with a conservative standard-font width budget.
