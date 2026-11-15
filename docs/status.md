@@ -1,10 +1,12 @@
 # Resume here
 
-## Tutorial playtest feedback implemented (2026-11-15)
+## Tutorial playtest refinements deployed (2026-11-15)
 
-On `bilal/tutorial-playtest-fixes`, the tutorial now renders the normal Galaxy Map with only its central diamond enabled, uses normal territory-change titles during the clan lessons, returns players to the safezone starting point facing level before recipes, requires placing the supplied TIE fighter item before full-world flight, and shows automatic event-page countdowns in its boss bar and holograms. The saber must return and remain held for a full second before continuing; gray Jawas are identified as Batuu/spawn buyers. A bright 17-block bullseye replaces the small target. Real clans, vehicle ownership and inventory escrow remain isolated.
+Merged PR #30 into dev (`95b2218`). The tutorial now renders the normal Galaxy Map with only its central diamond enabled, uses normal territory-change titles during the clan lessons, returns players to the safezone starting point facing level before recipes, requires placing the supplied TIE fighter item before full-world flight, and shows automatic event-page countdowns in its boss bar and holograms. The saber must return and remain held for a full second before continuing; gray Jawas are identified as Batuu/spawn buyers. A bright 17-block bullseye replaces the small target. Real clans, vehicle ownership and inventory escrow remain isolated.
 
-The reactor passes 330 Java tests and all 75 tooling checks. The expanded native walkthrough passes 412 assertions, and actual JVM restart recovery passes 51. Next action: merge into dev and deploy the scoped update with a stopped-runtime backup.
+The reactor passes 330 Java tests and all 75 tooling checks. The expanded native walkthrough passes 412 assertions, and actual JVM restart recovery passes 51. GitHub checks pass. The exact checked JAR and tutorial configuration are deployed after a clean stop and full runtime backup; startup is error-free and five warm worlds load. The other twelve binary hashes and pinned resource pack are unchanged.
+
+The requested full dev progression reset is complete for AstuteFlamez: native inventory/location/stats/advancements, credits/tutorial eligibility, clan membership, owned vehicles, pending auction delivery, trophy, Ilum times and weapon statistics were cleared. Staff access and other players’ records are preserved; the backup and reset receipt are retained locally. Next action: client-play the fresh first-join tutorial and verify the updated text, placement and larger target visually.
 
 ## Interactive tutorial deployed to development (2026-11-15)
 

@@ -39,7 +39,7 @@ The reactor passes 325 gameplay tests and four access tests; all 75 tooling chec
 
 Client rendering and physical keyboard/mouse interaction require an ordinary Minecraft playthrough; native callbacks are not presented as visual verification.
 
-## Development deployment
+## Initial development deployment
 Merged through PR #28 into dev (`c0ea13d`). The local development server was stopped cleanly, fully backed up, updated with the exact native-tested MandoMC JAR and new tutorial configuration, then restarted. Existing handbook/travel-guide wording was patched without replacing private placements. All twelve other binary hashes and the pinned resource-pack URL/hash remain unchanged. No test probe was installed on shared development. Startup has no errors, the tutorial command resolves, and all five warm worlds load.
 
 Deployed MandoMC SHA-256: `f7c0d973c843f0c9b6766949aacd082c11e009a54fff2dbdf8f754ce91bd85f8`. The full runtime backup, native logs and deployment receipt are retained locally under ignored `.local`; no runtime data is tracked. Production was not changed.
@@ -51,3 +51,7 @@ Next action: play `/tutorial` in an ordinary Minecraft client on dev, checking h
 The Galaxy Map now shares the regular menu renderer; tutorial input remains isolated. Territory presentation reads a session-only claim identity without touching real clans. TIE fighter placement goes through the normal block-interaction entry point and still creates only an ephemeral training vehicle. The recipe return resets position, yaw and pitch before rendering its instructions. Event timers refresh each second and retain the exit command in the boss bar.
 
 The reactor passes 330 Java tests and all 75 tooling checks. The expanded native walkthrough passes 412 assertions, including the original five changes plus the returned-saber pause, Batuu buyer explanation and full-world TIE flight. Actual JVM restart recovery passes 51 assertions.
+
+Merged the playtest follow-up through PR #30 into dev (`95b2218`) and deployed its exact native-tested JAR after a clean stop and full runtime backup. Startup has no errors, five warm worlds load, and the tutorial command resolves. Only the MandoMC JAR and tutorial configuration were deployed; twelve other binary hashes and the pinned resource pack remain unchanged. Follow-up JAR SHA-256: `6be3f7b01f8b66a926354cd23e781fa1c955fb37cc2c9cad852f5109e6da15c1`.
+
+The user-requested dev account progression reset was rehearsed on copied data, then applied while stopped. It clears onboarding/reward eligibility, credits, clan membership, owned vehicles and remaining account progression while preserving staff access and other players’ records. Backup and detailed receipt remain local and untracked. Next action: a fresh first-join client playthrough for the revised controls, hologram readability and large target.
