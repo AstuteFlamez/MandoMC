@@ -1,0 +1,12 @@
+{
+  "source": "User-supplied star_wars_signs_pack.zip",
+  "sha256": "8b1966dea447aac9b6bf9be6614e3e539f39bcfe69e9ab63fe60dcf6348993e4",
+  "files": {
+    "cantina_sign_1x4.json": "1160645d95f5fc4760c96cdb3087a5c6a9244a948160d209d9906811d80c1017",
+    "cantina_sign_1x4.png": "8be05f1c9586deca8663dda166fd866da8c713630666cd7612d6922fc4a534ad",
+    "leaderboards_sign_5x1.json": "c51815404929fe16a4a2c9d7409df524370343a9f0741f4ec836a96736f00b8f",
+    "leaderboards_sign_5x1.png": "267e3db26f2c1d1b02e467de8b6433f8bfa8230c00c7eeadfab79b643e5008bf",
+    "shops_sign_3x1.json": "0fc7c0cb1fac16c70243c172d61a6945e22961a5151012a338dced3ede421944",
+    "shops_sign_3x1.png": "94c171e0ef1abfc210cc90ff792cbefad620ae1c0ba5373c709cd4f27b36ed73"
+  }
+}

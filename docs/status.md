@@ -1,10 +1,16 @@
 # Resume here
 
-## Production release: staff mode and tutorial fixes (2026-11-15)
+## Three building signs deployed to development (2026-11-15)
 
-The owner accepted the development playtest and explicitly authorized production promotion and the PebbleHost console Restart action. This release includes all eleven dev playtest fixes plus independent staff gamemode, normal X-wing flight with only lesson keys enabled, single-press W/S behavior and a real block target. The native flight fixture holds its headless actor's corridor loaded and checks controller output before Paper drag/interpolation, avoiding timing-dependent velocity assertions.
+Added Shops (3×1), Leaderboards (5×1) and Cantina (1×4), available through `/mmc give shops_sign`, `/mmc give leaderboards_sign` and `/mmc give cantina_sign`. Every occupied cell shares the existing decoration protection and single-item recovery behavior. Journal schema 4 preserves schemas 1–3. The final source build has exactly the same JAR entries as the native-tested candidate and retains the latest staff/tutorial changes.
 
-Verification: 337 Java tests, 79 tooling tests, native staff/protection and complete tutorial/block-cleanup checks, plus actual JVM staff/tutorial recovery. Release through the passing main CI artifact and verified SFTP upload, then the authorized console restart. No world/player reset or vendor replacement is part of this release. Next action: client-smoke-test staff Survival mode and the tutorial flight/target on production after activation.
+Verification: 339 Java tests, 81 tooling checks, resource-pack build and 668 native lifecycle/actual-restart assertions pass, including the existing Crates Sign. The pack adds nine files and preserves all 1,184 existing entries byte-for-byte. Published pack `resource-pack-26.1.2-8015fc5774c9` (SHA-1 `1aa7dbc57a8f587b5dca8ac94d06091181af3a77`) was anonymously downloaded and hash-verified. Development was stopped cleanly, fully backed up, and restarted with the exact tested candidate; all other binaries are unchanged, 279 custom items load, and startup has no errors. Production was not modified by this release. See [building signs](features/building-signs.md). Next action: reconnect to development and visually check all three signs in game.
+
+## Production release live: staff mode and tutorial fixes (2026-11-15)
+
+Promoted the owner-accepted dev fixes through PR #43 (`b9f0132`) and used the explicitly authorized PebbleHost console Restart action. Production is running the checked release: independent staff gamemode, normal X-wing flight with only lesson keys enabled, single-press W/S behavior, real block targets, Ilum/protection fixes, revised planet descriptions, Agrinium-ingot pickaxe and no Kyber crystal crafting recipes. AstuteFlamez's requested `mandostudios` membership was assigned through the native console command and verified in saved rank data.
+
+Verification: 337 Java tests, 79 tooling tests, 264 native staff/protection checks, the final 1,226-assertion tutorial walkthrough, and actual JVM recovery checks (49 staff, 51 tutorial). Main CI, pack publication and verified SFTP upload passed. After restart, all 127 managed file hashes match the release receipt, startup has no errors, 276 custom items and the tutorial load, and the deployment is marked active. The previous managed bytes are retained in the remote rollback backup; no world/player reset or vendor replacement was performed. Next action: client-smoke-test staff Survival mode and the tutorial flight/target on production.
 
 ## Staff gamemode and normal tutorial flight feedback (2026-11-15)
 
