@@ -134,11 +134,11 @@ Dewback:
     - sound{s=mandomc:mobs.dewback_idle;v=1.5;p=1} @self ~onTimer:220 0.2
     - sound{s=mandomc:mobs.dewback_death;v=2;p=1} @self ~onDeath
 
-# Legacy behavior with the original fixed combat stats.
+# Legacy behavior with fixed combat stats and reduced health.
 Massiff:
   Type: ZOMBIE
   Display: '&6&lMassiff'
-  Health: 50
+  Health: 30
   Damage: 0
   Faction: Tusken
   Model:
