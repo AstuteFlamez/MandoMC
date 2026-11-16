@@ -744,7 +744,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
     public void jawa(Player player, LivingEntity entity) {
         var session = sessions.get(player.getUniqueId());
         if (session == null || entity.getWorld() != player.getWorld() || entity.getLocation().distanceSquared(player.getLocation()) > 36) { denied(player); return; }
-        if (selling(player) && plugin.jawas().gray(entity) && insideShop(entity.getLocation())) {
+        if (selling(player) && plugin.jawas().gray(entity)) {
             plugin.jawas().openTutorialBuyer(player, entity); return;
         }
         if (session.progress.step() == Step.BUY && session.entities.contains(entity) && mobs.type(entity).equals("JawaBrown")) {
@@ -761,9 +761,9 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
     }
     private void shopGuidance(Session session) {
         var player = session.player;
-        if (insideShop(player.getLocation())) { player.sendActionBar(text("messages.sell-inside")); return; }
+        if (insideShop(player.getLocation())) player.sendActionBar(text("messages.sell-inside"));
         var points = config.getMapList("shop-route");
-        if (points.isEmpty()) return;
+        if (points.size() < 2) return;
         var route = new ArrayList<Location>();
         for (var point : points) route.add(new Location(player.getWorld(), ((Number) point.get("x")).doubleValue(),
                 ((Number) point.get("y")).doubleValue(), ((Number) point.get("z")).doubleValue()));
@@ -774,10 +774,22 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
             var a = route.get(i); var delta = route.get(i + 1).toVector().subtract(a.toVector()); double length = delta.length();
             if (length < .01) continue;
             for (double n = (Bukkit.getCurrentTick() % 20) / 20.0; n < length; n += .6) {
-                var point = a.clone().add(delta.clone().multiply(n / length)).add(0, .2, 0);
+                var point = a.clone().add(delta.clone().multiply(n / length)).add(0, .35, 0);
                 if (player.getLocation().distanceSquared(point) < 225) dust(player, point, Color.AQUA);
             }
         }
+        // Keep the endpoint arrow visible inside the shop until the sale completes.
+        var tip = route.getLast().clone().add(0, .35, 0);
+        if (player.getLocation().distanceSquared(tip) >= 225) return;
+        var forward = tip.toVector().subtract(route.get(route.size() - 2).toVector()).setY(0);
+        if (forward.lengthSquared() < .01) return;
+        forward.normalize();
+        var side = new org.bukkit.util.Vector(-forward.getZ(), 0, forward.getX());
+        for (double n = 0; n <= 3; n += .2)
+            dust(player, tip.clone().subtract(forward.clone().multiply(n)), Color.AQUA);
+        for (int sign : new int[]{-1, 1}) for (double n = .2; n <= 1.6; n += .2)
+            dust(player, tip.clone().subtract(forward.clone().multiply(n))
+                    .add(side.clone().multiply(n * sign * .7)), Color.AQUA);
     }
     @EventHandler(priority = EventPriority.LOWEST)
     public void command(PlayerCommandPreprocessEvent event) {

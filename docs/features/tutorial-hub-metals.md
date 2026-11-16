@@ -38,3 +38,12 @@ The final reactor passes 342 Java tests (338 gameplay and four access); all 84 t
 A read-only production audit found 60 Agrinium sheets in two of eight player files. These are queued for one-for-one conversion during the stopped production cutover; production data has not been changed. The development sweep finds no remaining sheets. Promotion must run a fresh offline sweep against the stopped server's latest data, not upload the audit copies.
 
 Development was stopped cleanly and fully backed up before deploying the final tested gameplay JAR and seven merged configurations. The stopped playerdata sweep scanned one file and found no sheets to convert. Normal startup loads 268 custom items and the tutorial without errors; all fourteen other binaries and the pinned resource pack remain unchanged. No probe plugin is installed on shared development.
+
+## Shop playtest follow-up
+The owner accepted the other sections and requested a centered stair approach plus a directional arrow farther inside the shop. The route now follows the middle of the four-block-wide stair flight with half-block heights, then turns through the doorway. A three-block particle arrow points inward at the endpoint and stays visible after entering, until selling completes. Both trail and arrow remain private.
+
+Tutorial selling accepts any nearby public Batuu gray Jawa through the normal salvage tray. Previously a fixed shop rectangle rejected the buyer near the entrance even though normal trading worked; that rectangle is now used only for the interior instruction. Normal distance, entity identity and selling-step checks remain.
+
+Verification: 342 Java tests and 342 focused native shop assertions pass, including sampled route clearance, the interior-only arrow packet check, observer privacy, all seven gray buyers and successful lesson sale. The full tutorial was already owner-accepted apart from these shop refinements.
+
+The follow-up is deployed to development after a full stopped-runtime backup. Startup is healthy with the exact tested JAR and one merged tutorial configuration. Other binaries, pack and production are unchanged. Next action: client-check the revised Shops lesson.

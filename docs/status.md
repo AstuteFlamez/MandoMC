@@ -1,5 +1,11 @@
 # Resume here
 
+## Tutorial shop path and gray-Jawa follow-up (2026-11-16)
+
+The owner accepted the tutorial except for shop guidance. Centered the particle trail on the wide stairs and added an inward-pointing arrow that remains visible inside the building. Removed the tutorial-only shop rectangle restriction that rejected a public gray Jawa; nearby gray buyers now consistently open salvage during the selling step.
+
+Verification: 342 Java tests and 342 focused native shop checks pass, covering route clearance, private interior arrow particles, all seven public gray Jawas and the sale. Development was backed up and restarted with the tested JAR and one merged config; startup is healthy and all fourteen other binaries and the pack are unchanged. See [tutorial hub](features/tutorial-hub-metals.md). Next action: recheck the centered trail, interior arrow and gray-Jawa salvage in the Shops lesson on development.
+
 ## Optional tutorial hub and simplified metals (2026-11-16)
 
 Implemented five independently selectable lessons with saved completion and $500 once per section. Combat has one Gamorrean, one Quarren and one Twi'lek blaster target, then a real saber-hit exercise. Survival uses native mining, furnace smelting and pickaxe crafting. Shops guides each learner privately up the actual public Batuu stairs to a real gray Jawa. Clan and native X-wing lessons remain, with an optional exit and Naboo base guidance.
