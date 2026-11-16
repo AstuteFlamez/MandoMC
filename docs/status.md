@@ -1,5 +1,22 @@
 # Resume here
 
+## Ilum damage resets corrected (2026-11-16)
+
+On `bilal/ilum-damage-checkpoint`, environmental damage now reduces health normally at the start and
+checkpoints 1, 2 and 4. Only death automatically returns those runners to their saved checkpoint;
+checkpoint 3 (the dropper) retains immediate environmental-damage, fire and fall retries. The shared
+territory exception uses the same rule and is restricted to active runners in Ilum. PvP protection,
+manual compass retries, inventory escrow and checkpoint progression remain intact.
+
+Verification: `./scripts/build.sh` passes all 342 Java tests. A disposable Java 25 / Paper 26.1.2 server
+passes 51 native assertions covering every checkpoint, actual health loss, delayed teleport behavior,
+fire and below-course movement, respawn destinations, PvP denial and lethal damage retaining the run,
+controls and level. The existing development probe compiles with its corrected expectations.
+Development is deployed after a full stopped-runtime backup and clean restart. The tested JAR is active;
+all 12 other binaries and every server property value are unchanged (Paper refreshed its timestamp comment).
+Production promotion is authorized and pending the checked GitHub workflow. Next action: promote and
+verify the Ilum fix on PebbleHost.
+
 ## Tutorial and balance release live on production (2026-11-16)
 
 Promoted through PR #51 (`d328e85`); the owner started the verified production build through PebbleHost. Optional tutorial sections, $500 for each section’s first completion, direct scrap-to-ingot smelting, updated KOTH rewards, ten Beskar nodes, the owner's terrain-following shop route/private arrow and all gray-Jawa buyers are active. Massiff health is 30 HP and E-11 base damage is 2.0.
