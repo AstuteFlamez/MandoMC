@@ -1,5 +1,11 @@
 # Resume here
 
+## Dev playtest fixes deployed (2026-11-15)
+
+Implemented isolated staff mode, staff-only `/back`, Ilum mechanisms and checkpoint-3 death recovery, Batuu interaction protection, spawn hunger protection and safezone mob target clearing. Tutorial guidance now includes zone-colored borders, directional particles, a fixed saber hologram, required Weapons category and a constrained sequential X-wing lesson. Warp lore explains planet roles, the Agrinium pickaxe uses ingots, and all seven Kyber crystal recipes are removed while saber recipes remain.
+
+Verification: 335 Java tests, 79 tooling tests, 259 native staff/protection/circuit assertions, 834 full tutorial assertions and actual JVM recovery checks (49 staff, 51 tutorial) pass. Development was stopped, fully backed up and restarted with the exact tested gameplay JAR, matching circuit agent and six configurations. Other binaries and the pinned resource pack are unchanged; startup is healthy. Production remains untouched. See [behavior and all eleven owner checks](features/dev-playtest-fixes.md). Next action: complete the owner's eleven-item client acceptance checklist before production promotion.
+
 ## Blast furnace progression hotfix (2026-11-15)
 
 Changed the blast furnace recipe to use five Agrinium ingots instead of sheets, removing the dependency on the furnace needed to make those sheets. Bundled defaults and managed server overrides match. Verification and rollout are in progress; next action: verify checks and activate the recipe on production and development.

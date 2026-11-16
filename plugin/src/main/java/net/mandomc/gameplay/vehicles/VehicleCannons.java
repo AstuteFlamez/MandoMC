@@ -68,13 +68,15 @@ public final class VehicleCannons implements Listener, AutoCloseable {
     public int activeBolts() { return bolts.size(); }
 
     public boolean fire(Player player) {
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)
+                && plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && !mando.tutorial().mayFire(player)) return false;
         var weapon = weapons.get(vehicles.mountedType(player));
         if (weapon == null || player.isDead()) return false;
         var platform = vehicles.firingPlatform(player, weapon.bones());
         if (platform == null || !protection.use(player.getLocation())
                 || !protection.use(platform.entity().getLocation())) return false;
         long now = System.nanoTime() / 1_000_000;
-        if (now < recharge.getOrDefault(player.getUniqueId(), 0L)) {
+        if (!net.mandomc.gameplay.admin.StaffMode.active(player) && now < recharge.getOrDefault(player.getUniqueId(), 0L)) {
             message(player, "weapon-recharging", "seconds", String.format(Locale.ROOT, "%.1f",
                     Math.ceil((recharge.get(player.getUniqueId()) - now) / 100.0) / 10.0));
             return false;

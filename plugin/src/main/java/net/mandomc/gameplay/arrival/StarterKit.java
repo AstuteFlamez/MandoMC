@@ -65,7 +65,7 @@ public final class StarterKit implements Listener {
 
     /** Atomic delivery: construct everything, check capacity, then add it and record ownership. */
     public boolean grant(Player player) {
-        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return false;
+        if ((net.mandomc.gameplay.tutorial.TutorialInventory.active(player) || net.mandomc.gameplay.admin.StaffMode.active(player))) return false;
         if (player.getPersistentDataContainer().has(granted)) return false;
         var kit = new ArrayList<ItemStack>();
         try {

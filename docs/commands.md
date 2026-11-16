@@ -101,3 +101,7 @@ Quantity update: `/mmc give <item> [quantity]` and `/mmc give <player> <item> [q
 
 ## Native clans and KOTH crate (deployed)
 `/c` (`/clan`, `/cl`) supports create, invite, join, leave, kick, leader, disband, claim, unclaim, sethome, home, info, warpoints and map. Names use 3–16 letters/digits/underscores. Claims and homes require clan leadership; home travel is available to members. `/crates preview koth`, `/crates keys`, `/crates open koth` and `/crates claim` use the shared crate engine. See [native clans](features/native-clans.md).
+
+## Staff mode
+
+`/staff [on|off]` (alias `/staffmode`) switches between the saved survival inventory and an empty Creative staff inventory. `/gms` also exits staff mode. Staff permissions, including `/back`, require active staff mode; ordinary permissions apply while off. `/parkour checkpoint <1-4>` is a staff-mode-only Ilum testing shortcut. Console `staff revokeop <online-player>` revokes an imported vanilla operator entitlement; native rank membership is separate. See [development playtest fixes](features/dev-playtest-fixes.md) for recovery and acceptance checks.

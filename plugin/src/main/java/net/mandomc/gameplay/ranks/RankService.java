@@ -14,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /** One native authority for UUID memberships and Bukkit permission attachments. */
 public final class RankService implements Listener, AutoCloseable {
+    private static final org.bukkit.NamespacedKey OPERATOR = new org.bukkit.NamespacedKey("mandomc", "staff_operator");
     private final JavaPlugin plugin;
     private final RankCatalog catalog;
     private final Path file;
@@ -77,11 +78,36 @@ public final class RankService implements Listener, AutoCloseable {
             });
         });
     }
+    public boolean operatorEligible(Player player) {
+        return player.isOp() || player.getPersistentDataContainer().has(OPERATOR);
+    }
+    /** Operator authority is retained privately while native op status is disabled in survival. */
+    public void normalizeOperator(Player player) {
+        if (!net.mandomc.gameplay.admin.StaffMode.active(player) && player.isOp()) {
+            player.getPersistentDataContainer().set(OPERATOR, org.bukkit.persistence.PersistentDataType.BYTE, (byte) 1);
+            player.saveData(); // Preserve entitlement before removing the vanilla operator grant.
+            player.setOp(false);
+        } else if (net.mandomc.gameplay.admin.StaffMode.active(player) && operatorEligible(player) && !player.isOp()) {
+            player.setOp(true);
+        }
+    }
+    public void revokeOperator(Player player) {
+        player.setOp(false); player.getPersistentDataContainer().remove(OPERATOR); player.saveData();
+    }
+    public boolean staffEligible(Player player) {
+        return operatorEligible(player) || Boolean.TRUE.equals(RankCatalog.resolve(catalog.permissions(memberships(player.getUniqueId())), "mandomc.staff"));
+    }
+    public Map<String, Boolean> effectivePermissions(Player player) {
+        if (operatorEligible(player) && net.mandomc.gameplay.admin.StaffMode.active(player)) return Map.of("*", true);
+        return catalog.permissions(staffEligible(player) && !net.mandomc.gameplay.admin.StaffMode.active(player)
+                ? Set.of("default") : memberships(player.getUniqueId()));
+    }
     public void apply(Player player) {
+        normalizeOperator(player);
         remove(player);
         var attachment = player.addAttachment(plugin);
         attachments.put(player.getUniqueId(), attachment);
-        var nodes = catalog.permissions(memberships(player.getUniqueId()));
+        var nodes = effectivePermissions(player);
         var candidates = new TreeSet<>(nodes.keySet());
         for (var permission : Bukkit.getPluginManager().getPermissions()) {
             candidates.add(permission.getName()); candidates.addAll(permission.getChildren().keySet());
@@ -90,7 +116,12 @@ public final class RankService implements Listener, AutoCloseable {
         for (String node : candidates) {
             Boolean value = RankCatalog.resolve(nodes, node);
             if (value != null) attachment.setPermission(node, value);
+            else if (staffEligible(player) && !net.mandomc.gameplay.admin.StaffMode.active(player)) {
+                var permission = Bukkit.getPluginManager().getPermission(node);
+                attachment.setPermission(node, permission != null && permission.getDefault().getValue(false));
+            }
         }
+        attachment.setPermission("mandomc.staff", staffEligible(player));
         player.recalculatePermissions();
     }
     private void remove(Player player) {

@@ -65,11 +65,27 @@ public final class TerritoryProtection implements Listener {
     }
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void damage(EntityDamageEvent e){
-        if(!territories.combat(e.getEntity().getLocation())){e.setCancelled(true);return;}
+        if(!territories.combat(e.getEntity().getLocation())){
+            var parkour=org.bukkit.Bukkit.getServicesManager().load(net.mandomc.gameplay.ilum.ParkourService.class);
+            if (!(e instanceof EntityDamageByEntityEvent) && e.getEntity() instanceof Player player
+                    && parkour != null && parkour.damageTrial(player)) return;
+            e.setCancelled(true);return;
+        }
         Entity attacker=e.getDamageSource().getCausingEntity();
         if(e.getEntity() instanceof ArmorStand && !territories.edits(e.getEntity().getLocation())
                 && !(attacker instanceof Player player && staff(player))) {e.setCancelled(true);return;}
         if(attacker!=null&&!territories.combat(attacker.getLocation()))e.setCancelled(true);
+    }
+    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+    public void food(FoodLevelChangeEvent e) {
+        if (e.getEntity() instanceof Player player && !territories.combat(player.getLocation()) && e.getFoodLevel() < player.getFoodLevel()) {
+            e.setCancelled(true); player.setExhaustion(0);
+        }
+    }
+    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+    public void target(EntityTargetLivingEntityEvent e) {
+        if (e.getTarget() instanceof Player player && (!territories.combat(player.getLocation())
+                || !territories.combat(e.getEntity().getLocation()))) e.setCancelled(true);
     }
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void vehicleDamage(VehicleDamageEvent e){if(!territories.combat(e.getVehicle().getLocation())

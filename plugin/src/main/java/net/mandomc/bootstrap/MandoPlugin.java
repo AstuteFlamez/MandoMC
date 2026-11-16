@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MandoPlugin extends JavaPlugin implements Listener {
     private net.mandomc.gameplay.ranks.RankService ranks;
+    private net.mandomc.gameplay.admin.StaffMode staff;
     private net.mandomc.integrations.permissions.WorldEditRanks worldEditRanks;
     private net.mandomc.gameplay.jawa.JawaTraders jawas;
     public net.mandomc.gameplay.jawa.JawaTraders jawas() { return jawas; }
@@ -277,6 +278,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             events = new net.mandomc.gameplay.events.EventManager(this, warps);
             getLogger().info("Native events and public warps ready: configured destinations and event rewards loaded.");
             tutorial = new net.mandomc.gameplay.tutorial.InteractiveTutorial(this, loadFeature("tutorial/tutorial.yml"));
+            staff = new net.mandomc.gameplay.admin.StaffMode(this, loadFeature("admin/staff.yml"));
             starterKit.tutorialRequired(true);
             getLogger().info("Interactive tutorial ready: private worlds, isolated inventory and once-only completion rewards.");
             getLogger().info("Arrival enabled: protected Batuu spawn; /spawn and temporary /tutorial ready.");
@@ -303,6 +305,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (staff != null) staff.close();
         if (tutorial != null) tutorial.close();
         if (hud != null) hud.close();
         if (jawas != null) jawas.close();

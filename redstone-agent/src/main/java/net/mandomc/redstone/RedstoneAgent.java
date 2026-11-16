@@ -32,6 +32,16 @@ public final class RedstoneAgent {
     }
 
     public static void premain(String arguments, Instrumentation instrumentation) {
+        try {
+            var helper = java.nio.file.Files.createTempFile("mandomc-ilum-circuits-", ".jar");
+            helper.toFile().deleteOnExit();
+            try (var out = new java.util.jar.JarOutputStream(java.nio.file.Files.newOutputStream(helper));
+                    var input = RedstoneAgent.class.getResourceAsStream("/net/mandomc/redstone/IlumCircuits.class")) {
+                out.putNextEntry(new java.util.jar.JarEntry("net/mandomc/redstone/IlumCircuits.class"));
+                java.util.Objects.requireNonNull(input).transferTo(out); out.closeEntry();
+            }
+            instrumentation.appendToBootstrapClassLoaderSearch(new java.util.jar.JarFile(helper.toFile()));
+        } catch (Exception error) { throw new IllegalStateException("Cannot install Ilum circuit boundary", error); }
         instrumentation.addTransformer(new ClassFileTransformer() {
             @Override
             public byte[] transform(ClassLoader loader, String name, Class<?> redefined,
@@ -92,11 +102,33 @@ public final class RedstoneAgent {
                 if (type != 'I' && type != 'Z' && type != 'V') {
                     throw new IllegalStateException("Unexpected native return type: " + descriptor);
                 }
-                builder.withMethod(method.methodName(), method.methodType(), method.flags().flagsMask(), mb ->
-                        mb.withCode(code -> {
-                            if (type == 'V') code.return_();
-                            else code.iconst_0().ireturn();
-                        }));
+                // isSignalSource has no world argument. Preserve source identity; world-aware reads
+                // below still return zero everywhere except Ilum.
+                if (methodName.equals("isSignalSource")) { builder.with(method); return; }
+                int levelSlot = name.equals("net/minecraft/world/level/SignalGetter") ? 0 : -1;
+                int slot = (method.flags().flagsMask() & 8) == 0 ? 1 : 0;
+                for (var parameter : method.methodTypeSymbol().parameterList()) {
+                    String parameterName = parameter.descriptorString();
+                    if (Set.of("Lnet/minecraft/world/level/Level;", "Lnet/minecraft/server/level/ServerLevel;",
+                            "Lnet/minecraft/world/level/BlockGetter;", "Lnet/minecraft/world/level/SignalGetter;").contains(parameterName)) levelSlot = slot;
+                    slot += parameterName.equals("J") || parameterName.equals("D") ? 2 : 1;
+                }
+                if (levelSlot < 0) throw new IllegalStateException("No world argument: " + name + descriptor);
+                final int worldSlot = levelSlot;
+                builder.transformMethod(method, MethodTransform.transformingCode(CodeTransform.ofStateful(() -> {
+                    boolean[] first = {true};
+                    return (code, instruction) -> {
+                        if (first[0]) {
+                            first[0] = false;
+                            var original = code.newLabel();
+                            code.aload(worldSlot).invokestatic(ClassDesc.of("net.mandomc.redstone.IlumCircuits"),
+                                    "ilum", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z")).ifne(original);
+                            if (type == 'V') code.return_(); else code.iconst_0().ireturn();
+                            code.labelBinding(original);
+                        }
+                        code.with(instruction);
+                    };
+                })));
             } else builder.with(element);
         });
         if (!found.equals(expected)) throw new IllegalStateException("Native hooks changed: " + name + " " + found);
