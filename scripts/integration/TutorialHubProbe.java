@@ -167,7 +167,9 @@ public final class TutorialHubProbe extends JavaPlugin implements org.bukkit.eve
         for (int i = 0; i < route.size() - 1; i++) {
             var start = route.get(i); var delta = route.get(i + 1).toVector().subtract(start.toVector());
             for (double n = 0; n <= delta.length(); n += .2) {
-                var at = start.clone().add(delta.clone().normalize().multiply(n)).add(0, .35, 0);
+                var anchor = start.clone().add(delta.clone().normalize().multiply(n));
+                var at = surface(anchor);
+                check(at != null, "Every route sample has a walking surface");
                 var floor = at.getWorld().rayTraceBlocks(at.clone().add(0, 1.5, 0), new org.bukkit.util.Vector(0,-1,0),
                         3, FluidCollisionMode.NEVER, true);
                 check(floor != null && at.getY() > floor.getHitPosition().getY()
@@ -175,6 +177,30 @@ public final class TutorialHubProbe extends JavaPlugin implements org.bukkit.eve
                         "Trail clears actual walking surface: " + at.toVector());
             }
         }
+        for (double[] point : new double[][] {
+                {-16.5,93,-8.5,93.25}, {-19.5,94,-8.5,93.75}, {-20.5,94,-8.5,94.25},
+                {-21.5,94,-8.5,94.75}, {-22.5,95,-8.5,95.25}, {-22.5,95.5,-12.5,95.75},
+                {-22.5,96,-14.5,96.25}, {-41.5,96,-14.5,96.25}}) {
+            var at = surface(new Location(player.getWorld(),point[0],point[1],point[2]));
+            check(at != null && Math.abs(at.getY()-point[3]) < .001,
+                    "Measured slab/stair/landing height at " + Arrays.toString(point) + ": " + at);
+        }
+        var guidance = InteractiveTutorial.class.getDeclaredMethod("shopGuidance",session().getClass());
+        guidance.setAccessible(true);
+        put(player,route.get(1));actors.drain(player);actors.otherPackets(player);
+        guidance.invoke(mando.tutorial(),session());
+        later(12, () -> {
+        var stairs = particlePositions(player).stream().filter(at -> at.getX() < -19 && at.getX() > -22
+                && Math.abs(at.getZ()+8.5)<.01).toList();
+        check(stairs.size() >= 4 && stairs.stream().anyMatch(at -> at.getY() < 94)
+                && stairs.stream().anyMatch(at -> at.getY() > 94.7), "Actual particle packets climb the stair treads: " + stairs);
+        // Jump ahead without visiting earlier waypoints: the trail must still lead through the doorway.
+        put(player,new Location(player.getWorld(),-32.5,96.1,-14.5));
+        actors.drain(player);actors.otherPackets(player);guidance.invoke(mando.tutorial(),session());
+        later(12, () -> {
+        var doorwayParticles = particlePositions(player);
+        check(doorwayParticles.stream().anyMatch(at -> at.getX() < -33 && at.getX() > -36
+                && Math.abs(at.getZ()+14.5)<.01), "Cutting corners cannot leave the trail stuck behind the stairs: " + doorwayParticles);
         var buyers = player.getWorld().getLivingEntities().stream().filter(mando.jawas()::gray).toList();
         check(buyers.size() >= 7, "All seven public gray Jawas are loaded");
         for (var gray : buyers) {
@@ -190,6 +216,27 @@ public final class TutorialHubProbe extends JavaPlugin implements org.bukkit.eve
             check(own!=null&&own.stream().anyMatch(x->x.contains("LevelParticles")),"Player receives endpoint arrow inside the shop");
             check(others==null||others.stream().noneMatch(x->x.contains("LevelParticles")),"Observer receives no tutorial particles");sell();
         });
+        });
+        });
+    }
+    private Location surface(Location anchor) throws Exception {
+        var method = InteractiveTutorial.class.getDeclaredMethod("shopSurface",Location.class);
+        method.setAccessible(true);return (Location)method.invoke(mando.tutorial(),anchor);
+    }
+    private List<org.bukkit.util.Vector> particlePositions(Player target) throws Exception {
+        Object channel = ((Map<?,?>)field(actors,"channels")).get(target.getUniqueId());
+        channel.getClass().getMethod("runPendingTasks").invoke(channel);
+        var read = channel.getClass().getMethod("readOutbound");
+        var points = new ArrayList<org.bukkit.util.Vector>();
+        Object packet;
+        while ((packet = read.invoke(channel)) != null) {
+            var type = packet.getClass();
+            if (type.getSimpleName().equals("ClientboundLevelParticlesPacket")) points.add(new org.bukkit.util.Vector(
+                    ((Number)type.getMethod("getX").invoke(packet)).doubleValue(),
+                    ((Number)type.getMethod("getY").invoke(packet)).doubleValue(),
+                    ((Number)type.getMethod("getZ").invoke(packet)).doubleValue()));
+        }
+        return points;
     }
     private void sell() throws Exception {
         var gray=player.getWorld().getLivingEntities().stream().filter(e->mando.jawas().gray(e)&&e.getLocation().getX()<-37).findFirst().orElseThrow();
