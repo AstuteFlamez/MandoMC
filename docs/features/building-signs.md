@@ -1,5 +1,5 @@
 # Feature: Building signs
-Status: playable on development; client visual review pending
+Status: live on development and production; production client visual review pending
 Branch: bilal/star-wars-signs
 
 ## Player experience
@@ -28,3 +28,9 @@ Run `scripts/build.sh`, the Python tooling suite and `scripts/build-resource-pac
 339 Java tests and 81 tooling checks pass. Isolated Paper verifies 132/20 Shops, 168/24 Leaderboards, 150/22 Cantina and 132/20 Crates lifecycle/restart assertions: 668 total, with no startup errors. The candidate changes only eight JAR entries and retains all unrelated live entries; the final integrated source build reproduces every candidate entry.
 
 The pack adds nine files, preserving all 1,184 existing entries. Published `resource-pack-26.1.2-8015fc5774c9`, SHA-1 `1aa7dbc57a8f587b5dca8ac94d06091181af3a77`, was anonymously verified before deployment. A clean development stop, full runtime backup, scoped installation and normal restart completed; all other binaries are unchanged, 279 custom items load and startup has no errors. Private backup and deployment receipts are retained locally. Production was not modified. Client visual review remains. Next action: reconnect to development and check the three signs' wall/floor/ceiling placement and inventory appearance.
+
+## Production hub promotion (2026-11-16)
+
+PR #46 promotes the checked release as `8100c78`. Its CI gameplay JAR entries exactly match the tested development candidate; the production pack preserves the same verified 1,193 entries and SHA-1. The owner's cleanly saved SpawnWorld snapshot supplies 41 world files and five placed signs: one Shops, one Leaderboards, one Crates and two Cantina signs. Only SpawnWorld's placed decoration records are replaced; unrelated and pending custody records are retained.
+
+The import passes a private native startup and actual JVM restart, verifying the exact items/facing, one visual per sign and all 19 owned collision cells. Production is cleanly stopped before the staged directory is renamed into place; its previous entire dimension and journal are retained for rollback. All 49 captured account/access files remain byte-identical, other worlds are untouched, and no player reset occurs. Live production repeats the five-sign/19-cell checks and loads 279 custom items without startup errors. Private migration receipts retain the source hashes and rollback location. Next action: reconnect and visually inspect the production hub with the updated pack.
