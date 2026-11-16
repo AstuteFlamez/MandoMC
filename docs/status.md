@@ -12,8 +12,10 @@ Verification: `./scripts/build.sh` passes all 342 Java tests. A disposable Java 
 passes 51 native assertions covering every checkpoint, actual health loss, delayed teleport behavior,
 fire and below-course movement, respawn destinations, PvP denial and lethal damage retaining the run,
 controls and level. The existing development probe compiles with its corrected expectations.
-No shared development or production deployment was performed. Next action: deploy the tested branch
-through the normal development release workflow and playtest the course.
+Development is deployed after a full stopped-runtime backup and clean restart. The tested JAR is active;
+all 12 other binaries and every server property value are unchanged (Paper refreshed its timestamp comment).
+Production promotion is authorized and pending the checked GitHub workflow. Next action: promote and
+verify the Ilum fix on PebbleHost.
 
 ## Tutorial and balance release live on production (2026-11-16)
 

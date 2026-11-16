@@ -45,7 +45,8 @@ The scoped collision team prevents player pushing and restores prior teams.
 The 2026-11-16 damage-rule change is verified on a disposable Paper server with 51 assertions using
 `scripts/build-ilum-damage-probe.sh` and `IlumDamageProbe` (loopback port 25591 only). The probe checks
 all five progress states, actual damage, immediate versus death-only returns, fire, below-course
-movement, PvP protection and death inventory/run preservation. Deployment of this follow-up is pending.
+movement, PvP protection and death inventory/run preservation. This follow-up is deployed to development with a retained stopped-runtime backup and healthy startup.
+Production promotion is pending.
 
 Inventory escrow is stored in native player persistent data before temporary items are issued. Gear
 restoration, run completion, cooldown and queued key delivery are committed with the same native
