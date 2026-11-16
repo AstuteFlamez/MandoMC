@@ -48,7 +48,18 @@ public final class TutorialHubProbe extends JavaPlugin implements org.bukkit.eve
         check(Bukkit.getPort()==25590,"Disposable localhost fixture only");
         mobs=new net.mandomc.integrations.mobs.MythicMobAccess();
         mando=(MandoPlugin)Bukkit.getPluginManager().getPlugin("MandoMC");check(mando.tutorial()!=null,"Tutorial initialized");
+        var weaponType = Class.forName("me.deecaad.weaponmechanics.WeaponMechanics",true,
+                Bukkit.getPluginManager().getPlugin("WeaponMechanics").getClass().getClassLoader());
+        var weapons = weaponType.getMethod("getInstance").invoke(null);
+        var weaponConfig = weaponType.getMethod("getWeaponConfigurations").invoke(weapons);
+        check(((Number)weaponConfig.getClass().getMethod("getDouble",String.class)
+                .invoke(weaponConfig,"E11.Damage.Base_Damage")).doubleValue() == 2.0, "Loaded E-11 base damage is 2.0");
+        var massiff = mobs.spawn("Massiff",mando.worlds().spawn("Tatooine").clone().add(0,2,0),1);
+        check(massiff.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH).getValue() == 30,
+                "Native Massiff maximum health is 30");
+        check(massiff.getHealth() == 30, "New Massiff starts at 30 HP");mobs.remove(massiff);
         getDataFolder().mkdirs();actors=new NativeProbePlayers("HubCheck");
+        if (Files.exists(getDataFolder().toPath().resolve("balance-only"))) { pass(); return; }
         shopsOnly = Files.exists(getDataFolder().toPath().resolve("shops-only"));
         if (!shopsOnly && Files.exists(getDataFolder().toPath().resolve("beskar-only"))) { observer=actors.create(mando.worlds().spawn("Batuu"));beskar();return; }
         if (!shopsOnly && Files.exists(getDataFolder().toPath().resolve("restart-ready"))) { restartCheck(); return; }

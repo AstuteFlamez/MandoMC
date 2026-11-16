@@ -2,7 +2,7 @@
 
 ## Tutorial and balance production promotion (2026-11-16)
 
-The owner requested production deployment of the optional tutorial, simplified metals, final shop route, Massiff health 30 and E-11 base damage 2.0. The histories are combined; production verification and the backed-up sheet conversion are in progress. Next action: verify the integrated release and activate it through the production panel.
+The owner requested production deployment of the optional tutorial, simplified metals, final shop route, Massiff health 30 and E-11 base damage 2.0. The combined build passes 342 Java tests, 84 tooling checks, 1,145 native tutorial/event assertions and five loaded-balance checks. Production drift verification and the backed-up sheet conversion are in progress. Next action: promote the checked release, take a stopped backup and activate it through the production panel.
 
 ## Tutorial shop path and gray-Jawa follow-up (2026-11-16)
 
