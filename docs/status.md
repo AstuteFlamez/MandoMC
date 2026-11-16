@@ -1,5 +1,11 @@
 # Resume here
 
+## E-11 damage buff (2026-11-16)
+
+On `bilal/e11-damage-buff`, stacked on the Massiff health reduction, increased E-11 base damage from 0.5 to the owner's requested 2.0 per shot. All other weapon parameters remain unchanged. Updated the existing integration probe's expected damage value. The original development weapon config is backed up privately; only its base-damage field is deployed. Production promotion is pending.
+
+Verification: `./scripts/build.sh` passes all 339 Java tests; YAML comparison verifies base damage is the sole semantic weapon-config change, and `git diff --check` passes. Development restarted cleanly with all 34 weapons loaded; runtime comparison confirms damage 2.0 and the prior Massiff health 30. The legacy integration probe was updated but not rerun. Next action: playtest the E-11 at 2.0 damage on development before production promotion.
+
 ## Massiff health reduced on development (2026-11-16)
 
 On `bilal/massiff-health`, reduced fixed Massiff health from 50 to 30 HP (40%) so encounters take less damage to finish. The scoped development deployment changed only that health value after a clean stop and private configuration backup. The existing development pack remains pinned. Production promotion is pending.
