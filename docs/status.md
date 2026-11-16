@@ -1,5 +1,30 @@
 # Resume here
 
+## Ilum damage resets corrected (2026-11-16)
+
+On `bilal/ilum-damage-checkpoint`, environmental damage now reduces health normally at the start and
+checkpoints 1, 2 and 4. Only death automatically returns those runners to their saved checkpoint;
+checkpoint 3 (the dropper) retains immediate environmental-damage, fire and fall retries. The shared
+territory exception uses the same rule and is restricted to active runners in Ilum. PvP protection,
+manual compass retries, inventory escrow and checkpoint progression remain intact.
+
+Verification: `./scripts/build.sh` passes all 342 Java tests. A disposable Java 25 / Paper 26.1.2 server
+passes 51 native assertions covering every checkpoint, actual health loss, delayed teleport behavior,
+fire and below-course movement, respawn destinations, PvP denial and lethal damage retaining the run,
+controls and level. The existing development probe compiles with its corrected expectations.
+Development is deployed after a full stopped-runtime backup and clean restart. The tested JAR is active;
+all 12 other binaries and every server property value are unchanged (Paper refreshed its timestamp comment).
+Production promotion is authorized and pending the checked GitHub workflow. Next action: promote and
+verify the Ilum fix on PebbleHost.
+
+## Tutorial and balance release live on production (2026-11-16)
+
+Promoted through PR #51 (`d328e85`); the owner started the verified production build through PebbleHost. Optional tutorial sections, $500 for each section’s first completion, direct scrap-to-ingot smelting, updated KOTH rewards, ten Beskar nodes, the owner's terrain-following shop route/private arrow and all gray-Jawa buyers are active. Massiff health is 30 HP and E-11 base damage is 2.0.
+
+A completed 6.09 GB stopped-server backup precedes the cutover. The fresh sweep scanned 8 player files and converted 48 Agrinium sheets one-for-one in 1 file; the other player files remain byte-identical. Original player files and managed-file rollback copies are retained. No world or player reset occurred.
+
+Verification: 342 Java tests, 84 tooling checks, 1,145 native combined tutorial/event assertions, five native balance checks and the production build/pack jobs pass. The automatic SFTP job stalled during its initial read-only check and was cancelled; the exact CI artifacts were uploaded through the pinned SFTP recovery path with the normal drift checks, backups and read-back verification. The exact CI gameplay artifact matches every entry of the native-tested build; the published pack is downloaded anonymously and verified. All 128 installed managed hashes match, startup is healthy with 268 custom items, and the release receipt is marked active. First login logged seven native cleanup messages for recipe-book entries deliberately removed by this release; subsequent logins did not repeat them. The client successfully loaded the pack. A keepalive timeout occurred once during the observation period; later logins succeeded and the console reported 20.0/19.8/19.8 TPS. Next action: reconnect to production and check the Shops lesson, E-11 and Massiff encounters.
+
 ## Tutorial and balance production promotion (2026-11-16)
 
 The owner requested production deployment of the optional tutorial, simplified metals, final shop route, Massiff health 30 and E-11 base damage 2.0. The combined build passes 342 Java tests, 84 tooling checks, 1,145 native tutorial/event assertions and five loaded-balance checks. Production drift verification and the backed-up sheet conversion are in progress. Next action: promote the checked release, take a stopped backup and activate it through the production panel.
