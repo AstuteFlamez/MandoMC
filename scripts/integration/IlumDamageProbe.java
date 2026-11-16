@@ -73,7 +73,7 @@ public final class IlumDamageProbe extends JavaPlugin implements org.bukkit.even
             player.setFireTicks(40);
             var fireMove = new PlayerMoveEvent(player, before, next);
             Bukkit.getPluginManager().callEvent(fireMove);
-            check(fireMove.getTo().equals(dropper ? saved : next), "Fire movement at " + checkpoint);
+            check(fireMove.getTo().equals(next), "Fire movement at " + checkpoint);
             player.setFireTicks(0);
             Location below = before.clone(); below.setY(-100);
             var fallMove = new PlayerMoveEvent(player, before, below);

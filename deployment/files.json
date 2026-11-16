@@ -446,6 +446,10 @@
       "target": "plugins/MythicMobs/Skills/rancor-skills.yml"
     },
     {
+      "source": "server/config/common/votingplugin/Config.yml",
+      "target": "plugins/VotingPlugin/Config.yml"
+    },
+    {
       "source": "server/config/common/votingplugin/VoteSites.yml",
       "target": "plugins/VotingPlugin/VoteSites.yml"
     },

@@ -57,7 +57,7 @@ public final class SurvivalRules implements Listener {
         this.items = items;
         this.language = language;
         elytras = config.getBoolean("disable-elytras", true);
-        enchanting = config.getBoolean("disable-enchanting", true);
+        enchanting = config.getBoolean("disable-enchanting", false);
         potions = config.getBoolean("disable-potions", true);
         vanillaWeapons = config.getBoolean("disable-vanilla-weapons", true);
         dimensions = config.getBoolean("disable-nether-and-end", true);

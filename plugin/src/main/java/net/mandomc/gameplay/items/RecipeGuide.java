@@ -28,6 +28,7 @@ public final class RecipeGuide implements Listener, AutoCloseable {
     private final JavaPlugin plugin;
     private final CraftingRecipes recipes;
     private final ConfigurationSection config;
+    private final RecipeGuideOrder order;
     private static final int[] GRID = {10, 11, 12, 19, 20, 21, 28, 29, 30};
 
     private static final class Menu implements InventoryHolder {
@@ -47,6 +48,7 @@ public final class RecipeGuide implements Listener, AutoCloseable {
         this.plugin = plugin;
         this.recipes = recipes;
         this.config = config;
+        this.order = new RecipeGuideOrder(recipes.definitions());
         for (String key : List.of("title", "detail-title", "previous", "next", "back", "close", "all",
                 "category", "hint", "ingredient-hint", "crafting", "unavailable", "player-only",
                 "categories", "category-hint", "page", "smelting", "smelting-time")) {
@@ -114,7 +116,8 @@ public final class RecipeGuide implements Listener, AutoCloseable {
     }
 
     private void open(Player player, String category, int requestedPage) {
-        var choices = recipes.guideDefinitions().stream().filter(r -> matchesCategory(r, category)).toList();
+        var choices = recipes.guideDefinitions().stream().filter(r -> matchesCategory(r, category))
+                .sorted(order.comparator()).toList();
         int page = ItemBrowser.clampPage(requestedPage, choices.size());
         var menu = new Menu(player, text("title", ""));
         menu.category = category;

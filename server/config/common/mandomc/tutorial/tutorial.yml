@@ -64,7 +64,7 @@ steps:
   saber: '<yellow>Sneak + attack: throw your saber'
   buy: '<gold>Brown Jawa: buy 16 String'
   sell: <yellow>Follow particles into the shop.
-  recipes: <yellow>/recipes <gray>→ Weapons → Close
+  recipes: <yellow>/recipes <gray>→ Lightsabers → Close
   place: <gold>Hold X-wing; right-click pad.
   flight: '<yellow>Fly <seconds>/<total>s | Mouse: steer'
   right: '<yellow>Hold D: tilt right'
@@ -105,8 +105,8 @@ holograms:
     visit the real shops on Batuu.'
   sell: <gold>Gray Jawas buy salvage<newline><white>Find gray Jawas on Batuu (spawn).<newline><white>Right-click the buyer.<newline><yellow>Click
     your scrap to add it, then click Sell.<newline><gray>Closing the window returns unsold items.
-  recipes: <gold>Craft your equipment<newline><yellow>/recipes<newline><white>Open the Weapons category to find gear recipes.<newline><gray>Open
-    Weapons, then close the guide to continue.
+  recipes: <gold>Craft your equipment<newline><yellow>/recipes<newline><white>Open the Lightsabers category to find gear recipes.<newline><gray>Open
+    Lightsabers, then close the guide to continue.
   place: <gold>X-wing deployment<newline><white>Your X-wing is in your hotbar.<newline><yellow>Hold it and right-click the training pad.<newline><gray>Place
     it first, then board and fly.
   flight: '<gold>X-wing flight training<newline><white>Right-click the X-wing to board.<newline><yellow>Look up and press W to take off; fly for
