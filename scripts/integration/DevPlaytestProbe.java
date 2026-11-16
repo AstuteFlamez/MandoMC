@@ -66,7 +66,10 @@ public final class DevPlaytestProbe extends JavaPlugin {
         check(!player.hasPermission("mandomc.admin.gamemode") && !player.hasPermission("mandomc.travel.back"), "Privileges removed immediately");
         command("staff on"); command("gms");
         later(3, () -> {
-            check(!StaffMode.active(player), "/gms exits staff mode"); sameInventory();
+            check(StaffMode.active(player) && player.getGameMode() == GameMode.SURVIVAL, "/gms preserves staff mode in Survival");
+            check(player.getInventory().isEmpty(), "Survival gamemode retains separate empty staff inventory");
+            check(player.hasPermission("mandomc.travel.back"), "Survival staff retains staff permissions");
+            command("staff off"); sameInventory();
             command("staff on");
             // Exercise the same durable marker used after a JVM restart, with no reliance on an in-memory mode set.
             check(StaffInventory.active(player), "Durable staff recovery marker exists");
@@ -151,7 +154,8 @@ public final class DevPlaytestProbe extends JavaPlugin {
     private void prepareRestart() throws Exception {
         var folder=getDataFolder().toPath();Files.createDirectories(folder);
         Files.write(folder.resolve("expected-inventory.bin"),ItemStack.serializeItemsAsBytes(player.getInventory().getContents()));
-        player.setOp(true);mando.ranks().apply(player);command("staff on");player.saveData();
+        player.setOp(true);mando.ranks().apply(player);command("staff on");command("gms");
+        check(StaffMode.active(player), "Survival staff marker remains durable before restart");player.saveData();
         Path saved;
         try(var paths=Files.walk(Path.of(".").toAbsolutePath())) {
             saved=paths.filter(path->path.getFileName().toString().equals(player.getUniqueId()+".dat")).findFirst().orElseThrow();

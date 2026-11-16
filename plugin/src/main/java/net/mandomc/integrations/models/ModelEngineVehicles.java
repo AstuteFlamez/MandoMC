@@ -135,12 +135,6 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
                 return mando.tutorial().flightInput(player, input, entity);
             return input;
         }
-        private VehicleMotion.Step tutorialMotion(Player player, VehicleMotion.Step step) {
-            if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null
-                    && net.mandomc.gameplay.tutorial.TutorialInventory.active(player))
-                return mando.tutorial().flightMotion(player, step, entity);
-            return step;
-        }
         private void tutorialDenied(Player player) {
             if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null) mando.tutorial().denied(player);
         }
@@ -314,7 +308,6 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
             var step = motion.tick(model.definition, controls,
                             VehicleModels.grounded(model.entity),
                             controller.getVelocity().getY());
-            step = model.tutorialMotion(player, step);
             if (step.dismount() && net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) {
                 model.tutorialDenied(player);
                 controller.setVelocity(0, 0, 0); return;

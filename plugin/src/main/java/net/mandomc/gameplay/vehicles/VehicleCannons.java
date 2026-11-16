@@ -164,7 +164,7 @@ public final class VehicleCannons implements Listener, AutoCloseable {
                     entity -> entity instanceof LivingEntity && !(entity instanceof ArmorStand) && !excluded(bolt, entity));
             if (hit != null) {
                 var impact = hit.getHitPosition().toLocation(bolt.location().getWorld());
-                impact(bolt, impact, hit.getHitEntity()); remove(bolt); continue;
+                impact(bolt, impact, hit.getHitEntity(), hit.getHitBlock()); remove(bolt); continue;
             }
             var next = bolt.location().clone().add(direction.multiply(distance));
             double remaining = bolt.remaining() - distance;
@@ -175,10 +175,10 @@ public final class VehicleCannons implements Listener, AutoCloseable {
         }
     }
 
-    private void impact(Bolt bolt, Location location, Entity direct) {
+    private void impact(Bolt bolt, Location location, Entity direct, org.bukkit.block.Block block) {
         if (!vehicles.mayUse(bolt.platform().entity(), bolt.shooter(), location)) return;
         if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null)
-            mando.tutorial().cannonHit(bolt.shooter(), bolt.platform().id(), direct);
+            mando.tutorial().cannonHit(bolt.shooter(), bolt.platform().id(), block);
         var victims = new LinkedHashSet<LivingEntity>();
         if (direct instanceof LivingEntity living) victims.add(living);
         double radius = bolt.settings().radius();

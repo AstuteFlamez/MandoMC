@@ -62,7 +62,7 @@ steps:
   sell: '<gold>Gray Jawa: add 8 scrap, then Sell'
   recipes: '<yellow>/recipes <gray>→ Weapons → Close'
   place: '<gold>Hold X-wing; right-click pad.'
-  flight: '<yellow>Hold W: fly <seconds>/<total>s'
+  flight: '<yellow>Fly <seconds>/<total>s | Mouse: steer'
   right: '<yellow>Hold D: tilt right'
   left: '<yellow>Hold A: tilt left'
   stop: '<yellow>Hold S: stop in midair'
@@ -70,7 +70,7 @@ steps:
   target: '<yellow>Attack: shoot the glowing target'
   events: '<gold>Read the event guide. No action.'
   board: '<gold>Right-click X-wing to board.'
-  takeoff: '<yellow>Hold W: take off and fly'
+  takeoff: '<yellow>Look up + W: take off and fly'
 menus:
   warp: '<gold>Galaxy Map'
   tutorial: '<aqua>Tutorial'
@@ -93,8 +93,8 @@ holograms:
   sell: '<gold>Gray Jawas buy salvage<newline><white>Find gray Jawas on Batuu (spawn).<newline><white>Right-click the buyer.<newline><yellow>Click your scrap to add it, then click Sell.<newline><gray>Closing the window returns unsold items.'
   recipes: '<gold>Craft your equipment<newline><yellow>/recipes<newline><white>Open the Weapons category to find gear recipes.<newline><gray>Open Weapons, then close the guide to continue.'
   place: '<gold>X-wing deployment<newline><white>Your X-wing is in your hotbar.<newline><yellow>Hold it and right-click the training pad.<newline><gray>Place it first, then board and fly.'
-  flight: '<gold>X-wing flight training<newline><white>Right-click the X-wing to board.<newline><yellow>Hold W to take off and fly for 5 seconds<newline><white>Follow one control at a time: W, D, A, then S.<newline><gray>The training ship cannot be lost.'
-  target: '<gold>Gunnery target<newline><white>Aim your X-wing at the bullseye.<newline><yellow>Attack / left-click: fire cannons<newline><gray>A direct cannon hit completes the exercise.'
+  flight: '<gold>X-wing flight training<newline><white>Right-click the X-wing to board.<newline><yellow>Look up and press W to take off; fly for 5 seconds<newline><white>Follow one control at a time: W, D, A, then S.<newline><gray>The training ship cannot be lost.'
+  target: '<gold>Gunnery target<newline><white>Aim your X-wing at the bullseye.<newline><yellow>Attack / left-click: fire cannons<newline><gray>Destroy the blocks with a direct cannon hit.'
 events:
   0:
     action: '<gold>KOTH <gray>| Next in <seconds>s'
