@@ -1,5 +1,11 @@
 # Resume here
 
+## Massiff health reduced on development (2026-11-16)
+
+On `bilal/massiff-health`, reduced fixed Massiff health from 50 to 30 HP (40%) so encounters take less damage to finish. The scoped development deployment changed only that health value after a clean stop and private configuration backup. The existing development pack remains pinned. Production promotion is pending.
+
+Verification: `./scripts/build.sh` passes all 339 Java tests; YAML parsing, exact source/runtime change comparisons and `git diff --check` pass. Local Paper restarted successfully with MythicMobs loaded. In-game combat feel and existing-entity health migration are not verified. Next action: playtest a freshly spawned Massiff on development before promoting the change.
+
 ## Building signs and updated hub live on production (2026-11-16)
 
 Promoted the tested sign update through PR #46 (`8100c78`) and activated the matching published resource pack. Imported the owner's saved SpawnWorld hub: 41 world files and five placed signs (Shops, Leaderboards, Crates and two Cantina signs). The previous stopped hub and decoration journal remain in a private rollback backup. Other worlds are untouched; 49 account/access files were verified unchanged during the cutover, with no player reset.
