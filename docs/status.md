@@ -1,5 +1,13 @@
 # Resume here
 
+## Optional tutorial hub and simplified metals (2026-11-16)
+
+Implemented five independently selectable lessons with saved completion and $500 once per section. Combat has one Gamorrean, one Quarren and one Twi'lek blaster target, then a real saber-hit exercise. Survival uses native mining, furnace smelting and pickaxe crafting. Shops guides each learner privately up the actual public Batuu stairs to a real gray Jawa. Clan and native X-wing lessons remain, with an optional exit and Naboo base guidance.
+
+All eleven metal scraps now smelt directly into ingots in normal furnaces; sheets are removed from crafting and KOTH rewards. Ore drops are exactly one scrap, and Beskar Rush has ten nodes with old journal recovery retained. Sheet migration preserves quantities across inventories, ender chests, nested containers and saved escrow; the offline tool requires a stopped-world lock and backups. A read-only production audit found 60 Agrinium sheets across two players, queued for the production cutover; no production data has been changed.
+
+Verification: 342 Java tests, 84 tooling checks, 605 native tutorial assertions, 52 actual JVM recovery checks and 43 native Beskar assertions pass. Development was stopped, fully backed up and restarted with the final tested gameplay JAR and seven merged configs. Its stopped playerdata sweep found no sheets. Startup is healthy with 268 custom items; all fourteen other binaries and the pinned pack are unchanged. See [tutorial hub and metals](features/tutorial-hub-metals.md). Next action: client-play `/tutorial` on development, including each section and the Batuu walking trail.
+
 ## Building signs and updated hub live on production (2026-11-16)
 
 Promoted the tested sign update through PR #46 (`8100c78`) and activated the matching published resource pack. Imported the owner's saved SpawnWorld hub: 41 world files and five placed signs (Shops, Leaderboards, Crates and two Cantina signs). The previous stopped hub and decoration journal remain in a private rollback backup. Other worlds are untouched; 49 account/access files were verified unchanged during the cutover, with no player reset.

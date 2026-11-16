@@ -25,7 +25,7 @@ public final class BeskarJournal {
             var a=line.split("\\|",3);var xyz=a[0].split(",");
             nodes.add(new Node(new Pos(Integer.parseInt(xyz[0]),Integer.parseInt(xyz[1]),Integer.parseInt(xyz[2])),a[1],Boolean.parseBoolean(a[2])));
         }
-        if(nodes.size()!=25||nodes.stream().map(Node::position).distinct().count()!=25)throw new IllegalArgumentException("Beskar journal must contain100 distinct hosts");
+        if(!Set.of(10,25).contains(nodes.size())||nodes.stream().map(Node::position).distinct().count()!=nodes.size())throw new IllegalArgumentException("Beskar journal must contain 10 or 25 distinct hosts");
         return new State(Objects.requireNonNull(c.getString("world")),Objects.requireNonNull(c.getString("generation")),nodes);
     }
     public void save(State state)throws Exception {

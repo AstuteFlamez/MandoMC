@@ -7,6 +7,25 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class TutorialRewardTest {
+    @Test public void independentSectionReceiptsSurviveRestartPaymentsAndReplay() throws Exception {
+        var file = Files.createTempDirectory("tutorial-sections").resolve("credits.yml");
+        var player = UUID.randomUUID(); var other = UUID.randomUUID(); var ledger = new CreditLedger(file);
+        for (var section : TutorialProgress.Section.values()) {
+            assertTrue(ledger.rewardTutorialSection(player, section.name(), 50000));
+            assertFalse(ledger.rewardTutorialSection(player, section.name(), 50000));
+        }
+        assertEquals(250000, ledger.balance(player)); ledger.transfer(player, other, 10000);
+        ledger = new CreditLedger(file);
+        for (var section : TutorialProgress.Section.values()) assertFalse(ledger.rewardTutorialSection(player, section.name(), 50000));
+        assertEquals(240000, ledger.balance(player));
+    }
+    @Test public void failedSectionWriteDoesNotConsumeItsReceipt() throws Exception {
+        var file = Files.createTempDirectory("section-failure").resolve("credits.yml"); var player = UUID.randomUUID();
+        var ledger = new CreditLedger(file); Files.createDirectory(file); Files.writeString(file.resolve("block"), "x");
+        assertThrows(java.io.IOException.class, () -> ledger.rewardTutorialSection(player, "SHOPS", 50000));
+        assertEquals(0, ledger.balance(player)); Files.delete(file.resolve("block")); Files.delete(file);
+        assertTrue(ledger.rewardTutorialSection(player, "SHOPS", 50000));
+    }
     @Test public void rewardAndReceiptSurviveReloadAndUnrelatedPayments() throws Exception {
         var file = Files.createTempDirectory("tutorial-ledger").resolve("credits.yml");
         var player = UUID.randomUUID(); var other = UUID.randomUUID();

@@ -2,41 +2,43 @@ package net.mandomc.gameplay.tutorial;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
-import static net.mandomc.gameplay.tutorial.TutorialProgress.Step;
+import static net.mandomc.gameplay.tutorial.TutorialProgress.*;
 
 public class TutorialProgressTest {
-    @Test public void laterActionsCannotSkipObjectives() {
-        var progress = new TutorialProgress();
-        assertFalse(progress.advance(Step.CLAIM)); assertFalse(progress.kill(3));
-        assertFalse(progress.fly(true, true, 10_000, 10_000)); assertEquals(Step.WARP, progress.step());
-        assertTrue(progress.advance(Step.WARP)); assertFalse(progress.advance(Step.WARP)); assertEquals(Step.MAP, progress.step());
+    @Test public void hubAllowsAnySectionButLaterActionsCannotSkipObjectives() {
+        for (var section : Section.values()) {
+            var progress = new TutorialProgress();
+            assertEquals(Step.HUB, progress.step()); assertFalse(progress.advance(Step.HUB));
+            assertTrue(progress.start(section)); assertEquals(section.first(), progress.step());
+            assertFalse(progress.start(Section.SHOPS)); assertFalse(progress.advance(Step.COMPLETE));
+            progress.hub(); assertTrue(progress.start(Section.SHOPS));
+        }
     }
-    @Test public void allThreeGuardsAreRequiredAfterDisband() {
-        var progress = new TutorialProgress();
-        for (var step : new Step[]{Step.WARP, Step.MAP, Step.WILDERNESS, Step.CREATE, Step.CLAIM}) assertTrue(progress.advance(step));
-        assertFalse(progress.kill(3)); assertEquals(Step.DISBAND, progress.step());
-        progress.advance(Step.DISBAND); assertFalse(progress.kill(3)); assertFalse(progress.kill(3));
-        assertTrue(progress.kill(3)); assertEquals(Step.SABER, progress.step()); assertFalse(progress.kill(3));
+    @Test public void threeDifferentTargetsMustDieBeforeRecipesAndSaber() {
+        var progress = new TutorialProgress(); progress.start(Section.COMBAT);
+        assertFalse(progress.kill(3)); assertFalse(progress.kill(3)); assertTrue(progress.kill(3));
+        assertEquals(Step.RECIPES, progress.step()); assertFalse(progress.kill(3));
+        assertTrue(progress.advance(Step.RECIPES)); assertEquals(Step.SABER, progress.step());
+        assertTrue(progress.advance(Step.SABER)); assertEquals(Step.COMPLETE, progress.step());
     }
-    @Test public void placementMustCompleteBeforeFlightCanCount() {
-        var progress = new TutorialProgress(); while (progress.step() != Step.PLACE) progress.advance(progress.step());
-        assertFalse(progress.fly(true, true, 250, 100)); assertEquals(0, progress.flightMillis());
-        assertFalse(progress.advance(Step.FLIGHT)); assertTrue(progress.advance(Step.PLACE));
-        assertEquals(Step.BOARD, progress.step());
-        assertFalse(progress.fly(true, true, 250, 100));
-        assertTrue(progress.advance(Step.BOARD));
+    @Test public void eachSectionEndsWithoutStartingAnUnselectedLesson() {
+        for (var section : Section.values()) {
+            var progress = new TutorialProgress(); progress.start(section);
+            for (int i = 0; i < 20 && progress.step() != Step.COMPLETE; i++) assertTrue(progress.advance(progress.step()));
+            assertEquals(Step.COMPLETE, progress.step()); assertEquals(section, progress.section());
+            assertFalse(progress.advance(Step.COMPLETE));
+        }
     }
-    @Test public void onlyAirbornePilotingCountsAndServerStallsAreBounded() {
-        var progress = new TutorialProgress(); while (progress.step() != Step.FLIGHT) progress.advance(progress.step());
-        assertFalse(progress.fly(false, true, 200, 10_000)); assertFalse(progress.fly(true, false, 200, 10_000));
-        assertEquals(0, progress.flightMillis());
-        assertFalse(progress.fly(true, true, 60_000, 10_000)); assertEquals(250, progress.flightMillis());
-        for (int i = 0; i < 38; i++) assertFalse(progress.fly(true, true, 250, 10_000));
-        assertTrue(progress.fly(true, true, 250, 10_000)); assertEquals(Step.RIGHT, progress.step());
+    @Test public void airborneTimeRequiresPilotingAndDoesNotCountServerStalls() {
+        var p = new TutorialProgress(); p.start(Section.VEHICLES);
+        assertFalse(p.fly(true, true, 250, 100)); p.advance(Step.PLACE); p.advance(Step.BOARD);
+        assertFalse(p.fly(false, true, 200, 1000)); assertFalse(p.fly(true, false, 200, 1000));
+        assertEquals(0, p.flightMillis()); assertFalse(p.fly(true, true, 60000, 1000));
+        assertEquals(250, p.flightMillis());
+        assertFalse(p.fly(true, true, 250, 1000)); assertFalse(p.fly(true, true, 250, 1000));
+        assertTrue(p.fly(true, true, 250, 1000)); assertEquals(Step.RIGHT, p.step());
     }
-    @Test public void finalStepIsTerminalAndNamesCannotInjectCommands() {
-        var progress = new TutorialProgress(); while (progress.step() != Step.COMPLETE) progress.advance(progress.step());
-        assertFalse(progress.advance(Step.COMPLETE));
+    @Test public void clanNamesCannotInjectCommands() {
         assertTrue(TutorialProgress.clanName("Rebel_12")); assertFalse(TutorialProgress.clanName("ab"));
         assertFalse(TutorialProgress.clanName("rebel;op")); assertFalse(TutorialProgress.clanName("<red>Clan"));
     }

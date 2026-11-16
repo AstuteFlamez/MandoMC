@@ -64,7 +64,6 @@ public class ProgressionRecipesTest {
                 java.util.Map.entry("energy_conduits", "electrum=2,plastoid=1;out=2"),
                 java.util.Map.entry("fusion_coil_stabilizer", "durasteel=4,wiring_coil=1;out=1"),
                 java.util.Map.entry("plasma_capacitor_array", "electrum=3,wiring_coil=2;out=1"),
-                java.util.Map.entry("electrum_sheet", "electrum=3;out=1"),
                 java.util.Map.entry("transparisteel_shard", "agrinium=4,minecraft:glass=1;out=4"),
                 java.util.Map.entry("circuit_board", "electrum=1,plastoid=1,wiring_coil=2;out=1"),
                 java.util.Map.entry("precision_crafted_lens", "electrum=4,transparisteel_shard=1;out=1"));

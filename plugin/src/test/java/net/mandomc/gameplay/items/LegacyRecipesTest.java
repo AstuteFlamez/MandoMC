@@ -50,8 +50,8 @@ public class LegacyRecipesTest {
                 }
             }
         }
-        assertEquals(135, config.getConfigurationSection("recipes").getKeys(false).size());
-        assertEquals(11, config.getConfigurationSection("smelting").getKeys(false).size());
+        assertEquals(123, config.getConfigurationSection("recipes").getKeys(false).size());
+        assertEquals(12, config.getConfigurationSection("smelting").getKeys(false).size());
         assertEquals(71, config.getConfigurationSection("stonecutting").getKeys(false).size());
     }
 
@@ -91,15 +91,15 @@ public class LegacyRecipesTest {
 
     @Test public void blastRecipesRejectInvalidFurnacesTimingAndExperience() throws Exception {
         for (Object value : java.util.List.of(0, -1, 72001, "180", 2.5)) {
-            var config = resource("items/recipes.yml").getConfigurationSection("smelting.beskar_sheet");
+            var config = resource("items/recipes.yml").getConfigurationSection("smelting.beskar_from_scrap");
             config.set("cook-time", value);
-            assertThrows(IllegalArgumentException.class, () -> RecipeDefinition.parseSmelting("beskar_sheet", config));
+            assertThrows(IllegalArgumentException.class, () -> RecipeDefinition.parseSmelting("beskar_from_scrap", config));
         }
-        var config = resource("items/recipes.yml").getConfigurationSection("smelting.beskar_sheet");
+        var config = resource("items/recipes.yml").getConfigurationSection("smelting.beskar_from_scrap");
         config.set("furnace", "unknown");
-        assertThrows(IllegalArgumentException.class, () -> RecipeDefinition.parseSmelting("beskar_sheet", config));
+        assertThrows(IllegalArgumentException.class, () -> RecipeDefinition.parseSmelting("beskar_from_scrap", config));
         config.set("furnace", "blast");
         config.set("experience", Double.NaN);
-        assertThrows(IllegalArgumentException.class, () -> RecipeDefinition.parseSmelting("beskar_sheet", config));
+        assertThrows(IllegalArgumentException.class, () -> RecipeDefinition.parseSmelting("beskar_from_scrap", config));
     }
 }

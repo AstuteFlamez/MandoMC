@@ -1166,7 +1166,7 @@
       "rarity": "common",
       "category": "metals",
       "lore": [
-        "<gray>Fragments of agrinium awaiting refinement."
+        "<gray>Smelt in a normal furnace for one ingot."
       ],
       "item-model": "mandomc:legacy/agrinium_scrap"
     },
@@ -1181,17 +1181,6 @@
       ],
       "item-model": "mandomc:legacy/agrinium"
     },
-    "agrinium_sheet": {
-      "material": "ECHO_SHARD",
-      "name": "<gray>Agrinium Sheet",
-      "custom-model-data": 300,
-      "rarity": "common",
-      "category": "metals",
-      "lore": [
-        "<gray>Refined sheet of agrinium."
-      ],
-      "item-model": "mandomc:legacy/agrinium_sheet"
-    },
     "aurodium_scrap": {
       "material": "ECHO_SHARD",
       "name": "<gold>Aurodium Scrap",
@@ -1199,7 +1188,7 @@
       "rarity": "uncommon",
       "category": "metals",
       "lore": [
-        "<gray>Fragments of a precious golden alloy."
+        "<gray>Smelt in a normal furnace for one ingot."
       ],
       "item-model": "mandomc:legacy/aurodium_scrap"
     },
@@ -1214,17 +1203,6 @@
       ],
       "item-model": "mandomc:legacy/aurodium"
     },
-    "aurodium_sheet": {
-      "material": "ECHO_SHARD",
-      "name": "<gold>Aurodium Sheet",
-      "custom-model-data": 301,
-      "rarity": "uncommon",
-      "category": "metals",
-      "lore": [
-        "<gray>A refined golden metal sheet."
-      ],
-      "item-model": "mandomc:legacy/aurodium_sheet"
-    },
     "beskar_scrap": {
       "material": "ECHO_SHARD",
       "name": "<gray>Beskar Scrap",
@@ -1232,7 +1210,7 @@
       "rarity": "epic",
       "category": "metals",
       "lore": [
-        "<gray>Fragments of legendary Beskar."
+        "<gray>Smelt in a normal furnace for one ingot."
       ],
       "item-model": "mandomc:legacy/beskar_scrap"
     },
@@ -1247,17 +1225,6 @@
       ],
       "item-model": "mandomc:legacy/beskar"
     },
-    "beskar_sheet": {
-      "material": "ECHO_SHARD",
-      "name": "<gray>Beskar Sheet",
-      "custom-model-data": 302,
-      "rarity": "epic",
-      "category": "metals",
-      "lore": [
-        "<gray>A refined sheet of Beskar."
-      ],
-      "item-model": "mandomc:legacy/beskar_sheet"
-    },
     "cortosis_scrap": {
       "material": "ECHO_SHARD",
       "name": "<gray>Cortosis Scrap",
@@ -1265,7 +1232,7 @@
       "rarity": "rare",
       "category": "metals",
       "lore": [
-        "<gray>Fragments of cortosis."
+        "<gray>Smelt in a normal furnace for one ingot."
       ],
       "item-model": "mandomc:legacy/cortosis_scrap"
     },
@@ -1280,17 +1247,6 @@
       ],
       "item-model": "mandomc:legacy/cortosis"
     },
-    "cortosis_sheet": {
-      "material": "ECHO_SHARD",
-      "name": "<gray>Cortosis Sheet",
-      "custom-model-data": 303,
-      "rarity": "rare",
-      "category": "metals",
-      "lore": [
-        "<gray>Refined cortosis sheet."
-      ],
-      "item-model": "mandomc:legacy/cortosis_sheet"
-    },
     "durasteel_scrap": {
       "material": "ECHO_SHARD",
       "name": "<gray>Durasteel Scrap",
@@ -1298,7 +1254,7 @@
       "rarity": "uncommon",
       "category": "metals",
       "lore": [
-        "<gray>Scraps of durasteel."
+        "<gray>Smelt in a normal furnace for one ingot."
       ],
       "item-model": "mandomc:legacy/durasteel_scrap"
     },
@@ -1313,17 +1269,6 @@
       ],
       "item-model": "mandomc:legacy/durasteel"
     },
-    "durasteel_sheet": {
-      "material": "ECHO_SHARD",
-      "name": "<gray>Durasteel Sheet",
-      "custom-model-data": 304,
-      "rarity": "uncommon",
-      "category": "metals",
-      "lore": [
-        "<gray>A tough, durable metal sheet."
-      ],
-      "item-model": "mandomc:legacy/durasteel_sheet"
-    },
     "electrum_scrap": {
       "material": "ECHO_SHARD",
       "name": "<gold>Electrum Scrap",
@@ -1331,7 +1276,7 @@
       "rarity": "uncommon",
       "category": "metals",
       "lore": [
-        "<gray>Fragments of electrum."
+        "<gray>Smelt in a normal furnace for one ingot."
       ],
       "item-model": "mandomc:legacy/electrum_scrap"
     },
@@ -1346,17 +1291,6 @@
       ],
       "item-model": "mandomc:legacy/electrum"
     },
-    "electrum_sheet": {
-      "material": "ECHO_SHARD",
-      "name": "<gold>Electrum Sheet",
-      "custom-model-data": 305,
-      "rarity": "uncommon",
-      "category": "metals",
-      "lore": [
-        "<gray>Thin sheet for precision parts."
-      ],
-      "item-model": "mandomc:legacy/electrum_sheet"
-    },
     "lommite_scrap": {
       "material": "ECHO_SHARD",
       "name": "<gray>Lommite Scrap",
@@ -1364,7 +1298,7 @@
       "rarity": "common",
       "category": "metals",
       "lore": [
-        "<gray>Basic refining material."
+        "<gray>Smelt in a normal furnace for one ingot."
       ],
       "item-model": "mandomc:legacy/lommite_scrap"
     },
@@ -1379,17 +1313,6 @@
       ],
       "item-model": "mandomc:legacy/lommite"
     },
-    "lommite_sheet": {
-      "material": "ECHO_SHARD",
-      "name": "<gray>Lommite Sheet",
-      "custom-model-data": 306,
-      "rarity": "common",
-      "category": "metals",
-      "lore": [
-        "<gray>Basic metal sheet."
-      ],
-      "item-model": "mandomc:legacy/lommite_sheet"
-    },
     "mandalorian_iron_scrap": {
       "material": "ECHO_SHARD",
       "name": "<gray>Mandalorian Iron Scrap",
@@ -1397,7 +1320,7 @@
       "rarity": "epic",
       "category": "metals",
       "lore": [
-        "<gray>Fragments of Mandalorian iron."
+        "<gray>Smelt in a normal furnace for one ingot."
       ],
       "item-model": "mandomc:legacy/mandalorian_iron_scrap"
     },
@@ -1412,17 +1335,6 @@
       ],
       "item-model": "mandomc:legacy/mandalorian_iron"
     },
-    "mandalorian_sheet": {
-      "material": "ECHO_SHARD",
-      "name": "<gray>Mandalorian Sheet",
-      "custom-model-data": 307,
-      "rarity": "epic",
-      "category": "metals",
-      "lore": [
-        "<gray>Highly durable forged sheet."
-      ],
-      "item-model": "mandomc:legacy/mandalorian_sheet"
-    },
     "neuranium_scrap": {
       "material": "ECHO_SHARD",
       "name": "<dark_gray>Neuranium Scrap",
@@ -1430,7 +1342,7 @@
       "rarity": "rare",
       "category": "metals",
       "lore": [
-        "<gray>Dense reactor-grade fragments."
+        "<gray>Smelt in a normal furnace for one ingot."
       ],
       "item-model": "mandomc:legacy/neuranium_scrap"
     },
@@ -1445,17 +1357,6 @@
       ],
       "item-model": "mandomc:legacy/neuranium"
     },
-    "neuranium_sheet": {
-      "material": "ECHO_SHARD",
-      "name": "<dark_gray>Neuranium Sheet",
-      "custom-model-data": 308,
-      "rarity": "rare",
-      "category": "metals",
-      "lore": [
-        "<gray>Used in high-energy systems."
-      ],
-      "item-model": "mandomc:legacy/neuranium_sheet"
-    },
     "phrik_scrap": {
       "material": "ECHO_SHARD",
       "name": "<gray>Phrik Scrap",
@@ -1463,7 +1364,7 @@
       "rarity": "rare",
       "category": "metals",
       "lore": [
-        "<gray>Lightsaber-resistant fragments."
+        "<gray>Smelt in a normal furnace for one ingot."
       ],
       "item-model": "mandomc:legacy/phrik_scrap"
     },
@@ -1478,17 +1379,6 @@
       ],
       "item-model": "mandomc:legacy/phrik"
     },
-    "phrik_sheet": {
-      "material": "ECHO_SHARD",
-      "name": "<gray>Phrik Sheet",
-      "custom-model-data": 309,
-      "rarity": "rare",
-      "category": "metals",
-      "lore": [
-        "<gray>Advanced resistant alloy."
-      ],
-      "item-model": "mandomc:legacy/phrik_sheet"
-    },
     "songsteel_scrap": {
       "material": "ECHO_SHARD",
       "name": "<light_purple>Songsteel Scrap",
@@ -1496,7 +1386,7 @@
       "rarity": "epic",
       "category": "metals",
       "lore": [
-        "<gray>Rare refined fragments."
+        "<gray>Smelt in a normal furnace for one ingot."
       ],
       "item-model": "mandomc:legacy/songsteel_scrap"
     },
@@ -1510,17 +1400,6 @@
         "<gray>A rare elegant alloy."
       ],
       "item-model": "mandomc:legacy/songsteel"
-    },
-    "songsteel_sheet": {
-      "material": "ECHO_SHARD",
-      "name": "<light_purple>Songsteel Sheet",
-      "custom-model-data": 310,
-      "rarity": "epic",
-      "category": "metals",
-      "lore": [
-        "<gray>Refined songsteel sheet."
-      ],
-      "item-model": "mandomc:legacy/songsteel_sheet"
     },
     "durasteel_helmet": {
       "material": "DIAMOND_HELMET",
