@@ -1,5 +1,11 @@
 # Resume here
 
+## Three building signs deployed to development (2026-11-15)
+
+Added Shops (3×1), Leaderboards (5×1) and Cantina (1×4), available through `/mmc give shops_sign`, `/mmc give leaderboards_sign` and `/mmc give cantina_sign`. Every occupied cell shares the existing decoration protection and single-item recovery behavior. Journal schema 4 preserves schemas 1–3. The final source build has exactly the same JAR entries as the native-tested candidate and retains the latest staff/tutorial changes.
+
+Verification: 339 Java tests, 81 tooling checks, resource-pack build and 668 native lifecycle/actual-restart assertions pass, including the existing Crates Sign. The pack adds nine files and preserves all 1,184 existing entries byte-for-byte. Published pack `resource-pack-26.1.2-8015fc5774c9` (SHA-1 `1aa7dbc57a8f587b5dca8ac94d06091181af3a77`) was anonymously downloaded and hash-verified. Development was stopped cleanly, fully backed up, and restarted with the exact tested candidate; all other binaries are unchanged, 279 custom items load, and startup has no errors. Production was not modified by this release. See [building signs](features/building-signs.md). Next action: reconnect to development and visually check all three signs in game.
+
 ## Production release: staff mode and tutorial fixes (2026-11-15)
 
 The owner accepted the development playtest and explicitly authorized production promotion and the PebbleHost console Restart action. This release includes all eleven dev playtest fixes plus independent staff gamemode, normal X-wing flight with only lesson keys enabled, single-press W/S behavior and a real block target. The native flight fixture holds its headless actor's corridor loaded and checks controller output before Paper drag/interpolation, avoiding timing-dependent velocity assertions.

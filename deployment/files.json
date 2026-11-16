@@ -110,6 +110,10 @@
       "target": "plugins/MandoMC/items/definitions/boba-equipment.yml"
     },
     {
+      "source": "plugin/src/main/resources/items/definitions/building-signs.yml",
+      "target": "plugins/MandoMC/items/definitions/building-signs.yml"
+    },
+    {
       "source": "plugin/src/main/resources/items/definitions/crates-sign.yml",
       "target": "plugins/MandoMC/items/definitions/crates-sign.yml"
     },
