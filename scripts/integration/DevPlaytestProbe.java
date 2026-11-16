@@ -113,14 +113,14 @@ public final class DevPlaytestProbe extends JavaPlugin {
             player.getPersistentDataContainer().set(new NamespacedKey("mandomc","ilum_checkpoint"),PersistentDataType.INTEGER,3);
             var before=player.getLocation();
             var damage=new EntityDamageEvent(player,EntityDamageEvent.DamageCause.FALL,org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.FALL).build(),2);
-            Bukkit.getPluginManager().callEvent(damage);check(!damage.isCancelled(),"Checkpoint 3 environmental damage allowed");
+            Bukkit.getPluginManager().callEvent(damage);check(damage.isCancelled(),"Checkpoint 3 environmental damage retries immediately");
             var move=new PlayerMoveEvent(player,before,before.clone().add(.1,0,0));player.setFireTicks(40);Bukkit.getPluginManager().callEvent(move);
-            check(move.getTo().equals(before.clone().add(.1,0,0)),"Checkpoint 3 fire does not reset movement");player.setFireTicks(0);
+            check(move.getTo().distanceSquared(parkour.checkpoints().get(3))<.01,"Checkpoint 3 fire retries immediately");player.setFireTicks(0);
             var respawn=new PlayerRespawnEvent(player,before,false);Bukkit.getPluginManager().callEvent(respawn);
             check(respawn.getRespawnLocation().distanceSquared(parkour.checkpoints().get(3))<.01,"Death respawns at checkpoint 3");
             player.getPersistentDataContainer().set(new NamespacedKey("mandomc","ilum_checkpoint"),PersistentDataType.INTEGER,2);
             var earlier=new EntityDamageEvent(player,EntityDamageEvent.DamageCause.FALL,org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.FALL).build(),2);
-            Bukkit.getPluginManager().callEvent(earlier);check(earlier.isCancelled(),"Earlier checkpoints retain damage reset");
+            Bukkit.getPluginManager().callEvent(earlier);check(!earlier.isCancelled(),"Earlier checkpoints take damage without resetting");
             parkour.leave(player,true,false); sameInventory(); circuits(parkour);
         });
     }

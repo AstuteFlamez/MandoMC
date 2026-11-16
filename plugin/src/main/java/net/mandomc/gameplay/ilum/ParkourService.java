@@ -146,7 +146,10 @@ public final class ParkourService implements Listener, AutoCloseable {
         for (var player:Bukkit.getOnlinePlayers()) if (ParkourInventory.stored(player)) recover(player);
     }
 
-    public boolean damageTrial(Player player) { return active(player) && run(player).checkpoint() == 3; }
+    /** Ordinary sections take damage and retry on death; the dropper retries immediately. */
+    public boolean damageTrial(Player player) {
+        return player.getWorld().equals(world) && active(player) && run(player).checkpoint() != 3;
+    }
     private boolean staff(Player player) { return net.mandomc.gameplay.admin.StaffMode.active(player); }
     public boolean active(Player player) { return ParkourInventory.stored(player); }
     public World world() { return world; }

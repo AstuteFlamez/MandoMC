@@ -1,5 +1,20 @@
 # Resume here
 
+## Ilum damage resets corrected (2026-11-16)
+
+On `bilal/ilum-damage-checkpoint`, environmental damage now reduces health normally at the start and
+checkpoints 1, 2 and 4. Only death automatically returns those runners to their saved checkpoint;
+checkpoint 3 (the dropper) retains immediate environmental-damage, fire and fall retries. The shared
+territory exception uses the same rule and is restricted to active runners in Ilum. PvP protection,
+manual compass retries, inventory escrow and checkpoint progression remain intact.
+
+Verification: `./scripts/build.sh` passes all 342 Java tests. A disposable Java 25 / Paper 26.1.2 server
+passes 51 native assertions covering every checkpoint, actual health loss, delayed teleport behavior,
+fire and below-course movement, respawn destinations, PvP denial and lethal damage retaining the run,
+controls and level. The existing development probe compiles with its corrected expectations.
+No shared development or production deployment was performed. Next action: deploy the tested branch
+through the normal development release workflow and playtest the course.
+
 ## Tutorial and balance production promotion (2026-11-16)
 
 The owner requested production deployment of the optional tutorial, simplified metals, final shop route, Massiff health 30 and E-11 base damage 2.0. The combined build passes 342 Java tests, 84 tooling checks, 1,145 native tutorial/event assertions and five loaded-balance checks. Production drift verification and the backed-up sheet conversion are in progress. Next action: promote the checked release, take a stopped backup and activate it through the production panel.
