@@ -2,9 +2,9 @@
 
 ## Staff gamemode and normal tutorial flight feedback (2026-11-15)
 
-Staff mode is independent of gamemode: `/gms` keeps staff privileges and the temporary inventory; `/staff off` explicitly restores survival state. Tutorial X-wing controls now filter only the current lesson key and preserve normal thrust, look direction, speed, banking and braking. W latches thrust, released W continues flight, and S stops. The target is a real 17-by-17 block bullseye hit through native cannon block collision, with block debris and the existing explosion delay. Expanded airspace and a temporary landing pad support normal flight beyond the walking scene.
+Staff mode is independent of gamemode: `/gms` keeps staff privileges and the temporary inventory; `/staff off` explicitly restores survival state. Tutorial X-wing controls now filter only the current lesson key and preserve normal thrust, look direction, speed, banking and braking. W latches thrust, released W continues flight, and a single S press stops the ship and advances after braking. The target is a real 17-by-17 block bullseye hit through native cannon block collision, with block debris and the existing explosion delay. Expanded airspace and a temporary landing pad support normal flight beyond the walking scene.
 
-Verification: 337 Java tests, 79 tooling tests, 264 native staff/protection checks, 1,236 tutorial checks and actual JVM recovery checks (49 staff, 51 tutorial) pass. The exact tested gameplay JAR and two configs are deployed to development after a full stopped-runtime backup; other binaries and the pinned pack are unchanged. Production remains untouched. Next action: client-check `/staff on` → `/gms`, then replay the normal-flight lesson and destroy the real block target before production promotion.
+Verification: 337 Java tests, 79 tooling tests, 264 native staff/protection checks, the full native tutorial walkthrough and actual JVM recovery checks (49 staff, 51 tutorial) pass. The exact tested gameplay JAR and two configs are deployed to development after a full stopped-runtime backup; other binaries and the pinned pack are unchanged. Production remains untouched. Next action: client-check `/staff on` → `/gms`, then replay the normal-flight lesson and destroy the real block target before production promotion.
 
 ## Dev playtest fixes deployed (2026-11-15)
 

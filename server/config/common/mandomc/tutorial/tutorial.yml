@@ -65,7 +65,7 @@ steps:
   flight: '<yellow>Fly <seconds>/<total>s | Mouse: steer'
   right: '<yellow>Hold D: tilt right'
   left: '<yellow>Hold A: tilt left'
-  stop: '<yellow>Hold S: stop in midair'
+  stop: '<yellow>Press S: stop in midair'
   land: '<yellow>Hold Sneak: descend and land'
   target: '<yellow>Attack: shoot the glowing target'
   events: '<gold>Read the event guide. No action.'

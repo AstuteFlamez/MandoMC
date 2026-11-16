@@ -335,7 +335,8 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
             case FLIGHT -> raw.forward() > 0;
             case RIGHT -> raw.side() < 0;
             case LEFT -> raw.side() > 0;
-            case STOP -> raw.forward() < 0;
+            // Normal aircraft braking stays engaged after S is released.
+            case STOP -> session.correctControl || raw.forward() < 0;
             case LAND -> raw.sneak();
             default -> false;
         };

@@ -27,7 +27,7 @@ public class TutorialFlightTest {
             if (tick == 100) assertTrue("Changing look direction turns normal thrust", actual.x() < -2);
         }
         for (int tick = 0; tick < 30; tick++) {
-            var stop = new VehicleMotion.Input(-1, 0, false, false, 90, 0);
+            var stop = new VehicleMotion.Input(tick == 0 ? -1 : 0, 0, false, false, 90, 0);
             assertEquals(normal.tick(definition, stop, false, 0),
                     training.tick(definition, TutorialFlight.controls(Step.STOP, stop, false), false, 0));
         }

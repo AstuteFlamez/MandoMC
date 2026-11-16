@@ -23,7 +23,7 @@ public final class TutorialProbe extends JavaPlugin {
     private Location origin;
     private final Map<org.bukkit.block.Block, org.bukkit.block.data.BlockData> practiceOriginal = new LinkedHashMap<>();
     private int checks;
-    private boolean finished;
+    private boolean finished, brakePressed;
     private void check(boolean pass, String reason) { if (!pass) throw new AssertionError(reason); checks++; }
     @FunctionalInterface private interface Work { void run() throws Exception; }
     private void later(long ticks, Work action) { Bukkit.getScheduler().runTaskLater(this, () -> run(action), ticks); }
@@ -249,7 +249,8 @@ public final class TutorialProbe extends JavaPlugin {
         var controller = com.ticxo.modelengine.api.ModelEngineAPI.getMountPairManager().getController(player.getUniqueId());
         check(controller != null, "Training pilot has native controller");
         double side = step == TutorialProgress.Step.RIGHT ? -1 : step == TutorialProgress.Step.LEFT ? 1 : 0;
-        double forward = step == TutorialProgress.Step.FLIGHT && ticks == 0 ? 1 : step == TutorialProgress.Step.STOP ? -1 : 0;
+        double forward = step == TutorialProgress.Step.FLIGHT && ticks == 0 ? 1 : step == TutorialProgress.Step.STOP && !brakePressed ? -1 : 0;
+        if (step == TutorialProgress.Step.STOP) brakePressed = true;
         player.setRotation(ticks < 60 ? -20 : 0, ticks < 35 ? -20 : 0);
         if (ticks == 50) {
             check(ship.getVelocity().length() > 1.5, "Training retains normal X-wing speed after W is released");
