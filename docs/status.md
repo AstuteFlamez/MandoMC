@@ -1,5 +1,11 @@
 # Resume here
 
+## Building signs and updated hub live on production (2026-11-16)
+
+Promoted the tested sign update through PR #46 (`8100c78`) and activated the matching published resource pack. Imported the owner's saved SpawnWorld hub: 41 world files and five placed signs (Shops, Leaderboards, Crates and two Cantina signs). The previous stopped hub and decoration journal remain in a private rollback backup. Other worlds are untouched; 49 account/access files were verified unchanged during the cutover, with no player reset.
+
+Verification: production CI passes, the exact CI gameplay JAR has identical entries to the native-tested candidate, and the anonymously downloaded pack matches CI. A private import and actual JVM restart both verify five exact sign items/facings and 19 owned collision cells; live production repeats those checks and starts without errors with 279 custom items. See [building signs](features/building-signs.md). Next action: reconnect to production and visually check the updated hub and signs with the new pack.
+
 ## Three building signs deployed to development (2026-11-15)
 
 Added Shops (3×1), Leaderboards (5×1) and Cantina (1×4), available through `/mmc give shops_sign`, `/mmc give leaderboards_sign` and `/mmc give cantina_sign`. Every occupied cell shares the existing decoration protection and single-item recovery behavior. Journal schema 4 preserves schemas 1–3. The final source build has exactly the same JAR entries as the native-tested candidate and retains the latest staff/tutorial changes.
