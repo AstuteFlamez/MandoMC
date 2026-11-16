@@ -15,3 +15,6 @@ Plugin build/tests and resource-pack build passed. YAML parsing and exact legacy
 At the next coordinated deployment, stop the server, deploy the rebuilt plugin, copy the Massiff block of `server/config/common/mythicmobs/sandy-mobs.yml` to its runtime mob file and install `server/config/common/mythicmobs/massiff-skills.yml` in MythicMobs/skills. The plugin installs missing item/drop defaults and merges missing presentation badges. Publish the pack containing the ribs texture and consumable badge, then start Paper and reconnect with that pack. Preserve other in-progress mob definitions and player data.
 
 Deployment completed 2026-11-08: live Massiff block/skills and catalog food integration loaded after clean restart. Hosted pack `resource-pack-26.1.2-29399f01207f` is selected. The source-only note above records the initial implementation checkpoint; client behavior checks remain pending.
+
+## Production balance release — 2026-11-16
+Massiff health 30 HP is deployed through PR #51 (`d328e85`). The native loaded-balance checks pass; production startup is healthy and its installed configuration hash matches the checked release. Other tuning remains unchanged.
