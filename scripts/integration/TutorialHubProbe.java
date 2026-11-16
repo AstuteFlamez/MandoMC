@@ -22,7 +22,7 @@ public final class TutorialHubProbe extends JavaPlugin implements org.bukkit.eve
     private Player player, observer;
     private int checks;
     private final List<Integer> beskarLoot = new ArrayList<>();
-    private boolean checkingBeskar;
+    private boolean checkingBeskar, shopsOnly;
     private boolean finished, brakePressed;
     private ItemStack[] original;
     private long balance;
@@ -49,11 +49,13 @@ public final class TutorialHubProbe extends JavaPlugin implements org.bukkit.eve
         mobs=new net.mandomc.integrations.mobs.MythicMobAccess();
         mando=(MandoPlugin)Bukkit.getPluginManager().getPlugin("MandoMC");check(mando.tutorial()!=null,"Tutorial initialized");
         getDataFolder().mkdirs();actors=new NativeProbePlayers("HubCheck");
-        if (Files.exists(getDataFolder().toPath().resolve("beskar-only"))) { observer=actors.create(mando.worlds().spawn("Batuu"));beskar();return; }
-        if (Files.exists(getDataFolder().toPath().resolve("restart-ready"))) { restartCheck(); return; }
+        shopsOnly = Files.exists(getDataFolder().toPath().resolve("shops-only"));
+        if (!shopsOnly && Files.exists(getDataFolder().toPath().resolve("beskar-only"))) { observer=actors.create(mando.worlds().spawn("Batuu"));beskar();return; }
+        if (!shopsOnly && Files.exists(getDataFolder().toPath().resolve("restart-ready"))) { restartCheck(); return; }
         player=actors.create(mando.worlds().spawn("Batuu"));observer=actors.create(mando.worlds().spawn("Batuu"));
         player.getPersistentDataContainer().set(NamespacedKey.fromString("mandomc:starter_kit_v1"),PersistentDataType.BYTE,(byte)1);
         player.getInventory().setItem(0,new ItemStack(Material.EMERALD,13));original=player.getInventory().getContents();balance=mando.credits().ledger().balance(player.getUniqueId());
+        if (shopsOnly) { packs(player);mando.tutorial().request(player);later(40,this::shops);return; }
         exportTemplates();checkMetals();packs(player);mando.tutorial().request(player);later(40,this::hub);
     }
     private void exportTemplates() throws Exception {
@@ -158,22 +160,90 @@ public final class TutorialHubProbe extends JavaPlugin implements org.bukkit.eve
     private void batuu() throws Exception {
         stage("SELL");check(player.getWorld()==observer.getWorld(),"Real public Batuu");check(player.getInventory().contains(Material.STRING,16),"Purchased item retained");
         var cfg=org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.File(mando.getDataFolder(),"tutorial/tutorial.yml"));
-        for(var point:cfg.getMapList("shop-route")){
-            var loc=new Location(player.getWorld(),((Number)point.get("x")).doubleValue(),((Number)point.get("y")).doubleValue()+.3,((Number)point.get("z")).doubleValue());
-            check(loc.getBlock().isPassable(),"Route feet clear "+loc.toVector());check(loc.clone().add(0,1,0).getBlock().isPassable(),"Route head clear");
+        var route = new ArrayList<Location>();
+        for (var point : cfg.getMapList("shop-route")) route.add(new Location(player.getWorld(),
+                ((Number) point.get("x")).doubleValue(), ((Number) point.get("y")).doubleValue(),
+                ((Number) point.get("z")).doubleValue()));
+        for (int i = 0; i < route.size() - 1; i++) {
+            var start = route.get(i); var delta = route.get(i + 1).toVector().subtract(start.toVector());
+            for (double n = 0; n <= delta.length(); n += .2) {
+                var anchor = start.clone().add(delta.clone().normalize().multiply(n));
+                var at = surface(anchor);
+                check(at != null, "Every route sample has a walking surface");
+                var floor = at.getWorld().rayTraceBlocks(at.clone().add(0, 1.5, 0), new org.bukkit.util.Vector(0,-1,0),
+                        3, FluidCollisionMode.NEVER, true);
+                check(floor != null && at.getY() > floor.getHitPosition().getY()
+                        && at.getY() - floor.getHitPosition().getY() < 1,
+                        "Trail clears actual walking surface: " + at.toVector());
+            }
         }
-        actors.drain(player);actors.drain(observer);later(12,()->{
+        for (double[] point : new double[][] {
+                {-16.5,93,-8.5,93.25}, {-19.5,94,-8.5,93.75}, {-20.5,94,-8.5,94.25},
+                {-21.5,94,-8.5,94.75}, {-22.5,95,-8.5,95.25}, {-22.5,95.5,-12.5,95.75},
+                {-22.5,96,-14.5,96.25}, {-41.5,96,-14.5,96.25}}) {
+            var at = surface(new Location(player.getWorld(),point[0],point[1],point[2]));
+            check(at != null && Math.abs(at.getY()-point[3]) < .001,
+                    "Measured slab/stair/landing height at " + Arrays.toString(point) + ": " + at);
+        }
+        var guidance = InteractiveTutorial.class.getDeclaredMethod("shopGuidance",session().getClass());
+        guidance.setAccessible(true);
+        put(player,route.get(1));actors.drain(player);actors.otherPackets(player);
+        guidance.invoke(mando.tutorial(),session());
+        later(12, () -> {
+        var stairs = particlePositions(player).stream().filter(at -> at.getX() < -19 && at.getX() > -22
+                && Math.abs(at.getZ()+8.5)<.01).toList();
+        check(stairs.size() >= 4 && stairs.stream().anyMatch(at -> at.getY() < 94)
+                && stairs.stream().anyMatch(at -> at.getY() > 94.7), "Actual particle packets climb the stair treads: " + stairs);
+        // Jump ahead without visiting earlier waypoints: the trail must still lead through the doorway.
+        put(player,new Location(player.getWorld(),-32.5,96.1,-14.5));
+        actors.drain(player);actors.otherPackets(player);guidance.invoke(mando.tutorial(),session());
+        later(12, () -> {
+        var doorwayParticles = particlePositions(player);
+        check(doorwayParticles.stream().anyMatch(at -> at.getX() < -33 && at.getX() > -36
+                && Math.abs(at.getZ()+14.5)<.01), "Cutting corners cannot leave the trail stuck behind the stairs: " + doorwayParticles);
+        var buyers = player.getWorld().getLivingEntities().stream().filter(mando.jawas()::gray).toList();
+        check(buyers.size() >= 7, "All seven public gray Jawas are loaded");
+        for (var gray : buyers) {
+            put(player, gray.getLocation().clone().add(0,0,2));mando.tutorial().jawa(player,gray);
+            check(player.getOpenInventory().getTopInventory().getHolder() instanceof net.mandomc.gameplay.jawa.JawaSellInventory.Tray,
+                    "Public gray Jawa opens tutorial salvage at " + gray.getLocation().toVector());
+            player.closeInventory();
+        }
+        // Inside the building, and beyond the old early return, the endpoint arrow must still render privately.
+        put(player,route.getLast().clone().add(2,0,0));put(observer,player.getLocation().clone().add(0,0,2));
+        actors.drain(player);actors.drain(observer);actors.otherPackets(player);actors.otherPackets(observer);later(12,()->{
             actors.drain(player);actors.drain(observer);var own=actors.otherPackets(player);var others=actors.otherPackets(observer);
-            check(own!=null&&own.stream().anyMatch(x->x.contains("LevelParticles")),"Player receives trail particles");
+            check(own!=null&&own.stream().anyMatch(x->x.contains("LevelParticles")),"Player receives endpoint arrow inside the shop");
             check(others==null||others.stream().noneMatch(x->x.contains("LevelParticles")),"Observer receives no tutorial particles");sell();
         });
+        });
+        });
+    }
+    private Location surface(Location anchor) throws Exception {
+        var method = InteractiveTutorial.class.getDeclaredMethod("shopSurface",Location.class);
+        method.setAccessible(true);return (Location)method.invoke(mando.tutorial(),anchor);
+    }
+    private List<org.bukkit.util.Vector> particlePositions(Player target) throws Exception {
+        Object channel = ((Map<?,?>)field(actors,"channels")).get(target.getUniqueId());
+        channel.getClass().getMethod("runPendingTasks").invoke(channel);
+        var read = channel.getClass().getMethod("readOutbound");
+        var points = new ArrayList<org.bukkit.util.Vector>();
+        Object packet;
+        while ((packet = read.invoke(channel)) != null) {
+            var type = packet.getClass();
+            if (type.getSimpleName().equals("ClientboundLevelParticlesPacket")) points.add(new org.bukkit.util.Vector(
+                    ((Number)type.getMethod("getX").invoke(packet)).doubleValue(),
+                    ((Number)type.getMethod("getY").invoke(packet)).doubleValue(),
+                    ((Number)type.getMethod("getZ").invoke(packet)).doubleValue()));
+        }
+        return points;
     }
     private void sell() throws Exception {
         var gray=player.getWorld().getLivingEntities().stream().filter(e->mando.jawas().gray(e)&&e.getLocation().getX()<-37).findFirst().orElseThrow();
         put(player,gray.getLocation().clone().add(0,0,2));mando.tutorial().jawa(player,gray);
         check(player.getOpenInventory().getTopInventory().getHolder() instanceof net.mandomc.gameplay.jawa.JawaSellInventory.Tray,"Actual gray Jawa sell tray");
         check(!player.getPersistentDataContainer().has(NamespacedKey.fromString("mandomc:jawa_sell_custody_v1")),"Practice tray cannot enter durable real custody");
-        click(63);click(0);click(31);later(8,()->{stage("HUB");replay();});
+        click(63);click(0);click(31);later(8,()->{stage("HUB");if(shopsOnly) { command("/tutorial end");pass(); } else replay();});
     }
     private void replay() throws Exception {
         check(player.getPersistentDataContainer().getOrDefault(NamespacedKey.fromString("mandomc:tutorial_sections_v2"),PersistentDataType.INTEGER,0)==15,"Four section completions persisted");

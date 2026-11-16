@@ -65,7 +65,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         boolean recipeSeen, transitioning, saberHit;
         final Set<org.bukkit.block.Block> ores = new HashSet<>();
         org.bukkit.block.Block furnace, bench;
-        int mined, routeIndex;
+        int mined;
         final List<Entity> hubEntities = new ArrayList<>();
         int wallet = 100;
         Session(Player player, TutorialWorlds.Lease lease, World world, Component title) {
@@ -313,7 +313,6 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
                 }
             }
             case SELL -> {
-                session.routeIndex = 0;
                 if (!teleport(player, plugin.worlds().spawn("Batuu"))) throw new IllegalStateException("Batuu teleport cancelled");
                 player.sendMessage(text("messages.shop-route"));
             }
@@ -744,7 +743,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
     public void jawa(Player player, LivingEntity entity) {
         var session = sessions.get(player.getUniqueId());
         if (session == null || entity.getWorld() != player.getWorld() || entity.getLocation().distanceSquared(player.getLocation()) > 36) { denied(player); return; }
-        if (selling(player) && plugin.jawas().gray(entity) && insideShop(entity.getLocation())) {
+        if (selling(player) && plugin.jawas().gray(entity)) {
             plugin.jawas().openTutorialBuyer(player, entity); return;
         }
         if (session.progress.step() == Step.BUY && session.entities.contains(entity) && mobs.type(entity).equals("JawaBrown")) {
@@ -761,23 +760,56 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
     }
     private void shopGuidance(Session session) {
         var player = session.player;
-        if (insideShop(player.getLocation())) { player.sendActionBar(text("messages.sell-inside")); return; }
+        if (insideShop(player.getLocation())) player.sendActionBar(text("messages.sell-inside"));
         var points = config.getMapList("shop-route");
-        if (points.isEmpty()) return;
+        if (points.size() < 2) return;
         var route = new ArrayList<Location>();
         for (var point : points) route.add(new Location(player.getWorld(), ((Number) point.get("x")).doubleValue(),
                 ((Number) point.get("y")).doubleValue(), ((Number) point.get("z")).doubleValue()));
-        while (session.routeIndex < route.size() - 1 && player.getLocation().distanceSquared(route.get(session.routeIndex)) < 2.25) session.routeIndex++;
-        // Follow only surveyed walking segments. Never draw a direct line through shop walls.
-        int start = Math.max(0, session.routeIndex - 1);
-        for (int i = start; i < Math.min(route.size() - 1, session.routeIndex + 3); i++) {
-            var a = route.get(i); var delta = route.get(i + 1).toVector().subtract(a.toVector()); double length = delta.length();
-            if (length < .01) continue;
-            for (double n = (Bukkit.getCurrentTick() % 20) / 20.0; n < length; n += .6) {
-                var point = a.clone().add(delta.clone().multiply(n / length)).add(0, .2, 0);
-                if (player.getLocation().distanceSquared(point) < 225) dust(player, point, Color.AQUA);
-            }
+        int nearest = 0;
+        double closest = Double.POSITIVE_INFINITY;
+        var position = player.getLocation().toVector().setY(0);
+        for (int i = 0; i < route.size() - 1; i++) {
+            var from = route.get(i).toVector().setY(0);
+            var delta = route.get(i + 1).toVector().setY(0).subtract(from);
+            if (delta.lengthSquared() < .01) continue;
+            double along = Math.max(0, Math.min(1, position.clone().subtract(from).dot(delta) / delta.lengthSquared()));
+            double distance = position.distanceSquared(from.add(delta.multiply(along)));
+            if (distance < closest) { closest = distance; nearest = i; }
         }
+        // Select nearby segments even if the player cuts a corner or walks back down the stairs.
+        for (int i = Math.max(0, nearest - 1); i < Math.min(route.size() - 1, nearest + 3); i++) {
+            var a = route.get(i); var delta = route.get(i + 1).toVector().subtract(a.toVector());
+            double length = delta.clone().setY(0).length();
+            if (length < .01) continue;
+            for (double n = (Bukkit.getCurrentTick() % 20) / 20.0; n < length; n += .6)
+                shopDust(player, a.clone().add(delta.clone().multiply(n / length)));
+        }
+        // Keep the endpoint arrow visible inside the shop until the sale completes.
+        var tip = route.getLast().clone();
+        if (player.getLocation().distanceSquared(tip) >= 225) return;
+        var forward = tip.toVector().subtract(route.get(route.size() - 2).toVector()).setY(0);
+        if (forward.lengthSquared() < .01) return;
+        forward.normalize();
+        var side = new org.bukkit.util.Vector(-forward.getZ(), 0, forward.getX());
+        for (double n = 0; n <= 3; n += .2)
+            shopDust(player, tip.clone().subtract(forward.clone().multiply(n)));
+        for (int sign : new int[]{-1, 1}) for (double n = .2; n <= 1.6; n += .2)
+            shopDust(player, tip.clone().subtract(forward.clone().multiply(n))
+                    .add(side.clone().multiply(n * sign * .7)));
+    }
+    private void shopDust(Player player, Location anchor) {
+        if (player.getLocation().distanceSquared(anchor) >= 225) return;
+        var surface = shopSurface(anchor);
+        if (surface != null) dust(player, surface, Color.AQUA);
+    }
+    private Location shopSurface(Location anchor) {
+        // Search around the captured walking level, not the roof above the shop.
+        // Native collision ray tracing resolves carpets, slab halves and each stair tread.
+        var hit = anchor.getWorld().rayTraceBlocks(anchor.clone().add(0, 1.5, 0),
+                new org.bukkit.util.Vector(0, -1, 0), 4, FluidCollisionMode.NEVER, true);
+        if (hit == null) return null;
+        return new Location(anchor.getWorld(), anchor.getX(), hit.getHitPosition().getY() + .25, anchor.getZ());
     }
     @EventHandler(priority = EventPriority.LOWEST)
     public void command(PlayerCommandPreprocessEvent event) {

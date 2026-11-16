@@ -145,46 +145,21 @@ hub:
   exit: <green>Enter the server<newline><yellow>Click to leave anytime
   available: '<yellow>Click to start · First completion: $500'
   completed: <green>Completed ✓<newline><gray>Click to practice again
+# Owner-supplied block coordinates, centered within each block.
+# Y anchors select the walking level; particles use the actual collision surface.
 shop-route:
 - x: -0.5
   y: 93
   z: -16.5
-- x: -19.5
+- x: -16.5
   y: 93
-  z: -16.5
-- x: -19.5
-  y: 93
-  z: -15.5
-- x: -19.5
-  y: 94
-  z: -14.5
-- x: -19.5
-  y: 94
-  z: -13.5
-- x: -19.5
+  z: -8.5
+- x: -22.5
   y: 95
-  z: -12.5
-- x: -20.5
+  z: -8.5
+- x: -22.5
   y: 96
-  z: -12.5
-- x: -23.5
+  z: -14.5
+- x: -41.5
   y: 96
-  z: -12.5
-- x: -23.5
-  y: 96
-  z: -13.5
-- x: -28.5
-  y: 96
-  z: -13.5
-- x: -28.5
-  y: 96
-  z: -15.5
-- x: -33.5
-  y: 96.1
-  z: -15.5
-- x: -38.5
-  y: 96
-  z: -15.5
-- x: -45.5
-  y: 96
-  z: -15.5
+  z: -14.5
