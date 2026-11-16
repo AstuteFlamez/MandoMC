@@ -46,7 +46,9 @@ The 2026-11-16 damage-rule change is verified on a disposable Paper server with 
 `scripts/build-ilum-damage-probe.sh` and `IlumDamageProbe` (loopback port 25591 only). The probe checks
 all five progress states, actual damage, immediate versus death-only returns, fire, below-course
 movement, PvP protection and death inventory/run preservation. This follow-up is deployed to development with a retained stopped-runtime backup and healthy startup.
-Production promotion is pending.
+Production is also live via PR #54 (`b6b3f53`): all checks and the automatic upload passed, the exact CI
+JAR matches the native-tested contents, and all 128 installed managed files match after a healthy restart.
+Players received a 30-second console broadcast; restart followed 53 seconds later. Backups are retained.
 
 Inventory escrow is stored in native player persistent data before temporary items are issued. Gear
 restoration, run completion, cooldown and queued key delivery are committed with the same native

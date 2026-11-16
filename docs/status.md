@@ -14,8 +14,12 @@ fire and below-course movement, respawn destinations, PvP denial and lethal dama
 controls and level. The existing development probe compiles with its corrected expectations.
 Development is deployed after a full stopped-runtime backup and clean restart. The tested JAR is active;
 all 12 other binaries and every server property value are unchanged (Paper refreshed its timestamp comment).
-Production promotion is authorized and pending the checked GitHub workflow. Next action: promote and
-verify the Ilum fix on PebbleHost.
+Production is live from PR #54 (`b6b3f53`), following passing GitHub build, pack publication and automatic
+upload. The exact CI JAR matches every entry of the native-tested build; the public pack download matches
+the checked artifact. Broadcast a 30-second restart warning, waited 53 seconds, then restarted through
+PebbleHost. Startup is healthy, Ilum is ready, all 128 managed files match and the release is marked active.
+Rollback backups are retained. Next action: playtest minor damage outside the dropper and instant retries
+at checkpoint 3 on either server.
 
 ## Tutorial and balance release live on production (2026-11-16)
 
