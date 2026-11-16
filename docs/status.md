@@ -1,5 +1,9 @@
 # Resume here
 
+## Three building signs in verification (2026-11-15)
+
+Added Shops (3×1), Leaderboards (5×1) and Cantina (1×4) through the existing command-only decoration path. Journal schema 4 preserves schemas 1–3 and protects every horizontal/vertical cell. All 337 Java tests, 81 tooling checks and the 1,193-file pack build pass; all 1,184 existing pack entries are byte-identical. Native lifecycle/restart verification is running against a scoped candidate that retains the current staff/tutorial overlay. See [building signs](features/building-signs.md). Next action: complete native verification and deploy the tested build and pack to development.
+
 ## Dev playtest fixes deployed (2026-11-15)
 
 Implemented isolated staff mode, staff-only `/back`, Ilum mechanisms and checkpoint-3 death recovery, Batuu interaction protection, spawn hunger protection and safezone mob target clearing. Tutorial guidance now includes zone-colored borders, directional particles, a fixed saber hologram, required Weapons category and a constrained sequential X-wing lesson. Warp lore explains planet roles, the Agrinium pickaxe uses ingots, and all seven Kyber crystal recipes are removed while saber recipes remain.

@@ -1,0 +1,39 @@
+schema-version: 1
+items:
+  shops_sign:
+    material: PAPER
+    name: '<gold>Shops Sign'
+    rarity: common
+    category: trophies
+    custom-model-data: 0
+    item-model: mandomc:decor/shops_sign
+    lore:
+      - '<gray>A three-block-wide Shops sign.'
+      - ''
+      - '<yellow>[<key:key.use>] Place on a block face'
+      - '<gray>Needs three clear blocks. Break any part to recover.'
+  leaderboards_sign:
+    material: PAPER
+    name: '<gold>Leaderboards Sign'
+    rarity: common
+    category: trophies
+    custom-model-data: 0
+    item-model: mandomc:decor/leaderboards_sign
+    lore:
+      - '<gray>A five-block-wide Leaderboards sign.'
+      - ''
+      - '<yellow>[<key:key.use>] Place on a block face'
+      - '<gray>Needs five clear blocks. Break any part to recover.'
+  cantina_sign:
+    material: PAPER
+    name: '<gold>Cantina Sign'
+    rarity: common
+    category: trophies
+    custom-model-data: 0
+    item-model: mandomc:decor/cantina_sign
+    lore:
+      - '<gray>A four-block-tall Cantina sign.'
+      - ''
+      - '<yellow>[<key:key.use>] Place on a block face'
+      - '<gray>Extends upward, or downward from a ceiling.'
+      - '<gray>Needs four clear blocks. Break any part to recover.'
