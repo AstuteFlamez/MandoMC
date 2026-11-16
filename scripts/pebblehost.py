@@ -363,7 +363,7 @@ def verify_startup(sftp):
     log = (read_remote(sftp, log_path) or b'').decode('utf-8', errors='replace')
     required = ('Running Java 25', 'Loading Paper 26.1.2-74', 'Done (',
                 'Arrival enabled:', 'Native clans ready:', 'Native crates ready;',
-                'Redstone circuits disabled in all worlds', 'Travel guides ready:',
+                'Redstone circuits disabled outside Ilum', 'Travel guides ready:',
                 'Ambient Massiffs ready:', 'World leaderboards ready:',
                 '[VotingPlugin] Enabled VotingPlugin 7.1.1')
     missing = [text for text in required if text not in log]
