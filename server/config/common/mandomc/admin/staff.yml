@@ -1,6 +1,6 @@
 schema-version: 1
 messages:
-  usage: '<yellow>/staff [on|off] <gray>· /gms also leaves staff mode'
+  usage: '<yellow>/staff [on|off] <gray>· gamemode changes keep staff mode on'
   enabled: '<aqua>Staff mode ON. <gray>Survival inventory saved; testing restrictions bypassed.'
   disabled: '<green>Staff mode OFF. <gray>Survival inventory and location restored; normal player rules apply.'
   denied: '<red>You do not have staff access.'

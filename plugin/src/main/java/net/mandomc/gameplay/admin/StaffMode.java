@@ -101,12 +101,6 @@ public final class StaffMode implements Listener, AutoCloseable {
     }
     @EventHandler(priority = EventPriority.LOWEST) public void join(PlayerJoinEvent e) { recover(e.getPlayer()); }
     @EventHandler(priority = EventPriority.LOWEST) public void quit(PlayerQuitEvent e) { disable(e.getPlayer()); }
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void mode(PlayerGameModeChangeEvent e) {
-        if (active(e.getPlayer()) && e.getNewGameMode() == GameMode.SURVIVAL && !changing.contains(e.getPlayer().getUniqueId())) {
-            e.setCancelled(true); Bukkit.getScheduler().runTask(plugin, () -> disable(e.getPlayer()));
-        }
-    }
     @EventHandler(priority = EventPriority.HIGHEST) public void drop(PlayerDropItemEvent e) { if (active(e.getPlayer())) e.setCancelled(true); }
     @EventHandler(priority = EventPriority.HIGHEST) public void pickup(EntityPickupItemEvent e) { if (e.getEntity() instanceof Player p && active(p)) e.setCancelled(true); }
     @EventHandler(priority = EventPriority.HIGHEST) public void damage(EntityDamageEvent e) { if (e.getEntity() instanceof Player p && active(p)) e.setCancelled(true); }
