@@ -1,5 +1,5 @@
 # Feature: development playtest fixes
-Status: accepted on development; production promotion and console restart authorized
+Status: deployed to production through PR #43; console restart and installed hashes verified
 Branch: bilal/staff-flight-feedback (follow-up to bilal/dev-playtest-fixes)
 
 ## Player experience
