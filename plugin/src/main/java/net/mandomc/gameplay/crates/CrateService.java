@@ -206,7 +206,7 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
         return bytes==null ? new ItemStack[0] : ItemStack.deserializeItemsFromBytes(bytes);
     }
     public void claim(Player player) {
-        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return;
+        if ((net.mandomc.gameplay.tutorial.TutorialInventory.active(player) || net.mandomc.gameplay.admin.StaffMode.active(player))) return;
         if (restricted.test(player)) return;
         var viewing=menus.get(player.getUniqueId());
         if(viewing!=null&&viewing.rolling())return;
@@ -231,7 +231,7 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
         var item=items.create(reward.item());item.setAmount(reward.amount());return item;
     }
     public void open(Player player, CrateDefinition crate) {
-        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return;
+        if ((net.mandomc.gameplay.tutorial.TutorialInventory.active(player) || net.mandomc.gameplay.admin.StaffMode.active(player))) return;
         if (!allowed(player)) return;
         var current=menus.get(player.getUniqueId());
         if (current!=null && current.rolling()) return;
@@ -310,7 +310,7 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
         }
     }
     public void finishPending(Player player) {
-        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return;
+        if ((net.mandomc.gameplay.tutorial.TutorialInventory.active(player) || net.mandomc.gameplay.admin.StaffMode.active(player))) return;
         if (restricted.test(player)) return;
         var data=player.getPersistentDataContainer();
         var bytes=data.get(PENDING,PersistentDataType.BYTE_ARRAY);

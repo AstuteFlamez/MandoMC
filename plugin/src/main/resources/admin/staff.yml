@@ -1,0 +1,8 @@
+schema-version: 1
+messages:
+  usage: '<yellow>/staff [on|off] <gray>· /gms also leaves staff mode'
+  enabled: '<aqua>Staff mode ON. <gray>Survival inventory saved; testing restrictions bypassed.'
+  disabled: '<green>Staff mode OFF. <gray>Survival inventory and location restored; normal player rules apply.'
+  denied: '<red>You do not have staff access.'
+  busy: '<yellow>Finish combat, your activity, and pending item transactions first.'
+  return-blocked: '<red>Could not return to survival. Your saved inventory is retained; retry /staff off.'

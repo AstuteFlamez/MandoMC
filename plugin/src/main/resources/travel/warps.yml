@@ -14,14 +14,14 @@
       "material": "STICK",
       "item-model": "mandomc:planets/batuu",
       "slot": 28,
-      "description": "<gray>Black Spire Outpost. Protected spawn hub."
+      "description": "<gray>Protected hub: gray Jawa salvage buyers, crates and travel. No combat or building."
     },
     "hoth": {
       "name": "<white>Hoth",
       "material": "STICK",
       "item-model": "mandomc:planets/hoth",
       "slot": 39,
-      "description": "<gray>King of the Hill and PvP warzone.",
+      "description": "<gray>Ice-cave mining, clan wilderness and King of the Hill.\n<gray>Hold the PvP hill for your clan\u2019s KOTH Crate reward.",
       "badges": "<white>\u0116\u0121"
     },
     "tatooine": {
@@ -29,14 +29,14 @@
       "material": "STICK",
       "item-model": "mandomc:planets/tatooine",
       "slot": 43,
-      "description": "<gray>Desert settlements and Jabba\u2019s Palace."
+      "description": "<gray>Desert survival, clan bases and brown Jawa supplies.\n<gray>Challenge Jabba\u2019s Palace for shared loot; beware rival players."
     },
     "mandalore": {
       "name": "<gray>Mandalore",
       "material": "STICK",
       "item-model": "mandomc:planets/mandalore",
       "slot": 32,
-      "description": "<gray>Glassed cities and the Beskar mines.",
+      "description": "<gray>Contested mining, wilderness bases and Beskar Rush.\n<gray>Beskar appears during its event; expect PvP competition.",
       "badges": "<white>\u0112\u0121"
     },
     "ilum": {
@@ -45,7 +45,7 @@
       "item-model": "mandomc:planets/ilum",
       "slot": 20,
       "badges": "<white>\u0112\u0121",
-      "description": "<gray>The original Jedi trials. Earn a Kyber Crate Key."
+      "description": "<gray>Jedi parkour trials with saved checkpoints.\n<gray>Complete the course for a Kyber key (24h reward cooldown).\n<gray>Open the Kyber crate on Batuu for lightsaber crystals."
     },
     "crates": {
       "name": "<aqua>Crates",
@@ -67,7 +67,7 @@
       "material": "STICK",
       "item-model": "mandomc:planets/naboo",
       "slot": 15,
-      "description": "<gray>Forested lakeshores, meadows and rolling hills."
+      "description": "<green>START HERE \u2014 most beginner-friendly planet.\n<gray>Gather supplies, mine metals and claim a starter base.\n<gray>Safe arrival; wilderness permits building and combat."
     }
   }
 }

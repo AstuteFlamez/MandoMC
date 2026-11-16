@@ -272,8 +272,8 @@ public final class SaberService implements Listener {
     public boolean launch(Player p) {
         if(!isSaber(p.getInventory().getItemInMainHand())||busy(p)) return false;
         if(!allowed(p.getLocation())) {message(p,"safe-zone");return false;}
-        if(!guard(p).canThrow(tick, settings)) {message(p,"tired-throw");return false;}
-        if(cooldowns.getOrDefault(p.getUniqueId(),0)>tick) {message(p,"tired-throw");return false;}
+        if(!net.mandomc.gameplay.admin.StaffMode.active(p)&&!guard(p).canThrow(tick, settings)) {message(p,"tired-throw");return false;}
+        if(!net.mandomc.gameplay.admin.StaffMode.active(p)&&cooldowns.getOrDefault(p.getUniqueId(),0)>tick) {message(p,"tired-throw");return false;}
         ItemStack real=p.getInventory().getItemInMainHand();
         var display=p.getWorld().spawn(p.getEyeLocation(),ItemDisplay.class,d->{
             d.setPersistent(false);d.setInvulnerable(true);d.setGravity(false);

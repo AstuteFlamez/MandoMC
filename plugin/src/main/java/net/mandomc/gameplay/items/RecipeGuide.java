@@ -32,6 +32,7 @@ public final class RecipeGuide implements Listener, AutoCloseable {
 
     private static final class Menu implements InventoryHolder {
         private final UUID viewer;
+        private String category;
         private final Inventory inventory;
         private final Map<Integer, Consumer<Player>> actions = new HashMap<>();
         private Menu(Player player, Component title) {
@@ -72,6 +73,9 @@ public final class RecipeGuide implements Listener, AutoCloseable {
     }
 
     public static boolean isMenu(org.bukkit.inventory.Inventory inventory) { return inventory.getHolder() instanceof Menu; }
+    public static boolean isCategory(Inventory inventory, String category) {
+        return inventory.getHolder() instanceof Menu menu && category.equals(menu.category);
+    }
     private void categories(Player player) {
         var menu = new Menu(player, text("title", ""));
         button(menu, 10, Material.KNOWLEDGE_BOOK, "all", "", p -> open(p, null, 0));
@@ -113,6 +117,7 @@ public final class RecipeGuide implements Listener, AutoCloseable {
         var choices = recipes.guideDefinitions().stream().filter(r -> matchesCategory(r, category)).toList();
         int page = ItemBrowser.clampPage(requestedPage, choices.size());
         var menu = new Menu(player, text("title", ""));
+        menu.category = category;
         for (int slot = 0, i = page * 45; slot < 45 && i < choices.size(); slot++, i++) {
             var recipe = choices.get(i);
             var icon = recipes.result(recipe);

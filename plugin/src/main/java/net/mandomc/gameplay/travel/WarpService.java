@@ -126,7 +126,9 @@ public final class WarpService implements Listener, AutoCloseable {
             var meta=item.getItemMeta();meta.displayName(text(path+"name"));
             String model=config.getString(path+"item-model", "");
             if(!model.isEmpty()) meta.setItemModel(org.bukkit.NamespacedKey.fromString(model));
-            meta.lore(List.of(badges(id), Component.empty(), text(path+"description"),Component.empty(),message("click")));item.setItemMeta(meta);
+            var lore = new java.util.ArrayList<Component>(); lore.add(badges(id)); lore.add(Component.empty());
+            for (String line : config.getString(path+"description", "").split("\\R")) lore.add(MiniMessage.miniMessage().deserialize(line));
+            lore.add(Component.empty()); lore.add(message("click")); meta.lore(lore); item.setItemMeta(meta);
             inventory.setItem(slot,item);
         });
         MenuItems.fill(inventory);

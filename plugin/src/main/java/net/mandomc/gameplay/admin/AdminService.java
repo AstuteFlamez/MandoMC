@@ -45,7 +45,7 @@ public final class AdminService implements Listener, AutoCloseable {
         if (!player.isOnline() || player.isDead() || player.isInsideVehicle() || !player.getPassengers().isEmpty()) {
             messages.send(player, "request-unavailable"); return false;
         }
-        if (combat.tagged(player)) { messages.send(player, "combat"); return false; }
+        if (combat.tagged(player) && !net.mandomc.gameplay.admin.StaffMode.active(player)) { messages.send(player, "combat"); return false; }
         if (target.getWorld() == null || !target.getWorld().getWorldBorder().isInside(target)
                 || target.getY() < target.getWorld().getMinHeight() || target.getY() >= target.getWorld().getMaxHeight()) {
             messages.send(player, "unavailable"); return false;

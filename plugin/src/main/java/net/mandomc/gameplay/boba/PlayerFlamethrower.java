@@ -49,7 +49,7 @@ public final class PlayerFlamethrower implements Listener, AutoCloseable {
     public boolean activate(Player player) {
         if(!valid(player)||!wielding(player)) { message.accept(player,"flame-denied");return false; }
         long now=System.currentTimeMillis();
-        if(bursts.containsKey(player.getUniqueId())||now<player.getPersistentDataContainer().getOrDefault(NEXT_USE,PersistentDataType.LONG,0L)) {
+        if(bursts.containsKey(player.getUniqueId())||!net.mandomc.gameplay.admin.StaffMode.active(player)&&now<player.getPersistentDataContainer().getOrDefault(NEXT_USE,PersistentDataType.LONG,0L)) {
             message.accept(player,"cooldown");return false;
         }
         var origin=muzzle(player);
@@ -59,7 +59,7 @@ public final class PlayerFlamethrower implements Listener, AutoCloseable {
         var burst=new Burst(player,Bukkit.getCurrentTick());
         burst.packets.add(new Packet(origin,player.getEyeLocation().getDirection(),0));
         bursts.put(player.getUniqueId(),burst);
-        player.setCooldown(Material.BLAZE_ROD,settings.cooldownTicks());
+        player.setCooldown(Material.BLAZE_ROD,net.mandomc.gameplay.admin.StaffMode.active(player)?0:settings.cooldownTicks());
         player.getWorld().playSound(origin,"mandomc:mobs.flamethrower",1,1);
         return true;
     }

@@ -22,7 +22,9 @@ public class TutorialProgressTest {
         var progress = new TutorialProgress(); while (progress.step() != Step.PLACE) progress.advance(progress.step());
         assertFalse(progress.fly(true, true, 250, 100)); assertEquals(0, progress.flightMillis());
         assertFalse(progress.advance(Step.FLIGHT)); assertTrue(progress.advance(Step.PLACE));
-        assertEquals(Step.FLIGHT, progress.step());
+        assertEquals(Step.BOARD, progress.step());
+        assertFalse(progress.fly(true, true, 250, 100));
+        assertTrue(progress.advance(Step.BOARD));
     }
     @Test public void onlyAirbornePilotingCountsAndServerStallsAreBounded() {
         var progress = new TutorialProgress(); while (progress.step() != Step.FLIGHT) progress.advance(progress.step());
@@ -30,7 +32,7 @@ public class TutorialProgressTest {
         assertEquals(0, progress.flightMillis());
         assertFalse(progress.fly(true, true, 60_000, 10_000)); assertEquals(250, progress.flightMillis());
         for (int i = 0; i < 38; i++) assertFalse(progress.fly(true, true, 250, 10_000));
-        assertTrue(progress.fly(true, true, 250, 10_000)); assertEquals(Step.TARGET, progress.step());
+        assertTrue(progress.fly(true, true, 250, 10_000)); assertEquals(Step.RIGHT, progress.step());
     }
     @Test public void finalStepIsTerminalAndNamesCannotInjectCommands() {
         var progress = new TutorialProgress(); while (progress.step() != Step.COMPLETE) progress.advance(progress.step());

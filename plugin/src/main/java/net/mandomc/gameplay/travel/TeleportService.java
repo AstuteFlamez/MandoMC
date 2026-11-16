@@ -108,7 +108,7 @@ public final class TeleportService implements Listener, AutoCloseable {
             return false;
         }
         spirals.remove(player.getUniqueId());
-        if (player.getGameMode() == org.bukkit.GameMode.CREATIVE) {
+        if (net.mandomc.gameplay.admin.StaffMode.active(player)) {
             return complete(player, destination);
         }
         pending.put(player.getUniqueId(), new Pending(player, player.getLocation().clone(), destination,
@@ -119,7 +119,7 @@ public final class TeleportService implements Listener, AutoCloseable {
 
     private String refusal(Player player) {
         if (!player.isOnline() || player.isDead()) return "interrupted";
-        if (combat.tagged(player)) return "combat";
+        if (combat.tagged(player) && !net.mandomc.gameplay.admin.StaffMode.active(player)) return "combat";
         if (player.isInsideVehicle() || !player.getPassengers().isEmpty()) return "mounted";
         return null;
     }
@@ -144,7 +144,7 @@ public final class TeleportService implements Listener, AutoCloseable {
             String refusal = refusal(player);
             if (refusal != null) {
                 cancel(player, refusal, player.isOnline());
-            } else if (player.getGameMode() == org.bukkit.GameMode.CREATIVE) {
+            } else if (net.mandomc.gameplay.admin.StaffMode.active(player)) {
                 pending.remove(player.getUniqueId());
                 complete(player, request.destination());
             } else if (hasMoved(request.origin(), player.getLocation())) {

@@ -21,7 +21,9 @@ public final class WorldEditRanks implements PermissionsProvider, AutoCloseable 
     }
     @Override public boolean hasPermission(OfflinePlayer player, String permission) {
         if (player == null) return false;
-        Boolean value = RankCatalog.resolve(ranks.catalog().permissions(ranks.memberships(player.getUniqueId())),
+        Player current = player instanceof Player p ? p : player.getPlayer();
+        if (current == null || !net.mandomc.gameplay.admin.StaffMode.active(current)) return false;
+        Boolean value = RankCatalog.resolve(ranks.effectivePermissions(current),
                 permission.toLowerCase(Locale.ROOT));
         if (value != null) return value;
         Player online = player instanceof Player p ? p : player.getPlayer();

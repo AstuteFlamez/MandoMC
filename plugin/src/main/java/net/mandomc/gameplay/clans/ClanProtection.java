@@ -70,6 +70,10 @@ final class ClanProtection implements Listener {
             }
             return;
         }
+        String mechanism = b.getType().name();
+        if (territory.mechanisms(b.getLocation()) && (mechanism.endsWith("_BUTTON")
+                || mechanism.endsWith("_PRESSURE_PLATE") || mechanism.endsWith("_DOOR")
+                || mechanism.endsWith("_TRAPDOOR") || b.getType() == org.bukkit.Material.LEVER)) return;
         // Doors, redstone and physical/tool interactions cannot modify a rival's base.
         var owner=clans.owner(b.getLocation());
         if(!clans.canEdit(e.getPlayer(),b.getLocation())&&(owner==null||owner.abandonedAt==0)) {
