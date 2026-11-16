@@ -1,5 +1,5 @@
 # Feature: Building signs
-Status: verified; development release pending
+Status: playable on development; client visual review pending
 Branch: bilal/star-wars-signs
 
 ## Player experience
@@ -24,5 +24,7 @@ Original source files and hashes are retained under `resource-pack/art-sources/b
 ## Verification
 Run `scripts/build.sh`, the Python tooling suite and `scripts/build-resource-pack.py`. `BuildingSignsProbe` runs only on disposable localhost port 25593 and selects a model with `-Dmandomc.test.sign=<id>`. It exercises six placement faces, outer-cell obstruction/protection, collision, metadata, single-item recovery, full inventories, explosions, pistons and an actual JVM restart. A final run using `crates_sign` checks the existing sign against the extended service.
 
-## Pause note
-Build and 81 tooling checks pass. Isolated Paper verifies 132/20 Shops, 168/24 Leaderboards, 150/22 Cantina and 132/20 Crates lifecycle/restart assertions: 668 total, with no startup errors. The candidate changes only eight JAR entries and retains all unrelated live entries. The pack adds nine files, preserving all 1,184 existing entries. Publication and development deployment are authorized and pending. Next action: deploy the tested build and pack to development.
+## Development release and remaining check
+339 Java tests and 81 tooling checks pass. Isolated Paper verifies 132/20 Shops, 168/24 Leaderboards, 150/22 Cantina and 132/20 Crates lifecycle/restart assertions: 668 total, with no startup errors. The candidate changes only eight JAR entries and retains all unrelated live entries; the final integrated source build reproduces every candidate entry.
+
+The pack adds nine files, preserving all 1,184 existing entries. Published `resource-pack-26.1.2-8015fc5774c9`, SHA-1 `1aa7dbc57a8f587b5dca8ac94d06091181af3a77`, was anonymously verified before deployment. A clean development stop, full runtime backup, scoped installation and normal restart completed; all other binaries are unchanged, 279 custom items load and startup has no errors. Private backup and deployment receipts are retained locally. Production was not modified. Client visual review remains. Next action: reconnect to development and check the three signs' wall/floor/ceiling placement and inventory appearance.
