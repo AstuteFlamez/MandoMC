@@ -33,19 +33,19 @@ crates:
     key-mode: virtual
     blocks: []
     rewards:
-    - item: durasteel_sheet
+    - item: durasteel
       amount: 16
       weight: 35
-    - item: agrinium_sheet
+    - item: agrinium
       amount: 24
       weight: 30
     - item: beskar_scrap
       amount: 4
       weight: 20
-    - item: phrik_sheet
+    - item: phrik
       amount: 4
       weight: 10
-    - item: beskar_sheet
+    - item: beskar
       amount: 4
       weight: 5
   vote:

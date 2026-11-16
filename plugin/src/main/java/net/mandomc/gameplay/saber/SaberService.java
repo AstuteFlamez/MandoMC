@@ -269,10 +269,14 @@ public final class SaberService implements Listener {
             }
         });
     }
+    public boolean dealingThrowDamage(Player player) { return throwDamage.contains(player.getUniqueId()); }
+    private boolean training(Player player) {
+        return plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null && mando.tutorial().saberPractice(player);
+    }
     public boolean launch(Player p) {
         if(!isSaber(p.getInventory().getItemInMainHand())||busy(p)) return false;
         if(!allowed(p.getLocation())) {message(p,"safe-zone");return false;}
-        if(!net.mandomc.gameplay.admin.StaffMode.active(p)&&!guard(p).canThrow(tick, settings)) {message(p,"tired-throw");return false;}
+        if(!training(p)&&!net.mandomc.gameplay.admin.StaffMode.active(p)&&!guard(p).canThrow(tick, settings)) {message(p,"tired-throw");return false;}
         if(!net.mandomc.gameplay.admin.StaffMode.active(p)&&cooldowns.getOrDefault(p.getUniqueId(),0)>tick) {message(p,"tired-throw");return false;}
         ItemStack real=p.getInventory().getItemInMainHand();
         var display=p.getWorld().spawn(p.getEyeLocation(),ItemDisplay.class,d->{
@@ -284,8 +288,8 @@ public final class SaberService implements Listener {
         var flight=new Flight(p,display,findTarget(p),settings,settings.variants().get(catalog.identify(real)));flights.put(p.getUniqueId(),flight);
         display.setTransformation(flight.blade.transformation(flight.variant.center()));
         reserve(flight);p.clearActiveItem();
-        guard(p).thrown(settings);
-        cooldowns.put(p.getUniqueId(),tick+settings.cooldown());sound(p.getLocation(),"throw");
+        if (!training(p)) guard(p).thrown(settings);
+        cooldowns.put(p.getUniqueId(),tick+(training(p)?0:settings.cooldown()));sound(p.getLocation(),"throw");
         if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null) mando.tutorial().saberThrown(p);
         return true;
     }
@@ -489,6 +493,7 @@ public final class SaberService implements Listener {
                 impact = prior;
             }
             if (hit.accepted) {
+                if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null) mando.tutorial().saberHit(flight.owner, victim);
                 if (flight.target != null && flight.target.getUniqueId().equals(victim.getUniqueId())) flight.target = null;
                 sound(contact, "hit");
                 contact.getWorld().spawnParticle(Particle.CRIT, contact, 8, .16, .16, .16, .12);
@@ -533,6 +538,7 @@ public final class SaberService implements Listener {
         if (flight == null) return;
         flight.display.remove();
         returnItem(flight.owner, flight.item, flight.slot);
+        if (training(flight.owner)) cooldowns.put(owner, tick + 20);
     }
 
     private void recoverStored(Player player) {

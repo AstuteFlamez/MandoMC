@@ -19,7 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import net.mandomc.gameplay.events.beskar.MineSurvey.Pos;
 
-/** One twenty-five temporary nodes, owned by the existing event scheduler, never a region reset. */
+/** Ten temporary nodes, owned by the existing event scheduler, never a region reset. */
 public final class BeskarEvent implements ManagedEvent, EventMining, Listener {
     public record Host(Pos ore,Pos stand) {}
     private final JavaPlugin plugin;
@@ -46,7 +46,7 @@ public final class BeskarEvent implements ManagedEvent, EventMining, Listener {
 
     public BeskarEvent(JavaPlugin plugin,ItemCatalog items,ConfigurationSection config)throws Exception {
         this.plugin=plugin;this.items=items;this.config=config;
-        if(!"beskar".equals(config.getString("id"))||config.getInt("node-count")!=25)throw new IllegalArgumentException("Beskar requires exactly25 nodes");
+        if(!"beskar".equals(config.getString("id"))||config.getInt("node-count")!=10)throw new IllegalArgumentException("Beskar requires exactly 10 nodes");
         world=Objects.requireNonNull(Bukkit.getWorld(NamespacedKey.fromString(config.getString("world",""))),"Beskar world not loaded");
         territory=Objects.requireNonNull(Bukkit.getServicesManager().load(TerritoryService.class),"Native territory authority required");
         maximumSeconds=config.getInt("maximum-seconds");if(maximumSeconds<1||maximumSeconds>3300)throw new IllegalArgumentException("Invalid Beskar duration");
@@ -56,7 +56,7 @@ public final class BeskarEvent implements ManagedEvent, EventMining, Listener {
         walkway=List.copyOf(new LinkedHashSet<>(floors));var nodes=new ArrayList<Host>();
         for(Object raw:Objects.requireNonNull(config.getList("nodes"))){var list=(List<?>)raw;if(list.size()!=6)throw new IllegalArgumentException("Beskar node requires host and stand");nodes.add(new Host(point(list,0),point(list,3)));}
         hosts=List.copyOf(nodes);
-        if(hosts.size()!=25||hosts.stream().map(Host::ore).distinct().count()!=25||hosts.stream().anyMatch(h->!walkway.contains(h.stand)||walkway.contains(h.ore)))throw new IllegalArgumentException("25 distinct reachable wall hosts required");
+        if(hosts.size()!=10||hosts.stream().map(Host::ore).distinct().count()!=10||hosts.stream().anyMatch(h->!walkway.contains(h.stand)||walkway.contains(h.ore)))throw new IllegalArgumentException("10 distinct reachable wall hosts required");
         Objects.requireNonNull(items.create("beskar_scrap"),"Missing Beskar catalog scrap");
         marker=new NamespacedKey(plugin,"beskar_generation_v1");directory=plugin.getDataFolder().toPath().resolve("data/beskar-events");Files.createDirectories(directory);
         try(var files=Files.list(directory)){files.filter(p->p.getFileName().toString().endsWith(".yml")).sorted().forEach(recovery::add);}
@@ -77,9 +77,9 @@ public final class BeskarEvent implements ManagedEvent, EventMining, Listener {
     public String displayName(){return config.getString("display-name","Beskar Rush");}
     public boolean running(){return active||preparing;}
     public boolean miningActive(){return active;}
-    public int remainingCount(){return active?25-minedCount():0;}
+    public int remainingCount(){return active?hosts.size()-minedCount():0;}
     public net.kyori.adventure.text.Component status(){
-        String text=active?config.getString("messages.remaining","<yellow>Beskar Ore Blocks Left: <white><remaining>/25")
+        String text=active?config.getString("messages.remaining","<yellow>Beskar Ore Blocks Left: <white><remaining>/10")
                 :config.getString(preparing?"messages.preparing-status":"messages.inactive","<gray>Beskar Rush: Inactive");
         return MiniMessage.miniMessage().deserialize(text,net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed("remaining",Integer.toString(remainingCount())));
     }
@@ -115,7 +115,7 @@ public final class BeskarEvent implements ManagedEvent, EventMining, Listener {
             var b=node.position().block(world);if(b.getChunk().addPluginChunkTicket(plugin))tickets.add(b.getChunk());b.getChunk().getPersistentDataContainer().set(marker,PersistentDataType.STRING,state.generation());b.setType(Material.ANCIENT_DEBRIS,false);
         }
         preparing=false;active=true;deadline=(long)Bukkit.getCurrentTick()+maximumSeconds*20L;announce("start");
-        plugin.getLogger().info("Beskar event activated25 reachable deepslate nodes; connected walk tiles="+survey.reachedCount());survey=null;
+        plugin.getLogger().info("Beskar event activated 10 reachable deepslate nodes; connected walk tiles="+survey.reachedCount());survey=null;
     }
     private int index(Block block){
         if(state==null||!block.getWorld().getKey().toString().equals(state.world()))return -1;

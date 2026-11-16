@@ -279,7 +279,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             getLogger().info("Native events and public warps ready: configured destinations and event rewards loaded.");
             tutorial = new net.mandomc.gameplay.tutorial.InteractiveTutorial(this, loadFeature("tutorial/tutorial.yml"));
             staff = new net.mandomc.gameplay.admin.StaffMode(this, loadFeature("admin/staff.yml"));
-            starterKit.tutorialRequired(true);
+            starterKit.tutorialRequired(false);
             getLogger().info("Interactive tutorial ready: private worlds, isolated inventory and once-only completion rewards.");
             getLogger().info("Arrival enabled: protected Batuu spawn; /spawn and temporary /tutorial ready.");
         } catch (Exception | LinkageError error) {

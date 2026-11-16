@@ -1,5 +1,40 @@
 # Resume here
 
+## Tutorial and balance production promotion (2026-11-16)
+
+The owner requested production deployment of the optional tutorial, simplified metals, final shop route, Massiff health 30 and E-11 base damage 2.0. The combined build passes 342 Java tests, 84 tooling checks, 1,145 native tutorial/event assertions and five loaded-balance checks. Production drift verification and the backed-up sheet conversion are in progress. Next action: promote the checked release, take a stopped backup and activate it through the production panel.
+
+## Tutorial shop path and gray-Jawa follow-up (2026-11-16)
+
+The owner accepted the tutorial except for shop guidance. The final trail follows the five block coordinates supplied in screenshots, with particle elevation measured from native collision surfaces. Nearest-segment guidance continues even when players miss a waypoint. An inward-pointing arrow remains visible inside the building. Removed the tutorial-only shop rectangle restriction that rejected a public gray Jawa; nearby gray buyers now consistently open salvage during the selling step.
+
+Verification: 342 Java tests and 543 focused native shop checks pass, including exact slab/stair heights, emitted particles rising on the stairs, continued guidance after skipped waypoints, private interior arrow particles, all seven public gray Jawas and the sale. Development was backed up and restarted with the tested JAR and one merged config; startup is healthy and all fourteen other binaries and the pack are unchanged. See [tutorial hub](features/tutorial-hub-metals.md). Next action: recheck the centered trail, interior arrow and gray-Jawa salvage in the Shops lesson on development.
+
+## Optional tutorial hub and simplified metals (2026-11-16)
+
+Implemented five independently selectable lessons with saved completion and $500 once per section. Combat has one Gamorrean, one Quarren and one Twi'lek blaster target, then a real saber-hit exercise. Survival uses native mining, furnace smelting and pickaxe crafting. Shops guides each learner privately up the actual public Batuu stairs to a real gray Jawa. Clan and native X-wing lessons remain, with an optional exit and Naboo base guidance.
+
+All eleven metal scraps now smelt directly into ingots in normal furnaces; sheets are removed from crafting and KOTH rewards. Ore drops are exactly one scrap, and Beskar Rush has ten nodes with old journal recovery retained. Sheet migration preserves quantities across inventories, ender chests, nested containers and saved escrow; the offline tool requires a stopped-world lock and backups. A read-only production audit found 60 Agrinium sheets across two players, queued for the production cutover; no production data has been changed.
+
+Verification: 342 Java tests, 84 tooling checks, 605 native tutorial assertions, 52 actual JVM recovery checks and 43 native Beskar assertions pass. Development was stopped, fully backed up and restarted with the final tested gameplay JAR and seven merged configs. Its stopped playerdata sweep found no sheets. Startup is healthy with 268 custom items; all fourteen other binaries and the pinned pack are unchanged. See [tutorial hub and metals](features/tutorial-hub-metals.md). Next action: client-play `/tutorial` on development, including each section and the Batuu walking trail.
+## E-11 damage buff (2026-11-16)
+
+On `bilal/e11-damage-buff`, stacked on the Massiff health reduction, increased E-11 base damage from 0.5 to the owner's requested 2.0 per shot. All other weapon parameters remain unchanged. Updated the existing integration probe's expected damage value. The original development weapon config is backed up privately; only its base-damage field is deployed. Production promotion is pending.
+
+Verification: `./scripts/build.sh` passes all 339 Java tests; YAML comparison verifies base damage is the sole semantic weapon-config change, and `git diff --check` passes. Development restarted cleanly with all 34 weapons loaded; runtime comparison confirms damage 2.0 and the prior Massiff health 30. The legacy integration probe was updated but not rerun. Next action: playtest the E-11 at 2.0 damage on development before production promotion.
+
+## Massiff health reduced on development (2026-11-16)
+
+On `bilal/massiff-health`, reduced fixed Massiff health from 50 to 30 HP (40%) so encounters take less damage to finish. The scoped development deployment changed only that health value after a clean stop and private configuration backup. The existing development pack remains pinned. Production promotion is pending.
+
+Verification: `./scripts/build.sh` passes all 339 Java tests; YAML parsing, exact source/runtime change comparisons and `git diff --check` pass. Local Paper restarted successfully with MythicMobs loaded. In-game combat feel and existing-entity health migration are not verified. Next action: playtest a freshly spawned Massiff on development before promoting the change.
+
+## Building signs and updated hub live on production (2026-11-16)
+
+Promoted the tested sign update through PR #46 (`8100c78`) and activated the matching published resource pack. Imported the owner's saved SpawnWorld hub: 41 world files and five placed signs (Shops, Leaderboards, Crates and two Cantina signs). The previous stopped hub and decoration journal remain in a private rollback backup. Other worlds are untouched; 49 account/access files were verified unchanged during the cutover, with no player reset.
+
+Verification: production CI passes, the exact CI gameplay JAR has identical entries to the native-tested candidate, and the anonymously downloaded pack matches CI. A private import and actual JVM restart both verify five exact sign items/facings and 19 owned collision cells; live production repeats those checks and starts without errors with 279 custom items. See [building signs](features/building-signs.md). Next action: reconnect to production and visually check the updated hub and signs with the new pack.
+
 ## Three building signs deployed to development (2026-11-15)
 
 Added Shops (3×1), Leaderboards (5×1) and Cantina (1×4), available through `/mmc give shops_sign`, `/mmc give leaderboards_sign` and `/mmc give cantina_sign`. Every occupied cell shares the existing decoration protection and single-item recovery behavior. Journal schema 4 preserves schemas 1–3. The final source build has exactly the same JAR entries as the native-tested candidate and retains the latest staff/tutorial changes.

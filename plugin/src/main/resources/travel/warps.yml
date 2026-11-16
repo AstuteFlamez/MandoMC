@@ -14,38 +14,38 @@
       "material": "STICK",
       "item-model": "mandomc:planets/batuu",
       "slot": 28,
-      "description": "<gray>Protected hub: gray Jawa salvage buyers, crates and travel. No combat or building."
+      "description": "<green>Protected hub\n<gray>Resources: Gray Jawa salvage buyers & crates\n<gray>Bases: No building or claiming\n<gray>Danger: No combat\n<gray>Activities: Crate rewards; travel hub"
     },
     "hoth": {
       "name": "<white>Hoth",
       "material": "STICK",
       "item-model": "mandomc:planets/hoth",
       "slot": 39,
-      "description": "<gray>Ice-cave mining, clan wilderness and King of the Hill.\n<gray>Hold the PvP hill for your clan\u2019s KOTH Crate reward.",
-      "badges": "<white>\u0116\u0121"
+      "description": "<green>Ice planet\n<gray>Resources: Electrum in deeper caves; ice & snow\n<gray>Bases: Claim in Wilderness\n<gray>Danger: PvP outside Safezone\n<gray>Activities: KOTH: win a KOTH Crate key",
+      "badges": "<white>Ėġ"
     },
     "tatooine": {
       "name": "<gold>Tatooine",
       "material": "STICK",
       "item-model": "mandomc:planets/tatooine",
       "slot": 43,
-      "description": "<gray>Desert survival, clan bases and brown Jawa supplies.\n<gray>Challenge Jabba\u2019s Palace for shared loot; beware rival players."
+      "description": "<green>Desert survival\n<gray>Resources: Agrinium & Durasteel caves; brown Jawa supplies\n<gray>Bases: Claim in Wilderness\n<gray>Danger: PvP and hostile mobs\n<gray>Activities: Jabba’s Palace: shared dungeon loot"
     },
     "mandalore": {
       "name": "<gray>Mandalore",
       "material": "STICK",
       "item-model": "mandomc:planets/mandalore",
       "slot": 32,
-      "description": "<gray>Contested mining, wilderness bases and Beskar Rush.\n<gray>Beskar appears during its event; expect PvP competition.",
-      "badges": "<white>\u0112\u0121"
+      "description": "<green>Contested mining\n<gray>Resources: Beskar only during Beskar Rush\n<gray>Bases: Claim in Wilderness; mines are Warzone\n<gray>Danger: Expect PvP competition\n<gray>Activities: Beskar Rush: 10 ore nodes",
+      "badges": "<white>Ēġ"
     },
     "ilum": {
       "name": "<aqua>Ilum",
       "material": "STICK",
       "item-model": "mandomc:planets/ilum",
       "slot": 20,
-      "badges": "<white>\u0112\u0121",
-      "description": "<gray>Jedi parkour trials with saved checkpoints.\n<gray>Complete the course for a Kyber key (24h reward cooldown).\n<gray>Open the Kyber crate on Batuu for lightsaber crystals."
+      "badges": "<white>Ēġ",
+      "description": "<green>Jedi parkour trials\n<gray>Resources: Kyber key → crystals from Batuu’s Kyber Crate\n<gray>Bases: No base building\n<gray>Danger: Protected parkour course\n<gray>Activities: Course reward: once per 24 hours"
     },
     "crates": {
       "name": "<aqua>Crates",
@@ -67,7 +67,7 @@
       "material": "STICK",
       "item-model": "mandomc:planets/naboo",
       "slot": 15,
-      "description": "<green>START HERE \u2014 most beginner-friendly planet.\n<gray>Gather supplies, mine metals and claim a starter base.\n<gray>Safe arrival; wilderness permits building and combat."
+      "description": "<green>START HERE · Beginner-friendly\n<gray>Resources: Agrinium, Durasteel, Electrum & survival supplies\n<gray>Bases: Claim in Wilderness; protected city and arrival\n<gray>Danger: Combat outside Safezone\n<gray>Activities: No scheduled event"
     }
   }
 }
