@@ -1,4 +1,4 @@
-# E-11 recovered from the supplied server backup; tuning preserved.
+# E-11 recovered from the supplied server backup; base damage buffed to 2.0.
 E11:
   Info:
     Weapon_Item:
@@ -90,7 +90,7 @@ E11:
         - Standard_Plasma_Cells
 
   Damage:
-    Base_Damage: 0.5
+    Base_Damage: 2.0
     Armor_Damage: 1
 
   Scope:

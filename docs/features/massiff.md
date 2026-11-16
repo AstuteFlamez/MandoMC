@@ -1,6 +1,6 @@
 # Massiff legacy restoration
 
-Massiffs use the legacy idle/chase/bite behavior and original model assets. Idle speed is 0.12, chase uses the legacy 3x multiplier, and biting uses 0.33x. The brain runs every 35 ticks; a bite plays its original animation/sound, then deals 6 damage and knockback after 10 ticks. Health is 50 and native melee damage is zero, so the scripted bite is the damage owner. Group levels still appear in names; legacy combat stats are fixed rather than level-scaled.
+Massiffs use the legacy idle/chase/bite behavior and original model assets. Idle speed is 0.12, chase uses the legacy 3x multiplier, and biting uses 0.33x. The brain runs every 35 ticks; a bite plays its original animation/sound, then deals 6 damage and knockback after 10 ticks. Health is 30 (reduced from 50 on 2026-11-16) and native melee damage is zero, so the scripted bite is the damage owner. Combat stats are fixed rather than level-scaled.
 
 The copied `massiff-skills.yml` is semantically identical to legacy `MassiffSkills.yml`. The existing normalized blueprint already matches all legacy geometry, animation and embedded texture data. Legacy ModelEngine state-machine/default idle/walk settings match the current runtime; no global ModelEngine configuration replacement is needed. The mob's legacy Model section restores view radius 64, drive false and damage tint true. Current player targeting, anti-transformation safeguards and model reattachment on chunk load remain; an explicit Mythic threat table enables the legacy combat conditions.
 

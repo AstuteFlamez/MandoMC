@@ -1,5 +1,9 @@
 # Resume here
 
+## Tutorial and balance production promotion (2026-11-16)
+
+The owner requested production deployment of the optional tutorial, simplified metals, final shop route, Massiff health 30 and E-11 base damage 2.0. The combined build passes 342 Java tests, 84 tooling checks, 1,145 native tutorial/event assertions and five loaded-balance checks. Production drift verification and the backed-up sheet conversion are in progress. Next action: promote the checked release, take a stopped backup and activate it through the production panel.
+
 ## Tutorial shop path and gray-Jawa follow-up (2026-11-16)
 
 The owner accepted the tutorial except for shop guidance. The final trail follows the five block coordinates supplied in screenshots, with particle elevation measured from native collision surfaces. Nearest-segment guidance continues even when players miss a waypoint. An inward-pointing arrow remains visible inside the building. Removed the tutorial-only shop rectangle restriction that rejected a public gray Jawa; nearby gray buyers now consistently open salvage during the selling step.
@@ -13,6 +17,17 @@ Implemented five independently selectable lessons with saved completion and $500
 All eleven metal scraps now smelt directly into ingots in normal furnaces; sheets are removed from crafting and KOTH rewards. Ore drops are exactly one scrap, and Beskar Rush has ten nodes with old journal recovery retained. Sheet migration preserves quantities across inventories, ender chests, nested containers and saved escrow; the offline tool requires a stopped-world lock and backups. A read-only production audit found 60 Agrinium sheets across two players, queued for the production cutover; no production data has been changed.
 
 Verification: 342 Java tests, 84 tooling checks, 605 native tutorial assertions, 52 actual JVM recovery checks and 43 native Beskar assertions pass. Development was stopped, fully backed up and restarted with the final tested gameplay JAR and seven merged configs. Its stopped playerdata sweep found no sheets. Startup is healthy with 268 custom items; all fourteen other binaries and the pinned pack are unchanged. See [tutorial hub and metals](features/tutorial-hub-metals.md). Next action: client-play `/tutorial` on development, including each section and the Batuu walking trail.
+## E-11 damage buff (2026-11-16)
+
+On `bilal/e11-damage-buff`, stacked on the Massiff health reduction, increased E-11 base damage from 0.5 to the owner's requested 2.0 per shot. All other weapon parameters remain unchanged. Updated the existing integration probe's expected damage value. The original development weapon config is backed up privately; only its base-damage field is deployed. Production promotion is pending.
+
+Verification: `./scripts/build.sh` passes all 339 Java tests; YAML comparison verifies base damage is the sole semantic weapon-config change, and `git diff --check` passes. Development restarted cleanly with all 34 weapons loaded; runtime comparison confirms damage 2.0 and the prior Massiff health 30. The legacy integration probe was updated but not rerun. Next action: playtest the E-11 at 2.0 damage on development before production promotion.
+
+## Massiff health reduced on development (2026-11-16)
+
+On `bilal/massiff-health`, reduced fixed Massiff health from 50 to 30 HP (40%) so encounters take less damage to finish. The scoped development deployment changed only that health value after a clean stop and private configuration backup. The existing development pack remains pinned. Production promotion is pending.
+
+Verification: `./scripts/build.sh` passes all 339 Java tests; YAML parsing, exact source/runtime change comparisons and `git diff --check` pass. Local Paper restarted successfully with MythicMobs loaded. In-game combat feel and existing-entity health migration are not verified. Next action: playtest a freshly spawned Massiff on development before promoting the change.
 
 ## Building signs and updated hub live on production (2026-11-16)
 
