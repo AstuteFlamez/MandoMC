@@ -238,7 +238,11 @@ public final class TutorialProbe extends JavaPlugin {
             var chunks = new ArrayList<java.util.concurrent.CompletableFuture<?>>();
             for (int x = 0; x <= 10; x++) for (int z = 2; z <= 24; z++) chunks.add(player.getWorld().getChunkAtAsync(x, z, true));
             java.util.concurrent.CompletableFuture.allOf(chunks.toArray(java.util.concurrent.CompletableFuture[]::new))
-                    .thenRun(() -> later(1, () -> driveFlight(0)));
+                    .thenRun(() -> later(1, () -> {
+                        for (int x = 0; x <= 10; x++) for (int z = 2; z <= 24; z++)
+                            player.getWorld().addPluginChunkTicket(x, z, this);
+                        driveFlight(0);
+                    }));
         });
     }
     private void driveFlight(int ticks) throws Exception {
@@ -253,7 +257,7 @@ public final class TutorialProbe extends JavaPlugin {
         if (step == TutorialProgress.Step.STOP) brakePressed = true;
         player.setRotation(ticks < 60 ? -20 : 0, ticks < 35 ? -20 : 0);
         if (ticks == 50) {
-            check(ship.getVelocity().length() > 1.5, "Training retains normal X-wing speed after W is released");
+            check(ship.getVelocity().length() > 1.5, "Training retains normal X-wing speed after W is released: location=" + ship.getLocation() + " velocity=" + ship.getVelocity());
             check(ship.getVelocity().getX() > .3 && ship.getVelocity().getZ() > .3, "Native flight follows mouse heading on both axes");
         }
         controller.setInput(new com.ticxo.modelengine.api.mount.controller.MountController.MountInput((float) side, (float) forward, false, false));
