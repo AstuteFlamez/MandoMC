@@ -113,7 +113,7 @@ public final class ItemCatalog {
 
     /** Returns an independent item. Callers never receive a cached mutable template. */
     public ItemStack create(String id) {
-        var entry = entries.get(id);
+        var entry = entries.get(MetalMigration.ingotId(id));
         return entry == null ? null : entry.factory().get().clone();
     }
 

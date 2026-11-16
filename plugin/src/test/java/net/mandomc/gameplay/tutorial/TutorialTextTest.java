@@ -34,7 +34,7 @@ public class TutorialTextTest {
     }
     @Test public void allTutorialActionBarsFitWithLargestConfiguredCounters() throws Exception {
         var tutorial = load("/tutorial/tutorial.yml");
-        var otherSurfaces = Set.of("players-only", "bossbar", "event-bar", "loading-bar", "event-next",
+        var otherSurfaces = Set.of("players-only", "bossbar", "hub-bar", "shop-route", "event-bar", "loading-bar", "event-next",
                 "event-finish", "start-naboo", "naboo-title", "naboo-subtitle", "map-intro", "map-walk", "recovery");
         for (String key : tutorial.getConfigurationSection("messages").getKeys(false))
             if (!otherSurfaces.contains(key)) compact("messages." + key, tutorial.getString("messages." + key));

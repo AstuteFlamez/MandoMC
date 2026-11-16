@@ -6,5 +6,5 @@ import java.util.random.RandomGenerator;
 public final class OreDropQuantity {
     private OreDropQuantity() { }
 
-    public static int roll(RandomGenerator random) { return random.nextInt(1, 6); }
+    public static int roll(RandomGenerator random) { return 1; }
 }

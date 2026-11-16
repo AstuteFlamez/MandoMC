@@ -44,9 +44,9 @@ pages:
   topic: Mining & Materials
   heading: Mining & Materials
   body: |-
-    Mine themed ores for metal scraps. Refine scraps to ingots.
+    Each ore drops one scrap. Smelt it in a normal furnace for one ingot.
 
-    Scraps, ingots and sheets feed equipment crafting.
+    Use ingots to craft equipment.
 
     /recipes shows sources and the right furnace or workstation.
 - id: crafting

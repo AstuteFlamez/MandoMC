@@ -110,7 +110,7 @@
         "B B"
       ],
       "ingredients": {
-        "B": "beskar_sheet"
+        "B": "beskar"
       }
     },
     "beskar_chestplate": {
@@ -123,7 +123,7 @@
         "BBB"
       ],
       "ingredients": {
-        "B": "beskar_sheet"
+        "B": "beskar"
       }
     },
     "beskar_leggings": {
@@ -136,7 +136,7 @@
         "B B"
       ],
       "ingredients": {
-        "B": "beskar_sheet"
+        "B": "beskar"
       }
     },
     "beskar_boots": {
@@ -148,7 +148,7 @@
         "B B"
       ],
       "ingredients": {
-        "B": "beskar_sheet"
+        "B": "beskar"
       }
     },
     "tiefighter_cockpit": {
@@ -161,7 +161,7 @@
         "ASA"
       ],
       "ingredients": {
-        "A": "durasteel_sheet",
+        "A": "durasteel",
         "B": "transparisteel_shard",
         "C": "circuit_board",
         "S": "wiring_coil"
@@ -177,7 +177,7 @@
         "AAA"
       ],
       "ingredients": {
-        "A": "durasteel_sheet",
+        "A": "durasteel",
         "B": "energy_conduits",
         "C": "alloy_plating"
       }
@@ -192,7 +192,7 @@
         "ADA"
       ],
       "ingredients": {
-        "A": "electrum_sheet",
+        "A": "electrum",
         "B": "transparisteel_shard",
         "C": "circuit_board",
         "D": "precision_crafted_lens",
@@ -209,7 +209,7 @@
         "DED"
       ],
       "ingredients": {
-        "A": "electrum_sheet",
+        "A": "electrum",
         "B": "energy_conduits",
         "C": "alloy_plating",
         "D": "fusion_coil_stabilizer",
@@ -226,7 +226,7 @@
         "AAA"
       ],
       "ingredients": {
-        "A": "electrum_sheet",
+        "A": "electrum",
         "B": "energy_conduits",
         "C": "alloy_plating",
         "D": "fusion_coil_stabilizer",
@@ -243,7 +243,7 @@
         "NNN"
       ],
       "ingredients": {
-        "N": "neuranium_sheet",
+        "N": "neuranium",
         "B": "minecraft:bucket"
       }
     },
@@ -257,7 +257,7 @@
         "N N"
       ],
       "ingredients": {
-        "N": "neuranium_sheet",
+        "N": "neuranium",
         "B": "minecraft:bucket"
       }
     },
@@ -329,149 +329,6 @@
         "H": "straight_hilt"
       }
     },
-    "agrinium": {
-      "result": "agrinium",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "agrinium_scrap"
-      }
-    },
-    "aurodium": {
-      "result": "aurodium",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "aurodium_scrap"
-      }
-    },
-    "beskar": {
-      "result": "beskar",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "beskar_scrap"
-      }
-    },
-    "cortosis": {
-      "result": "cortosis",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "cortosis_scrap"
-      }
-    },
-    "durasteel": {
-      "result": "durasteel",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "durasteel_scrap"
-      }
-    },
-    "electrum": {
-      "result": "electrum",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "electrum_scrap"
-      }
-    },
-    "lommite": {
-      "result": "lommite",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "lommite_scrap"
-      }
-    },
-    "mandalorian_iron": {
-      "result": "mandalorian_iron",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "mandalorian_iron_scrap"
-      }
-    },
-    "neuranium": {
-      "result": "neuranium",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "neuranium_scrap"
-      }
-    },
-    "phrik": {
-      "result": "phrik",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "phrik_scrap"
-      }
-    },
-    "songsteel": {
-      "result": "songsteel",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "songsteel_scrap"
-      }
-    },
     "xwing": {
       "result": "xwing",
       "amount": 1,
@@ -510,7 +367,7 @@
         "M M"
       ],
       "ingredients": {
-        "M": "durasteel_sheet"
+        "M": "durasteel"
       }
     },
     "durasteel_chestplate": {
@@ -522,7 +379,7 @@
         "MMM"
       ],
       "ingredients": {
-        "M": "durasteel_sheet"
+        "M": "durasteel"
       }
     },
     "durasteel_leggings": {
@@ -534,7 +391,7 @@
         "M M"
       ],
       "ingredients": {
-        "M": "durasteel_sheet"
+        "M": "durasteel"
       }
     },
     "durasteel_boots": {
@@ -545,7 +402,7 @@
         "M M"
       ],
       "ingredients": {
-        "M": "durasteel_sheet"
+        "M": "durasteel"
       }
     },
     "durasteel_pickaxe": {
@@ -557,7 +414,7 @@
         " S "
       ],
       "ingredients": {
-        "M": "durasteel_sheet",
+        "M": "durasteel",
         "S": "minecraft:stick"
       }
     },
@@ -570,7 +427,7 @@
         "S"
       ],
       "ingredients": {
-        "M": "durasteel_sheet",
+        "M": "durasteel",
         "S": "minecraft:stick"
       }
     },
@@ -583,7 +440,7 @@
         " S"
       ],
       "ingredients": {
-        "M": "durasteel_sheet",
+        "M": "durasteel",
         "S": "minecraft:stick"
       }
     },
@@ -596,7 +453,7 @@
         " S "
       ],
       "ingredients": {
-        "M": "beskar_sheet",
+        "M": "beskar",
         "S": "minecraft:stick"
       }
     },
@@ -609,7 +466,7 @@
         "S"
       ],
       "ingredients": {
-        "M": "beskar_sheet",
+        "M": "beskar",
         "S": "minecraft:stick"
       }
     },
@@ -635,7 +492,7 @@
         "DDD"
       ],
       "ingredients": {
-        "D": "durasteel_sheet",
+        "D": "durasteel",
         "A": "alloy_plating"
       }
     },
@@ -652,7 +509,7 @@
         "E": "energy_conduits",
         "W": "wiring_coil",
         "C": "circuit_board",
-        "D": "durasteel_sheet"
+        "D": "durasteel"
       }
     },
     "uwing_cockpit": {
@@ -665,7 +522,7 @@
         "DLD"
       ],
       "ingredients": {
-        "D": "durasteel_sheet",
+        "D": "durasteel",
         "W": "wiring_coil",
         "T": "transparisteel_shard",
         "C": "circuit_board",
@@ -682,7 +539,7 @@
         "SPS"
       ],
       "ingredients": {
-        "D": "durasteel_sheet",
+        "D": "durasteel",
         "E": "energy_conduits",
         "A": "alloy_plating",
         "S": "fusion_coil_stabilizer",
@@ -702,7 +559,7 @@
         "R": "speederbike_repulsor",
         "C": "speederbike_chassis",
         "W": "wiring_coil",
-        "D": "durasteel_sheet"
+        "D": "durasteel"
       }
     },
     "uwing": {
@@ -800,17 +657,6 @@
         "W": "wiring_coil"
       }
     },
-    "electrum_sheet": {
-      "result": "electrum_sheet",
-      "amount": 1,
-      "category": "components",
-      "shape": [
-        "EEE"
-      ],
-      "ingredients": {
-        "E": "electrum"
-      }
-    },
     "transparisteel_shard": {
       "result": "transparisteel_shard",
       "amount": 4,
@@ -875,7 +721,7 @@
         "S"
       ],
       "ingredients": {
-        "M": "agrinium_sheet",
+        "M": "agrinium",
         "S": "minecraft:stick"
       }
     },
@@ -889,7 +735,7 @@
         " E "
       ],
       "ingredients": {
-        "E": "electrum_sheet",
+        "E": "electrum",
         "T": "transparisteel_shard",
         "C": "circuit_board"
       }
@@ -906,7 +752,7 @@
       "ingredients": {
         "E": "precision_emitter_coil",
         "C": "blue_kyber",
-        "S": "durasteel_sheet",
+        "S": "durasteel",
         "H": "straight_hilt",
         "P": "plasma_capacitor_array"
       }
@@ -923,7 +769,7 @@
       "ingredients": {
         "E": "precision_emitter_coil",
         "C": "green_kyber",
-        "S": "durasteel_sheet",
+        "S": "durasteel",
         "H": "pike_hilt",
         "P": "plasma_capacitor_array"
       }
@@ -940,7 +786,7 @@
       "ingredients": {
         "E": "precision_emitter_coil",
         "C": "red_kyber",
-        "S": "durasteel_sheet",
+        "S": "durasteel",
         "H": "straight_hilt",
         "P": "plasma_capacitor_array"
       }
@@ -957,7 +803,7 @@
       "ingredients": {
         "E": "precision_emitter_coil",
         "C": "orange_kyber",
-        "S": "durasteel_sheet",
+        "S": "durasteel",
         "H": "great_hilt",
         "P": "plasma_capacitor_array"
       }
@@ -974,7 +820,7 @@
       "ingredients": {
         "E": "precision_emitter_coil",
         "C": "purple_kyber",
-        "S": "durasteel_sheet",
+        "S": "durasteel",
         "H": "great_hilt",
         "P": "plasma_capacitor_array"
       }
@@ -991,7 +837,7 @@
       "ingredients": {
         "E": "precision_emitter_coil",
         "C": "yellow_kyber",
-        "S": "durasteel_sheet",
+        "S": "durasteel",
         "H": "whip_hilt",
         "P": "plasma_capacitor_array"
       }
@@ -1008,7 +854,7 @@
       "ingredients": {
         "E": "precision_emitter_coil",
         "C": "white_kyber",
-        "S": "durasteel_sheet",
+        "S": "durasteel",
         "H": "fang_hilt",
         "P": "plasma_capacitor_array"
       }
@@ -1025,7 +871,7 @@
       "ingredients": {
         "#": "minecraft:redstone_torch",
         "S": "minecraft:stick",
-        "X": "agrinium_sheet"
+        "X": "agrinium"
       }
     },
     "agrinium_anvil": {
@@ -1039,7 +885,7 @@
       ],
       "ingredients": {
         "I": "minecraft:iron_block",
-        "i": "agrinium_sheet"
+        "i": "agrinium"
       }
     },
     "agrinium_blast_furnace": {
@@ -1066,7 +912,7 @@
         " # "
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_cauldron": {
@@ -1079,7 +925,7 @@
         "###"
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_compass": {
@@ -1092,7 +938,7 @@
         " # "
       ],
       "ingredients": {
-        "#": "agrinium_sheet",
+        "#": "agrinium",
         "X": "electrum"
       }
     },
@@ -1106,7 +952,7 @@
         "RDR"
       ],
       "ingredients": {
-        "#": "agrinium_sheet",
+        "#": "agrinium",
         "C": "minecraft:crafting_table",
         "D": "minecraft:dropper",
         "R": "electrum"
@@ -1124,7 +970,7 @@
       "ingredients": {
         "#": "minecraft:stone_pressure_plate",
         "R": "electrum",
-        "X": "agrinium_sheet"
+        "X": "agrinium"
       }
     },
     "agrinium_flint_and_steel": {
@@ -1133,7 +979,7 @@
       "category": "utilities",
       "type": "shapeless",
       "ingredients": [
-        "agrinium_sheet",
+        "agrinium",
         "minecraft:flint"
       ]
     },
@@ -1145,7 +991,7 @@
         "##"
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_hopper": {
@@ -1159,7 +1005,7 @@
       ],
       "ingredients": {
         "C": "minecraft:chest",
-        "I": "agrinium_sheet"
+        "I": "agrinium"
       }
     },
     "agrinium_bars": {
@@ -1171,7 +1017,7 @@
         "###"
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_chain": {
@@ -1184,8 +1030,8 @@
         "N"
       ],
       "ingredients": {
-        "I": "agrinium_sheet",
-        "N": "agrinium_sheet"
+        "I": "agrinium",
+        "N": "agrinium"
       }
     },
     "agrinium_door": {
@@ -1198,7 +1044,7 @@
         "##"
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_trapdoor": {
@@ -1210,7 +1056,7 @@
         "##"
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_lantern": {
@@ -1224,7 +1070,7 @@
       ],
       "ingredients": {
         "#": "minecraft:torch",
-        "X": "agrinium_sheet"
+        "X": "agrinium"
       }
     },
     "agrinium_lodestone": {
@@ -1237,7 +1083,7 @@
         "SSS"
       ],
       "ingredients": {
-        "#": "agrinium_sheet",
+        "#": "agrinium",
         "S": "minecraft:chiseled_stone_bricks"
       }
     },
@@ -1250,7 +1096,7 @@
         "###"
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_piston": {
@@ -1266,7 +1112,7 @@
         "#": "minecraft:cobblestone",
         "R": "electrum",
         "T": "#minecraft:planks",
-        "X": "agrinium_sheet"
+        "X": "agrinium"
       }
     },
     "agrinium_rail": {
@@ -1280,7 +1126,7 @@
       ],
       "ingredients": {
         "#": "minecraft:stick",
-        "X": "agrinium_sheet"
+        "X": "agrinium"
       }
     },
     "agrinium_saddle": {
@@ -1292,7 +1138,7 @@
         "X#X"
       ],
       "ingredients": {
-        "#": "agrinium_sheet",
+        "#": "agrinium",
         "X": "bantha_hide"
       }
     },
@@ -1305,7 +1151,7 @@
         "# "
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_smithing_table": {
@@ -1319,7 +1165,7 @@
       ],
       "ingredients": {
         "#": "#minecraft:planks",
-        "@": "agrinium_sheet"
+        "@": "agrinium"
       }
     },
     "agrinium_soul_lantern": {
@@ -1333,7 +1179,7 @@
       ],
       "ingredients": {
         "#": "minecraft:soul_torch",
-        "X": "agrinium_sheet"
+        "X": "agrinium"
       }
     },
     "agrinium_stonecutter": {
@@ -1346,7 +1192,7 @@
       ],
       "ingredients": {
         "#": "minecraft:stone",
-        "I": "agrinium_sheet"
+        "I": "agrinium"
       }
     },
     "agrinium_tripwire_hook": {
@@ -1360,7 +1206,7 @@
       ],
       "ingredients": {
         "#": "#minecraft:planks",
-        "I": "agrinium_sheet",
+        "I": "agrinium",
         "S": "minecraft:stick"
       }
     },
@@ -1484,7 +1330,7 @@
         " D "
       ],
       "ingredients": {
-        "D": "durasteel_sheet",
+        "D": "durasteel",
         "B": "barrel_liner",
         "P": "plastoid",
         "C": "circuit_board",
@@ -1500,7 +1346,7 @@
         "CEC"
       ],
       "ingredients": {
-        "A": "agrinium_sheet",
+        "A": "agrinium",
         "C": "minecraft:coal",
         "E": "electrum"
       }
@@ -1530,7 +1376,7 @@
         "EVE"
       ],
       "ingredients": {
-        "A": "agrinium_sheet",
+        "A": "agrinium",
         "E": "electrum",
         "V": "tibanna_gas_vial"
       }
@@ -1545,7 +1391,7 @@
         "DWD"
       ],
       "ingredients": {
-        "D": "durasteel_sheet",
+        "D": "durasteel",
         "G": "minecraft:gunpowder",
         "P": "plasma_capacitor_array",
         "W": "wiring_coil"
@@ -1560,7 +1406,7 @@
         "EWE"
       ],
       "ingredients": {
-        "A": "agrinium_sheet",
+        "A": "agrinium",
         "E": "electrum",
         "W": "wiring_coil"
       }
@@ -1843,7 +1689,7 @@
   },
   "sources": {
     "vote_crate_key": "<gray>Not currently obtainable through crafting or loot.",
-    "bantha_hide": "<gray>Tatooine: Banthas drop 1\u20133 hides.\n<gray>Brown Jawa shop on Tatooine: Utility supplies.\n<gray>Also craft four rabbit hides; click for recipe.",
+    "bantha_hide": "<gray>Tatooine: Banthas drop 1–3 hides.\n<gray>Brown Jawa shop on Tatooine: Utility supplies.\n<gray>Also craft four rabbit hides; click for recipe.",
     "purple_xwing": "<gray>Not currently obtainable through crafting or loot.",
     "money_note": "<gray>Not currently obtainable through crafting or loot.",
     "cortosis_alloy_frame": "<gray>Not currently obtainable through crafting or loot.",
@@ -1909,17 +1755,17 @@
     "pathfinder_crate_key": "<gray>Not currently obtainable through crafting or loot.",
     "voyager_crate_key": "<gray>Not currently obtainable through crafting or loot.",
     "wayfarer_crate_key": "<gray>Not currently obtainable through crafting or loot.",
-    "agrinium_scrap": "<gray>Tatooine caves: mine Agrinium Ore.\n<gray>Use a stone-or-better pickaxe; 1\u20135 scraps.\n<gray>Fortune adds none; Silk Touch keeps the ore.",
-    "aurodium_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "beskar_scrap": "<gray>Mandalore mine: 25 nodes during Beskar Rush.\n<gray>Mine active nodes for 1\u20135 scraps each.\n<gray>Also a possible KOTH Crate reward on Batuu.\n<gray>Crate key: winning clan reward from KOTH on Hoth.",
-    "cortosis_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "durasteel_scrap": "<gray>Tatooine caves: mine Durasteel Ore.\n<gray>Use a iron-or-better pickaxe; 1\u20135 scraps.\n<gray>Fortune adds none; Silk Touch keeps the ore.",
-    "electrum_scrap": "<gray>Hoth deeper stone caves: mine Electrum Ore.\n<gray>Use a iron-or-better pickaxe; 1\u20135 scraps.\n<gray>Fortune adds none; Silk Touch keeps the ore.",
-    "lommite_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "mandalorian_iron_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "neuranium_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "phrik_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "songsteel_scrap": "<gray>Not currently obtainable through crafting or loot.",
+    "agrinium_scrap": "<gray>Tatooine and Naboo caves: mine Agrinium Ore.\n<gray>Use a stone-or-better pickaxe; one scrap.\n<gray>Fortune adds none; Silk Touch keeps the ore.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "aurodium_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "beskar_scrap": "<gray>Mandalore mine: 10 nodes during Beskar Rush.\n<gray>Mine active nodes for one scrap each.\n<gray>Also a possible KOTH Crate reward on Batuu.\n<gray>Crate key: winning clan reward from KOTH on Hoth.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "cortosis_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "durasteel_scrap": "<gray>Tatooine and Naboo caves: mine Durasteel Ore.\n<gray>Use a iron-or-better pickaxe; one scrap.\n<gray>Fortune adds none; Silk Touch keeps the ore.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "electrum_scrap": "<gray>Hoth and Naboo caves: mine Electrum Ore.\n<gray>Use a iron-or-better pickaxe; one scrap.\n<gray>Fortune adds none; Silk Touch keeps the ore.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "lommite_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "mandalorian_iron_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "neuranium_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "phrik_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "songsteel_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
     "minecraft:raw_iron": "<gray>Retained legacy raw metal. Current Agrinium ores drop Agrinium Scraps.",
     "minecraft:clay_ball": "<gray>Tatooine caves: break clay for clay balls.\n<gray>Plastoid needs two separate clay-ball slots.",
     "minecraft:sand": "<gray>Tatooine: dig ordinary desert sand.\n<gray>Red sand does not replace sand in custom recipes.",
@@ -1948,7 +1794,7 @@
     "minecraft:glass_bottle": "<gray>Craft three glass in a V for three bottles.\n<gray>Glass: smelt sand from Tatooine.",
     "minecraft:green_dye": "<gray>Smelt cactus in a furnace for green dye.\n<gray>Gather cactus in Tatooine desert terrain.",
     "minecraft:gunpowder": "<gray>Creepers drop gunpowder.\n<gray>Brown Jawa shops do not stock it.",
-    "minecraft:leather": "<gray>Drops from banthas (1\u20133 per kill) and creatures that normally drop leather. Brown Jawa traders may stock Bantha Hide. It also works in normal leather recipes.",
+    "minecraft:leather": "<gray>Drops from banthas (1–3 per kill) and creatures that normally drop leather. Brown Jawa traders may stock Bantha Hide. It also works in normal leather recipes.",
     "minecraft:orange_dye": "<gray>Combine red dye and yellow dye.\n<gray>Flowers: brown Jawa shop on Tatooine,\n<gray>Greenery & dyes category.",
     "minecraft:purple_dye": "<gray>Combine red dye and blue dye.\n<gray>Brown Jawa shops on Tatooine: Greenery & dyes\n<gray>and Mineral supplies for flowers and lapis.",
     "minecraft:red_dye": "<gray>Craft a poppy into red dye.\n<gray>Poppies: brown Jawa shop on Tatooine,\n<gray>Greenery & dyes category.",
@@ -1979,23 +1825,19 @@
     "minecraft:red_wool": "<gray>Dye white wool red, or shear red sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
     "minecraft:white_wool": "<gray>Craft four string in a square for white wool.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
     "minecraft:yellow_wool": "<gray>Dye white wool yellow, or shear yellow sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "agrinium": "<gray>Craft nine Agrinium Scraps into one ingot.\n<gray>Scrap source: Tatooine caves.",
+    "agrinium": "<gray>Smelt one Agrinium Scrap in a normal furnace.\n<gray>One scrap produces one ingot.\n<gray>Scrap source: Tatooine and Naboo caves.\n<gray>Also: possible KOTH Crate reward on Batuu.",
     "agrinium_block": "<gray>Craft nine Agrinium ingots into one block.\n<gray>Ore source: Tatooine caves.",
-    "agrinium_sheet": "<gray>Craft from Agrinium ingots; click for recipe.\n<gray>Ore source: Tatooine caves.\n<gray>Also: possible KOTH Crate reward on Batuu.\n<gray>Key: winning clan reward from KOTH on Hoth.",
     "ahsoka_tano_white_lightsaber": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "alloy_plating": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "barrel_liner": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "beskar": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Scrap source: Mandalore mine during Beskar Rush.",
+    "beskar": "<gray>Smelt one Raw Beskar Scrap in a normal furnace.\n<gray>One scrap produces one ingot.\n<gray>Scrap source: Mandalore during Beskar Rush.\n<gray>Also: possible KOTH Crate reward on Batuu.",
     "beskar_block": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Scrap source: Mandalore mine during Beskar Rush.",
-    "beskar_sheet": "<gray>Smelt in a furnace; click for the input.\n<gray>Scrap source: Mandalore mine during Beskar Rush.\n<gray>Also: possible KOTH Crate reward on Batuu.\n<gray>Key: winning clan reward from KOTH on Hoth.",
     "blue_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "circuit_board": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "durasteel": "<gray>Craft nine Durasteel Scraps into one ingot.\n<gray>Scrap source: Tatooine caves.",
+    "durasteel": "<gray>Smelt one Durasteel Scrap in a normal furnace.\n<gray>One scrap produces one ingot.\n<gray>Scrap source: Tatooine and Naboo caves.\n<gray>Also: possible KOTH Crate reward on Batuu.",
     "durasteel_block": "<gray>Craft nine Durasteel ingots into one block.\n<gray>Ore source: Tatooine caves.",
-    "durasteel_sheet": "<gray>Craft from Durasteel ingots; click for recipe.\n<gray>Ore source: Tatooine caves.\n<gray>Also: possible KOTH Crate reward on Batuu.\n<gray>Key: winning clan reward from KOTH on Hoth.",
-    "electrum": "<gray>Craft nine Electrum Scraps into one ingot.\n<gray>Scrap source: Hoth deeper stone caves.\n<gray>Also: brown Jawa shop on Tatooine,\n<gray>Mineral supplies (native redstone / Electrum).",
+    "electrum": "<gray>Smelt one Electrum Scrap in a normal furnace.\n<gray>One scrap produces one ingot.\n<gray>Scrap source: Hoth and Naboo caves.",
     "electrum_block": "<gray>Craft nine Electrum ingots into one block.\n<gray>Ore source: Hoth deeper stone caves.",
-    "electrum_sheet": "<gray>Craft from Electrum ingots; click for recipe.\n<gray>Ore source: Hoth deeper stone caves.",
     "energy_conduits": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "fang_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "fusion_coil_stabilizer": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
@@ -2030,7 +1872,8 @@
     "x_wing_cockpit": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "x_wing_left_wing": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "x_wing_right_wing": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "yellow_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown)."
+    "yellow_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
+    "phrik": "<gray>Smelt one scrap in a normal furnace for one ingot.\n<gray>Also: possible KOTH Crate reward on Batuu."
   },
   "guide": {
     "title": "<gold>Recipes",
@@ -2049,26 +1892,19 @@
     "smelting": "<yellow>Refine in a blast furnace",
     "smelting-time": "<gray>Cooking time: <value> seconds",
     "categories": "<yellow>Categories",
-    "category-hint": "<gray><value> recipes \u2014 click to browse",
+    "category-hint": "<gray><value> recipes — click to browse",
     "page": "<gray>Page <value>",
     "shapeless": "<yellow>Craft in any arrangement",
     "furnace": "<yellow>Smelt in a furnace",
     "obtain-hint": "<yellow>Click to see how to obtain.",
     "hidden-results": [
       "aurodium",
-      "aurodium_sheet",
       "cortosis",
-      "cortosis_sheet",
       "lommite",
-      "lommite_sheet",
       "mandalorian_iron",
-      "mandalorian_sheet",
       "neuranium",
-      "neuranium_sheet",
       "phrik",
-      "phrik_sheet",
       "songsteel",
-      "songsteel_sheet",
       "rhydonium_barrel",
       "rhydonium_canister"
     ],
@@ -2076,10 +1912,17 @@
       "agrinium_from_raw"
     ],
     "preferred-recipes": {
-      "agrinium": "agrinium",
-      "electrum": "electrum",
-      "durasteel": "durasteel",
-      "beskar": "beskar"
+      "agrinium": "agrinium_from_scrap",
+      "electrum": "electrum_from_scrap",
+      "durasteel": "durasteel_from_scrap",
+      "beskar": "beskar_from_scrap",
+      "aurodium": "aurodium_from_scrap",
+      "cortosis": "cortosis_from_scrap",
+      "lommite": "lommite_from_scrap",
+      "mandalorian_iron": "mandalorian_iron_from_scrap",
+      "neuranium": "neuranium_from_scrap",
+      "phrik": "phrik_from_scrap",
+      "songsteel": "songsteel_from_scrap"
     },
     "stonecutting": "<yellow>Choose a saber style at a stonecutter",
     "stonecutter-denied": "<red>This style requires the original, undamaged <item>."
@@ -2093,84 +1936,92 @@
       "experience": 0.7,
       "category": "metals"
     },
-    "agrinium_sheet": {
-      "result": "agrinium_sheet",
-      "input": "agrinium",
-      "furnace": "blast",
-      "experience": 0.6,
-      "cook-time": 180,
-      "category": "metals"
-    },
-    "aurodium_sheet": {
-      "result": "aurodium_sheet",
-      "input": "aurodium",
-      "furnace": "blast",
-      "experience": 0.9,
-      "cook-time": 220,
-      "category": "metals"
-    },
-    "beskar_sheet": {
-      "result": "beskar_sheet",
-      "input": "beskar",
-      "furnace": "blast",
-      "experience": 2.0,
-      "cook-time": 400,
-      "category": "metals"
-    },
-    "cortosis_sheet": {
-      "result": "cortosis_sheet",
-      "input": "cortosis",
-      "furnace": "blast",
-      "experience": 1.2,
-      "cook-time": 260,
-      "category": "metals"
-    },
-    "durasteel_sheet": {
-      "result": "durasteel_sheet",
-      "input": "durasteel",
-      "furnace": "blast",
-      "experience": 0.8,
+    "agrinium_from_scrap": {
+      "result": "agrinium",
+      "input": "agrinium_scrap",
+      "furnace": "furnace",
       "cook-time": 200,
+      "experience": 0.7,
       "category": "metals"
     },
-    "lommite_sheet": {
-      "result": "lommite_sheet",
-      "input": "lommite",
-      "furnace": "blast",
-      "experience": 0.5,
-      "cook-time": 160,
+    "aurodium_from_scrap": {
+      "result": "aurodium",
+      "input": "aurodium_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
       "category": "metals"
     },
-    "mandalorian_sheet": {
-      "result": "mandalorian_sheet",
-      "input": "mandalorian_iron",
-      "furnace": "blast",
-      "experience": 1.8,
-      "cook-time": 340,
+    "beskar_from_scrap": {
+      "result": "beskar",
+      "input": "beskar_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
       "category": "metals"
     },
-    "neuranium_sheet": {
-      "result": "neuranium_sheet",
-      "input": "neuranium",
-      "furnace": "blast",
-      "experience": 1.5,
-      "cook-time": 300,
+    "cortosis_from_scrap": {
+      "result": "cortosis",
+      "input": "cortosis_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
       "category": "metals"
     },
-    "phrik_sheet": {
-      "result": "phrik_sheet",
-      "input": "phrik",
-      "furnace": "blast",
-      "experience": 1.2,
-      "cook-time": 300,
+    "durasteel_from_scrap": {
+      "result": "durasteel",
+      "input": "durasteel_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
       "category": "metals"
     },
-    "songsteel_sheet": {
-      "result": "songsteel_sheet",
-      "input": "songsteel",
-      "furnace": "blast",
-      "experience": 1.6,
-      "cook-time": 320,
+    "electrum_from_scrap": {
+      "result": "electrum",
+      "input": "electrum_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
+      "category": "metals"
+    },
+    "lommite_from_scrap": {
+      "result": "lommite",
+      "input": "lommite_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
+      "category": "metals"
+    },
+    "mandalorian_iron_from_scrap": {
+      "result": "mandalorian_iron",
+      "input": "mandalorian_iron_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
+      "category": "metals"
+    },
+    "neuranium_from_scrap": {
+      "result": "neuranium",
+      "input": "neuranium_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
+      "category": "metals"
+    },
+    "phrik_from_scrap": {
+      "result": "phrik",
+      "input": "phrik_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
+      "category": "metals"
+    },
+    "songsteel_from_scrap": {
+      "result": "songsteel",
+      "input": "songsteel_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
       "category": "metals"
     }
   },

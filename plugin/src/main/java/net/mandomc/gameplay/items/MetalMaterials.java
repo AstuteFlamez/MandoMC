@@ -37,6 +37,26 @@ public final class MetalMaterials implements Listener {
         if (original == null || original.isEmpty()) return original;
         String id = original.hasItemMeta()
                 ? original.getItemMeta().getPersistentDataContainer().get(ItemCatalog.ITEM_ID, PersistentDataType.STRING) : null;
+        if (MetalMigration.isSheet(id)) {
+            var replacement = items.create(MetalMigration.ingotId(id));
+            replacement.setAmount(original.getAmount());
+            return replacement;
+        }
+        if (id != null && id.endsWith("_scrap") && items.create(id) != null && !id.equals("metal_scrap")) {
+            var replacement = items.create(id); replacement.setAmount(original.getAmount());
+            if (!original.equals(replacement)) return replacement;
+        }
+        if (original.getItemMeta() instanceof org.bukkit.inventory.meta.BlockStateMeta meta
+                && meta.getBlockState() instanceof org.bukkit.block.Container container) {
+            var before = container.getInventory().getContents(); normalize(container.getInventory());
+            if (!java.util.Arrays.equals(before, container.getInventory().getContents())) {
+                var copy = original.clone(); meta.setBlockState(container); copy.setItemMeta(meta); return copy;
+            }
+        }
+        if (original.getItemMeta() instanceof org.bukkit.inventory.meta.BundleMeta meta) {
+            var before = meta.getItems(); var after = before.stream().map(this::canonical).toList();
+            if (!before.equals(after)) { var copy = original.clone(); meta.setItems(after); copy.setItemMeta(meta); return copy; }
+        }
         String form = FORMS.get(original.getType());
         if (form != null) {
             if (original.hasItemMeta()) return original;
@@ -80,7 +100,7 @@ public final class MetalMaterials implements Listener {
         normalize(event.getPlayer().getInventory());
     }
 
-    @EventHandler public void join(PlayerJoinEvent event) { normalize(event.getPlayer().getInventory()); }
+    @EventHandler public void join(PlayerJoinEvent event) { normalize(event.getPlayer().getInventory()); normalize(event.getPlayer().getEnderChest()); }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void blockDrops(org.bukkit.event.block.BlockDropItemEvent event) {
