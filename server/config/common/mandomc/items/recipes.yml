@@ -862,7 +862,7 @@
         " S "
       ],
       "ingredients": {
-        "M": "agrinium_sheet",
+        "M": "agrinium",
         "S": "minecraft:stick"
       }
     },
@@ -878,81 +878,6 @@
         "M": "agrinium_sheet",
         "S": "minecraft:stick"
       }
-    },
-    "white_kyber": {
-      "result": "white_kyber",
-      "amount": 1,
-      "category": "materials",
-      "shape": [
-        "ADA",
-        "DGD",
-        "ADA"
-      ],
-      "ingredients": {
-        "A": "minecraft:amethyst_shard",
-        "D": "durasteel_scrap",
-        "G": "minecraft:glass"
-      }
-    },
-    "blue_kyber": {
-      "result": "blue_kyber",
-      "amount": 1,
-      "category": "materials",
-      "type": "shapeless",
-      "ingredients": [
-        "white_kyber",
-        "minecraft:blue_dye"
-      ]
-    },
-    "green_kyber": {
-      "result": "green_kyber",
-      "amount": 1,
-      "category": "materials",
-      "type": "shapeless",
-      "ingredients": [
-        "white_kyber",
-        "minecraft:green_dye"
-      ]
-    },
-    "red_kyber": {
-      "result": "red_kyber",
-      "amount": 1,
-      "category": "materials",
-      "type": "shapeless",
-      "ingredients": [
-        "white_kyber",
-        "minecraft:red_dye"
-      ]
-    },
-    "orange_kyber": {
-      "result": "orange_kyber",
-      "amount": 1,
-      "category": "materials",
-      "type": "shapeless",
-      "ingredients": [
-        "white_kyber",
-        "minecraft:orange_dye"
-      ]
-    },
-    "purple_kyber": {
-      "result": "purple_kyber",
-      "amount": 1,
-      "category": "materials",
-      "type": "shapeless",
-      "ingredients": [
-        "white_kyber",
-        "minecraft:purple_dye"
-      ]
-    },
-    "yellow_kyber": {
-      "result": "yellow_kyber",
-      "amount": 1,
-      "category": "materials",
-      "type": "shapeless",
-      "ingredients": [
-        "white_kyber",
-        "minecraft:yellow_dye"
-      ]
     },
     "precision_emitter_coil": {
       "result": "precision_emitter_coil",
@@ -1917,8 +1842,8 @@
     }
   },
   "sources": {
-    "vote_crate_key": "<gray>Vote for MandoMC using /vote.\n<gray>Each accepted vote grants one Voting Crate Key.\n<gray>Use /crates open vote or a placed Voting Crate.",
-    "bantha_hide": "<gray>Tatooine: Banthas drop 1–3 hides.\n<gray>Brown Jawa shop on Tatooine: Utility supplies.\n<gray>Also craft four rabbit hides; click for recipe.",
+    "vote_crate_key": "<gray>Not currently obtainable through crafting or loot.",
+    "bantha_hide": "<gray>Tatooine: Banthas drop 1\u20133 hides.\n<gray>Brown Jawa shop on Tatooine: Utility supplies.\n<gray>Also craft four rabbit hides; click for recipe.",
     "purple_xwing": "<gray>Not currently obtainable through crafting or loot.",
     "money_note": "<gray>Not currently obtainable through crafting or loot.",
     "cortosis_alloy_frame": "<gray>Not currently obtainable through crafting or loot.",
@@ -1981,16 +1906,15 @@
     "rhydonium_barrel_three": "<gray>Not currently obtainable through crafting or loot.",
     "rhydonium_barrel_full": "<gray>Not currently obtainable through crafting or loot.",
     "keycard": "<gray>Not currently obtainable through crafting or loot.",
-    "vote_crate_key": "<gray>Not currently obtainable through crafting or loot.",
     "pathfinder_crate_key": "<gray>Not currently obtainable through crafting or loot.",
     "voyager_crate_key": "<gray>Not currently obtainable through crafting or loot.",
     "wayfarer_crate_key": "<gray>Not currently obtainable through crafting or loot.",
-    "agrinium_scrap": "<gray>Tatooine caves: mine Agrinium Ore.\n<gray>Use a stone-or-better pickaxe; 1–5 scraps.\n<gray>Fortune adds none; Silk Touch keeps the ore.",
+    "agrinium_scrap": "<gray>Tatooine caves: mine Agrinium Ore.\n<gray>Use a stone-or-better pickaxe; 1\u20135 scraps.\n<gray>Fortune adds none; Silk Touch keeps the ore.",
     "aurodium_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "beskar_scrap": "<gray>Mandalore mine: 25 nodes during Beskar Rush.\n<gray>Mine active nodes for 1–5 scraps each.\n<gray>Also a possible KOTH Crate reward on Batuu.\n<gray>Crate key: winning clan reward from KOTH on Hoth.",
+    "beskar_scrap": "<gray>Mandalore mine: 25 nodes during Beskar Rush.\n<gray>Mine active nodes for 1\u20135 scraps each.\n<gray>Also a possible KOTH Crate reward on Batuu.\n<gray>Crate key: winning clan reward from KOTH on Hoth.",
     "cortosis_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "durasteel_scrap": "<gray>Tatooine caves: mine Durasteel Ore.\n<gray>Use a iron-or-better pickaxe; 1–5 scraps.\n<gray>Fortune adds none; Silk Touch keeps the ore.",
-    "electrum_scrap": "<gray>Hoth deeper stone caves: mine Electrum Ore.\n<gray>Use a iron-or-better pickaxe; 1–5 scraps.\n<gray>Fortune adds none; Silk Touch keeps the ore.",
+    "durasteel_scrap": "<gray>Tatooine caves: mine Durasteel Ore.\n<gray>Use a iron-or-better pickaxe; 1\u20135 scraps.\n<gray>Fortune adds none; Silk Touch keeps the ore.",
+    "electrum_scrap": "<gray>Hoth deeper stone caves: mine Electrum Ore.\n<gray>Use a iron-or-better pickaxe; 1\u20135 scraps.\n<gray>Fortune adds none; Silk Touch keeps the ore.",
     "lommite_scrap": "<gray>Not currently obtainable through crafting or loot.",
     "mandalorian_iron_scrap": "<gray>Not currently obtainable through crafting or loot.",
     "neuranium_scrap": "<gray>Not currently obtainable through crafting or loot.",
@@ -2024,7 +1948,7 @@
     "minecraft:glass_bottle": "<gray>Craft three glass in a V for three bottles.\n<gray>Glass: smelt sand from Tatooine.",
     "minecraft:green_dye": "<gray>Smelt cactus in a furnace for green dye.\n<gray>Gather cactus in Tatooine desert terrain.",
     "minecraft:gunpowder": "<gray>Creepers drop gunpowder.\n<gray>Brown Jawa shops do not stock it.",
-    "minecraft:leather": "<gray>Drops from banthas (1–3 per kill) and creatures that normally drop leather. Brown Jawa traders may stock Bantha Hide. It also works in normal leather recipes.",
+    "minecraft:leather": "<gray>Drops from banthas (1\u20133 per kill) and creatures that normally drop leather. Brown Jawa traders may stock Bantha Hide. It also works in normal leather recipes.",
     "minecraft:orange_dye": "<gray>Combine red dye and yellow dye.\n<gray>Flowers: brown Jawa shop on Tatooine,\n<gray>Greenery & dyes category.",
     "minecraft:purple_dye": "<gray>Combine red dye and blue dye.\n<gray>Brown Jawa shops on Tatooine: Greenery & dyes\n<gray>and Mineral supplies for flowers and lapis.",
     "minecraft:red_dye": "<gray>Craft a poppy into red dye.\n<gray>Poppies: brown Jawa shop on Tatooine,\n<gray>Greenery & dyes category.",
@@ -2064,7 +1988,7 @@
     "beskar": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Scrap source: Mandalore mine during Beskar Rush.",
     "beskar_block": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Scrap source: Mandalore mine during Beskar Rush.",
     "beskar_sheet": "<gray>Smelt in a furnace; click for the input.\n<gray>Scrap source: Mandalore mine during Beskar Rush.\n<gray>Also: possible KOTH Crate reward on Batuu.\n<gray>Key: winning clan reward from KOTH on Hoth.",
-    "blue_kyber": "<gray>Craft from White Kyber and matching dye.\n<gray>Also: random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
+    "blue_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "circuit_board": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "durasteel": "<gray>Craft nine Durasteel Scraps into one ingot.\n<gray>Scrap source: Tatooine caves.",
     "durasteel_block": "<gray>Craft nine Durasteel ingots into one block.\n<gray>Ore source: Tatooine caves.",
@@ -2076,18 +2000,18 @@
     "fang_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "fusion_coil_stabilizer": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Also: Jabba's Palace supply caches, Tatooine.\n<gray>Caches are available during the Jabba event.",
     "great_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "green_kyber": "<gray>Craft from White Kyber and matching dye.\n<gray>Also: random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
+    "green_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "obiwan": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "orange_kyber": "<gray>Craft from White Kyber and matching dye.\n<gray>Also: random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
+    "orange_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "pike_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "plasma_capacitor_array": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Also: Jabba's Palace supply caches, Tatooine.\n<gray>Caches are available during the Jabba event.",
     "plastoid": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "precision_crafted_lens": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Also: Jabba's Palace supply caches, Tatooine.\n<gray>Caches are available during the Jabba event.",
     "precision_emitter_coil": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "purple_kyber": "<gray>Craft from White Kyber and matching dye.\n<gray>Also: random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
+    "purple_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "quigon": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "raw_agrinium_block": "<gray>Pack nine retained Raw Agrinium into a block.\n<gray>Current Agrinium Ore drops scraps instead.",
-    "red_kyber": "<gray>Craft from White Kyber and matching dye.\n<gray>Also: random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
+    "red_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "speederbike_chassis": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "speederbike_repulsor": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "straight_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
@@ -2100,13 +2024,13 @@
     "vader": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "ventress_yellow": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "whip_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "white_kyber": "<gray>Craft with amethyst, Durasteel Scrap and glass.\n<gray>Also: random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
+    "white_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "windu": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "wiring_coil": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Also: Jabba's Palace supply caches, Tatooine.\n<gray>Caches are available during the Jabba event.\n<gray>Brown Jawas on Tatooine may also drop one.",
     "x_wing_cockpit": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "x_wing_left_wing": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "x_wing_right_wing": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "yellow_kyber": "<gray>Craft from White Kyber and matching dye.\n<gray>Also: random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown)."
+    "yellow_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown)."
   },
   "guide": {
     "title": "<gold>Recipes",
@@ -2125,7 +2049,7 @@
     "smelting": "<yellow>Refine in a blast furnace",
     "smelting-time": "<gray>Cooking time: <value> seconds",
     "categories": "<yellow>Categories",
-    "category-hint": "<gray><value> recipes — click to browse",
+    "category-hint": "<gray><value> recipes \u2014 click to browse",
     "page": "<gray>Page <value>",
     "shapeless": "<yellow>Craft in any arrangement",
     "furnace": "<yellow>Smelt in a furnace",

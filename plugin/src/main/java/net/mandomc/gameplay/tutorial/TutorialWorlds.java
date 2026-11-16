@@ -43,7 +43,7 @@ public final class TutorialWorlds implements AutoCloseable {
             world.setPVP(false); world.setDifficulty(Difficulty.NORMAL); world.setAutoSave(false);
             world.setTime(6000); world.setStorm(false); world.setThundering(false);
             world.setSpawnLocation(new Location(world, 8.5, 65, .5, -90, 0));
-            world.getWorldBorder().setCenter(48, 0); world.getWorldBorder().setSize(192);
+            world.getWorldBorder().setCenter(48, 0); world.getWorldBorder().setSize(2048);
             for (var rule : List.of(GameRules.SPAWN_MOBS, GameRules.ADVANCE_TIME, GameRules.ADVANCE_WEATHER,
                     GameRules.MOB_GRIEFING, GameRules.TNT_EXPLODES, GameRules.COMMAND_BLOCKS_WORK)) world.setGameRule(rule, false);
             world.setGameRule(GameRules.RANDOM_TICK_SPEED, 0);
@@ -96,7 +96,7 @@ public final class TutorialWorlds implements AutoCloseable {
         @Override public void generateNoise(org.bukkit.generator.WorldInfo info, Random random, int chunkX, int chunkZ, ChunkData data) {
             for (int lx = 0; lx < 16; lx++) for (int lz = 0; lz < 16; lz++) {
                 int x = chunkX * 16 + lx, z = chunkZ * 16 + lz;
-                if (x < -48 || x >= 144 || z < -96 || z >= 96) continue;
+                if (x < -976 || x >= 1072 || z < -1024 || z >= 1024) continue;
                 boolean market = x >= 96 && z < 16;
                 Material floor = market ? Material.SANDSTONE : z >= 32 ? Material.SMOOTH_STONE
                         : x < 32 ? Material.POLISHED_DEEPSLATE : Material.RED_SANDSTONE;

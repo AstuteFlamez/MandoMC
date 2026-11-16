@@ -48,11 +48,16 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         final Set<UUID> guards = new HashSet<>();
         final List<Entity> entities = new ArrayList<>();
         final BossBar bar;
-        UUID vehicle, target, brown, gray;
+        UUID vehicle, brown, gray;
         TextDisplay hologram;
         String clan;
         int claimX, claimZ, eventPage, eventSeconds = -1;
-        long pageAt, messageUntil, saberHeldMillis;
+        long pageAt, messageUntil, saberHeldMillis, controlMillis;
+        int controlTick = -1;
+        boolean correctControl;
+        Location targetCenter;
+        final Set<org.bukkit.block.Block> targetBlocks = new LinkedHashSet<>();
+        final Map<org.bukkit.block.Block, org.bukkit.block.BlockState> practiceBlocks = new LinkedHashMap<>();
         Component message;
         boolean recipeSeen, transitioning;
         int wallet = 100;
@@ -136,7 +141,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         finally { internal.remove(player.getUniqueId()); }
     }
     private boolean busy(Player player) {
-        if (net.mandomc.integrations.weapons.WeaponMechanicsItems.reloading(player)
+        if (net.mandomc.gameplay.admin.StaffMode.active(player) || net.mandomc.integrations.weapons.WeaponMechanicsItems.reloading(player)
                 || plugin.combat().tagged(player) || player.isInsideVehicle() || plugin.vehicles().mountedType(player) != null
                 || player.isDead() || net.mandomc.gameplay.ilum.ParkourInventory.stored(player)
                 || plugin.credits().auctions().pending(player)) return true;
@@ -217,7 +222,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
     }
     private void enter(Session session) {
         var player = session.player; var step = session.progress.step(); session.transitioning = false;
-        session.messageUntil = 0;
+        session.messageUntil = 0; session.controlMillis = 0; session.correctControl = false;
         session.bar.progress(Math.min(1, (float) step.ordinal() / Step.COMPLETE.ordinal()));
         if (session.hologram != null) { session.entities.remove(session.hologram); session.hologram.remove(); session.hologram = null; }
         switch (step) {
@@ -233,6 +238,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
                 for (int i = 0; i < config.getInt("guards"); i++) spawnGuard(session, i);
             }
             case SABER -> {
+                if (!teleport(player, at(session, 66.5, 65, .5, -90))) throw new IllegalStateException("Saber arrival cancelled");
                 clearItems(session); give(player, "saber", 1, 0); player.getInventory().setHeldItemSlot(0);
             }
             case BUY -> {
@@ -259,6 +265,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
                 if (!teleport(player, at(session, 44.5, 65, 44.5, 0))) throw new IllegalStateException("Hangar teleport cancelled");
             }
             case TARGET -> spawnTarget(session);
+            case LAND -> landingPad(session);
             case EVENTS -> {
                 removeVehicle(session); clearItems(session);
                 if (!teleport(player, at(session, 8.5, 65, .5, -90))) throw new IllegalStateException("Debrief teleport cancelled");
@@ -267,7 +274,8 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
             case COMPLETE -> { complete(session); return; }
             default -> { }
         }
-        if (step != Step.MAP && step != Step.WILDERNESS) hologram(session);
+        if (step != Step.MAP && step != Step.WILDERNESS && !flightStep(step)) hologram(session);
+        if (step == Step.EVENTS) eventTimer(session);
         plugin.territories().announce(player);
         player.sendActionBar(instruction(session));
     }
@@ -284,32 +292,59 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         session.guards.add(entity.getUniqueId()); session.entities.add(entity);
     }
     private void spawnTarget(Session session) {
-        // A 17-block luminous bullseye at the center of the full private flight range.
-        var target = session.world.spawn(at(session, 48.5, 92, .5, 180), Slime.class, slime -> {
-            slime.setSize(32); slime.setAI(false); slime.setGravity(false); slime.setInvisible(true);
-            slime.setInvulnerable(true); slime.setCollidable(false); slime.setPersistent(false); slime.setSilent(true);
-        });
-        session.target = target.getUniqueId(); session.entities.add(target);
-        // Four rectangular bars per ring keep this large target inexpensive to render.
-        for (int ring = 0; ring < 4; ring++) {
-            int size = 17 - ring * 4;
-            double x = 40 + ring * 2, y = 92 + ring * 2;
-            Material color = ring % 2 == 0 ? Material.SEA_LANTERN : Material.RED_CONCRETE;
-            targetPart(session, x, y, size, 2, color);
-            targetPart(session, x, y + size - 2, size, 2, color);
-            targetPart(session, x, y + 2, 2, size - 4, color);
-            targetPart(session, x + size - 2, y + 2, 2, size - 4, color);
+        var ship = Objects.requireNonNull(plugin.vehicles().entity(session.vehicle));
+        var facing = session.player.getEyeLocation();
+        facing.setPitch((float) Math.clamp(facing.getPitch(), -30, 30));
+        var direction = facing.getDirection();
+        session.targetCenter = ship.getLocation().add(0, 3, 0).add(direction.clone().multiply(28));
+        session.targetCenter.setY(Math.clamp(session.targetCenter.getY(), 74, session.world.getMaxHeight() - 12));
+        boolean alongX = Math.abs(direction.getZ()) >= Math.abs(direction.getX());
+        // Solid blocks are both the visible bullseye and the native cannon collision surface.
+        for (int across = -8; across <= 8; across++) for (int up = -8; up <= 8; up++) {
+            var block = session.targetCenter.clone().add(alongX ? across : 0, up, alongX ? 0 : across).getBlock();
+            int ring = Math.max(Math.abs(across), Math.abs(up)) / 2;
+            practiceBlock(session, block, ring % 2 == 0 ? Material.SEA_LANTERN : Material.RED_CONCRETE);
+            session.targetBlocks.add(block);
         }
-        targetPart(session, 48, 100, 1, 1, Material.SEA_LANTERN);
     }
-    private void targetPart(Session session, double x, double y, float width, float height, Material material) {
-        var display = session.world.spawn(at(session, x, y, .5, 0), BlockDisplay.class, block -> {
-            block.setBlock(material.createBlockData()); block.setPersistent(false); block.setViewRange(8);
-            block.setBrightness(new Display.Brightness(15, 15));
-            block.setTransformation(new org.bukkit.util.Transformation(new org.joml.Vector3f(),
-                    new org.joml.Quaternionf(), new org.joml.Vector3f(width, height, .25f), new org.joml.Quaternionf()));
-        });
-        session.entities.add(display);
+    private void practiceBlock(Session session, org.bukkit.block.Block block, Material material) {
+        session.practiceBlocks.putIfAbsent(block, block.getState());
+        block.setType(material, false);
+    }
+    private void landingPad(Session session) {
+        var ship = Objects.requireNonNull(plugin.vehicles().entity(session.vehicle));
+        // The flight area is larger than the original walking scene. Give every landing a solid surface,
+        // including older generated chunks that were void before the flight area was expanded.
+        int x = ship.getLocation().getBlockX(), z = ship.getLocation().getBlockZ();
+        for (int dx = -4; dx <= 4; dx++) for (int dz = -4; dz <= 4; dz++) {
+            var block = session.world.getBlockAt(x + dx, 64, z + dz);
+            practiceBlock(session, block, Math.abs(dx) == 4 || Math.abs(dz) == 4 ? Material.SEA_LANTERN : Material.SMOOTH_STONE);
+        }
+    }
+    private static boolean flightStep(Step step) {
+        return step.ordinal() >= Step.BOARD.ordinal() && step.ordinal() <= Step.LAND.ordinal();
+    }
+    /** Filter the actual ModelEngine inputs before motion; only the taught control can affect the ship. */
+    public net.mandomc.gameplay.vehicles.VehicleMotion.Input flightInput(Player player,
+            net.mandomc.gameplay.vehicles.VehicleMotion.Input raw, LivingEntity vehicle) {
+        var session = sessions.get(player.getUniqueId());
+        if (session == null) return raw;
+        var step = session.progress.step();
+        session.controlTick = Bukkit.getCurrentTick();
+        session.correctControl = switch (step) {
+            case FLIGHT -> raw.forward() > 0;
+            case RIGHT -> raw.side() < 0;
+            case LEFT -> raw.side() > 0;
+            // Normal aircraft braking stays engaged after S is released.
+            case STOP -> session.correctControl || raw.forward() < 0;
+            case LAND -> raw.sneak();
+            default -> false;
+        };
+        return TutorialFlight.controls(step, raw, VehicleModels.grounded(vehicle));
+    }
+    public boolean mayFire(Player player) {
+        var session = sessions.get(player.getUniqueId());
+        return session != null && session.progress.step() == Step.TARGET && !session.transitioning;
     }
     private Component instruction(Session session) {
         if (session.progress.step() == Step.EVENTS) return text("events." + session.eventPage + ".action",
@@ -317,7 +352,6 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         if (session.progress.step() == Step.SABER && session.transitioning) return text(
                 plugin.sabers().busy(session.player) ? "messages.saber-return" : "messages.saber-hold");
         if (session.progress.step() == Step.FLIGHT) {
-            if (!plugin.vehicles().occupant(session.vehicle, session.player.getUniqueId())) return text("steps.board");
             var vehicle = plugin.vehicles().entity(session.vehicle);
             if (vehicle != null && VehicleModels.grounded(vehicle)) return text("steps.takeoff");
         }
@@ -344,8 +378,15 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         if (session.hologram != null) session.hologram.text(hologramText(session));
     }
     private void hologram(Session session) {
-        var location = session.progress.step() == Step.TARGET ? at(session, 48.5, 112, .5, 0)
-                : session.player.getLocation().add(session.player.getLocation().getDirection().setY(0).normalize().multiply(5)).add(0, 2.8, 0);
+        var location = switch (session.progress.step()) {
+            case SABER, COMBAT -> at(session, 74.5, 68, .5, 0);
+            case CREATE, CLAIM, DISBAND -> at(session, 53, 68, .5, 0);
+            case BUY -> at(session, 116, 68, -32.5, 0);
+            case SELL -> at(session, 116, 68, -8.5, 0);
+            case PLACE -> at(session, 50, 68, 50, 0);
+            case WARP -> at(session, -18, 68, .5, 0);
+            default -> at(session, 14, 68, .5, 0);
+        };
         session.hologram = session.world.spawn(location, TextDisplay.class, display -> {
             display.setPersistent(false); display.setBillboard(Display.Billboard.CENTER);
             display.setAlignment(TextDisplay.TextAlignment.CENTER); display.setLineWidth(280);
@@ -399,15 +440,22 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
     }
     public void board(Player player, UUID vehicle) {
         var session = sessions.get(player.getUniqueId());
-        if (session == null || !Objects.equals(session.vehicle, vehicle) || session.progress.step() != Step.FLIGHT) { denied(player); return; }
+        if (session == null || !Objects.equals(session.vehicle, vehicle) || session.progress.step() != Step.BOARD) { denied(player); return; }
         plugin.vehicles().mount(player, vehicle, true);
     }
-    public void cannonHit(Player player, UUID vehicle, Entity direct) {
+    public void cannonHit(Player player, UUID vehicle, org.bukkit.block.Block block) {
         var session = sessions.get(player.getUniqueId());
         if (session == null || session.progress.step() != Step.TARGET || !Objects.equals(session.vehicle, vehicle)
-                || direct == null || !direct.getUniqueId().equals(session.target) || session.transitioning) return;
+                || block == null || !session.targetBlocks.contains(block) || session.transitioning) return;
         session.transitioning = true;
-        later(session, Step.TARGET, 20, () -> advance(session, Step.TARGET));
+        for (var part : session.targetBlocks) {
+            session.world.spawnParticle(Particle.BLOCK, part.getLocation().add(.5, .5, .5), 3, .4, .4, .4, .1, part.getBlockData());
+            part.setType(Material.AIR, false);
+        }
+        session.targetBlocks.clear();
+        session.world.spawnParticle(Particle.EXPLOSION_EMITTER, session.targetCenter, 3);
+        session.world.playSound(session.targetCenter, Sound.ENTITY_GENERIC_EXPLODE, 1, .8f);
+        later(session, Step.TARGET, 60, () -> advance(session, Step.TARGET));
     }
     private void tick() {
         long nowNanos = System.nanoTime(), elapsed = Math.max(0, (nowNanos - lastTick) / 1_000_000); lastTick = nowNanos;
@@ -432,24 +480,74 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
                     session.saberHeldMillis = held ? session.saberHeldMillis + Math.max(0, Math.min(250, elapsed)) : 0;
                     if (session.saberHeldMillis >= 1000) advance(session, Step.SABER);
                 }
-                if (step == Step.FLIGHT || step == Step.TARGET) {
+                if (flightStep(step)) {
                     replenish(player, "vehicle-ammo", 1);
                     var vehicle = plugin.vehicles().entity(session.vehicle);
                     if (vehicle == null || !vehicle.isValid()) throw new IllegalStateException("Training vehicle disappeared");
-                    if (session.progress.fly(plugin.vehicles().occupant(session.vehicle, player.getUniqueId()),
-                            !VehicleModels.grounded(vehicle), elapsed, config.getInt("flight-seconds") * 1000L)) enter(session);
+                    boolean pilot = plugin.vehicles().occupant(session.vehicle, player.getUniqueId());
+                    boolean grounded = VehicleModels.grounded(vehicle);
+                    boolean observed = pilot && session.correctControl && Bukkit.getCurrentTick() - session.controlTick <= 2;
+                    if (step == Step.BOARD && pilot) advance(session, Step.BOARD);
+                    if (session.progress.fly(pilot, !grounded && vehicle.getVelocity().lengthSquared() > .01, elapsed, config.getInt("flight-seconds") * 1000L)) enter(session);
+                    if (step == Step.RIGHT || step == Step.LEFT || step == Step.STOP) {
+                        boolean correct = observed && !grounded && (step != Step.STOP || vehicle.getVelocity().lengthSquared() < .01);
+                        session.controlMillis = correct ? session.controlMillis + Math.min(250, elapsed) : 0;
+                        if (session.controlMillis >= 600) advance(session, step);
+                    }
+                    if (step == Step.LAND && pilot && grounded) advance(session, Step.LAND);
                 }
                 if (step == Step.EVENTS && now - session.pageAt >= config.getInt("event-page-seconds") * 1000L) {
                     if (++session.eventPage == 3) { advance(session, Step.EVENTS); continue; }
                     session.pageAt = now; session.eventSeconds = -1;
                 }
                 if (step == Step.EVENTS) eventTimer(session);
+                if (Bukkit.getCurrentTick() % 10 == 0) guidance(session);
                 if (Bukkit.getCurrentTick() % 5 == 0) player.sendActionBar(now < session.messageUntil ? session.message : instruction(session));
             } catch (RuntimeException error) { fail(session.player, error); end(session.player, false); }
         }
         if (Bukkit.getCurrentTick() % 100 == 0) for (var player : Bukkit.getOnlinePlayers()) {
             if (!TutorialInventory.active(player)) rewards(player);
         }
+    }
+    private void guidance(Session session) {
+        var player = session.player; var step = session.progress.step();
+        if (territoryTitles(player)) {
+            int cx = player.getLocation().getBlockX() >> 4, cz = player.getLocation().getBlockZ() >> 4;
+            for (int x = cx - 1; x <= cx + 1; x++) for (int z = cz - 1; z <= cz + 1; z++) {
+                var center = at(session, x * 16 + 8, 65.15, z * 16 + 8, 0);
+                var identity = plugin.territories().identity(player, center);
+                var color = identity.relation() == net.mandomc.gameplay.territory.TerritoryIdentity.Relation.OWN
+                        ? Color.LIME : identity.zone() == net.mandomc.gameplay.territory.TerritoryPolicy.Zone.SAFEZONE ? Color.ORANGE : Color.GRAY;
+                for (int n = 0; n <= 16; n += 2) {
+                    dust(player, at(session, x * 16 + n, 65.15, z * 16, 0), color);
+                    dust(player, at(session, x * 16 + n, 65.15, z * 16 + 16, 0), color);
+                    dust(player, at(session, x * 16, 65.15, z * 16 + n, 0), color);
+                    dust(player, at(session, x * 16 + 16, 65.15, z * 16 + n, 0), color);
+                }
+            }
+        }
+        Location goal = switch (step) {
+            case WILDERNESS -> at(session, 36, 65.25, .5, 0);
+            case CLAIM -> at(session, 55, 65.25, .5, 0);
+            case BUY -> at(session, 119, 65.25, -32.5, 0);
+            case SELL -> at(session, 119, 65.25, -8.5, 0);
+            case PLACE -> at(session, 50, 65.25, 50, 0);
+            case BOARD -> plugin.vehicles().entity(session.vehicle).getLocation().add(0, .3, 0);
+            default -> null;
+        };
+        if (goal == null) return;
+        var from = player.getLocation().clone(); from.setY(goal.getY());
+        var delta = goal.toVector().subtract(from.toVector()); double length = delta.length();
+        if (length < .2) return; delta.normalize();
+        double phase = (Bukkit.getCurrentTick() % 20) / 20.0;
+        for (double n = phase; n < Math.min(20, length); n += .9) dust(player, from.clone().add(delta.clone().multiply(n)), Color.AQUA);
+        // Arrowhead at the destination makes direction unambiguous even while stationary.
+        var side = new org.bukkit.util.Vector(-delta.getZ(), 0, delta.getX());
+        for (int sign : new int[]{-1, 1}) for (double n = 0; n < 2; n += .4)
+            dust(player, goal.clone().subtract(delta.clone().multiply(n)).add(side.clone().multiply(n * sign * .6)), Color.AQUA);
+    }
+    private void dust(Player player, Location at, Color color) {
+        player.spawnParticle(Particle.DUST, at, 1, 0, 0, 0, 0, new Particle.DustOptions(color, 1));
     }
     private void replenish(Player player, String item, int slot) {
         if (Bukkit.getCurrentTick() % 5 != 0) return;
@@ -472,6 +570,8 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
             player.saveData();
         }
         end(player, true);
+        player.sendMessage(text("messages.start-naboo"));
+        player.showTitle(net.kyori.adventure.title.Title.title(text("messages.naboo-title"), text("messages.naboo-subtitle")));
     }
     public void end(Player player, boolean completed) {
         if (!ending.add(player.getUniqueId())) return;
@@ -486,6 +586,8 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
             try { if (entity.isValid()) mobs.remove(entity); }
             catch (RuntimeException error) { entity.remove(); plugin.getLogger().log(java.util.logging.Level.WARNING, "Tutorial model cleanup failed", error); }
         }
+        for (var state : session.practiceBlocks.values()) state.update(true, false);
+        session.practiceBlocks.clear(); session.targetBlocks.clear();
         pool.release(session.lease);
     }
     private void endSession(Player player, boolean completed) {
@@ -609,7 +711,8 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         if (session == null) { event.setCancelled(true); return; }
         if (event.getInventory().getHolder() instanceof Menu menu && menu.owner.equals(player.getUniqueId())) return;
         if (session.progress.step() == Step.RECIPES && RecipeGuide.isMenu(event.getInventory())) {
-            session.recipeSeen = true; return;
+            if (RecipeGuide.isCategory(event.getInventory(), "weapons")) session.recipeSeen = true;
+            return;
         }
         event.setCancelled(true); denied(player);
     }
@@ -756,7 +859,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         if (event instanceof PlayerTeleportEvent || event.getTo() == null) return;
         var session = sessions.get(event.getPlayer().getUniqueId()); if (session == null) return;
         var to = event.getTo(); var step = session.progress.step();
-        if (step == Step.FLIGHT || step == Step.TARGET) return;
+        if (flightStep(step)) return;
         boolean outside = to.getY() < 64 || to.getY() > 77 || switch (step) {
             case WARP -> to.getX() < -32 || to.getX() >= -12 || Math.abs(to.getZ()) > 10;
             case MAP -> to.getX() < 0 || to.getX() >= 30 || Math.abs(to.getZ()) > 10;
@@ -767,7 +870,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
             case SELL -> to.getX() < 100 || to.getX() > 132 || to.getZ() < -20 || to.getZ() > 3;
             default -> to.getX() < 0 || to.getX() > 30 || Math.abs(to.getZ()) > 10;
         };
-        if (outside) { event.setTo(event.getFrom()); denied(event.getPlayer()); }
+        if (outside) { event.setTo(event.getFrom()); hint(event.getPlayer(), "follow-particles"); }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void dismount(EntityDismountEvent event) {

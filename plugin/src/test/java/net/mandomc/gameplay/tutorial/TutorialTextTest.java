@@ -27,10 +27,15 @@ public class TutorialTextTest {
         assertFalse(key + " must be one line", line.contains("\n"));
         assertTrue(key + " exceeds compact action-bar budget (" + budget + "): " + line, budget <= 240);
     }
+    @Test public void trainingShipHasItsActualWeaponAmmo() throws Exception {
+        var tutorial = load("/tutorial/tutorial.yml"); var weapons = load("/vehicles/weapons.yml");
+        assertEquals("xwing", tutorial.getString("items.vehicle"));
+        assertEquals(weapons.getString("vehicles." + tutorial.getString("items.vehicle") + ".ammo"), tutorial.getString("items.vehicle-ammo"));
+    }
     @Test public void allTutorialActionBarsFitWithLargestConfiguredCounters() throws Exception {
         var tutorial = load("/tutorial/tutorial.yml");
         var otherSurfaces = Set.of("players-only", "bossbar", "event-bar", "loading-bar", "event-next",
-                "event-finish", "map-intro", "map-walk", "recovery");
+                "event-finish", "start-naboo", "naboo-title", "naboo-subtitle", "map-intro", "map-walk", "recovery");
         for (String key : tutorial.getConfigurationSection("messages").getKeys(false))
             if (!otherSurfaces.contains(key)) compact("messages." + key, tutorial.getString("messages." + key));
         for (String key : tutorial.getConfigurationSection("steps").getKeys(false))

@@ -24,7 +24,7 @@ import org.bukkit.event.block.TNTPrimeEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/** One server-wide boundary: no world, region, operator or event exemptions. */
+/** Native circuit boundary; Ilum alone retains its authored course mechanisms. */
 public final class RedstoneCircuitBoundary implements Listener {
     private static final Set<String> NATIVE_CLASSES = Set.of(
             "net.minecraft.world.level.SignalGetter",
@@ -70,7 +70,7 @@ public final class RedstoneCircuitBoundary implements Listener {
                 chunks++;
             }
         }
-        plugin.getLogger().info("Redstone circuits disabled in all worlds; normalized " + chunks
+        plugin.getLogger().info("Redstone circuits disabled outside Ilum; normalized " + chunks
                 + " loaded chunks in " + (System.nanoTime() - start) / 1_000_000 + "ms.");
     }
 
@@ -88,7 +88,9 @@ public final class RedstoneCircuitBoundary implements Listener {
                 };
     }
 
+    private static boolean ilum(org.bukkit.World world) { return world.getKey().toString().equals("minecraft:ilum"); }
     private void normalize(Chunk chunk) {
+        if (ilum(chunk.getWorld())) return;
         try {
             // null requests the already-loaded chunk; no ticket, getChunkAt or world-wide force loading.
             Object[] nativeSections = (Object[]) sections.invoke(handle.invoke(chunk, new Object[]{null}));
@@ -129,14 +131,14 @@ public final class RedstoneCircuitBoundary implements Listener {
     public void power(BlockRedstoneEvent event) {
         // Native reads are already zero. This prevents sensor/observer and local state activation;
         // allowing zero transitions avoids trapping observers or inverted torches in retry loops.
-        event.setNewCurrent(0);
+        if (!ilum(event.getBlock().getWorld())) event.setNewCurrent(0);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void extend(BlockPistonExtendEvent event) { event.setCancelled(true); }
+    public void extend(BlockPistonExtendEvent event) { if (!ilum(event.getBlock().getWorld())) event.setCancelled(true); }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void retract(BlockPistonRetractEvent event) { event.setCancelled(true); }
+    public void retract(BlockPistonRetractEvent event) { if (!ilum(event.getBlock().getWorld())) event.setCancelled(true); }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void tnt(TNTPrimeEvent event) {

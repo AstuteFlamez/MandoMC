@@ -51,7 +51,17 @@ public final class TerritoryService implements Listener, AutoCloseable {
         plugin.getServer().getPluginManager().registerEvents(new TerritoryProtection(this),plugin);
         plugin.getServer().getOnlinePlayers().forEach(this::announce);
         transitions = plugin.getServer().getScheduler().runTaskTimer(plugin,
-                () -> plugin.getServer().getOnlinePlayers().forEach(this::announce), 10, 10);
+                () -> {
+                    plugin.getServer().getOnlinePlayers().forEach(this::announce);
+                    for (var player : plugin.getServer().getOnlinePlayers()) {
+                        for (var entity : player.getNearbyEntities(64, 32, 64)) {
+                            if (entity instanceof org.bukkit.entity.Mob mob && mob.getTarget() instanceof Player target
+                                    && (!combat(target.getLocation()) || !combat(mob.getLocation()))) {
+                                mob.setTarget(null); mob.getPathfinder().stopPathfinding();
+                            }
+                        }
+                    }
+                }, 1, 5);
     }
     public TerritoryPolicy policy() { return policy; }
     public boolean interactions(Location location) {
@@ -112,7 +122,16 @@ public final class TerritoryService implements Listener, AutoCloseable {
         plugin.getServer().getScheduler().runTask(plugin,()->{if(event.getPlayer().isOnline())announce(event.getPlayer());});
     }
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
-    public void teleport(PlayerTeleportEvent event) { move(event); }
+    public void teleport(PlayerTeleportEvent event) {
+        if (event.getTo() != null && (!combat(event.getTo()) || event.getFrom().getWorld() != event.getTo().getWorld())) {
+            for (var entity : event.getFrom().getWorld().getNearbyEntities(event.getFrom(), 64, 32, 64)) {
+                if (entity instanceof org.bukkit.entity.Mob mob && event.getPlayer().equals(mob.getTarget())) {
+                    mob.setTarget(null); mob.getPathfinder().stopPathfinding();
+                }
+            }
+        }
+        move(event);
+    }
     @EventHandler public void join(PlayerJoinEvent event) { announce(event.getPlayer()); }
     @EventHandler public void changedWorld(PlayerChangedWorldEvent event) { announce(event.getPlayer()); }
     @EventHandler public void respawn(PlayerRespawnEvent event) {

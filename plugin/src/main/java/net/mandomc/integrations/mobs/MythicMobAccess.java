@@ -41,6 +41,7 @@ public final class MythicMobAccess {
         if (org.bukkit.event.HandlerList.getRegisteredListeners(owner).stream()
                 .noneMatch(listener -> listener.getListener() instanceof MobBaseStats)) {
             new MobBaseStats(owner, this, vendor, api, active, activeType);
+            new SafezoneMobs(owner, vendor, api, active, activeType);
         }
 
     }

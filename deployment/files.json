@@ -22,6 +22,10 @@
       "target": "plugins/MandoAccess/config.yml"
     },
     {
+      "source": "server/config/common/mandomc/admin/staff.yml",
+      "target": "plugins/MandoMC/admin/staff.yml"
+    },
+    {
       "source": "server/config/common/mandomc/admin/utilities.yml",
       "target": "plugins/MandoMC/admin/utilities.yml"
     },

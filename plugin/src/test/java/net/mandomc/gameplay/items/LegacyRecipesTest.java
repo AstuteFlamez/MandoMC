@@ -50,11 +50,18 @@ public class LegacyRecipesTest {
                 }
             }
         }
-        assertEquals(142, config.getConfigurationSection("recipes").getKeys(false).size());
+        assertEquals(135, config.getConfigurationSection("recipes").getKeys(false).size());
         assertEquals(11, config.getConfigurationSection("smelting").getKeys(false).size());
         assertEquals(71, config.getConfigurationSection("stonecutting").getKeys(false).size());
     }
 
+    @Test public void kyberComesFromCratesAndPickaxeUsesIngots() throws Exception {
+        var config = resource("items/recipes.yml");
+        for (String id : config.getConfigurationSection("recipes").getKeys(false))
+            assertFalse(config.getString("recipes." + id + ".result").endsWith("_kyber"));
+        assertEquals("agrinium", config.getString("recipes.agrinium_pickaxe.ingredients.M"));
+        assertEquals("blue_kyber", config.getString("recipes.obiwan.ingredients.C"));
+    }
     private String pattern(RecipeDefinition recipe, boolean mirror) {
         var rows = recipe.shape();
         int min = 3, max = -1;

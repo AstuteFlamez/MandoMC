@@ -121,7 +121,10 @@ public final class ParkourService implements Listener, AutoCloseable {
             switch(action) {
                 case "start" -> request(player);
                 case "leave" -> leave(player,true,false);
-                case "checkpoint" -> {if(active(player))retry(player);else send(player,"outside");}
+                case "checkpoint" -> {
+                    if (staff(player) && args.length == 2 && args[1].matches("[1-4]")) teleport(player, checkpoints.get(Integer.parseInt(args[1])));
+                    else if(active(player))retry(player);else send(player,"outside");
+                }
                 case "restart" -> restart(player);
                 case "status" -> send(player,"status","checkpoint",Integer.toString(active(player)?run(player).checkpoint():0),"time",format(elapsed(player)));
                 case "top" -> showTop(player);
@@ -143,6 +146,8 @@ public final class ParkourService implements Listener, AutoCloseable {
         for (var player:Bukkit.getOnlinePlayers()) if (ParkourInventory.stored(player)) recover(player);
     }
 
+    public boolean damageTrial(Player player) { return active(player) && run(player).checkpoint() == 3; }
+    private boolean staff(Player player) { return net.mandomc.gameplay.admin.StaffMode.active(player); }
     public boolean active(Player player) { return ParkourInventory.stored(player); }
     public World world() { return world; }
     public Location start() { return start.clone(); }
@@ -179,6 +184,7 @@ public final class ParkourService implements Listener, AutoCloseable {
     }
     private Location exit() { return plugin.worlds().spawn(config.getString("return-world")); }
     public void request(Player player) {
+        if (staff(player)) { teleport(player, start); return; }
         if (active(player)) { send(player,"welcome");return; }
         if (plugin.combat().tagged(player) || player.isInsideVehicle()) { send(player,"unsafe");return; }
         if (player.getPersistentDataContainer().has(CrateService.PENDING)) { send(player,"crate-pending");return; }
@@ -187,7 +193,7 @@ public final class ParkourService implements Listener, AutoCloseable {
         else plugin.travel().request(player,()->start.clone());
     }
     public void begin(Player player) {
-        if (active(player)) return;
+        if (active(player) || staff(player)) return;
         if (player.getPersistentDataContainer().has(CrateService.PENDING)) { teleport(player,exit());send(player,"crate-pending");return; }
         player.closeInventory();
         if (player.getItemOnCursor()!=null&&!player.getItemOnCursor().isEmpty()) { teleport(player,exit());send(player,"unsafe");return; }
@@ -341,7 +347,7 @@ public final class ParkourService implements Listener, AutoCloseable {
         }
         if(active(player)){Bukkit.getScheduler().runTask(plugin,()->recover(player));return;}
         restoreInspectMode(player);
-        if(player.getWorld().equals(world))Bukkit.getScheduler().runTask(plugin,()->teleport(player,exit()));
+        if(player.getWorld().equals(world) && !staff(player))Bukkit.getScheduler().runTask(plugin,()->teleport(player,exit()));
         var best=bests.get(player.getUniqueId());
         long nativeBest=player.getPersistentDataContainer().getOrDefault(BEST,PersistentDataType.LONG,Long.MAX_VALUE);
         if(best!=null&&nativeBest==Long.MAX_VALUE)player.getPersistentDataContainer().set(BEST,PersistentDataType.LONG,best.millis());
@@ -355,13 +361,13 @@ public final class ParkourService implements Listener, AutoCloseable {
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true) public void teleportEvent(PlayerTeleportEvent event) {
         var player=event.getPlayer();
         if(!active(player)||internal.contains(player.getUniqueId())||!event.getTo().getWorld().equals(world))return;
-        if(player.isOp()){saveRun(player,run(player).practice());player.saveData();send(player,"practice");}
+        if(staff(player)){saveRun(player,run(player).practice());player.saveData();send(player,"practice");}
         else{event.setCancelled(true);send(player,"commands");}
     }
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true) public void move(PlayerMoveEvent event) {
         var player=event.getPlayer();
         if(event instanceof PlayerTeleportEvent||!active(player)||!event.hasChangedPosition())return;
-        if(event.getTo().getY()<config.getDouble("fall-y",-90)||player.getFireTicks()>0){
+        if(!damageTrial(player) && (event.getTo().getY()<config.getDouble("fall-y",-90)||player.getFireTicks()>0)){
             event.setTo(checkpoint(player));player.setFireTicks(0);player.setFallDistance(0);return;
         }
         Block block=event.getTo().getBlock();
@@ -378,6 +384,8 @@ public final class ParkourService implements Listener, AutoCloseable {
     }
     @EventHandler(priority=EventPriority.LOWEST) public void damage(EntityDamageEvent event) {
         if(!event.getEntity().getWorld().equals(world))return;
+        if(event.getEntity() instanceof Player player && damageTrial(player)
+                && !(event instanceof org.bukkit.event.entity.EntityDamageByEntityEvent)) return;
         event.setCancelled(true);
         if(!(event.getEntity() instanceof Player player)||!active(player))return;
         switch(event.getCause()) {
@@ -390,7 +398,7 @@ public final class ParkourService implements Listener, AutoCloseable {
         }
     }
     @EventHandler public void death(PlayerDeathEvent event) {if(active(event.getEntity())){event.setKeepInventory(true);event.getDrops().clear();event.setKeepLevel(true);}}
-    @EventHandler public void respawn(PlayerRespawnEvent event) {if(active(event.getPlayer()))event.setRespawnLocation(checkpoint(event.getPlayer()));}
+    @EventHandler(priority=EventPriority.HIGHEST) public void respawn(PlayerRespawnEvent event) {if(active(event.getPlayer()))event.setRespawnLocation(checkpoint(event.getPlayer()));}
     @EventHandler(priority=EventPriority.LOWEST) public void controls(PlayerInteractEvent event) {
         var player=event.getPlayer();if(!active(player))return;
         if(event.getAction()==Action.PHYSICAL)return; // Original pressure-plate mechanisms remain functional.
@@ -414,10 +422,10 @@ public final class ParkourService implements Listener, AutoCloseable {
     @EventHandler public void food(FoodLevelChangeEvent event) {if(event.getEntity() instanceof Player p&&active(p)){event.setCancelled(true);event.setFoodLevel(20);}}
     @EventHandler public void fly(PlayerToggleFlightEvent event) {if(active(event.getPlayer())){event.setCancelled(true);event.getPlayer().setFlying(false);event.getPlayer().setAllowFlight(false);}}
     @EventHandler(priority=EventPriority.LOWEST) public void command(PlayerCommandPreprocessEvent event) {
-        if(!active(event.getPlayer())||event.getPlayer().isOp())return;
+        if(!active(event.getPlayer())||staff(event.getPlayer()))return;
         String command=event.getMessage().split(" ",2)[0].substring(1).toLowerCase(java.util.Locale.ROOT);
         if(command.contains(":"))command=command.substring(command.indexOf(':')+1);
-        if(!List.of("parkour","ilum","spawn","msg","r","help").contains(command)){event.setCancelled(true);send(event.getPlayer(),"commands");}
+        if(!List.of("parkour","ilum","spawn","msg","r","help","staff","staffmode").contains(command)){event.setCancelled(true);send(event.getPlayer(),"commands");}
     }
 
     private void spawnDisplays() {

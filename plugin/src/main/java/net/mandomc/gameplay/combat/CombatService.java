@@ -56,7 +56,7 @@ public final class CombatService implements Listener, AutoCloseable {
     public int remainingTenths(Player player) { return tags.tenths(player.getUniqueId()); }
 
     public void tag(Player player) {
-        if (closed || player.isDead() || net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return;
+        if (closed || player.isDead() || net.mandomc.gameplay.tutorial.TutorialInventory.active(player) || net.mandomc.gameplay.admin.StaffMode.active(player)) return;
         boolean fresh = !tagged(player);
         tags.tag(player.getUniqueId());
         taggedPlayers.put(player.getUniqueId(), player);
@@ -106,7 +106,7 @@ public final class CombatService implements Listener, AutoCloseable {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void teleport(PlayerTeleportEvent event) {
-        if (tagged(event.getPlayer()) && !movementCorrections.contains(event.getPlayer().getUniqueId())) {
+        if (tagged(event.getPlayer()) && !net.mandomc.gameplay.admin.StaffMode.active(event.getPlayer()) && !movementCorrections.contains(event.getPlayer().getUniqueId())) {
             event.setCancelled(true);
             event.getPlayer().sendMessage(message("teleport-denied"));
         }

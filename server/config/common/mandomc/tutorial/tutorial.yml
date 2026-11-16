@@ -3,15 +3,15 @@ warm-worlds: 5
 maximum-worlds: 16
 reward-credits: 5000
 guards: 3
-flight-seconds: 10
+flight-seconds: 5
 event-page-seconds: 9
 items:
   blaster: se14c
   ammo: standard_plasma_cells
   saber: vader
   junk: agrinium_scrap
-  vehicle-ammo: tibanna_gas_cells
-  vehicle: tiefighter
+  vehicle-ammo: proton_torpedo
+  vehicle: xwing
 messages:
   players-only: '<gray>Join the server to start /tutorial.'
   usage: '<yellow>/tutorial <gray>| <yellow>/tutorial end'
@@ -36,6 +36,10 @@ messages:
   outside: '<gray>Use <yellow>/tutorial <gray>to start.'
   ended: '<gold>Ended. <gray>Inventory restored.'
   complete: '<gold>Complete! <gray>Inventory restored.'
+  follow-particles: '<aqua>Follow the blue particles.'
+  start-naboo: '<gold><bold>START ON NABOO!</bold></gold> <green>Naboo is the most beginner-friendly planet. Gather supplies, mine and claim your first base there. <yellow>Use /warp naboo now.</yellow>'
+  naboo-title: '<green><bold>START ON NABOO</bold>'
+  naboo-subtitle: '<yellow>/warp naboo <gray>— best for beginners'
   reward: '<gold>First completion: +$5,000!'
   kit-space: '<yellow>Free space for your starter kit.'
   error: '<red>Tutorial stopped. Inventory saved.'
@@ -56,13 +60,17 @@ steps:
   saber: '<yellow>Sneak + attack: throw your saber'
   buy: '<gold>Brown Jawa: buy 4 Oak Saplings'
   sell: '<gold>Gray Jawa: add 8 scrap, then Sell'
-  recipes: '<yellow>/recipes <gray>| Close it to continue'
-  place: '<gold>Hold TIE; right-click the ground.'
-  flight: '<gold>Fly: <yellow><seconds>/<total>s <gray>| Look to steer'
+  recipes: '<yellow>/recipes <gray>→ Weapons → Close'
+  place: '<gold>Hold X-wing; right-click pad.'
+  flight: '<yellow>Fly <seconds>/<total>s | Mouse: steer'
+  right: '<yellow>Hold D: tilt right'
+  left: '<yellow>Hold A: tilt left'
+  stop: '<yellow>Press S: stop in midair'
+  land: '<yellow>Hold Sneak: descend and land'
   target: '<yellow>Attack: shoot the glowing target'
   events: '<gold>Read the event guide. No action.'
-  board: '<gold>Right-click TIE fighter to board.'
-  takeoff: '<yellow>Forward + Jump: take off'
+  board: '<gold>Right-click X-wing to board.'
+  takeoff: '<yellow>Look up + W: take off and fly'
 menus:
   warp: '<gold>Galaxy Map'
   tutorial: '<aqua>Tutorial'
@@ -83,10 +91,10 @@ holograms:
   saber: '<gold>Lightsabers & Ilum<newline><white>Complete Ilum’s course for a Kyber key.<newline><white>Open the Kyber crate to obtain crystals.<newline><yellow>Sneak + attack to throw your saber once.'
   buy: '<gold>Tatooine · Brown Jawa supplies<newline><white>Right-click a brown Jawa to browse.<newline><yellow>Buy Oak Saplings ×4 for $40.<newline><gray>Your practice wallet has $100.'
   sell: '<gold>Gray Jawas buy salvage<newline><white>Find gray Jawas on Batuu (spawn).<newline><white>Right-click the buyer.<newline><yellow>Click your scrap to add it, then click Sell.<newline><gray>Closing the window returns unsold items.'
-  recipes: '<gold>Craft your equipment<newline><yellow>/recipes<newline><white>Explore items, ingredients and their sources.<newline><gray>Close the guide to continue.'
-  place: '<gold>TIE fighter deployment<newline><white>Your TIE fighter is in your hotbar.<newline><yellow>Hold it and right-click the training pad.<newline><gray>Place it first, then board and fly.'
-  flight: '<gold>TIE fighter flight training<newline><white>Right-click the TIE fighter to board.<newline><yellow>Forward + Jump: take off · Look to steer<newline><white>Fly anywhere inside this world’s border for 10 seconds.<newline><gray>The training ship cannot be lost.'
-  target: '<gold>Gunnery target<newline><white>Aim your TIE fighter at the bullseye.<newline><yellow>Attack / left-click: fire cannons<newline><gray>A direct cannon hit completes the exercise.'
+  recipes: '<gold>Craft your equipment<newline><yellow>/recipes<newline><white>Open the Weapons category to find gear recipes.<newline><gray>Open Weapons, then close the guide to continue.'
+  place: '<gold>X-wing deployment<newline><white>Your X-wing is in your hotbar.<newline><yellow>Hold it and right-click the training pad.<newline><gray>Place it first, then board and fly.'
+  flight: '<gold>X-wing flight training<newline><white>Right-click the X-wing to board.<newline><yellow>Look up and press W to take off; fly for 5 seconds<newline><white>Follow one control at a time: W, D, A, then S.<newline><gray>The training ship cannot be lost.'
+  target: '<gold>Gunnery target<newline><white>Aim your X-wing at the bullseye.<newline><yellow>Attack / left-click: fire cannons<newline><gray>Destroy the blocks with a direct cannon hit.'
 events:
   0:
     action: '<gold>KOTH <gray>| Next in <seconds>s'

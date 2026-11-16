@@ -129,6 +129,12 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
                     new MountControllerType((rider, mount) -> new Controller(rider, mount, this));
         }
 
+        private VehicleMotion.Input tutorialInput(Player player, VehicleMotion.Input input) {
+            if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null
+                    && net.mandomc.gameplay.tutorial.TutorialInventory.active(player))
+                return mando.tutorial().flightInput(player, input, entity);
+            return input;
+        }
         private void tutorialDenied(Player player) {
             if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null) mando.tutorial().denied(player);
         }
@@ -297,16 +303,9 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
             }
             var input = getInput();
             var eye = player.getEyeLocation();
-            var step =
-                    motion.tick(
-                            model.definition,
-                            new VehicleMotion.Input(
-                                    input.getFront(),
-                                    input.getSide(),
-                                    input.isJump(),
-                                    input.isSneak(),
-                                    eye.getYaw(),
-                                    eye.getPitch()),
+            var controls = model.tutorialInput(player, new VehicleMotion.Input(input.getFront(), input.getSide(),
+                    input.isJump(), input.isSneak(), eye.getYaw(), eye.getPitch()));
+            var step = motion.tick(model.definition, controls,
                             VehicleModels.grounded(model.entity),
                             controller.getVelocity().getY());
             if (step.dismount() && net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) {
@@ -331,7 +330,7 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
             }
             controller.setVelocity(step.x(), step.y(), step.z());
             controller.nullifyFallDistance();
-            active.getModeledEntity().getBase().getLookController().setBodyYaw(eye.getYaw());
+            active.getModeledEntity().getBase().getLookController().setBodyYaw(controls.yaw());
             if (model.definition.aerial()) {
                 if (animator == null)
                     active.getBone("body")
