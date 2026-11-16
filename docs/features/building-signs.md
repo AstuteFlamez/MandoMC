@@ -1,5 +1,5 @@
 # Feature: Building signs
-Status: native verification
+Status: verified; development release pending
 Branch: bilal/star-wars-signs
 
 ## Player experience
@@ -25,4 +25,4 @@ Original source files and hashes are retained under `resource-pack/art-sources/b
 Run `scripts/build.sh`, the Python tooling suite and `scripts/build-resource-pack.py`. `BuildingSignsProbe` runs only on disposable localhost port 25593 and selects a model with `-Dmandomc.test.sign=<id>`. It exercises six placement faces, outer-cell obstruction/protection, collision, metadata, single-item recovery, full inventories, explosions, pistons and an actual JVM restart. A final run using `crates_sign` checks the existing sign against the extended service.
 
 ## Pause note
-Implementation and automated builds are complete. Native lifecycle/restart tests and development rollout are in progress. Next action: finish isolated verification and deploy the tested scoped build to development.
+Build and 81 tooling checks pass. Isolated Paper verifies 132/20 Shops, 168/24 Leaderboards, 150/22 Cantina and 132/20 Crates lifecycle/restart assertions: 668 total, with no startup errors. The candidate changes only eight JAR entries and retains all unrelated live entries. The pack adds nine files, preserving all 1,184 existing entries. Publication and development deployment are authorized and pending. Next action: deploy the tested build and pack to development.

@@ -21,8 +21,9 @@ public final class TutorialProbe extends JavaPlugin {
     private Player player, second;
     private ItemStack[] original;
     private Location origin;
+    private final Map<org.bukkit.block.Block, org.bukkit.block.data.BlockData> practiceOriginal = new LinkedHashMap<>();
     private int checks;
-    private boolean finished;
+    private boolean finished, brakePressed;
     private void check(boolean pass, String reason) { if (!pass) throw new AssertionError(reason); checks++; }
     @FunctionalInterface private interface Work { void run() throws Exception; }
     private void later(long ticks, Work action) { Bukkit.getScheduler().runTaskLater(this, () -> run(action), ticks); }
@@ -233,7 +234,15 @@ public final class TutorialProbe extends JavaPlugin {
             stage("FLIGHT"); check(progress(player).flightMillis() == 0, "Grounded idle time does not count");
             check(instruction().contains("take off"), "Grounded pilot sees takeoff instruction");
             check(!mando.vehicleCannons().fire(player), "Cannons locked before gunnery lesson");
-            driveFlight(0);
+            // Native test actors do not have a real client chunk subscription. Prepare their flight corridor.
+            var chunks = new ArrayList<java.util.concurrent.CompletableFuture<?>>();
+            for (int x = 0; x <= 10; x++) for (int z = 2; z <= 24; z++) chunks.add(player.getWorld().getChunkAtAsync(x, z, true));
+            java.util.concurrent.CompletableFuture.allOf(chunks.toArray(java.util.concurrent.CompletableFuture[]::new))
+                    .thenRun(() -> later(1, () -> {
+                        for (int x = 0; x <= 10; x++) for (int z = 2; z <= 24; z++)
+                            player.getWorld().addPluginChunkTicket(x, z, this);
+                        driveFlight(0);
+                    }));
         });
     }
     private void driveFlight(int ticks) throws Exception {
@@ -244,27 +253,36 @@ public final class TutorialProbe extends JavaPlugin {
         var controller = com.ticxo.modelengine.api.ModelEngineAPI.getMountPairManager().getController(player.getUniqueId());
         check(controller != null, "Training pilot has native controller");
         double side = step == TutorialProgress.Step.RIGHT ? -1 : step == TutorialProgress.Step.LEFT ? 1 : 0;
-        double forward = step == TutorialProgress.Step.FLIGHT ? 1 : step == TutorialProgress.Step.STOP ? -1 : 0;
+        double forward = step == TutorialProgress.Step.FLIGHT && ticks == 0 ? 1 : step == TutorialProgress.Step.STOP && !brakePressed ? -1 : 0;
+        if (step == TutorialProgress.Step.STOP) brakePressed = true;
+        player.setRotation(ticks < 60 ? -20 : 0, ticks < 35 ? -20 : 0);
         controller.setInput(new com.ticxo.modelengine.api.mount.controller.MountController.MountInput((float) side, (float) forward, false, false));
         var model = com.ticxo.modelengine.api.ModelEngineAPI.getModeledEntity(ship);
         controller.updateDriverMovement(model.getBase().getMoveController(), model.getModels().values().iterator().next());
+        if (ticks == 50) {
+            // Read the controller output now; Entity#getVelocity is sampled after native drag/interpolation.
+            var requested = model.getBase().getMoveController().getVelocity();
+            check(Math.abs(requested.length() - 2.1) < .001, "Training requests normal X-wing speed after W release: " + requested);
+            check(requested.getX() > .3 && requested.getZ() > .3, "Native flight follows mouse heading on both axes");
+        }
         later(1, () -> driveFlight(ticks + 1));
     }
     private void target() throws Exception {
         stage("TARGET"); var session = session(player); UUID vehicle = (UUID) field(session, "vehicle");
-        var target = (LivingEntity) Bukkit.getEntity((UUID) field(session, "target")); check(target != null, "Stationary target exists");
-        check(target.getBoundingBox().getWidthX() >= 16 && target.getBoundingBox().getHeight() >= 16, "Target has a much larger hittable area");
-        check(target.getLocation().getZ() < mando.vehicles().entity(vehicle).getLocation().getZ() - 20, "Target spawns ahead of stopped ship");
-        var parts = player.getWorld().getEntitiesByClass(BlockDisplay.class);
-        check(parts.size() == 17 && parts.stream().allMatch(part -> part.getBrightness().getBlockLight() == 15 && part.getViewRange() >= 8), "Large target stays bright and visible across full range");
-        mando.tutorial().cannonHit(player, UUID.randomUUID(), target); stage("TARGET");
+        @SuppressWarnings("unchecked") var blocks = Set.copyOf((Set<org.bukkit.block.Block>) field(session, "targetBlocks"));
+        check(blocks.size() == 289, "Target is a solid 17-by-17 block structure");
+        check(blocks.stream().allMatch(block -> block.getType() == Material.RED_CONCRETE || block.getType() == Material.SEA_LANTERN), "Target uses actual world blocks");
+        check(player.getWorld().getEntitiesByClass(Slime.class).isEmpty(), "Target has no hidden slime hitbox");
+        check(player.getWorld().getEntitiesByClass(BlockDisplay.class).isEmpty(), "Target has no display-entity substitute");
+        mando.tutorial().cannonHit(player, UUID.randomUUID(), blocks.iterator().next()); stage("TARGET");
         var platform = mando.vehicles().firingPlatform(player, List.of("weapon_one", "weapon_two"));
         check(platform != null, "Native X-wing muzzles resolve");
-        // Put the invisible collision target on the native muzzle ray to test actual swept cannon impact.
-        target.teleport(platform.muzzles().getFirst().clone().add(platform.direction().clone().multiply(8)).add(0, -1, 0));
+        var ray = player.getWorld().rayTraceBlocks(platform.muzzles().getFirst(), platform.direction(), 60,
+                FluidCollisionMode.NEVER, true);
+        check(ray != null && blocks.contains(ray.getHitBlock()), "Actual spawned block target intersects native cannon ray without moving it");
         check(mando.vehicleCannons().fire(player), "Native cannons emit and consume supplied ammo");
         later(30, () -> {
-            stage("TARGET"); check(!target.isValid(), "Target destroyed before explosion delay completes");
+            stage("TARGET"); check(blocks.stream().allMatch(block -> block.getType().isAir()), "Cannon destroyed the actual target blocks before explosion delay completes");
         });
         later(90, () -> land(vehicle));
     }
@@ -278,6 +296,9 @@ public final class TutorialProbe extends JavaPlugin {
     }
     private void eventGuide(UUID vehicle) throws Exception {
             stage("EVENTS"); check(mando.vehicles().entity(vehicle) == null, "Training ship cleaned up after target");
+            @SuppressWarnings("unchecked") var originals = (Map<org.bukkit.block.Block, org.bukkit.block.BlockState>) field(session(player), "practiceBlocks");
+            originals.forEach((block, state) -> practiceOriginal.put(block, state.getBlockData()));
+            check(originals.size() >= 370, "Target and landing pad both record original blocks for cleanup");
             var bar = (net.kyori.adventure.bossbar.BossBar) field(session(player), "bar");
             var plain = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText();
             check(plain.serialize(bar.name()).contains("Auto-continue") && plain.serialize(bar.name()).contains("/tutorial end"), "Event bossbar explains automatic timing and exit");
@@ -296,6 +317,8 @@ public final class TutorialProbe extends JavaPlugin {
     }
     private void completed() throws Exception {
         check(!TutorialInventory.active(player), "Completion exits tutorial");
+        check(!practiceOriginal.isEmpty(), "Native fixture captured temporary target and landing blocks");
+        practiceOriginal.forEach((block, data) -> check(block.getBlockData().equals(data), "Completion restores practice block " + block.getLocation()));
         check(player.getWorld() == origin.getWorld(), "Original world restored");
         var handle = player.getClass().getMethod("getHandle").invoke(player);
         boolean rawInvulnerable = (boolean) handle.getClass().getMethod("isInvulnerable").invoke(handle);

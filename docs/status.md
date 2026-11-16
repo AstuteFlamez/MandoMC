@@ -2,7 +2,19 @@
 
 ## Three building signs in verification (2026-11-15)
 
-Added Shops (3×1), Leaderboards (5×1) and Cantina (1×4) through the existing command-only decoration path. Journal schema 4 preserves schemas 1–3 and protects every horizontal/vertical cell. All 337 Java tests, 81 tooling checks and the 1,193-file pack build pass; all 1,184 existing pack entries are byte-identical. Native lifecycle/restart verification is running against a scoped candidate that retains the current staff/tutorial overlay. See [building signs](features/building-signs.md). Next action: complete native verification and deploy the tested build and pack to development.
+Added Shops (3×1), Leaderboards (5×1) and Cantina (1×4) through the existing command-only decoration path. Journal schema 4 preserves schemas 1–3 and protects every horizontal/vertical cell. All 337 Java tests, 81 tooling checks and the 1,193-file pack build pass; all 1,184 existing pack entries are byte-identical. All 668 native lifecycle/restart assertions pass across the three new signs and existing Crates Sign on the scoped candidate retaining current staff/tutorial changes. See [building signs](features/building-signs.md). Next action: complete native verification and deploy the tested build and pack to development.
+
+## Production release: staff mode and tutorial fixes (2026-11-15)
+
+The owner accepted the development playtest and explicitly authorized production promotion and the PebbleHost console Restart action. This release includes all eleven dev playtest fixes plus independent staff gamemode, normal X-wing flight with only lesson keys enabled, single-press W/S behavior and a real block target. The native flight fixture holds its headless actor's corridor loaded and checks controller output before Paper drag/interpolation, avoiding timing-dependent velocity assertions.
+
+Verification: 337 Java tests, 79 tooling tests, native staff/protection and complete tutorial/block-cleanup checks, plus actual JVM staff/tutorial recovery. Release through the passing main CI artifact and verified SFTP upload, then the authorized console restart. No world/player reset or vendor replacement is part of this release. Next action: client-smoke-test staff Survival mode and the tutorial flight/target on production after activation.
+
+## Staff gamemode and normal tutorial flight feedback (2026-11-15)
+
+Staff mode is independent of gamemode: `/gms` keeps staff privileges and the temporary inventory; `/staff off` explicitly restores survival state. Tutorial X-wing controls now filter only the current lesson key and preserve normal thrust, look direction, speed, banking and braking. W latches thrust, released W continues flight, and a single S press stops the ship and advances after braking. The target is a real 17-by-17 block bullseye hit through native cannon block collision, with block debris and the existing explosion delay. Expanded airspace and a temporary landing pad support normal flight beyond the walking scene.
+
+Verification: 337 Java tests, 79 tooling tests, 264 native staff/protection checks, the full native tutorial walkthrough and actual JVM recovery checks (49 staff, 51 tutorial) pass. The exact tested gameplay JAR and two configs are deployed to development after a full stopped-runtime backup; other binaries and the pinned pack are unchanged. The owner accepted the dev playtest and authorized production promotion plus the console restart; see the release entry above.
 
 ## Dev playtest fixes deployed (2026-11-15)
 
