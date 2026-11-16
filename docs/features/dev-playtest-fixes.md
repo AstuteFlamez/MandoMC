@@ -1,5 +1,5 @@
 # Feature: development playtest fixes
-Status: deployed to development; owner acceptance pending
+Status: accepted on development; production promotion and console restart authorized
 Branch: bilal/staff-flight-feedback (follow-up to bilal/dev-playtest-fixes)
 
 ## Player experience
