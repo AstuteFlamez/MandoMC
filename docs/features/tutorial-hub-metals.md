@@ -1,6 +1,6 @@
 # Optional tutorial hub and simplified metals
 
-Status: deployed to development; client playtest pending.
+Status: deployed to production; final client playtest pending.
 Branch: bilal/tutorial-hub-metals
 
 ## Player behavior
@@ -35,7 +35,7 @@ A normal Minecraft client playthrough is still required to confirm visual readab
 
 The final reactor passes 342 Java tests (338 gameplay and four access); all 84 tooling checks pass. The full lesson walkthrough passes 605 assertions, actual JVM recovery passes 52, and the ten-node Beskar event passes 43. Tests cover all eleven furnace recipes, nested sheet migration, offline backup/locking/idempotence and deserialization of migrated Paper inventory bytes.
 
-A read-only production audit found 60 Agrinium sheets in two of eight player files. These are queued for one-for-one conversion during the stopped production cutover; production data has not been changed. The development sweep finds no remaining sheets. Promotion must run a fresh offline sweep against the stopped server's latest data, not upload the audit copies.
+A prior live audit found 60 Agrinium sheets. The fresh stopped production sweep scanned 8 files and found 48 sheets in 1 file. Those sheets were converted one-for-one into canonical ingots, with original backups and unchanged hashes for the remaining player files. The development sweep found no sheets. Future migrations must re-read the stopped server's latest saves.
 
 Development was stopped cleanly and fully backed up before deploying the final tested gameplay JAR and seven merged configurations. The stopped playerdata sweep scanned one file and found no sheets to convert. Normal startup loads 268 custom items and the tutorial without errors; all fourteen other binaries and the pinned resource pack remain unchanged. No probe plugin is installed on shared development.
 
@@ -47,3 +47,6 @@ Tutorial selling accepts any nearby public Batuu gray Jawa through the normal sa
 Verification of the initial follow-up: 342 Java tests and 342 focused native shop assertions passed, including sampled route clearance, the interior-only arrow packet check, observer privacy, all seven gray buyers and successful lesson sale. The final screenshot route passes 543 native checks: every sampled surface, eight exact stair/landing heights, actual rising particle packets, forward guidance after skipped waypoints, interior arrow privacy, all gray buyers and successful sale. The 342 Java tests also pass. The full tutorial was already owner-accepted apart from these shop refinements.
 
 The follow-up is deployed to development after a full stopped-runtime backup. Startup is healthy with the exact tested JAR and one merged tutorial configuration. Other binaries, pack and production are unchanged. Next action: client-check the revised Shops lesson.
+
+## Production activation
+PR #51 (`d328e85`) is active on production after a completed stopped full backup, exact CI artifact/pack verification and the fresh sheet conversion. All 128 managed hashes and gameplay startup markers verify. Massiff health 30 and E-11 base damage 2.0 were promoted in the same release. Next action: client-play the final Shops route on production.
