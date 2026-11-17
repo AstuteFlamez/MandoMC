@@ -133,9 +133,9 @@ public final class JawaProbe extends JavaPlugin {
         for(int i=0;i<1000;i++){
             var event=new io.lumine.mythic.bukkit.events.MythicMobDeathEvent(active,null,new ArrayList<>());Bukkit.getPluginManager().callEvent(event);int g=0,c=0,p=0;
             for(var item:event.getDrops())if("Jawa_Ionization_Blaster".equals(WeaponMechanicsAPI.getWeaponTitle(item)))g+=item.getAmount();else if(item.isSimilar(ammo))c+=item.getAmount();else if(pool.contains(mando.items().identify(item))){p+=item.getAmount();distinct.add(mando.items().identify(item));}else throw new AssertionError("Unexpected Jawa loot");
-            if(g>1||c>3||p<1||p>2)throw new AssertionError("Jawa loot exceeded legacy bounds");guns+=g;cells+=c;parts+=p;
+            if(g>1||c>20||p<1||p>2)throw new AssertionError("Jawa loot exceeded configured bounds");guns+=g;cells+=c;parts+=p;
         }
-        check(guns>60&&guns<180,"actual Mythic death adapter preserves 12% blaster roll");check(cells>1300&&cells<1700,"actual Mythic death adapter preserves three 50% cell rolls");check(parts>=1000&&parts<=2000&&distinct.equals(pool),"actual deaths roll 1–2 genuine parts across the full electrical pool");
+        check(guns>60&&guns<180,"actual Mythic death adapter preserves 12% blaster roll");check(cells>9500&&cells<10500,"actual Mythic death adapter averages ten cells through twenty 50% rolls");check(parts>=1000&&parts<=2000&&distinct.equals(pool),"actual deaths roll 1–2 genuine parts across the full electrical pool");
     }
     private Player actor(Location point)throws Exception{var p=nativeTestPlayer(world,point);actors.add(p);p.setGameMode(GameMode.SURVIVAL);var h=p.getClass().getMethod("getHandle").invoke(p);handles.put(p.getUniqueId(),h);worldPlayers.add(h);online.put(p.getUniqueId(),h);return p;}
     private void click(Player player,int slot){if(!(player.getOpenInventory().getTopInventory().getHolder().getClass().getName().contains("JawaTraders")) && !(player.getOpenInventory().getTopInventory().getHolder() instanceof net.mandomc.gameplay.jawa.JawaSellInventory.Tray))return;var event=new InventoryClickEvent(player.getOpenInventory(),InventoryType.SlotType.CONTAINER,slot,ClickType.LEFT,InventoryAction.PICKUP_ALL);Bukkit.getPluginManager().callEvent(event);check(event.isCancelled(),"Jawa menu blocks inventory transfer");}

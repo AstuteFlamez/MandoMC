@@ -56,6 +56,19 @@ class Remote:
 
 
 class SftpSafetyTests(unittest.TestCase):
+    def test_voting_presentation_accepts_only_the_reviewed_source(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / 'deployment').mkdir()
+            source = root / 'server/config/common/votingplugin/Config.yml'
+            source.parent.mkdir(parents=True)
+            source.write_text('DataStorage: SQLITE\nVoteBroadcast:\n  Type: EVERY_VOTE\n')
+            (root / 'plugin.jar').write_bytes(b'plugin fixture')
+            (root / 'deployment/files.json').write_text(json.dumps({'files': [
+                {'source': 'plugin.jar', 'target': 'plugins/update/MandoMC.jar'},
+                {'source': str(source.relative_to(root)), 'target': 'plugins/VotingPlugin/Config.yml'}]}))
+            self.assertEqual(source.read_bytes(), module.payload(root)['plugins/VotingPlugin/Config.yml'])
+
     def test_public_voting_listener_accepts_linux_ipv6_and_ipv4_wildcards(self):
         for address in ('0.0.0.0', '[0:0:0:0:0:0:0:0%0]', '[0:0:0:0:0:0:0:0]'):
             self.assertTrue(module.voting_listener_ready('[Votifier] Votifier enabled on socket /' + address + ':19132.'))
