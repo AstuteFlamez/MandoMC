@@ -126,6 +126,10 @@ public final class GuideKnowledge {
         if (selected.isEmpty()) return Optional.empty();
         var first = selected.getFirst();
         if (first.id().equals("beginner")) return Optional.of(first.fallback());
+        String normalized = RecipeSearch.normalize(question);
+        if (first.id().equals("mining") && normalized.contains("fortune")) return Optional.of(first.fallback());
+        if (first.id().equals("death") && normalized.matches(".*\\b(?:die|death|dying|killed)\\b.*"))
+            return Optional.of(first.fallback());
         if (!acquisition(RecipeSearch.normalize(question))) return Optional.empty();
         return first.id().startsWith("item:") || first.id().equals("sabers")
                 ? Optional.of(first.fallback()) : Optional.empty();

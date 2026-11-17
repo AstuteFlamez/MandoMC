@@ -1,5 +1,11 @@
 # Resume here
 
+## Build-pinned public droid knowledge deployed (2026-11-16)
+
+On `bilal/droid-github-knowledge` (PR #60), M4-ND indexes 357 approved public GitHub files into 3813 bounded passages. Each clean JAR pins its exact commit and source hashes; only its own verified archive/cache is eligible. Modified builds, private/runtime paths, mismatched caches, unsafe redirects and oversized responses are rejected. Same-version caching works offline. Current handbook/configuration outrank historical notes; historical rollout sections are excluded. Exact acquisition, beginner, mining and death guidance stays deterministic, while broader questions use retrieved context with concise plain answers. Character, provider-free menus, quotas and FAQ fallback remain.
+
+Verification: 367 Java tests, 87 tooling checks, unchanged resource-pack hashes and all 70 native assertions pass. Native checks include real GitHub retrieval/cache validation, version identity, off-topic refusal, exact coal/first-saber/beginner/mining/death answers, live AI answers about homes and repairs, the signed skin NPC and staff-forge inventory restoration. Development is running the exact tested artifact and prewarmed public cache after a full stopped-runtime backup and clean normal restart. All thirteen other binaries, server properties, the resource pack and Groq credential are unchanged. Production remains unchanged by the owner's explicit decision; vehicle-only hotfix #59 stays a draft. Next action: playtest M4-ND’s expanded gameplay answers on development.
+
 ## Droid, staff forge and Hoth vehicle feedback (2026-11-16)
 
 On `bilal/droid-knowledge-skin`, removed provider branding from M4-ND’s menu, replaced his armor stand with a signed full-body protocol-droid mannequin, connected public recipe/acquisition data, added verified first-saber and beginner guidance, and allowed material-funded forge testing in Creative/Survival staff mode with normal inventory restoration. Added `/vehicle recall`, `/recallvehicle` and `/vrecall`, plus a scoped vehicle spawn on Hoth and rejection of cancelled bases before consuming the item. The reported lost speeder was on production; its owner already issued a replacement. No extra item was granted by this change.

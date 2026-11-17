@@ -1,5 +1,8 @@
 schema-version: 1
 model: openai/gpt-oss-20b
+repository:
+  enabled: true
+  fallback: My concise written guides cannot safely summarize that topic right now, traveler. Try /recipes for items and sources, or /tutorial for guided practice.
 daily-answers: 10
 cooldown-seconds: 20
 daily-token-budget: 140000
@@ -29,7 +32,7 @@ knowledge:
   identity:
     tags: who you name identity droid protocol m4 nd mando yourself
     facts: M4-ND, pronounced Mando, is MandoMC’s resident protocol droid at Batuu spawn. He explains verified MandoMC
-      information, is formal, helpful and slightly anxious about danger, and cannot perform actions.
+      information and cannot perform actions.
     answer: Greetings, traveler. I am M4-ND, pronounced Mando, the protocol and information droid stationed at Batuu.
       I explain MandoMC’s systems. Dangerous expeditions are, thankfully, your department.
   beginner:
@@ -43,6 +46,14 @@ knowledge:
       its source. Back preserves search results.
     answer: Open /recipes, traveler. Search by the item’s name, or switch to Uses this ingredient. Clicking an ingredient
       explains its recipe or source.
+  mining:
+    tags: mining ore ores scrap scraps fortune yield
+    facts: Eligible Agrinium, Electrum, Durasteel and Beskar ore mining yields exactly one matching scrap per block. Fortune never increases this final custom scrap quantity. This is a fixed one-scrap rule, not a random 1-to-5 roll. Native tool requirements, cancelled breaks, Creative and Silk Touch remain authoritative. These facts describe themed metal ores, not ordinary coal or other unconverted vanilla ores.
+    answer: Each eligible themed metal ore drops exactly one matching scrap, traveler. Fortune does not increase that amount; Silk Touch keeps the ore where supported.
+  death:
+    tags: death die dying killed respawn
+    facts: Normal survival death immediately drops the player's carried gear at the death location. Gear does not return automatically on respawn. The 15-second combat tag applies before death and to combat logout, not to a post-death item-drop grace period. Tutorial and staff temporary-inventory rules are separate.
+    answer: On normal survival death, your carried gear drops at the death site. Return to recover it, traveler; it does not automatically come back on respawn.
   jawas:
     tags: jawa jawas shops shop buy buying sell selling salvage parts components electronics electronic stock traders
     facts: 'Brown Jawas roam Tatooine and sell basic electronic components plus one to three random advanced parts.
@@ -88,7 +99,7 @@ knowledge:
     answer: Use /warp to choose a planet, or /spawn to return to Batuu. Stand still during travel and leave combat
       first. Naboo is a good place to begin your first base.
   clans:
-    tags: clan clans base claim claims home raid raiding warpoints rivalry
+    tags: clan clans base claim claims raid raiding warpoints rivalry
     facts: Use /c for clan commands and /c map for zones and claims. Wilderness is claimable subject to clan limits
       and spacing. A +10 pairwise net-kill lead permits an approved explosive breach against that rival; the first
       breach begins a fixed one-hour raid and resets/freezes that rivalry for the hour. Clanmates cannot damage

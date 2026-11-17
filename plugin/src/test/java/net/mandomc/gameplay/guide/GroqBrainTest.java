@@ -7,4 +7,11 @@ public class GroqBrainTest {
         assertEquals(3390,GroqBrain.resetDelay("3.39s"));
         assertEquals(60000,GroqBrain.resetDelay("unknown"));
     }
+    @Test public void repliesDoNotExposeFormattingTags(){
+        assertEquals("Hold a wrench.\nKeep crouching.",GroqBrain.plainAnswer("<aqua>Hold a wrench.<newline><gray>Keep crouching."));
+        String plain = GroqBrain.plainAnswer("**Three** homes. `mandomc.travel.homes.unlimited` bypasses homes-limit.");
+        assertFalse(plain.contains("mandomc."));assertFalse(plain.contains("homes-limit"));
+        assertEquals("Gear drops at death. Return to recover it.",GroqBrain.plainAnswer("Gear drops at death. Return to recover it. You have an imaginary grace period."));
+        assertFalse(plain.contains("**"));assertFalse(plain.contains("`"));assertTrue(plain.contains("unlimited"));
+    }
 }
