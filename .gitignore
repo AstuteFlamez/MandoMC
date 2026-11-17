@@ -94,3 +94,6 @@ __pycache__/
 !/server/runtime/config/paper-global.yml.template
 # Real server.properties and paper-global.yml can contain RCON/proxy secrets.
 # Their sanitized templates are tracked; live machine-specific copies stay ignored.
+
+# Runtime AI credentials must never be published.
+**/groq-api-key

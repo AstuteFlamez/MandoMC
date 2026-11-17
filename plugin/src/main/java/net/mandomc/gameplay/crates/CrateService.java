@@ -100,6 +100,19 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
         ticker = Bukkit.getScheduler().runTaskTimer(plugin, this::tick, 1, 1);
     }
 
+    /** WeaponMechanics loads its catalog after plugin enable; defer startup until configured external rewards resolve. */
+    public static boolean catalogReady(ItemCatalog items,YamlConfiguration config) {
+        var definitions=java.util.Objects.requireNonNull(config.getConfigurationSection("crates"));
+        for(String id:definitions.getKeys(false)){
+            var crate=CrateDefinition.read(id,definitions.getConfigurationSection(id));
+            for(var entry:crate.rewards().entries()){
+                String item=entry.value().item();
+                if(!items.ids().contains(item))throw new IllegalArgumentException("Unknown crate item "+item);
+                if(items.external(item))try{items.create(item);}catch(IllegalStateException loading){return false;}
+            }
+        }
+        return true;
+    }
     private void requireItem(String id) {
         if (items.create(id) == null) throw new IllegalArgumentException("Crate references missing catalog item " + id);
     }

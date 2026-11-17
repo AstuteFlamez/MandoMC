@@ -1,5 +1,13 @@
 # Resume here
 
+## Approved gameplay upgrades deployed to development (2026-11-16)
+
+On `bilal/dev-gameplay-upgrades`, all five approved features are active: recipe output/ingredient search with preserved Back state; M4-ND’s private Groq explanations at Cassian’s former anchor; finished-gun/Jetpack/vehicle KOTH rewards with rare Black Kyber and a required Darksaber recipe; permanent per-entity brown component stock; seven titled gray supply categories with retained salvage trays; and a craftable six-point Saber Forge with real damage/speed/guard/throw effects. The tutorial, handbook, acquisition notes and droid knowledge are updated. Interplanetary vehicle travel remains deferred.
+
+Verification: 354 Java tests and 85 tooling checks pass, along with 133 native gameplay assertions and 548 native Shops walkthrough assertions. A real Groq explanation is verified. The final recipe-guidance follow-up changes one JAR resource; every gameplay class is byte-identical to the native-tested release. GitHub checks passed for the feature build. Published pack `resource-pack-26.1.2-84bc24f720fb` was downloaded anonymously and verified against SHA-1 `a3b671891cb225943edf916f2c5930926ac801eb` and SHA-256. It preserves all 1,193 existing assets and adds only the Black Kyber item wrapper.
+
+Development has full stopped-runtime rollback backups and a private deployment receipt. Normal startup is error-free; the active JAR/configuration/pack are verified. Live read-only checks confirm M4-ND’s body/title at Cassian’s exact anchor, seven gray Jawas and all seven category titles. All thirteen other binary hashes and unrelated server properties are preserved. The Groq key is Git-ignored, excluded from unpublished-commit scans, and installed with owner-only permissions; no probe or test actors are installed on shared dev. Production was not updated. Next action: reconnect to development and playtest the five features, especially droid appearance, title readability and initial loot/forge balance.
+
 ## Development playtest corrections verified (2026-11-16)
 
 On `bilal/dev-feedback-fixes`, fixed operation-specific skull/helmet/sign messages, fall-only dropper retries, advancement chat suppression, styled voting broadcasts/reminders/commands, custom recipe-book discovery, separate color-grouped lightsabers, and normal enchanting with Bantha Hide leather compatibility. Dewbacks drop no hide while keeping saddles/food. All four existing ammo sources now average 10 rounds (20 independent 50% rolls); weapon/equipment/salvage chances remain unchanged.

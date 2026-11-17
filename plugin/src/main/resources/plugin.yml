@@ -6,6 +6,10 @@ author: AstuteFlamez
 description: MandoMC gameplay
 softdepend: [ packetevents, WorldEdit, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
+  ask:
+    description: Ask M4-ND a MandoMC question
+    usage: /ask [question]
+    permission: mandomc.arrival
   staff:
     description: Toggle staff mode and restore your survival inventory
     usage: '/staff [on|off]'

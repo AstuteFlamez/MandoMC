@@ -33,21 +33,42 @@ crates:
     key-mode: virtual
     blocks: []
     rewards:
-    - item: durasteel
-      amount: 16
-      weight: 35
-    - item: agrinium
-      amount: 24
-      weight: 30
-    - item: beskar_scrap
-      amount: 4
-      weight: 20
-    - item: phrik
-      amount: 4
+    - item: se14c
+      amount: 1
+      weight: 18
+    - item: a280
+      amount: 1
+      weight: 16
+    - item: ee3
+      amount: 1
+      weight: 12
+    - item: jawa_ionization_blaster
+      amount: 1
       weight: 10
-    - item: beskar
-      amount: 4
-      weight: 5
+    - item: cycler_rifle
+      amount: 1
+      weight: 12
+    - item: relby_v10
+      amount: 1
+      weight: 8
+    - item: boba_jetpack
+      amount: 1
+      weight: 10
+    - item: speederbike
+      amount: 1
+      weight: 6
+    - item: uwing
+      amount: 1
+      weight: 3
+    - item: xwing
+      amount: 1
+      weight: 2
+    - item: tiefighter
+      amount: 1
+      weight: 2
+    - item: black_kyber
+      amount: 1
+      weight: 1
   vote:
     name: <aqua>Voting Crate
     key-item: vote_crate_key
@@ -74,10 +95,8 @@ messages:
   denied: <red>You cannot manage crate keys.
   players-only: <gray>Use this command in game.
   no-key: <yellow>You need a matching crate key. Use /crates keys to check your keys.
-  full: <yellow>Free an inventory slot before opening the crate. Your key has not
-    been used.
-  mail-full: <yellow>Your reward is saved. Free inventory space, then use /crates
-    claim.
+  full: <yellow>Free an inventory slot before opening the crate. Your key has not been used.
+  mail-full: <yellow>Your reward is saved. Free inventory space, then use /crates claim.
   parkour: <yellow>Finish or leave parkour before opening a crate.
   unsafe: <yellow>Leave combat and dismount before opening a crate.
   claimed: <aqua>Claimed {amount} saved crate item(s).
@@ -89,18 +108,15 @@ messages:
   skip: <yellow>Skip animation • keep the same reward
   key-count: '<gray>Available keys: <aqua>{amount}'
   open-hint: <yellow>Click to open • consumes one key
-  list: '<aqua>Crates: {crates}</aqua> <gray>Use /crates preview kyber or /crates
-    open kyber. At a crate block: left-click to preview, right-click to open.'
+  list: '<aqua>Crates: {crates}</aqua> <gray>Use /crates preview kyber or /crates open kyber. At a crate block:
+    left-click to preview, right-click to open.'
   keys: '<gray>{crate} keys: <aqua>{amount}'
   usage: <gray>/crates preview|open <crate> • /crates keys • /crates claim
-  admin-usage: <gray>/crates key give <crate> <player> [amount] • /crates setblock
-    <crate>
+  admin-usage: <gray>/crates key give <crate> <player> [amount] • /crates setblock <crate>
   key-given: <aqua>Gave {amount} crate key(s) to {player}.
   offline: <yellow>That player must be online to receive keys.
-  container: <yellow>Look at a chest, barrel, shulker box, or ender chest within five
-    blocks.
+  container: <yellow>Look at a chest, barrel, shulker box, or ender chest within five blocks.
   bound: <aqua>Container registered as a crate. Existing contents were preserved.
   binding-saving: <gray>Saving crate location…
   binding-busy: <yellow>A crate location is still being saved. Try again shortly.
-  binding-failed: <red>The location could not be saved. Existing crate locations are
-    unchanged.
+  binding-failed: <red>The location could not be saved. Existing crate locations are unchanged.

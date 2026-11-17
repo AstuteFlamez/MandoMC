@@ -105,3 +105,6 @@ Quantity update: `/mmc give <item> [quantity]` and `/mmc give <player> <item> [q
 ## Staff mode
 
 `/staff [on|off]` (alias `/staffmode`) switches between the saved survival inventory and an empty Creative staff inventory. `/gms` and other gamemode changes keep staff mode active; use `/staff off` to restore the saved survival inventory. Staff permissions, including `/back`, require active staff mode; ordinary permissions apply while off. `/parkour checkpoint <1-4>` is a staff-mode-only Ilum testing shortcut. Console `staff revokeop <online-player>` revokes an imported vanilla operator entitlement; native rank membership is separate. See [development playtest fixes](features/dev-playtest-fixes.md) for recovery and acceptance checks.
+
+### M4-ND and recipe search
+`/ask [question]` opens M4-ND's private question dialog or asks a MandoMC question directly. Groq has a daily/cooldown allowance; maintained FAQ guidance remains available. Right-click M4-ND at Cassian's former spawn position for the same interface. `/recipes` includes native text search and an ingredient-use toggle; Back preserves the search.

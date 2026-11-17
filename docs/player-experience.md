@@ -130,3 +130,6 @@ The user delegated finished-saber recipes and a conventional player auction hous
 
 ## Deferred planet content
 See [planet wilderness direction](features/planet-wilderness.md) for Hoth creatures, Mandalore, the beskar ore event and possible trooper enemies. All are deferred.
+
+## Accepted November 16 gameplay updates
+Recipe search, the explanations-only Groq protocol droid M4-ND replacing Cassian, equipment-focused KOTH rewards with rare Black Kyber for a required Darksaber recipe, permanent encounter component stock on brown Jawas, seven titled ordinary-goods shops on the existing gray Jawas, and chosen material-funded Saber Forge upgrades are approved. These supersede earlier material-only KOTH and brown ordinary-supply shop descriptions. KOTH has no armor rewards. Interplanetary vehicle travel remains deferred. See [development gameplay upgrades](features/dev-gameplay-upgrades.md) for initial configurable limits and balance.

@@ -169,7 +169,7 @@ public final class TutorialHubProbe extends JavaPlugin implements org.bukkit.eve
         put(player,brown.getLocation().clone().add(-2,0,0));mando.tutorial().jawa(player,brown);click(13);later(5,this::batuu);
     }
     private void batuu() throws Exception {
-        stage("SELL");check(player.getWorld()==observer.getWorld(),"Real public Batuu");check(player.getInventory().contains(Material.STRING,16),"Purchased item retained");
+        stage("SELL");check(player.getWorld()==observer.getWorld(),"Real public Batuu");check(player.getInventory().contains(Material.STRING,16),"Practice String supplied for selling");check("wiring_coil".equals(mando.items().identify(player.getInventory().getItem(0))),"Purchased Wiring Coil retained");
         var cfg=org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.File(mando.getDataFolder(),"tutorial/tutorial.yml"));
         var route = new ArrayList<Location>();
         for (var point : cfg.getMapList("shop-route")) route.add(new Location(player.getWorld(),
@@ -254,7 +254,8 @@ public final class TutorialHubProbe extends JavaPlugin implements org.bukkit.eve
         put(player,gray.getLocation().clone().add(0,0,2));mando.tutorial().jawa(player,gray);
         check(player.getOpenInventory().getTopInventory().getHolder() instanceof net.mandomc.gameplay.jawa.JawaSellInventory.Tray,"Actual gray Jawa sell tray");
         check(!player.getPersistentDataContainer().has(NamespacedKey.fromString("mandomc:jawa_sell_custody_v1")),"Practice tray cannot enter durable real custody");
-        click(63);click(0);click(31);later(8,()->{stage("HUB");if(shopsOnly) { command("/tutorial end");pass(); } else replay();});
+        int stringSlot=-1;for(int i=0;i<36;i++)if(player.getInventory().getItem(i)!=null && player.getInventory().getItem(i).getType()==Material.STRING){stringSlot=i;break;}
+        check(stringSlot>=0,"Practice salvage is available");click(stringSlot<9?63+stringSlot:36+stringSlot-9);click(0);click(31);later(8,()->{stage("HUB");if(shopsOnly) { command("/tutorial end");pass(); } else replay();});
     }
     private void replay() throws Exception {
         check(player.getPersistentDataContainer().getOrDefault(NamespacedKey.fromString("mandomc:tutorial_sections_v2"),PersistentDataType.INTEGER,0)==15,"Four section completions persisted");

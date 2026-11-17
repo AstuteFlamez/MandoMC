@@ -9,7 +9,7 @@ import java.util.Set;
 
 /** Groups saber styles by the crystal required for their original crafting recipe. */
 public final class RecipeGuideOrder {
-    private static final List<String> COLORS = List.of("blue", "green", "red", "purple", "yellow", "orange", "white");
+    private static final List<String> COLORS = List.of("blue", "green", "red", "purple", "yellow", "orange", "white", "black");
     private final Map<String, RecipeDefinition> recipes = new HashMap<>();
 
     public RecipeGuideOrder(List<RecipeDefinition> definitions) {
