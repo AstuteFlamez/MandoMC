@@ -80,7 +80,7 @@ public final class DroidExpandedProbe extends JavaPlugin {
         check(!value.contains("groq") && !value.contains("server/config/") && !value.contains("<gray>"), "plain player-facing answer");
         switch(question) {
             case 0 -> check(value.contains("anakin") && (value.contains("sith") || value.contains("jedi")), "Star Wars lore answered");
-            case 1 -> check(value.contains("paris"), "general knowledge answered");
+            case 1 -> check(value.equals(org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.File(mando.getDataFolder(),"guide/protocol-droid.yml")).getString("conversation.redirect").toLowerCase(Locale.ROOT)), "unrelated geography redirected");
             case 2 -> check(value.contains("30") || value.contains("15 hearts"), "verified Massiff health");
             case 3 -> check(value.contains("tatooine") && !value.contains("minecraft:"), "verified Massiff spawn planet");
             case 4 -> check(value.contains("rib") && (value.contains("75") || value.contains("0.75")), "follow-up uses same mob and verified drop chance");

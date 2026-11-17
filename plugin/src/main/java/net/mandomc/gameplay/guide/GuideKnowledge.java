@@ -112,7 +112,9 @@ public final class GuideKnowledge {
         boolean advice = normalized.matches("(?:what (?:should|can|do) i do|what to do|what now|what next)"
                 + "(?: next| now| here| first| on mandomc| in mandomc| as a beginner)*")
                 || normalized.matches(".*(?:beginner advice|beginner tips|just joined|new to (?:the server|mandomc)"
-                + "|what do you recommend).*");
+                + "|what do you recommend).*")
+                || normalized.matches(".*\\bwhere (?:should|can|do) i (?:build|make|start|put) "
+                        + "(?:my |a )?(?:first|starter|new) (?:mandomc )?base\\b.*");
         if (advice) return topic("beginner");
         return notes.stream()
                 .filter(note -> !(note.id().equals("forge") && !upgrade) && !(note.id().equals("sabers") && upgrade))

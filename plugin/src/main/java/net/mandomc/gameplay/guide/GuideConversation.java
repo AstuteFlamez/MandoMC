@@ -6,7 +6,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 /** Per-player topic context is ephemeral and never shared through the answer cache. */
 final class GuideConversation {
-    enum Topic { SERVER, LORE, GENERAL }
+    enum Topic { SERVER, LORE, REVIEW }
     record Question(String text, Topic topic) { }
     private record Recent(String question, Topic topic, long time) { }
     private final Map<UUID, Recent> recent = new HashMap<>();
@@ -36,7 +36,7 @@ final class GuideConversation {
                 || q.matches("(?:and |also )?(?:where|how much|how many|what about)(?: else)?")
                 || q.split(" +").length <= 7 && q.matches("(?:and|also|what about) .+");
         if (followup && previous != null) {
-            String context = previous.question() + "\nFollow-up question: " + text;
+            String context = "Current question: " + text + "\nPrevious topic question: " + previous.question();
             recent.put(player, new Recent(previous.question(), previous.topic(), now));
             return new Question(context, previous.topic());
         }
@@ -45,8 +45,8 @@ final class GuideConversation {
                 + "|warp|warps|cooldown|cooldowns|crate|crates|upgrade|upgrades|buy|sell)\\b.*");
         boolean lore = q.matches(".*\\b(?:star wars|starwars|canon|legends|lore|jedi|sith|darth|vader|skywalker"
                 + "|obi wan|kenobi|yoda|ahsoka|palpatine|mandalorian|grogu|force|republic|empire|death star)\\b.*");
-        Topic topic = server ? Topic.SERVER : lore ? Topic.LORE : serverEvidence ? Topic.SERVER : Topic.GENERAL;
-        if (topic == Topic.GENERAL && q.matches(".*\\b(?:material|materials|mob|mobs|planet|planets|saber|sabers"
+        Topic topic = server ? Topic.SERVER : lore ? Topic.LORE : serverEvidence ? Topic.SERVER : Topic.REVIEW;
+        if (topic == Topic.REVIEW && q.matches(".*\\b(?:material|materials|mob|mobs|planet|planets|saber|sabers"
                 + "|lightsaber|lightsabers|kyber|beskar|durasteel|agrinium|electrum|jawa|jawas|bantha|banthas"
                 + "|massiff|massiffs|dewback|dewbacks|tatooine|batuu|naboo|hoth|ilum)\\b.*")) topic = Topic.SERVER;
         if (recent.size() >= 256) recent.remove(recent.entrySet().stream()
