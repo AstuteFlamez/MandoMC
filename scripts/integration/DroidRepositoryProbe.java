@@ -102,13 +102,14 @@ public final class DroidRepositoryProbe extends JavaPlugin {
         check(answers.stream().noneMatch(s->s.contains("unavailable") || s.contains("written guidance")),"answer path healthy "+questions[question]);
         String text=reply.get().toLowerCase();getLogger().info("Verified answer to ["+questions[question]+"]: "+reply.get());
         check(!text.contains("groq"),"no provider name in response");
+        check(!text.contains("<aqua>") && !text.contains("mandomc.") && !text.contains("homes-limit"),"player-facing answer hides tags and internal identifiers");
         if(question==0){check(text.contains("tatooine") && text.contains("coal ore") && text.contains("pickaxe") && !text.contains("refine"),"coal answer gives verified mining source");}
         if(question==1){check(text.contains("crafting table") && text.contains("ilum") && text.contains("kyber"),"first saber explains actual acquisition");check(!text.contains("already possess") && !text.contains("should already"),"no assumed first saber");}
         if(question==2){check(text.contains("/tutorial") && (text.contains("naboo") || text.contains("500")),"beginner gets achievable first steps");}
         if(question==3){check(text.contains("protocol") && text.contains("mando"),"live AI retains droid identity");}
         if(question==4)check((text.contains("three") || text.contains("3")) && text.contains("home"),"GitHub-backed home limit correct");
         if(question==5)check(text.contains("wrench") && (text.contains("crouch") || text.contains("sneak")),"GitHub-backed vehicle repairs correct");
-        if(question==6)check(text.contains("fortune") && (text.contains("not") || text.contains("no ")) && text.contains("scrap"),"GitHub-backed ore Fortune rule correct");
+        if(question==6)check(text.contains("fortune") && (text.contains("not") || text.contains("no ")) && text.contains("scrap") && (text.contains("one") || text.contains("1")) && !text.contains("1–5") && !text.contains("1-5") && !text.contains("1 to 5"),"GitHub-backed ore Fortune rule correct");
         if(question==7){check(text.contains("drop") && (text.contains("gear") || text.contains("item")),"GitHub-backed survival death explanation correct");finish(null);return;}
         question++;later(question<=3?3:440,this::ask);
     }

@@ -7,4 +7,7 @@ public class GroqBrainTest {
         assertEquals(3390,GroqBrain.resetDelay("3.39s"));
         assertEquals(60000,GroqBrain.resetDelay("unknown"));
     }
+    @Test public void repliesDoNotExposeFormattingTags(){
+        assertEquals("Hold a wrench.\nKeep crouching.",GroqBrain.plainAnswer("<aqua>Hold a wrench.<newline><gray>Keep crouching."));
+    }
 }

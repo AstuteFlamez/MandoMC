@@ -3,6 +3,7 @@ package net.mandomc.gameplay.guide;
 import java.util.*;
 import java.util.stream.Collectors;
 import net.mandomc.gameplay.items.RecipeSearch;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 
 /** Small immutable lexical index: only the best bounded passages, never whole files, become model context. */
 public final class RepositorySearch {
@@ -22,11 +23,15 @@ public final class RepositorySearch {
         this.fallback = fallback;
         var rows = new ArrayList<Passage>();
         snapshot.documents().forEach((path, text) -> {
-            String status = text.lines().limit(20).filter(l -> l.startsWith("Status:")).findFirst().orElse("");
+            String publicText = MiniMessage.miniMessage().stripTags(text.replace("<newline>", "\n")
+                    .replace("<key:key.sneak>", "Sneak").replace("<key:key.use>", "Use")
+                    .replace("<key:key.attack>", "Attack"));
+            if (path.endsWith(".md")) publicText = playerSections(publicText);
+            String status = publicText.lines().limit(20).filter(l -> l.startsWith("Status:")).findFirst().orElse("");
             var pathWords = tokens(path.replace(".java", "").replace(".yml", "").replace(".md", ""));
-            double authority = path.startsWith("server/config/common/") ? 1.5 : path.contains("/resources/") ? 1.3 : path.endsWith(".java") ? 1.1 : 1;
+            double authority = path.endsWith("language/handbook.yml") ? 2.2 : path.startsWith("server/config/common/") ? 1.5 : path.contains("/resources/") ? 1.3 : path.endsWith(".java") ? 1.1 : 1;
             String heading = "";
-            for (String paragraph : text.split("\\n\\s*\\n")) {
+            for (String paragraph : publicText.split("\\n\\s*\\n")) {
                 if (paragraph.isBlank()) continue;
                 if (paragraph.startsWith("#")) heading = paragraph.lines().findFirst().orElse("");
                 for (int start = 0; start < paragraph.length(); start += 800) {
@@ -43,6 +48,24 @@ public final class RepositorySearch {
         frequencies = Map.copyOf(counts);
         averageLength = passages.stream().mapToInt(p -> p.counts().values().stream()
                 .mapToInt(Integer::intValue).sum()).average().orElse(1);
+    }
+
+    private static String playerSections(String markdown) {
+        var result = new StringBuilder();
+        int skippedDepth = 0;
+        for (String line : markdown.split("\n")) {
+            if (line.startsWith("#")) {
+                int depth = 0;
+                while (depth < line.length() && line.charAt(depth) == '#') depth++;
+                if (skippedDepth > 0 && depth <= skippedDepth) skippedDepth = 0;
+                String title = line.toLowerCase(Locale.ROOT);
+                if (List.of("verification", "rollout", "deployment", "migration", "ownership", "implementation",
+                        "historical", "ordered queue", "roadmap", "planned", "future work", "pause note")
+                        .stream().anyMatch(title::contains)) skippedDepth = depth;
+            }
+            if (skippedDepth == 0) result.append(line).append('\n');
+        }
+        return result.toString();
     }
 
     static Set<String> tokens(String text) { return new HashSet<>(words(text)); }

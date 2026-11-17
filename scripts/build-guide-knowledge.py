@@ -15,7 +15,9 @@ CODE_AREAS = {'arrival', 'auction', 'boba', 'credits', 'dungeon', 'explosions', 
               'progression', 'rules', 'saber', 'travel', 'tutorial', 'vehicles', 'worlds'}
 DOCS = {'docs/commands.md', 'docs/player-experience.md',
         'plugin/src/main/resources/admin/utilities.yml',
-        'server/config/common/mandomc/admin/utilities.yml'}
+        'server/config/common/mandomc/admin/utilities.yml',
+        'plugin/src/main/resources/language/handbook.yml',
+        'server/config/common/mandomc/language/handbook.yml'}
 
 
 def approved(path):
