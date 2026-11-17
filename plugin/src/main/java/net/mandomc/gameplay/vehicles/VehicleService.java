@@ -156,6 +156,16 @@ public final class VehicleService implements Listener, AutoCloseable {
         journal = plugin.getDataFolder().toPath().resolve("data/vehicles.yml");
         load();
         Bukkit.getPluginManager().registerEvents(this, plugin);
+        for (String name : List.of("vehicle", "recallvehicle")) {
+            Objects.requireNonNull(plugin.getCommand(name)).setExecutor((sender, command, label, args) -> {
+                if (!(sender instanceof Player player)) return true;
+                if (args.length == 0 || args.length == 1 && args[0].equalsIgnoreCase("recall")) recall(player);
+                else message(player, "recall-usage");
+                return true;
+            });
+        }
+        plugin.getCommand("vehicle").setTabCompleter((sender, command, label, args) ->
+                args.length == 1 ? List.of("recall") : List.of());
         restoreTask = Bukkit.getScheduler().runTaskLater(plugin, this::restore, 20);
         task = Bukkit.getScheduler().runTaskTimer(plugin, this::tick, 20, 20);
         menuTask = Bukkit.getScheduler().runTaskTimer(plugin, this::refreshSeatMenus, 2, 2);
@@ -320,8 +330,9 @@ public final class VehicleService implements Listener, AutoCloseable {
     private void spawn(Record r) {
         var d = definitions.get(r.type);
         holdChunks(r.location);
-        var pig =
-                r.location
+        var territories = Objects.requireNonNull(Bukkit.getServicesManager().load(
+                net.mandomc.gameplay.territory.TerritoryService.class));
+        var pig = territories.spawnVehicle(r.location, () -> r.location
                         .getWorld()
                         .spawn(
                                 r.location,
@@ -342,8 +353,9 @@ public final class VehicleService implements Listener, AutoCloseable {
                                     p.setMaximumNoDamageTicks(0);
                                     p.getPersistentDataContainer()
                                             .set(ID, PersistentDataType.STRING, r.id.toString());
-                                });
+                                }));
         try {
+            if (!pig.isValid() || pig.isDead()) throw new IllegalStateException("Vehicle base spawn was cancelled");
             var handle =
                     models.attach(
                             pig,
@@ -366,6 +378,10 @@ public final class VehicleService implements Listener, AutoCloseable {
                                     interactWith(p, pig);
                                 }
                             });
+            if (!pig.isValid() || pig.isDead()) {
+                handle.remove();
+                throw new IllegalStateException("Vehicle base disappeared during model setup");
+            }
             active.put(r.id, new Live(r, pig, handle));
             entities.put(pig.getUniqueId(), r.id);
         } catch (RuntimeException | LinkageError error) {
@@ -461,6 +477,7 @@ public final class VehicleService implements Listener, AutoCloseable {
             return null;
         }
         Record r;
+        boolean created = false;
         var tags = item.getItemMeta().getPersistentDataContainer();
         String raw = tags.get(ID, PersistentDataType.STRING);
         if (raw != null) {
@@ -486,15 +503,17 @@ public final class VehicleService implements Listener, AutoCloseable {
             r.state = State.PACKED;
             r.health = definitions.get(type).health();
             records.put(r.id, r);
+            created = true;
         }
         UUID previousOwner = r.owner;
+        Location previousLocation = r.location;
         r.owner = p.getUniqueId();
         r.location = location.clone();
         try {
             spawn(r);
             r.state = State.DEPLOYED;
             save();
-        } catch (RuntimeException error) {
+        } catch (RuntimeException | LinkageError error) {
             var spawned = active.remove(r.id);
             if (spawned != null) {
                 entities.remove(spawned.entity.getUniqueId());
@@ -503,6 +522,9 @@ public final class VehicleService implements Listener, AutoCloseable {
             }
             r.state = State.PACKED;
             r.owner = previousOwner;
+            r.location = previousLocation;
+            if (created) records.remove(r.id);
+            refreshTickets();
             plugin.getLogger().log(java.util.logging.Level.SEVERE, "Cannot deploy " + type, error);
             message(p, "unavailable");
             return null;
@@ -698,21 +720,54 @@ public final class VehicleService implements Listener, AutoCloseable {
             message(p, "inventory-full");
             return false;
         }
-        var r = live.record;
-        r.health = live.entity.getHealth();
-        r.location = live.entity.getLocation();
-        r.token = UUID.randomUUID();
-        r.state = State.PACKED;
+        return returnPacked(p, live.record, live);
+    }
+
+    /** Recover the owner's deployed identity, including an invalid/missing base, without minting another vehicle. */
+    public boolean recall(Player player) {
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)
+                || net.mandomc.gameplay.admin.StaffMode.active(player)) {
+            message(player, "recall-temporary");
+            return false;
+        }
+        var record = records.values().stream().filter(r -> !r.tutorial && r.state == State.DEPLOYED
+                && r.owner.equals(player.getUniqueId())).findFirst().orElse(null);
+        if (record == null) { message(player, "recall-none"); return false; }
+        var live = active.get(record.id);
+        if (live != null && live.entity.isValid() && !live.entity.isDead()) return pack(player, record.id);
+        if (player.isDead() || player.isInsideVehicle() || combat.tagged(player)
+                || record.hitUntil > System.currentTimeMillis()) { message(player, "combat"); return false; }
+        if (record.health <= 0) { message(player, "recall-none"); return false; }
+        if (player.getInventory().firstEmpty() < 0) { message(player, "inventory-full"); return false; }
+        return returnPacked(player, record, live);
+    }
+
+    private boolean returnPacked(Player player, Record record, Live live) {
+        UUID oldToken = record.token;
+        double oldHealth = record.health;
+        Location oldLocation = record.location;
+        if (live != null && live.entity.isValid() && !live.entity.isDead()) {
+            record.health = live.entity.getHealth();
+            record.location = live.entity.getLocation();
+        }
+        record.token = UUID.randomUUID();
+        record.state = State.PACKED;
         try {
             save();
-        } catch (RuntimeException ex) {
-            r.state = State.DEPLOYED;
-            throw ex;
+        } catch (RuntimeException error) {
+            record.state = State.DEPLOYED;
+            record.token = oldToken;
+            record.health = oldHealth;
+            record.location = oldLocation;
+            plugin.getLogger().log(java.util.logging.Level.SEVERE, "Cannot recall vehicle", error);
+            message(player, "unavailable");
+            return false;
         }
-        remove(live);
-        p.getInventory().addItem(packed(r));
-        p.saveData();
-        message(p, "packed");
+        if (live != null) remove(live);
+        refreshTickets();
+        player.getInventory().addItem(packed(record));
+        player.saveData();
+        message(player, "packed");
         return true;
     }
 

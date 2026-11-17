@@ -1,5 +1,11 @@
 # Resume here
 
+## Droid, staff forge and Hoth vehicle feedback (2026-11-16)
+
+On `bilal/droid-knowledge-skin`, removed provider branding from M4-ND’s menu, replaced his armor stand with a signed full-body protocol-droid mannequin, connected public recipe/acquisition data, added verified first-saber and beginner guidance, and allowed material-funded forge testing in Creative/Survival staff mode with normal inventory restoration. Added `/vehicle recall`, `/recallvehicle` and `/vrecall`, plus a scoped vehicle spawn on Hoth and rejection of cancelled bases before consuming the item. The reported lost speeder was on production; its owner already issued a replacement. No extra item was granted by this change.
+
+Verification: 355 Java tests and 85 tooling checks pass. All 36 native droid/forge assertions and 48 native vehicle assertions pass, including the signed mannequin, exact coal/first-saber/beginner guidance, real AI identity, staff escrow restoration and an actual vehicle JVM restart. Development activation is pending. Production remains unchanged; a separate vehicle-only hotfix is being prepared from current main. Next action: deploy the exact tested build to development.
+
 ## Approved gameplay upgrades deployed to development (2026-11-16)
 
 On `bilal/dev-gameplay-upgrades`, all five approved features are active: recipe output/ingredient search with preserved Back state; M4-ND’s private Groq explanations at Cassian’s former anchor; finished-gun/Jetpack/vehicle KOTH rewards with rare Black Kyber and a required Darksaber recipe; permanent per-entity brown component stock; seven titled gray supply categories with retained salvage trays; and a craftable six-point Saber Forge with real damage/speed/guard/throw effects. The tutorial, handbook, acquisition notes and droid knowledge are updated. Interplanetary vehicle travel remains deferred.
