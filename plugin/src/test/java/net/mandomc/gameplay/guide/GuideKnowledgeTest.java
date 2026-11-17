@@ -38,6 +38,8 @@ public class GuideKnowledgeTest {
             assertTrue(advice.facts().contains("/tutorial"));assertTrue(advice.facts().contains("Naboo"));
         }
         assertEquals("item:minecraft:coal",knowledge.find("what do I do with coal").getFirst().id());
+        assertTrue(knowledge.verifiedAnswer("How does Fortune affect custom ore drops?",knowledge.find("How does Fortune affect custom ore drops?")).orElseThrow().contains("exactly one"));
+        assertTrue(knowledge.verifiedAnswer("What happens to my gear when I die?",knowledge.find("What happens to my gear when I die?")).orElseThrow().contains("drops at the death site"));
         assertEquals("item:saber_forge",knowledge.find("how do I craft a saber forge").getFirst().id());
     }
 }

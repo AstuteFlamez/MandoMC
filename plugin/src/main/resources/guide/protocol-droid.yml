@@ -46,6 +46,14 @@ knowledge:
       its source. Back preserves search results.
     answer: Open /recipes, traveler. Search by the item’s name, or switch to Uses this ingredient. Clicking an ingredient
       explains its recipe or source.
+  mining:
+    tags: mining ore ores scrap scraps fortune yield
+    facts: Eligible Agrinium, Electrum, Durasteel and Beskar ore mining yields exactly one matching scrap per block. Fortune never increases this final custom scrap quantity. This is a fixed one-scrap rule, not a random 1-to-5 roll. Native tool requirements, cancelled breaks, Creative and Silk Touch remain authoritative. These facts describe themed metal ores, not ordinary coal or other unconverted vanilla ores.
+    answer: Each eligible themed metal ore drops exactly one matching scrap, traveler. Fortune does not increase that amount; Silk Touch keeps the ore where supported.
+  death:
+    tags: death die dying killed respawn
+    facts: Normal survival death immediately drops the player's carried gear at the death location. Gear does not return automatically on respawn. The 15-second combat tag applies before death and to combat logout, not to a post-death item-drop grace period. Tutorial and staff temporary-inventory rules are separate.
+    answer: On normal survival death, your carried gear drops at the death site. Return to recover it, traveler; it does not automatically come back on respawn.
   jawas:
     tags: jawa jawas shops shop buy buying sell selling salvage parts components electronics electronic stock traders
     facts: 'Brown Jawas roam Tatooine and sell basic electronic components plus one to three random advanced parts.
