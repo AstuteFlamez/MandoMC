@@ -153,6 +153,14 @@ class SftpSafetyTests(unittest.TestCase):
         previous = [value for name, value in remote.files.items() if name.endswith('/previous')]
         self.assertEqual(previous, [b'old'])
 
+    def test_knowledge_startup_must_match_the_deployed_commit_and_bundle(self):
+        commit = 'a' * 40
+        log = 'M4-ND public knowledge ready: 386 approved sources, 4000 passages @ ' + commit[:12] + ' (bundled with this build; 800 encyclopedia records).'
+        self.assertTrue(module.guide_knowledge_ready(log, commit))
+        self.assertFalse(module.guide_knowledge_ready(log, 'b' * 40))
+        self.assertFalse(module.guide_knowledge_ready(log.replace('bundled with this build', 'local cache'), commit))
+        self.assertFalse(module.guide_knowledge_ready('M4-ND ready: Groq configured', commit))
+
     def test_repeated_plugin_updates_never_leave_backup_archives_in_paper_scan(self):
         class PebbleRemote(Remote):
             def posix_rename(self, source, target):

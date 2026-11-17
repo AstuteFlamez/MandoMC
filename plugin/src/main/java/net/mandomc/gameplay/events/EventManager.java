@@ -129,6 +129,11 @@ public final class EventManager implements Listener, AutoCloseable {
     public ManagedEvent event(String id) {return events.get(id);}
     public String activeId() {return active;}
     public String queuedId() {return queued;}
+    /** Public menu facts only; callers snapshot this on Paper's server thread. */
+    public record PublicStatus(String current, String next, boolean scheduled, long startsIn) { }
+    public PublicStatus publicStatus() {
+        return new PublicStatus(name(active), name(queued), config.getBoolean("scheduler.enabled"), startsIn());
+    }
     public boolean start(String id) {
         if(active!=null || !entries.containsKey(id) || !entries.get(id).enabled()) return false;
         try {events.get(id).start();}

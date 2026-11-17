@@ -49,6 +49,10 @@ public final class RepositorySearch {
     }
 
     static String playerText(String text) {
+        text = text.replace("minecraft:tatooine_review", "Tatooine").replace("minecraft:spawnworld", "Batuu")
+                .replace("minecraft:hoth", "Hoth").replace("minecraft:ilum", "Ilum")
+                .replace("minecraft:naboo", "Naboo").replace("minecraft:mandalore", "Mandalore");
+        text = text.replace("minecraft:", "");
         String plain = MiniMessage.miniMessage().stripTags(text.replace("<newline>", "\n")
                 .replace("<key:key.sneak>", "Sneak").replace("<key:key.use>", "Use")
                 .replace("<key:key.attack>", "Attack"));
