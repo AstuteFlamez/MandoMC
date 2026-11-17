@@ -1,10 +1,10 @@
 # Resume here
 
-## M4-ND conversation and encyclopedia implementation (2026-11-17)
+## M4-ND conversation and encyclopedia verified (2026-11-17)
 
 On `bilal/droid-expanded-knowledge`, added quota-free in-character greetings/farewells/thanks, general and Star Wars question routing, five-minute per-player follow-up context, and direct read-only own-balance/public-event answers. Builds now bundle hash-verified public knowledge for offline startup, including MythicMobs/WeaponMechanics sources. A generated encyclopedia preserves entity statistics and effective overrides, computes crate chances, links spawn rules to native encounter kinds, and improves material typos/acquisition links. Server mechanics still require verified release evidence.
 
-`AGENTS.md` now requires knowledge upkeep on every production push. Packaged source/hash/coverage/commit checks run at build, in CI before retaining artifacts and immediately before upload, and in the local production CLI. Post-restart verification requires the matching bundled-knowledge startup marker. Java and tooling suites pass; native Paper/AI verification is in progress. A general-query false positive caught by the native probe was fixed and regression-tested. Production and shared development are unchanged. Next action: finish native answer checks and deploy the checked candidate to development.
+`AGENTS.md` now requires knowledge upkeep on every production push. Packaged source/hash/coverage/commit checks run at build, in CI before retaining artifacts and immediately before upload, and in the local production CLI. Post-restart verification requires the matching bundled-knowledge startup marker. All 375 Java tests pass; 92 tooling checks complete with three existing optional-NBT dependency skips. Native Paper and real-AI outputs verify greetings without quota, own balance/public events, general knowledge, Star Wars lore, material typos, Massiff health/spawn/follow-up loot, E-11 base damage and Black Kyber probability. Native feedback fixed general-query false positives and raw biome identifiers; the final probability assertion was corrected to accept equivalent decimal percentages and Unicode spacing. Production and shared development are unchanged. Next action: deploy the checked candidate to development and verify its exact-build startup marker.
 
 ## Full gameplay release verified live on production (2026-11-17)
 

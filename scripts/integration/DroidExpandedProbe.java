@@ -14,7 +14,7 @@ public final class DroidExpandedProbe extends JavaPlugin {
     private MandoPlugin mando;
     private NativeProbePlayers actors;
     private Player player;
-    private int checks, question, waited;
+    private int checks, question = Integer.getInteger("mandomc.probe.first-question", 0), waited;
     private final List<String> answers = new ArrayList<>();
     private final String[] questions = {"Who is Darth Vader?", "What is the capital of France?",
             "How much health does a Massiff have on MandoMC?", "Where do Massiffs spawn on MandoMC?",
@@ -85,7 +85,7 @@ public final class DroidExpandedProbe extends JavaPlugin {
             case 3 -> check(value.contains("tatooine") && !value.contains("minecraft:"), "verified Massiff spawn planet");
             case 4 -> check(value.contains("rib") && (value.contains("75") || value.contains("0.75")), "follow-up uses same mob and verified drop chance");
             case 5 -> check(value.contains("2") && !value.contains("20 damage"), "verified current E11 base damage");
-            case 6 -> check(value.contains("1%") || value.contains("1 percent") || value.contains("1.0%"), "computed Black Kyber probability");
+            case 6 -> check(value.matches("(?sU).*\\b1(?:\\.0+)?\\s*(?:%|percent).*"), "computed Black Kyber probability");
             default -> throw new IllegalStateException("Unknown question");
         }
         if(++question==questions.length){finish(null);return;}

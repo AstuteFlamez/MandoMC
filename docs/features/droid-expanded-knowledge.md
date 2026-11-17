@@ -1,5 +1,5 @@
 # Feature: M4-ND conversation and gameplay encyclopedia
-Status: implementation
+Status: playable
 Branch: bilal/droid-expanded-knowledge
 
 ## Player experience
@@ -18,4 +18,4 @@ The guide owns conversation context and read-only knowledge retrieval. Credits a
 The paired protocol-droid configuration defines conversation phrases/replies, live response text and the existing budgets. AI reservation is 6000 tokens. Context holds at most 256 recent players for five minutes. Four structured records and three source passages are candidates; model evidence is capped at 9000 characters. Changes activate through a normal restart.
 
 ## Verification
-Automated checks cover routing, lore/server separation, context isolation/expiry, exact sources and overrides, material typos/acquisition links, health units, spawn eligibility, scripted damage, crate weight arithmetic, offline bundle loading, and release freshness/tamper/coverage failures. Native Paper and real-AI verification are required before development promotion.
+Automated checks cover routing, lore/server separation, context isolation/expiry, exact sources and overrides, material typos/acquisition links, health units, spawn eligibility, scripted damage, crate weight arithmetic, offline bundle loading, and release freshness/tamper/coverage failures. Verified on isolated Paper with real AI replies: quota-free greetings and direct live answers, general knowledge, Star Wars lore, Massiff health/spawn/follow-up loot, E-11 base damage and calculated Black Kyber probability. The probability assertion accepts equivalent decimal percentages and Unicode spacing. Development deployment follows the normal stopped, backed-up workflow.
