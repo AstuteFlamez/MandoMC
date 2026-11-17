@@ -10,7 +10,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-/** Replaces successful native ore loot with catalog scraps, using one final 1–5 roll while retaining native tools, Silk Touch, XP and cancellation. */
+/** Replaces successful native ore loot with catalog scraps, using exactly one scrap while retaining native tools, Silk Touch, XP and cancellation. */
 public final class OreDrops implements Listener {
     private record Tool(UUID world, int x, int y, int z, boolean silk) {
         boolean matches(org.bukkit.block.Block block) { return world.equals(block.getWorld().getUID())
@@ -56,7 +56,7 @@ public final class OreDrops implements Listener {
                 scrap.setAmount(OreDropQuantity.roll(java.util.concurrent.ThreadLocalRandom.current()));
                 entity.setItemStack(scrap);
             } else {
-                // Fortune can split native loot over several entities; it must not multiply this final roll.
+                // Fortune can split native loot over several entities; it must not multiply the final quantity.
                 iterator.remove();
                 entity.remove();
             }

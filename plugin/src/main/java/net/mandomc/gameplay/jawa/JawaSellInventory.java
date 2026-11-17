@@ -35,7 +35,7 @@ public final class JawaSellInventory implements Listener, AutoCloseable {
     private record Quote(List<ItemStack> accepted,List<ItemStack> rejected,long cents,int count) { }
     public static final class Tray implements InventoryHolder {
         final UUID owner, jawa; final Inventory inventory;
-        boolean locked, finished;
+        boolean locked, finished, practice;
         Tray(Player player,LivingEntity jawa,Component title){owner=player.getUniqueId();this.jawa=jawa.getUniqueId();inventory=Bukkit.createInventory(this,SIZE,title);MenuItems.fill(inventory);for(int i=0;i<INPUTS;i++)inventory.setItem(i,null);}
         @Override public Inventory getInventory(){return inventory;}
     }
@@ -70,9 +70,11 @@ public final class JawaSellInventory implements Listener, AutoCloseable {
         // Unreturned items remain saved until there is room; never overwrite that custody with another tray.
         if(!saved(player).isEmpty())return;
         var tray=new Tray(player,jawa,label("gray-title"));
+        tray.practice = plugin.tutorial() != null && plugin.tutorial().selling(player);
         var info=new ItemStack(Material.BOOK);var meta=info.getItemMeta();meta.displayName(label("buyer-info-title"));
         meta.lore(text.getStringList("buyer-info-lines").stream().map(line->MiniMessage.miniMessage().deserialize(line).decoration(TextDecoration.ITALIC,false)).toList());info.setItemMeta(meta);tray.inventory.setItem(27,info);
         var close=new ItemStack(Material.BARRIER);meta=close.getItemMeta();meta.displayName(label("buyer-close"));close.setItemMeta(meta);tray.inventory.setItem(35,close);
+        var back=new ItemStack(Material.CHEST);back.editMeta(m->m.displayName(label("gray-back")));tray.inventory.setItem(28,back);
         refresh(tray);player.openInventory(tray.inventory);
         if(player.getOpenInventory().getTopInventory().getHolder()==tray){sessions.put(player.getUniqueId(),tray);persist(player,tray);}
     }
@@ -91,10 +93,10 @@ public final class JawaSellInventory implements Listener, AutoCloseable {
     private void journal(Player player,Tray tray) {
         var items=contents(tray);if(!empty(player.getItemOnCursor()))items.add(player.getItemOnCursor().clone());saved(player,items);
     }
-    private void persist(Player player,Tray tray){journal(player,tray);player.saveData();}
+    private void persist(Player player,Tray tray){if (!tray.practice) { journal(player,tray);player.saveData(); }}
     /** Remaining overflow stays in player data; no ground drops and no metadata changes. */
     public void recover(Player player) {
-        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return;
+        if ((net.mandomc.gameplay.tutorial.TutorialInventory.active(player) || net.mandomc.gameplay.admin.StaffMode.active(player))) return;
         if(sessions.containsKey(player.getUniqueId()))return;
         var pending=saved(player);if(pending.isEmpty())return;
         var remaining=new ArrayList<ItemStack>();
@@ -133,6 +135,13 @@ public final class JawaSellInventory implements Listener, AutoCloseable {
         var quote=quote(tray);
         if(quote.cents()>CreditLedger.MAX){send(player,"buyer-limit");return;}
         if(quote.accepted().isEmpty()){send(player,contents(tray).isEmpty()?"buyer-empty":"buyer-invalid");player.closeInventory();return;}
+        if (tray.practice) {
+            if (plugin.tutorial() == null || !plugin.tutorial().selling(player)) { player.closeInventory(); return; }
+            int string = quote.accepted().stream().filter(item -> item.getType() == Material.STRING).mapToInt(ItemStack::getAmount).sum();
+            if (string < 16) { send(player,"buyer-empty"); return; }
+            for (int i=0;i<INPUTS;i++) tray.inventory.setItem(i,null);
+            player.closeInventory(); plugin.tutorial().sold(player); return;
+        }
         boolean submitted=plugin.credits().auctions().sellDeposit(player,quote.accepted(),quote.cents(),()->{
             // Custody is handed to auction escrow in the same player save; unsold items stay in this tray.
             for(int i=0;i<INPUTS;i++)tray.inventory.setItem(i,null);
@@ -147,6 +156,7 @@ public final class JawaSellInventory implements Listener, AutoCloseable {
         boolean denied=event.isCancelled();event.setCancelled(true);
         if(denied || !(event.getWhoClicked() instanceof Player player) || !active(player,tray) || tray.locked)return;
         int raw=event.getRawSlot();
+        if(raw==28 && !tray.practice){Bukkit.getScheduler().runTask(plugin,()->{var entity=Bukkit.getEntity(tray.jawa);player.closeInventory();if(entity instanceof LivingEntity jawa)plugin.jawas().open(player,jawa);});return;}
         if(raw==35){tray.locked=true;Bukkit.getScheduler().runTask(plugin,()->player.closeInventory());return;}
         if(raw==31 && event.getClick()==ClickType.LEFT){tray.locked=true;Bukkit.getScheduler().runTask(plugin,()->sell(player,tray));return;}
         if(!mutable(raw))return;
@@ -213,6 +223,7 @@ public final class JawaSellInventory implements Listener, AutoCloseable {
         if(tray.finished)return;tray.finished=true;sessions.remove(player.getUniqueId(),tray);
         var returned=contents(tray);for(int i=0;i<INPUTS;i++)tray.inventory.setItem(i,null);
         if(!empty(player.getItemOnCursor()))returned.add(player.getItemOnCursor().clone());player.setItemOnCursor(null);
+        if (tray.practice) { for (var item : returned) player.getInventory().addItem(item); return; }
         saved(player,returned);recover(player);
         if(!returned.isEmpty() && saved(player).isEmpty())send(player,"buyer-returned");
     }

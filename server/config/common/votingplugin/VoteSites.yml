@@ -16,8 +16,7 @@ VoteSites:
       - mandomc:credits give %player% 500
       - mandomc:crates key give vote %player% 1
       Messages:
-        Player: '&bThanks for voting! &fYou received 500 credits and a Voting Crate
-          key.'
+        Player: '&6&lᴍᴀɴᴅᴏᴍᴄ &8» &7Thanks for voting! You received &f500 credits &7and &f1 Voting Crate key&7.'
   MinecraftServerList:
     Enabled: true
     Name: MCSL
@@ -35,8 +34,7 @@ VoteSites:
       - mandomc:credits give %player% 500
       - mandomc:crates key give vote %player% 1
       Messages:
-        Player: '&bThanks for voting! &fYou received 500 credits and a Voting Crate
-          key.'
+        Player: '&6&lᴍᴀɴᴅᴏᴍᴄ &8» &7Thanks for voting! You received &f500 credits &7and &f1 Voting Crate key&7.'
   MinecraftServers:
     Enabled: true
     Name: MinecraftServers.org
@@ -54,8 +52,7 @@ VoteSites:
       - mandomc:credits give %player% 500
       - mandomc:crates key give vote %player% 1
       Messages:
-        Player: '&bThanks for voting! &fYou received 500 credits and a Voting Crate
-          key.'
+        Player: '&6&lᴍᴀɴᴅᴏᴍᴄ &8» &7Thanks for voting! You received &f500 credits &7and &f1 Voting Crate key&7.'
   PlanetMinecraft:
     Enabled: true
     Name: PlanetMinecraft.com
@@ -73,8 +70,7 @@ VoteSites:
       - mandomc:credits give %player% 500
       - mandomc:crates key give vote %player% 1
       Messages:
-        Player: '&bThanks for voting! &fYou received 500 credits and a Voting Crate
-          key.'
+        Player: '&6&lᴍᴀɴᴅᴏᴍᴄ &8» &7Thanks for voting! You received &f500 credits &7and &f1 Voting Crate key&7.'
   MinecraftBuzz:
     Enabled: true
     Name: Minecraft.Buzz
@@ -92,6 +88,5 @@ VoteSites:
       - mandomc:credits give %player% 500
       - mandomc:crates key give vote %player% 1
       Messages:
-        Player: '&bThanks for voting! &fYou received 500 credits and a Voting Crate
-          key.'
+        Player: '&6&lᴍᴀɴᴅᴏᴍᴄ &8» &7Thanks for voting! You received &f500 credits &7and &f1 Voting Crate key&7.'
 EverySiteReward: {}

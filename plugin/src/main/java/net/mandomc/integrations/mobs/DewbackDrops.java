@@ -35,11 +35,13 @@ public final class DewbackDrops implements Listener {
         var entity = type.getMethod("getEntity");
         Bukkit.getPluginManager().registerEvent(type, this, EventPriority.HIGH, (listener, event) -> {
             try {
-                if ("Dewback".equals(name.invoke(mobType.invoke(event)))
-                        && !HerdAge.baby((org.bukkit.entity.Entity) entity.invoke(event))
-                        && ThreadLocalRandom.current().nextDouble() < chance) {
-                    ((List<ItemStack>) drops.invoke(event)).add(items.create(id));
-                }
+                if (!"Dewback".equals(name.invoke(mobType.invoke(event)))) return;
+                // Horse leather becomes Bantha Hide later; remove it here while keeping saddle/equipment returns.
+                var loot = (List<ItemStack>) drops.invoke(event);
+                loot.removeIf(stack -> stack.getType() == org.bukkit.Material.LEATHER
+                        || "bantha_hide".equals(items.identify(stack)));
+                if (!HerdAge.baby((org.bukkit.entity.Entity) entity.invoke(event))
+                        && ThreadLocalRandom.current().nextDouble() < chance) loot.add(items.create(id));
             } catch (ReflectiveOperationException | RuntimeException error) {
                 plugin.getLogger().log(Level.SEVERE, "Dewback food drop failed", error);
             }

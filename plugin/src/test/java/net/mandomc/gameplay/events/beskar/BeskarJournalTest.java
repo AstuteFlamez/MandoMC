@@ -12,6 +12,13 @@ public class BeskarJournalTest {
         for(int i=0;i<25;i++)result.add(new BeskarJournal.Node(new Pos(i,12,0),"minecraft:deepslate[axis="+(i%2==0?"x":"z")+"]",i%3==0));
         return result;
     }
+    @Test public void tenNodeEventsAndLegacyTwentyFiveNodeRecoveryBothLoad() throws Exception {
+        var dir=Files.createTempDirectory("beskar-size"); var file=dir.resolve("journal.yml");
+        for (int size : new int[]{10,25}) {
+            var state=new BeskarJournal.State("minecraft:mandalore","size"+size,nodes().subList(0,size));
+            var journal=new BeskarJournal(file);journal.save(state);assertEquals(state,journal.load());
+        }
+    }
     @Test public void exactOrientedHostsAndConsumedStateSurviveAtomicRoundTrip()throws Exception {
         var dir=Files.createTempDirectory("beskar-journal-test");var p=dir.resolve("receipt.yml");
         try {

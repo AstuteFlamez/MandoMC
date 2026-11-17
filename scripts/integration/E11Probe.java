@@ -59,7 +59,7 @@ public final class E11Probe extends JavaPlugin {
         check(reload.getAmmoLeft(weapon, "E11") == 0, "magazine reaches zero");
         check(!reload.consumeAmmo(weapon, "E11", 1), "empty weapon cannot consume another shot");
         check(config.getInt("E11.Reload.Reload_Duration") == 45, "legacy reload duration preserved");
-        check(config.getDouble("E11.Damage.Base_Damage") == 0.5, "legacy base damage preserved");
+        check(config.getDouble("E11.Damage.Base_Damage") == 2.0, "buffed base damage loaded");
         var projectile = config.getObject("E11.Projectile", Projectile.class);
         check(projectile != null, "red bolt resolves through the projectile registry");
         var survival = Bukkit.getWorld(NamespacedKey.minecraft("overworld"));

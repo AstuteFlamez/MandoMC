@@ -21,8 +21,9 @@ public final class TutorialProbe extends JavaPlugin {
     private Player player, second;
     private ItemStack[] original;
     private Location origin;
+    private final Map<org.bukkit.block.Block, org.bukkit.block.data.BlockData> practiceOriginal = new LinkedHashMap<>();
     private int checks;
-    private boolean finished;
+    private boolean finished, brakePressed;
     private void check(boolean pass, String reason) { if (!pass) throw new AssertionError(reason); checks++; }
     @FunctionalInterface private interface Work { void run() throws Exception; }
     private void later(long ticks, Work action) { Bukkit.getScheduler().runTaskLater(this, () -> run(action), ticks); }
@@ -184,14 +185,28 @@ public final class TutorialProbe extends JavaPlugin {
                 check(player.getLocation().getPitch() == 0 && player.getLocation().getYaw() == -90, "Recipe lesson faces straight ahead");
                 check(mando.credits().ledger().balance(player.getUniqueId()) == balance, "Practice sale leaves real credits unchanged");
                 command(player, "/recipes"); check(net.mandomc.gameplay.items.RecipeGuide.isMenu(player.getOpenInventory().getTopInventory()), "Actual recipe guide opens");
-                stage("RECIPES"); player.closeInventory(); later(5, this::flight);
+                stage("RECIPES"); player.closeInventory();
+                later(3, () -> {
+                    stage("RECIPES"); command(player, "/recipes");
+                    var inventory = player.getOpenInventory().getTopInventory(); int weapons = -1;
+                    var plain = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText();
+                    for (int slot = 0; slot < inventory.getSize(); slot++) {
+                        var item = inventory.getItem(slot);
+                        if (item != null && item.getItemMeta().displayName() != null && plain.serialize(item.getItemMeta().displayName()).contains("Weapons")) weapons = slot;
+                    }
+                    check(weapons >= 0, "Weapons category present"); click(player, weapons);
+                    later(3, () -> {
+                        check(net.mandomc.gameplay.items.RecipeGuide.isCategory(player.getOpenInventory().getTopInventory(), "weapons"), "Actual weapons page is required");
+                        player.closeInventory(); later(5, this::flight);
+                    });
+                });
             });
         });
     }
     private void flight() throws Exception {
         stage("PLACE");
-        check(field(session(player), "vehicle") == null, "No TIE fighter blocks arrival instructions");
-        check("tiefighter".equals(mando.items().identify(player.getInventory().getItemInMainHand())), "Training TIE fighter supplied in inventory");
+        check(field(session(player), "vehicle") == null, "No X-wing blocks arrival instructions");
+        check("xwing".equals(mando.items().identify(player.getInventory().getItemInMainHand())), "Training X-wing supplied in inventory");
         check(progress(player).flightMillis() == 0, "Placement has no flight progress");
         // Drive the ordinary vehicle block-interaction event; only a valid placement advances.
         var block = player.getWorld().getBlockAt(48, 64, 46);
@@ -201,10 +216,10 @@ public final class TutorialProbe extends JavaPlugin {
         Bukkit.getPluginManager().callEvent(denied); stage("PLACE");
         var placed = new PlayerInteractEvent(player, org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK,
                 player.getInventory().getItemInMainHand(), block, org.bukkit.block.BlockFace.UP, EquipmentSlot.HAND);
-        Bukkit.getPluginManager().callEvent(placed); stage("FLIGHT");
-        check(player.getInventory().getItemInMainHand().isEmpty(), "Placement consumes training TIE fighter item");
+        Bukkit.getPluginManager().callEvent(placed); stage("BOARD");
+        check(player.getInventory().getItemInMainHand().isEmpty(), "Placement consumes training X-wing item");
         UUID id = (UUID) field(session(player), "vehicle");
-        var entity = mando.vehicles().entity(id); check(entity != null, "Real modeled TIE fighter created");
+        var entity = mando.vehicles().entity(id); check(entity != null, "Real modeled X-wing created");
         var movement = mando.vehicles().getClass().getDeclaredMethod("movement", UUID.class, Location.class, Location.class);
         movement.setAccessible(true);
         for (var destination : List.of(new Location(entity.getWorld(), -35, 90, -80), new Location(entity.getWorld(), 130, 150, 80)))
@@ -216,29 +231,74 @@ public final class TutorialProbe extends JavaPlugin {
         mando.tutorial().board(player, id); check(mando.vehicles().occupant(id, player.getUniqueId()), "Player boards real ModelEngine pilot seat");
         check(mando.tutorial().lockDismount(player), "Dismount locked during flight");
         later(25, () -> {
-            check(progress(player).flightMillis() == 0, "Grounded time does not count");
-            check(instruction().contains("take off"), "Grounded pilot sees concise takeoff instruction");
-            // Native mounted vehicle, raised into a hover; no client input is fabricated.
-            entity.teleport(entity.getLocation().add(0, 13, 0));
-            later(5, () -> { check(instruction().startsWith("Fly:"), "Airborne pilot sees compact progress"); stage("FLIGHT"); });
-            later(225, this::target);
+            stage("FLIGHT"); check(progress(player).flightMillis() == 0, "Grounded idle time does not count");
+            check(instruction().contains("take off"), "Grounded pilot sees takeoff instruction");
+            check(!mando.vehicleCannons().fire(player), "Cannons locked before gunnery lesson");
+            // Native test actors do not have a real client chunk subscription. Prepare their flight corridor.
+            var chunks = new ArrayList<java.util.concurrent.CompletableFuture<?>>();
+            for (int x = 0; x <= 10; x++) for (int z = 2; z <= 24; z++) chunks.add(player.getWorld().getChunkAtAsync(x, z, true));
+            java.util.concurrent.CompletableFuture.allOf(chunks.toArray(java.util.concurrent.CompletableFuture[]::new))
+                    .thenRun(() -> later(1, () -> {
+                        for (int x = 0; x <= 10; x++) for (int z = 2; z <= 24; z++)
+                            player.getWorld().addPluginChunkTicket(x, z, this);
+                        driveFlight(0);
+                    }));
         });
+    }
+    private void driveFlight(int ticks) throws Exception {
+        check(ticks < 700, "Flight must finish within native test deadline");
+        var step = progress(player).step();
+        if (step == TutorialProgress.Step.TARGET) { target(); return; }
+        var id = (UUID) field(session(player), "vehicle"); var ship = mando.vehicles().entity(id);
+        var controller = com.ticxo.modelengine.api.ModelEngineAPI.getMountPairManager().getController(player.getUniqueId());
+        check(controller != null, "Training pilot has native controller");
+        double side = step == TutorialProgress.Step.RIGHT ? -1 : step == TutorialProgress.Step.LEFT ? 1 : 0;
+        double forward = step == TutorialProgress.Step.FLIGHT && ticks == 0 ? 1 : step == TutorialProgress.Step.STOP && !brakePressed ? -1 : 0;
+        if (step == TutorialProgress.Step.STOP) brakePressed = true;
+        player.setRotation(ticks < 60 ? -20 : 0, ticks < 35 ? -20 : 0);
+        controller.setInput(new com.ticxo.modelengine.api.mount.controller.MountController.MountInput((float) side, (float) forward, false, false));
+        var model = com.ticxo.modelengine.api.ModelEngineAPI.getModeledEntity(ship);
+        controller.updateDriverMovement(model.getBase().getMoveController(), model.getModels().values().iterator().next());
+        if (ticks == 50) {
+            // Read the controller output now; Entity#getVelocity is sampled after native drag/interpolation.
+            var requested = model.getBase().getMoveController().getVelocity();
+            check(Math.abs(requested.length() - 2.1) < .001, "Training requests normal X-wing speed after W release: " + requested);
+            check(requested.getX() > .3 && requested.getZ() > .3, "Native flight follows mouse heading on both axes");
+        }
+        later(1, () -> driveFlight(ticks + 1));
     }
     private void target() throws Exception {
         stage("TARGET"); var session = session(player); UUID vehicle = (UUID) field(session, "vehicle");
-        var target = (LivingEntity) Bukkit.getEntity((UUID) field(session, "target")); check(target != null, "Stationary target exists");
-        check(target.getBoundingBox().getWidthX() >= 16 && target.getBoundingBox().getHeight() >= 16, "Target has a much larger hittable area");
-        check(target.getLocation().distanceSquared(new Location(player.getWorld(), 48.5, 92, .5)) < .01, "Large target is centered over training world");
-        var parts = player.getWorld().getEntitiesByClass(BlockDisplay.class);
-        check(parts.size() == 17 && parts.stream().allMatch(part -> part.getBrightness().getBlockLight() == 15 && part.getViewRange() >= 8), "Large target stays bright and visible across full range");
-        mando.tutorial().cannonHit(player, UUID.randomUUID(), target); stage("TARGET");
+        @SuppressWarnings("unchecked") var blocks = Set.copyOf((Set<org.bukkit.block.Block>) field(session, "targetBlocks"));
+        check(blocks.size() == 289, "Target is a solid 17-by-17 block structure");
+        check(blocks.stream().allMatch(block -> block.getType() == Material.RED_CONCRETE || block.getType() == Material.SEA_LANTERN), "Target uses actual world blocks");
+        check(player.getWorld().getEntitiesByClass(Slime.class).isEmpty(), "Target has no hidden slime hitbox");
+        check(player.getWorld().getEntitiesByClass(BlockDisplay.class).isEmpty(), "Target has no display-entity substitute");
+        mando.tutorial().cannonHit(player, UUID.randomUUID(), blocks.iterator().next()); stage("TARGET");
         var platform = mando.vehicles().firingPlatform(player, List.of("weapon_one", "weapon_two"));
-        check(platform != null, "Native TIE fighter muzzles resolve");
-        // Put the invisible collision target on the native muzzle ray to test actual swept cannon impact.
-        target.teleport(platform.muzzles().getFirst().clone().add(platform.direction().clone().multiply(8)).add(0, -1, 0));
+        check(platform != null, "Native X-wing muzzles resolve");
+        var ray = player.getWorld().rayTraceBlocks(platform.muzzles().getFirst(), platform.direction(), 60,
+                FluidCollisionMode.NEVER, true);
+        check(ray != null && blocks.contains(ray.getHitBlock()), "Actual spawned block target intersects native cannon ray without moving it");
         check(mando.vehicleCannons().fire(player), "Native cannons emit and consume supplied ammo");
-        later(50, () -> {
+        later(30, () -> {
+            stage("TARGET"); check(blocks.stream().allMatch(block -> block.getType().isAir()), "Cannon destroyed the actual target blocks before explosion delay completes");
+        });
+        later(90, () -> land(vehicle));
+    }
+    private void land(UUID vehicle) throws Exception {
+        stage("LAND"); var ship = mando.vehicles().entity(vehicle);
+        var controller = com.ticxo.modelengine.api.ModelEngineAPI.getMountPairManager().getController(player.getUniqueId());
+        controller.setInput(new com.ticxo.modelengine.api.mount.controller.MountController.MountInput(0, 0, false, true));
+        var model = com.ticxo.modelengine.api.ModelEngineAPI.getModeledEntity(ship);
+        controller.updateDriverMovement(model.getBase().getMoveController(), model.getModels().values().iterator().next());
+        later(1, () -> { if (progress(player).step() == TutorialProgress.Step.LAND) land(vehicle); else eventGuide(vehicle); });
+    }
+    private void eventGuide(UUID vehicle) throws Exception {
             stage("EVENTS"); check(mando.vehicles().entity(vehicle) == null, "Training ship cleaned up after target");
+            @SuppressWarnings("unchecked") var originals = (Map<org.bukkit.block.Block, org.bukkit.block.BlockState>) field(session(player), "practiceBlocks");
+            originals.forEach((block, state) -> practiceOriginal.put(block, state.getBlockData()));
+            check(originals.size() >= 370, "Target and landing pad both record original blocks for cleanup");
             var bar = (net.kyori.adventure.bossbar.BossBar) field(session(player), "bar");
             var plain = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText();
             check(plain.serialize(bar.name()).contains("Auto-continue") && plain.serialize(bar.name()).contains("/tutorial end"), "Event bossbar explains automatic timing and exit");
@@ -254,10 +314,11 @@ public final class TutorialProbe extends JavaPlugin {
                 check(plain.serialize(((TextDisplay) field(session(player), "hologram")).text()).contains("Tutorial completes in"), "Final page explains timed completion");
             });
             later(580, this::completed);
-        });
     }
     private void completed() throws Exception {
         check(!TutorialInventory.active(player), "Completion exits tutorial");
+        check(!practiceOriginal.isEmpty(), "Native fixture captured temporary target and landing blocks");
+        practiceOriginal.forEach((block, data) -> check(block.getBlockData().equals(data), "Completion restores practice block " + block.getLocation()));
         check(player.getWorld() == origin.getWorld(), "Original world restored");
         var handle = player.getClass().getMethod("getHandle").invoke(player);
         boolean rawInvulnerable = (boolean) handle.getClass().getMethod("isInvulnerable").invoke(handle);
@@ -311,7 +372,7 @@ public final class TutorialProbe extends JavaPlugin {
     }
     private void autoAndClanChecks() throws Exception {
         var clans = Bukkit.getServicesManager().load(net.mandomc.gameplay.clans.ClanService.class);
-        var clan = clans.state().create("Existing" + checks, second.getUniqueId(), System.currentTimeMillis());
+        var clan = clans.state().create("Existing" + UUID.randomUUID().toString().substring(0, 8), second.getUniqueId(), System.currentTimeMillis());
         mando.tutorial().request(second);
         later(25, () -> {
             command(second, "/warp"); click(second, 22);

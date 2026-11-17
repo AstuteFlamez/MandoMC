@@ -25,13 +25,14 @@ final class ClanProtection implements Listener {
         if(p.getGameMode()!=GameMode.SURVIVAL)return true;
         // DevWorld is the development sandbox, outside the frozen planet wilderness scope.
         // Clan ownership and territory protection still apply before this exemption.
-        if(block.getWorld().getKey().equals(org.bukkit.NamespacedKey.minecraft("devworld")))return true;
+        if(block.getWorld().getKey().equals(org.bukkit.NamespacedKey.minecraft("devworld"))
+                || net.mandomc.gameplay.tutorial.TutorialInventory.world(block.getWorld()))return true;
         if(!clans.land().prepare(block.getWorld(),block.getX()>>4,block.getZ()>>4)) {
             p.sendActionBar(clans.message("unprepared"));return false;
         }
         return true;
     }
-    private void touch(Player p,Block b){if(p.getGameMode()==GameMode.SURVIVAL)clans.land().touch(LandRestoration.chunk(b));}
+    private void touch(Player p,Block b){if(!net.mandomc.gameplay.tutorial.TutorialInventory.world(b.getWorld()) && p.getGameMode()==GameMode.SURVIVAL)clans.land().touch(LandRestoration.chunk(b));}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void breakBlock(BlockBreakEvent e){
         boolean storage=e.getBlock().getState() instanceof Container||e.getBlock().getType()==org.bukkit.Material.ENDER_CHEST;
@@ -70,6 +71,10 @@ final class ClanProtection implements Listener {
             }
             return;
         }
+        String mechanism = b.getType().name();
+        if (territory.mechanisms(b.getLocation()) && (mechanism.endsWith("_BUTTON")
+                || mechanism.endsWith("_PRESSURE_PLATE") || mechanism.endsWith("_DOOR")
+                || mechanism.endsWith("_TRAPDOOR") || b.getType() == org.bukkit.Material.LEVER)) return;
         // Doors, redstone and physical/tool interactions cannot modify a rival's base.
         var owner=clans.owner(b.getLocation());
         if(!clans.canEdit(e.getPlayer(),b.getLocation())&&(owner==null||owner.abandonedAt==0)) {

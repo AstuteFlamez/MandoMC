@@ -14,9 +14,11 @@ public class KothCrateTest {
     @Test public void kothUsesTheSharedCrateDefinitionAndSavedVirtualKeys() {
         var crate=CrateDefinition.read("koth",config().getConfigurationSection("crates.koth"));
         assertTrue(crate.virtual());assertEquals("koth_crate_key",crate.keyItem());
-        assertEquals(100,crate.rewards().total());assertEquals(5,crate.rewards().entries().size());
-        assertEquals("durasteel_sheet",crate.rewards().choose(0).item());
-        assertEquals("beskar_sheet",crate.rewards().choose(99).item());
+        assertEquals(100,crate.rewards().total());assertEquals(12,crate.rewards().entries().size());
+        assertEquals("se14c",crate.rewards().choose(0).item());
+        assertEquals("black_kyber",crate.rewards().choose(99).item());
+        var items=new java.util.HashSet<String>();for(int i=0;i<100;i++)items.add(crate.rewards().choose(i).item());
+        assertEquals(java.util.Set.of("se14c","a280","ee3","jawa_ionization_blaster","cycler_rifle","relby_v10","boba_jetpack","speederbike","uwing","xwing","tiefighter","black_kyber"),items);
     }
     @Test public void weightedRewardsUseExactBoundariesAndRejectInvalidTickets() {
         var pool=new WeightedPool<>(List.of(new WeightedPool.Entry<>("common",95),new WeightedPool.Entry<>("rare",5)));
@@ -27,7 +29,7 @@ public class KothCrateTest {
     @Test public void invalidWeightsAndUnboundedItemAmountsFailValidation() {
         assertThrows(IllegalArgumentException.class,()->new WeightedPool<>(List.of()));
         assertThrows(IllegalArgumentException.class,()->new WeightedPool<>(List.of(new WeightedPool.Entry<>("bad",0))));
-        var config=config();config.set("crates.koth.rewards",List.of(java.util.Map.of("item","beskar_sheet","amount",65,"weight",1)));
+        var config=config();config.set("crates.koth.rewards",List.of(java.util.Map.of("item","beskar","amount",65,"weight",1)));
         assertThrows(IllegalArgumentException.class,()->CrateDefinition.read("koth",config.getConfigurationSection("crates.koth")));
     }
 }

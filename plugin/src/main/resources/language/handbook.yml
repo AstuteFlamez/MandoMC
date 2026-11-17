@@ -15,102 +15,121 @@ pages:
 - id: travel
   topic: Getting Started & Travel
   heading: Travel
-  body: |-
-    Batuu: safe spawn.
+  body: 'Batuu: safe spawn.
+
     /warp: galaxy map.
+
     /spawn: back to Batuu.
+
 
     Stand still to travel. Combat blocks travel.
 
+
     /c map: zones and claims.
-    Wild edits reset after 24h without edits.
+
+    Wild edits reset after 24h without edits.'
 - id: combat_weapons
   topic: Combat, Death, Blasters & Lightsabers
   heading: Combat & Weapons
-  body: |-
-    Death drops carried gear. Combat: 15s. Logout in combat kills you.
+  body: 'Death drops carried gear. Combat: 15s. Logout in combat kills you.
+
 
     Blaster: use to fire; drop key reloads.
 
-    Saber: hold use to guard; sneak + attack throws. Rest recovers charge.
+
+    Saber: hold use to guard; sneak + attack throws. Rest recovers charge.'
 - id: jawas
   topic: Jawa Shops
   heading: Jawa Shops
-  body: |-
-    Brown Jawas sell supplies on Tatooine. Right-click to browse.
+  body: 'Brown Jawas: components on Tatooine. Basic parts plus random advanced finds; stock stays fixed.
 
-    Gray buyers pay credits. Put salvage in the sell window, then Sell. Rejected items return; closing returns leftovers.
+
+    Seven titled gray Jawas at Batuu sell ordinary goods. Sell Goods buys salvage.'
 - id: mining_materials
   topic: Mining & Materials
   heading: Mining & Materials
-  body: |-
-    Mine themed ores for metal scraps. Refine scraps to ingots.
+  body: 'Each ore drops one scrap. Smelt it in a normal furnace for one ingot.
 
-    Scraps, ingots and sheets feed equipment crafting.
 
-    /recipes shows sources and the right furnace or workstation.
+    Use ingots to craft equipment.
+
+
+    /recipes shows sources and the right furnace or workstation.'
 - id: crafting
   topic: Crafting & /recipes
   heading: Crafting
-  body: |-
-    /recipes opens the guide. Pick an item for recipes and sources.
+  body: 'Use /recipes. Search output names or toggle ingredient uses. Click inputs for sources.
 
-    Follow ingredients to their own recipes. Check the workstation: crafting, blast furnace or stonecutter.
+
+    Craft a Saber Forge for six upgrade points. Choose your saber style first.'
 - id: credits_auctions
   topic: Credits & /ah
   heading: Credits & Auctions
-  body: |-
-    /balance: your credits.
+  body: '/balance: your credits.
+
     /pay <player> <amount>
 
+
     /ah: player market.
+
     Hold an item, then:
+
     /ah sell <price>
 
-    /ah collect retrieves saved items and returns.
+
+    /ah collect retrieves saved items and returns.'
 - id: clans_claims
   topic: Clans & Claims
   heading: Clans & Claims
-  body: |-
-    Max 4 players; 4 chunks.
+  body: 'Max 4 players; 4 chunks.
+
     /c create <name>
+
     /c invite <player>
+
     /c join <clan>
+
     /c claim
+
     /c map
 
-    Leave a full empty chunk beside rival claims and protected zones.
+
+    Leave a full empty chunk beside rival claims and protected zones.'
 - id: raids_warpoints
   topic: Raids & Warpoints
   heading: Raids & Warpoints
-  body: |-
-    +10 vs a rival: explosive raids and chest loot. First breach starts 1h; pair points reset/freeze. No hand-breaking.
+  body: '+10 vs a rival: explosive raids and chest loot. First breach starts 1h; pair points reset/freeze. No hand-breaking.
 
-    After 7d clan inactivity: 24h public loot, then gradual land reset.
+
+    After 7d clan inactivity: 24h public loot, then gradual land reset.'
 - id: events
   topic: Events
   heading: Events
-  body: |-
-    KOTH: /warp hoth
-    Hill: -148, 27, 141.
-    Clan holds 3min; clear all holders to reset. A random winner on hill gets a key.
+  body: 'KOTH on Hoth: win keys for guns, Jetpack books, vehicles or rare Black Kyber to craft a Darksaber.
 
-    Jabba: watch /event. Clear rooms; caches and PvP. Beat Rancor, then loot before closing.
+
+    Jabba: shared dungeon loot.
+
+
+    /events shows schedules.'
 - id: vehicles
   topic: Vehicles
   heading: Vehicles
-  body: |-
-    Place a vehicle on solid ground, then choose a seat. Only the placer pilots. See item hints for keys.
+  body: 'Place on solid ground. Only the placer pilots.
 
-    Pack when stopped, empty and out of combat. Destroyed vehicles are lost.
+
+    Pack while landed, empty and out of combat. /vehicle recall returns it. Destroyed vehicles are lost.'
 - id: ilum_crates
   topic: Ilum & Crates
   heading: Ilum & Crates
-  body: |-
-    /warp ilum
+  body: '/warp ilum
+
     Follow plates and Jedi. Compass retries; /parkour leave exits.
+
 
     Finish for one Kyber key per 24h. Your gear is kept safe.
 
+
     /warp crates
-    /crates open kyber
+
+    /crates open kyber'

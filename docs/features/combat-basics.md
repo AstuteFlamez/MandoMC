@@ -7,7 +7,7 @@ New players receive stone pickaxe, axe, shovel and hoe, 64 steak, all four Deser
 
 An uncancelled, positive-damage player/mob or player/player hit puts involved players into combat for 15 seconds. Further hits refresh the deadline. The sidebar shows `Safe in 15.0s`, counting down with one decimal. Voluntary teleports are refused while tagged. Leaving while tagged causes one real death and drops storage, armor, offhand and any airborne saber at the player's location.
 
-Elytra flight, enchanting, potions and ordinary swords/bows/crossbows/shields are disabled; the registered Vader saber is exempt. Nether/End portals and entry are disabled, and neither dimension loads. Normal repair and renaming remain available through anvils. Crafting repairs of matching custom items preserve their identity and repaired wear. Applying or increasing enchantments through an anvil is denied.
+Elytra flight, potions and ordinary swords/bows/crossbows/shields are disabled; the registered Vader saber is exempt. Nether/End portals and entry are disabled, and neither dimension loads. Normal repair and renaming remain available through anvils. Crafting repairs of matching custom items preserve their identity and repaired wear. Normal enchanting tables and applying/increasing enchantments through an anvil are enabled (2026-11-16). Bantha Hide is native leather for books and repairing leather robes.
 
 ## Rules
 - Both dealing and receiving attributed damage refresh combat, including WeaponMechanics E-11 and mob projectiles. Cancelled or zero-damage hits and environmental damage do not tag. Environmental damage still interrupts a pending travel countdown.
@@ -24,7 +24,7 @@ MandoMC CombatService is the sole tag authority. TeleportService delegates to it
 ## Parameters
 - `combat/combat.yml`: schema-version 1; tag-seconds 1..300, default 15.
 - `arrival/starter-kit.yml`: schema-version 1; materials and custom-items IDs with whole-stack quantities 1..64, constrained by each item's native maximum stack.
-- `rules/survival.yml`: schema-version 1; disable-elytras, disable-enchanting, disable-potions, disable-vanilla-weapons, disable-nether-and-end, all true.
+- `rules/survival.yml`: schema-version 1; disable-elytras, disable-potions, disable-vanilla-weapons and disable-nether-and-end are true; disable-enchanting is false.
 - `language/messages.yml`: combat sidebar/messages, rule denials and kit receipt text.
 All gameplay config changes require a clean restart. Bundled language defaults are additive.
 

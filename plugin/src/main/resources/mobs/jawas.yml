@@ -1,4 +1,3 @@
----
 schema-version: 1
 spawning:
   worlds:
@@ -368,7 +367,7 @@ shop:
       price: '4'
   categories:
     saplings:
-      name: Saplings & plants
+      name: Plants & Dyes
       items:
       - oak
       - spruce
@@ -380,8 +379,18 @@ shop:
       - pale_oak
       - mangrove_propagule
       - bamboo
+      - moss_block
+      - vine
+      - lily_pad
+      - glow_berries
+      - azalea
+      - small_dripleaf
+      - dandelion
+      - poppy
+      - blue_orchid
+      - allium
     farming:
-      name: Farming starters
+      name: Farming
       items:
       - wheat_seeds
       - beetroot_seeds
@@ -394,21 +403,8 @@ shop:
       - dirt
       - grass_block
       - mud
-    greenery:
-      name: Greenery & dyes
-      items:
-      - moss_block
-      - vine
-      - lily_pad
-      - glow_berries
-      - azalea
-      - small_dripleaf
-      - dandelion
-      - poppy
-      - blue_orchid
-      - allium
     ocean:
-      name: Ocean materials
+      name: Ocean Goods
       items:
       - prismarine
       - sea_lantern
@@ -417,7 +413,7 @@ shop:
       - sea_pickle
       - kelp
     nether:
-      name: Nether supplies
+      name: Nether Goods
       items:
       - quartz
       - glowstone
@@ -431,13 +427,13 @@ shop:
       - warped_fungus
       - shroomlight
     end:
-      name: End materials
+      name: End Goods
       items:
       - end_stone
       - purpur_block
       - chorus_flower
     utility:
-      name: Utility supplies
+      name: General Supplies
       items:
       - slime_ball
       - string
@@ -446,59 +442,122 @@ shop:
       - bone
       - ink_sac
     minerals:
-      name: Mineral supplies
+      name: Minerals
       items:
       - redstone
       - lapis_lazuli
       - gold_ingot
       - copper_ingot
+  components:
+    basic:
+      wiring_coil:
+        item: wiring_coil
+        amount: 1
+        price: '60'
+      basic_power_cell:
+        item: basic_power_cell
+        amount: 1
+        price: '70'
+      rough_power_cell:
+        item: rough_power_cell
+        amount: 1
+        price: '80'
+      basic_emitter_coil:
+        item: basic_emitter_coil
+        amount: 1
+        price: '90'
+      makeshift_recoil_buffer:
+        item: makeshift_recoil_buffer
+        amount: 1
+        price: '100'
+      old_ion_chamber:
+        item: old_ion_chamber
+        amount: 1
+        price: '110'
+    advanced:
+      precision_crafted_lens:
+        item: precision_crafted_lens
+        amount: 1
+        price: '250'
+      energy_conduits:
+        item: energy_conduits
+        amount: 1
+        price: '350'
+      durable_mid_grade_power_core:
+        item: durable_mid_grade_power_core
+        amount: 1
+        price: '400'
+      precision_emitter_coil:
+        item: precision_emitter_coil
+        amount: 1
+        price: '450'
+      reinforced_ion_chamber:
+        item: reinforced_ion_chamber
+        amount: 1
+        price: '450'
+      fusion_coil_stabilizer:
+        item: fusion_coil_stabilizer
+        amount: 1
+        price: '700'
+      plasma_capacitor_array:
+        item: plasma_capacitor_array
+        amount: 1
+        price: '800'
+      cortosis_alloy_frame:
+        item: cortosis_alloy_frame
+        amount: 1
+        price: '1000'
+    advanced-minimum: 1
+    advanced-maximum: 3
 npcs: {}
 text:
-  brown-title: "<gold>Jawa · <category>"
-  gray-title: "<gray>Jawa salvage buyer"
-  buy-price: "<gray>Buy <white><amount> <gray>for <gold>$<price>"
-  sell-price: "<gray>Sell <white><amount> <gray>for <gold>$<price>"
-  buy-hint: "<yellow>Left-click to buy one bundle."
-  sell-hint: "<yellow>Left-click to sell one bundle."
-  balance: "<gray>Credits: <gold>$<balance>"
-  too-far: "<red>Move closer to the Jawa."
-  angry: "<red>Finish combat before trading."
-  missing-items: "<red>You do not have that bundle to sell."
-  inventory-full: "<red>Make room in your inventory first."
-  placed: "<gray>Jawa placement saved."
-  usage: "<gray>/mmc jawa gray <id> · /mmc jawa remove <id> · /mmc jawa brown · /mmc
-    jawa status"
-  saving: "<yellow>A Jawa placement is being saved. Try again in a moment."
-  save-failed: "<red>The Jawa placement could not be saved."
-  buyer-info-title: "<gold>How to sell"
+  brown-title: <gold>Jawa · Components
+  gray-title: <gray>Jawa · Sell Goods
+  buy-price: <gray>Buy <white><amount> <gray>for <gold>$<price>
+  sell-price: <gray>Sell <white><amount> <gray>for <gold>$<price>
+  buy-hint: <yellow>Left-click to buy one bundle.
+  sell-hint: <yellow>Left-click to sell one bundle.
+  balance: '<gray>Credits: <gold>$<balance>'
+  too-far: <red>Move closer to the Jawa.
+  angry: <red>Finish combat before trading.
+  missing-items: <red>You do not have that bundle to sell.
+  inventory-full: <red>Make room in your inventory first.
+  placed: <gray>Jawa placement saved.
+  usage: <gray>/mmc jawa gray <id> · /mmc jawa remove <id> · /mmc jawa brown · /mmc jawa status
+  saving: <yellow>A Jawa placement is being saved. Try again in a moment.
+  save-failed: <red>The Jawa placement could not be saved.
+  buyer-info-title: <gold>How to sell
   buyer-info-lines:
-  - "<gray>Place items in the empty slots above."
-  - "<gray>Click <green>Sell items <gray>to confirm the sale."
+  - <gray>Place items in the empty slots above.
+  - <gray>Click <green>Sell items <gray>to confirm the sale.
   - ''
-  - "<gray>The total updates as you add items."
-  - "<gray>Only items this Jawa buys are sold."
-  - "<gray>Other items are returned unchanged."
+  - <gray>The total updates as you add items.
+  - <gray>Only items this Jawa buys are sold.
+  - <gray>Other items are returned unchanged.
   - ''
-  - "<gray>Closing this window cancels the sale"
-  - "<gray>and returns everything still inside."
-  - "<gray>If your inventory is full, make room"
-  - "<gray>and speak to a buyer to collect returns."
-  buyer-sell: "<green>Sell items <dark_gray>» <gold>$<price>"
-  buyer-quote: "<gray><count> sellable · <returned> to return"
-  buyer-close: "<red>Return items & close"
-  buyer-empty: "<yellow>Place items in the empty slots first."
-  buyer-mode: "<red>Switch to Survival or Adventure to sell items."
-  buyer-pending: "<yellow>Some returned items are saved. Make room and speak to a
-    buyer Jawa to collect them."
-  buyer-returned: "<gray>Unsold items were returned to your inventory."
-  buyer-invalid: "<yellow>This Jawa does not buy those items. They have been returned."
-  buyer-limit: "<red>That sale exceeds the credit limit. Remove some items and try
-    again."
-  category-title: "<gold><category>"
-  category-info: "<gray>This Jawa sells the complete <category> selection."
-  category-loading: "<yellow>This Jawa is sorting its supplies. Try again in a moment."
-  category-unavailable: "<yellow>This Jawa cannot open its supplies right now. Please
-    contact staff."
+  - <gray>Closing this window cancels the sale
+  - <gray>and returns everything still inside.
+  - <gray>If your inventory is full, make room
+  - <gray>and speak to a buyer to collect returns.
+  buyer-sell: <green>Sell items <dark_gray>» <gold>$<price>
+  buyer-quote: <gray><count> sellable · <returned> to return
+  buyer-close: <red>Return items & close
+  buyer-empty: <yellow>Place items in the empty slots first.
+  buyer-mode: <red>Switch to Survival or Adventure to sell items.
+  buyer-pending: <yellow>Some returned items are saved. Make room and speak to a buyer Jawa to collect them.
+  buyer-returned: <gray>Unsold items were returned to your inventory.
+  buyer-invalid: <yellow>This Jawa does not buy those items. They have been returned.
+  buyer-limit: <red>That sale exceeds the credit limit. Remove some items and try again.
+  category-title: <gold>Fixed Encounter Stock
+  category-info: <gray>Basic parts + this Jawa’s lucky finds.
+  category-loading: <yellow>This Jawa is sorting its supplies. Try again in a moment.
+  category-unavailable: <yellow>This Jawa cannot open its supplies right now. Please contact staff.
+  gray-buy-title: <gold>Jawa · <category>
+  gray-name: <gold><category>
+  gray-sell: <green>Sell Goods
+  gray-stock-info: <gray>Browse this trader’s permanent supplies.
+  gray-back: <yellow>Buy Goods
+  gray-page: <yellow>Page <page>
 combat-timing:
   initial-min-ticks: 6
   initial-max-ticks: 36

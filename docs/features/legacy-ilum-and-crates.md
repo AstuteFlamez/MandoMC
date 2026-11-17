@@ -35,8 +35,20 @@ key artwork reuse the original user-provided PNGs, without changing their pixels
 ## Multiplayer, recovery and safety
 
 The map is shared; run IDs, ordered checkpoints, clocks, dialogue and rewards belong to individual players.
-Players cannot skip checkpoint numbers or reset another runner by punching them. Environmental failures
-retry the current checkpoint. The scoped collision team prevents player pushing and restores prior teams.
+Players cannot skip checkpoint numbers or reset another runner by punching them. At checkpoint 3 (the
+dropper), environmental failures retry immediately. At the start and checkpoints 1, 2 and 4, environmental
+damage reduces health normally; only death automatically returns the player to their saved checkpoint.
+Being on fire or falling below the course does not trigger an early return in those sections. Death keeps
+the run, temporary controls and level intact. The compass remains available for a voluntary retry.
+The scoped collision team prevents player pushing and restores prior teams.
+
+The 2026-11-16 damage-rule change is verified on a disposable Paper server with 51 assertions using
+`scripts/build-ilum-damage-probe.sh` and `IlumDamageProbe` (loopback port 25591 only). The probe checks
+all five progress states, actual damage, immediate versus death-only returns, fire, below-course
+movement, PvP protection and death inventory/run preservation. This follow-up is deployed to development with a retained stopped-runtime backup and healthy startup.
+Production is also live via PR #54 (`b6b3f53`): all checks and the automatic upload passed, the exact CI
+JAR matches the native-tested contents, and all 128 installed managed files match after a healthy restart.
+Players received a 30-second console broadcast; restart followed 53 seconds later. Backups are retained.
 
 Inventory escrow is stored in native player persistent data before temporary items are issued. Gear
 restoration, run completion, cooldown and queued key delivery are committed with the same native

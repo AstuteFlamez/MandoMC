@@ -17,8 +17,8 @@ public class HandbookDefinitionTest {
                 "clans_claims","raids_warpoints","events","vehicles","ilum_crates"),book.pages().stream().map(HandbookDefinition.Page::id).toList());
         assertEquals("Jawa Shops",book.pages().get(2).heading());
         assertEquals("Jawa Shops",book.pages().get(2).topic());
-        assertTrue(book.pages().get(2).body().contains("Brown Jawas sell supplies"));
-        assertTrue(book.pages().get(2).body().contains("Gray buyers pay credits"));
+        assertTrue(book.pages().get(2).body().contains("Brown Jawas: components"));
+        assertTrue(book.pages().get(2).body().contains("Sell Goods buys salvage"));
         assertFalse(book.pages().stream().anyMatch(page->page.id().equals("armor_repairs")));
         assertEquals(1,book.pages().stream().filter(page->page.id().equals("jawas")).count());
         assertEquals("Events",book.pages().get(8).heading());

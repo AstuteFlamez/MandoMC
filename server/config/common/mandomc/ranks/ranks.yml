@@ -8,7 +8,7 @@ ranks:
     icon: "ā"
     color: "#55FFFF"
     inherits: ["builder"]
-    permissions: ["*"]
+    permissions: ["*", "mandomc.travel.back"]
   mod:
     name: Moderator
     order: 1
@@ -16,7 +16,7 @@ ranks:
     icon: "ą"
     color: "#00AA00"
     inherits: ["mandalore"]
-    permissions: ["mandomc.admin.vanish", "mandomc.admin.vanish.see", "mandomc.admin.invsee", "mandomc.admin.fly", "mandomc.admin.mvtp", "minecraft.command.ban", "minecraft.command.pardon"]
+    permissions: ["mandomc.staff", "mandomc.travel.back", "mandomc.admin.vanish", "mandomc.admin.vanish.see", "mandomc.admin.invsee", "mandomc.admin.fly", "mandomc.admin.mvtp", "minecraft.command.ban", "minecraft.command.pardon"]
   builder:
     name: Builder
     order: 2
@@ -24,7 +24,7 @@ ranks:
     icon: "ħ"
     color: "#00AAAA"
     inherits: ["mandalore"]
-    permissions: ["mandomc.admin.fly", "mandomc.admin.gamemode", "mandomc.admin.mvtp", "mandomc.admin.speed", "mandomc.admin.flyspeed", "mandomc.travel.homes.unlimited", "minecraft.command.clear", "worldedit.*"]
+    permissions: ["mandomc.staff", "mandomc.travel.back", "mandomc.admin.fly", "mandomc.admin.gamemode", "mandomc.admin.mvtp", "mandomc.admin.speed", "mandomc.admin.flyspeed", "mandomc.travel.homes.unlimited", "minecraft.command.clear", "worldedit.*"]
   creator:
     name: Creator
     order: 3
@@ -64,4 +64,4 @@ ranks:
     icon: "ī"
     color: "#AAAAAA"
     inherits: []
-    permissions: ["mandomc.arrival", "mandomc.travel.*", "-mandomc.travel.homes.unlimited", "mandomc.event", "mandomc.recipes", "mandomc.hud", "mandomc.credits.balance", "mandomc.credits.pay", "mandomc.credits.top", "weaponmechanics.use.*"]
+    permissions: ["mandomc.arrival", "mandomc.travel.*", "-mandomc.travel.homes.unlimited", "-mandomc.travel.back", "mandomc.event", "mandomc.recipes", "mandomc.hud", "mandomc.credits.balance", "mandomc.credits.pay", "mandomc.credits.top", "weaponmechanics.use.*"]

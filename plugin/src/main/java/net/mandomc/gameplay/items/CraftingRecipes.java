@@ -13,7 +13,7 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /** Owns native crafting registration and the recipe data displayed by the player guide. */
-public final class CraftingRecipes implements AutoCloseable {
+public final class CraftingRecipes implements org.bukkit.event.Listener, AutoCloseable {
     private final ItemCatalog items;
     private org.bukkit.scheduler.BukkitTask vendorRegistration;
     private StonecutterRules stonecutterRules;
@@ -83,6 +83,8 @@ public final class CraftingRecipes implements AutoCloseable {
             close();
             throw error;
         }
+        Bukkit.getPluginManager().registerEvents(this, plugin);
+        Bukkit.getOnlinePlayers().forEach(this::discover);
         if (!vendorRecipes.isEmpty()) {
             // WeaponMechanics loads its templates asynchronously after plugin onEnable.
             // Resolve every genuine template before registering any vendor-output recipes.
@@ -109,6 +111,7 @@ public final class CraftingRecipes implements AutoCloseable {
                             added.add(key);
                         }
                         keys.addAll(added);
+                        Bukkit.getOnlinePlayers().forEach(CraftingRecipes.this::discover);
                         plugin.getLogger().info("Registered " + added.size() + " vendor crafting recipes.");
                     } catch (RuntimeException error) {
                         added.forEach(Bukkit::removeRecipe);
@@ -117,6 +120,20 @@ public final class CraftingRecipes implements AutoCloseable {
                 }
             }.runTaskTimer(plugin, 1, 1);
         }
+    }
+
+    private void discover(org.bukkit.entity.Player player) {
+        player.discoverRecipes(keys);
+    }
+
+    @org.bukkit.event.EventHandler
+    public void join(org.bukkit.event.player.PlayerJoinEvent event) {
+        discover(event.getPlayer());
+    }
+
+    @org.bukkit.event.EventHandler
+    public void discoverNotice(org.bukkit.event.player.PlayerRecipeDiscoverEvent event) {
+        if (keys.contains(event.getRecipe())) event.shouldShowNotification(false);
     }
 
     private org.bukkit.inventory.Recipe craftingRecipe(JavaPlugin plugin, RecipeDefinition definition, ItemStack result) {
@@ -170,6 +187,7 @@ public final class CraftingRecipes implements AutoCloseable {
     }
 
     @Override public void close() {
+        org.bukkit.event.HandlerList.unregisterAll(this);
         if (vendorRegistration != null) vendorRegistration.cancel();
         if (stonecutterRules != null) stonecutterRules.close();
         keys.forEach(Bukkit::removeRecipe);

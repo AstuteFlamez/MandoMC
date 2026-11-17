@@ -110,7 +110,7 @@
         "B B"
       ],
       "ingredients": {
-        "B": "beskar_sheet"
+        "B": "beskar"
       }
     },
     "beskar_chestplate": {
@@ -123,7 +123,7 @@
         "BBB"
       ],
       "ingredients": {
-        "B": "beskar_sheet"
+        "B": "beskar"
       }
     },
     "beskar_leggings": {
@@ -136,7 +136,7 @@
         "B B"
       ],
       "ingredients": {
-        "B": "beskar_sheet"
+        "B": "beskar"
       }
     },
     "beskar_boots": {
@@ -148,7 +148,7 @@
         "B B"
       ],
       "ingredients": {
-        "B": "beskar_sheet"
+        "B": "beskar"
       }
     },
     "tiefighter_cockpit": {
@@ -161,7 +161,7 @@
         "ASA"
       ],
       "ingredients": {
-        "A": "durasteel_sheet",
+        "A": "durasteel",
         "B": "transparisteel_shard",
         "C": "circuit_board",
         "S": "wiring_coil"
@@ -177,7 +177,7 @@
         "AAA"
       ],
       "ingredients": {
-        "A": "durasteel_sheet",
+        "A": "durasteel",
         "B": "energy_conduits",
         "C": "alloy_plating"
       }
@@ -192,7 +192,7 @@
         "ADA"
       ],
       "ingredients": {
-        "A": "electrum_sheet",
+        "A": "electrum",
         "B": "transparisteel_shard",
         "C": "circuit_board",
         "D": "precision_crafted_lens",
@@ -209,7 +209,7 @@
         "DED"
       ],
       "ingredients": {
-        "A": "electrum_sheet",
+        "A": "electrum",
         "B": "energy_conduits",
         "C": "alloy_plating",
         "D": "fusion_coil_stabilizer",
@@ -226,7 +226,7 @@
         "AAA"
       ],
       "ingredients": {
-        "A": "electrum_sheet",
+        "A": "electrum",
         "B": "energy_conduits",
         "C": "alloy_plating",
         "D": "fusion_coil_stabilizer",
@@ -243,7 +243,7 @@
         "NNN"
       ],
       "ingredients": {
-        "N": "neuranium_sheet",
+        "N": "neuranium",
         "B": "minecraft:bucket"
       }
     },
@@ -257,7 +257,7 @@
         "N N"
       ],
       "ingredients": {
-        "N": "neuranium_sheet",
+        "N": "neuranium",
         "B": "minecraft:bucket"
       }
     },
@@ -329,149 +329,6 @@
         "H": "straight_hilt"
       }
     },
-    "agrinium": {
-      "result": "agrinium",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "agrinium_scrap"
-      }
-    },
-    "aurodium": {
-      "result": "aurodium",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "aurodium_scrap"
-      }
-    },
-    "beskar": {
-      "result": "beskar",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "beskar_scrap"
-      }
-    },
-    "cortosis": {
-      "result": "cortosis",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "cortosis_scrap"
-      }
-    },
-    "durasteel": {
-      "result": "durasteel",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "durasteel_scrap"
-      }
-    },
-    "electrum": {
-      "result": "electrum",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "electrum_scrap"
-      }
-    },
-    "lommite": {
-      "result": "lommite",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "lommite_scrap"
-      }
-    },
-    "mandalorian_iron": {
-      "result": "mandalorian_iron",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "mandalorian_iron_scrap"
-      }
-    },
-    "neuranium": {
-      "result": "neuranium",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "neuranium_scrap"
-      }
-    },
-    "phrik": {
-      "result": "phrik",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "phrik_scrap"
-      }
-    },
-    "songsteel": {
-      "result": "songsteel",
-      "amount": 1,
-      "category": "metals",
-      "shape": [
-        "DDD",
-        "DDD",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "songsteel_scrap"
-      }
-    },
     "xwing": {
       "result": "xwing",
       "amount": 1,
@@ -510,7 +367,7 @@
         "M M"
       ],
       "ingredients": {
-        "M": "durasteel_sheet"
+        "M": "durasteel"
       }
     },
     "durasteel_chestplate": {
@@ -522,7 +379,7 @@
         "MMM"
       ],
       "ingredients": {
-        "M": "durasteel_sheet"
+        "M": "durasteel"
       }
     },
     "durasteel_leggings": {
@@ -534,7 +391,7 @@
         "M M"
       ],
       "ingredients": {
-        "M": "durasteel_sheet"
+        "M": "durasteel"
       }
     },
     "durasteel_boots": {
@@ -545,7 +402,7 @@
         "M M"
       ],
       "ingredients": {
-        "M": "durasteel_sheet"
+        "M": "durasteel"
       }
     },
     "durasteel_pickaxe": {
@@ -557,7 +414,7 @@
         " S "
       ],
       "ingredients": {
-        "M": "durasteel_sheet",
+        "M": "durasteel",
         "S": "minecraft:stick"
       }
     },
@@ -570,7 +427,7 @@
         "S"
       ],
       "ingredients": {
-        "M": "durasteel_sheet",
+        "M": "durasteel",
         "S": "minecraft:stick"
       }
     },
@@ -583,7 +440,7 @@
         " S"
       ],
       "ingredients": {
-        "M": "durasteel_sheet",
+        "M": "durasteel",
         "S": "minecraft:stick"
       }
     },
@@ -596,7 +453,7 @@
         " S "
       ],
       "ingredients": {
-        "M": "beskar_sheet",
+        "M": "beskar",
         "S": "minecraft:stick"
       }
     },
@@ -609,7 +466,7 @@
         "S"
       ],
       "ingredients": {
-        "M": "beskar_sheet",
+        "M": "beskar",
         "S": "minecraft:stick"
       }
     },
@@ -635,7 +492,7 @@
         "DDD"
       ],
       "ingredients": {
-        "D": "durasteel_sheet",
+        "D": "durasteel",
         "A": "alloy_plating"
       }
     },
@@ -652,7 +509,7 @@
         "E": "energy_conduits",
         "W": "wiring_coil",
         "C": "circuit_board",
-        "D": "durasteel_sheet"
+        "D": "durasteel"
       }
     },
     "uwing_cockpit": {
@@ -665,7 +522,7 @@
         "DLD"
       ],
       "ingredients": {
-        "D": "durasteel_sheet",
+        "D": "durasteel",
         "W": "wiring_coil",
         "T": "transparisteel_shard",
         "C": "circuit_board",
@@ -682,7 +539,7 @@
         "SPS"
       ],
       "ingredients": {
-        "D": "durasteel_sheet",
+        "D": "durasteel",
         "E": "energy_conduits",
         "A": "alloy_plating",
         "S": "fusion_coil_stabilizer",
@@ -702,7 +559,7 @@
         "R": "speederbike_repulsor",
         "C": "speederbike_chassis",
         "W": "wiring_coil",
-        "D": "durasteel_sheet"
+        "D": "durasteel"
       }
     },
     "uwing": {
@@ -800,17 +657,6 @@
         "W": "wiring_coil"
       }
     },
-    "electrum_sheet": {
-      "result": "electrum_sheet",
-      "amount": 1,
-      "category": "components",
-      "shape": [
-        "EEE"
-      ],
-      "ingredients": {
-        "E": "electrum"
-      }
-    },
     "transparisteel_shard": {
       "result": "transparisteel_shard",
       "amount": 4,
@@ -862,7 +708,7 @@
         " S "
       ],
       "ingredients": {
-        "M": "agrinium_sheet",
+        "M": "agrinium",
         "S": "minecraft:stick"
       }
     },
@@ -875,84 +721,9 @@
         "S"
       ],
       "ingredients": {
-        "M": "agrinium_sheet",
+        "M": "agrinium",
         "S": "minecraft:stick"
       }
-    },
-    "white_kyber": {
-      "result": "white_kyber",
-      "amount": 1,
-      "category": "materials",
-      "shape": [
-        "ADA",
-        "DGD",
-        "ADA"
-      ],
-      "ingredients": {
-        "A": "minecraft:amethyst_shard",
-        "D": "durasteel_scrap",
-        "G": "minecraft:glass"
-      }
-    },
-    "blue_kyber": {
-      "result": "blue_kyber",
-      "amount": 1,
-      "category": "materials",
-      "type": "shapeless",
-      "ingredients": [
-        "white_kyber",
-        "minecraft:blue_dye"
-      ]
-    },
-    "green_kyber": {
-      "result": "green_kyber",
-      "amount": 1,
-      "category": "materials",
-      "type": "shapeless",
-      "ingredients": [
-        "white_kyber",
-        "minecraft:green_dye"
-      ]
-    },
-    "red_kyber": {
-      "result": "red_kyber",
-      "amount": 1,
-      "category": "materials",
-      "type": "shapeless",
-      "ingredients": [
-        "white_kyber",
-        "minecraft:red_dye"
-      ]
-    },
-    "orange_kyber": {
-      "result": "orange_kyber",
-      "amount": 1,
-      "category": "materials",
-      "type": "shapeless",
-      "ingredients": [
-        "white_kyber",
-        "minecraft:orange_dye"
-      ]
-    },
-    "purple_kyber": {
-      "result": "purple_kyber",
-      "amount": 1,
-      "category": "materials",
-      "type": "shapeless",
-      "ingredients": [
-        "white_kyber",
-        "minecraft:purple_dye"
-      ]
-    },
-    "yellow_kyber": {
-      "result": "yellow_kyber",
-      "amount": 1,
-      "category": "materials",
-      "type": "shapeless",
-      "ingredients": [
-        "white_kyber",
-        "minecraft:yellow_dye"
-      ]
     },
     "precision_emitter_coil": {
       "result": "precision_emitter_coil",
@@ -964,7 +735,7 @@
         " E "
       ],
       "ingredients": {
-        "E": "electrum_sheet",
+        "E": "electrum",
         "T": "transparisteel_shard",
         "C": "circuit_board"
       }
@@ -972,7 +743,7 @@
     "obiwan": {
       "result": "obiwan",
       "amount": 1,
-      "category": "weapons",
+      "category": "lightsabers",
       "shape": [
         " EC",
         " SH",
@@ -981,7 +752,7 @@
       "ingredients": {
         "E": "precision_emitter_coil",
         "C": "blue_kyber",
-        "S": "durasteel_sheet",
+        "S": "durasteel",
         "H": "straight_hilt",
         "P": "plasma_capacitor_array"
       }
@@ -989,7 +760,7 @@
     "quigon": {
       "result": "quigon",
       "amount": 1,
-      "category": "weapons",
+      "category": "lightsabers",
       "shape": [
         " EC",
         " SH",
@@ -998,7 +769,7 @@
       "ingredients": {
         "E": "precision_emitter_coil",
         "C": "green_kyber",
-        "S": "durasteel_sheet",
+        "S": "durasteel",
         "H": "pike_hilt",
         "P": "plasma_capacitor_array"
       }
@@ -1006,7 +777,7 @@
     "vader": {
       "result": "vader",
       "amount": 1,
-      "category": "weapons",
+      "category": "lightsabers",
       "shape": [
         " EC",
         " SH",
@@ -1015,7 +786,7 @@
       "ingredients": {
         "E": "precision_emitter_coil",
         "C": "red_kyber",
-        "S": "durasteel_sheet",
+        "S": "durasteel",
         "H": "straight_hilt",
         "P": "plasma_capacitor_array"
       }
@@ -1023,7 +794,7 @@
     "baylan_skoll_lightsaber": {
       "result": "baylan_skoll_lightsaber",
       "amount": 1,
-      "category": "weapons",
+      "category": "lightsabers",
       "shape": [
         " EC",
         " SH",
@@ -1032,7 +803,7 @@
       "ingredients": {
         "E": "precision_emitter_coil",
         "C": "orange_kyber",
-        "S": "durasteel_sheet",
+        "S": "durasteel",
         "H": "great_hilt",
         "P": "plasma_capacitor_array"
       }
@@ -1040,7 +811,7 @@
     "windu": {
       "result": "windu",
       "amount": 1,
-      "category": "weapons",
+      "category": "lightsabers",
       "shape": [
         " EC",
         " SH",
@@ -1049,7 +820,7 @@
       "ingredients": {
         "E": "precision_emitter_coil",
         "C": "purple_kyber",
-        "S": "durasteel_sheet",
+        "S": "durasteel",
         "H": "great_hilt",
         "P": "plasma_capacitor_array"
       }
@@ -1057,7 +828,7 @@
     "ventress_yellow": {
       "result": "ventress_yellow",
       "amount": 1,
-      "category": "weapons",
+      "category": "lightsabers",
       "shape": [
         " EC",
         " SH",
@@ -1066,7 +837,7 @@
       "ingredients": {
         "E": "precision_emitter_coil",
         "C": "yellow_kyber",
-        "S": "durasteel_sheet",
+        "S": "durasteel",
         "H": "whip_hilt",
         "P": "plasma_capacitor_array"
       }
@@ -1074,7 +845,7 @@
     "ahsoka_tano_white_lightsaber": {
       "result": "ahsoka_tano_white_lightsaber",
       "amount": 1,
-      "category": "weapons",
+      "category": "lightsabers",
       "shape": [
         " EC",
         " SH",
@@ -1083,7 +854,7 @@
       "ingredients": {
         "E": "precision_emitter_coil",
         "C": "white_kyber",
-        "S": "durasteel_sheet",
+        "S": "durasteel",
         "H": "fang_hilt",
         "P": "plasma_capacitor_array"
       }
@@ -1100,7 +871,7 @@
       "ingredients": {
         "#": "minecraft:redstone_torch",
         "S": "minecraft:stick",
-        "X": "agrinium_sheet"
+        "X": "agrinium"
       }
     },
     "agrinium_anvil": {
@@ -1114,7 +885,7 @@
       ],
       "ingredients": {
         "I": "minecraft:iron_block",
-        "i": "agrinium_sheet"
+        "i": "agrinium"
       }
     },
     "agrinium_blast_furnace": {
@@ -1141,7 +912,7 @@
         " # "
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_cauldron": {
@@ -1154,7 +925,7 @@
         "###"
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_compass": {
@@ -1167,7 +938,7 @@
         " # "
       ],
       "ingredients": {
-        "#": "agrinium_sheet",
+        "#": "agrinium",
         "X": "electrum"
       }
     },
@@ -1181,7 +952,7 @@
         "RDR"
       ],
       "ingredients": {
-        "#": "agrinium_sheet",
+        "#": "agrinium",
         "C": "minecraft:crafting_table",
         "D": "minecraft:dropper",
         "R": "electrum"
@@ -1199,7 +970,7 @@
       "ingredients": {
         "#": "minecraft:stone_pressure_plate",
         "R": "electrum",
-        "X": "agrinium_sheet"
+        "X": "agrinium"
       }
     },
     "agrinium_flint_and_steel": {
@@ -1208,7 +979,7 @@
       "category": "utilities",
       "type": "shapeless",
       "ingredients": [
-        "agrinium_sheet",
+        "agrinium",
         "minecraft:flint"
       ]
     },
@@ -1220,7 +991,7 @@
         "##"
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_hopper": {
@@ -1234,7 +1005,7 @@
       ],
       "ingredients": {
         "C": "minecraft:chest",
-        "I": "agrinium_sheet"
+        "I": "agrinium"
       }
     },
     "agrinium_bars": {
@@ -1246,7 +1017,7 @@
         "###"
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_chain": {
@@ -1259,8 +1030,8 @@
         "N"
       ],
       "ingredients": {
-        "I": "agrinium_sheet",
-        "N": "agrinium_sheet"
+        "I": "agrinium",
+        "N": "agrinium"
       }
     },
     "agrinium_door": {
@@ -1273,7 +1044,7 @@
         "##"
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_trapdoor": {
@@ -1285,7 +1056,7 @@
         "##"
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_lantern": {
@@ -1299,7 +1070,7 @@
       ],
       "ingredients": {
         "#": "minecraft:torch",
-        "X": "agrinium_sheet"
+        "X": "agrinium"
       }
     },
     "agrinium_lodestone": {
@@ -1312,7 +1083,7 @@
         "SSS"
       ],
       "ingredients": {
-        "#": "agrinium_sheet",
+        "#": "agrinium",
         "S": "minecraft:chiseled_stone_bricks"
       }
     },
@@ -1325,7 +1096,7 @@
         "###"
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_piston": {
@@ -1341,7 +1112,7 @@
         "#": "minecraft:cobblestone",
         "R": "electrum",
         "T": "#minecraft:planks",
-        "X": "agrinium_sheet"
+        "X": "agrinium"
       }
     },
     "agrinium_rail": {
@@ -1355,7 +1126,7 @@
       ],
       "ingredients": {
         "#": "minecraft:stick",
-        "X": "agrinium_sheet"
+        "X": "agrinium"
       }
     },
     "agrinium_saddle": {
@@ -1367,7 +1138,7 @@
         "X#X"
       ],
       "ingredients": {
-        "#": "agrinium_sheet",
+        "#": "agrinium",
         "X": "bantha_hide"
       }
     },
@@ -1380,7 +1151,7 @@
         "# "
       ],
       "ingredients": {
-        "#": "agrinium_sheet"
+        "#": "agrinium"
       }
     },
     "agrinium_smithing_table": {
@@ -1394,7 +1165,7 @@
       ],
       "ingredients": {
         "#": "#minecraft:planks",
-        "@": "agrinium_sheet"
+        "@": "agrinium"
       }
     },
     "agrinium_soul_lantern": {
@@ -1408,7 +1179,7 @@
       ],
       "ingredients": {
         "#": "minecraft:soul_torch",
-        "X": "agrinium_sheet"
+        "X": "agrinium"
       }
     },
     "agrinium_stonecutter": {
@@ -1421,7 +1192,7 @@
       ],
       "ingredients": {
         "#": "minecraft:stone",
-        "I": "agrinium_sheet"
+        "I": "agrinium"
       }
     },
     "agrinium_tripwire_hook": {
@@ -1435,7 +1206,7 @@
       ],
       "ingredients": {
         "#": "#minecraft:planks",
-        "I": "agrinium_sheet",
+        "I": "agrinium",
         "S": "minecraft:stick"
       }
     },
@@ -1559,7 +1330,7 @@
         " D "
       ],
       "ingredients": {
-        "D": "durasteel_sheet",
+        "D": "durasteel",
         "B": "barrel_liner",
         "P": "plastoid",
         "C": "circuit_board",
@@ -1575,7 +1346,7 @@
         "CEC"
       ],
       "ingredients": {
-        "A": "agrinium_sheet",
+        "A": "agrinium",
         "C": "minecraft:coal",
         "E": "electrum"
       }
@@ -1605,7 +1376,7 @@
         "EVE"
       ],
       "ingredients": {
-        "A": "agrinium_sheet",
+        "A": "agrinium",
         "E": "electrum",
         "V": "tibanna_gas_vial"
       }
@@ -1620,7 +1391,7 @@
         "DWD"
       ],
       "ingredients": {
-        "D": "durasteel_sheet",
+        "D": "durasteel",
         "G": "minecraft:gunpowder",
         "P": "plasma_capacitor_array",
         "W": "wiring_coil"
@@ -1635,7 +1406,7 @@
         "EWE"
       ],
       "ingredients": {
-        "A": "agrinium_sheet",
+        "A": "agrinium",
         "E": "electrum",
         "W": "wiring_coil"
       }
@@ -1914,38 +1685,70 @@
         "G": "minecraft:glass",
         "L": "bantha_hide"
       }
+    },
+    "saber_forge": {
+      "result": "saber_forge",
+      "amount": 1,
+      "category": "tools",
+      "shape": [
+        "DCD",
+        "ASA",
+        "DDD"
+      ],
+      "ingredients": {
+        "D": "durasteel",
+        "C": "circuit_board",
+        "A": "agrinium",
+        "S": "minecraft:smithing_table"
+      }
+    },
+    "dark_saber": {
+      "result": "dark_saber",
+      "amount": 1,
+      "category": "lightsabers",
+      "shape": [
+        " B ",
+        "PKP",
+        " E "
+      ],
+      "ingredients": {
+        "B": "beskar",
+        "P": "phrik",
+        "K": "black_kyber",
+        "E": "energy_conduits"
+      }
     }
   },
   "sources": {
-    "vote_crate_key": "<gray>Vote for MandoMC using /vote.\n<gray>Each accepted vote grants one Voting Crate Key.\n<gray>Use /crates open vote or a placed Voting Crate.",
-    "bantha_hide": "<gray>Tatooine: Banthas drop 1–3 hides.\n<gray>Brown Jawa shop on Tatooine: Utility supplies.\n<gray>Also craft four rabbit hides; click for recipe.",
+    "vote_crate_key": "<gray>Not currently obtainable through crafting or loot.",
+    "bantha_hide": "<gray>Tatooine: Banthas drop 1–3 hides.\n<gray>gray Jawa shops at Batuu: General Supplies.\n<gray>Also craft four rabbit hides; click for recipe.",
     "purple_xwing": "<gray>Not currently obtainable through crafting or loot.",
     "money_note": "<gray>Not currently obtainable through crafting or loot.",
-    "cortosis_alloy_frame": "<gray>Not currently obtainable through crafting or loot.",
+    "cortosis_alloy_frame": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
     "high_efficiency_energy_segment": "<gray>Not currently obtainable through crafting or loot.",
     "high_tech_stabilizer": "<gray>Not currently obtainable through crafting or loot.",
     "incredibly_strong_and_light_frame": "<gray>Not currently obtainable through crafting or loot.",
     "ionized_focusing_lens": "<gray>Not currently obtainable through crafting or loot.",
     "kyber_tech_recoil_dampener": "<gray>Not currently obtainable through crafting or loot.",
     "state_of_the_art_recoil_dampener": "<gray>Not currently obtainable through crafting or loot.",
-    "basic_emitter_coil": "<gray>Recovered from brown Jawa electrical salvage on Tatooine.",
+    "basic_emitter_coil": "<gray>Buy from any brown Jawa on Tatooine, or craft with /recipes.",
     "basic_ion_chamber": "<gray>Not currently obtainable through crafting or loot.",
-    "basic_power_cell": "<gray>Recovered from brown Jawa electrical salvage on Tatooine.",
-    "makeshift_recoil_buffer": "<gray>Recovered from brown Jawa electrical salvage on Tatooine.",
+    "basic_power_cell": "<gray>Buy from any brown Jawa on Tatooine, or craft with /recipes.",
+    "makeshift_recoil_buffer": "<gray>Buy from any brown Jawa on Tatooine, or craft with /recipes.",
     "old_and_worn_barrel_liner": "<gray>Not currently obtainable through crafting or loot.",
-    "old_ion_chamber": "<gray>Not currently obtainable through crafting or loot.",
+    "old_ion_chamber": "<gray>Buy from any brown Jawa on Tatooine, or craft with /recipes.",
     "primitive_recoil_buffer": "<gray>Not currently obtainable through crafting or loot.",
-    "rough_power_cell": "<gray>Recovered from brown Jawa electrical salvage on Tatooine.",
+    "rough_power_cell": "<gray>Buy from any brown Jawa on Tatooine, or craft with /recipes.",
     "simple_emitter_coil": "<gray>Not currently obtainable through crafting or loot.",
     "worn_barrel_liner": "<gray>Not currently obtainable through crafting or loot.",
-    "durable_mid_grade_power_core": "<gray>Not currently obtainable through crafting or loot.",
+    "durable_mid_grade_power_core": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
     "durasteel_power_core": "<gray>Not currently obtainable through crafting or loot.",
     "enhanced_ion_chamber": "<gray>Not currently obtainable through crafting or loot.",
     "finely_tuned_emitter_coil": "<gray>Not currently obtainable through crafting or loot.",
     "modular_recoil_buffer": "<gray>Not currently obtainable through crafting or loot.",
     "recoil_reduction_system": "<gray>Not currently obtainable through crafting or loot.",
     "reinforced_barrel_liner": "<gray>Not currently obtainable through crafting or loot.",
-    "reinforced_ion_chamber": "<gray>Not currently obtainable through crafting or loot.",
+    "reinforced_ion_chamber": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
     "batteries": "<gray>Not currently obtainable through crafting or loot.",
     "biosample": "<gray>Not currently obtainable through crafting or loot.",
     "coaxium_fragment": "<gray>Not currently obtainable through crafting or loot.",
@@ -1981,27 +1784,26 @@
     "rhydonium_barrel_three": "<gray>Not currently obtainable through crafting or loot.",
     "rhydonium_barrel_full": "<gray>Not currently obtainable through crafting or loot.",
     "keycard": "<gray>Not currently obtainable through crafting or loot.",
-    "vote_crate_key": "<gray>Not currently obtainable through crafting or loot.",
     "pathfinder_crate_key": "<gray>Not currently obtainable through crafting or loot.",
     "voyager_crate_key": "<gray>Not currently obtainable through crafting or loot.",
     "wayfarer_crate_key": "<gray>Not currently obtainable through crafting or loot.",
-    "agrinium_scrap": "<gray>Tatooine caves: mine Agrinium Ore.\n<gray>Use a stone-or-better pickaxe; 1–5 scraps.\n<gray>Fortune adds none; Silk Touch keeps the ore.",
-    "aurodium_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "beskar_scrap": "<gray>Mandalore mine: 25 nodes during Beskar Rush.\n<gray>Mine active nodes for 1–5 scraps each.\n<gray>Also a possible KOTH Crate reward on Batuu.\n<gray>Crate key: winning clan reward from KOTH on Hoth.",
-    "cortosis_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "durasteel_scrap": "<gray>Tatooine caves: mine Durasteel Ore.\n<gray>Use a iron-or-better pickaxe; 1–5 scraps.\n<gray>Fortune adds none; Silk Touch keeps the ore.",
-    "electrum_scrap": "<gray>Hoth deeper stone caves: mine Electrum Ore.\n<gray>Use a iron-or-better pickaxe; 1–5 scraps.\n<gray>Fortune adds none; Silk Touch keeps the ore.",
-    "lommite_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "mandalorian_iron_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "neuranium_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "phrik_scrap": "<gray>Not currently obtainable through crafting or loot.",
-    "songsteel_scrap": "<gray>Not currently obtainable through crafting or loot.",
+    "agrinium_scrap": "<gray>Tatooine and Naboo caves: mine Agrinium Ore.\n<gray>Use a stone-or-better pickaxe; one scrap.\n<gray>Fortune adds none; Silk Touch keeps the ore.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "aurodium_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "beskar_scrap": "<gray>Mandalore mine: 10 nodes during Beskar Rush.\n<gray>Mine active nodes for one scrap each.\n<gray>Also a possible KOTH Crate reward on Batuu.\n<gray>Crate key: winning clan reward from KOTH on Hoth.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "cortosis_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "durasteel_scrap": "<gray>Tatooine and Naboo caves: mine Durasteel Ore.\n<gray>Use a iron-or-better pickaxe; one scrap.\n<gray>Fortune adds none; Silk Touch keeps the ore.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "electrum_scrap": "<gray>Hoth and Naboo caves: mine Electrum Ore.\n<gray>Use a iron-or-better pickaxe; one scrap.\n<gray>Fortune adds none; Silk Touch keeps the ore.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "lommite_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "mandalorian_iron_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "neuranium_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "phrik_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "songsteel_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
     "minecraft:raw_iron": "<gray>Retained legacy raw metal. Current Agrinium ores drop Agrinium Scraps.",
     "minecraft:clay_ball": "<gray>Tatooine caves: break clay for clay balls.\n<gray>Plastoid needs two separate clay-ball slots.",
     "minecraft:sand": "<gray>Tatooine: dig ordinary desert sand.\n<gray>Red sand does not replace sand in custom recipes.",
     "minecraft:coal": "<gray>Tatooine caves: mine Coal Ore with a pickaxe.\n<gray>These recipes require coal, not charcoal.",
     "minecraft:glass": "<gray>Smelt sand or red sand in a furnace.\n<gray>Sand source: Tatooine desert.",
-    "#minecraft:planks": "<gray>Craft logs into planks; any wood type works.\n<gray>Saplings: brown Jawa shop on Tatooine,\n<gray>Saplings & plants category.",
+    "#minecraft:planks": "<gray>Craft logs into planks; any wood type works.\n<gray>Saplings: gray Jawa shops at Batuu,\n<gray>Plants & Dyes category.",
     "agrinium_ore": "<gray>Mine matching Agrinium Ore with a suitable Silk Touch pickaxe.",
     "deepslate_agrinium_ore": "<gray>Mine matching Agrinium Ore with a suitable Silk Touch pickaxe.",
     "electrum_ore": "<gray>Mine matching Electrum Ore with a suitable Silk Touch pickaxe.",
@@ -2013,100 +1815,111 @@
     "raw_agrinium": "<gray>Legacy raw metal; unpack a Raw Agrinium Block.\n<gray>Smelt it in a furnace for Agrinium.\n<gray>Current Agrinium Ore drops scraps instead.",
     "minecraft:iron_block": "<gray>Craft nine Agrinium ingots into an Agrinium Block.\n<gray>Agrinium Ore: Tatooine caves.",
     "minecraft:amethyst_shard": "<gray>Mine mature amethyst clusters without Silk Touch.\n<gray>No fixed planet deposit or Jawa stock is configured.",
-    "minecraft:blue_dye": "<gray>Craft Lapis Lazuli into blue dye.\n<gray>Lapis: brown Jawa shop on Tatooine,\n<gray>Mineral supplies category.",
-    "minecraft:chest": "<gray>Craft eight planks around an empty center.\n<gray>Saplings: brown Jawa shop on Tatooine,\n<gray>Saplings & plants category.",
+    "minecraft:blue_dye": "<gray>Craft Lapis Lazuli into blue dye.\n<gray>Lapis: gray Jawa shops at Batuu,\n<gray>Minerals category.",
+    "minecraft:chest": "<gray>Craft eight planks around an empty center.\n<gray>Saplings: gray Jawa shops at Batuu,\n<gray>Plants & Dyes category.",
     "minecraft:chiseled_stone_bricks": "<gray>Craft two stone brick slabs vertically,\n<gray>or cut stone / stone bricks at a stonecutter.\n<gray>Stone source: Tatooine or Hoth caves.",
     "minecraft:cobblestone": "<gray>Mine stone in Tatooine or Hoth caves.\n<gray>Use a pickaxe without Silk Touch.",
-    "minecraft:crafting_table": "<gray>Craft four planks in a square.\n<gray>Saplings: brown Jawa shop on Tatooine,\n<gray>Saplings & plants category.",
+    "minecraft:crafting_table": "<gray>Craft four planks in a square.\n<gray>Saplings: gray Jawa shops at Batuu,\n<gray>Plants & Dyes category.",
     "minecraft:dropper": "<gray>Craft seven cobblestone with Electrum below center.\n<gray>Electrum Ore: deeper Hoth caves.\n<gray>Stone source: Tatooine or Hoth caves.",
     "minecraft:flint": "<gray>Break gravel without Silk Touch; flint is a chance drop.\n<gray>Fortune improves the chance.",
     "minecraft:furnace": "<gray>Craft eight cobblestone around an empty center.\n<gray>Stone source: Tatooine or Hoth caves.",
     "minecraft:glass_bottle": "<gray>Craft three glass in a V for three bottles.\n<gray>Glass: smelt sand from Tatooine.",
     "minecraft:green_dye": "<gray>Smelt cactus in a furnace for green dye.\n<gray>Gather cactus in Tatooine desert terrain.",
-    "minecraft:gunpowder": "<gray>Creepers drop gunpowder.\n<gray>Brown Jawa shops do not stock it.",
-    "minecraft:leather": "<gray>Drops from banthas (1–3 per kill) and creatures that normally drop leather. Brown Jawa traders may stock Bantha Hide. It also works in normal leather recipes.",
-    "minecraft:orange_dye": "<gray>Combine red dye and yellow dye.\n<gray>Flowers: brown Jawa shop on Tatooine,\n<gray>Greenery & dyes category.",
-    "minecraft:purple_dye": "<gray>Combine red dye and blue dye.\n<gray>Brown Jawa shops on Tatooine: Greenery & dyes\n<gray>and Mineral supplies for flowers and lapis.",
-    "minecraft:red_dye": "<gray>Craft a poppy into red dye.\n<gray>Poppies: brown Jawa shop on Tatooine,\n<gray>Greenery & dyes category.",
+    "minecraft:gunpowder": "<gray>Creepers drop gunpowder.\n<gray>Jawa shops do not stock it.",
+    "minecraft:leather": "<gray>Drops from banthas (1–3 per kill) and creatures that normally drop leather. Gray Jawa General Supplies shops at Batuu sell Bantha Hide. It also works in normal leather recipes.",
+    "minecraft:orange_dye": "<gray>Combine red dye and yellow dye.\n<gray>Flowers: gray Jawa shops at Batuu,\n<gray>Plants & Dyes category.",
+    "minecraft:purple_dye": "<gray>Combine red dye and blue dye.\n<gray>gray Jawa shops at Batuu: Plants & Dyes\n<gray>and Minerals for flowers and lapis.",
+    "minecraft:red_dye": "<gray>Craft a poppy into red dye.\n<gray>Poppies: gray Jawa shops at Batuu,\n<gray>Plants & Dyes category.",
     "minecraft:redstone_torch": "<gray>Craft Electrum above a stick.\n<gray>Electrum Ore: deeper Hoth caves.",
     "minecraft:smooth_stone": "<gray>Smelt cobblestone into stone, then smelt again.\n<gray>Stone source: Tatooine or Hoth caves.",
-    "minecraft:soul_torch": "<gray>Craft coal or charcoal, a stick and Soul Sand.\n<gray>Soul Sand: brown Jawa shop on Tatooine,\n<gray>Nether supplies category.",
-    "minecraft:stick": "<gray>Craft two planks vertically for four sticks.\n<gray>Saplings: brown Jawa shop on Tatooine,\n<gray>Saplings & plants category.",
+    "minecraft:soul_torch": "<gray>Craft coal or charcoal, a stick and Soul Sand.\n<gray>Soul Sand: gray Jawa shops at Batuu,\n<gray>Nether Goods category.",
+    "minecraft:stick": "<gray>Craft two planks vertically for four sticks.\n<gray>Saplings: gray Jawa shops at Batuu,\n<gray>Plants & Dyes category.",
     "minecraft:stone": "<gray>Smelt cobblestone, or mine stone with Silk Touch.\n<gray>Stone source: Tatooine or Hoth caves.",
     "minecraft:stone_pressure_plate": "<gray>Craft two stone blocks side by side.\n<gray>Stone source: Tatooine or Hoth caves.",
     "minecraft:torch": "<gray>Craft coal or charcoal above a stick.\n<gray>Coal Ore: Tatooine caves; sticks from planks.",
-    "minecraft:yellow_dye": "<gray>Craft a dandelion into yellow dye.\n<gray>Dandelions: brown Jawa shop on Tatooine,\n<gray>Greenery & dyes category.",
-    "minecraft:black_wool": "<gray>Dye white wool black, or shear black sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "minecraft:blue_wool": "<gray>Dye white wool blue, or shear blue sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "minecraft:paper": "<gray>Craft three sugar cane in a row for three paper.\n<gray>Sugar cane: brown Jawa shop on Tatooine,\n<gray>Farming starters category.",
-    "minecraft:brown_wool": "<gray>Dye white wool brown, or shear brown sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "minecraft:string": "<gray>Spiders drop string; cut cobwebs with a sword.\n<gray>Also: brown Jawa shop on Tatooine,\n<gray>Utility supplies category.",
-    "minecraft:cyan_wool": "<gray>Dye white wool cyan, or shear cyan sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "minecraft:gray_wool": "<gray>Dye white wool gray, or shear gray sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "minecraft:green_wool": "<gray>Dye white wool green, or shear green sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "minecraft:rabbit_hide": "<gray>Rabbits drop rabbit hides.\n<gray>Natural rabbit spawning is currently disabled;\n<gray>no brown Jawa shop stocks rabbit hides.",
-    "minecraft:light_blue_wool": "<gray>Dye white wool light blue, or shear light blue sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "minecraft:light_gray_wool": "<gray>Dye white wool light gray, or shear light gray sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "minecraft:lime_wool": "<gray>Dye white wool lime, or shear lime sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "minecraft:magenta_wool": "<gray>Dye white wool magenta, or shear magenta sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "minecraft:orange_wool": "<gray>Dye white wool orange, or shear orange sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "minecraft:pink_wool": "<gray>Dye white wool pink, or shear pink sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "minecraft:purple_wool": "<gray>Dye white wool purple, or shear purple sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "minecraft:red_wool": "<gray>Dye white wool red, or shear red sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "minecraft:white_wool": "<gray>Craft four string in a square for white wool.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "minecraft:yellow_wool": "<gray>Dye white wool yellow, or shear yellow sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: brown Jawa shop on Tatooine, Utility supplies.",
-    "agrinium": "<gray>Craft nine Agrinium Scraps into one ingot.\n<gray>Scrap source: Tatooine caves.",
+    "minecraft:yellow_dye": "<gray>Craft a dandelion into yellow dye.\n<gray>Dandelions: gray Jawa shops at Batuu,\n<gray>Plants & Dyes category.",
+    "minecraft:paper": "<gray>Craft three sugar cane in a row for three paper.\n<gray>Sugar cane: gray Jawa shops at Batuu,\n<gray>Farming category.",
+    "minecraft:string": "<gray>Spiders drop string; cut cobwebs with a sword.\n<gray>Also: gray Jawa shops at Batuu,\n<gray>General Supplies category.",
+    "minecraft:rabbit_hide": "<gray>Rabbits drop rabbit hides.\n<gray>Natural rabbit spawning is currently disabled;\n<gray>Jawa shops do not stock rabbit hides.",
+    "minecraft:black_wool": "<gray>Dye white wool black, or shear black sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "minecraft:blue_wool": "<gray>Dye white wool blue, or shear blue sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "minecraft:brown_wool": "<gray>Dye white wool brown, or shear brown sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "minecraft:cyan_wool": "<gray>Dye white wool cyan, or shear cyan sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "minecraft:gray_wool": "<gray>Dye white wool gray, or shear gray sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "minecraft:green_wool": "<gray>Dye white wool green, or shear green sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "minecraft:light_blue_wool": "<gray>Dye white wool light blue, or shear light blue sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "minecraft:light_gray_wool": "<gray>Dye white wool light gray, or shear light gray sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "minecraft:lime_wool": "<gray>Dye white wool lime, or shear lime sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "minecraft:magenta_wool": "<gray>Dye white wool magenta, or shear magenta sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "minecraft:orange_wool": "<gray>Dye white wool orange, or shear orange sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "minecraft:pink_wool": "<gray>Dye white wool pink, or shear pink sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "minecraft:purple_wool": "<gray>Dye white wool purple, or shear purple sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "minecraft:red_wool": "<gray>Dye white wool red, or shear red sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "minecraft:white_wool": "<gray>Craft four string in a square for white wool.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "minecraft:yellow_wool": "<gray>Dye white wool yellow, or shear yellow sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
+    "agrinium": "<gray>Smelt one Agrinium Scrap in a normal furnace.\n<gray>One scrap produces one ingot.\n<gray>Scrap source: Tatooine and Naboo caves.\n<gray>Also: possible KOTH Crate reward on Batuu.",
     "agrinium_block": "<gray>Craft nine Agrinium ingots into one block.\n<gray>Ore source: Tatooine caves.",
-    "agrinium_sheet": "<gray>Craft from Agrinium ingots; click for recipe.\n<gray>Ore source: Tatooine caves.\n<gray>Also: possible KOTH Crate reward on Batuu.\n<gray>Key: winning clan reward from KOTH on Hoth.",
     "ahsoka_tano_white_lightsaber": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "alloy_plating": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Also: Jabba's Palace supply caches, Tatooine.\n<gray>Caches are available during the Jabba event.",
+    "alloy_plating": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "barrel_liner": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "beskar": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Scrap source: Mandalore mine during Beskar Rush.",
+    "beskar": "<gray>Smelt one Raw Beskar Scrap in a normal furnace.\n<gray>One scrap produces one ingot.\n<gray>Scrap source: Mandalore during Beskar Rush.\n<gray>Also: possible KOTH Crate reward on Batuu.",
     "beskar_block": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Scrap source: Mandalore mine during Beskar Rush.",
-    "beskar_sheet": "<gray>Smelt in a furnace; click for the input.\n<gray>Scrap source: Mandalore mine during Beskar Rush.\n<gray>Also: possible KOTH Crate reward on Batuu.\n<gray>Key: winning clan reward from KOTH on Hoth.",
-    "blue_kyber": "<gray>Craft from White Kyber and matching dye.\n<gray>Also: random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
+    "blue_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "circuit_board": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "durasteel": "<gray>Craft nine Durasteel Scraps into one ingot.\n<gray>Scrap source: Tatooine caves.",
+    "durasteel": "<gray>Smelt one Durasteel Scrap in a normal furnace.\n<gray>One scrap produces one ingot.\n<gray>Scrap source: Tatooine and Naboo caves.\n<gray>Also: possible KOTH Crate reward on Batuu.",
     "durasteel_block": "<gray>Craft nine Durasteel ingots into one block.\n<gray>Ore source: Tatooine caves.",
-    "durasteel_sheet": "<gray>Craft from Durasteel ingots; click for recipe.\n<gray>Ore source: Tatooine caves.\n<gray>Also: possible KOTH Crate reward on Batuu.\n<gray>Key: winning clan reward from KOTH on Hoth.",
-    "electrum": "<gray>Craft nine Electrum Scraps into one ingot.\n<gray>Scrap source: Hoth deeper stone caves.\n<gray>Also: brown Jawa shop on Tatooine,\n<gray>Mineral supplies (native redstone / Electrum).",
+    "electrum": "<gray>Smelt one Electrum Scrap in a normal furnace.\n<gray>One scrap produces one ingot.\n<gray>Scrap source: Hoth and Naboo caves.",
     "electrum_block": "<gray>Craft nine Electrum ingots into one block.\n<gray>Ore source: Hoth deeper stone caves.",
-    "electrum_sheet": "<gray>Craft from Electrum ingots; click for recipe.\n<gray>Ore source: Hoth deeper stone caves.",
-    "energy_conduits": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Also: Jabba's Palace supply caches, Tatooine.\n<gray>Caches are available during the Jabba event.",
+    "energy_conduits": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
     "fang_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "fusion_coil_stabilizer": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Also: Jabba's Palace supply caches, Tatooine.\n<gray>Caches are available during the Jabba event.",
+    "fusion_coil_stabilizer": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
     "great_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "green_kyber": "<gray>Craft from White Kyber and matching dye.\n<gray>Also: random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
+    "green_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "obiwan": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "orange_kyber": "<gray>Craft from White Kyber and matching dye.\n<gray>Also: random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
+    "orange_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "pike_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "plasma_capacitor_array": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Also: Jabba's Palace supply caches, Tatooine.\n<gray>Caches are available during the Jabba event.",
+    "plasma_capacitor_array": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
     "plastoid": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "precision_crafted_lens": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Also: Jabba's Palace supply caches, Tatooine.\n<gray>Caches are available during the Jabba event.",
-    "precision_emitter_coil": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "purple_kyber": "<gray>Craft from White Kyber and matching dye.\n<gray>Also: random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
+    "precision_crafted_lens": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
+    "precision_emitter_coil": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
+    "purple_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "quigon": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "raw_agrinium_block": "<gray>Pack nine retained Raw Agrinium into a block.\n<gray>Current Agrinium Ore drops scraps instead.",
-    "red_kyber": "<gray>Craft from White Kyber and matching dye.\n<gray>Also: random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
+    "red_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "speederbike_chassis": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "speederbike_repulsor": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "straight_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "tibanna_gas_vial": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "tiefighter_cockpit": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "tiefighter_wing": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "transparisteel_shard": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Also: Jabba's Palace supply caches, Tatooine.\n<gray>Caches are available during the Jabba event.",
+    "transparisteel_shard": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "uwing_cockpit": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "uwing_wing": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "vader": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "ventress_yellow": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "whip_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "white_kyber": "<gray>Craft with amethyst, Durasteel Scrap and glass.\n<gray>Also: random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
+    "white_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "windu": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "wiring_coil": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Also: Jabba's Palace supply caches, Tatooine.\n<gray>Caches are available during the Jabba event.\n<gray>Brown Jawas on Tatooine may also drop one.",
+    "wiring_coil": "<gray>Buy from any brown Jawa on Tatooine, or craft with /recipes.",
     "x_wing_cockpit": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "x_wing_left_wing": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "x_wing_right_wing": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "yellow_kyber": "<gray>Craft from White Kyber and matching dye.\n<gray>Also: random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown)."
+    "yellow_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
+    "phrik": "<gray>Smelt one scrap in a normal furnace for one ingot.\n<gray>Also: possible KOTH Crate reward on Batuu.",
+    "black_kyber": "<gray>Rarest KOTH Crate reward. Win KOTH on Hoth for a key.",
+    "dark_saber": "<gray>Craft using Black Kyber from the KOTH Crate.",
+    "saber_forge": "<gray>Craft with Durasteel, Agrinium, a Circuit Board and a Smithing Table.",
+    "se14c": "<gray>Available from the KOTH Crate; see /crates preview koth.",
+    "a280": "<gray>Available from the KOTH Crate; see /crates preview koth.",
+    "ee3": "<gray>Available from the KOTH Crate; see /crates preview koth.",
+    "jawa_ionization_blaster": "<gray>Available from the KOTH Crate; see /crates preview koth.",
+    "cycler_rifle": "<gray>Available from the KOTH Crate; see /crates preview koth.",
+    "relby_v10": "<gray>Available from the KOTH Crate; see /crates preview koth.",
+    "boba_jetpack": "<gray>Available from the KOTH Crate; see /crates preview koth.",
+    "speederbike": "<gray>Available from the KOTH Crate; see /crates preview koth.",
+    "uwing": "<gray>Available from the KOTH Crate; see /crates preview koth.",
+    "xwing": "<gray>Available from the KOTH Crate; see /crates preview koth.",
+    "tiefighter": "<gray>Available from the KOTH Crate; see /crates preview koth."
   },
   "guide": {
     "title": "<gold>Recipes",
@@ -2132,19 +1945,12 @@
     "obtain-hint": "<yellow>Click to see how to obtain.",
     "hidden-results": [
       "aurodium",
-      "aurodium_sheet",
       "cortosis",
-      "cortosis_sheet",
       "lommite",
-      "lommite_sheet",
       "mandalorian_iron",
-      "mandalorian_sheet",
       "neuranium",
-      "neuranium_sheet",
       "phrik",
-      "phrik_sheet",
       "songsteel",
-      "songsteel_sheet",
       "rhydonium_barrel",
       "rhydonium_canister"
     ],
@@ -2152,13 +1958,27 @@
       "agrinium_from_raw"
     ],
     "preferred-recipes": {
-      "agrinium": "agrinium",
-      "electrum": "electrum",
-      "durasteel": "durasteel",
-      "beskar": "beskar"
+      "agrinium": "agrinium_from_scrap",
+      "electrum": "electrum_from_scrap",
+      "durasteel": "durasteel_from_scrap",
+      "beskar": "beskar_from_scrap",
+      "aurodium": "aurodium_from_scrap",
+      "cortosis": "cortosis_from_scrap",
+      "lommite": "lommite_from_scrap",
+      "mandalorian_iron": "mandalorian_iron_from_scrap",
+      "neuranium": "neuranium_from_scrap",
+      "phrik": "phrik_from_scrap",
+      "songsteel": "songsteel_from_scrap"
     },
     "stonecutting": "<yellow>Choose a saber style at a stonecutter",
-    "stonecutter-denied": "<red>This style requires the original, undamaged <item>."
+    "stonecutter-denied": "<red>This style requires the original, undamaged <item>.",
+    "search": "<yellow>Search Recipes",
+    "search-label": "<gray>Item name or part of a name",
+    "search-submit": "<yellow>Search",
+    "search-clear": "<yellow>Clear Search",
+    "search-uses": "<aqua>Search: Uses this ingredient",
+    "search-outputs": "<aqua>Search: Output names",
+    "search-empty": "<gray>No matching recipes. Click to edit."
   },
   "smelting": {
     "agrinium_from_raw": {
@@ -2169,84 +1989,92 @@
       "experience": 0.7,
       "category": "metals"
     },
-    "agrinium_sheet": {
-      "result": "agrinium_sheet",
-      "input": "agrinium",
-      "furnace": "blast",
-      "experience": 0.6,
-      "cook-time": 180,
-      "category": "metals"
-    },
-    "aurodium_sheet": {
-      "result": "aurodium_sheet",
-      "input": "aurodium",
-      "furnace": "blast",
-      "experience": 0.9,
-      "cook-time": 220,
-      "category": "metals"
-    },
-    "beskar_sheet": {
-      "result": "beskar_sheet",
-      "input": "beskar",
-      "furnace": "blast",
-      "experience": 2.0,
-      "cook-time": 400,
-      "category": "metals"
-    },
-    "cortosis_sheet": {
-      "result": "cortosis_sheet",
-      "input": "cortosis",
-      "furnace": "blast",
-      "experience": 1.2,
-      "cook-time": 260,
-      "category": "metals"
-    },
-    "durasteel_sheet": {
-      "result": "durasteel_sheet",
-      "input": "durasteel",
-      "furnace": "blast",
-      "experience": 0.8,
+    "agrinium_from_scrap": {
+      "result": "agrinium",
+      "input": "agrinium_scrap",
+      "furnace": "furnace",
       "cook-time": 200,
+      "experience": 0.7,
       "category": "metals"
     },
-    "lommite_sheet": {
-      "result": "lommite_sheet",
-      "input": "lommite",
-      "furnace": "blast",
-      "experience": 0.5,
-      "cook-time": 160,
+    "aurodium_from_scrap": {
+      "result": "aurodium",
+      "input": "aurodium_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
       "category": "metals"
     },
-    "mandalorian_sheet": {
-      "result": "mandalorian_sheet",
-      "input": "mandalorian_iron",
-      "furnace": "blast",
-      "experience": 1.8,
-      "cook-time": 340,
+    "beskar_from_scrap": {
+      "result": "beskar",
+      "input": "beskar_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
       "category": "metals"
     },
-    "neuranium_sheet": {
-      "result": "neuranium_sheet",
-      "input": "neuranium",
-      "furnace": "blast",
-      "experience": 1.5,
-      "cook-time": 300,
+    "cortosis_from_scrap": {
+      "result": "cortosis",
+      "input": "cortosis_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
       "category": "metals"
     },
-    "phrik_sheet": {
-      "result": "phrik_sheet",
-      "input": "phrik",
-      "furnace": "blast",
-      "experience": 1.2,
-      "cook-time": 300,
+    "durasteel_from_scrap": {
+      "result": "durasteel",
+      "input": "durasteel_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
       "category": "metals"
     },
-    "songsteel_sheet": {
-      "result": "songsteel_sheet",
-      "input": "songsteel",
-      "furnace": "blast",
-      "experience": 1.6,
-      "cook-time": 320,
+    "electrum_from_scrap": {
+      "result": "electrum",
+      "input": "electrum_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
+      "category": "metals"
+    },
+    "lommite_from_scrap": {
+      "result": "lommite",
+      "input": "lommite_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
+      "category": "metals"
+    },
+    "mandalorian_iron_from_scrap": {
+      "result": "mandalorian_iron",
+      "input": "mandalorian_iron_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
+      "category": "metals"
+    },
+    "neuranium_from_scrap": {
+      "result": "neuranium",
+      "input": "neuranium_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
+      "category": "metals"
+    },
+    "phrik_from_scrap": {
+      "result": "phrik",
+      "input": "phrik_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
+      "category": "metals"
+    },
+    "songsteel_from_scrap": {
+      "result": "songsteel",
+      "input": "songsteel_scrap",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
       "category": "metals"
     }
   },
@@ -2254,357 +2082,352 @@
     "ahsoka_tano_blue_lightsaber": {
       "input": "obiwan",
       "result": "ahsoka_tano_blue_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "ahsoka_tano_blue_shoto_lightsaber": {
       "input": "obiwan",
       "result": "ahsoka_tano_blue_shoto_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "ahsoka_tano_green_lightsaber": {
       "input": "quigon",
       "result": "ahsoka_tano_green_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "ahsoka_tano_green_shoto_lightsaber": {
       "input": "quigon",
       "result": "ahsoka_tano_green_shoto_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "ahsoka_tano_white_shoto_lightsaber": {
       "input": "ahsoka_tano_white_lightsaber",
       "result": "ahsoka_tano_white_shoto_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "anakin_skywalker_jedi_knight_lightsaber": {
       "input": "obiwan",
       "result": "anakin_skywalker_jedi_knight_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "anakin_skywalker_padawan_lightsaber": {
       "input": "obiwan",
       "result": "anakin_skywalker_padawan_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "anakin_skywalker_red_lightsaber": {
       "input": "vader",
       "result": "anakin_skywalker_red_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "asajj_ventress_assassin_lightsaber": {
       "input": "vader",
       "result": "asajj_ventress_assassin_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "asajj_ventress_assassin_shoto_lightsaber": {
       "input": "vader",
       "result": "asajj_ventress_assassin_shoto_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "asajj_ventress_double_blade_lightsaber": {
       "input": "vader",
       "result": "asajj_ventress_double_blade_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "blue_training_lightsaber": {
       "input": "obiwan",
       "result": "blue_training_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "cal_kestis_inquisitor_lightsaber": {
       "input": "vader",
       "result": "cal_kestis_inquisitor_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "cal_kestis_merged_lightsaber": {
       "input": "obiwan",
       "result": "cal_kestis_merged_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "cal_kestis_merged_shoto_lightsaber": {
       "input": "obiwan",
       "result": "cal_kestis_merged_shoto_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "cal_kestis_merged_split_lightsaber": {
       "input": "obiwan",
       "result": "cal_kestis_merged_split_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "cal_kestis_padawan_lightsaber": {
       "input": "obiwan",
       "result": "cal_kestis_padawan_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "cal_kestis_rebuild_lightsaber": {
       "input": "obiwan",
       "result": "cal_kestis_rebuild_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "cal_survivor_crossguard": {
       "input": "obiwan",
       "result": "cal_survivor_crossguard",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "cal_kestis_survivor_lightsaber": {
       "input": "obiwan",
       "result": "cal_kestis_survivor_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "cal_kestis_survivor_shoto_lightsaber": {
       "input": "obiwan",
       "result": "cal_kestis_survivor_shoto_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "cal_kestis_survivor_split_lightsaber": {
       "input": "obiwan",
       "result": "cal_kestis_survivor_split_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "caleb_dume_lightsaber": {
       "input": "obiwan",
       "result": "caleb_dume_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "cere_junda_jedi_knight_lightsaber": {
       "input": "quigon",
       "result": "cere_junda_jedi_knight_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "count_dooku_lightsaber": {
       "input": "vader",
       "result": "count_dooku_lightsaber",
-      "category": "weapons"
-    },
-    "dark_saber": {
-      "input": "ahsoka_tano_white_lightsaber",
-      "result": "dark_saber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "darth_maul_apprentice_lightsaber": {
       "input": "vader",
       "result": "darth_maul_apprentice_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "darth_maul_reforged_lightsaber": {
       "input": "vader",
       "result": "darth_maul_reforged_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "darth_maul_reforged_shoto_lightsaber": {
       "input": "vader",
       "result": "darth_maul_reforged_shoto_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "darth_maul_reforged_split_lightsaber": {
       "input": "vader",
       "result": "darth_maul_reforged_split_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "darth_maul_vengeance_lightsaber": {
       "input": "vader",
       "result": "darth_maul_vengeance_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "devon_izara_lightsaber": {
       "input": "obiwan",
       "result": "devon_izara_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "ezra_bridger_green_lightsaber": {
       "input": "quigon",
       "result": "ezra_bridger_green_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "ezra_bridger_nomad_lightsaber": {
       "input": "obiwan",
       "result": "ezra_bridger_nomad_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "ezra_bridger_padawan_lightsaber": {
       "input": "obiwan",
       "result": "ezra_bridger_padawan_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "grand_inquisitor_crescent_lightsaber": {
       "input": "vader",
       "result": "grand_inquisitor_crescent_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "grand_inquisitor_full_ring_lightsaber": {
       "input": "vader",
       "result": "grand_inquisitor_full_ring_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "green_training_lightsaber": {
       "input": "quigon",
       "result": "green_training_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "indara_lightsaber": {
       "input": "quigon",
       "result": "indara_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "jaro_tapal_lightsaber": {
       "input": "obiwan",
       "result": "jaro_tapal_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "jecki_lon_lightsaber": {
       "input": "quigon",
       "result": "jecki_lon_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "jod_na_nawood_discovered_lightsaber": {
       "input": "obiwan",
       "result": "jod_na_nawood_discovered_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "ki_adi_mundi_lightsaber": {
       "input": "obiwan",
       "result": "ki_adi_mundi_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "kylo_ren_lightsaber": {
       "input": "vader",
       "result": "kylo_ren_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "leia_organa_lightsaber": {
       "input": "obiwan",
       "result": "leia_organa_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "luke_skywalker_episode_4_lightsaber": {
       "input": "obiwan",
       "result": "luke_skywalker_episode_4_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "luke_skywalker_episode_5_lightsaber": {
       "input": "obiwan",
       "result": "luke_skywalker_episode_5_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "luke_skywalker_jedi_knight_lightsaber": {
       "input": "quigon",
       "result": "luke_skywalker_jedi_knight_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "obi_wan_kenobi_jedi_knight_lightsaber": {
       "input": "obiwan",
       "result": "obi_wan_kenobi_jedi_knight_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "obi_wan_kenobi_padawan_lightsaber": {
       "input": "obiwan",
       "result": "obi_wan_kenobi_padawan_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "pong_krell_blue_lightsaber": {
       "input": "obiwan",
       "result": "pong_krell_blue_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "pong_krell_green_lightsaber": {
       "input": "quigon",
       "result": "pong_krell_green_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "qimir_dagger_lightsaber": {
       "input": "vader",
       "result": "qimir_dagger_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "qimir_lightsaber": {
       "input": "vader",
       "result": "qimir_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "qimir_split_lightsaber": {
       "input": "vader",
       "result": "qimir_split_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "quinlan_vos_lightsaber": {
       "input": "quigon",
       "result": "quinlan_vos_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "revan_fallen_lightsaber": {
       "input": "vader",
       "result": "revan_fallen_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "revan_redeemed_lightsaber": {
       "input": "windu",
       "result": "revan_redeemed_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "rey_blue_lightsaber": {
       "input": "obiwan",
       "result": "rey_blue_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "rey_reforged_lightsaber": {
       "input": "obiwan",
       "result": "rey_reforged_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "sabine_wren_lightsaber": {
       "input": "quigon",
       "result": "sabine_wren_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "savage_opress_lightsaber": {
       "input": "vader",
       "result": "savage_opress_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "second_sister_crescent_lightsaber": {
       "input": "vader",
       "result": "second_sister_crescent_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "second_sister_full_ring_lightsaber": {
       "input": "vader",
       "result": "second_sister_full_ring_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "tak_rennod_discovered_lightsaber": {
       "input": "obiwan",
       "result": "tak_rennod_discovered_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "taron_malicos_lightsaber": {
       "input": "vader",
       "result": "taron_malicos_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "taron_malicos_shoto_lightsaber": {
       "input": "vader",
       "result": "taron_malicos_shoto_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "torbin_lightsaber": {
       "input": "ventress_yellow",
       "result": "torbin_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "vernestra_rwoh_lightsaber": {
       "input": "windu",
       "result": "vernestra_rwoh_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "wim_discovered_lightsaber": {
       "input": "obiwan",
       "result": "wim_discovered_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     },
     "yoda_lightsaber": {
       "input": "quigon",
       "result": "yoda_lightsaber",
-      "category": "weapons"
+      "category": "lightsabers"
     }
   },
   "replace-native": [
@@ -2664,8 +2487,5 @@
     "minecraft:red_harness",
     "minecraft:white_harness",
     "minecraft:yellow_harness"
-  ],
-  "unobtainable": {
-    "ilum_kyber_crate_key": "<gray>Complete the Ilum trials, once every 24 hours."
-  }
+  ]
 }

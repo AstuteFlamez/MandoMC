@@ -68,13 +68,15 @@ public final class VehicleCannons implements Listener, AutoCloseable {
     public int activeBolts() { return bolts.size(); }
 
     public boolean fire(Player player) {
+        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)
+                && plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && !mando.tutorial().mayFire(player)) return false;
         var weapon = weapons.get(vehicles.mountedType(player));
         if (weapon == null || player.isDead()) return false;
         var platform = vehicles.firingPlatform(player, weapon.bones());
         if (platform == null || !protection.use(player.getLocation())
                 || !protection.use(platform.entity().getLocation())) return false;
         long now = System.nanoTime() / 1_000_000;
-        if (now < recharge.getOrDefault(player.getUniqueId(), 0L)) {
+        if (!net.mandomc.gameplay.admin.StaffMode.active(player) && now < recharge.getOrDefault(player.getUniqueId(), 0L)) {
             message(player, "weapon-recharging", "seconds", String.format(Locale.ROOT, "%.1f",
                     Math.ceil((recharge.get(player.getUniqueId()) - now) / 100.0) / 10.0));
             return false;
@@ -162,7 +164,7 @@ public final class VehicleCannons implements Listener, AutoCloseable {
                     entity -> entity instanceof LivingEntity && !(entity instanceof ArmorStand) && !excluded(bolt, entity));
             if (hit != null) {
                 var impact = hit.getHitPosition().toLocation(bolt.location().getWorld());
-                impact(bolt, impact, hit.getHitEntity()); remove(bolt); continue;
+                impact(bolt, impact, hit.getHitEntity(), hit.getHitBlock()); remove(bolt); continue;
             }
             var next = bolt.location().clone().add(direction.multiply(distance));
             double remaining = bolt.remaining() - distance;
@@ -173,10 +175,10 @@ public final class VehicleCannons implements Listener, AutoCloseable {
         }
     }
 
-    private void impact(Bolt bolt, Location location, Entity direct) {
+    private void impact(Bolt bolt, Location location, Entity direct, org.bukkit.block.Block block) {
         if (!vehicles.mayUse(bolt.platform().entity(), bolt.shooter(), location)) return;
         if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null)
-            mando.tutorial().cannonHit(bolt.shooter(), bolt.platform().id(), direct);
+            mando.tutorial().cannonHit(bolt.shooter(), bolt.platform().id(), block);
         var victims = new LinkedHashSet<LivingEntity>();
         if (direct instanceof LivingEntity living) victims.add(living);
         double radius = bolt.settings().radius();

@@ -10,8 +10,10 @@ public class JawaSettingsTest {
         var settings=JawaSettings.read(config());var random=new Random(17);var seen=new HashSet<String>();
         for(int i=0;i<1000;i++) {
             long seed=random.nextLong();var category=settings.category(seed);seen.add(category.id());
-            assertEquals(category.offers(),settings.stock(seed));assertEquals(settings.stock(seed),settings.stock(seed));
-            assertEquals(category.offers().size(),new HashSet<>(settings.stock(seed)).size());
+            assertTrue(settings.stock(seed).containsAll(settings.basicComponents()));assertEquals(settings.stock(seed),settings.stock(seed));
+            assertEquals(settings.stock(seed).size(),new HashSet<>(settings.stock(seed)).size());
+            assertTrue(settings.stock(seed).size()>=settings.basicComponents().size()+settings.advancedMinimum());
+            assertTrue(settings.stock(seed).size()<=settings.basicComponents().size()+settings.advancedMaximum());
         }
         assertEquals(settings.categories().size(),seen.size());
         var all=settings.categories().stream().flatMap(c->c.offers().stream()).toList();
@@ -43,7 +45,7 @@ public class JawaSettingsTest {
     }
     @Test public void grayBuybackCannotProfitFromTheSameBrownBundle(){
         var settings=JawaSettings.read(config());
-        for(var sell:settings.supplies())for(var buy:settings.purchases())if(sell.item().equals(buy.item()))
+        for(var sell:java.util.stream.Stream.of(settings.supplies(),settings.basicComponents(),settings.advancedComponents()).flatMap(List::stream).toList())for(var buy:settings.purchases())if(sell.item().equals(buy.item()))
             assertTrue(sell.id(),sell.price()*buy.amount()>buy.price()*sell.amount());
     }
 }

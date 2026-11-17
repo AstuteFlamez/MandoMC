@@ -52,6 +52,9 @@ public final class MessageService implements Listener, AutoCloseable {
     public Component notice(String key,ChatCategory category){
         return style.format(MiniMessage.miniMessage().deserialize(java.util.Objects.requireNonNull(settings.getString("messages."+key))),category);
     }
+    @EventHandler(priority=EventPriority.HIGHEST) public void advancement(org.bukkit.event.player.PlayerAdvancementDoneEvent event){
+        event.message(null);
+    }
     @EventHandler(priority=EventPriority.HIGHEST) public void death(PlayerDeathEvent event){
         if(event.deathMessage()!=null)event.deathMessage(style.format(event.deathMessage(),ChatCategory.COMBAT));
     }

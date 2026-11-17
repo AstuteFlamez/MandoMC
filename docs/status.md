@@ -1,5 +1,125 @@
 # Resume here
 
+## Full production promotion approved (2026-11-16)
+
+The owner explicitly approved pushing the full tested dev bundle to production and all necessary actions, including restart. This supersedes the earlier production hold. The release includes the gameplay upgrades, playtest fixes, M4-ND skin/guidance/build-pinned GitHub knowledge, staff forge access and Hoth vehicle recovery. The separate vehicle-only draft #59 becomes redundant after the full release.
+
+Verification before promotion: 367 Java tests, 88 tooling checks, 70 latest native droid checks, 48 vehicle/restart checks and earlier complete gameplay/shops checks pass on dev. The only release-preparation code change updates the deployment verifier to recognize current and legacy travel-guide readiness messages; gameplay code is unchanged. Production activation is pending checked main upload, private credential/cache setup and an authorized normal restart. Next action: publish and activate the checked full production release.
+
+## Build-pinned public droid knowledge deployed (2026-11-16)
+
+On `bilal/droid-github-knowledge` (PR #60), M4-ND indexes 357 approved public GitHub files into 3813 bounded passages. Each clean JAR pins its exact commit and source hashes; only its own verified archive/cache is eligible. Modified builds, private/runtime paths, mismatched caches, unsafe redirects and oversized responses are rejected. Same-version caching works offline. Current handbook/configuration outrank historical notes; historical rollout sections are excluded. Exact acquisition, beginner, mining and death guidance stays deterministic, while broader questions use retrieved context with concise plain answers. Character, provider-free menus, quotas and FAQ fallback remain.
+
+Verification: 367 Java tests, 87 tooling checks, unchanged resource-pack hashes and all 70 native assertions pass. Native checks include real GitHub retrieval/cache validation, version identity, off-topic refusal, exact coal/first-saber/beginner/mining/death answers, live AI answers about homes and repairs, the signed skin NPC and staff-forge inventory restoration. Development is running the exact tested artifact and prewarmed public cache after a full stopped-runtime backup and clean normal restart. All thirteen other binaries, server properties, the resource pack and Groq credential are unchanged. Production remains unchanged by the owner's explicit decision; vehicle-only hotfix #59 stays a draft. Next action: playtest M4-ND’s expanded gameplay answers on development.
+
+## Droid, staff forge and Hoth vehicle feedback (2026-11-16)
+
+On `bilal/droid-knowledge-skin`, removed provider branding from M4-ND’s menu, replaced his armor stand with a signed full-body protocol-droid mannequin, connected public recipe/acquisition data, added verified first-saber and beginner guidance, and allowed material-funded forge testing in Creative/Survival staff mode with normal inventory restoration. Added `/vehicle recall`, `/recallvehicle` and `/vrecall`, plus a scoped vehicle spawn on Hoth and rejection of cancelled bases before consuming the item. The reported lost speeder was on production; its owner already issued a replacement. No extra item was granted by this change.
+
+Verification: 355 Java tests and 85 tooling checks pass. All 36 native droid/forge assertions and 48 native vehicle assertions pass, including the signed mannequin, exact coal/first-saber/beginner guidance, real AI identity, staff escrow restoration and an actual vehicle JVM restart. Development is running the exact tested JAR and three scoped config updates after a full stopped-runtime backup and clean normal restart. All thirteen unrelated binaries, every server property value and the Groq credential are unchanged. No probe is installed on shared dev. Production remains unchanged; a separate vehicle-only hotfix is being verified from current main. Next action: playtest the corrected droid and staff forge on development.
+
+## Approved gameplay upgrades deployed to development (2026-11-16)
+
+On `bilal/dev-gameplay-upgrades`, all five approved features are active: recipe output/ingredient search with preserved Back state; M4-ND’s private Groq explanations at Cassian’s former anchor; finished-gun/Jetpack/vehicle KOTH rewards with rare Black Kyber and a required Darksaber recipe; permanent per-entity brown component stock; seven titled gray supply categories with retained salvage trays; and a craftable six-point Saber Forge with real damage/speed/guard/throw effects. The tutorial, handbook, acquisition notes and droid knowledge are updated. Interplanetary vehicle travel remains deferred.
+
+Verification: 354 Java tests and 85 tooling checks pass, along with 133 native gameplay assertions and 548 native Shops walkthrough assertions. A real Groq explanation is verified. The final recipe-guidance follow-up changes one JAR resource; every gameplay class is byte-identical to the native-tested release. GitHub checks passed for the feature build. Published pack `resource-pack-26.1.2-84bc24f720fb` was downloaded anonymously and verified against SHA-1 `a3b671891cb225943edf916f2c5930926ac801eb` and SHA-256. It preserves all 1,193 existing assets and adds only the Black Kyber item wrapper.
+
+Development has full stopped-runtime rollback backups and a private deployment receipt. Normal startup is error-free; the active JAR/configuration/pack are verified. Live read-only checks confirm M4-ND’s body/title at Cassian’s exact anchor, seven gray Jawas and all seven category titles. All thirteen other binary hashes and unrelated server properties are preserved. The Groq key is Git-ignored, excluded from unpublished-commit scans, and installed with owner-only permissions; no probe or test actors are installed on shared dev. Production was not updated. Next action: reconnect to development and playtest the five features, especially droid appearance, title readability and initial loot/forge balance.
+
+## Development playtest corrections verified (2026-11-16)
+
+On `bilal/dev-feedback-fixes`, fixed operation-specific skull/helmet/sign messages, fall-only dropper retries, advancement chat suppression, styled voting broadcasts/reminders/commands, custom recipe-book discovery, separate color-grouped lightsabers, and normal enchanting with Bantha Hide leather compatibility. Dewbacks drop no hide while keeping saddles/food. All four existing ammo sources now average 10 rounds (20 independent 50% rolls); weapon/equipment/salvage chances remain unchanged.
+
+Verification: 346 Java tests, 82 tooling tests and 4,288 native Paper assertions pass; three unrelated NBT tests require CI's nbtlib dependency. The pack builds byte-identically to the pinned release. Native checks include actual enchanting/XP/lapis, anvil books/robe repair, book crafting, herd deaths, mixed decoration custody, Ilum movement, exactly-once vote rewards and 1,000 ammo rolls per source. Current development JAR/config preflight matches the expected baseline; seven scoped files and 18 owned JAR entries will change. Development activation is pending. See [dev feedback](features/dev-feedback-fixes.md). Next action: merge the checked dev PR and deploy the verified scope with a stopped-runtime backup.
+
+## Ilum damage resets corrected (2026-11-16)
+
+On `bilal/ilum-damage-checkpoint`, environmental damage now reduces health normally at the start and
+checkpoints 1, 2 and 4. Only death automatically returns those runners to their saved checkpoint;
+checkpoint 3 (the dropper) retains immediate environmental-damage, fire and fall retries. The shared
+territory exception uses the same rule and is restricted to active runners in Ilum. PvP protection,
+manual compass retries, inventory escrow and checkpoint progression remain intact.
+
+Verification: `./scripts/build.sh` passes all 342 Java tests. A disposable Java 25 / Paper 26.1.2 server
+passes 51 native assertions covering every checkpoint, actual health loss, delayed teleport behavior,
+fire and below-course movement, respawn destinations, PvP denial and lethal damage retaining the run,
+controls and level. The existing development probe compiles with its corrected expectations.
+Development is deployed after a full stopped-runtime backup and clean restart. The tested JAR is active;
+all 12 other binaries and every server property value are unchanged (Paper refreshed its timestamp comment).
+Production is live from PR #54 (`b6b3f53`), following passing GitHub build, pack publication and automatic
+upload. The exact CI JAR matches every entry of the native-tested build; the public pack download matches
+the checked artifact. Broadcast a 30-second restart warning, waited 53 seconds, then restarted through
+PebbleHost. Startup is healthy, Ilum is ready, all 128 managed files match and the release is marked active.
+Rollback backups are retained. Next action: playtest minor damage outside the dropper and instant retries
+at checkpoint 3 on either server.
+
+## Tutorial and balance release live on production (2026-11-16)
+
+Promoted through PR #51 (`d328e85`); the owner started the verified production build through PebbleHost. Optional tutorial sections, $500 for each section’s first completion, direct scrap-to-ingot smelting, updated KOTH rewards, ten Beskar nodes, the owner's terrain-following shop route/private arrow and all gray-Jawa buyers are active. Massiff health is 30 HP and E-11 base damage is 2.0.
+
+A completed 6.09 GB stopped-server backup precedes the cutover. The fresh sweep scanned 8 player files and converted 48 Agrinium sheets one-for-one in 1 file; the other player files remain byte-identical. Original player files and managed-file rollback copies are retained. No world or player reset occurred.
+
+Verification: 342 Java tests, 84 tooling checks, 1,145 native combined tutorial/event assertions, five native balance checks and the production build/pack jobs pass. The automatic SFTP job stalled during its initial read-only check and was cancelled; the exact CI artifacts were uploaded through the pinned SFTP recovery path with the normal drift checks, backups and read-back verification. The exact CI gameplay artifact matches every entry of the native-tested build; the published pack is downloaded anonymously and verified. All 128 installed managed hashes match, startup is healthy with 268 custom items, and the release receipt is marked active. First login logged seven native cleanup messages for recipe-book entries deliberately removed by this release; subsequent logins did not repeat them. The client successfully loaded the pack. A keepalive timeout occurred once during the observation period; later logins succeeded and the console reported 20.0/19.8/19.8 TPS. Next action: reconnect to production and check the Shops lesson, E-11 and Massiff encounters.
+
+## Tutorial and balance production promotion (2026-11-16)
+
+The owner requested production deployment of the optional tutorial, simplified metals, final shop route, Massiff health 30 and E-11 base damage 2.0. The combined build passes 342 Java tests, 84 tooling checks, 1,145 native tutorial/event assertions and five loaded-balance checks. Production drift verification and the backed-up sheet conversion are in progress. Next action: promote the checked release, take a stopped backup and activate it through the production panel.
+
+## Tutorial shop path and gray-Jawa follow-up (2026-11-16)
+
+The owner accepted the tutorial except for shop guidance. The final trail follows the five block coordinates supplied in screenshots, with particle elevation measured from native collision surfaces. Nearest-segment guidance continues even when players miss a waypoint. An inward-pointing arrow remains visible inside the building. Removed the tutorial-only shop rectangle restriction that rejected a public gray Jawa; nearby gray buyers now consistently open salvage during the selling step.
+
+Verification: 342 Java tests and 543 focused native shop checks pass, including exact slab/stair heights, emitted particles rising on the stairs, continued guidance after skipped waypoints, private interior arrow particles, all seven public gray Jawas and the sale. Development was backed up and restarted with the tested JAR and one merged config; startup is healthy and all fourteen other binaries and the pack are unchanged. See [tutorial hub](features/tutorial-hub-metals.md). Next action: recheck the centered trail, interior arrow and gray-Jawa salvage in the Shops lesson on development.
+
+## Optional tutorial hub and simplified metals (2026-11-16)
+
+Implemented five independently selectable lessons with saved completion and $500 once per section. Combat has one Gamorrean, one Quarren and one Twi'lek blaster target, then a real saber-hit exercise. Survival uses native mining, furnace smelting and pickaxe crafting. Shops guides each learner privately up the actual public Batuu stairs to a real gray Jawa. Clan and native X-wing lessons remain, with an optional exit and Naboo base guidance.
+
+All eleven metal scraps now smelt directly into ingots in normal furnaces; sheets are removed from crafting and KOTH rewards. Ore drops are exactly one scrap, and Beskar Rush has ten nodes with old journal recovery retained. Sheet migration preserves quantities across inventories, ender chests, nested containers and saved escrow; the offline tool requires a stopped-world lock and backups. A read-only production audit found 60 Agrinium sheets across two players, queued for the production cutover; no production data has been changed.
+
+Verification: 342 Java tests, 84 tooling checks, 605 native tutorial assertions, 52 actual JVM recovery checks and 43 native Beskar assertions pass. Development was stopped, fully backed up and restarted with the final tested gameplay JAR and seven merged configs. Its stopped playerdata sweep found no sheets. Startup is healthy with 268 custom items; all fourteen other binaries and the pinned pack are unchanged. See [tutorial hub and metals](features/tutorial-hub-metals.md). Next action: client-play `/tutorial` on development, including each section and the Batuu walking trail.
+## E-11 damage buff (2026-11-16)
+
+On `bilal/e11-damage-buff`, stacked on the Massiff health reduction, increased E-11 base damage from 0.5 to the owner's requested 2.0 per shot. All other weapon parameters remain unchanged. Updated the existing integration probe's expected damage value. The original development weapon config is backed up privately; only its base-damage field is deployed. Production promotion is pending.
+
+Verification: `./scripts/build.sh` passes all 339 Java tests; YAML comparison verifies base damage is the sole semantic weapon-config change, and `git diff --check` passes. Development restarted cleanly with all 34 weapons loaded; runtime comparison confirms damage 2.0 and the prior Massiff health 30. The legacy integration probe was updated but not rerun. Next action: playtest the E-11 at 2.0 damage on development before production promotion.
+
+## Massiff health reduced on development (2026-11-16)
+
+On `bilal/massiff-health`, reduced fixed Massiff health from 50 to 30 HP (40%) so encounters take less damage to finish. The scoped development deployment changed only that health value after a clean stop and private configuration backup. The existing development pack remains pinned. Production promotion is pending.
+
+Verification: `./scripts/build.sh` passes all 339 Java tests; YAML parsing, exact source/runtime change comparisons and `git diff --check` pass. Local Paper restarted successfully with MythicMobs loaded. In-game combat feel and existing-entity health migration are not verified. Next action: playtest a freshly spawned Massiff on development before promoting the change.
+
+## Building signs and updated hub live on production (2026-11-16)
+
+Promoted the tested sign update through PR #46 (`8100c78`) and activated the matching published resource pack. Imported the owner's saved SpawnWorld hub: 41 world files and five placed signs (Shops, Leaderboards, Crates and two Cantina signs). The previous stopped hub and decoration journal remain in a private rollback backup. Other worlds are untouched; 49 account/access files were verified unchanged during the cutover, with no player reset.
+
+Verification: production CI passes, the exact CI gameplay JAR has identical entries to the native-tested candidate, and the anonymously downloaded pack matches CI. A private import and actual JVM restart both verify five exact sign items/facings and 19 owned collision cells; live production repeats those checks and starts without errors with 279 custom items. See [building signs](features/building-signs.md). Next action: reconnect to production and visually check the updated hub and signs with the new pack.
+
+## Three building signs deployed to development (2026-11-15)
+
+Added Shops (3×1), Leaderboards (5×1) and Cantina (1×4), available through `/mmc give shops_sign`, `/mmc give leaderboards_sign` and `/mmc give cantina_sign`. Every occupied cell shares the existing decoration protection and single-item recovery behavior. Journal schema 4 preserves schemas 1–3. The final source build has exactly the same JAR entries as the native-tested candidate and retains the latest staff/tutorial changes.
+
+Verification: 339 Java tests, 81 tooling checks, resource-pack build and 668 native lifecycle/actual-restart assertions pass, including the existing Crates Sign. The pack adds nine files and preserves all 1,184 existing entries byte-for-byte. Published pack `resource-pack-26.1.2-8015fc5774c9` (SHA-1 `1aa7dbc57a8f587b5dca8ac94d06091181af3a77`) was anonymously downloaded and hash-verified. Development was stopped cleanly, fully backed up, and restarted with the exact tested candidate; all other binaries are unchanged, 279 custom items load, and startup has no errors. Production was not modified by this release. See [building signs](features/building-signs.md). Next action: reconnect to development and visually check all three signs in game.
+
+## Production release live: staff mode and tutorial fixes (2026-11-15)
+
+Promoted the owner-accepted dev fixes through PR #43 (`b9f0132`) and used the explicitly authorized PebbleHost console Restart action. Production is running the checked release: independent staff gamemode, normal X-wing flight with only lesson keys enabled, single-press W/S behavior, real block targets, Ilum/protection fixes, revised planet descriptions, Agrinium-ingot pickaxe and no Kyber crystal crafting recipes. AstuteFlamez's requested `mandostudios` membership was assigned through the native console command and verified in saved rank data.
+
+Verification: 337 Java tests, 79 tooling tests, 264 native staff/protection checks, the final 1,226-assertion tutorial walkthrough, and actual JVM recovery checks (49 staff, 51 tutorial). Main CI, pack publication and verified SFTP upload passed. After restart, all 127 managed file hashes match the release receipt, startup has no errors, 276 custom items and the tutorial load, and the deployment is marked active. The previous managed bytes are retained in the remote rollback backup; no world/player reset or vendor replacement was performed. Next action: client-smoke-test staff Survival mode and the tutorial flight/target on production.
+
+## Staff gamemode and normal tutorial flight feedback (2026-11-15)
+
+Staff mode is independent of gamemode: `/gms` keeps staff privileges and the temporary inventory; `/staff off` explicitly restores survival state. Tutorial X-wing controls now filter only the current lesson key and preserve normal thrust, look direction, speed, banking and braking. W latches thrust, released W continues flight, and a single S press stops the ship and advances after braking. The target is a real 17-by-17 block bullseye hit through native cannon block collision, with block debris and the existing explosion delay. Expanded airspace and a temporary landing pad support normal flight beyond the walking scene.
+
+Verification: 337 Java tests, 79 tooling tests, 264 native staff/protection checks, the full native tutorial walkthrough and actual JVM recovery checks (49 staff, 51 tutorial) pass. The exact tested gameplay JAR and two configs are deployed to development after a full stopped-runtime backup; other binaries and the pinned pack are unchanged. The owner accepted the dev playtest and authorized production promotion plus the console restart; see the release entry above.
+
+## Dev playtest fixes deployed (2026-11-15)
+
+Implemented isolated staff mode, staff-only `/back`, Ilum mechanisms and checkpoint-3 death recovery, Batuu interaction protection, spawn hunger protection and safezone mob target clearing. Tutorial guidance now includes zone-colored borders, directional particles, a fixed saber hologram, required Weapons category and a constrained sequential X-wing lesson. Warp lore explains planet roles, the Agrinium pickaxe uses ingots, and all seven Kyber crystal recipes are removed while saber recipes remain.
+
+Verification: 335 Java tests, 79 tooling tests, 259 native staff/protection/circuit assertions, 834 full tutorial assertions and actual JVM recovery checks (49 staff, 51 tutorial) pass. Development was stopped, fully backed up and restarted with the exact tested gameplay JAR, matching circuit agent and six configurations. Other binaries and the pinned resource pack are unchanged; startup is healthy. Production remains untouched. See [behavior and all eleven owner checks](features/dev-playtest-fixes.md). Next action: complete the owner's eleven-item client acceptance checklist before production promotion.
+
 ## Blast furnace progression hotfix (2026-11-15)
 
 Changed the blast furnace recipe to use five Agrinium ingots instead of sheets, removing the dependency on the furnace needed to make those sheets. Bundled defaults and managed server overrides match. Verification and rollout are in progress; next action: verify checks and activate the recipe on production and development.

@@ -23,7 +23,14 @@ public final class TerritoryService implements Listener, AutoCloseable {
     private NpcSpawn npcSpawn;
     /** Permit only the explicitly placed NPC's base entity during this server-thread operation. */
     public <T> T spawnNpc(org.bukkit.entity.EntityType type, Location location, java.util.function.Supplier<T> spawn) {
-        if (!org.bukkit.Bukkit.isPrimaryThread() || npcSpawn != null) throw new IllegalStateException("NPC spawn must be a single server-thread operation");
+        return spawnManaged(type, location, spawn);
+    }
+    /** A vehicle base is not a natural mob; placement checks remain owned by VehicleService. */
+    public <T> T spawnVehicle(Location location, java.util.function.Supplier<T> spawn) {
+        return spawnManaged(org.bukkit.entity.EntityType.PIG, location, spawn);
+    }
+    private <T> T spawnManaged(org.bukkit.entity.EntityType type, Location location, java.util.function.Supplier<T> spawn) {
+        if (!org.bukkit.Bukkit.isPrimaryThread() || npcSpawn != null) throw new IllegalStateException("Managed spawn must be a single server-thread operation");
         npcSpawn = new NpcSpawn(type, location.clone());
         try { return spawn.get(); } finally { npcSpawn = null; }
     }
@@ -51,7 +58,17 @@ public final class TerritoryService implements Listener, AutoCloseable {
         plugin.getServer().getPluginManager().registerEvents(new TerritoryProtection(this),plugin);
         plugin.getServer().getOnlinePlayers().forEach(this::announce);
         transitions = plugin.getServer().getScheduler().runTaskTimer(plugin,
-                () -> plugin.getServer().getOnlinePlayers().forEach(this::announce), 10, 10);
+                () -> {
+                    plugin.getServer().getOnlinePlayers().forEach(this::announce);
+                    for (var player : plugin.getServer().getOnlinePlayers()) {
+                        for (var entity : player.getNearbyEntities(64, 32, 64)) {
+                            if (entity instanceof org.bukkit.entity.Mob mob && mob.getTarget() instanceof Player target
+                                    && (!combat(target.getLocation()) || !combat(mob.getLocation()))) {
+                                mob.setTarget(null); mob.getPathfinder().stopPathfinding();
+                            }
+                        }
+                    }
+                }, 1, 5);
     }
     public TerritoryPolicy policy() { return policy; }
     public boolean interactions(Location location) {
@@ -112,7 +129,16 @@ public final class TerritoryService implements Listener, AutoCloseable {
         plugin.getServer().getScheduler().runTask(plugin,()->{if(event.getPlayer().isOnline())announce(event.getPlayer());});
     }
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
-    public void teleport(PlayerTeleportEvent event) { move(event); }
+    public void teleport(PlayerTeleportEvent event) {
+        if (event.getTo() != null && (!combat(event.getTo()) || event.getFrom().getWorld() != event.getTo().getWorld())) {
+            for (var entity : event.getFrom().getWorld().getNearbyEntities(event.getFrom(), 64, 32, 64)) {
+                if (entity instanceof org.bukkit.entity.Mob mob && event.getPlayer().equals(mob.getTarget())) {
+                    mob.setTarget(null); mob.getPathfinder().stopPathfinding();
+                }
+            }
+        }
+        move(event);
+    }
     @EventHandler public void join(PlayerJoinEvent event) { announce(event.getPlayer()); }
     @EventHandler public void changedWorld(PlayerChangedWorldEvent event) { announce(event.getPlayer()); }
     @EventHandler public void respawn(PlayerRespawnEvent event) {

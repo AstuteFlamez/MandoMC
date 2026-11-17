@@ -20,7 +20,7 @@ public class LegacyRecipesTest {
     @Test public void allRecoveredRecipesResolveWithoutDuplicateItemIds() throws Exception {
         var ids = new HashSet<String>();
         for (String file : java.util.List.of("legacy", "vehicles", "robes", "materials", "sabers", "tusken",
-                "jabba", "jabba-loot", "dioxis", "massiff", "dewback", "vehicle-ammo")) {
+                "koth", "jabba", "jabba-loot", "dioxis", "massiff", "dewback", "vehicle-ammo")) {
             var items = resource("items/definitions/" + file + ".yml").getConfigurationSection("items");
             for (String id : items.getKeys(false)) {
                 assertTrue("Duplicate " + id, ids.add(id));
@@ -50,11 +50,18 @@ public class LegacyRecipesTest {
                 }
             }
         }
-        assertEquals(142, config.getConfigurationSection("recipes").getKeys(false).size());
-        assertEquals(11, config.getConfigurationSection("smelting").getKeys(false).size());
-        assertEquals(71, config.getConfigurationSection("stonecutting").getKeys(false).size());
+        assertEquals(125, config.getConfigurationSection("recipes").getKeys(false).size());
+        assertEquals(12, config.getConfigurationSection("smelting").getKeys(false).size());
+        assertEquals(70, config.getConfigurationSection("stonecutting").getKeys(false).size());
     }
 
+    @Test public void kyberComesFromCratesAndPickaxeUsesIngots() throws Exception {
+        var config = resource("items/recipes.yml");
+        for (String id : config.getConfigurationSection("recipes").getKeys(false))
+            assertFalse(config.getString("recipes." + id + ".result").endsWith("_kyber"));
+        assertEquals("agrinium", config.getString("recipes.agrinium_pickaxe.ingredients.M"));
+        assertEquals("blue_kyber", config.getString("recipes.obiwan.ingredients.C"));
+    }
     private String pattern(RecipeDefinition recipe, boolean mirror) {
         var rows = recipe.shape();
         int min = 3, max = -1;
@@ -84,15 +91,15 @@ public class LegacyRecipesTest {
 
     @Test public void blastRecipesRejectInvalidFurnacesTimingAndExperience() throws Exception {
         for (Object value : java.util.List.of(0, -1, 72001, "180", 2.5)) {
-            var config = resource("items/recipes.yml").getConfigurationSection("smelting.beskar_sheet");
+            var config = resource("items/recipes.yml").getConfigurationSection("smelting.beskar_from_scrap");
             config.set("cook-time", value);
-            assertThrows(IllegalArgumentException.class, () -> RecipeDefinition.parseSmelting("beskar_sheet", config));
+            assertThrows(IllegalArgumentException.class, () -> RecipeDefinition.parseSmelting("beskar_from_scrap", config));
         }
-        var config = resource("items/recipes.yml").getConfigurationSection("smelting.beskar_sheet");
+        var config = resource("items/recipes.yml").getConfigurationSection("smelting.beskar_from_scrap");
         config.set("furnace", "unknown");
-        assertThrows(IllegalArgumentException.class, () -> RecipeDefinition.parseSmelting("beskar_sheet", config));
+        assertThrows(IllegalArgumentException.class, () -> RecipeDefinition.parseSmelting("beskar_from_scrap", config));
         config.set("furnace", "blast");
         config.set("experience", Double.NaN);
-        assertThrows(IllegalArgumentException.class, () -> RecipeDefinition.parseSmelting("beskar_sheet", config));
+        assertThrows(IllegalArgumentException.class, () -> RecipeDefinition.parseSmelting("beskar_from_scrap", config));
     }
 }

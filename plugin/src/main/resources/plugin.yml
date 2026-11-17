@@ -6,6 +6,24 @@ author: AstuteFlamez
 description: MandoMC gameplay
 softdepend: [ packetevents, WorldEdit, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
+  vehicle:
+    description: Recall your deployed vehicle to your inventory
+    usage: /vehicle recall
+    permission: mandomc.arrival
+  recallvehicle:
+    description: Recall your deployed vehicle to your inventory
+    usage: /recallvehicle
+    aliases: [vrecall]
+    permission: mandomc.arrival
+  ask:
+    description: Ask M4-ND a MandoMC question
+    usage: /ask [question]
+    permission: mandomc.arrival
+  staff:
+    description: Toggle staff mode and restore your survival inventory
+    usage: '/staff [on|off]'
+    aliases: [staffmode]
+    permission: mandomc.staff
   crates:
     description: Preview and open crates
     usage: /crates [preview|open|keys|claim|key|setblock]
@@ -224,6 +242,8 @@ commands:
     usage: '/tpcancel'
     permission: mandomc.travel.tpcancel
 permissions:
+  mandomc.staff:
+    default: op
   mandomc.crates.play:
     default: true
   mandomc.crates.admin:
@@ -315,7 +335,7 @@ permissions:
   mandomc.travel.delhome:
     default: true
   mandomc.travel.back:
-    default: true
+    default: op
   mandomc.travel.tpa:
     default: true
   mandomc.travel.tpahere:

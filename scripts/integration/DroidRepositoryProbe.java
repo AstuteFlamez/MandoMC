@@ -1,0 +1,117 @@
+package net.mandomc.verification;
+
+import java.nio.file.*;
+import java.util.*;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.mandomc.bootstrap.MandoPlugin;
+import net.mandomc.gameplay.admin.StaffMode;
+import net.mandomc.gameplay.saber.SaberUpgrades;
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.*;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.*;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
+
+/** Disposable Paper regression checks for player-reported droid and staff-forge behavior. */
+public final class DroidRepositoryProbe extends JavaPlugin {
+    private MandoPlugin mando;private NativeProbePlayers actors;private Player player;private Block block;private int checks;
+    private int question;private int waited;private final List<String> answers=new ArrayList<>();
+    private final String[] questions={"where to get coal","how to get saber","what should I do","Who are you?","How many homes can I set?","How do I repair a damaged speederbike?","How does Fortune affect custom ore drops?","What happens to my gear when I die?"};
+    @Override public void onEnable(){Bukkit.getScheduler().runTaskLater(this,()->run(this::waitForRepository),160);}
+    private interface Work{void run()throws Exception;}
+    private void run(Work work){try{work.run();}catch(Throwable error){finish(error);}}
+    private void later(int ticks,Work work){Bukkit.getScheduler().runTaskLater(this,()->run(work),ticks);}
+    private void check(boolean value,String why){if(!value)throw new IllegalStateException(why);checks++;}
+    private int repositoryWait;
+    private Object field(Object target,String name)throws Exception{var f=target.getClass().getDeclaredField(name);f.setAccessible(true);return f.get(target);}
+    private void waitForRepository()throws Exception{
+        mando=(MandoPlugin)Bukkit.getPluginManager().getPlugin("MandoMC");
+        var repository=(net.mandomc.gameplay.guide.GitHubKnowledge)field(mando.droid(),"repository");
+        if(repository.passageCount()==0){if((repositoryWait+=20)>1800)throw new IllegalStateException("Pinned public knowledge did not load");later(20,this::waitForRepository);return;}
+        var manifest=net.mandomc.gameplay.guide.RepositorySnapshot.manifest(mando.getResource("guide-repository.json"));
+        check(manifest.clean(),"deployed artifact records a clean source commit");
+        check(repository.commit().equals(manifest.commit()),"repository index pinned to this artifact commit");
+        check(repository.passageCount()>500 && manifest.sources().size()>100,"broad public gameplay index loaded");
+        var cached=mando.getDataFolder().toPath().resolve("data/guide/public-knowledge/"+manifest.commit()+".json");
+        var snapshot=net.mandomc.gameplay.guide.RepositorySnapshot.cache(manifest,cached);
+        check(snapshot.documents().size()==manifest.sources().size(),"verified same-version local cache complete");
+        for(String question:java.util.List.of("How many homes can I set?","How do I repair a damaged speederbike?","How does Fortune affect custom ore drops?","What happens to my gear when I die?")){
+            var notes=repository.find(question);check(!notes.isEmpty(),"repository retrieval: "+question);
+            check(notes.stream().allMatch(n->n.id().contains(manifest.commit())),"retrieved notes all use deployed version");
+            getLogger().info("Retrieved public passages for ["+question+"]: "+notes.stream().map(n->n.id().substring(n.id().lastIndexOf(':')+1)).toList());
+        }
+        check(repository.find("What is the capital of France?").isEmpty(),"off-topic query has no repository context");
+        start();
+    }
+    private void start()throws Exception{
+        mando=(MandoPlugin)Bukkit.getPluginManager().getPlugin("MandoMC");check(mando!=null && mando.isEnabled(),"MandoMC enabled");
+        var at=mando.droid().location();check(at!=null,"droid spawned");
+        var bodies=at.getWorld().getNearbyEntities(at,1,1,1).stream().filter(e->e instanceof Mannequin).map(e->(Mannequin)e).toList();
+        check(bodies.size()==1,"one real skin mannequin at Cassian anchor");var body=bodies.getFirst();
+        var profile=body.getProfile();check(profile!=null,"resolvable player skin profile present");
+        var resolved=profile.resolve().join();
+        var textures=resolved.getProperties().stream().filter(p->p.getName().equals("textures")).toList();
+        check(textures.size()==1 && textures.getFirst().getSignature()!=null,"signed full-body skin");
+        String skin=new String(Base64.getDecoder().decode(textures.getFirst().getValue()),java.nio.charset.StandardCharsets.UTF_8);
+        check(skin.contains("textures.minecraft.net/texture/"),"Mojang texture configured");
+        check(body.isImmovable() && body.isInvulnerable() && !body.hasGravity(),"native NPC protected and stationary");
+        check(Arrays.stream(body.getEquipment().getArmorContents()).allMatch(s->s==null || s.isEmpty()),"skin has no armor covering it");
+        check(at.getWorld().getNearbyEntities(at,1,1,1).stream().noneMatch(e->e instanceof ArmorStand),"armor stand removed");
+        actors=new NativeProbePlayers("DroidFix");player=actors.create(new Location(mando.worlds().resolve("DevWorld"),-201.5,200,-199.5));
+        player.setGameMode(GameMode.SURVIVAL);player.getInventory().clear();player.getInventory().setItem(5,new ItemStack(Material.DIAMOND,9));
+        player.setOp(true);mando.ranks().apply(player);Bukkit.getPluginCommand("staff").execute(player,"staff",new String[]{"on"});
+        check(StaffMode.active(player) && player.getGameMode()==GameMode.CREATIVE,"real staff mode entered");
+        block=player.getLocation().clone().add(1,0,0).getBlock();block.setType(Material.SMITHING_TABLE);
+        block.getChunk().getPersistentDataContainer().set(new NamespacedKey("mandomc","forge_"+block.getX()+"_"+block.getY()+"_"+block.getZ()),PersistentDataType.BYTE,(byte)1);
+        prepare();interact();click(10);later(2,this::creativePaid);
+    }
+    private void prepare(){player.closeInventory();player.getInventory().clear();player.getInventory().setHeldItemSlot(0);player.getInventory().setItem(0,mando.items().create("vader"));var mat=mando.items().create("beskar");mat.setAmount(2);player.getInventory().setItem(1,mat);}
+    private void interact(){
+        var event=new PlayerInteractEvent(player,Action.RIGHT_CLICK_BLOCK,player.getInventory().getItemInMainHand(),block,BlockFace.UP,EquipmentSlot.HAND);
+        Bukkit.getPluginManager().callEvent(event);
+        check(player.getOpenInventory().getTopInventory().getSize()==27,"native right-click opens forge while staff "+player.getGameMode());
+    }
+    private void click(int slot){var e=new InventoryClickEvent(player.getOpenInventory(),InventoryType.SlotType.CONTAINER,slot,ClickType.LEFT,InventoryAction.PICKUP_ALL);Bukkit.getPluginManager().callEvent(e);check(e.isCancelled(),"forge preview protected");}
+    private void paid(){check(SaberUpgrades.level(player.getInventory().getItem(0),"damage")==1,"staff upgrade committed");check(player.getInventory().getItem(1)==null || player.getInventory().getItem(1).isEmpty(),"temporary staff materials consumed");}
+    private void creativePaid(){paid();player.setGameMode(GameMode.SURVIVAL);prepare();interact();click(10);later(2,this::survivalPaid);}
+    private void survivalPaid()throws Exception{
+        paid();Bukkit.getPluginCommand("staff").execute(player,"staff",new String[]{"off"});
+        check(!StaffMode.active(player),"staff mode exited");check(player.getInventory().getItem(5).equals(new ItemStack(Material.DIAMOND,9)),"normal inventory restored unchanged");
+        check(player.getInventory().getItem(0)==null || player.getInventory().getItem(0).isEmpty(),"temporary upgraded saber discarded");
+        player.teleport(mando.droid().location().clone().add(1,0,0));actors.drain(player);mando.droid().prompt(player);later(3,this::dialog);
+    }
+    private void dialog()throws Exception{
+        actors.drain(player);check(actors.otherPackets(player).stream().anyMatch(s->s.contains("ShowDialog")),"native droid question dialog");
+        var config=org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.File(mando.getDataFolder(),"guide/protocol-droid.yml"));
+        check(!config.getConfigurationSection("text").getValues(false).toString().toLowerCase().contains("groq"),"no provider branding in menu text");
+        mando.droid().ask(player,"What is the capital of France?");later(2,()->{
+            var messages=actors.drain(player).stream().map(c->PlainTextComponentSerializer.plainText().serialize(c)).toList();
+            check(messages.stream().anyMatch(t->t.contains("databanks")) && messages.stream().noneMatch(t->t.contains("Consulting")),"off-topic refused without model call");ask();
+        });
+    }
+    private void ask()throws Exception{answers.clear();waited=0;actors.drain(player);mando.droid().ask(player,questions[question]);later(10,this::answer);}
+    private void answer()throws Exception{
+        for(var c:actors.drain(player)){String s=PlainTextComponentSerializer.plainText().serialize(c);if(!s.contains("Consulting"))answers.add(s);}
+        var reply=answers.stream().filter(s->s.contains("M4-ND") && s.contains("»")).findFirst();
+        if(reply.isEmpty()){if((waited+=10)>1000)throw new IllegalStateException("Timed out: "+questions[question]);later(10,this::answer);return;}
+        check(answers.stream().noneMatch(s->s.contains("unavailable") || s.contains("written guidance")),"answer path healthy "+questions[question]);
+        String text=reply.get().toLowerCase();getLogger().info("Verified answer to ["+questions[question]+"]: "+reply.get());
+        check(!text.contains("groq"),"no provider name in response");
+        check(!text.contains("<aqua>") && !text.contains("mandomc.") && !text.contains("homes-limit"),"player-facing answer hides tags and internal identifiers");
+        if(question==0){check(text.contains("tatooine") && text.contains("coal ore") && text.contains("pickaxe") && !text.contains("refine"),"coal answer gives verified mining source");}
+        if(question==1){check(text.contains("crafting table") && text.contains("ilum") && text.contains("kyber"),"first saber explains actual acquisition");check(!text.contains("already possess") && !text.contains("should already"),"no assumed first saber");}
+        if(question==2){check(text.contains("/tutorial") && (text.contains("naboo") || text.contains("500")),"beginner gets achievable first steps");}
+        if(question==3){check(text.contains("protocol") && text.contains("mando"),"live AI retains droid identity");}
+        if(question==4)check((text.contains("three") || text.contains("3")) && text.contains("home"),"GitHub-backed home limit correct");
+        if(question==5)check(text.contains("wrench") && (text.contains("crouch") || text.contains("sneak")),"GitHub-backed vehicle repairs correct");
+        if(question==6)check(text.contains("fortune") && (text.contains("not") || text.contains("no ")) && text.contains("scrap") && (text.contains("one") || text.contains("1")) && !text.contains("1–5") && !text.contains("1-5") && !text.contains("1 to 5"),"GitHub-backed ore Fortune rule correct");
+        if(question==7){check(text.contains("drop") && (text.contains("gear") || text.contains("item")),"GitHub-backed survival death explanation correct");finish(null);return;}
+        question++;later(question<=3 || question>=6?3:440,this::ask);
+    }
+    private void finish(Throwable error){try{if(actors!=null)actors.close();Files.createDirectories(getDataFolder().toPath());Files.writeString(getDataFolder().toPath().resolve(error==null?"PASSED.txt":"FAILED.txt"),error==null?checks+" native droid repository assertions passed\n":error.toString());if(error==null)getLogger().info("DROID REPOSITORY PASSED: "+checks);else getLogger().log(java.util.logging.Level.SEVERE,"DROID REPOSITORY FAILED",error);}catch(Exception e){getLogger().log(java.util.logging.Level.SEVERE,"Probe cleanup failed",e);}Bukkit.shutdown();}
+}

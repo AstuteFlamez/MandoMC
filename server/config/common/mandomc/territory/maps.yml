@@ -198,4 +198,5 @@ additional-maps:
     - '................................'
     - '................................'
 locked-interaction-worlds:
+- minecraft:spawnworld
 - minecraft:naboo

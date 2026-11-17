@@ -17,6 +17,8 @@ Essentials and Multiverse are replaced by MandoMC. See [native utilities](featur
 
 Operator nodes use `mandomc.admin.<command>` (`gamemode` for all mode aliases); targeting others needs `mandomc.admin.others`. Public nodes use `mandomc.travel.<command>`. Public homes, requests and return trips use instant travel in Creative and a three-second warmup in other modes and revalidate the destination. Admin direct commands use their explicit immediate path.
 
+`/vehicle recall` returns your deployed vehicle to your inventory; `/recallvehicle` and `/vrecall` are shortcuts. The vehicle must be landed, stationary, empty and out of combat. Health is preserved; destroyed vehicles cannot be recalled.
+
 ## Command catalogue
 | Command | Permission | Destination/behavior | Status |
 | --- | --- | --- | --- |
@@ -101,3 +103,10 @@ Quantity update: `/mmc give <item> [quantity]` and `/mmc give <player> <item> [q
 
 ## Native clans and KOTH crate (deployed)
 `/c` (`/clan`, `/cl`) supports create, invite, join, leave, kick, leader, disband, claim, unclaim, sethome, home, info, warpoints and map. Names use 3–16 letters/digits/underscores. Claims and homes require clan leadership; home travel is available to members. `/crates preview koth`, `/crates keys`, `/crates open koth` and `/crates claim` use the shared crate engine. See [native clans](features/native-clans.md).
+
+## Staff mode
+
+`/staff [on|off]` (alias `/staffmode`) switches between the saved survival inventory and an empty Creative staff inventory. `/gms` and other gamemode changes keep staff mode active; use `/staff off` to restore the saved survival inventory. Staff permissions, including `/back`, require active staff mode; ordinary permissions apply while off. `/parkour checkpoint <1-4>` is a staff-mode-only Ilum testing shortcut. Console `staff revokeop <online-player>` revokes an imported vanilla operator entitlement; native rank membership is separate. See [development playtest fixes](features/dev-playtest-fixes.md) for recovery and acceptance checks.
+
+### M4-ND and recipe search
+`/ask [question]` opens M4-ND's private question dialog or asks a MandoMC question directly. Groq has a daily/cooldown allowance; maintained FAQ guidance remains available. Right-click M4-ND at Cassian's former spawn position for the same interface. `/recipes` includes native text search and an ingredient-use toggle; Back preserves the search.

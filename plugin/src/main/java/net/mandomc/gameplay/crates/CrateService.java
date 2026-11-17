@@ -100,6 +100,19 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
         ticker = Bukkit.getScheduler().runTaskTimer(plugin, this::tick, 1, 1);
     }
 
+    /** WeaponMechanics loads its catalog after plugin enable; defer startup until configured external rewards resolve. */
+    public static boolean catalogReady(ItemCatalog items,YamlConfiguration config) {
+        var definitions=java.util.Objects.requireNonNull(config.getConfigurationSection("crates"));
+        for(String id:definitions.getKeys(false)){
+            var crate=CrateDefinition.read(id,definitions.getConfigurationSection(id));
+            for(var entry:crate.rewards().entries()){
+                String item=entry.value().item();
+                if(!items.ids().contains(item))throw new IllegalArgumentException("Unknown crate item "+item);
+                if(items.external(item))try{items.create(item);}catch(IllegalStateException loading){return false;}
+            }
+        }
+        return true;
+    }
     private void requireItem(String id) {
         if (items.create(id) == null) throw new IllegalArgumentException("Crate references missing catalog item " + id);
     }
@@ -206,7 +219,7 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
         return bytes==null ? new ItemStack[0] : ItemStack.deserializeItemsFromBytes(bytes);
     }
     public void claim(Player player) {
-        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return;
+        if ((net.mandomc.gameplay.tutorial.TutorialInventory.active(player) || net.mandomc.gameplay.admin.StaffMode.active(player))) return;
         if (restricted.test(player)) return;
         var viewing=menus.get(player.getUniqueId());
         if(viewing!=null&&viewing.rolling())return;
@@ -231,7 +244,7 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
         var item=items.create(reward.item());item.setAmount(reward.amount());return item;
     }
     public void open(Player player, CrateDefinition crate) {
-        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return;
+        if ((net.mandomc.gameplay.tutorial.TutorialInventory.active(player) || net.mandomc.gameplay.admin.StaffMode.active(player))) return;
         if (!allowed(player)) return;
         var current=menus.get(player.getUniqueId());
         if (current!=null && current.rolling()) return;
@@ -310,7 +323,7 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
         }
     }
     public void finishPending(Player player) {
-        if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)) return;
+        if ((net.mandomc.gameplay.tutorial.TutorialInventory.active(player) || net.mandomc.gameplay.admin.StaffMode.active(player))) return;
         if (restricted.test(player)) return;
         var data=player.getPersistentDataContainer();
         var bytes=data.get(PENDING,PersistentDataType.BYTE_ARRAY);

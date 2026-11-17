@@ -54,7 +54,7 @@ The catalog in server/plugins.catalog.json records admission status. Installed v
 - MandoMC stores only its own state. Select file or transactional local storage when a feature needs it.
 - Disabled features must not load missing vendor classes. Missing dependencies for enabled features fail clearly. Protection failures never open an unprotected gameplay path.
 - Stable MandoMC IDs survive vendor replacement through explicit mapping and saved-data migration.
-- Identify custom items before applying ordinary-weapon restrictions. Removing vanilla shields must not disable registered shield-based lightsabers. Enchanting is disabled; keep the custom guard limit independent of native repair behavior.
+- Identify custom items before applying ordinary-weapon restrictions. Removing vanilla shields must not disable registered shield-based lightsabers. Normal enchanting tables and anvil books are enabled; keep the custom guard limit independent of native repair behavior. Bantha Hide retains native leather crafting and repair behavior.
 
 ## Vehicles
 Built-in aircraft weapons remain deferred; the U-wing gunner may fire held blasters. MandoMC owns vehicle state and seat access, while ModelEngine owns visuals. Persist the placing player's UUID as the pilot authority for a deployed vehicle. Group membership and passenger access do not grant piloting rights.

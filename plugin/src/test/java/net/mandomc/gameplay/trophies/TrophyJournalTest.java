@@ -40,7 +40,7 @@ public class TrophyJournalTest {
     }
     @Test public void legacyFloorJournalKeepsYawAndMigratesWithoutChangingCustody()throws Exception {
         var file=Files.createTempDirectory("trophy").resolve("data.yml");var e=entry();var y=new org.bukkit.configuration.file.YamlConfiguration();y.set("schema-version",1);String p="entries."+e.id()+".";y.set(p+"owner",e.owner().toString());y.set(p+"world",e.cell().world());y.set(p+"x",e.cell().x());y.set(p+"y",e.cell().y());y.set(p+"z",e.cell().z());y.set(p+"yaw",e.yaw());y.set(p+"item",e.item());y.set(p+"phase","PLACED");Files.writeString(file,y.saveToString());
-        var journal=new TrophyJournal(file,20);var restored=journal.at(e.cell());assertEquals(Face.UP,restored.face());assertEquals(e.yaw(),restored.yaw());assertEquals(e.item(),restored.item());journal.replace(restored,restored.returning(e.owner()));assertEquals(Face.UP,new TrophyJournal(file,20).entries().get(e.id()).face());assertEquals(3,org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(file.toFile()).getInt("schema-version"));
+        var journal=new TrophyJournal(file,20);var restored=journal.at(e.cell());assertEquals(Face.UP,restored.face());assertEquals(e.yaw(),restored.yaw());assertEquals(e.item(),restored.item());journal.replace(restored,restored.returning(e.owner()));assertEquals(Face.UP,new TrophyJournal(file,20).entries().get(e.id()).face());assertEquals(4,org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(file.toFile()).getInt("schema-version"));
     }
     @Test public void allSixFacesPersistAndCannotChangeDuringCustodyTransfer()throws Exception {
         for(var face:Face.values()){
@@ -49,17 +49,17 @@ public class TrophyJournalTest {
         }
     }
     @Test public void wideSignReservesEveryCellAndRestoresAcrossChunkBoundaries()throws Exception {
-        for(int yaw:new int[]{0,90,180,270}){
+        for(int width:new int[]{3,5})for(int yaw:new int[]{0,90,180,270}){
             var file=Files.createTempDirectory("sign").resolve("data.yml");var journal=new TrophyJournal(file,20);
-            var e=new Entry(UUID.randomUUID(),UUID.randomUUID(),new Cell("minecraft:devworld",15,80,15),yaw,Face.SOUTH,"YWJj",Phase.PREPARED,3);
-            journal.reserve(e);assertEquals(3,e.cells().size());assertTrue(e.cells().contains(e.cell()));
+            var e=new Entry(UUID.randomUUID(),UUID.randomUUID(),new Cell("minecraft:devworld",15,80,15),yaw,Face.SOUTH,"YWJj",Phase.PREPARED,width);
+            journal.reserve(e);assertEquals(width,e.cells().size());assertTrue(e.cells().contains(e.cell()));
             for(var cell:e.cells()){
                 assertEquals(e,new TrophyJournal(file,20).at(cell));
                 assertEquals(80,cell.y());if(yaw%180==0)assertEquals(15,cell.z());else assertEquals(15,cell.x());
                 var overlap=new Entry(UUID.randomUUID(),e.owner(),cell,yaw,e.item(),Phase.PREPARED);
                 assertThrows(IllegalStateException.class,()->journal.reserve(overlap));
             }
-            journal.replace(e,e.placed());var placed=new TrophyJournal(file,20).at(e.cell());assertEquals(3,placed.width());
+            journal.replace(e,e.placed());var placed=new TrophyJournal(file,20).at(e.cell());assertEquals(width,placed.width());
             var changed=new Entry(e.id(),e.owner(),e.cell(),yaw,e.face(),e.item(),Phase.RETURNING,1);
             assertThrows(IllegalStateException.class,()->journal.replace(placed,changed));
             journal.replace(placed,placed.returning(e.owner()));for(var cell:e.cells())assertNull(journal.at(cell));
@@ -69,5 +69,32 @@ public class TrophyJournalTest {
         var file=Files.createTempDirectory("old-decoration").resolve("data.yml");var journal=new TrophyJournal(file,20);var e=entry();journal.reserve(e);
         var yaml=org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(file.toFile());yaml.set("schema-version",2);yaml.set("entries."+e.id()+".width",null);Files.writeString(file,yaml.saveToString());
         var restored=new TrophyJournal(file,20).at(e.cell());assertEquals(1,restored.width());assertEquals(List.of(e.cell()),restored.cells());
+    }
+    @Test public void tallSignsReserveEveryLevelAndRejectFootprintChanges()throws Exception {
+        var file=Files.createTempDirectory("tall-sign").resolve("data.yml");
+        var journal=new TrophyJournal(file,20);
+        var e=new Entry(UUID.randomUUID(),UUID.randomUUID(),new Cell("minecraft:devworld",15,80,15),90,Face.SOUTH,"YWJj",Phase.PREPARED,1,4);
+        journal.reserve(e);
+        assertEquals(List.of(80,81,82,83),e.cells().stream().map(Cell::y).toList());
+        for(var cell:e.cells()) {
+            assertEquals(e,new TrophyJournal(file,20).at(cell));
+            var overlap=new Entry(UUID.randomUUID(),e.owner(),cell,0,e.item(),Phase.PREPARED);
+            assertThrows(IllegalStateException.class,()->journal.reserve(overlap));
+        }
+        journal.replace(e,e.placed());
+        var placed=new TrophyJournal(file,20).at(e.cell());
+        var changed=new Entry(e.id(),e.owner(),e.cell(),e.yaw(),e.face(),e.item(),Phase.RETURNING,1,1);
+        assertThrows(IllegalStateException.class,()->journal.replace(placed,changed));
+        journal.replace(placed,placed.returning(e.owner()));
+        assertEquals(4,new TrophyJournal(file,20).entries().get(e.id()).height());
+        for(var cell:e.cells())assertNull(journal.at(cell));
+    }
+    @Test public void schemaThreeCratesKeepTheirOriginalCells()throws Exception {
+        var file=Files.createTempDirectory("old-sign").resolve("data.yml");var journal=new TrophyJournal(file,20);
+        var e=new Entry(UUID.randomUUID(),UUID.randomUUID(),new Cell("minecraft:devworld",15,80,15),0,Face.SOUTH,"YWJj",Phase.PREPARED,3);
+        journal.reserve(e);
+        var yaml=org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(file.toFile());
+        yaml.set("schema-version",3);yaml.set("entries."+e.id()+".height",null);Files.writeString(file,yaml.saveToString());
+        assertEquals(e,new TrophyJournal(file,20).at(e.cell()));
     }
 }
