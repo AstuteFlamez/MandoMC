@@ -3,11 +3,31 @@ items:
   koth_crate_key:
     material: TRIPWIRE_HOOK
     custom-model-data: 0
-    name: '<gold>KOTH Crate Key'
+    name: <gold>KOTH Crate Key
     rarity: epic
     category: keys
     lore:
-      - '<gray>Earned by winning King of the Hill.'
-      - ''
-      - '<yellow>/crates open koth'
+    - <gray>Earned by winning King of the Hill.
+    - ''
+    - <yellow>/crates open koth
     item-model: mandomc:legacy/wayfarer_crate_key
+  black_kyber:
+    material: AMETHYST_SHARD
+    name: <dark_gray>Black Kyber Crystal
+    rarity: mythic
+    category: crystals
+    custom-model-data: 0
+    item-model: mandomc:legacy/black_kyber
+    lore:
+    - <gray>A rare crystal won at KOTH.
+    - <gray>Required to craft the Darksaber.
+  saber_forge:
+    material: SMITHING_TABLE
+    name: <gold>Saber Forge
+    rarity: epic
+    category: tools
+    custom-model-data: 0
+    item-model: minecraft:smithing_table
+    lore:
+    - <gray>Place to upgrade your lightsabers.
+    - <yellow>Hold a saber and use the forge.

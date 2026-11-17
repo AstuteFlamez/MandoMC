@@ -74,6 +74,7 @@ public final class JawaSellInventory implements Listener, AutoCloseable {
         var info=new ItemStack(Material.BOOK);var meta=info.getItemMeta();meta.displayName(label("buyer-info-title"));
         meta.lore(text.getStringList("buyer-info-lines").stream().map(line->MiniMessage.miniMessage().deserialize(line).decoration(TextDecoration.ITALIC,false)).toList());info.setItemMeta(meta);tray.inventory.setItem(27,info);
         var close=new ItemStack(Material.BARRIER);meta=close.getItemMeta();meta.displayName(label("buyer-close"));close.setItemMeta(meta);tray.inventory.setItem(35,close);
+        var back=new ItemStack(Material.CHEST);back.editMeta(m->m.displayName(label("gray-back")));tray.inventory.setItem(28,back);
         refresh(tray);player.openInventory(tray.inventory);
         if(player.getOpenInventory().getTopInventory().getHolder()==tray){sessions.put(player.getUniqueId(),tray);persist(player,tray);}
     }
@@ -155,6 +156,7 @@ public final class JawaSellInventory implements Listener, AutoCloseable {
         boolean denied=event.isCancelled();event.setCancelled(true);
         if(denied || !(event.getWhoClicked() instanceof Player player) || !active(player,tray) || tray.locked)return;
         int raw=event.getRawSlot();
+        if(raw==28 && !tray.practice){Bukkit.getScheduler().runTask(plugin,()->{var entity=Bukkit.getEntity(tray.jawa);player.closeInventory();if(entity instanceof LivingEntity jawa)plugin.jawas().open(player,jawa);});return;}
         if(raw==35){tray.locked=true;Bukkit.getScheduler().runTask(plugin,()->player.closeInventory());return;}
         if(raw==31 && event.getClick()==ClickType.LEFT){tray.locked=true;Bukkit.getScheduler().runTask(plugin,()->sell(player,tray));return;}
         if(!mutable(raw))return;

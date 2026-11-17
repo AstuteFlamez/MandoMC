@@ -56,6 +56,7 @@ public final class TravelGuides implements Listener, AutoCloseable {
         tutorial = Objects.requireNonNull(plugin.getCommand("tutorial"));
         if (warp.getPlugin() != plugin || tutorial.getPlugin() != plugin) throw new IllegalStateException("Guide commands must retain native owners");
         for (String id : List.of("rebel_pilot", "cassian_andor")) {
+            if(id.equals("cassian_andor") && config.getBoolean("replace-cassian-with-protocol-droid",false))continue;
             ConfigurationSection c = Objects.requireNonNull(config.getConfigurationSection("npcs." + id));
             World world = Objects.requireNonNull(Bukkit.getWorld(Objects.requireNonNull(NamespacedKey.fromString(c.getString("world", "")))));
             for (String key : List.of("x", "y", "z", "yaw", "pitch"))
@@ -79,7 +80,7 @@ public final class TravelGuides implements Listener, AutoCloseable {
         } catch (RuntimeException error) { removeAll(); throw error; }
         Bukkit.getPluginManager().registerEvents(this, plugin);
         task = Bukkit.getScheduler().runTaskTimer(plugin, this::tick, 2, 2);
-        plugin.getLogger().info("Travel guides ready: Rebel pilot and Cassian Andor at saved anchors.");
+        plugin.getLogger().info("Travel guides ready at saved anchors.");
     }
     public static String day(Clock clock) { return LocalDate.now(clock).toString(); }
     public Map<String, Mannequin> bodies() {

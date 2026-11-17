@@ -1,0 +1,150 @@
+# Reviewed voting presentation; listener identity and vote history remain private.
+AutoCreateVoteSites: false
+AllowUnjoined: false
+DataStorage: SQLITE
+ProcessRewards: true
+VoteBroadcast:
+  Type: EVERY_VOTE
+  Duration: 2m
+  MaxSitesListed: 0
+  Format:
+    BroadcastMsg: '&e&lᴍᴀɴᴅᴏᴍᴄ &8» &f%player% &7voted on &f%site%&7. Use &b/vote &7to earn rewards.'
+    Header: '&e&lᴍᴀɴᴅᴏᴍᴄ &8» &f%player% &7voted on &f%sites_count% &7sites:'
+    ListLine: '&e&lᴍᴀɴᴅᴏᴍᴄ &8» &f%site%'
+Format:
+  NoPerms: '&c&lᴍᴀɴᴅᴏᴍᴄ &8» &7You do not have permission to do that.'
+  Commands:
+    Vote:
+      Text:
+      - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Each vote gives &f500 credits &7and &f1 Voting Crate key&7.'
+      AutoInputSites: true
+      OnlyShowSitesToVote: false
+      Sites: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &f%SiteName% &8» &b%url%'
+      ForceLinks: true
+      Next:
+        Title: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Next votes for &f%player%&7:'
+        Layout: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &f%SiteName% &8» &7%info%'
+        Info:
+          CanVote: Ready to vote
+          TimeUntilVote: '%hours%h %minutes%m remaining'
+          Error: Vote time unavailable
+          VoteDelayDaily: '%hours%h %minutes%m remaining'
+      Last:
+        Title: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Last votes for &f%player%&7:'
+        Line: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &f%SiteName% &8» &7%timeSince%'
+      Total:
+      - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7&f%player%&7 Total Votes:'
+      - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Daily Total: &f%DailyTotal%&7'
+      - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Weekly Total: &f%WeeklyTotal%&7'
+      - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Monthly Total: &f%MonthlyTotal%&7'
+      - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7AllTime Total: &f%AllTimeTotal%&7'
+      TotalAll:
+      - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Server Total Votes:'
+      - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Daily Total: &f%DailyTotal%&7'
+      - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Weekly Total: &f%WeeklyTotal%&7'
+      - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Monthly Total: &f%MonthlyTotal%&7'
+      - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7AllTime Total: &f%AllTimeTotal%&7'
+      Top:
+        Title: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Top &f%Top%&7 Voters &f%page%&7/&f%maxpages%&7'
+        Line: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7&f%num%&7: &f%player%&7, &f%votes%&7'
+      Help:
+        Title: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Voting Player Help'
+        Line: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7&f%Command%&7 - &f%HelpMessage%&7'
+        HoverColor: AQUA
+        RequirePermission: true
+      Best:
+        Title: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7&f%player%&7 Best Votes'
+        Lines:
+        - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Highest Daily Total: &f%HighestDailyTotal%&7'
+        - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Highest Week Total: &f%HighestWeeklyTotal%&7'
+        - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Highest Month Total: &f%HighestMonthlyTotal%&7'
+      Streak:
+        Title: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7&f%player%&7 Vote Streak'
+        Lines:
+        - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Current Daily Streak: &f%DailyStreak%&7'
+        - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Current Week Streak: &f%WeeklyStreak%&7'
+        - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Current Month Streak: &f%MonthlyStreak%&7'
+        - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Highest Streaks:'
+        - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Highest Daily Streak: &f%BestDailyStreak%&7'
+        - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Highest Week Streak: &f%BestWeeklyStreak%&7'
+        - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Highest Month Streak: &f%BestMonthlyStreak%&7'
+      Today:
+        Title:
+        - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Today''s Votes &f%page%&7/&f%maxpage%&7'
+        - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7PlayerName : VoteSite : Time'
+        Line: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7&f%player%&7 : &f%VoteSite%&7 : &f%Time%&7'
+      Party:
+      - '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Currently at &f%Votes%&7, &f%NeededVotes%&7 more votes to go to reach &f%VotesRequired%&7'
+      Points: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7&f%Player%&7 currently has &f%Points%&7 Points!'
+      ToggleBroadcasts:
+        Enabled: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7You will now see vote broadcasts'
+        Disabled: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7You will no longer see vote broadcasts'
+      ToggleReminders:
+        Enabled: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Vote reminders enabled'
+        Disabled: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Vote reminders disabled'
+  NotNumber: '&c&lᴍᴀɴᴅᴏᴍᴄ &8» &7Error on &f%arg%&7, number expected!'
+  UserNotExist: '&c&lᴍᴀɴᴅᴏᴍᴄ &8» &7User does not exist: &f%player%&7'
+  InvFull: '&c&lᴍᴀɴᴅᴏᴍᴄ &8» &7Inventory full'
+  InvalidCommand:
+    Vote: '&c&lᴍᴀɴᴅᴏᴍᴄ &8» &cUnknown vote command. Use /vote help.'
+  TopVoterAwardMsg: '&6&lᴍᴀɴᴅᴏᴍᴄ &8» &7You came in &f%place%&7 in top voters of the month! Here is an award!'
+VoteReminderOptions:
+  Enabled: true
+  StopAfterMatch: true
+  GlobalCooldown: 10m
+  DefaultPriority: 0
+  Defaults:
+    Cooldown: 0
+    Delay: 0
+    Conditions: null
+    Rewards:
+      Messages:
+        Player: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7You can vote on &f%sitesavailable% &7sites. Use &b/vote&7.'
+VoteReminders:
+  OnLogin:
+    Type: LOGIN
+    Priority: 50
+    Delay: 3s
+    Cooldown: 3m
+    Conditions:
+      CanVoteAny: true
+    Rewards:
+      Messages:
+        Player: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Welcome back! You can vote now on &f%sitesavailable%&7 sites.'
+  FirstJoinWelcome:
+    Type: FIRST_JOIN
+    Priority: 60
+    Delay: 2s
+    Cooldown: 0
+    Rewards:
+      Messages:
+        Player: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Welcome! Type /vote to see vote sites.'
+  IntervalPing:
+    Type: INTERVAL
+    Priority: 10
+    Interval: 30m
+    Cooldown: 2h
+    Conditions:
+      CanVoteAny: true
+      MinOnlineTime: 10m
+    Rewards:
+      Messages:
+        Player: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7Reminder: you can vote on &f%sitesavailable%&7 sites.'
+  CooldownAnySite:
+    Type: COOLDOWN_END_ANY_SITE
+    Priority: 35
+    Cooldown: 1h
+    Conditions:
+      CanVoteAny: true
+    Rewards:
+      Messages:
+        Player: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7A vote site is available again!'
+  CooldownAllSites:
+    Type: COOLDOWN_END_ALL_SITES
+    Priority: 45
+    Cooldown: 2h
+    Conditions:
+      CanVoteAll: true
+    Rewards:
+      Messages:
+        Player: '&b&lᴍᴀɴᴅᴏᴍᴄ &8» &7All vote sites are available again!'

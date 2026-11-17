@@ -10,17 +10,22 @@ import org.bukkit.scheduler.BukkitTask;
 /** Starts after the existing world/territory/model owners; supplies one typed scenery service. */
 public final class DecorFeature implements AutoCloseable {
     private final MandoPlugin plugin;
-    private final BukkitTask startup;
+    private BukkitTask startup;
+    private int attempts;
     private DecorService service;
     private TravelGuides guides;
     private AmbientMassiffs massiffs;
     public DecorFeature(MandoPlugin plugin){
         this.plugin=plugin;
-        startup=Bukkit.getScheduler().runTask(plugin,()->{
+        startup=Bukkit.getScheduler().runTaskTimer(plugin,()->{
             try{
-                if(Bukkit.getServicesManager().load(DecorService.class)!=null){plugin.getLogger().warning("Spawn decor already has an owner; duplicate startup ignored.");return;}
+                if(Bukkit.getServicesManager().load(DecorService.class)!=null){startup.cancel();plugin.getLogger().warning("Spawn decor already has an owner; duplicate startup ignored.");return;}
                 var file=new File(plugin.getDataFolder(),"decor/placements.yml");if(!file.exists())plugin.saveResource("decor/placements.yml",false);
-                var config=new YamlConfiguration();config.load(file);if(!config.getBoolean("enabled",false))return;
+                var config=new YamlConfiguration();config.load(file);if(!config.getBoolean("enabled",false)){startup.cancel();return;}
+                if(config.getMapList("placements").stream().anyMatch(row->!net.mandomc.integrations.models.DecorModel.available(java.util.Objects.toString(row.get("model"),"")))){
+                    if(++attempts<40)return;
+                    throw new IllegalStateException("Spawn decoration models were not ready within 20 seconds");
+                }
                 service=new DecorService(plugin,config);Bukkit.getServicesManager().register(DecorService.class,service,plugin,ServicePriority.Normal);
                 var guideFile=new File(plugin.getDataFolder(),"decor/travel-guides.yml");
                 if(!guideFile.exists())plugin.saveResource("decor/travel-guides.yml",false);
@@ -33,8 +38,9 @@ public final class DecorFeature implements AutoCloseable {
                     massiffs=new AmbientMassiffs(plugin,guideConfig.getConfigurationSection("massiffs"));
                     Bukkit.getServicesManager().register(AmbientMassiffs.class,massiffs,plugin,ServicePriority.Normal);
                 }
-            }catch(Exception error){plugin.getLogger().log(java.util.logging.Level.SEVERE,"Spawn decoration unavailable; existing gameplay owners retained",error);}
-        });
+                startup.cancel();
+            }catch(Exception error){startup.cancel();plugin.getLogger().log(java.util.logging.Level.SEVERE,"Spawn decoration unavailable; existing gameplay owners retained",error);}
+        },1,10);
         if(Bukkit.getServicesManager().load(DecorFeature.class)==null)Bukkit.getServicesManager().register(DecorFeature.class,this,plugin,ServicePriority.Normal);
     }
     public static void start(MandoPlugin plugin){if(Bukkit.getServicesManager().load(DecorFeature.class)==null)new DecorFeature(plugin);}

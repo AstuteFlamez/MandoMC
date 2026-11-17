@@ -10,19 +10,19 @@ drops:
     weapon-chance: 0.2
     ammo: standard_plasma_cells
     ammo-chance: 0.5
-    ammo-rolls: 3
+    ammo-rolls: 20
   TwilekGuard:
     weapon: a280
     weapon-chance: 0.2
     ammo: standard_plasma_cells
     ammo-chance: 0.5
-    ammo-rolls: 3
+    ammo-rolls: 20
   BobaFett:
     weapon: ee3
     weapon-chance: 0.5
     ammo: standard_plasma_cells
     ammo-chance: 0.5
-    ammo-rolls: 3
+    ammo-rolls: 20
     equipment:
       boba_jetpack: 0.10
       boba_flamethrower: 0.15
@@ -31,7 +31,7 @@ drops:
     weapon-chance: 0.12
     ammo: ionized_energy_cells
     ammo-chance: 0.5
-    ammo-rolls: 3
+    ammo-rolls: 20
     salvage:
       minimum: 1
       maximum: 2

@@ -31,5 +31,11 @@
     "quantity": "<red>Use a whole-item quantity from 1 to 2304.",
     "usage": "<yellow>/mmc give [player] [item] [quantity]",
     "console-item-required": "<yellow>Console usage: /mandomc give <player> <item> [quantity]"
+  },
+  "vehicles": {
+    "recall-usage": "<yellow>Use /vehicle recall to return your deployed vehicle to your inventory.",
+    "recall-none": "<yellow>You have no deployed vehicle to recall.",
+    "recall-temporary": "<yellow>Leave staff mode or your tutorial before recalling your survival vehicle.",
+    "already-deployed": "<red>Pack your deployed vehicle or use /vehicle recall before placing another. The server vehicle limit may also be full."
   }
 }

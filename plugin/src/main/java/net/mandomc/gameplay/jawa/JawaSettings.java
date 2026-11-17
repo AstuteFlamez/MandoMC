@@ -6,7 +6,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 /** Immutable offers and bounded population settings; prices represent one explicitly sized bundle. */
 public record JawaSettings(List<String> worlds, int interval, int cap, int minimum, int maximum,
-        int minDistance, int maxDistance, int lifetime, int offers, List<Offer> supplies, List<Offer> purchases, List<Category> categories) {
+        int minDistance, int maxDistance, int lifetime, int offers, List<Offer> supplies, List<Offer> purchases, List<Category> categories, List<Offer> basicComponents, List<Offer> advancedComponents, int advancedMinimum, int advancedMaximum) {
     public record Offer(String id, String item, int amount, long price) { }
     public record Category(String id,String name,List<Offer> offers) {
         public Category { offers=List.copyOf(offers); }
@@ -42,7 +42,11 @@ public record JawaSettings(List<String> worlds, int interval, int cap, int minim
         if(categories.isEmpty() || !assigned.equals(byId.keySet()))throw new IllegalArgumentException("mobs/jawas.yml: every supply must belong to exactly one category");
         if(maximum>categories.size())throw new IllegalArgumentException("mobs/jawas.yml: group-max exceeds category count; each group member needs a different category");
         int offers=categories.stream().mapToInt(c->c.offers().size()).max().orElseThrow();
-        return new JawaSettings(List.copyOf(worlds),interval,cap,minimum,maximum,near,far,lifetime,offers,supplies,purchases,List.copyOf(categories));
+        var basic=offers(config,"shop.components.basic");var advanced=offers(config,"shop.components.advanced");
+        int advancedMin=config.getInt("shop.components.advanced-minimum"), advancedMax=config.getInt("shop.components.advanced-maximum");
+        if(basic.isEmpty() || advancedMin<0 || advancedMax<advancedMin || advancedMax>advanced.size() || basic.size()+advancedMax>27)
+            throw new IllegalArgumentException("mobs/jawas.yml: invalid encounter components");
+        return new JawaSettings(List.copyOf(worlds),interval,cap,minimum,maximum,near,far,lifetime,offers,supplies,purchases,List.copyOf(categories),basic,advanced,advancedMin,advancedMax);
     }
     private static List<Offer> offers(ConfigurationSection root,String path) {
         var section=Objects.requireNonNull(root.getConfigurationSection(path),path); var result=new ArrayList<Offer>();
@@ -58,6 +62,8 @@ public record JawaSettings(List<String> worlds, int interval, int cap, int minim
     public Category category(long seed) { return categories.get(new Random(seed).nextInt(categories.size())); }
     public Category category(String id) { return categories.stream().filter(c->c.id().equals(id)).findFirst().orElse(null); }
     public List<Offer> stock(long seed) {
-        return category(seed).offers();
+        var result=new ArrayList<>(basicComponents);var pool=new ArrayList<>(advancedComponents);
+        var random=new Random(seed);Collections.shuffle(pool,random);
+        int count=random.nextInt(advancedMinimum,advancedMaximum+1);result.addAll(pool.subList(0,count));return List.copyOf(result);
     }
 }

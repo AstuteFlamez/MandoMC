@@ -748,7 +748,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         }
         if (session.progress.step() == Step.BUY && session.entities.contains(entity) && mobs.type(entity).equals("JawaBrown")) {
             var menu = new Menu(player, MenuKind.BUY, text("menus.buy"), plugin.warps());
-            var item = new ItemStack(Material.STRING, 16);
+            var item = plugin.items().create("wiring_coil");
             item.editMeta(meta -> { meta.displayName(text("menus.saplings")); meta.lore(List.of(text("menus.buy-hint"))); });
             menu.inventory.setItem(13, item); menu.inventory.setItem(31, icon(Material.GOLD_NUGGET, "menus.wallet"));
             player.openInventory(menu.inventory);
@@ -857,7 +857,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         if (session == null) { event.setCancelled(true); return; }
         if (event.getInventory().getHolder() instanceof Menu menu && menu.owner.equals(player.getUniqueId())) return;
         if (Set.of(Step.RECIPES, Step.MINING, Step.SMELTING, Step.CRAFTING).contains(session.progress.step()) && RecipeGuide.isMenu(event.getInventory())) {
-            if (session.progress.step() != Step.RECIPES || RecipeGuide.isCategory(event.getInventory(), "weapons")) session.recipeSeen = true;
+            if (session.progress.step() != Step.RECIPES || RecipeGuide.isCategory(event.getInventory(), "lightsabers")) session.recipeSeen = true;
             return;
         }
         if (session.progress.step() == Step.SELL && event.getInventory().getHolder() instanceof net.mandomc.gameplay.jawa.JawaSellInventory.Tray) return;
@@ -878,7 +878,8 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
             if (menu.kind == MenuKind.WARP && slot == menu.continueSlot && session.progress.step() == Step.WARP) {
                 Bukkit.getScheduler().runTask(plugin, () -> { if (sessions.get(player.getUniqueId()) == session) { player.closeInventory(); advance(session, Step.WARP); } });
             } else if (menu.kind == MenuKind.BUY && slot == 13 && session.progress.step() == Step.BUY && session.wallet >= 24) {
-                session.wallet -= 24; player.getInventory().setItem(0, new ItemStack(Material.STRING, 16));
+                session.wallet -= 24; player.getInventory().setItem(0, plugin.items().create("wiring_coil"));
+                player.getInventory().addItem(new ItemStack(Material.STRING,16));
                 Bukkit.getScheduler().runTask(plugin, () -> { if (sessions.get(player.getUniqueId()) == session) { player.closeInventory(); advance(session, Step.BUY); } });
             } else if (menu.kind == MenuKind.SELL && session.progress.step() == Step.SELL) sellClick(session, menu, event);
             return;

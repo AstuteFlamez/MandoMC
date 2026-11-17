@@ -73,13 +73,6 @@ public final class RancorTrophies implements Listener,AutoCloseable {
     private boolean helmet(Entry entry){return helmet(decode(entry));}
     private ItemStack decode(Entry entry){var item=ItemStack.deserializeBytes(Base64.getDecoder().decode(entry.item()));if(!decoration(item)||item.getAmount()!=1||(entry.width()!=(sign(item)?shape(item).width():1)||entry.height()!=(sign(item)?shape(item).height():1)))throw new IllegalArgumentException("Invalid saved trophy item: "+entry.id());return item;}
     private String kind(ItemStack item){return sign(item)?"sign-text.":helmet(item)?"helmet-text.":"text.";}
-    private void tell(Player p,String key){
-        if(p==null||!p.isOnline())return;
-        String prefix=kind(p.getInventory().getItemInMainHand());
-        if(!decoration(p.getInventory().getItemInMainHand()))prefix=kind(p.getInventory().getItemInOffHand());
-        for(var e:journal.entries().values())if(e.owner().equals(p.getUniqueId())){prefix=kind(decode(e));break;}
-        tell(p,key,prefix);
-    }
     private void tell(Player p,String key,String prefix){
         if(p!=null&&p.isOnline())p.sendMessage(MiniMessage.miniMessage().deserialize(config.getString(prefix+key,config.getString("text."+key))));
     }
@@ -131,10 +124,13 @@ public final class RancorTrophies implements Listener,AutoCloseable {
     }
     public void place(Player player,Block site,EquipmentSlot hand){place(player,site,hand,Face.UP,site.getRelative(BlockFace.DOWN));}
     public void place(Player player,Block site,EquipmentSlot hand,Face face,Block against){
-        if(closed||hand==null||players.containsKey(player.getUniqueId())||reservations.containsKey(cell(site))||journal.at(cell(site))!=null){tell(player,"busy");return;}
-        var held=player.getInventory().getItem(hand);if(!decoration(held)||!nearby(player,site))return;
-        if(!clear(site)){tell(player,"space");return;}
-        if(!zoneEdits.test(player,site.getLocation())){tell(player,"denied");return;}
+        if(hand==null)return;
+        var held=player.getInventory().getItem(hand);if(!decoration(held))return;
+        String messageKind=kind(held);
+        if(closed||players.containsKey(player.getUniqueId())||reservations.containsKey(cell(site))||journal.at(cell(site))!=null){tell(player,"busy",messageKind);return;}
+        if(!nearby(player,site))return;
+        if(!clear(site)){tell(player,"space",messageKind);return;}
+        if(!zoneEdits.test(player,site.getLocation())){tell(player,"denied",messageKind);return;}
         var stack=held.clone();stack.setAmount(1);
         int yaw=switch(face){case NORTH->180;case SOUTH->0;case EAST->270;case WEST->90;default->Math.floorMod(Math.round(player.getYaw()/90)*90+180,360);};
         var shape=shape(stack);
@@ -142,25 +138,25 @@ public final class RancorTrophies implements Listener,AutoCloseable {
         var anchor=cell(site);
         if(shape!=null&&face==Face.DOWN)anchor=new Cell(anchor.world(),anchor.x(),anchor.y()-shape.height()+1,anchor.z());
         var entry=new Entry(UUID.randomUUID(),player.getUniqueId(),anchor,yaw,face,Base64.getEncoder().encodeToString(stack.serializeAsBytes()),Phase.PREPARED,shape==null?1:shape.width(),shape==null?1:shape.height());
-        if(entry.cells().stream().anyMatch(c->reservations.containsKey(c)||journal.at(c)!=null)){tell(player,"busy");return;}
-        if(!clear(entry)){tell(player,"space");return;}
-        if(!editable(player,entry)){tell(player,"denied");return;}
-        operations.add(entry.id());players.put(player.getUniqueId(),entry.id());for(var cell:entry.cells())reservations.put(cell,entry.id());tell(player,"placing");
+        if(entry.cells().stream().anyMatch(c->reservations.containsKey(c)||journal.at(c)!=null)){tell(player,"busy",messageKind);return;}
+        if(!clear(entry)){tell(player,"space",messageKind);return;}
+        if(!editable(player,entry)){tell(player,"denied",messageKind);return;}
+        operations.add(entry.id());players.put(player.getUniqueId(),entry.id());for(var cell:entry.cells())reservations.put(cell,entry.id());tell(player,"placing",messageKind);
         io(entry.id(),()->{journal.reserve(entry);return null;},(v,error)->{
-            if(error!=null){release(entry);tell(player,"save-failed");return;}
+            if(error!=null){release(entry);tell(player,"save-failed",messageKind);return;}
             var current=player.getInventory().getItem(hand);
-            if(!nearby(player,site)||!decoration(current)||!current.isSimilar(stack)||!clear(entry)||!editable(player,entry)){abort(entry);tell(player,"denied");return;}
+            if(!nearby(player,site)||!decoration(current)||!current.isSimilar(stack)||!clear(entry)||!editable(player,entry)){abort(entry);tell(player,"denied",messageKind);return;}
             var remaining=current.clone();remaining.subtract(1);player.getInventory().setItem(hand,remaining.isEmpty()?null:remaining);addReceipt(player,entry.placeReceipt());
-            try{player.saveData();}catch(RuntimeException failure){release(entry);tell(player,"save-failed");plugin.getLogger().log(java.util.logging.Level.SEVERE,"Trophy player snapshot failed; prepared custody retained",failure);return;}
+            try{player.saveData();}catch(RuntimeException failure){release(entry);tell(player,"save-failed",messageKind);plugin.getLogger().log(java.util.logging.Level.SEVERE,"Trophy player snapshot failed; prepared custody retained",failure);return;}
             var placed=entry.placed();
             io(entry.id(),()->{journal.replace(entry,placed);return null;},(ignored,problem)->{
-                if(problem!=null){release(entry);tell(player,"save-failed");return;}
+                if(problem!=null){release(entry);tell(player,"save-failed",messageKind);return;}
                 if(!nearby(player,site)||!clear(entry)||!authorizePlace(player,entry,against,hand,stack)){release(entry);returning(placed,player.getUniqueId());return;}
-                install(placed,Objects.requireNonNull(loaded(placed.cell())));release(entry);tell(player,"placed");prune(player);
+                install(placed,Objects.requireNonNull(loaded(placed.cell())));release(entry);tell(player,"placed",messageKind);prune(player);
             });
         });
     }
-    private void abort(Entry entry){io(entry.id(),()->{journal.remove(entry);return null;},(v,error)->{release(entry);if(error!=null)tell(Bukkit.getPlayer(entry.owner()),"save-failed");});}
+    private void abort(Entry entry){io(entry.id(),()->{journal.remove(entry);return null;},(v,error)->{release(entry);if(error!=null)tell(Bukkit.getPlayer(entry.owner()),"save-failed",kind(decode(entry)));});}
     private boolean clear(Entry entry){return entry.cells().stream().allMatch(c->{var b=loaded(c);return b!=null&&clear(b);});}
     private boolean editable(Player player,Entry entry){return entry.cells().stream().allMatch(c->{var b=loaded(c);return b!=null&&zoneEdits.test(player,b.getLocation());});}
     private boolean authorizePlace(Player player,Entry entry,Block against,EquipmentSlot hand,ItemStack item){
@@ -218,7 +214,7 @@ public final class RancorTrophies implements Listener,AutoCloseable {
     }
     private void returning(Entry entry,UUID recipient){
         if(operations.contains(entry.id()))return;operations.add(entry.id());var next=entry.returning(recipient);
-        io(entry.id(),()->{journal.replace(entry,next);return null;},(v,error)->{release(entry);if(error==null){removeWorld(next);deliver(next);}else tell(Bukkit.getPlayer(recipient),"save-failed");});
+        io(entry.id(),()->{journal.replace(entry,next);return null;},(v,error)->{release(entry);if(error==null){removeWorld(next);deliver(next);}else tell(Bukkit.getPlayer(recipient),"save-failed",kind(decode(entry)));});
     }
     private void removeWorld(Entry entry){
         for(var cell:entry.cells()){
@@ -232,7 +228,7 @@ public final class RancorTrophies implements Listener,AutoCloseable {
         if(entry.cells().stream().anyMatch(c->{var b=loaded(c);return b!=null&&owned(b,entry);})||operations.contains(entry.id()))return; // RETURNING anchors in unloaded chunks are inert and cleaned on load.
         var player=Bukkit.getPlayer(entry.owner());if(player==null||!player.isOnline()||player.isDead())return;
         if(!receipt(player,entry.returnReceipt())){
-            var stack=decode(entry);if(!fits(player,stack)){tell(player,"pending");return;}
+            var stack=decode(entry);if(!fits(player,stack)){tell(player,"pending",kind(decode(entry)));return;}
             player.getInventory().addItem(stack);addReceipt(player,entry.returnReceipt());
             try{player.saveData();}catch(RuntimeException failure){plugin.getLogger().log(java.util.logging.Level.SEVERE,"Trophy return snapshot failed; receipt retained",failure);return;}
         }else{

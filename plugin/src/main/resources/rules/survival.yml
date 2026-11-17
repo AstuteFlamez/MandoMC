@@ -1,7 +1,7 @@
 schema-version: 1
 # Restart after changing. Native custom saber shields remain usable.
 disable-elytras: true
-disable-enchanting: true
+disable-enchanting: false
 disable-potions: true
 disable-vanilla-weapons: true
 # Custom catalog armor and native crafting/anvil repairs remain available.

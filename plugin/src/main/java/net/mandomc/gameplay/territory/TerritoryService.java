@@ -23,7 +23,14 @@ public final class TerritoryService implements Listener, AutoCloseable {
     private NpcSpawn npcSpawn;
     /** Permit only the explicitly placed NPC's base entity during this server-thread operation. */
     public <T> T spawnNpc(org.bukkit.entity.EntityType type, Location location, java.util.function.Supplier<T> spawn) {
-        if (!org.bukkit.Bukkit.isPrimaryThread() || npcSpawn != null) throw new IllegalStateException("NPC spawn must be a single server-thread operation");
+        return spawnManaged(type, location, spawn);
+    }
+    /** A vehicle base is not a natural mob; placement checks remain owned by VehicleService. */
+    public <T> T spawnVehicle(Location location, java.util.function.Supplier<T> spawn) {
+        return spawnManaged(org.bukkit.entity.EntityType.PIG, location, spawn);
+    }
+    private <T> T spawnManaged(org.bukkit.entity.EntityType type, Location location, java.util.function.Supplier<T> spawn) {
+        if (!org.bukkit.Bukkit.isPrimaryThread() || npcSpawn != null) throw new IllegalStateException("Managed spawn must be a single server-thread operation");
         npcSpawn = new NpcSpawn(type, location.clone());
         try { return spawn.get(); } finally { npcSpawn = null; }
     }

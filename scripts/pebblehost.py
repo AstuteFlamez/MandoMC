@@ -209,6 +209,8 @@ def payload(root=ROOT):
                 target == 'plugins/MandoAccess/config.yml' or
                 target == 'plugins/CoreProtect/config.yml' or
                 target == 'plugins/VotingPlugin/VoteSites.yml' or
+                (target == 'plugins/VotingPlugin/Config.yml' and
+                 item['source'] == 'server/config/common/votingplugin/Config.yml') or
                 (target.startswith('plugins/ModelEngine/blueprints/') and target.endswith('.bbmodel')) or
                 (target.startswith(('plugins/MythicMobs/Mobs/', 'plugins/MythicMobs/Skills/',
                                     'plugins/MythicMobs/RandomSpawns/',
@@ -352,6 +354,10 @@ def voting_listener_ready(log):
     return bool(re.search(r'\[Votifier\] Votifier enabled on socket /(?:0\.0\.0\.0|\[0:0:0:0:0:0:0:0(?:%0)?\]):19132\.', log))
 
 
+def travel_guides_ready(log):
+    return bool(re.search(r'Travel guides ready(?::| at saved anchors\.)', log))
+
+
 def verify_startup(sftp):
     raw = read_remote(sftp, '.mandomc/bootstrap.json')
     if raw is None:
@@ -363,10 +369,12 @@ def verify_startup(sftp):
     log = (read_remote(sftp, log_path) or b'').decode('utf-8', errors='replace')
     required = ('Running Java 25', 'Loading Paper 26.1.2-74', 'Done (',
                 'Arrival enabled:', 'Native clans ready:', 'Native crates ready;',
-                'Redstone circuits disabled outside Ilum', 'Travel guides ready:',
+                'Redstone circuits disabled outside Ilum',
                 'Ambient Massiffs ready:', 'World leaderboards ready:',
                 '[VotingPlugin] Enabled VotingPlugin 7.1.1')
     missing = [text for text in required if text not in log]
+    if not travel_guides_ready(log):
+        missing.append('travel guides at saved anchors')
     if not voting_listener_ready(log):
         missing.append('public voting listener on allocated port 19132')
     if missing or '/ERROR]' in log or '/SEVERE]' in log:

@@ -12,18 +12,23 @@ import org.bukkit.scheduler.BukkitTask;
 /** Owned by command binding lifecycle; leaves the shared deployment bootstrap byte-identical. */
 public final class IlumFeature implements AutoCloseable {
     private final MandoPlugin plugin;
-    private final BukkitTask startup;
+    private BukkitTask startup;
     private CrateService crates;
     private ParkourService parkour;
+    private int attempts;
 
     public IlumFeature(MandoPlugin plugin) {
         this.plugin=plugin;
         // Wait for the existing bootstrap's worlds, catalog, arrival and public travel to finish.
-        startup=Bukkit.getScheduler().runTask(plugin,()->{
+        startup=Bukkit.getScheduler().runTaskTimer(plugin,()->{
             try {
                 for(String resource:List.of("crates/crates.yml","parkour/ilum.yml","items/definitions/crates.yml"))
                     if(!new File(plugin.getDataFolder(),resource).isFile())plugin.saveResource(resource,false);
                 plugin.items().reload();
+                if(!CrateService.catalogReady(plugin.items(),read("crates/crates.yml"))){
+                    if(++attempts<40)return;
+                    throw new IllegalStateException("WeaponMechanics crate rewards were not ready within 20 seconds");
+                }
                 crates=new CrateService(plugin,plugin.items(),read("crates/crates.yml"),
                         player->ParkourInventory.stored(player),plugin.combat()::tagged);
                 Bukkit.getServicesManager().register(CrateService.class,crates,plugin,ServicePriority.Normal);
@@ -32,12 +37,13 @@ public final class IlumFeature implements AutoCloseable {
                     parkour=new ParkourService(plugin,crates,config);
                     Bukkit.getServicesManager().register(ParkourService.class,parkour,plugin,ServicePriority.Normal);
                 }
+                startup.cancel();
                 plugin.getLogger().info("Native crates ready; original Ilum parkour "+(parkour==null?"disabled":"ready"));
             }catch(Exception error){
                 plugin.getLogger().log(java.util.logging.Level.SEVERE,"Ilum/crates unavailable; existing gameplay retained",error);
                 close();
             }
-        });
+        },1,10);
     }
     private YamlConfiguration read(String path)throws Exception{
         var config=new YamlConfiguration();config.load(new File(plugin.getDataFolder(),path));

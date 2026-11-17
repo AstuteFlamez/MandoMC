@@ -20,7 +20,7 @@ public class LegacyRecipesTest {
     @Test public void allRecoveredRecipesResolveWithoutDuplicateItemIds() throws Exception {
         var ids = new HashSet<String>();
         for (String file : java.util.List.of("legacy", "vehicles", "robes", "materials", "sabers", "tusken",
-                "jabba", "jabba-loot", "dioxis", "massiff", "dewback", "vehicle-ammo")) {
+                "koth", "jabba", "jabba-loot", "dioxis", "massiff", "dewback", "vehicle-ammo")) {
             var items = resource("items/definitions/" + file + ".yml").getConfigurationSection("items");
             for (String id : items.getKeys(false)) {
                 assertTrue("Duplicate " + id, ids.add(id));
@@ -50,9 +50,9 @@ public class LegacyRecipesTest {
                 }
             }
         }
-        assertEquals(123, config.getConfigurationSection("recipes").getKeys(false).size());
+        assertEquals(125, config.getConfigurationSection("recipes").getKeys(false).size());
         assertEquals(12, config.getConfigurationSection("smelting").getKeys(false).size());
-        assertEquals(71, config.getConfigurationSection("stonecutting").getKeys(false).size());
+        assertEquals(70, config.getConfigurationSection("stonecutting").getKeys(false).size());
     }
 
     @Test public void kyberComesFromCratesAndPickaxeUsesIngots() throws Exception {

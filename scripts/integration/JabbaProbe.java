@@ -114,12 +114,12 @@ public final class JabbaProbe extends JavaPlugin {
                 else if(item.isSimilar(plugin.items().create("standard_plasma_cells")))a++;
                 else throw new AssertionError("Unexpected guard loot "+item);
             }
-            if(w>1 || a>3 || (id.equals("GamorreanGuard")&&a!=0))throw new AssertionError("Duplicate/wrong guard loot");
+            if(w>1 || a>20 || (id.equals("GamorreanGuard")&&a!=0))throw new AssertionError("Duplicate/wrong guard loot");
             weapons+=w;ammo+=a;
         }
         check(weapons>(id.equals("GamorreanGuard")?180:130) && weapons<(id.equals("GamorreanGuard")?320:270),
                 id+" original weapon drop chance: "+weapons+"/1000");
-        check(id.equals("GamorreanGuard")?ammo==0:ammo>1350&&ammo<1650,id+" independent ammo rolls: "+ammo+" cells");
+        check(id.equals("GamorreanGuard")?ammo==0:ammo>9500&&ammo<10500,id+" independent ammo rolls: "+ammo+" cells");
     }
     private void damage(Mob source,String id) throws Exception {
         var victim=player(source.getLocation().add(0,0,5));

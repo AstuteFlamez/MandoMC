@@ -20,9 +20,10 @@ public final class ClanFeature implements AutoCloseable {
     private final ClanService clans;
     private final FrozenLandPreparation preparation;
     private final ClanCommands commands;
-    private final BukkitTask startup;
+    private BukkitTask startup;
     private CrateService ownedCrates;
     private boolean closed;
+    private int attempts;
 
     public ClanFeature(MandoPlugin plugin) throws Exception {
         this.plugin=plugin;
@@ -33,9 +34,13 @@ public final class ClanFeature implements AutoCloseable {
         clans=new ClanService(plugin,territory,read("clans/settings.yml"),read("language/clans.yml"));
         preparation=new FrozenLandPreparation(plugin,clans);
         commands=new ClanCommands(plugin,clans,plugin.travel());
-        startup=Bukkit.getScheduler().runTask(plugin,()->{
+        startup=Bukkit.getScheduler().runTaskTimer(plugin,()->{
             try {
                 plugin.items().reload();
+                if(!CrateService.catalogReady(plugin.items(),read("crates/crates.yml"))){
+                    if(++attempts<40)return;
+                    throw new IllegalStateException("WeaponMechanics crate rewards were not ready within 20 seconds");
+                }
                 var crates=Bukkit.getServicesManager().load(CrateService.class);
                 if(crates==null) {
                     ownedCrates=new CrateService(plugin,plugin.items(),read("crates/crates.yml"),
@@ -45,9 +50,10 @@ public final class ClanFeature implements AutoCloseable {
                     crates=ownedCrates;
                 }
                 if(!crates.definitions().containsKey("koth"))throw new IllegalStateException("Shared crate service lacks KOTH");
+                startup.cancel();
                 plugin.getLogger().info("Native clans ready: four members, four claims, one-hour raids and shared KOTH crate.");
-            }catch(Exception error){plugin.getLogger().log(java.util.logging.Level.SEVERE,"Clan crate startup failed",error);}
-        });
+            }catch(Exception error){startup.cancel();plugin.getLogger().log(java.util.logging.Level.SEVERE,"Clan crate startup failed",error);}
+        },1,10);
     }
     private YamlConfiguration read(String path)throws Exception {
         var file=new File(plugin.getDataFolder(),path);

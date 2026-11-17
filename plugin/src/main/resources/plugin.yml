@@ -6,6 +6,19 @@ author: AstuteFlamez
 description: MandoMC gameplay
 softdepend: [ packetevents, WorldEdit, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
+  vehicle:
+    description: Recall your deployed vehicle to your inventory
+    usage: /vehicle recall
+    permission: mandomc.arrival
+  recallvehicle:
+    description: Recall your deployed vehicle to your inventory
+    usage: /recallvehicle
+    aliases: [vrecall]
+    permission: mandomc.arrival
+  ask:
+    description: Ask M4-ND a MandoMC question
+    usage: /ask [question]
+    permission: mandomc.arrival
   staff:
     description: Toggle staff mode and restore your survival inventory
     usage: '/staff [on|off]'
