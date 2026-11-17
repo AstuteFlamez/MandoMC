@@ -1,5 +1,13 @@
 # Resume here
 
+## Full gameplay release verified live on production (2026-11-17)
+
+The owner restarted PebbleHost after the approved PR #62 upload. Production is running the exact checked `8fad679` artifact: recipe search, the signed protocol-droid M4-ND with corrected beginner/acquisition guidance and build-pinned knowledge, KOTH equipment/Black Kyber, Jawa component trading and seven titled gray categories, staff-accessible Saber Forge, and Hoth vehicle placement/recall are active. Interplanetary vehicle travel remains deferred.
+
+Active verification passed: healthy Java 25 / Paper 26.1.2-74 startup, gameplay/droid/readiness markers, the exact production JAR, all 131 installed managed hashes, the verified public resource pack, owner-only Groq credential and exact-build public knowledge cache (357 approved sources, 3813 passages). The release receipt is marked active. This follows 367 Java tests, 88 tooling checks, 70 native droid checks and 48 vehicle/restart checks, plus the earlier full gameplay/shop suites. Player-facing appearance and balance still need the owner's client playtest.
+
+Startup deliberately added the seven missing fixed NPC category assignments and serialized `mobs/jawas.yml`. Review confirmed those seven additions were the only semantic differences. The original receipt, uploaded source and resulting configuration were backed up before recording the reviewed runtime hash; the running configuration was left unchanged. The same assignments are now explicit in source so future uploads do not trigger this rewrite. All seven categories are present exactly once, and the source matches production semantically. Managed rollback backups remain available; no player inventories or worlds were reset. Production history is synchronized into dev and hotfix through PRs #63–64; the separate vehicle-only draft #59 is superseded. Next action: client-playtest the released features on production, including M4-ND, gray-Jawa titles, staff forge and `/vehicle recall` on Hoth.
+
 ## Full production release uploaded; restart pending (2026-11-16)
 
 The approved full dev promotion merged through PR #62 to production commit `8fad679`. Its checks, public resource-pack publication and checked upload passed. All 131 staged managed files match the deployment receipt; the production JAR differs from the native-tested dev JAR only in its exact-source knowledge manifest. The public pack download matches the checked artifact and retains SHA-1 `a3b671891cb225943edf916f2c5930926ac801eb`.
