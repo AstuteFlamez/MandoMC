@@ -1,5 +1,11 @@
 # Resume here
 
+## Development playtest corrections verified (2026-11-16)
+
+On `bilal/dev-feedback-fixes`, fixed operation-specific skull/helmet/sign messages, fall-only dropper retries, advancement chat suppression, styled voting broadcasts/reminders/commands, custom recipe-book discovery, separate color-grouped lightsabers, and normal enchanting with Bantha Hide leather compatibility. Dewbacks drop no hide while keeping saddles/food. All four existing ammo sources now average 10 rounds (20 independent 50% rolls); weapon/equipment/salvage chances remain unchanged.
+
+Verification: 346 Java tests, 82 tooling tests and 4,288 native Paper assertions pass; three unrelated NBT tests require CI's nbtlib dependency. The pack builds byte-identically to the pinned release. Native checks include actual enchanting/XP/lapis, anvil books/robe repair, book crafting, herd deaths, mixed decoration custody, Ilum movement, exactly-once vote rewards and 1,000 ammo rolls per source. Current development JAR/config preflight matches the expected baseline; seven scoped files and 18 owned JAR entries will change. Development activation is pending. See [dev feedback](features/dev-feedback-fixes.md). Next action: merge the checked dev PR and deploy the verified scope with a stopped-runtime backup.
+
 ## Ilum damage resets corrected (2026-11-16)
 
 On `bilal/ilum-damage-checkpoint`, environmental damage now reduces health normally at the start and

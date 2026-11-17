@@ -209,6 +209,8 @@ def payload(root=ROOT):
                 target == 'plugins/MandoAccess/config.yml' or
                 target == 'plugins/CoreProtect/config.yml' or
                 target == 'plugins/VotingPlugin/VoteSites.yml' or
+                (target == 'plugins/VotingPlugin/Config.yml' and
+                 item['source'] == 'server/config/common/votingplugin/Config.yml') or
                 (target.startswith('plugins/ModelEngine/blueprints/') and target.endswith('.bbmodel')) or
                 (target.startswith(('plugins/MythicMobs/Mobs/', 'plugins/MythicMobs/Skills/',
                                     'plugins/MythicMobs/RandomSpawns/',

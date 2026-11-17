@@ -857,7 +857,7 @@ public final class InteractiveTutorial implements Listener, AutoCloseable {
         if (session == null) { event.setCancelled(true); return; }
         if (event.getInventory().getHolder() instanceof Menu menu && menu.owner.equals(player.getUniqueId())) return;
         if (Set.of(Step.RECIPES, Step.MINING, Step.SMELTING, Step.CRAFTING).contains(session.progress.step()) && RecipeGuide.isMenu(event.getInventory())) {
-            if (session.progress.step() != Step.RECIPES || RecipeGuide.isCategory(event.getInventory(), "weapons")) session.recipeSeen = true;
+            if (session.progress.step() != Step.RECIPES || RecipeGuide.isCategory(event.getInventory(), "lightsabers")) session.recipeSeen = true;
             return;
         }
         if (session.progress.step() == Step.SELL && event.getInventory().getHolder() instanceof net.mandomc.gameplay.jawa.JawaSellInventory.Tray) return;

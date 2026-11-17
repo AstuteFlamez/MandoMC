@@ -14,7 +14,7 @@ public class JabbaDropsSettingsTest {
                 Objects.requireNonNull(getClass().getResourceAsStream("/mobs/drops/jabba.yml"))));
     }
 
-    @Test public void preservesLegacyIndependentRollsAndBounds() {
+    @Test public void preservesIndependentRollsAndBounds() {
         var settings = JabbaDropsSettings.read(config());
         var random = new Random(36);
         for (String name : settings.mobs().keySet()) {
@@ -30,8 +30,18 @@ public class JabbaDropsSettingsTest {
                 ammo += drops.stream().filter(rule.ammo()::equals).count();
             }
             assertEquals(10000 * rule.weaponChance(), weapons, 150);
-            assertEquals(10000 * rule.ammoRolls() * rule.ammoChance(), ammo, 300);
+            assertEquals(10000 * rule.ammoRolls() * rule.ammoChance(), ammo,
+                    Math.max(1, 6 * Math.sqrt(10000 * rule.ammoRolls() * rule.ammoChance() * (1 - rule.ammoChance()))));
         }
+    }
+
+    @Test public void everyAmmoDroppingMobAveragesTenRounds() {
+        var settings = JabbaDropsSettings.read(config());
+        for (String mob : List.of("QuarrenGuard", "TwilekGuard", "BobaFett", "JawaBrown")) {
+            var rule = settings.mobs().get(mob);
+            assertEquals(mob, 10, rule.ammoRolls() * rule.ammoChance(), .001);
+        }
+        assertEquals(0, settings.mobs().get("GamorreanGuard").ammoRolls());
     }
 
     @Test public void equipmentRollsAreIndependentAndDoNotReplaceOriginalLoot() {

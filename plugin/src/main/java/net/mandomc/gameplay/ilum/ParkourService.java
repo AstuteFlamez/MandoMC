@@ -370,7 +370,7 @@ public final class ParkourService implements Listener, AutoCloseable {
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true) public void move(PlayerMoveEvent event) {
         var player=event.getPlayer();
         if(event instanceof PlayerTeleportEvent||!active(player)||!event.hasChangedPosition())return;
-        if(!damageTrial(player) && (event.getTo().getY()<config.getDouble("fall-y",-90)||player.getFireTicks()>0)){
+        if(!damageTrial(player) && (event.getTo().getY()<config.getDouble("fall-y",-90))){
             event.setTo(checkpoint(player));player.setFireTicks(0);player.setFallDistance(0);return;
         }
         Block block=event.getTo().getBlock();
@@ -391,15 +391,14 @@ public final class ParkourService implements Listener, AutoCloseable {
                 && !(event instanceof org.bukkit.event.entity.EntityDamageByEntityEvent)) return;
         event.setCancelled(true);
         if(!(event.getEntity() instanceof Player player)||!active(player))return;
-        switch(event.getCause()) {
-            case FALL,VOID,FIRE,FIRE_TICK,LAVA,DROWNING,SUFFOCATION,HOT_FLOOR,FREEZE -> {
-                if(retries.add(player.getUniqueId()))Bukkit.getScheduler().runTask(plugin,()->{
-                    retries.remove(player.getUniqueId());if(player.isOnline()&&active(player))retry(player);
-                });
-            }
-            default -> { }
+        // The dropper retries only on landing damage. Other hazards stay cancelled without moving the runner.
+        if(event.getCause()==EntityDamageEvent.DamageCause.FALL) {
+            if(retries.add(player.getUniqueId()))Bukkit.getScheduler().runTask(plugin,()->{
+                retries.remove(player.getUniqueId());if(player.isOnline()&&active(player))retry(player);
+            });
         }
     }
+
     @EventHandler public void death(PlayerDeathEvent event) {if(active(event.getEntity())){event.setKeepInventory(true);event.getDrops().clear();event.setKeepLevel(true);}}
     @EventHandler(priority=EventPriority.HIGHEST) public void respawn(PlayerRespawnEvent event) {if(active(event.getPlayer()))event.setRespawnLocation(checkpoint(event.getPlayer()));}
     @EventHandler(priority=EventPriority.LOWEST) public void controls(PlayerInteractEvent event) {

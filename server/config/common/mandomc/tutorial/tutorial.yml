@@ -64,9 +64,15 @@ steps:
   disband: '<gold>Disband clan: <yellow>/c disband'
   combat: '<gold>Defeat guards: <yellow><kills>/3'
   saber: '<yellow>Sneak + attack: throw your saber'
+<<<<<<< HEAD
   buy: '<gold>Brown Jawa: buy Wiring Coil'
   sell: '<yellow>Gray Jawa: sell 16 String'
   recipes: '<yellow>Recipes: search for an item'
+=======
+  buy: '<gold>Brown Jawa: buy 16 String'
+  sell: <yellow>Follow particles into the shop.
+  recipes: <yellow>/recipes <gray>→ Lightsabers → Close
+>>>>>>> origin/dev
   place: <gold>Hold X-wing; right-click pad.
   flight: '<yellow>Fly <seconds>/<total>s | Mouse: steer'
   right: '<yellow>Hold D: tilt right'
@@ -93,6 +99,7 @@ menus:
   sell-button: <green>Sell items » $6
   close: <red>Return items & close
 holograms:
+<<<<<<< HEAD
   warp: <gold>Choose your first planet<newline><yellow>/warp<newline><white>Compare resources, bases, danger and
     events.<newline><green>Naboo is recommended for your first base.<newline><gray>Click Continue when ready to
     practice mining.
@@ -125,6 +132,36 @@ holograms:
     scrap smelts into one ingot.<newline><yellow>Collect all three ingots.
   crafting: <gold>Craft your first pickaxe<newline><yellow>/recipes → Tools → Agrinium Pickaxe<newline><white>Use
     three ingots and your two sticks.<newline><gray>Craft it at the nearby crafting table.
+=======
+  warp: <gold>Choose your first planet<newline><yellow>/warp<newline><white>Compare resources, bases, danger and events.<newline><green>Naboo
+    is recommended for your first base.<newline><gray>Click Continue when ready to practice mining.
+  create: <gold>Make a home with your clan<newline><white>/c create <name><newline><gray>This practice clan will not affect your real clan.
+  claim: <gold>Protect your base<newline><white>Walk along the path to X 48–63.<newline><yellow>/c claim<newline><gray>Leave one empty chunk beside
+    protected land.
+  disband: <gold>Your practice chunk is claimed<newline><white>/c disband<newline><gray>Disbanding removes the practice clan and its claim.
+  combat: '<gold>Blaster practice<newline><white>Defeat the Gamorrean, Quarren and Twi’lek targets.<newline><yellow>Use: fire · Drop key: reload<newline><gray>Ammo
+    refills when empty.'
+  saber: '<gold>Lightsaber throw practice<newline><yellow>Sneak + attack: hit the Gamorrean.<newline><white>Missed? Catch your saber and retry
+    after one second.<newline><gray>Ilum awards keys for the Kyber crystal crate.'
+  buy: '<gold>Tatooine · Brown Jawa supplies<newline><white>Right-click a brown Jawa.<newline><yellow>Buy 16 String for $24 in practice credits.<newline><gray>Next:
+    visit the real shops on Batuu.'
+  sell: <gold>Gray Jawas buy salvage<newline><white>Find gray Jawas on Batuu (spawn).<newline><white>Right-click the buyer.<newline><yellow>Click
+    your scrap to add it, then click Sell.<newline><gray>Closing the window returns unsold items.
+  recipes: <gold>Craft your equipment<newline><yellow>/recipes<newline><white>Open the Lightsabers category to find gear recipes.<newline><gray>Open
+    Lightsabers, then close the guide to continue.
+  place: <gold>X-wing deployment<newline><white>Your X-wing is in your hotbar.<newline><yellow>Hold it and right-click the training pad.<newline><gray>Place
+    it first, then board and fly.
+  flight: '<gold>X-wing flight training<newline><white>Right-click the X-wing to board.<newline><yellow>Look up and press W to take off; fly for
+    5 seconds<newline><white>Follow one control at a time: W, D, A, then S.<newline><gray>The training ship cannot be lost.'
+  target: '<gold>Gunnery target<newline><white>Aim your X-wing at the bullseye.<newline><yellow>Attack / left-click: fire cannons<newline><gray>Destroy
+    the blocks with a direct cannon hit.'
+  mining: <gold>Mine Agrinium<newline><white>Mine the three marked ores with your stone pickaxe.<newline><gray>Each ore drops one scrap.<newline><yellow>/recipes
+    explains ingredients and workstations.
+  smelting: <gold>Scrap → Ingot<newline><white>Put three scraps and your coal in the furnace.<newline><gray>One scrap smelts into one ingot.<newline><yellow>Collect
+    all three ingots.
+  crafting: <gold>Craft your first pickaxe<newline><yellow>/recipes → Tools → Agrinium Pickaxe<newline><white>Use three ingots and your two sticks.<newline><gray>Craft
+    it at the nearby crafting table.
+>>>>>>> origin/dev
 events:
   0:
     action: <gold>KOTH <gray>| Next in <seconds>s
