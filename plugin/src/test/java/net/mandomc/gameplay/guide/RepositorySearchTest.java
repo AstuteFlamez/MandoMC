@@ -36,7 +36,7 @@ public class RepositorySearchTest {
         var manifest = RepositorySnapshotTest.manifest("a".repeat(40), true, files);
         var search = new RepositorySearch(RepositorySnapshot.archive(manifest, RepositorySnapshotTest.zip(files)), "FAQ");
         var notes = search.find("How many homes can I set?");
-        assertTrue(notes.stream().anyMatch(n -> n.facts().contains("homes-limit: 3")));
+        assertTrue(notes.stream().anyMatch(n -> n.facts().contains("homes limit: 3")));
         assertEquals(3, notes.size());
     }
     @Test public void historicalRolloutsAndFormattingDoNotBecomePlayerFacts() throws Exception {
