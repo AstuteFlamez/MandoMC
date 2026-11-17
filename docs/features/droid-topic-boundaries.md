@@ -1,5 +1,5 @@
 # Feature: M4-ND subject boundaries
-Status: implementation
+Status: playable
 Branch: bilal/droid-topic-boundaries
 
 ## Player experience
@@ -17,4 +17,4 @@ GroqBrain owns semantic scope selection, requests the pinned model's strict JSON
 The paired protocol-droid configuration contains `conversation.redirect`, `conversation.clarify`, a small maintained `lore-facts` primer and the specialist identity/menu wording. Normal restart activation applies. No topic keywords are added to a user-facing whitelist.
 
 ## Verification
-Unit checks cover scope output validation, discarded outside payloads, missing server facts, maintained messages, refund/accounting persistence and topic context. The isolated native fixture exercises real Walmart/UW-Madison requests, fabricated-domain/instruction attempts, mixed requests, lore without keyword hints, lore follow-ups, Minecraft controls, humor, ambiguity and verified server statistics. A small maintained canon primer anchors Vader/Anakin training, Chewbacca identity and Yoda's exile without restricting the rest of Star Wars to enumerated names. References: [Obi-Wan Kenobi](https://www.starwars.com/databank/obi-wan-kenobi), [Anakin Skywalker](https://www.starwars.com/databank/anakin-skywalker), [Chewbacca](https://www.starwars.com/databank/chewbacca), [Yoda](https://www.starwars.com/databank/yoda). Native results and development activation are pending.
+Unit checks cover scope output validation, discarded outside payloads, missing server facts, maintained messages, refund/accounting persistence and topic context. The isolated native fixture exercises real Walmart/UW-Madison requests, fabricated-domain/instruction attempts, mixed requests, lore without keyword hints, lore follow-ups, Minecraft controls, humor, ambiguity and verified server statistics. A small maintained canon primer anchors Vader/Anakin training, Chewbacca identity and Yoda's exile without restricting the rest of Star Wars to enumerated names. References: [Obi-Wan Kenobi](https://www.starwars.com/databank/obi-wan-kenobi), [Anakin Skywalker](https://www.starwars.com/databank/anakin-skywalker), [Chewbacca](https://www.starwars.com/databank/chewbacca), [Yoda](https://www.starwars.com/databank/yoda). The complete scope run passed 59 native assertions across 15 cases, with another 17 assertions in a focused final canon-data check. Development activation is recorded in docs/status.md.
