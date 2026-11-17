@@ -1,5 +1,13 @@
 # Resume here
 
+## M4-ND specialist release uploaded to production; restart pending (2026-11-17)
+
+The user requested production promotion after verification. PR #68 merged the tested dev release to main `a82b503`. Its main build, exact-release knowledge checks, versioned pack publication and pinned-SFTP upload succeeded. Independent readback verified all 131 managed files against the checked CI artifacts/source, the complete clean 387-source bundled knowledge against that exact commit, byte-identical native-tested gameplay classes, owner-only credential permissions and the anonymous pack download. Pack bytes remain unchanged from the previous production release. Managed-file rollback backups are retained; no player/world migrations were performed.
+
+The staged release includes the offline gameplay encyclopedia, material/ingredient links, mob/weapon statistics, live own-balance/public-event answers, short supported follow-ups, and semantic MandoMC/Star Wars/Minecraft/droid-conversation boundaries. Unrelated requests redirect and invite in-domain context; mixed requests retain their supported part. Personal allowance is preserved for redirects/clarifications and maintained first-base guidance. `AGENTS.md` plus build/CI/upload checks require M4-ND knowledge freshness on every production push.
+
+Verification includes 380 Java tests, complete CI tooling/pack checks, 59 full native scope assertions across 15 cases and 17 focused canon-data assertions. Production files are uploaded but not active: the exact new gameplay JAR is queued for the existing manual PebbleHost restart. No restart or reload was sent. Development remains on the native-tested `e341b0f` code. Next action: manually restart production, verify the exact-build bundled-knowledge startup marker and ask representative scope/gameplay questions before marking activation complete.
+
 ## M4-ND subject boundaries deployed to development (2026-11-17)
 
 On `bilal/droid-topic-boundaries`, replaced unrestricted general knowledge with semantic MandoMC/Star Wars/relevant-Minecraft/conversation scope. Every generated reply uses a provider-enforced scope schema plus local validation. Outside or ambiguous payloads are discarded in favor of maintained redirect/clarification text; unclassified or malformed replies fail to existing written guidance. Mixed questions answer only their supported portion. Rejected topics clear follow-up context and refund the personal answer/cooldown while retaining actual shared token cost/global request spacing. Greetings, direct live answers and verified acquisition guidance remain quota-free.
