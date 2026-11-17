@@ -72,6 +72,8 @@ public final class RepositorySnapshot {
                 "server/config/common/mandomc/admin/utilities.yml",
                 "plugin/src/main/resources/language/handbook.yml",
                 "server/config/common/mandomc/language/handbook.yml").contains(path)) return true;
+        if ((path.startsWith("server/config/common/mythicmobs/")
+                || path.startsWith("server/config/common/weaponmechanics/")) && path.endsWith(".yml")) return true;
         String name = path.substring(path.lastIndexOf('/') + 1);
         if (path.startsWith("docs/features/") && path.endsWith(".md"))
             return List.of("maintenance", "security", "deployment", "dev-").stream().noneMatch(name::contains);
@@ -122,8 +124,22 @@ public final class RepositorySnapshot {
     public static RepositorySnapshot cache(Manifest manifest, Path path) throws IOException {
         if (!manifest.retrievable() || !Files.isRegularFile(path, LinkOption.NOFOLLOW_LINKS)
                 || Files.size(path) > MAX_ARCHIVE) throw new IOException("Invalid cache size or version");
+        return documents(manifest, Files.readString(path));
+    }
+
+    /** Build-owned bundle is hash-checked like a cache and also supports unpublished development builds. */
+    public static RepositorySnapshot bundled(Manifest manifest, InputStream input) throws IOException {
+        if (input == null) throw new IOException("Missing bundled public knowledge");
+        try (var gzip = new java.util.zip.GZIPInputStream(input)) {
+            byte[] bytes = gzip.readNBytes(MAX_ARCHIVE + 1);
+            if (bytes.length > MAX_ARCHIVE) throw new IOException("Bundled knowledge exceeds size bound");
+            return documents(manifest, new String(bytes, StandardCharsets.UTF_8));
+        }
+    }
+
+    private static RepositorySnapshot documents(Manifest manifest, String json) throws IOException {
         try {
-            var root = JsonParser.parseString(Files.readString(path)).getAsJsonObject();
+            var root = JsonParser.parseString(json).getAsJsonObject();
             if (!manifest.commit().equals(root.get("commit").getAsString())
                     || !manifest.hash().equals(root.get("manifestHash").getAsString()))
                 throw new IOException("Knowledge cache belongs to a different build");

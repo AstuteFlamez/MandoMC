@@ -158,3 +158,15 @@ The host's jar auto-update is disabled so its pinned Paper version remains delib
 Voting setup, private listener keys and crate placement are documented in [voting](features/voting.md). Prepare the initial public image with `--public --voting-identity <private-existing-votifier-directory>`; the listener identity stays outside Git.
 
 The preparer canonicalizes every managed path component to the manifest spelling, including MythicMobs folders, before recording inventory. This avoids macOS case-insensitive paths silently producing different Linux deployment paths. Startup verification accepts both IPv4 and IPv6 wildcard voting sockets on allocated port 19132.
+
+## M4-ND knowledge on every production push
+
+Every release updates M4-ND alongside gameplay. Follow `AGENTS.md` and
+[the knowledge workflow](guide-knowledge.md): maintain public acquisition notes for changed
+content, rebuild the exact-release knowledge bundle, and pass
+`python scripts/check-guide-knowledge.py --release`. CI checks the packaged knowledge both
+before retaining the JAR and before upload; the local upload command enforces the same check.
+The build bundles verified public sources, including mob/weapon definitions, so startup does
+not depend on a fresh GitHub download. A normal production restart activates gameplay and
+knowledge together. Verify the exact-commit knowledge-ready marker and representative answers
+for changed content after restarting; staging an upload alone is not activation.

@@ -27,10 +27,14 @@ public final class GuideAllowance {
         set("requests",number("requests")+1);set("count."+id,number("count."+id)+1);set("last."+id,now.getEpochSecond());set("tokens",number("tokens")+reservation);save();return Denial.NONE;
     }
     public void finish(UUID player,Instant reservedAt,int actualTokens,boolean success) throws IOException{
+        finish(player,reservedAt,actualTokens,success,true);
+    }
+    /** A scoped redirect still charges actual shared tokens, but is not a personal AI answer. */
+    public void finish(UUID player,Instant reservedAt,int actualTokens,boolean success,boolean personalAnswer) throws IOException{
         // A response crossing midnight must not alter the new day's counters.
         String original=reservedAt.atZone(ZoneId.of("America/Chicago")).toLocalDate().toString();if(!original.equals(values.getProperty("day")))return;
         if(success)set("tokens",Math.max(0,number("tokens")-reservation+Math.max(0,actualTokens)));
-        else {set("count."+player,Math.max(0,number("count."+player)-1));values.remove("last."+player);}
+        if(!success || !personalAnswer) {set("count."+player,Math.max(0,number("count."+player)-1));values.remove("last."+player);}
         save();
     }
     public void save() throws IOException{

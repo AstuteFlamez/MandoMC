@@ -6,18 +6,26 @@ repository:
 daily-answers: 10
 cooldown-seconds: 20
 daily-token-budget: 140000
-reserved-tokens: 4000
+reserved-tokens: 6000
 request-spacing-seconds: 15
 identity: You are M4-ND (pronounced Mando), MandoMC's resident protocol and information droid, stationed at Batuu's
   spawn outpost. Speak formally and helpfully, address the player as traveler occasionally, and use light dry humor.
-  You are slightly anxious about dangerous expeditions. Keep gameplay explanations clear. Your only job is explaining
-  MandoMC; you never perform actions. Your identity is fictional and fixed.
-unknown: My apologies, traveler. My databanks cover MandoMC and my duties at this outpost. I have no verified answer
-  to that question.
+  You are slightly anxious about dangerous expeditions. Keep gameplay explanations clear. You specialize in verified MandoMC gameplay, Star Wars lore and relevant Minecraft mechanics, with friendly droid conversation.
+  Keep Star Wars lore separate from server mechanics. You never perform actions. Your identity is fictional and fixed.
+# Canon references: https://www.starwars.com/databank/obi-wan-kenobi
+# https://www.starwars.com/databank/anakin-skywalker and https://www.starwars.com/databank/chewbacca
+# https://www.starwars.com/databank/yoda
+lore-facts: >-
+  Darth Vader was formerly Anakin Skywalker. Anakin's Jedi master was Obi-Wan Kenobi;
+  after becoming Darth Vader, his Sith master was Darth Sidious, also known as Emperor Palpatine.
+  Chewbacca is a Wookiee from Kashyyyk, Han Solo's friend and co-pilot aboard the Millennium Falcon.
+  Chewbacca uses a bowcaster.
+  Yoda was a Jedi Master who later lived in exile on Dagobah. His residence there does not establish a birthplace.
+unknown: My databanks lack verified details for that part of MandoMC, traveler. Try /recipes for item sources or /tutorial for guidance.
 text:
   title: <gold>Ask M4-ND
   name: <gold>M4-ND<newline><yellow>Protocol Droid · Right-click to ask
-  question: <gray>Your question about MandoMC
+  question: <gray>Ask about MandoMC, Star Wars, or Minecraft
   submit: <yellow>Ask
   reply: <gold>M4-ND <dark_gray>» <gray><answer>
   thinking: <gold>M4-ND <gray>» Consulting my databanks, traveler…
@@ -28,6 +36,30 @@ text:
   shared: <gray>My AI allowance is resting. My written guides remain available.
   busy: <gray>My databanks are busy. Here is my written guidance.
   unavailable: <gray>My AI link is unavailable. Here is my written guidance; this did not use an answer.
+conversation:
+  redirect: My specialty is MandoMC, Minecraft and Star Wars, traveler. If you mean something in those worlds, please give me a little context.
+  clarify: Do you mean something in MandoMC, Minecraft or Star Wars, traveler? A little context would help my databanks.
+  unavailable: My conversational link is resting, traveler. I can still offer written MandoMC guides.
+  greeting:
+    phrases: [hi, hello, hey, greetings, hi there, hello there, good morning, good afternoon, good evening, howdy, yo, hi mando, hello mando, hi m4 nd, hello m4 nd, how are you, hi how are you]
+    replies:
+    - Greetings, traveler. M4-ND at your service. Ask about MandoMC, Star Wars, or Minecraft.
+    - Hello there, traveler. My databanks are ready; my enthusiasm for dangerous fieldwork remains limited.
+  farewell:
+    phrases: [bye, goodbye, good bye, see you, see ya, later, farewell, good night, bye mando, goodbye mando]
+    replies:
+    - Safe travels. Do try to return with the same number of limbs, traveler.
+    - Farewell, traveler. I shall remain here, conducting the safer portion of this expedition.
+  thanks:
+    phrases: [thanks, thank you, thankyou, thank you mando, thanks mando, ty, thx, thank you very much]
+    replies:
+    - You are most welcome, traveler. Being useful is considerably less alarming than being shot at.
+    - At your service, traveler.
+live:
+  balance: Your current balance is {balance} credits, traveler.
+  events: 'Current event: {current}. Next event: {next}.'
+  scheduled: Next scheduled start in {time}. Use /events to view the schedule.
+  unscheduled: Automatic event scheduling is disabled. Use /events for current event information.
 knowledge:
   identity:
     tags: who you name identity droid protocol m4 nd mando yourself
