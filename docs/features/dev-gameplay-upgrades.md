@@ -1,5 +1,5 @@
 # Feature: recipe search, M4-ND, KOTH equipment, Jawa shops and Saber Forge
-Status: verified; development activation pending
+Status: deployed to development; client playtest pending
 Branch: bilal/dev-gameplay-upgrades
 
 ## Player experience
@@ -28,7 +28,7 @@ Crate and scenery startup now wait for their vendor catalogs/blueprints before v
 Bundled defaults and reviewed server overrides are paired. Update the interactive Shops lesson, event explanations, recipe search lesson, eleven-topic handbook, ingredient acquisition hints, travel-guide hints and droid knowledge together. The Shops exercise buys a Wiring Coil using practice credits, then sells supplied String through the normal gray tray. Rewards and isolated tutorial inventory behavior remain unchanged.
 
 ## Verification
-All 353 Java tests, 85 tooling checks, 133 native gameplay checks and 548 focused tutorial checks pass. The disposable Paper probe exercises actual search/detail/Back, native text dialogs, seven existing gray shops/titles, entity stock, actual Darksaber crafting and ingredient rejection, exact forge payment, native combat attributes, item serialization, Cassian replacement, off-topic refusal and the Groq response path. No probe is installed on shared development. Client appearance and gameplay balance still require player feedback.
+All 354 Java tests, 85 tooling checks, 133 native gameplay checks and 548 focused tutorial checks pass. The disposable Paper probe exercises actual search/detail/Back, native text dialogs, seven existing gray shops/titles, entity stock, actual Darksaber crafting and ingredient rejection, exact forge payment, native combat attributes, item serialization, Cassian replacement, off-topic refusal and the Groq response path. No probe is installed on shared development. Client appearance and gameplay balance still require player feedback.
 
 ## Pause note
-Next action: complete the final native rehearsal, then deploy the exact verified build/configuration/pack to development with a stopped-runtime backup and normal restart. Production is excluded.
+Development is deployed with full rollback backups and verified startup, JAR, configuration, pack, NPC and title checks. All thirteen unrelated binaries retain their hashes. Next action: reconnect and client-play recipe search, M4-ND, KOTH previews, Jawa shops and the Saber Forge. Production is excluded.
