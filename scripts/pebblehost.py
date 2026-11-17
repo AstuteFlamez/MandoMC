@@ -358,6 +358,12 @@ def travel_guides_ready(log):
     return bool(re.search(r'Travel guides ready(?::| at saved anchors\.)', log))
 
 
+def guide_knowledge_ready(log, commit):
+    return bool(re.fullmatch('[a-f0-9]{40}', commit) and re.search(
+        r'M4-ND public knowledge ready: \d+ approved sources, \d+ passages @ '
+        + re.escape(commit[:12]) + r' \(bundled with this build; \d+ encyclopedia records\)\.', log))
+
+
 def verify_startup(sftp):
     raw = read_remote(sftp, '.mandomc/bootstrap.json')
     if raw is None:
@@ -383,6 +389,8 @@ def verify_startup(sftp):
     if state_raw is None:
         raise ValueError('Missing managed-file receipt')
     state = json.loads(state_raw)
+    if not guide_knowledge_ready(log, state.get('sourceCommit', '')):
+        raise ValueError('M4-ND knowledge has not activated for the deployed production commit; inspect latest.log.')
     drift = []
     for target, expected in state['files'].items():
         current = read_remote(sftp, installed_path(target))
@@ -485,6 +493,11 @@ def main():
     if args.command == 'configure':
         configure()
         return
+    if args.command == 'deploy':
+        import runpy
+        knowledge = runpy.run_path(str(ROOT / 'scripts/check-guide-knowledge.py'))['check'](release=True)
+        if knowledge['commit'] != args.commit:
+            raise ValueError('Production upload commit differs from M4-ND knowledge build')
     config = settings()
     client, sftp = connect(config)
     try:

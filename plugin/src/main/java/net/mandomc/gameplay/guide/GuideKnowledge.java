@@ -51,7 +51,7 @@ public final class GuideKnowledge {
                         default -> RecipeDefinition.parse(id, row);
                     };
                     if (hidden.contains(recipe.result())) continue;
-                    publicItems.merge(recipe.result(), instructions(recipe), (source, steps) -> source + " " + steps);
+                    publicItems.merge(recipe.result(), instructions(recipe, sources), (source, steps) -> source + " " + steps);
                 }
             }
             hidden.forEach(publicItems::remove);
@@ -62,7 +62,7 @@ public final class GuideKnowledge {
         }).toList();
     }
 
-    private static String instructions(RecipeDefinition recipe) {
+    private static String instructions(RecipeDefinition recipe, ConfigurationSection sources) {
         var counts = new LinkedHashMap<String, Integer>();
         for (String line : recipe.shape())
             for (char symbol : line.toCharArray())
@@ -71,8 +71,11 @@ public final class GuideKnowledge {
                 : recipe.smelting() ? (recipe.blasting() ? "a blast furnace" : "a furnace") : "a crafting table";
         String ingredients = counts.entrySet().stream()
                 .map(entry -> entry.getValue() + " " + label(entry.getKey())).collect(Collectors.joining(", "));
+        String acquisition = sources == null ? "" : counts.keySet().stream().limit(5)
+                .filter(sources::isString).map(id -> label(id) + ": " + clean(sources.getString(id)))
+                .filter(s -> s.length() <= 300).collect(Collectors.joining(" "));
         return "Make " + recipe.amount() + " " + label(recipe.result()) + " at " + method + " using " + ingredients
-                + ". Use /recipes for the layout and ingredient sources.";
+                + ". " + acquisition + " Use /recipes for the layout and ingredient sources.";
     }
 
     private static String clean(String text) {
@@ -93,14 +96,14 @@ public final class GuideKnowledge {
 
     public List<Note> find(String question) {
         String normalized = RecipeSearch.normalize(question);
-        var terms = Arrays.stream(normalized.split(" +")).map(GuideKnowledge::term)
+        var terms = GuideTerms.tokens(question).stream().map(GuideKnowledge::term)
                 .filter(t -> t.length() > 2 && !STOP_WORDS.contains(t)).distinct().toList();
         boolean changing = terms.stream().anyMatch(UPGRADE_WORDS::contains);
         boolean upgrade = changing || terms.contains("forge");
         var exact = items.stream().filter(note -> {
             var words = Arrays.stream(RecipeSearch.normalize(note.tags()).split(" +"))
                     .map(GuideKnowledge::term).toList();
-            return !words.isEmpty() && terms.containsAll(words);
+            return !words.isEmpty() && words.stream().allMatch(word -> GuideTerms.matches(word, Set.copyOf(terms)));
         }).sorted(Comparator.comparingInt((Note note) -> note.tags().length()).reversed()).limit(3).toList();
         if (!exact.isEmpty() && (!upgrade || acquisition(normalized) && !changing)) return exact;
         if (!upgrade && (terms.contains("saber") || terms.contains("lightsaber"))
@@ -109,7 +112,9 @@ public final class GuideKnowledge {
         boolean advice = normalized.matches("(?:what (?:should|can|do) i do|what to do|what now|what next)"
                 + "(?: next| now| here| first| on mandomc| in mandomc| as a beginner)*")
                 || normalized.matches(".*(?:beginner advice|beginner tips|just joined|new to (?:the server|mandomc)"
-                + "|what do you recommend).*");
+                + "|what do you recommend).*")
+                || normalized.matches(".*\\bwhere (?:should|can|do) i (?:build|make|start|put) "
+                        + "(?:my |a )?(?:first|starter|new) (?:mandomc )?base\\b.*");
         if (advice) return topic("beginner");
         return notes.stream()
                 .filter(note -> !(note.id().equals("forge") && !upgrade) && !(note.id().equals("sabers") && upgrade))
@@ -138,6 +143,6 @@ public final class GuideKnowledge {
     private int score(Note note, List<String> terms) {
         var tags = Arrays.stream(RecipeSearch.normalize(note.tags()).split(" +"))
                 .map(GuideKnowledge::term).collect(Collectors.toSet());
-        return (int) terms.stream().filter(tags::contains).count();
+        return (int) terms.stream().filter(word -> GuideTerms.matches(word, tags)).count();
     }
 }

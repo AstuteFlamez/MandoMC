@@ -41,5 +41,12 @@ public class GuideKnowledgeTest {
         assertTrue(knowledge.verifiedAnswer("How does Fortune affect custom ore drops?",knowledge.find("How does Fortune affect custom ore drops?")).orElseThrow().contains("exactly one"));
         assertTrue(knowledge.verifiedAnswer("What happens to my gear when I die?",knowledge.find("What happens to my gear when I die?")).orElseThrow().contains("drops at the death site"));
         assertEquals("item:saber_forge",knowledge.find("how do I craft a saber forge").getFirst().id());
+        assertEquals("item:durasteel",knowledge.find("where can i find durastel").getFirst().id());
+        assertTrue(knowledge.find("how do I craft robes helmet").getFirst().facts().contains("Banthas drop"));
+        var base="I go to UW-Madison; where should I build my first MandoMC base?";
+        assertEquals("beginner",knowledge.find(base).getFirst().id());
+        var advice=knowledge.verifiedAnswer(base,knowledge.find(base)).orElseThrow();
+        assertTrue(advice.contains("Naboo") && advice.contains("/c map"));
+        assertFalse(advice.contains("48") || advice.contains("Wisconsin"));
     }
 }

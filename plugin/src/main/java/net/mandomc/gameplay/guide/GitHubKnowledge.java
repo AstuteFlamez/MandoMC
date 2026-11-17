@@ -19,12 +19,20 @@ public final class GitHubKnowledge implements AutoCloseable {
     private final String fallback;
     private final Consumer<String> log;
     private final Callable<byte[]> fetch;
+    private InputStream bundle;
     private volatile RepositorySearch search;
+    private volatile GameplayEncyclopedia encyclopedia;
     private volatile boolean closed;
 
     public GitHubKnowledge(InputStream buildManifest, Path cacheDirectory, boolean enabled,
             String fallback, Consumer<String> log) {
         this(buildManifest, cacheDirectory, enabled, fallback, log, null);
+    }
+
+    public GitHubKnowledge(InputStream buildManifest, InputStream bundle, Path cacheDirectory, boolean enabled,
+            String fallback, Consumer<String> log) {
+        this(buildManifest, cacheDirectory, enabled, fallback, log, null);
+        this.bundle = bundle;
     }
 
     GitHubKnowledge(InputStream buildManifest, Path cacheDirectory, boolean enabled,
@@ -45,7 +53,18 @@ public final class GitHubKnowledge implements AutoCloseable {
 
     /** Call on the existing guide worker, never on Paper's tick loop. Each deployment gets its own immutable cache. */
     public void refresh() {
-        if (closed || manifest == null) return;
+        if (closed || manifest == null) { closeBundle(); return; }
+        if (bundle != null) {
+            try {
+                var snapshot = RepositorySnapshot.bundled(manifest, bundle);
+                bundle = null;
+                publish(snapshot, "bundled with this build");
+                return;
+            } catch (Exception invalid) {
+                closeBundle();
+                log.accept("M4-ND bundled knowledge invalid; trying this build's verified public cache.");
+            }
+        }
         if (!manifest.retrievable()) {
             log.accept("M4-ND repository knowledge disabled for a modified source build; retained local guidance.");
             return;
@@ -62,16 +81,29 @@ public final class GitHubKnowledge implements AutoCloseable {
                 try { snapshot.save(cache); }
                 catch (IOException unavailable) { log.accept("M4-ND could not persist its verified public cache; using it for this session."); }
             }
-            var index = new RepositorySearch(snapshot, fallback);
-            if (closed) return;
-            search = index;
-            log.accept("M4-ND public knowledge ready: " + snapshot.documents().size() + " approved sources, "
-                    + index.passageCount() + " passages @ " + manifest.commit().substring(0, 12)
-                    + (cached ? " (local cache)." : " (verified public download)."));
+            publish(snapshot, cached ? "local cache" : "verified public download");
         } catch (Exception unavailable) {
             if (unavailable instanceof InterruptedException) Thread.currentThread().interrupt();
             if (!closed) log.accept("M4-ND could not refresh build-pinned public knowledge; retained local guidance.");
         }
+    }
+
+    private void publish(RepositorySnapshot snapshot, String origin) {
+        var index = new RepositorySearch(snapshot, fallback);
+        var records = new GameplayEncyclopedia(snapshot, fallback);
+        if (closed) return;
+        encyclopedia = records;
+        search = index;
+        log.accept("M4-ND public knowledge ready: " + snapshot.documents().size() + " approved sources, "
+                + index.passageCount() + " passages @ " + manifest.commit().substring(0, 12)
+                + " (" + origin + "; " + records.size() + " encyclopedia records).");
+    }
+
+    private void closeBundle() {
+        if (bundle == null) return;
+        try { bundle.close(); }
+        catch (IOException unavailable) { log.accept("M4-ND could not close its bundled knowledge stream."); }
+        bundle = null;
     }
 
     private byte[] download() throws IOException, InterruptedException {
@@ -111,11 +143,16 @@ public final class GitHubKnowledge implements AutoCloseable {
 
     public List<GuideKnowledge.Note> find(String question) {
         var index = search;
-        return index == null ? List.of() : index.find(question);
+        if (index == null) return List.of();
+        var notes = new ArrayList<GuideKnowledge.Note>();
+        var records = encyclopedia;
+        if (records != null) notes.addAll(records.find(question));
+        notes.addAll(index.find(question));
+        return List.copyOf(notes);
     }
     public String commit() { return manifest == null ? "" : manifest.commit(); }
     public int passageCount() { var index = search; return index == null ? 0 : index.passageCount(); }
-    @Override public void close() { closed = true; client.shutdownNow(); }
+    @Override public void close() { closed = true; closeBundle(); client.shutdownNow(); }
 
     /** Streaming subscriber cancels oversized responses before allocating an unbounded archive body. */
     static final class BoundedBody implements HttpResponse.BodySubscriber<byte[]> {

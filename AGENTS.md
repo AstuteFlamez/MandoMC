@@ -8,5 +8,6 @@
 - Port relevant behavior; do not merge raw recovery payloads as active implementation.
 - Use bilal/ feature branches and preserve history. Never force-push main.
 - Build with ./scripts/build.sh. Add meaningful tests and real-server integration checks as features land.
+- Every production push must refresh M4-ND's knowledge from that exact release: update public acquisition notes and explanations for changed gameplay, include new public content in the approved knowledge sources, regenerate the bundled encyclopedia/manifest, and pass the packaged knowledge freshness check. Do not reuse a previous release's knowledge or treat Star Wars lore as evidence for server mechanics. After the normal production restart, verify the exact-build M4-ND knowledge-ready marker and representative answers for changed content. See docs/guide-knowledge.md.
 - Keep binaries, credentials, runtime data, maps and local absolute paths out of Git.
 - Before stopping, update docs/status.md with verification, unfinished work and one next action.

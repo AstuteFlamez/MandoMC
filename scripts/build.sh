@@ -7,3 +7,4 @@ python3 scripts/build-guide-knowledge.py
 ./mvnw --batch-mode --no-transfer-progress \
     "-Dmaven.repo.local=$MANDOMC_ROOT/.local/maven-repository" verify "$@"
 bash "$MANDOMC_ROOT/scripts/build-redstone-agent.sh"
+python3 scripts/check-guide-knowledge.py
