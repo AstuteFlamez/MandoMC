@@ -135,6 +135,9 @@ ranks:
   player-missing: '<red>Player not found. Use an exact known name or UUID.'
   unknown: '<red>Unknown rank. Use /mmc rank list.'
 vehicles:
+  recall-usage: '<yellow>Use /vehicle recall to return your deployed vehicle to your inventory.'
+  recall-none: '<yellow>You have no deployed vehicle to recall.'
+  recall-temporary: '<yellow>Leave staff mode or your tutorial before recalling your survival vehicle.'
   menu-title: '<dark_gray>Vehicle seats'
   pilot: '<yellow>Pilot seat (placer only)'
   passenger: '<yellow>Passenger seat'
@@ -144,7 +147,7 @@ vehicles:
   owner-only: '<red>Only the player who placed this vehicle can pilot or pack it.'
   occupied: '<red>That seat is unavailable.'
   placement-denied: '<red>Place your vehicle in open, unprotected terrain while out of combat.'
-  already-deployed: '<red>Pack your deployed vehicle before placing another. The server vehicle limit may also be full.'
+  already-deployed: '<red>Pack your deployed vehicle or use /vehicle recall before placing another. The server vehicle limit may also be full.'
   invalid: '<red>This vehicle item is no longer valid.'
   unavailable: '<red>Vehicle unavailable. Contact an administrator.'
   deployed: '<green>Vehicle deployed. Right-click it to choose a seat.'

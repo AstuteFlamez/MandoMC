@@ -52,8 +52,8 @@ public final class SaberForge implements Listener,AutoCloseable {
     @EventHandler(ignoreCancelled=true) public void pull(BlockPistonRetractEvent event){if(event.getBlocks().stream().anyMatch(this::station))event.setCancelled(true);}
     private boolean allowed(Player player,Block block){return station(block) && player.getWorld()==block.getWorld() && player.getLocation().distanceSquared(block.getLocation().add(.5,.5,.5))<=36
             && !player.isDead() && !player.isInsideVehicle() && !plugin.combat().tagged(player) && !plugin.sabers().busy(player)
-            && !net.mandomc.gameplay.admin.StaffMode.active(player) && !net.mandomc.gameplay.tutorial.TutorialInventory.active(player)
-            && (player.getGameMode()==GameMode.SURVIVAL || player.getGameMode()==GameMode.ADVENTURE);}
+            && !net.mandomc.gameplay.tutorial.TutorialInventory.active(player)
+            && (player.getGameMode()==GameMode.SURVIVAL || player.getGameMode()==GameMode.ADVENTURE || (net.mandomc.gameplay.admin.StaffMode.active(player) && player.getGameMode()==GameMode.CREATIVE));}
     @EventHandler(priority=EventPriority.HIGHEST) public void use(PlayerInteractEvent event){
         if(event.getAction()!=Action.RIGHT_CLICK_BLOCK || event.getHand()!=EquipmentSlot.HAND || event.getClickedBlock()==null || !station(event.getClickedBlock()))return;
         if(event.useInteractedBlock()==Event.Result.DENY)return;

@@ -14,7 +14,7 @@ unknown: My apologies, traveler. My databanks cover MandoMC and my duties at thi
 text:
   title: <gold>Ask M4-ND
   name: <gold>M4-ND<newline><yellow>Protocol Droid · Right-click to ask
-  question: <gray>Your MandoMC question (sent to Groq)
+  question: <gray>Your question about MandoMC
   submit: <yellow>Ask
   reply: <gold>M4-ND <dark_gray>» <gray><answer>
   thinking: <gold>M4-ND <gray>» Consulting my databanks, traveler…
@@ -32,6 +32,10 @@ knowledge:
       information, is formal, helpful and slightly anxious about danger, and cannot perform actions.
     answer: Greetings, traveler. I am M4-ND, pronounced Mando, the protocol and information droid stationed at Batuu.
       I explain MandoMC’s systems. Dangerous expeditions are, thankfully, your department.
+  beginner:
+    tags: beginner beginners new starting recommend recommended recommendations advice bored progression next
+    facts: When a player asks what to do or requests beginner advice, recommend a short achievable progression plan. Start with /tutorial and its optional Survival, Clans, Combat, Shops and Vehicles sections; each first completion awards 500 credits. Then use /warp to visit Naboo, a recommended planet for a first base, and /c map to check zones before building in eligible Wilderness. Gather resources; coal is mined from Coal Ore in Tatooine caves with a pickaxe. Gray Jawas at Batuu buy approved salvage for credits; /balance checks credits. For a first lightsaber, use /recipes to plan the components and complete Ilum for a Kyber Crate key (24-hour cooldown), then open the Kyber Crate at Batuu for a random crystal. Craft the saber at a crafting table before considering forge upgrades. Ask which stage the player has reached when useful, and suggest one or two next steps rather than overwhelming them. Do not assume they have a saber or equipment. KOTH and Jabba's Palace involve competing players, so suggest these later as optional challenges; /events shows the schedule.
+    answer: For a first expedition, traveler, start with /tutorial. Each lesson's first completion earns 500 credits. Then use /warp to visit Naboo and /c map to check where you can build a first base. Gather supplies and sell approved salvage to the gray Jawas at Batuu. When ready, use /recipes to plan your first saber and complete Ilum for a Kyber Crate key. Have you finished the tutorial or chosen a base yet?
   recipes:
     tags: recipe recipes craft crafting ingredient ingredients search equipment
     facts: Use /recipes for crafting recipes and ingredient acquisition notes. Search matches output names by default.
@@ -60,6 +64,10 @@ knowledge:
       rewards.
     answer: Win KOTH on Hoth for a chance at a KOTH key. The crate contains guns, Jetpack I, vehicles and rare Black
       Kyber for crafting the Darksaber. Check /crates preview koth for the current chances, traveler.
+  sabers:
+    tags: lightsaber lightsabers saber sabers obtain getting first make crafting
+    facts: To get a first lightsaber, craft one at a crafting table. The blue Obi-Wan saber needs one precision emitter coil, one blue kyber, one durasteel, one straight hilt and one plasma capacitor array. Blue kyber comes randomly from the Kyber Crate at Batuu; earn a key by completing Ilum (24-hour cooldown). The red Vader version uses red kyber instead. Components have crafting recipes; brown Jawas on Tatooine also sell selected components with fixed stock per encounter. Use /recipes to see each ingredient and its source. A Saber Forge only upgrades a saber you have already crafted; it does not give you a first saber. The starter kit does not include a saber.
+    answer: Craft your first saber at a crafting table, traveler. For the blue Obi-Wan saber, use one each of precision emitter coil, blue kyber, durasteel, straight hilt and plasma capacitor array. Earn a Kyber Crate key by completing Ilum, then open the crate at Batuu for a random crystal. Use /recipes for component recipes and sources; brown Jawas on Tatooine sell selected components. The forge upgrades an existing saber afterward.
   forge:
     tags: forge upgrade upgrades upgraded stats damage speed defense guard throw lightsaber lightsabers saber sabers
     facts: 'Craft a Saber Forge using /recipes and place it. Hold a lightsaber and right-click the forge in Survival
@@ -76,7 +84,7 @@ knowledge:
     tags: planet planets travel warp spawn batuu hoth tatooine mandalore naboo ilum teleport
     facts: Use /warp for the current galaxy map and /spawn to return to Batuu. Travel has a stationary warmup and
       is blocked in combat. Naboo is recommended for a first base. Vehicle-based interplanetary travel is deferred;
-      current ships do not replace warps.
+      current ships do not replace warps. Use /vehicle recall to return your deployed vehicle to your inventory when it is empty, landed, stationary and out of combat; its health is preserved. /recallvehicle and /vrecall are shortcuts.
     answer: Use /warp to choose a planet, or /spawn to return to Batuu. Stand still during travel and leave combat
       first. Naboo is a good place to begin your first base.
   clans:
@@ -118,3 +126,9 @@ knowledge:
     answer: 'Jabba’s Palace opens through the event schedule. Fight guards and bosses for loot, but watch for rival
       players: the dungeon is shared. Use /events to check when it opens.'
 daily-request-budget: 800
+
+# Full-body C-3PO skin, pinned signed Mojang profile; not a head-only texture.
+# Public catalogue: https://namemc.com/skin/4135e7847dde056d
+skin:
+  texture: ewogICJ0aW1lc3RhbXAiIDogMTc5NDg3OTQxMDIzMiwKICAicHJvZmlsZUlkIiA6ICI2MzE3NzFlN2NmMGI0OTI5YjcyM2NhYTc4MDNkMmU4OSIsCiAgInByb2ZpbGVOYW1lIiA6ICJLbmlnaHQzUE8iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTY4MmY5YWFiNDQwMThhYzJjMTA4NTUyNDhhZmE1NzlhMTY3ZGM2OWJmMGMyZjJhYjRhZGIyYTkxNzFlY2JjNCIKICAgIH0KICB9Cn0=
+  signature: S8CRBVDxS/XHjKkD5g9PMaFCZGWvvcbHRtDaTQRX4ggDxsoyJLGoBquXhpBPXzqSuTJpKwAeSsCLHEuxWYEft7NGdqxQco+I5P7WrEPEDVwkTXcZZYNoEQtFg0ky0e2OyDzFGME01fm3R6vGbWZYdXb+DK2GhbthKXtnwU+T8HdeeRrcYa7uj35HmAbAOoEDiAM/ssyvAHvoeCHr0l2tdzQ7SrLQnY2I5O44c4zVG1VJ2KXPFe9Hn7Zk+mmyGk22mxhNPHRQwF6zIIWvreVJDqil8c9yDC2eedg2pD1eSsb5j3OE2Y+xZlRY3xgRTD+UDmuYqvPFgeKq6Bx3byso/1FsFtDEFvQpjQUdD8W6p1wbWCZLG5BW0AKmPL+2gbmpVN3+VN8O7RgaWQBVijVd613PWarYczQj7uMgIvwuxkZd3uhZBzQtdUo9Oa6hU9m7NmpUHWBqHplCIc+cWAXrm5Nv8noryXORQ5j1Fk0dpeoIlfe3FgrpyuciUV8k/J8EOTrmbY/JfNbB5Pgtz2WBw2XcKOA7f9PVI1yKRUZPw6mLU4UiiNNowzPlKYz1fv32s0LeMwb8QG259aVfmChplNZOEXdR7b+V7+hn7TU+J/TZy9ZYKCRpTiq7VQJzHCFPkN0gfS6oBbSv9cDm2XMAoKIK1kGoAQQHqTF6RIE6hME=
