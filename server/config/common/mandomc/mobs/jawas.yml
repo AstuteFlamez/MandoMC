@@ -642,7 +642,8 @@
       "y": 96.0,
       "z": -9.51074454608026,
       "yaw": 136.0501,
-      "pitch": 0.89999473
+      "pitch": 0.89999473,
+      "category": "minerals"
     },
     "batuu_market_01": {
       "world": "minecraft:spawnworld",
@@ -650,7 +651,8 @@
       "y": 96.0,
       "z": -22.305433549866454,
       "yaw": 0.020831674337387085,
-      "pitch": 1.4999682903289795
+      "pitch": 1.4999682903289795,
+      "category": "saplings"
     },
     "batuu_market_02": {
       "world": "minecraft:spawnworld",
@@ -658,7 +660,8 @@
       "y": 96.0,
       "z": -7.699999988079071,
       "yaw": 179.36703,
-      "pitch": 1.7571559
+      "pitch": 1.7571559,
+      "category": "farming"
     },
     "batuu_market_03": {
       "world": "minecraft:spawnworld",
@@ -666,7 +669,8 @@
       "y": 97.0,
       "z": -7.699999988079071,
       "yaw": 179.81718,
-      "pitch": 1.1571704
+      "pitch": 1.1571704,
+      "category": "ocean"
     },
     "batuu_market_04": {
       "world": "minecraft:spawnworld",
@@ -674,7 +678,8 @@
       "y": 96.0,
       "z": -19.301312361042505,
       "yaw": -0.032684326,
-      "pitch": 6.107193
+      "pitch": 6.107193,
+      "category": "nether"
     },
     "batuu_market_05": {
       "world": "minecraft:spawnworld",
@@ -682,7 +687,8 @@
       "y": 96.0,
       "z": -19.30088169877861,
       "yaw": -0.7826538,
-      "pitch": 2.957191
+      "pitch": 2.957191,
+      "category": "end"
     },
     "batuu_market_06": {
       "world": "minecraft:spawnworld",
@@ -690,7 +696,8 @@
       "y": 96.0,
       "z": -22.30000001192093,
       "yaw": -0.7826538,
-      "pitch": 2.957191
+      "pitch": 2.957191,
+      "category": "utility"
     }
   },
   "text": {
