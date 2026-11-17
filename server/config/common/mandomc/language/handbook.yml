@@ -99,10 +99,10 @@ pages:
 - id: vehicles
   topic: Vehicles
   heading: Vehicles
-  body: |-
-    Place a vehicle on solid ground, then choose a seat. Only the placer pilots. See item hints for keys.
+  body: 'Place on solid ground. Only the placer pilots.
 
-    Pack when stopped, empty and out of combat. Destroyed vehicles are lost.
+
+    Pack while landed, empty and out of combat. /vehicle recall returns it. Destroyed vehicles are lost.'
 - id: ilum_crates
   topic: Ilum & Crates
   heading: Ilum & Crates

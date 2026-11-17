@@ -17,6 +17,8 @@ Essentials and Multiverse are replaced by MandoMC. See [native utilities](featur
 
 Operator nodes use `mandomc.admin.<command>` (`gamemode` for all mode aliases); targeting others needs `mandomc.admin.others`. Public nodes use `mandomc.travel.<command>`. Public homes, requests and return trips use instant travel in Creative and a three-second warmup in other modes and revalidate the destination. Admin direct commands use their explicit immediate path.
 
+`/vehicle recall` returns your deployed vehicle to your inventory; `/recallvehicle` and `/vrecall` are shortcuts. The vehicle must be landed, stationary, empty and out of combat. Health is preserved; destroyed vehicles cannot be recalled.
+
 ## Command catalogue
 | Command | Permission | Destination/behavior | Status |
 | --- | --- | --- | --- |
