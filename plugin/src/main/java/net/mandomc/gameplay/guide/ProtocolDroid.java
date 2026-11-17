@@ -20,7 +20,7 @@ import org.bukkit.inventory.*;
 /** One native golden protocol droid and a bounded, private explanations service. */
 public final class ProtocolDroid implements Listener,AutoCloseable {
     private final MandoPlugin plugin;private final YamlConfiguration config;private final GuideKnowledge knowledge;
-    private final GroqBrain brain;private final GuideAllowance allowance;
+    private final GroqBrain brain;private final GuideAllowance allowance;private final GitHubKnowledge repository;
     private final ScheduledExecutorService worker=Executors.newSingleThreadScheduledExecutor(r->{var t=new Thread(r,"MandoMC-guide");t.setDaemon(true);return t;});
     private final Map<UUID,Integer> promptTicks=new HashMap<>();
     private final Set<UUID> pending=new HashSet<>();private final Map<String,GroqBrain.Answer> cache=new ConcurrentHashMap<>();
@@ -38,6 +38,9 @@ public final class ProtocolDroid implements Listener,AutoCloseable {
         String key=Files.exists(secret)?Files.readString(secret).strip():System.getenv().getOrDefault("MANDOMC_GROQ_API_KEY","").strip();
         brain=new GroqBrain(key,config.getString("model"),config.getString("identity"));
         allowance=new GuideAllowance(plugin.getDataFolder().toPath().resolve("data/guide-allowance.properties"),config.getInt("daily-answers"),config.getInt("daily-token-budget"),config.getInt("reserved-tokens"),config.getInt("cooldown-seconds"),config.getInt("daily-request-budget",800));
+        repository=new GitHubKnowledge(plugin.getResource("guide-repository.json"),plugin.getDataFolder().toPath().resolve("data/guide/public-knowledge"),
+                config.getBoolean("repository.enabled",true),config.getString("repository.fallback",config.getString("unknown")),plugin.getLogger()::info);
+        worker.execute(()->{repository.refresh();cache.clear();});
         Bukkit.getPluginManager().registerEvents(this,plugin);
         Objects.requireNonNull(plugin.getCommand("ask")).setExecutor((sender,command,label,args)->{if(sender instanceof Player player){if(args.length==0)prompt(player);else ask(player,String.join(" ",args));}return true;});
         ticker=Bukkit.getScheduler().runTaskTimer(plugin,this::tick,20,5);
@@ -48,8 +51,9 @@ public final class ProtocolDroid implements Listener,AutoCloseable {
     private boolean safe(Player player){if(!player.hasPermission("mandomc.arrival") || player.isDead() || plugin.combat().tagged(player) || player.isInsideVehicle() || net.mandomc.gameplay.tutorial.TutorialInventory.active(player)){player.sendMessage(text("unsafe"));return false;}return true;}
     public void ask(Player player,String question){
         if(!safe(player) || question.isBlank())return;if(question.length()>240){player.sendMessage(text("length"));return;}
-        var notes=knowledge.find(question);if(notes.isEmpty()){reply(player,config.getString("unknown"));return;}
+        var notes=new ArrayList<>(knowledge.find(question));
         var verified=knowledge.verifiedAnswer(question,notes);if(verified.isPresent()){reply(player,verified.get());return;}
+        notes.addAll(repository.find(question));if(notes.isEmpty()){reply(player,config.getString("unknown"));return;}
         String cacheKey=net.mandomc.gameplay.items.RecipeSearch.normalize(question);var cached=cache.get(cacheKey);
         if(cached!=null){reply(player,cached.text());return;}
         if(!brain.configured() || !storageHealthy){reply(player,notes.getFirst().fallback());return;}
@@ -98,5 +102,5 @@ public final class ProtocolDroid implements Listener,AutoCloseable {
     @EventHandler(priority=EventPriority.HIGHEST) public void interact(PlayerInteractEntityEvent event){if(droid!=null && event.getRightClicked().getUniqueId().equals(droid.getUniqueId())){event.setCancelled(true);if(event.getHand()==EquipmentSlot.HAND)Bukkit.getScheduler().runTask(plugin,()->prompt(event.getPlayer()));}}
     @EventHandler(priority=EventPriority.HIGHEST) public void interactAt(PlayerInteractAtEntityEvent event){interact(event);}
     @EventHandler(priority=EventPriority.HIGHEST) public void damage(EntityDamageEvent event){if(droid!=null && event.getEntity().getUniqueId().equals(droid.getUniqueId()))event.setCancelled(true);}
-    @Override public void close(){closed=true;ticker.cancel();worker.shutdownNow();brain.close();HandlerList.unregisterAll(this);if(droid!=null)droid.remove();if(title!=null)title.remove();pending.clear();}
+    @Override public void close(){closed=true;ticker.cancel();worker.shutdownNow();repository.close();brain.close();HandlerList.unregisterAll(this);if(droid!=null)droid.remove();if(title!=null)title.remove();pending.clear();}
 }

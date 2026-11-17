@@ -1,5 +1,11 @@
 # Resume here
 
+## Build-pinned public droid knowledge (2026-11-16)
+
+On `bilal/droid-github-knowledge`, the handoff-authorized GitHub retrieval is implemented: each clean build embeds its exact commit and approved public source hashes; M4-ND loads only that version’s validated cache/archive, searches bounded passages and retains verified local acquisition/beginner answers, character, quotas and FAQ fallback. Runtime/private files and arbitrary hosts are excluded. The owner chose to keep production unchanged; vehicle-only hotfix #59 is held as a draft.
+
+Verification: 364 Java tests and 87 tooling checks cover the public/version/cache boundaries. A clean published candidate and native repository/AI/skin/staff-forge verification are being prepared. Development is still running the prior tested droid/forge/vehicle fixes from PR #58; production has not been updated. See [droid knowledge](guide-knowledge.md). Next action: verify a clean commit-pinned candidate on disposable Paper and deploy it to dev.
+
 ## Droid, staff forge and Hoth vehicle feedback (2026-11-16)
 
 On `bilal/droid-knowledge-skin`, removed provider branding from M4-ND’s menu, replaced his armor stand with a signed full-body protocol-droid mannequin, connected public recipe/acquisition data, added verified first-saber and beginner guidance, and allowed material-funded forge testing in Creative/Survival staff mode with normal inventory restoration. Added `/vehicle recall`, `/recallvehicle` and `/vrecall`, plus a scoped vehicle spawn on Hoth and rejection of cancelled bases before consuming the item. The reported lost speeder was on production; its owner already issued a replacement. No extra item was granted by this change.

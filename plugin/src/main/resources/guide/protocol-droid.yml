@@ -1,5 +1,8 @@
 schema-version: 1
 model: openai/gpt-oss-20b
+repository:
+  enabled: true
+  fallback: My concise written guides cannot safely summarize that topic right now, traveler. Try /recipes for items and sources, or /tutorial for guided practice.
 daily-answers: 10
 cooldown-seconds: 20
 daily-token-budget: 140000

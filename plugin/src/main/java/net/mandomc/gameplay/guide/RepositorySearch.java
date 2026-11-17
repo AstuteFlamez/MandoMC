@@ -1,0 +1,75 @@
+package net.mandomc.gameplay.guide;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import net.mandomc.gameplay.items.RecipeSearch;
+
+/** Small immutable lexical index: only the best bounded passages, never whole files, become model context. */
+public final class RepositorySearch {
+    private static final Set<String> STOP = Set.of("how", "what", "where", "when", "why", "who", "can", "could",
+            "should", "would", "the", "and", "for", "with", "from", "this", "that", "have", "has", "are", "does",
+            "do", "you", "your", "my", "please", "tell", "about", "want", "help", "get", "find", "finding", "obtain",
+            "know", "work", "works", "many", "set", "happen", "happens", "affect", "affected", "mandomc", "minecraft", "server", "java", "code");
+    private record Passage(String path, String text, Set<String> words, Set<String> pathWords, double authority) { }
+    private final String commit, fallback;
+    private final List<Passage> passages;
+    private final Map<String, Integer> frequencies;
+
+    public RepositorySearch(RepositorySnapshot snapshot, String fallback) {
+        this.commit = snapshot.manifest().commit();
+        this.fallback = fallback;
+        var rows = new ArrayList<Passage>();
+        snapshot.documents().forEach((path, text) -> {
+            String status = text.lines().limit(20).filter(l -> l.startsWith("Status:")).findFirst().orElse("");
+            var pathWords = tokens(path.replace(".java", "").replace(".yml", "").replace(".md", ""));
+            double authority = path.startsWith("server/config/common/") ? 1.5 : path.contains("/resources/") ? 1.3 : path.endsWith(".java") ? 1.1 : 1;
+            String heading = "";
+            for (String paragraph : text.split("\\n\\s*\\n")) {
+                if (paragraph.isBlank()) continue;
+                if (paragraph.startsWith("#")) heading = paragraph.lines().findFirst().orElse("");
+                for (int start = 0; start < paragraph.length(); start += 800) {
+                    String body = (status + "\n" + heading + "\n"
+                            + paragraph.substring(start, Math.min(paragraph.length(), start + 1000))).strip();
+                    rows.add(new Passage(path, body, tokens(body), pathWords, authority));
+                }
+            }
+        });
+        passages = List.copyOf(rows);
+        var counts = new HashMap<String, Integer>();
+        for (Passage passage : passages) for (String word : passage.words()) counts.merge(word, 1, Integer::sum);
+        frequencies = Map.copyOf(counts);
+    }
+
+    static Set<String> tokens(String text) {
+        return Arrays.stream(RecipeSearch.normalize(text.replaceAll("([a-z])([A-Z])", "$1 $2")).replace("speederbike", "speeder bike").split(" +"))
+                .filter(w -> w.length() > 2 && !STOP.contains(w)).map(w -> switch (w) {
+                    case "die", "dying", "died" -> "death";
+                    case "money" -> "credit";
+                    case "ship", "starship", "aircraft" -> "vehicle";
+                    default -> w.startsWith("repair") ? "repair" : w.length() > 3 && w.endsWith("s") ? w.substring(0, w.length() - 1) : w;
+                }).collect(Collectors.toSet());
+    }
+
+    public List<GuideKnowledge.Note> find(String question) {
+        var words = new HashSet<>(tokens(question));
+        if (words.contains("speeder") || words.contains("xwing") || words.contains("uwing")
+                || words.contains("tiefighter")) words.add("vehicle");
+        if (words.isEmpty()) return List.of();
+        int required = Math.min(2, words.size());
+        String focus = List.of("repair", "death", "fortune").stream().filter(words::contains).findFirst().orElse("");
+        return passages.stream().filter(p -> focus.isEmpty() || p.words().contains(focus)).filter(p -> words.stream().filter(p.words()::contains).count() >= required)
+                .sorted(Comparator.comparingDouble((Passage p) -> score(p, words)).reversed())
+                .limit(3).map(p -> new GuideKnowledge.Note("repository:" + commit + ":" + p.path(), question,
+                        "PUBLIC EVIDENCE @ " + commit + " / " + p.path() + ":\n" + p.text(), fallback)).toList();
+    }
+
+    private double score(Passage passage, Set<String> words) {
+        double score = 0;
+        for (String word : words) if (passage.words().contains(word)) {
+            double rarity = Math.log(1 + (double) passages.size() / (1 + frequencies.getOrDefault(word, 0)));
+            score += rarity * (passage.pathWords().contains(word) ? 1.7 : 1);
+        }
+        return score * passage.authority();
+    }
+    public int passageCount() { return passages.size(); }
+}
