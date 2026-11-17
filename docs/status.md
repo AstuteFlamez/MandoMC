@@ -4,7 +4,7 @@
 
 On `bilal/hoth-vehicle-recall`, a production-only candidate fixes vehicle bases being blocked by Hoth’s ordinary mob suppression. Cancelled spawning keeps the item. `/vehicle recall`, `/recallvehicle` and `/vrecall` return the owner’s existing deployed identity with preserved health and rotated tokens; normal packing restrictions remain. The owner already replaced the reported bike, so no item grant is included.
 
-Verification: 342 Java tests, 84 tooling checks, the deployment manifest and resource-pack build pass. This exact production candidate also passes all 48 native assertions, including all four vehicles on Hoth, cancelled spawning, recall restrictions, stale tokens and an actual JVM restart. Its ten vehicle/territory classes match the dev-tested candidate byte for byte. Production upload/restart awaits approval. The droid, forge, KOTH and Jawa development features are excluded. Next action: approve the vehicle-only production hotfix and restart.
+Verification: 342 Java tests, 84 tooling checks, the deployment manifest and resource-pack build pass. This exact production candidate also passes all 48 native assertions, including all four vehicles on Hoth, cancelled spawning, recall restrictions, stale tokens and an actual JVM restart. Its ten vehicle/territory classes match the dev-tested candidate byte for byte. The owner explicitly chose **Keep production unchanged** on November 16. The vehicle-only PR is held as draft #59; no production upload or restart was performed. The droid, forge, KOTH and Jawa development features are excluded. Next action: retain this hotfix until the owner requests a production release.
 
 ## Ilum damage resets corrected (2026-11-16)
 
