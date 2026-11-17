@@ -67,7 +67,9 @@ public final class RepositorySnapshot {
 
     public static boolean approved(String path) {
         if (!path.matches("[a-zA-Z0-9_./-]+") || path.startsWith("/") || path.contains("..")) return false;
-        if (Set.of("docs/commands.md", "docs/player-experience.md").contains(path)) return true;
+        if (Set.of("docs/commands.md", "docs/player-experience.md",
+                "plugin/src/main/resources/admin/utilities.yml",
+                "server/config/common/mandomc/admin/utilities.yml").contains(path)) return true;
         String name = path.substring(path.lastIndexOf('/') + 1);
         if (path.startsWith("docs/features/") && path.endsWith(".md"))
             return List.of("maintenance", "security", "deployment", "dev-").stream().noneMatch(name::contains);

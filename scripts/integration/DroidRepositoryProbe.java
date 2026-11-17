@@ -110,7 +110,7 @@ public final class DroidRepositoryProbe extends JavaPlugin {
         if(question==5)check(text.contains("wrench") && (text.contains("crouch") || text.contains("sneak")),"GitHub-backed vehicle repairs correct");
         if(question==6)check(text.contains("fortune") && (text.contains("not") || text.contains("no ")) && text.contains("scrap"),"GitHub-backed ore Fortune rule correct");
         if(question==7){check(text.contains("drop") && (text.contains("gear") || text.contains("item")),"GitHub-backed survival death explanation correct");finish(null);return;}
-        question++;later(440,this::ask);
+        question++;later(question<=3?3:440,this::ask);
     }
     private void finish(Throwable error){try{if(actors!=null)actors.close();Files.createDirectories(getDataFolder().toPath());Files.writeString(getDataFolder().toPath().resolve(error==null?"PASSED.txt":"FAILED.txt"),error==null?checks+" native droid repository assertions passed\n":error.toString());if(error==null)getLogger().info("DROID REPOSITORY PASSED: "+checks);else getLogger().log(java.util.logging.Level.SEVERE,"DROID REPOSITORY FAILED",error);}catch(Exception e){getLogger().log(java.util.logging.Level.SEVERE,"Probe cleanup failed",e);}Bukkit.shutdown();}
 }

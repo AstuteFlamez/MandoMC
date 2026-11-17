@@ -26,4 +26,17 @@ public class RepositorySearchTest {
             assertTrue(note.id().contains(manifest.commit()));
         }
     }
+    @Test public void relevantDetailsOutrankIncidentalMentionsAndDuplicateOverrides() throws Exception {
+        String tutorial = "Make a home with your clan. Tutorial mining and crafting practice.";
+        var files = Map.of(
+                "server/config/common/mandomc/admin/utilities.yml", "schema-version: 1\nhomes-limit: 3\nrequest-expiry-seconds: 60",
+                "docs/features/native-utilities.md", "Players can save three named homes. /sethome saves a home. /home returns to a home. /homes lists homes. The default limit is three homes.",
+                "server/config/common/mandomc/tutorial/tutorial.yml", tutorial,
+                "plugin/src/main/resources/tutorial/tutorial.yml", tutorial);
+        var manifest = RepositorySnapshotTest.manifest("a".repeat(40), true, files);
+        var search = new RepositorySearch(RepositorySnapshot.archive(manifest, RepositorySnapshotTest.zip(files)), "FAQ");
+        var notes = search.find("How many homes can I set?");
+        assertTrue(notes.stream().anyMatch(n -> n.facts().contains("homes-limit: 3")));
+        assertEquals(3, notes.size());
+    }
 }

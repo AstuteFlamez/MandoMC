@@ -13,7 +13,9 @@ RESOURCE_AREAS = {'arrival', 'clans', 'combat', 'crates', 'economy', 'equipment'
 CODE_AREAS = {'arrival', 'auction', 'boba', 'credits', 'dungeon', 'explosions', 'leaderboards',
               'messaging', 'territory', 'trophies', 'clans', 'combat', 'crates', 'events', 'herd', 'ilum', 'items', 'jawa', 'mining', 'mobs',
               'progression', 'rules', 'saber', 'travel', 'tutorial', 'vehicles', 'worlds'}
-DOCS = {'docs/commands.md', 'docs/player-experience.md'}
+DOCS = {'docs/commands.md', 'docs/player-experience.md',
+        'plugin/src/main/resources/admin/utilities.yml',
+        'server/config/common/mandomc/admin/utilities.yml'}
 
 
 def approved(path):
