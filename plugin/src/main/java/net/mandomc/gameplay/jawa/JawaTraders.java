@@ -41,6 +41,8 @@ public final class JawaTraders implements Listener, AutoCloseable {
     public JawaIonization ionization(){return ionization;}
     private final BukkitTask attackTask;
     private final NamespacedKey group, born, npc, paused, categoryKey;
+    private final NamespacedKey stockKey=new NamespacedKey("mandomc","jawa_stock_v2");
+    private final Map<String,TextDisplay> shopTitles=new HashMap<>();
     private final Map<String, UUID> anchors=new HashMap<>();
     private record Conversation(Mob entity, boolean hadAI, Set<UUID> viewers) { }
     private final Map<UUID,Conversation> conversations=new HashMap<>();
@@ -75,6 +77,13 @@ public final class JawaTraders implements Listener, AutoCloseable {
             if(!config.isString("text."+key))throw new IllegalArgumentException("mobs/jawas.yml: missing text."+key);
         for(var offer:settings.supplies()) item(offer);
         for(var offer:settings.purchases()) item(offer);
+        for(var offer:settings.basicComponents()) item(offer);
+        for(var offer:settings.advancedComponents()) item(offer);
+        var npcs=config.getConfigurationSection("npcs");boolean changed=false;
+        if(npcs!=null){int index=0;for(String id:npcs.getKeys(false).stream().sorted().toList()){
+            if(settings.category(config.getString("npcs."+id+".category",""))==null){config.set("npcs."+id+".category",settings.categories().get(index%settings.categories().size()).id());changed=true;}index++;
+        }}
+        if(changed)config.save(new File(plugin.getDataFolder(),"mobs/jawas.yml"));
         ionization=new JawaIonization(plugin,Objects.requireNonNull(config.getConfigurationSection("ionization")));
         ionizationHits=new net.mandomc.integrations.weapons.IonizationHits(plugin,ionization);
         buyer=new JawaSellInventory(plugin,config,settings,this::canTrade);
@@ -116,6 +125,13 @@ public final class JawaTraders implements Listener, AutoCloseable {
         if(selected==null)selected=settings.category(entity.getUniqueId().getMostSignificantBits()^entity.getUniqueId().getLeastSignificantBits());
         entity.getPersistentDataContainer().set(categoryKey,PersistentDataType.STRING,selected.id());return selected;
     }
+    public List<JawaSettings.Offer> stock(LivingEntity entity) {
+        var all=new ArrayList<>(settings.basicComponents());all.addAll(settings.advancedComponents());
+        String saved=entity.getPersistentDataContainer().get(stockKey,PersistentDataType.STRING);
+        if(saved==null){var stock=settings.stock(entity.getUniqueId().getMostSignificantBits()^entity.getUniqueId().getLeastSignificantBits());
+            saved=stock.stream().map(JawaSettings.Offer::id).collect(java.util.stream.Collectors.joining(","));entity.getPersistentDataContainer().set(stockKey,PersistentDataType.STRING,saved);}
+        var ids=List.of(saved.split(","));return ids.stream().map(id->all.stream().filter(o->o.id().equals(id)).findFirst().orElseThrow(()->new IllegalStateException("Retired Jawa stock "+id))).toList();
+    }
     private List<LivingEntity> groupMembers(String id) {
         var members=new ArrayList<LivingEntity>();
         for(var world:Bukkit.getWorlds())for(var entity:world.getLivingEntities())
@@ -146,6 +162,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
     private void reconcileGroups() {
         var groups=new HashSet<String>();
         for(var world:Bukkit.getWorlds())for(var entity:world.getLivingEntities())if(brown(entity)) {
+            stock(entity);
             if(entity instanceof Mob mob)combatants.put(entity.getUniqueId(),mob);
             String id=entity.getPersistentDataContainer().get(group,PersistentDataType.STRING);if(id!=null)groups.add(id);
         }
@@ -180,25 +197,26 @@ public final class JawaTraders implements Listener, AutoCloseable {
         }
         boolean buying=brown(entity);
         if(!buying && !gray(entity))return;
-        if(!buying){buyer.open(player,entity);return;}
         if(!canTrade(player,entity))return;
-        var category=category(entity);
-        if(category==null){String id=entity.getPersistentDataContainer().get(group,PersistentDataType.STRING);send(player,failedGroups.contains(id)?"category-unavailable":"category-loading");return;}
-        var menu=new Menu(player,entity,true,text("brown-title","category",category.name()));
-        var offers=category.offers();
+        String anchor=entity.getPersistentDataContainer().get(npc,PersistentDataType.STRING);
+        var category=buying?null:settings.category(config.getString("npcs."+anchor+".category",settings.categories().getFirst().id()));
+        var menu=new Menu(player,entity,true,buying?text("brown-title"):text("gray-buy-title","category",category.name()));
+        var offers=buying?stock(entity):category.offers();
         for(int i=0;i<offers.size();i++) {
             var offer=offers.get(i);var preview=item(offer);var meta=preview.getItemMeta();
             var lore=new ArrayList<Component>(meta.hasLore()?meta.lore():List.of());lore.add(Component.empty());
-            lore.add(text(buying?"buy-price":"sell-price","amount",String.valueOf(offer.amount()),"price",CreditLedger.format(offer.price())));
-            lore.add(text(buying?"buy-hint":"sell-hint"));meta.lore(lore);preview.setItemMeta(meta);
+            lore.add(text("buy-price","amount",String.valueOf(offer.amount()),"price",CreditLedger.format(offer.price())));
+            lore.add(text("buy-hint"));meta.lore(lore);preview.setItemMeta(meta);
             menu.inventory.setItem(i,preview);menu.offers.put(i,offer);
         }
         var info=new ItemStack(Material.BOOK);var infoMeta=info.getItemMeta();
-        infoMeta.displayName(text("category-title","category",category.name()));
-        infoMeta.lore(List.of(text("category-info","category",category.name())));info.setItemMeta(infoMeta);menu.inventory.setItem(30,info);
+        infoMeta.displayName(buying?text("category-title"):text("gray-buy-title","category",category.name()));
+        infoMeta.lore(List.of(text(buying?"category-info":"gray-stock-info")));info.setItemMeta(infoMeta);menu.inventory.setItem(30,info);
         var balance=new ItemStack(Material.GOLD_NUGGET);var meta=balance.getItemMeta();
         meta.displayName(text("balance","balance",CreditLedger.format(plugin.credits().ledger().balance(player.getUniqueId()))));balance.setItemMeta(meta);
-        menu.inventory.setItem(31,balance);player.openInventory(menu.inventory);
+        menu.inventory.setItem(31,balance);
+        if(!buying){var sell=new ItemStack(Material.EMERALD);sell.editMeta(m->m.displayName(text("gray-sell")));menu.inventory.setItem(32,sell);}
+        player.openInventory(menu.inventory);
         if(buying && player.getOpenInventory().getTopInventory().getHolder()==menu && entity instanceof Mob mob) {
             var conversation=conversations.computeIfAbsent(entity.getUniqueId(),id->{
                 mob.getPersistentDataContainer().set(paused,PersistentDataType.BYTE,(byte)(mob.hasAI()?1:0));
@@ -256,8 +274,11 @@ public final class JawaTraders implements Listener, AutoCloseable {
         event.setCancelled(true);
         if(!(event.getWhoClicked() instanceof Player player) || !menu.viewer.equals(player.getUniqueId())
                 || event.getRawSlot()<0 || event.getRawSlot()>=36 || event.getClick()!=ClickType.LEFT)return;
+        if(event.getRawSlot()==32 && Bukkit.getEntity(menu.jawa) instanceof LivingEntity gray && gray(gray)) {
+            Bukkit.getScheduler().runTask(plugin,()->{if(player.isOnline() && player.getOpenInventory().getTopInventory()==menu.inventory)buyer.open(player,gray);});return;
+        }
         var offer=menu.offers.get(event.getRawSlot());if(offer==null)return;
-        if(!(Bukkit.getEntity(menu.jawa) instanceof LivingEntity jawa) || (menu.buying?!brown(jawa):!gray(jawa)) || !canTrade(player,jawa))return;
+        if(!(Bukkit.getEntity(menu.jawa) instanceof LivingEntity jawa) || (!brown(jawa)&&!gray(jawa)) || !canTrade(player,jawa))return;
         var stack=item(offer);
         if(!menu.buying && !player.getInventory().containsAtLeast(stack,stack.getAmount())){send(player,"missing-items");return;}
         if(menu.buying && !fits(player,stack)){send(player,"inventory-full");return;}
@@ -314,7 +335,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
             for(var site:sites) {
                 var entity=vendor.access().spawn("JawaBrown",site,1);
                 if(entity==null || !entity.isValid())throw new IllegalStateException("Jawa spawn denied");
-                created.add(entity);entity.getPersistentDataContainer().set(group,PersistentDataType.STRING,id);
+                stock(entity);created.add(entity);entity.getPersistentDataContainer().set(group,PersistentDataType.STRING,id);
                 entity.getPersistentDataContainer().set(born,PersistentDataType.LONG,System.currentTimeMillis());
                 entity.getPersistentDataContainer().set(categoryKey,PersistentDataType.STRING,pool.get(created.size()-1).id());
                 if(entity instanceof Mob mob)combatants.put(entity.getUniqueId(),mob);
@@ -426,6 +447,12 @@ public final class JawaTraders implements Listener, AutoCloseable {
                 entity.getPersistentDataContainer().set(npc,PersistentDataType.STRING,id);vendor.access().persist(entity);anchors.put(id,entity.getUniqueId());
             }
             grayModels.ensure(entity,clock*5L);
+            String categoryId=config.getString("npcs."+id+".category",settings.categories().getFirst().id());
+            var title=shopTitles.get(id);
+            if(title==null || !title.isValid()){
+                title=home.getWorld().spawn(home.clone().add(0,2.1,0),TextDisplay.class,t->{t.setPersistent(false);t.setInvulnerable(true);t.setBillboard(Display.Billboard.CENTER);t.setViewRange(.5f);t.setLineWidth(180);t.setSeeThrough(false);t.setShadowed(true);});shopTitles.put(id,title);
+            }
+            title.text(text("gray-name","category",settings.category(categoryId).name()));
             entity.setInvulnerable(true);entity.setCollidable(false);entity.setSilent(true);entity.setRemoveWhenFarAway(false);
             if(entity instanceof Mob mob){mob.setAI(false);mob.setTarget(null);}
             if(entity.getWorld()!=home.getWorld() || entity.getLocation().distanceSquared(home)>.01)entity.teleport(home);
@@ -480,6 +507,7 @@ public final class JawaTraders implements Listener, AutoCloseable {
         player.sendMessage(text("usage"));
     }
     @Override public void close() {
+        shopTitles.values().forEach(Entity::remove);shopTitles.clear();
         population.cancel();idle.cancel();attackTask.cancel();grayLook.cancel();grayLookTargets.clear();grayModels.close();attackClock.clear();combatants.clear();ionizationHits.close();ionization.close();buyer.close();
         for(UUID id:List.copyOf(conversations.keySet()))endConversation(id);
         HandlerList.unregisterAll(this);

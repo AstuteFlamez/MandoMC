@@ -1685,6 +1685,38 @@
         "G": "minecraft:glass",
         "L": "bantha_hide"
       }
+    },
+    "dark_saber": {
+      "result": "dark_saber",
+      "amount": 1,
+      "category": "weapons",
+      "shape": [
+        " B ",
+        "PKP",
+        " E "
+      ],
+      "ingredients": {
+        "B": "beskar",
+        "P": "phrik",
+        "K": "black_kyber",
+        "E": "energy_conduits"
+      }
+    },
+    "saber_forge": {
+      "result": "saber_forge",
+      "amount": 1,
+      "category": "tools",
+      "shape": [
+        "DCD",
+        "ASA",
+        "DDD"
+      ],
+      "ingredients": {
+        "D": "durasteel",
+        "C": "circuit_board",
+        "A": "agrinium",
+        "S": "minecraft:smithing_table"
+      }
     }
   },
   "sources": {
@@ -1692,31 +1724,31 @@
     "bantha_hide": "<gray>Tatooine: Banthas drop 1–3 hides.\n<gray>Brown Jawa shop on Tatooine: Utility supplies.\n<gray>Also craft four rabbit hides; click for recipe.",
     "purple_xwing": "<gray>Not currently obtainable through crafting or loot.",
     "money_note": "<gray>Not currently obtainable through crafting or loot.",
-    "cortosis_alloy_frame": "<gray>Not currently obtainable through crafting or loot.",
+    "cortosis_alloy_frame": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
     "high_efficiency_energy_segment": "<gray>Not currently obtainable through crafting or loot.",
     "high_tech_stabilizer": "<gray>Not currently obtainable through crafting or loot.",
     "incredibly_strong_and_light_frame": "<gray>Not currently obtainable through crafting or loot.",
     "ionized_focusing_lens": "<gray>Not currently obtainable through crafting or loot.",
     "kyber_tech_recoil_dampener": "<gray>Not currently obtainable through crafting or loot.",
     "state_of_the_art_recoil_dampener": "<gray>Not currently obtainable through crafting or loot.",
-    "basic_emitter_coil": "<gray>Recovered from brown Jawa electrical salvage on Tatooine.",
+    "basic_emitter_coil": "<gray>Buy from any brown Jawa on Tatooine, or craft with /recipes.",
     "basic_ion_chamber": "<gray>Not currently obtainable through crafting or loot.",
-    "basic_power_cell": "<gray>Recovered from brown Jawa electrical salvage on Tatooine.",
-    "makeshift_recoil_buffer": "<gray>Recovered from brown Jawa electrical salvage on Tatooine.",
+    "basic_power_cell": "<gray>Buy from any brown Jawa on Tatooine, or craft with /recipes.",
+    "makeshift_recoil_buffer": "<gray>Buy from any brown Jawa on Tatooine, or craft with /recipes.",
     "old_and_worn_barrel_liner": "<gray>Not currently obtainable through crafting or loot.",
-    "old_ion_chamber": "<gray>Not currently obtainable through crafting or loot.",
+    "old_ion_chamber": "<gray>Buy from any brown Jawa on Tatooine, or craft with /recipes.",
     "primitive_recoil_buffer": "<gray>Not currently obtainable through crafting or loot.",
-    "rough_power_cell": "<gray>Recovered from brown Jawa electrical salvage on Tatooine.",
+    "rough_power_cell": "<gray>Buy from any brown Jawa on Tatooine, or craft with /recipes.",
     "simple_emitter_coil": "<gray>Not currently obtainable through crafting or loot.",
     "worn_barrel_liner": "<gray>Not currently obtainable through crafting or loot.",
-    "durable_mid_grade_power_core": "<gray>Not currently obtainable through crafting or loot.",
+    "durable_mid_grade_power_core": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
     "durasteel_power_core": "<gray>Not currently obtainable through crafting or loot.",
     "enhanced_ion_chamber": "<gray>Not currently obtainable through crafting or loot.",
     "finely_tuned_emitter_coil": "<gray>Not currently obtainable through crafting or loot.",
     "modular_recoil_buffer": "<gray>Not currently obtainable through crafting or loot.",
     "recoil_reduction_system": "<gray>Not currently obtainable through crafting or loot.",
     "reinforced_barrel_liner": "<gray>Not currently obtainable through crafting or loot.",
-    "reinforced_ion_chamber": "<gray>Not currently obtainable through crafting or loot.",
+    "reinforced_ion_chamber": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
     "batteries": "<gray>Not currently obtainable through crafting or loot.",
     "biosample": "<gray>Not currently obtainable through crafting or loot.",
     "coaxium_fragment": "<gray>Not currently obtainable through crafting or loot.",
@@ -1838,18 +1870,18 @@
     "durasteel_block": "<gray>Craft nine Durasteel ingots into one block.\n<gray>Ore source: Tatooine caves.",
     "electrum": "<gray>Smelt one Electrum Scrap in a normal furnace.\n<gray>One scrap produces one ingot.\n<gray>Scrap source: Hoth and Naboo caves.",
     "electrum_block": "<gray>Craft nine Electrum ingots into one block.\n<gray>Ore source: Hoth deeper stone caves.",
-    "energy_conduits": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
+    "energy_conduits": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
     "fang_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "fusion_coil_stabilizer": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
+    "fusion_coil_stabilizer": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
     "great_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "green_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "obiwan": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "orange_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "pike_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "plasma_capacitor_array": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
+    "plasma_capacitor_array": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
     "plastoid": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "precision_crafted_lens": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "precision_emitter_coil": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
+    "precision_crafted_lens": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
+    "precision_emitter_coil": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
     "purple_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "quigon": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "raw_agrinium_block": "<gray>Pack nine retained Raw Agrinium into a block.\n<gray>Current Agrinium Ore drops scraps instead.",
@@ -1868,12 +1900,15 @@
     "whip_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "white_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "windu": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "wiring_coil": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Brown Jawas on Tatooine may also drop one.",
+    "wiring_coil": "<gray>Buy from any brown Jawa on Tatooine, or craft with /recipes.",
     "x_wing_cockpit": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "x_wing_left_wing": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "x_wing_right_wing": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "yellow_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
-    "phrik": "<gray>Smelt one scrap in a normal furnace for one ingot.\n<gray>Also: possible KOTH Crate reward on Batuu."
+    "phrik": "<gray>Smelt one scrap in a normal furnace for one ingot.\n<gray>Also: possible KOTH Crate reward on Batuu.",
+    "black_kyber": "<gray>Rarest KOTH Crate reward. Win KOTH on Hoth for a key.",
+    "dark_saber": "<gray>Craft using Black Kyber from the KOTH Crate.",
+    "saber_forge": "<gray>Craft with Durasteel, Agrinium, a Circuit Board and a Smithing Table."
   },
   "guide": {
     "title": "<gold>Recipes",
@@ -1925,7 +1960,14 @@
       "songsteel": "songsteel_from_scrap"
     },
     "stonecutting": "<yellow>Choose a saber style at a stonecutter",
-    "stonecutter-denied": "<red>This style requires the original, undamaged <item>."
+    "stonecutter-denied": "<red>This style requires the original, undamaged <item>.",
+    "search": "<yellow>Search Recipes",
+    "search-label": "<gray>Item name or part of a name",
+    "search-submit": "<yellow>Search",
+    "search-clear": "<yellow>Clear Search",
+    "search-uses": "<aqua>Search: Uses this ingredient",
+    "search-outputs": "<aqua>Search: Output names",
+    "search-empty": "<gray>No matching recipes. Click to edit."
   },
   "smelting": {
     "agrinium_from_raw": {
@@ -2149,11 +2191,6 @@
     "count_dooku_lightsaber": {
       "input": "vader",
       "result": "count_dooku_lightsaber",
-      "category": "weapons"
-    },
-    "dark_saber": {
-      "input": "ahsoka_tano_white_lightsaber",
-      "result": "dark_saber",
       "category": "weapons"
     },
     "darth_maul_apprentice_lightsaber": {

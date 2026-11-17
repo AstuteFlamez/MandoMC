@@ -109,6 +109,7 @@ public final class SaberService implements Listener {
         task=plugin.getServer().getScheduler().runTaskTimer(plugin,this::tick,1,1);
     }
     public SaberSettings settings() { return settings; }
+    private double upgradeBonus(ItemStack item,String track){return plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.forge()!=null?mando.forge().bonus(item,track):0;}
     public boolean isSaber(ItemStack item) {
         if (item == null || item.getType() != Material.SHIELD) return false;
         String id = catalog.identify(item);
@@ -124,7 +125,7 @@ public final class SaberService implements Listener {
     }
     public void reflected(Player p, double damage) { consumeGuard(p, damage); sound(p.getLocation(),"hit"); }
     private void consumeGuard(Player p, double damage) {
-        if(guard(p).hit(tick,settings,damage)) stun(p);
+        if(guard(p).hit(tick,settings,damage*Math.max(.1,1-upgradeBonus(p.getInventory().getItemInMainHand(),"guard")))) stun(p);
         syncDurability(p);
     }
     private void stun(Player player) {
@@ -485,7 +486,7 @@ public final class SaberService implements Listener {
             throwDamage.add(flight.owner.getUniqueId());
             try {
                 victim.setNoDamageTicks(0);
-                victim.damage(settings.throwDamage(), flight.owner);
+                victim.damage(settings.throwDamage()+upgradeBonus(flight.item,"throw"), flight.owner);
             } finally {
                 victim.setNoDamageTicks(immunity);
                 victim.setLastDamage(lastDamage);

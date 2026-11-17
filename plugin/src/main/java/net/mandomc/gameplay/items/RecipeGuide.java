@@ -89,6 +89,7 @@ public final class RecipeGuide implements Listener, AutoCloseable {
             slot++;
             if (slot % 9 == 8) slot += 2;
         }
+        button(menu, 47, Material.COMPASS, "search", "", p -> search(p, null, "", false));
         button(menu, 53, Material.BARRIER, "close", "", Player::closeInventory);
         player.openInventory(menu.inventory);
     }
@@ -114,7 +115,27 @@ public final class RecipeGuide implements Listener, AutoCloseable {
     }
 
     private void open(Player player, String category, int requestedPage) {
-        var choices = recipes.guideDefinitions().stream().filter(r -> matchesCategory(r, category)).toList();
+        open(player, category, requestedPage, "", false);
+    }
+
+    private void search(Player player, String category, String query, boolean uses) {
+        net.mandomc.gameplay.ui.TextPrompt.open(plugin, player, text("search", ""),
+                text("search-label", ""), text("search-submit", ""), query, 64,
+                (viewer, value) -> { if (viewer.hasPermission("mandomc.recipes")) open(viewer, category, 0, value, uses); });
+    }
+
+    private boolean match(String query, String id) {
+        var item = recipes.ingredient(id);
+        var display = item.getItemMeta().displayName();
+        String name = display == null ? item.getType().name()
+                : net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(display);
+        return RecipeSearch.matches(query, id, name);
+    }
+
+    private void open(Player player, String category, int requestedPage, String query, boolean uses) {
+        var choices = recipes.guideDefinitions().stream().filter(r -> matchesCategory(r, category))
+                .filter(r -> query.isBlank() || (uses ? r.ingredients().values().stream().anyMatch(id -> match(query, id))
+                        : match(query, r.result()))).toList();
         int page = ItemBrowser.clampPage(requestedPage, choices.size());
         var menu = new Menu(player, text("title", ""));
         menu.category = category;
@@ -122,13 +143,18 @@ public final class RecipeGuide implements Listener, AutoCloseable {
             var recipe = choices.get(i);
             var icon = recipes.result(recipe);
             menu.inventory.setItem(slot, obtainPreview(icon, recipe.result()));
-            menu.actions.put(slot, p -> detail(p, recipe, v -> open(v, category, page)));
+            menu.actions.put(slot, p -> detail(p, recipe, v -> open(v, category, page, query, uses)));
         }
         button(menu, 45, Material.CHEST, "categories", "", this::categories);
-        if (page > 0) button(menu, 48, Material.ARROW, "previous", "", p -> open(p, category, page - 1));
+        if (page > 0) button(menu, 48, Material.ARROW, "previous", "", p -> open(p, category, page - 1, query, uses));
         if (page + 1 < ItemBrowser.pageCount(choices.size())) {
-            button(menu, 50, Material.ARROW, "next", "", p -> open(p, category, page + 1));
+            button(menu, 50, Material.ARROW, "next", "", p -> open(p, category, page + 1, query, uses));
         }
+        button(menu, 46, Material.MILK_BUCKET, "search-clear", "", p -> open(p, category, 0));
+        button(menu, 47, Material.COMPASS, "search", query, p -> search(p, category, query, uses));
+        button(menu, 51, Material.HOPPER, uses ? "search-uses" : "search-outputs", "",
+                p -> open(p, category, 0, query, !uses));
+        if (choices.isEmpty()) button(menu, 22, Material.PAPER, "search-empty", "", p -> search(p, category, query, uses));
         button(menu, 49, Material.PAPER, "page", (page + 1) + " / " + ItemBrowser.pageCount(choices.size()), p -> {});
         button(menu, 53, Material.BARRIER, "close", "", Player::closeInventory);
         player.openInventory(menu.inventory);

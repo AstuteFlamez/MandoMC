@@ -1,0 +1,41 @@
+schema-version: 1
+point-budget: 6
+maximum-level: 3
+upgrades:
+  damage:
+    material: beskar
+    amount: 2
+    per-level: 1.0
+    description: '+1 melee damage per level'
+  speed:
+    material: precision_emitter_coil
+    amount: 1
+    per-level: 0.1
+    description: '+0.1 attacks/second per level'
+  guard:
+    material: phrik
+    amount: 2
+    per-level: 0.1
+    description: '10% less guard drain from hits per level'
+  throw:
+    material: energy_conduits
+    amount: 2
+    per-level: 2.0
+    description: '+2 throw damage per level'
+text:
+  title: '<gold>Saber Forge'
+  hold: '<yellow>Hold your lightsaber, then use the Saber Forge.'
+  unsafe: '<yellow>Leave combat, dismount and use the forge in Survival or Adventure.'
+  damage: '<gold>Damage <level>/<maximum>'
+  speed: '<gold>Attack Speed <level>/<maximum>'
+  guard: '<gold>Defense <level>/<maximum>'
+  throw: '<gold>Saber Throw <level>/<maximum>'
+  cost: '<gray>Cost: <yellow><amount> <material>'
+  points: '<gray>Upgrade points used: <yellow><spent>/<budget>'
+  effect: '<gray><value>'
+  confirm: '<yellow>Click to apply permanently. Costs rise each level.'
+  limit: '<yellow>This path or saber has reached its upgrade limit.'
+  missing: '<yellow>You need the displayed materials in your inventory.'
+  close: '<red>Close'
+  stats-label: 'Forge:'
+  style-first: '<yellow>Choose your saber style before upgrading. Forged sabers cannot be restyled.'
