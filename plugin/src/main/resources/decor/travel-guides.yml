@@ -1,5 +1,6 @@
 schema-version: 1
 enabled: true
+replace-cassian-with-protocol-droid: true
 time-zone: America/Chicago
 messages:
   delivered: 'Here is your current field handbook. Come back for more advice.'
@@ -8,7 +9,7 @@ messages:
 hints:
 - 'Use /warp to open the Galaxy Map and choose a planet.'
 - 'Public travel can be interrupted by movement or combat. Find a quiet place first.'
-- 'Use /tutorial for guided practice. First completion earns $5,000 and a starter kit.'
+- 'Use /tutorial for guided practice. Each section pays $500 on its first completion.'
 - 'Keep your handbook handy for the current server commands and activities.'
 npcs:
   rebel_pilot:

@@ -35,19 +35,22 @@ crates:
     rewards:
     - item: se14c
       amount: 1
-      weight: 20
+      weight: 18
     - item: a280
       amount: 1
-      weight: 18
+      weight: 16
     - item: ee3
       amount: 1
-      weight: 14
+      weight: 12
     - item: jawa_ionization_blaster
       amount: 1
-      weight: 12
+      weight: 10
     - item: cycler_rifle
       amount: 1
       weight: 12
+    - item: relby_v10
+      amount: 1
+      weight: 8
     - item: boba_jetpack
       amount: 1
       weight: 10

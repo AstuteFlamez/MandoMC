@@ -27,7 +27,7 @@ public class RecipeGuideOrderTest {
         var order = new RecipeGuideOrder(definitions);
         var sabers = definitions.stream().filter(r -> r.category().equals("lightsabers")).toList();
         assertEquals(78, sabers.size());
-        for (var saber : sabers) assertTrue(saber.id(), List.of("blue", "green", "red", "purple", "yellow", "orange", "white").contains(order.color(saber)));
+        for (var saber : sabers) assertTrue(saber.id(), List.of("blue", "green", "red", "purple", "yellow", "orange", "white", "black").contains(order.color(saber)));
         assertTrue(definitions.stream().anyMatch(r -> r.result().equals("e11") && r.category().equals("weapons")));
     }
 
@@ -36,7 +36,7 @@ public class RecipeGuideOrderTest {
         var order = new RecipeGuideOrder(definitions);
         var sorted = definitions.stream().filter(r -> r.category().equals("lightsabers")).sorted(order.comparator()).toList();
         var colors = sorted.stream().map(order::color).distinct().toList();
-        assertEquals(List.of("blue", "green", "red", "purple", "yellow", "orange", "white"), colors);
+        assertEquals(List.of("blue", "green", "red", "purple", "yellow", "orange", "white", "black"), colors);
         assertEquals("obiwan", sorted.getFirst().result());
         for (String color : colors) assertFalse(sorted.stream().filter(r -> order.color(r).equals(color)).findFirst().orElseThrow().stonecutting());
     }

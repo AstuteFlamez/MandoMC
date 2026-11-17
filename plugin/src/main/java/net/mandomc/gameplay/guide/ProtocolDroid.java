@@ -22,29 +22,34 @@ public final class ProtocolDroid implements Listener,AutoCloseable {
     private final MandoPlugin plugin;private final YamlConfiguration config;private final GuideKnowledge knowledge;
     private final GroqBrain brain;private final GuideAllowance allowance;
     private final ScheduledExecutorService worker=Executors.newSingleThreadScheduledExecutor(r->{var t=new Thread(r,"MandoMC-guide");t.setDaemon(true);return t;});
+    private final Map<UUID,Integer> promptTicks=new HashMap<>();
     private final Set<UUID> pending=new HashSet<>();private final Map<String,GroqBrain.Answer> cache=new ConcurrentHashMap<>();
-    private ArmorStand droid;private TextDisplay title;private long nextRequest;private volatile boolean closed;
+    private ArmorStand droid;private TextDisplay title;private long nextRequest;private volatile boolean closed;private volatile boolean storageHealthy=true;
     private final org.bukkit.scheduler.BukkitTask ticker;
     public ProtocolDroid(MandoPlugin plugin,YamlConfiguration config) throws Exception{
-        this.plugin=plugin;this.config=config;knowledge=new GuideKnowledge(Objects.requireNonNull(config.getConfigurationSection("knowledge")));
+        this.plugin=plugin;this.config=config;
+        if(config.getInt("schema-version")!=1 || config.getInt("daily-answers")<1 || config.getInt("daily-answers")>100
+                || config.getInt("cooldown-seconds")<1 || config.getInt("request-spacing-seconds")<1 || config.getInt("request-spacing-seconds")>60
+                || config.getString("identity","").isBlank() || !config.getString("model","").matches("[a-zA-Z0-9._/-]+"))throw new IllegalArgumentException("guide/protocol-droid.yml: invalid bounds or identity");
+        knowledge=new GuideKnowledge(Objects.requireNonNull(config.getConfigurationSection("knowledge")));
         var secret=plugin.getDataFolder().toPath().resolve("secrets/groq-api-key");
         String key=Files.exists(secret)?Files.readString(secret).strip():System.getenv().getOrDefault("MANDOMC_GROQ_API_KEY","").strip();
         brain=new GroqBrain(key,config.getString("model"),config.getString("identity"));
-        allowance=new GuideAllowance(plugin.getDataFolder().toPath().resolve("data/guide-allowance.properties"),config.getInt("daily-answers"),config.getInt("daily-token-budget"),config.getInt("reserved-tokens"),config.getInt("cooldown-seconds"));
+        allowance=new GuideAllowance(plugin.getDataFolder().toPath().resolve("data/guide-allowance.properties"),config.getInt("daily-answers"),config.getInt("daily-token-budget"),config.getInt("reserved-tokens"),config.getInt("cooldown-seconds"),config.getInt("daily-request-budget",800));
         Bukkit.getPluginManager().registerEvents(this,plugin);
         Objects.requireNonNull(plugin.getCommand("ask")).setExecutor((sender,command,label,args)->{if(sender instanceof Player player){if(args.length==0)prompt(player);else ask(player,String.join(" ",args));}return true;});
         ticker=Bukkit.getScheduler().runTaskTimer(plugin,this::tick,20,5);
         plugin.getLogger().info("M4-ND ready: "+(brain.configured()?"Groq configured":"FAQ only; add secrets/groq-api-key")+"; private explanations only.");
     }
     private Component text(String key,String...values){var tags=new ArrayList<net.kyori.adventure.text.minimessage.tag.resolver.TagResolver>();for(int i=0;i<values.length;i+=2)tags.add(Placeholder.unparsed(values[i],values[i+1]));return MiniMessage.miniMessage().deserialize(config.getString("text."+key,key),tags.toArray(net.kyori.adventure.text.minimessage.tag.resolver.TagResolver[]::new));}
-    public void prompt(Player player){if(!safe(player))return;TextPrompt.open(plugin,player,text("title"),text("question"),text("submit"),"",240,this::ask);}
+    public void prompt(Player player){if(!safe(player))return;int tick=Bukkit.getCurrentTick();if(tick-promptTicks.getOrDefault(player.getUniqueId(),tick-10)<10)return;promptTicks.put(player.getUniqueId(),tick);TextPrompt.open(plugin,player,text("title"),text("question"),text("submit"),"",240,this::ask);}
     private boolean safe(Player player){if(!player.hasPermission("mandomc.arrival") || player.isDead() || plugin.combat().tagged(player) || player.isInsideVehicle() || net.mandomc.gameplay.tutorial.TutorialInventory.active(player)){player.sendMessage(text("unsafe"));return false;}return true;}
     public void ask(Player player,String question){
         if(!safe(player) || question.isBlank())return;if(question.length()>240){player.sendMessage(text("length"));return;}
         var notes=knowledge.find(question);if(notes.isEmpty()){reply(player,config.getString("unknown"));return;}
         String cacheKey=net.mandomc.gameplay.items.RecipeSearch.normalize(question);var cached=cache.get(cacheKey);
         if(cached!=null){reply(player,cached.text());return;}
-        if(!brain.configured()){reply(player,notes.getFirst().fallback());return;}
+        if(!brain.configured() || !storageHealthy){reply(player,notes.getFirst().fallback());return;}
         if(pending.contains(player.getUniqueId()) || pending.size()>=4){fallback(player,notes,"busy");return;}
         pending.add(player.getUniqueId());UUID id=player.getUniqueId();player.sendMessage(text("thinking"));
         long delay=Math.max(0,nextRequest-System.currentTimeMillis());nextRequest=Math.max(System.currentTimeMillis(),nextRequest)+config.getInt("request-spacing-seconds")*1000L;
@@ -55,7 +60,7 @@ public final class ProtocolDroid implements Listener,AutoCloseable {
                 if(denial!=GuideAllowance.Denial.NONE)notice=denial==GuideAllowance.Denial.DAILY?"daily":denial==GuideAllowance.Denial.COOLDOWN?"cooldown":"shared";
                 else{held=true;var generated=brain.answer(question,notes);answer=generated.text();allowance.finish(id,reserved,generated.tokens(),true);held=false;if(cache.size()>=256)cache.clear();cache.put(cacheKey,generated);}
             }catch(Exception error){
-                if(held)try{allowance.finish(id,reserved,0,false);}catch(Exception save){plugin.getLogger().warning("M4-ND allowance save failed; AI requests paused.");closed=true;}
+                if(held)try{allowance.finish(id,reserved,0,false);}catch(Exception save){plugin.getLogger().warning("M4-ND allowance save failed; AI requests paused.");storageHealthy=false;}
                 notice="unavailable";plugin.getLogger().warning("M4-ND request unavailable; served a maintained FAQ answer.");
             }
             String result=answer,status=notice;
@@ -68,9 +73,11 @@ public final class ProtocolDroid implements Listener,AutoCloseable {
     private void tick(){
         if(closed)return;
         if(droid==null || !droid.isValid()){
-            var spawn=plugin.worlds().spawn("Batuu");Location at=null;
-            for(int[] offset:new int[][]{{3,0},{-3,0},{0,3},{0,-3},{4,2},{-4,2}}){var trial=spawn.clone().add(offset[0],0,offset[1]);if(trial.getBlock().isPassable() && trial.clone().add(0,1,0).getBlock().isPassable() && !trial.clone().add(0,-1,0).getBlock().isPassable()){at=trial;break;}}
-            if(at==null)return;
+            var guides=YamlConfiguration.loadConfiguration(new java.io.File(plugin.getDataFolder(),"decor/travel-guides.yml"));
+            var anchor=Objects.requireNonNull(guides.getConfigurationSection("npcs.cassian_andor"));
+            var world=Bukkit.getWorld(Objects.requireNonNull(NamespacedKey.fromString(anchor.getString("world"))));
+            if(world==null)return;
+            Location at=new Location(world,anchor.getDouble("x"),anchor.getDouble("y"),anchor.getDouble("z"),(float)anchor.getDouble("yaw"),(float)anchor.getDouble("pitch"));
             Location site=at;
             droid=(ArmorStand)plugin.territories().spawnNpc(EntityType.ARMOR_STAND,site,()->site.getWorld().spawn(site,ArmorStand.class));
             if(droid==null)return;
@@ -83,6 +90,7 @@ public final class ProtocolDroid implements Listener,AutoCloseable {
     }
     private ArmorStand atWorldStand(World world,Location spawn){return world.spawn(spawn,ArmorStand.class);}
     @EventHandler(priority=EventPriority.HIGHEST) public void interact(PlayerInteractEntityEvent event){if(droid!=null && event.getRightClicked().getUniqueId().equals(droid.getUniqueId())){event.setCancelled(true);if(event.getHand()==EquipmentSlot.HAND)Bukkit.getScheduler().runTask(plugin,()->prompt(event.getPlayer()));}}
+    @EventHandler(priority=EventPriority.HIGHEST) public void interactAt(PlayerInteractAtEntityEvent event){interact(event);}
     @EventHandler(priority=EventPriority.HIGHEST) public void damage(EntityDamageEvent event){if(droid!=null && event.getEntity().getUniqueId().equals(droid.getUniqueId()))event.setCancelled(true);}
     @EventHandler public void manipulate(PlayerArmorStandManipulateEvent event){if(droid!=null && event.getRightClicked().getUniqueId().equals(droid.getUniqueId()))event.setCancelled(true);}
     @Override public void close(){closed=true;ticker.cancel();worker.shutdownNow();brain.close();HandlerList.unregisterAll(this);if(droid!=null)droid.remove();if(title!=null)title.remove();pending.clear();}

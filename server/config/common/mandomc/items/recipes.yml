@@ -1686,22 +1686,6 @@
         "L": "bantha_hide"
       }
     },
-    "dark_saber": {
-      "result": "dark_saber",
-      "amount": 1,
-      "category": "weapons",
-      "shape": [
-        " B ",
-        "PKP",
-        " E "
-      ],
-      "ingredients": {
-        "B": "beskar",
-        "P": "phrik",
-        "K": "black_kyber",
-        "E": "energy_conduits"
-      }
-    },
     "saber_forge": {
       "result": "saber_forge",
       "amount": 1,
@@ -1716,6 +1700,22 @@
         "C": "circuit_board",
         "A": "agrinium",
         "S": "minecraft:smithing_table"
+      }
+    },
+    "dark_saber": {
+      "result": "dark_saber",
+      "amount": 1,
+      "category": "lightsabers",
+      "shape": [
+        " B ",
+        "PKP",
+        " E "
+      ],
+      "ingredients": {
+        "B": "beskar",
+        "P": "phrik",
+        "K": "black_kyber",
+        "E": "energy_conduits"
       }
     }
   },
@@ -2193,14 +2193,6 @@
       "result": "count_dooku_lightsaber",
       "category": "lightsabers"
     },
-<<<<<<< HEAD
-=======
-    "dark_saber": {
-      "input": "ahsoka_tano_white_lightsaber",
-      "result": "dark_saber",
-      "category": "lightsabers"
-    },
->>>>>>> origin/dev
     "darth_maul_apprentice_lightsaber": {
       "input": "vader",
       "result": "darth_maul_apprentice_lightsaber",

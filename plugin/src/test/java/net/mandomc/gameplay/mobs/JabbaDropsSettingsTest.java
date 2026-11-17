@@ -17,7 +17,7 @@ public class JabbaDropsSettingsTest {
     @Test public void preservesIndependentRollsAndBounds() {
         var settings = JabbaDropsSettings.read(config());
         var random = new Random(36);
-        for (String name : settings.mobs().keySet()) {
+        for (String name : settings.mobs().keySet().stream().sorted().toList()) {
             var rule = settings.mobs().get(name);
             int weapons = 0, ammo = 0;
             for (int i = 0; i < 10000; i++) {
@@ -29,7 +29,7 @@ public class JabbaDropsSettingsTest {
                 weapons += drops.stream().filter(rule.weapon()::equals).count();
                 ammo += drops.stream().filter(rule.ammo()::equals).count();
             }
-            assertEquals(10000 * rule.weaponChance(), weapons, 150);
+            assertEquals(10000 * rule.weaponChance(), weapons, Math.max(1, 6 * Math.sqrt(10000 * rule.weaponChance() * (1-rule.weaponChance()))));
             assertEquals(10000 * rule.ammoRolls() * rule.ammoChance(), ammo,
                     Math.max(1, 6 * Math.sqrt(10000 * rule.ammoRolls() * rule.ammoChance() * (1 - rule.ammoChance()))));
         }

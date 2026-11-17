@@ -117,7 +117,6 @@ public final class RecipeGuide implements Listener, AutoCloseable {
     }
 
     private void open(Player player, String category, int requestedPage) {
-<<<<<<< HEAD
         open(player, category, requestedPage, "", false);
     }
 
@@ -139,10 +138,7 @@ public final class RecipeGuide implements Listener, AutoCloseable {
         var choices = recipes.guideDefinitions().stream().filter(r -> matchesCategory(r, category))
                 .filter(r -> query.isBlank() || (uses ? r.ingredients().values().stream().anyMatch(id -> match(query, id))
                         : match(query, r.result()))).toList();
-=======
-        var choices = recipes.guideDefinitions().stream().filter(r -> matchesCategory(r, category))
-                .sorted(order.comparator()).toList();
->>>>>>> origin/dev
+        choices=choices.stream().sorted(order.comparator()).toList();
         int page = ItemBrowser.clampPage(requestedPage, choices.size());
         var menu = new Menu(player, text("title", ""));
         menu.category = category;

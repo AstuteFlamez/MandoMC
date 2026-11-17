@@ -450,7 +450,9 @@ public final class JawaTraders implements Listener, AutoCloseable {
             String categoryId=config.getString("npcs."+id+".category",settings.categories().getFirst().id());
             var title=shopTitles.get(id);
             if(title==null || !title.isValid()){
-                title=home.getWorld().spawn(home.clone().add(0,2.1,0),TextDisplay.class,t->{t.setPersistent(false);t.setInvulnerable(true);t.setBillboard(Display.Billboard.CENTER);t.setViewRange(.5f);t.setLineWidth(180);t.setSeeThrough(false);t.setShadowed(true);});shopTitles.put(id,title);
+                double extra=0;
+                for(String other:entries.getKeys(false))if(other.compareTo(id)<0){var near=anchor(other);if(near!=null && near.getWorld()==home.getWorld() && Math.abs(near.getY()-home.getY())<.5 && Math.pow(near.getX()-home.getX(),2)+Math.pow(near.getZ()-home.getZ(),2)<4)extra+=.4;}
+                title=home.getWorld().spawn(home.clone().add(0,2.1+extra,0),TextDisplay.class,t->{t.setPersistent(false);t.setInvulnerable(true);t.setBillboard(Display.Billboard.CENTER);t.setViewRange(.5f);t.setLineWidth(180);t.setSeeThrough(false);t.setShadowed(true);});shopTitles.put(id,title);
             }
             title.text(text("gray-name","category",settings.category(categoryId).name()));
             entity.setInvulnerable(true);entity.setCollidable(false);entity.setSilent(true);entity.setRemoveWhenFarAway(false);

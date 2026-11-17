@@ -13,6 +13,7 @@ import org.bukkit.entity.ArmorStand;
 public final class DecorModel implements AutoCloseable {
     private final ModeledEntity modeled;
     private final ActiveModel active;
+    public static boolean available(String id){return ModelEngineAPI.getBlueprint(id)!=null;}
     public DecorModel(ArmorStand base,DecorDefinition definition){
         if(ModelEngineAPI.getBlueprint(definition.model())==null)throw new IllegalStateException("Missing decor blueprint "+definition.model());
         var existing=ModelEngineAPI.getModeledEntity(base);

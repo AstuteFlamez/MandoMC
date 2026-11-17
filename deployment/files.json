@@ -82,6 +82,10 @@
       "target": "plugins/MandoMC/equipment/jetpack-visual-tests.yml"
     },
     {
+      "source": "server/config/common/mandomc/equipment/saber-forge.yml",
+      "target": "plugins/MandoMC/equipment/saber-forge.yml"
+    },
+    {
       "source": "server/config/common/mandomc/events/beskar.yml",
       "target": "plugins/MandoMC/events/beskar.yml"
     },
@@ -96,6 +100,10 @@
     {
       "source": "server/config/common/mandomc/events/schedule.yml",
       "target": "plugins/MandoMC/events/schedule.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/guide/protocol-droid.yml",
+      "target": "plugins/MandoMC/guide/protocol-droid.yml"
     },
     {
       "source": "server/config/common/mandomc/interface/hud.yml",

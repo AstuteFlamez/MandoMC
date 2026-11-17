@@ -14,11 +14,11 @@ public class KothCrateTest {
     @Test public void kothUsesTheSharedCrateDefinitionAndSavedVirtualKeys() {
         var crate=CrateDefinition.read("koth",config().getConfigurationSection("crates.koth"));
         assertTrue(crate.virtual());assertEquals("koth_crate_key",crate.keyItem());
-        assertEquals(100,crate.rewards().total());assertEquals(11,crate.rewards().entries().size());
+        assertEquals(100,crate.rewards().total());assertEquals(12,crate.rewards().entries().size());
         assertEquals("se14c",crate.rewards().choose(0).item());
         assertEquals("black_kyber",crate.rewards().choose(99).item());
         var items=new java.util.HashSet<String>();for(int i=0;i<100;i++)items.add(crate.rewards().choose(i).item());
-        assertEquals(java.util.Set.of("se14c","a280","ee3","jawa_ionization_blaster","cycler_rifle","boba_jetpack","speederbike","uwing","xwing","tiefighter","black_kyber"),items);
+        assertEquals(java.util.Set.of("se14c","a280","ee3","jawa_ionization_blaster","cycler_rifle","relby_v10","boba_jetpack","speederbike","uwing","xwing","tiefighter","black_kyber"),items);
     }
     @Test public void weightedRewardsUseExactBoundariesAndRejectInvalidTickets() {
         var pool=new WeightedPool<>(List.of(new WeightedPool.Entry<>("common",95),new WeightedPool.Entry<>("rare",5)));

@@ -22,7 +22,7 @@ public class GuideAllowanceTest {
         allowance=new GuideAllowance(file,10,4000,4000,20);assertEquals(GuideAllowance.Denial.SHARED,allowance.reserve(UUID.randomUUID(),now));
     }
     @Test public void oldResponseCannotSpendTheNewDay() throws Exception {
-        var file=Files.createTempDirectory("guide").resolve("usage.properties");var player=UUID.randomUUID();var now=Instant.parse("2026-11-16T07:59:59Z");
+        var file=Files.createTempDirectory("guide").resolve("usage.properties");var player=UUID.randomUUID();var now=Instant.parse("2026-11-16T05:59:59Z");
         var allowance=new GuideAllowance(file,1,12000,4000,20);allowance.reserve(player,now);allowance.reserve(player,now.plusSeconds(2));
         allowance.finish(player,now,100,true);assertEquals(GuideAllowance.Denial.DAILY,allowance.reserve(player,now.plusSeconds(30)));
     }

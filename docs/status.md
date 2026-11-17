@@ -1,5 +1,12 @@
 # Resume here
 
+## Approved gameplay upgrades verified for development (2026-11-16)
+
+On `bilal/dev-gameplay-upgrades`, implemented recipe output/ingredient search with preserved Back state; M4-ND’s private Groq explanations at Cassian’s former anchor; finished-gun/Jetpack/vehicle KOTH rewards with rare Black Kyber and a required Darksaber recipe; permanent per-entity brown component stock; seven titled gray supply categories with retained salvage trays; and a craftable six-point Saber Forge with real damage/speed/guard/throw effects. Updated tutorial, handbook, acquisition notes and droid knowledge. Interplanetary vehicle travel remains deferred.
+
+Merged the latest development feedback fixes before verification. All 353 Java tests and 85 tooling checks pass. The full disposable Paper probe passes 133 native assertions, including a real Groq explanation; startup is error-free after vendor-readiness gates. The pack preserves all 1,193 active entries and adds only the Black Kyber item wrapper. The key is saved only in ignored owner-only storage; source credential scanning passes. The final Shops walkthrough also passes 548 native assertions, including the Wiring Coil purchase, supplied-salvage sale, private route and retained reward/escrow behavior. Development activation remains pending. Next action: publish the reviewed development pack, then activate the exact tested build after a full stopped-runtime backup.
+
+
 ## Development playtest corrections verified (2026-11-16)
 
 On `bilal/dev-feedback-fixes`, fixed operation-specific skull/helmet/sign messages, fall-only dropper retries, advancement chat suppression, styled voting broadcasts/reminders/commands, custom recipe-book discovery, separate color-grouped lightsabers, and normal enchanting with Bantha Hide leather compatibility. Dewbacks drop no hide while keeping saddles/food. All four existing ammo sources now average 10 rounds (20 independent 50% rolls); weapon/equipment/salvage chances remain unchanged.

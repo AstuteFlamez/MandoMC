@@ -29,9 +29,9 @@ public final class SaberForge implements Listener,AutoCloseable {
     }
     public SaberForge(MandoPlugin plugin,YamlConfiguration config){
         this.plugin=plugin;this.config=config;budget=config.getInt("point-budget");maximum=config.getInt("maximum-level");
-        if(budget<1 || budget>10 || maximum<1 || maximum>budget)throw new IllegalArgumentException("forge: invalid point bounds");
+        if(config.getInt("schema-version")!=1 || budget<1 || budget>10 || maximum<1 || maximum>budget)throw new IllegalArgumentException("forge: invalid point bounds");
         for(String track:SaberUpgrades.TRACKS){
-            if(plugin.items().create(config.getString("upgrades."+track+".material",""))==null || config.getInt("upgrades."+track+".amount")<1
+            if(plugin.items().create(config.getString("upgrades."+track+".material",""))==null || config.getInt("upgrades."+track+".amount")<1 || config.getInt("upgrades."+track+".amount")>64
                     || !Double.isFinite(config.getDouble("upgrades."+track+".per-level")) || config.getDouble("upgrades."+track+".per-level")<=0)
                 throw new IllegalArgumentException("forge: invalid upgrade "+track);
         }
@@ -56,7 +56,7 @@ public final class SaberForge implements Listener,AutoCloseable {
             && (player.getGameMode()==GameMode.SURVIVAL || player.getGameMode()==GameMode.ADVENTURE);}
     @EventHandler(priority=EventPriority.HIGHEST) public void use(PlayerInteractEvent event){
         if(event.getAction()!=Action.RIGHT_CLICK_BLOCK || event.getHand()!=EquipmentSlot.HAND || event.getClickedBlock()==null || !station(event.getClickedBlock()))return;
-        // Protected hubs may deny edits; using a forge does not grant editing permission.
+        if(event.useInteractedBlock()==Event.Result.DENY)return;
         event.setCancelled(true);var player=event.getPlayer();
         if(!allowed(player,event.getClickedBlock())){player.sendMessage(text("unsafe"));return;}
         if(!plugin.sabers().isSaber(player.getInventory().getItemInMainHand())){player.sendMessage(text("hold"));return;}
