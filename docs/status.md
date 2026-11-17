@@ -1,5 +1,13 @@
 # Resume here
 
+## Full production release uploaded; restart pending (2026-11-16)
+
+The approved full dev promotion merged through PR #62 to production commit `8fad679`. Its checks, public resource-pack publication and checked upload passed. All 131 staged managed files match the deployment receipt; the production JAR differs from the native-tested dev JAR only in its exact-source knowledge manifest. The public pack download matches the checked artifact and retains SHA-1 `a3b671891cb225943edf916f2c5930926ac801eb`.
+
+The existing Groq key is installed privately with owner-only permissions, and the exact production build's validated public knowledge cache contains 357 sources and 3813 passages. The previously unmanaged voting configuration was reviewed, backed up and adopted into drift tracking before the normal uploader applied the approved styling. Managed-file rollback backups are retained; no worlds or player records were changed by this release.
+
+Verification: 367 Java tests, 88 tooling checks, 70 native droid checks and 48 vehicle/restart checks, plus the earlier full gameplay/shop suites. Upload and staged verification are complete; active startup verification is pending. The owner's approval includes restart, but the Mac is locked and the existing PebbleHost panel cannot be operated until it is unlocked. Next action: restart production through PebbleHost and verify the active JAR, startup markers and all installed managed hashes.
+
 ## Full production promotion approved (2026-11-16)
 
 The owner explicitly approved pushing the full tested dev bundle to production and all necessary actions, including restart. This supersedes the earlier production hold. The release includes the gameplay upgrades, playtest fixes, M4-ND skin/guidance/build-pinned GitHub knowledge, staff forge access and Hoth vehicle recovery. The separate vehicle-only draft #59 becomes redundant after the full release.
