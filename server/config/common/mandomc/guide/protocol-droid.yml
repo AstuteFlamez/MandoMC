@@ -32,7 +32,7 @@ knowledge:
   identity:
     tags: who you name identity droid protocol m4 nd mando yourself
     facts: M4-ND, pronounced Mando, is MandoMC’s resident protocol droid at Batuu spawn. He explains verified MandoMC
-      information, is formal, helpful and slightly anxious about danger, and cannot perform actions.
+      information and cannot perform actions.
     answer: Greetings, traveler. I am M4-ND, pronounced Mando, the protocol and information droid stationed at Batuu.
       I explain MandoMC’s systems. Dangerous expeditions are, thankfully, your department.
   beginner:
@@ -91,7 +91,7 @@ knowledge:
     answer: Use /warp to choose a planet, or /spawn to return to Batuu. Stand still during travel and leave combat
       first. Naboo is a good place to begin your first base.
   clans:
-    tags: clan clans base claim claims home raid raiding warpoints rivalry
+    tags: clan clans base claim claims raid raiding warpoints rivalry
     facts: Use /c for clan commands and /c map for zones and claims. Wilderness is claimable subject to clan limits
       and spacing. A +10 pairwise net-kill lead permits an approved explosive breach against that rival; the first
       breach begins a fixed one-hour raid and resets/freezes that rivalry for the hour. Clanmates cannot damage

@@ -6,7 +6,6 @@ import java.net.URI;
 import java.net.http.*;
 import java.time.Duration;
 import java.util.List;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 
 /** The only outgoing AI boundary. Sends the question and selected public notes, never credentials in URLs or logs. */
 public final class GroqBrain implements AutoCloseable {
@@ -39,7 +38,7 @@ public final class GroqBrain implements AutoCloseable {
             int tokens=data.getAsJsonObject("usage").get("total_tokens").getAsInt();return new Answer(answer,tokens);
         }
     }
-    static String plainAnswer(String value){return MiniMessage.miniMessage().stripTags(value.replace("<newline>","\n")).strip();}
+    static String plainAnswer(String value){return RepositorySearch.playerText(value).replace("**","").replace("`","").strip();}
     public static long resetDelay(String value){
         var matcher=java.util.regex.Pattern.compile("(\\d+(?:\\.\\d+)?)(ms|s|m|h)").matcher(value);double milliseconds=0;
         while(matcher.find())milliseconds+=Double.parseDouble(matcher.group(1))*switch(matcher.group(2)){case "h"->3600000;case "m"->60000;case "s"->1000;default->1;};

@@ -23,9 +23,7 @@ public final class RepositorySearch {
         this.fallback = fallback;
         var rows = new ArrayList<Passage>();
         snapshot.documents().forEach((path, text) -> {
-            String publicText = MiniMessage.miniMessage().stripTags(text.replace("<newline>", "\n")
-                    .replace("<key:key.sneak>", "Sneak").replace("<key:key.use>", "Use")
-                    .replace("<key:key.attack>", "Attack"));
+            String publicText = playerText(text);
             if (path.endsWith(".md")) publicText = playerSections(publicText);
             String status = publicText.lines().limit(20).filter(l -> l.startsWith("Status:")).findFirst().orElse("");
             var pathWords = tokens(path.replace(".java", "").replace(".yml", "").replace(".md", ""));
@@ -48,6 +46,16 @@ public final class RepositorySearch {
         frequencies = Map.copyOf(counts);
         averageLength = passages.stream().mapToInt(p -> p.counts().values().stream()
                 .mapToInt(Integer::intValue).sum()).average().orElse(1);
+    }
+
+    static String playerText(String text) {
+        String plain = MiniMessage.miniMessage().stripTags(text.replace("<newline>", "\n")
+                .replace("<key:key.sneak>", "Sneak").replace("<key:key.use>", "Use")
+                .replace("<key:key.attack>", "Attack"));
+        plain = java.util.regex.Pattern.compile("\\bmandomc\\.[a-z0-9_.*-]+")
+                .matcher(plain).replaceAll(m -> m.group().substring(8).replace('.', ' ') + " permission");
+        return java.util.regex.Pattern.compile("(?<![/\\w])[a-z][a-z0-9]*(?:[-_][a-z0-9]+)+(?!\\w)")
+                .matcher(plain).replaceAll(m -> m.group().replace('_', ' ').replace('-', ' '));
     }
 
     private static String playerSections(String markdown) {
