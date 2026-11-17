@@ -56,6 +56,12 @@ class Remote:
 
 
 class SftpSafetyTests(unittest.TestCase):
+    def test_current_and_legacy_travel_guide_startup_messages(self):
+        for message in ('[MandoMC] Travel guides ready at saved anchors.', '[MandoMC] Travel guides ready: 2 NPCs'):
+            self.assertTrue(module.travel_guides_ready(message))
+        for message in ('Travel guides unavailable', 'Travel guides ready soon', 'Travel guides disabled'):
+            self.assertFalse(module.travel_guides_ready(message))
+
     def test_voting_presentation_accepts_only_the_reviewed_source(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

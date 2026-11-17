@@ -1,5 +1,11 @@
 # Resume here
 
+## Full production promotion approved (2026-11-16)
+
+The owner explicitly approved pushing the full tested dev bundle to production and all necessary actions, including restart. This supersedes the earlier production hold. The release includes the gameplay upgrades, playtest fixes, M4-ND skin/guidance/build-pinned GitHub knowledge, staff forge access and Hoth vehicle recovery. The separate vehicle-only draft #59 becomes redundant after the full release.
+
+Verification before promotion: 367 Java tests, 88 tooling checks, 70 latest native droid checks, 48 vehicle/restart checks and earlier complete gameplay/shops checks pass on dev. The only release-preparation code change updates the deployment verifier to recognize current and legacy travel-guide readiness messages; gameplay code is unchanged. Production activation is pending checked main upload, private credential/cache setup and an authorized normal restart. Next action: publish and activate the checked full production release.
+
 ## Build-pinned public droid knowledge deployed (2026-11-16)
 
 On `bilal/droid-github-knowledge` (PR #60), M4-ND indexes 357 approved public GitHub files into 3813 bounded passages. Each clean JAR pins its exact commit and source hashes; only its own verified archive/cache is eligible. Modified builds, private/runtime paths, mismatched caches, unsafe redirects and oversized responses are rejected. Same-version caching works offline. Current handbook/configuration outrank historical notes; historical rollout sections are excluded. Exact acquisition, beginner, mining and death guidance stays deterministic, while broader questions use retrieved context with concise plain answers. Character, provider-free menus, quotas and FAQ fallback remain.
