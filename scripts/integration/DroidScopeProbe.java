@@ -89,7 +89,7 @@ public final class DroidScopeProbe extends JavaPlugin {
             case "vader" -> check(value.contains("anakin"),"Vader lore retained");
             case "followup" -> check(value.contains("obi") || value.contains("kenobi"),"lore pronoun follow-up retained");
             case "base" -> check(value.contains("naboo") && value.contains("/c map") && !value.contains("48") && !value.contains("university") && !value.contains("wisconsin"),"mixed request uses maintained first-base advice");
-            case "yoda" -> check(value.contains("jedi") && !value.contains("walmart") && !value.contains("retail"),"mixed request answers only lore");
+            case "yoda" -> check(value.contains("jedi") && !value.contains("walmart") && !value.contains("retail") && !value.contains("from the planet dagobah"),"mixed request answers only lore");
             case "minecraft" -> check(value.contains("inventory") && (value.contains(" e") || value.contains("key")),"vanilla controls remain available");
             case "joke" -> check(value.length()>15 && !value.contains("specialty is"),"droid humor remains available");
             case "health" -> check(value.contains("30") || value.contains("15 hearts"),"verified server statistics retained");
