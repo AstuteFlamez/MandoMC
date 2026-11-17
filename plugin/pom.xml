@@ -50,7 +50,7 @@
             <resource>
                 <directory>${maven.multiModuleProjectDirectory}/.local/build-info</directory>
                 <filtering>false</filtering>
-                <includes><include>guide-repository.json</include></includes>
+                <includes><include>guide-repository.json</include><include>guide-public.json.gz</include></includes>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>

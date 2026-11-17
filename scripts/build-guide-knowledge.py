@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Pin a read-only public gameplay allowlist to the exact clean source used by this build."""
 import hashlib
+import gzip
 import json
 from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / '.local' / 'build-info' / 'guide-repository.json'
+BUNDLE = OUTPUT.with_name('guide-public.json.gz')
 RESOURCE_AREAS = {'arrival', 'clans', 'combat', 'crates', 'economy', 'equipment', 'events', 'items',
                   'leaderboards', 'mobs', 'parkour', 'rules', 'territory', 'travel', 'trophies', 'tutorial',
                   'vehicles', 'worlds'}
@@ -26,6 +28,8 @@ def approved(path):
         return False
     if path in DOCS:
         return True
+    if path.startswith(('server/config/common/mythicmobs/', 'server/config/common/weaponmechanics/')):
+        return path.endswith('.yml')
     if path.startswith('docs/features/') and path.endswith('.md'):
         return not any(word in Path(path).name for word in ('maintenance', 'security', 'deployment', 'dev-'))
     if (path.startswith('plugin/src/main/resources/') or path.startswith('server/config/common/mandomc/')) and path.endswith('.yml'):
@@ -58,5 +62,8 @@ if __name__ == '__main__':
     data = manifest()
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(json.dumps(data, separators=(',', ':')) + '\n')
+    bundle = {'commit': data['commit'], 'manifestHash': hashlib.sha256(OUTPUT.read_bytes()).hexdigest(),
+              'documents': {s['path']: (ROOT / s['path']).read_text(encoding='utf-8') for s in data['sources']}}
+    BUNDLE.write_bytes(gzip.compress(json.dumps(bundle, separators=(',', ':'), ensure_ascii=False).encode(), mtime=0))
     print(f"Pinned {len(data['sources'])} public gameplay sources at {data['commit'][:12]} "
           f"({'clean' if data['clean'] else 'modified; GitHub retrieval disabled'}).")

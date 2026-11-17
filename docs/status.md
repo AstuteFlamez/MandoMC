@@ -1,5 +1,11 @@
 # Resume here
 
+## M4-ND conversation and encyclopedia implementation (2026-11-17)
+
+On `bilal/droid-expanded-knowledge`, added quota-free in-character greetings/farewells/thanks, general and Star Wars question routing, five-minute per-player follow-up context, and direct read-only own-balance/public-event answers. Builds now bundle hash-verified public knowledge for offline startup, including MythicMobs/WeaponMechanics sources. A generated encyclopedia preserves entity statistics and effective overrides, computes crate chances, links spawn rules to native encounter kinds, and improves material typos/acquisition links. Server mechanics still require verified release evidence.
+
+`AGENTS.md` now requires knowledge upkeep on every production push. Packaged source/hash/coverage/commit checks run at build, in CI before retaining artifacts and immediately before upload, and in the local production CLI. Post-restart verification requires the matching bundled-knowledge startup marker. Java and tooling suites pass; native Paper/AI verification is in progress. A general-query false positive caught by the native probe was fixed and regression-tested. Production and shared development are unchanged. Next action: finish native answer checks and deploy the checked candidate to development.
+
 ## Full gameplay release verified live on production (2026-11-17)
 
 The owner restarted PebbleHost after the approved PR #62 upload. Production is running the exact checked `8fad679` artifact: recipe search, the signed protocol-droid M4-ND with corrected beginner/acquisition guidance and build-pinned knowledge, KOTH equipment/Black Kyber, Jawa component trading and seven titled gray categories, staff-accessible Saber Forge, and Hoth vehicle placement/recall are active. Interplanetary vehicle travel remains deferred.
