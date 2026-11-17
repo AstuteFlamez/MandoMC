@@ -1,5 +1,11 @@
 # Resume here
 
+## M4-ND subject boundaries in verification (2026-11-17)
+
+On `bilal/droid-topic-boundaries`, replaced unrestricted general knowledge with semantic MandoMC/Star Wars/relevant-Minecraft/conversation scope. Every generated reply uses a provider-enforced scope schema plus local validation. Outside or ambiguous payloads are discarded in favor of maintained redirect/clarification text; unclassified or malformed replies fail to existing written guidance. Mixed questions answer only their supported portion. Rejected topics clear follow-up context and refund the personal answer/cooldown while retaining actual shared token cost/global request spacing. Greetings, direct live answers and verified acquisition guidance remain quota-free.
+
+The paired identity/menu text and current player/knowledge docs now describe the specialist boundary. All 380 Java tests pass; 92 tooling checks complete with the three existing optional-NBT dependency skips. The isolated native fixture is testing Walmart/UW-Madison, fabricated-domain/instruction requests, lore without keyword hints, lore follow-ups, mixed requests, vanilla controls, droid humor, ambiguity and current server statistics. Production and shared development remain unchanged by this follow-up. Next action: finish native scope checks, then deploy the verified candidate to development.
+
 ## Expanded M4-ND deployed to development (2026-11-17)
 
 On `bilal/droid-expanded-knowledge`, added quota-free in-character greetings/farewells/thanks, general and Star Wars question routing, five-minute per-player follow-up context, and direct read-only own-balance/public-event answers. Builds now bundle hash-verified public knowledge for offline startup, including MythicMobs/WeaponMechanics sources. A generated encyclopedia preserves entity statistics and effective overrides, computes crate chances, links spawn rules to native encounter kinds, and improves material typos/acquisition links. Server mechanics still require verified release evidence.

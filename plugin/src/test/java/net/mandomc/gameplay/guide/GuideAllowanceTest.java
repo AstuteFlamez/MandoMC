@@ -5,6 +5,20 @@ import java.util.UUID;
 import org.junit.Test;
 import static org.junit.Assert.*;
 public class GuideAllowanceTest {
+    @Test public void redirectsRefundPersonalAnswersButKeepActualSharedTokenCost() throws Exception {
+        var file=Files.createTempDirectory("guide-scope").resolve("usage.properties");
+        var player=UUID.randomUUID();var now=Instant.parse("2026-11-17T18:00:00Z");
+        var allowance=new GuideAllowance(file,1,8000,4000,20);
+        assertEquals(GuideAllowance.Denial.NONE,allowance.reserve(player,now));
+        allowance.finish(player,now,500,true,false);
+        var values=new java.util.Properties();try(var in=Files.newInputStream(file)){values.load(in);}
+        assertEquals("500",values.getProperty("tokens"));
+        assertEquals("0",values.getProperty("count."+player));
+        allowance=new GuideAllowance(file,1,8000,4000,20);
+        assertEquals(GuideAllowance.Denial.NONE,allowance.reserve(player,now.plusSeconds(1)));
+        allowance.finish(player,now.plusSeconds(1),1000,true,true);
+        assertEquals(GuideAllowance.Denial.DAILY,allowance.reserve(player,now.plusSeconds(30)));
+    }
     @Test public void restartRetainsAllowanceAndFailuresRefundThePlayer() throws Exception {
         var file=Files.createTempDirectory("guide").resolve("usage.properties");var player=UUID.randomUUID();var now=Instant.parse("2026-11-16T18:00:00Z");
         var allowance=new GuideAllowance(file,2,12000,4000,20);

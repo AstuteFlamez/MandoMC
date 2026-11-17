@@ -38,7 +38,10 @@ public final class ProtocolDroid implements Listener,AutoCloseable {
         conversation=new GuideConversation(config);
         var secret=plugin.getDataFolder().toPath().resolve("secrets/groq-api-key");
         String key=Files.exists(secret)?Files.readString(secret).strip():System.getenv().getOrDefault("MANDOMC_GROQ_API_KEY","").strip();
-        brain=new GroqBrain(key,config.getString("model"),config.getString("identity"));
+        brain=new GroqBrain(key,config.getString("model"),config.getString("identity"),
+                config.getString("conversation.redirect","My specialty is MandoMC, Minecraft and Star Wars, traveler."),
+                config.getString("conversation.clarify","Do you mean something in MandoMC, Minecraft or Star Wars, traveler?"),
+                config.getString("unknown"),config.getString("lore-facts",""));
         allowance=new GuideAllowance(plugin.getDataFolder().toPath().resolve("data/guide-allowance.properties"),config.getInt("daily-answers"),config.getInt("daily-token-budget"),config.getInt("reserved-tokens"),config.getInt("cooldown-seconds"),config.getInt("daily-request-budget",800));
         repository=new GitHubKnowledge(plugin.getResource("guide-repository.json"),plugin.getResource("guide-public.json.gz"),plugin.getDataFolder().toPath().resolve("data/guide/public-knowledge"),
                 config.getBoolean("repository.enabled",true),config.getString("repository.fallback",config.getString("unknown")),plugin.getLogger()::info);
@@ -80,17 +83,17 @@ public final class ProtocolDroid implements Listener,AutoCloseable {
         pending.add(player.getUniqueId());UUID id=player.getUniqueId();player.sendMessage(text("thinking"));
         long delay=Math.max(0,nextRequest-System.currentTimeMillis());nextRequest=Math.max(System.currentTimeMillis(),nextRequest)+config.getInt("request-spacing-seconds")*1000L;
         worker.schedule(()->{
-            String answer=notes.getFirst().fallback(),notice="";Instant reserved=Instant.now();boolean held=false;
+            String answer=notes.getFirst().fallback(),notice="";Instant reserved=Instant.now();boolean held=false,supported=true;
             try{
                 var denial=allowance.reserve(id,reserved);
                 if(denial!=GuideAllowance.Denial.NONE)notice=denial==GuideAllowance.Denial.DAILY?"daily":denial==GuideAllowance.Denial.COOLDOWN?"cooldown":"shared";
-                else{held=true;var generated=brain.answer(resolvedQuestion,notes,resolved.topic());answer=generated.text();allowance.finish(id,reserved,generated.tokens(),true);held=false;if(share){if(cache.size()>=256)cache.clear();cache.put(cacheKey,generated);}}
+                else{held=true;var generated=brain.answer(resolvedQuestion,notes,resolved.topic());answer=generated.text();supported=generated.supported();allowance.finish(id,reserved,generated.tokens(),true,supported);held=false;if(share && supported){if(cache.size()>=256)cache.clear();cache.put(cacheKey,generated);}}
             }catch(Exception error){
                 if(held)try{allowance.finish(id,reserved,0,false);}catch(Exception save){plugin.getLogger().warning("M4-ND allowance save failed; AI requests paused.");storageHealthy=false;}
-                notice="unavailable";plugin.getLogger().warning("M4-ND request unavailable; served a maintained FAQ answer.");
+                notice="unavailable";plugin.getLogger().warning("M4-ND request unavailable ("+GroqBrain.failureReason(error)+"); served a maintained FAQ answer.");
             }
-            String result=answer,status=notice;
-            if(!closed && plugin.isEnabled())Bukkit.getScheduler().runTask(plugin,()->{pending.remove(id);var viewer=Bukkit.getPlayer(id);if(viewer!=null && viewer.isOnline()){if(!status.isBlank())viewer.sendMessage(text(status));reply(viewer,result);}});
+            String result=answer,status=notice;boolean accepted=supported;
+            if(!closed && plugin.isEnabled())Bukkit.getScheduler().runTask(plugin,()->{pending.remove(id);if(!accepted)conversation.forget(id);var viewer=Bukkit.getPlayer(id);if(viewer!=null && viewer.isOnline()){if(!status.isBlank())viewer.sendMessage(text(status));reply(viewer,result);}});
         },delay,TimeUnit.MILLISECONDS);
     }
     private String liveEvents(){
