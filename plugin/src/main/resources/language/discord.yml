@@ -1,0 +1,7 @@
+usage: "<gray>Run <aqua>/discord</aqua> in game to link your Discord account."
+reward: '<aqua>C0-M5 <dark_gray>» <green>Discord linked! <gold>5,000 credits <green>added to your balance.'
+requesting: "<gray>Requesting your Discord link code…"
+code: "<gray>Join <click:open_url:'https://discord.gg/3VrzUmNp6U'><aqua>our Discord</aqua></click>, then run <aqua>/link code:<code></aqua>. Your code expires in 10 minutes. Keep it private. Linking rewards <gold>5,000 credits</gold> once on production."
+linked: "<green>Your Minecraft account is already linked to Discord."
+cooldown: "<gray>Please wait 30 seconds before requesting another code."
+unavailable: "<gray>Discord linking is temporarily unavailable. Please try again later."

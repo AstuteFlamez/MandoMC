@@ -1,5 +1,123 @@
 # Resume here
 
+## C0-M5 hosting and both-server activation in progress (2026-11-18)
+
+The owner approved all seven explicit two-way mappings (Mando Studios, Server Mod,
+Build Team, Creator, Mandalore, Marshal, Warrior), Mando Citizen as default, activation
+on both servers, and the production Minecraft-hosted Gateway connection for Online,
+DM relay and join auto-role. Cloudflare free Worker/D1 is provisioned and authorized;
+the existing Discord application routes signed interactions to it, with legacy ticket
+controls retained. Four new cosmetic rank roles were created with zero permissions.
+C0-M5’s bot username, guild nickname and matching rendered silver-droid avatar are
+applied to the existing bot. The Developer Portal application name is also C0-M5, with its saved name verified through Discord’s application API. No token reset
+or incoming-webhook changes occurred. Old MySQL refused read-only login (1045), so no
+legacy link ownership has been inferred or imported.
+
+The owner additionally requested C0-M5 as a linking NPC near M4-ND, transparent M4-ND
+text backgrounds, a one-time 5,000-credit production linking reward, and M4-ND Discord
+guidance. Added a pinned signed silver TC-14 skin, exact head renderer, safe supported
+placement five to ten blocks from M4-ND, existing private proof on right-click, and
+atomic credit/reward receipts. Verified an existing non-expiring guild invite and
+added exact local guidance for joining, linking, rewards, sync and tickets. Both server
+bridges now use distinct credentials, shared rank intent with durable per-server ACKs,
+and separate status/baltop snapshots. Steady-state rank polling avoids unnecessary
+link-row writes. Production alone runs the separate JDA 6.7.0 Paper Gateway plugin.
+
+Verification so far: 38 Worker tests pass; 388 gameplay/integration and four access
+tests pass. Disposable Paper passes six HTTPS reconciliation stages with durable
+rank receipts; the expanded fixture also checks repeated link-payout delivery and a ledger reload. A second disposable Paper instance loads the real Gateway dependency,
+authenticates the existing bot and observes Gateway READY/Online, then stops cleanly.
+Copied Batuu passes 16 native checks for both droids, clear supported placement, hologram spacing, transparent backgrounds, signed silver skin, real right-click proof invocation and exact M4-ND Discord answers. All 95 tooling checks pass (six existing environment skips). Worker migration 0002 and the updated
+Worker are deployed; live Minecraft runtimes are not yet changed. Next action: finish
+native spawn verification, then roll out the checked build to dev and production
+through the normal promotion, backup and restart workflow.
+
+
+## Cloudflare account connected in browser; deployment authorization pending (2026-11-18)
+
+Verified the owner is signed into the intended MandoMC Cloudflare account in the
+Mando Chrome profile and pinned the ignored deployment configuration to that account.
+All 27 Worker tests pass and the exact prepared hosting config bundles successfully.
+Opened the official Wrangler consent page with only user/account read, Worker-script
+write, D1 write and required background access. The computer-use confirmation policy
+requires owner approval for this new app access; approval was requested and no
+Authorize button has been clicked. No Cloudflare resources, billing plan or Discord
+settings changed. Next action: after owner approval, authorize Wrangler and provision
+the bot's free Worker/D1 service using the private prepared configuration and secrets.
+
+## Original Discord token recovered and verified (2026-11-18)
+
+After the owner authorized a laptop file search, located the original MandoBot
+project and its private environment file. Recovered the existing token into ignored
+owner-only local configuration and verified it through read-only Discord identity,
+guild and channel requests. It authenticates as the same application previously
+inspected in the Developer Portal. Verified the original panel's `ticket_select`
+control, all four category values and existing global link/players/baltop commands.
+No token values or database credentials were printed or committed. The original
+project, its environment and its uncommitted ticket/main/requirements changes are
+unchanged. No credential reset, command registration or live Discord write occurred.
+
+Both GitHub Server checks passed for implementation plus discovery checkpoint
+6ec24b3, and exact-commit packaging/knowledge verification passes. Cloudflare CLI
+is not authenticated; no hosted resources have been provisioned. The private prepared
+Worker config includes the verified existing IDs with an empty rank mapping.
+Live hosting and guild smoke checks remain pending. Next action: connect the owner's
+Cloudflare account and provision the free Worker/D1 service using the recovered token.
+
+## Existing Discord configuration collected (2026-11-18)
+
+Read-only inspection of the owner's signed-in Discord and Developer Portal verified
+the existing MandoBot application, matching bot account, MandoMC guild, staff/Citizen/
+Linked role IDs, Tickets category, ticket-log channel and original ticket panel.
+Saved the verified IDs, public key and a prepared Worker configuration only in
+ignored owner-readable `.local/discord/`. Both the application webhook endpoint
+and Interactions Endpoint are blank; all three Gateway intents are already enabled.
+The bot's existing highest role has Administrator and is above the staff/link roles.
+No settings, credentials, roles, messages, channels or webhook URLs were changed.
+
+The role list does not contain Warrior, Marshal, Mandalore or Creator. Keep rank
+mapping empty until the intended mappings/role creation are selected. The existing
+token cannot be viewed again in the Developer Portal, and no reset was performed;
+the owner was asked for the original private `.env`/hosting configuration location.
+Cloudflare account/database setup and live guild checks remain unfinished.
+
+Draft PR #77 contains the implementation. Both push and PR Server checks pass for
+8993307; publication and production upload were skipped. Next action: recover the
+existing token from the owner's original private bot configuration without rotating it.
+
+## Discord bot and bidirectional ranks implemented (2026-11-18)
+
+On `bilal/discord-bot-sync`, recreated MandoBot's link/baltop/players/ticket behavior
+inside `discord-bot/` for Cloudflare Workers/D1. Added optional Gateway companion for
+ordinary DM relay, join auto-role and presence. Reused the original ticket component
+IDs and supported adoption of old ticket channels in the configured guild/category.
+The original source has no custom webhook contract; existing incoming webhook URLs
+are untouched. The same Discord application/token can be reused, but the old MySQL
+backend is not silently replaced or imported.
+
+Minecraft `/discord` issues one-use, ten-minute account proof. The outbound bridge
+uses native CreditLedger snapshots and RankService writes, explicit matching role
+mappings, durable reconciliation intent, snapshot checks, bounded batches and retries.
+Both rank directions include offline UUIDs, preserve unrelated memberships and never
+change operator status. First link uses Minecraft's baseline. Integration defaults
+off; private credentials are excluded from source and deployments.
+
+Verification: 27 Worker tests and six companion tests pass. Java reactor passes
+383 gameplay/integration tests plus four access tests. Tooling passes 95 checks
+(six pre-existing environment-dependent skips), and the 1,196-entry resource pack
+build passes. Wrangler 4.164.0 bundles successfully; a real local Cloudflare runtime
+applies the D1 schema and verifies authenticated code/snapshot/sync routes. A disposable
+Paper 26.1.2 / Java 25 fixture passes six HTTPS stages for native offline rank persistence,
+managed-only merge, stale response rejection and outage recovery. Discord API calls
+are mocked; real guild role hierarchy, permissions, linking and tickets are not yet
+verified. CI includes the new bot checks. Public command notes and feature guidance
+are included in the exact-build M4-ND knowledge bundle.
+
+No Cloudflare resources, live Discord settings/roles/messages, production server files
+or webhooks were changed. Live activation needs the owner's Cloudflare account,
+Discord app credentials and approved guild/role/channel IDs. Next action: configure
+the Worker and verify one non-staff rank mapping with the existing Discord application.
+
 ## Workbench recipe discovery verified; combined production promotion in progress (2026-11-17)
 
 The owner requested keeping the existing five-Durasteel/two-Agrinium/Circuit-Board/Smithing-Table recipe, surfacing it in `/recipes` and promoting all completed saber/spawner/KOTH/Jabba/cave updates to production. PR #73 is merged into dev and includes the latest single-creature stacked-spawner timing and all previous saber fixes; PR #74 is consequently merged too. The Workbench now appears under Lightsabers as well as Tools, with exact crafting-table acquisition guidance. The isolated Paper suite passes 2,781 assertions, including native recipe matching without injecting a result, actual result pickup, exact ingredient consumption and browsing the Lightsabers category. The full Java build passes. Production receipt/drift checks and the separate cave migration are being prepared; production restart remains manual. Next action: deploy the recipe follow-up to dev, merge the checked release through dev/main, and stage the verified production files and offline cave migration.

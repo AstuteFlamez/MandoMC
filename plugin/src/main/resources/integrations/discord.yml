@@ -1,0 +1,12 @@
+schema-version: 1
+enabled: false
+endpoint: "https://mandomc-discord.YOUR_SUBDOMAIN.workers.dev"
+interval-seconds: 30
+link-reward: '5000.00'
+# Explicit memberships only, with the same mapping in the Worker's RANK_ROLES.
+# Each mapped role can grant AND revoke its native rank. Staff ranks grant permissions;
+# approve those mappings deliberately. default, op status and unrelated ranks are never synced.
+rank-roles: {}
+# Example after replacing IDs: {warrior: "123456789012345678"}
+# Store the shared secret in plugins/MandoMC/private/discord-bridge-secret (owner-readable)
+# or MANDOMC_DISCORD_BRIDGE_SECRET. Never put it in this reviewed file.

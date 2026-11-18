@@ -1,0 +1,5 @@
+schema-version: 1
+enabled: true
+endpoint: https://mandomc-discord.mandomc-discord-bot.workers.dev
+guild-id: '1400188397519245342'
+ticket-category-id: '1487377690171539456'
