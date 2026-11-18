@@ -1,8 +1,10 @@
 # Resume here
 
-## Spawner appearance follow-up in verification (2026-11-17)
+## Spawner appearance follow-up verified (2026-11-17)
 
-Placement hints now explicitly allow unclaimed Wilderness and the player’s own clan claims. Spawner items and placed blocks clear the native pig; matching miniature creature rigs rotate inside cages with gold `1x Massiff`, `1x Dewback`, `1x Bantha` and `1x Jawa` holograms. Existing items/blocks migrate while keeping identity and custom names. Preview cleanup covers break, chunk unload and shutdown. Herd model scaling now applies only to actual horse-based animals, preserving cosmetic miniature scales. The Java build passes; focused Paper lifecycle and clan checks are in progress. The shared development runtime has a newer Saber Workbench release, so deployment must retain that source and configuration. Next action: finish the focused native checks and deploy the combined verified scope to development.
+Placement hints explicitly allow unclaimed Wilderness and the player’s own clan claims. Spawner items and placed blocks clear the native pig; matching miniature creature rigs rotate inside cages with gold `1x Massiff`, `1x Dewback`, `1x Bantha` and `1x Jawa` holograms. Existing items/blocks migrate while keeping identity and custom names. Inert, unsaved previews clean up on break, chunk unload and shutdown. Herd scaling now applies only to actual horse-based animals, preserving cosmetic miniature scales.
+
+The combined candidate preserves the newer deployed Saber Workbench source. All 383 Java tests and 95 tooling checks pass. The focused disposable Paper probe passes 68 assertions for all models/labels, item/block migration, name/count preservation, repeated tracking, chunk lifecycle, pickaxe removal, own-clan placement and final cleanup. The probe explicitly tickets its arena and removes its synthetic clan before shutdown; early runs exposed retained test-state and chunk-loading mistakes, which are corrected. Exact-build M4-ND knowledge covers 404 approved sources. Only nine owned class entries and four three-way-merged configurations differ from current development; the pack and world migration are unchanged. Client appearance remains for owner review. Next action: deploy the verified scoped update to development with a stopped backup and normal restart.
 
 ## Saber Workbench and enchantments deployed to development (2026-11-17)
 

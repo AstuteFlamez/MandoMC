@@ -20,7 +20,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SpawnerPreviewProbe extends JavaPlugin {
-    private MandoPlugin mando;private NativeProbePlayers actors;private Player player;private MobSpawners spawners;private World world;private int checks;
+    private MandoPlugin mando;private NativeProbePlayers actors;private Player player;private MobSpawners spawners;private World world;private int checks;private net.mandomc.gameplay.clans.ClanState.Clan testClan;
     @FunctionalInterface private interface Work{void run()throws Exception;}
     private void check(boolean b,String s){if(!b)throw new AssertionError(s);checks++;}
     private void later(int t,Work w){Bukkit.getScheduler().runTaskLater(this,()->{try{w.run();}catch(Throwable e){finish(e);}},t);}
@@ -29,8 +29,10 @@ public final class SpawnerPreviewProbe extends JavaPlugin {
     private String plain(Component c){return PlainTextComponentSerializer.plainText().serialize(c);}
     @Override public void onEnable(){later(180,this::start);}
     private void start()throws Exception{
-        check(Bukkit.getPort()==25591,"Disposable runtime required");mando=(MandoPlugin)Bukkit.getPluginManager().getPlugin("MandoMC");check(mando!=null&&mando.isEnabled(),"Mando enabled");
+        Files.deleteIfExists(getDataFolder().toPath().resolve("PASSED.txt"));
+        check(Bukkit.getPort()==25591,"Disposable runtime required");mando=(MandoPlugin)Bukkit.getPluginManager().getPlugin("MandoMC");check(mando!=null&&mando.isEnabled()&&!((boolean)field(mando,"failed")),"Mando enabled and healthy");
         spawners=(MobSpawners)field(mando,"spawners");world=Bukkit.getWorld(NamespacedKey.minecraft("devworld"));world.getWorldBorder().setCenter(0,0);world.getWorldBorder().setSize(1024);
+        for(int x=-14;x<-10;x++)for(int z=-14;z<-10;z++)world.getChunkAt(x,z).addPluginChunkTicket(this);
         actors=new NativeProbePlayers("Preview");player=actors.create(new Location(world,-201.5,200,-199.5));player.setGameMode(GameMode.SURVIVAL);mando.ranks().apply(player);
         for(int x=-212;x<-172;x++)for(int z=-214;z<-192;z++){
             world.getBlockAt(x,199,z).setType(Material.STONE,false);
@@ -57,7 +59,7 @@ public final class SpawnerPreviewProbe extends JavaPlugin {
         legacyState.getPersistentDataContainer().set(MobSpawners.TYPE,PersistentDataType.STRING,"massiff_spawner");legacyState.setSpawnedType(EntityType.PIG);legacyState.update();
         var load=MobSpawners.class.getDeclaredMethod("load",Chunk.class);load.setAccessible(true);load.invoke(spawners,legacyBlock.getChunk());
         check(((CreatureSpawner)legacyBlock.getState()).getSpawnedType()==null,"Existing pig block migrates on load");
-        invoke(spawners,"tick");later(5,this::verifyPreviews);
+        check(SpawnerModel.available("massiff"),"Massiff blueprint ready");invoke(spawners,"tick");later(5,this::verifyPreviews);
     }
     private void verifyPreviews()throws Exception{
         var previews=(Map<?,?>)field(spawners,"previews");check(previews.size()>=5,"One visual and hologram per nearby spawner: previews="+previews.size()+" sites="+field(spawners,"sites")+" player="+player.getLocation()+" online="+player.isOnline()+" worldPlayers="+world.getPlayers().size());
@@ -83,9 +85,9 @@ public final class SpawnerPreviewProbe extends JavaPlugin {
         var first=world.getBlockAt(-206,200,-204);int before=previews.size();var e=new BlockBreakEvent(first,player);player.getInventory().setItemInMainHand(new ItemStack(Material.STONE_PICKAXE));Bukkit.getPluginManager().callEvent(e);check(!e.isCancelled(),"Spawner pickaxe recovery remains permitted");first.setType(Material.AIR,false);
         check(previews.size()==before-1,"Breaking spawner immediately removes its visual and label");
         // Same underlying Wilderness, with a real clan membership/claim in the native state.
-        var clans=Bukkit.getServicesManager().load(net.mandomc.gameplay.clans.ClanService.class);var clan=clans.state().create("Preview"+UUID.randomUUID().toString().substring(0,8),player.getUniqueId(),System.currentTimeMillis());
+        var clans=Bukkit.getServicesManager().load(net.mandomc.gameplay.clans.ClanService.class);var clan=testClan=clans.state().create("Preview"+UUID.randomUUID().toString().substring(0,8),player.getUniqueId(),System.currentTimeMillis());
         var location=world.getBlockAt(-199,200,-204).getLocation();
-        var claims=clans.state().getClass().getDeclaredField("claims");claims.setAccessible(true);((Map<Object,Object>)claims.get(clans.state())).put(net.mandomc.gameplay.clans.LandRestoration.chunk(location),clan.id);
+        clans.state().claims.put(net.mandomc.gameplay.clans.LandRestoration.chunk(location),clan.id);
         check(clans.owner(location)==clan&&clans.canEdit(player,location),"Own native clan claim remains editable");
         var block=world.getBlockAt(-199,201,-204);var original=block.getState();block.setType(Material.SPAWNER,false);var place=new BlockPlaceEvent(block,original,block.getRelative(0,-1,0),mando.items().create("massiff_spawner"),player,true,EquipmentSlot.HAND);
         Bukkit.getPluginManager().callEvent(place);check(!place.isCancelled(),"Spawner placement allowed inside own clan claim");
@@ -93,7 +95,7 @@ public final class SpawnerPreviewProbe extends JavaPlugin {
         check(world.getEntities().stream().noneMatch(x->x.getPersistentDataContainer().has(new NamespacedKey("mandomc","spawner_preview_v1"))),"No model bodies or labels remain after shutdown");
         finish(null);
     }
-    private void finish(Throwable error){try{if(actors!=null)actors.close();}catch(Throwable e){if(error==null)error=e;}
+    private void finish(Throwable error){try{var clans=Bukkit.getServicesManager().load(net.mandomc.gameplay.clans.ClanService.class);if(testClan!=null&&clans!=null)clans.state().remove(testClan);if(actors!=null)actors.close();}catch(Throwable e){if(error==null)error=e;}
         if(error==null){getLogger().info("SPAWNER PREVIEW PASSED: "+checks+" assertions");try{Files.createDirectories(getDataFolder().toPath());Files.writeString(getDataFolder().toPath().resolve("PASSED.txt"),checks+" native assertions\n");}catch(Exception e){throw new RuntimeException(e);}}
         else getLogger().log(java.util.logging.Level.SEVERE,"SPAWNER PREVIEW FAILED",error);Bukkit.shutdown();}
 }

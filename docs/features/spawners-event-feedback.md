@@ -1,5 +1,5 @@
 # Feature: Spawners and gameplay feedback
-Status: playable in disposable verification
+Status: original release deployed to development; appearance follow-up verified
 Branch: bilal/spawners-event-fixes
 
 ## Player experience
@@ -26,11 +26,11 @@ MandoMC owns spawner block identity, timers and population limits; MythicMobs ow
 Run `scripts/add-planet-coal.py` using the pinned map-tools requirements, with `--runtime` and a new `--output` directory. The default is a dry run. `--apply` acquires native world session locks, validates target states against frozen wilderness originals, excludes staff edits, claims, safe zones, structure columns and existing ores, backs up changed region files and writes a separate `data/coal-terrain.yml` overlay. No missing chunks are generated. Original frozen baseline files, journals and scopes remain unchanged. The overlay is required alongside the map changes to retain coal during land restoration. A completed migration is idempotent. Deploy maps/overlay only from a stopped, consistent backup; routine JAR/config upload does not carry them.
 
 ## Verification
-`./scripts/build.sh` passes 384 Java tests; all 95 tooling/map checks pass. The combined Paper fixture passes 252 assertions, and an actual JVM restart passes 10 more for persisted spawner species and resumed tracking. The palace check verifies a real 6,000-tick scheduled task and invokes its callback on the server thread, rather than waiting five wall-clock minutes. The saber check round-trips the actual recipe packet and compares every permitted option against native selection.
+`./scripts/build.sh` passes 383 Java tests in the combined Saber Workbench release; all 95 tooling/map checks pass. The appearance follow-up adds a 68-assertion native probe (`scripts/build-spawner-preview-probe.sh`) for matching miniature models, all four gold labels, legacy migration, preserved item metadata, clan placement and break/unload/shutdown cleanup. The combined Paper fixture passes 252 assertions, and an actual JVM restart passes 10 more for persisted spawner species and resumed tracking. The palace check verifies a real 6,000-tick scheduled task and invokes its callback on the server thread, rather than waiting five wall-clock minutes. The saber check round-trips the actual recipe packet and compares every permitted option against native selection.
 
 Unit tests cover proportional purchasing, spawner ordering/pricing, physical KOTH config and legacy source guidance, recipe resolution, coal overlay conflict/staff handling, cave depth/structure/ore exclusions and migration idempotence. A disposable Paper fixture covers real crafting, shop transactions, themed spawns, protection/recovery events, global KOTH delivery and palace cleanup.
 
-The private map rehearsal adds 2,125 Hoth, 12,503 Mandalore, 12,053 Naboo and 7,053 Tatooine coal blocks. Region records round-trip before any write; every changed file has a retained prior copy. Live deployment and client playtesting remain pending.
+The private map rehearsal adds 2,125 Hoth, 12,503 Mandalore, 12,053 Naboo and 7,053 Tatooine coal blocks. Region records round-trip before any write; every changed file has a retained prior copy. The original gameplay release and coal migration are deployed to development. The appearance follow-up preserves that terrain and the newer Saber Workbench release; client appearance still needs owner review.
 
 ## Next action
-Stage the tested release and matching stopped-world coal migration for development playtesting.
+Deploy the verified appearance follow-up to development, preserving the existing coal migration and resource pack.
