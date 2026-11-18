@@ -1,5 +1,24 @@
 # Resume here
 
+## Original Discord token recovered and verified (2026-11-18)
+
+After the owner authorized a laptop file search, located the original MandoBot
+project and its private environment file. Recovered the existing token into ignored
+owner-only local configuration and verified it through read-only Discord identity,
+guild and channel requests. It authenticates as the same application previously
+inspected in the Developer Portal. Verified the original panel's `ticket_select`
+control, all four category values and existing global link/players/baltop commands.
+No token values or database credentials were printed or committed. The original
+project, its environment and its uncommitted ticket/main/requirements changes are
+unchanged. No credential reset, command registration or live Discord write occurred.
+
+Both GitHub Server checks passed for implementation plus discovery checkpoint
+6ec24b3, and exact-commit packaging/knowledge verification passes. Cloudflare CLI
+is not authenticated; no hosted resources have been provisioned. The private prepared
+Worker config includes the verified existing IDs with an empty rank mapping.
+Live hosting and guild smoke checks remain pending. Next action: connect the owner's
+Cloudflare account and provision the free Worker/D1 service using the recovered token.
+
 ## Existing Discord configuration collected (2026-11-18)
 
 Read-only inspection of the owner's signed-in Discord and Developer Portal verified
