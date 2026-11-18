@@ -48,7 +48,7 @@ public final class JetpackChestplateSmoke extends JavaPlugin {
         meta.lore(List.of(net.kyori.adventure.text.Component.text("Original lore")));
         meta.getPersistentDataContainer().set(new NamespacedKey("test","owned"),org.bukkit.persistence.PersistentDataType.STRING,"retained");
         ((org.bukkit.inventory.meta.ArmorMeta)meta).setTrim(new org.bukkit.inventory.meta.trim.ArmorTrim(org.bukkit.inventory.meta.trim.TrimMaterial.GOLD,org.bukkit.inventory.meta.trim.TrimPattern.SENTRY));
-        armor.setItemMeta(meta);
+        armor.setItemMeta(meta);net.mandomc.gameplay.enchantments.EnchantmentLore.update(armor);
         var upgraded=craftingProof(armor);
         actor.getInventory().setChestplate(upgraded);
         check(equipment.toggle(actor),"actual registered jetpack activates");
@@ -169,6 +169,7 @@ public final class JetpackChestplateSmoke extends JavaPlugin {
         var custom=main.items().create("beskar_chestplate");
         check(custom!=null,"actual Beskar chestplate exists for screenshot regression");
         custom.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.PROTECTION,4);
+        net.mandomc.gameplay.enchantments.EnchantmentLore.update(custom);
         var original=custom.clone();var upgraded=service.upgrade(custom);
         var lore=upgraded.getItemMeta().lore();
         check(upgraded.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS),"native above-badge enchantment block hidden on catalog armor");
@@ -179,7 +180,7 @@ public final class JetpackChestplateSmoke extends JavaPlugin {
             if(plain.serialize(lore.get(i)).contains("Jetpack"))jetpack=i;
             if(plain.serialize(lore.get(i)).toLowerCase(java.util.Locale.ROOT).contains("protection"))protection=i;
         }
-        check(jetpack>0&&protection>jetpack,"Jetpack I and other enchantments display below badges");
+        check(jetpack>0&&protection>jetpack,"Jetpack I and other enchantments display at the bottom of lore");
         service.maintain(upgraded);var once=upgraded.clone();service.maintain(upgraded);
         check(once.equals(upgraded),"tooltip maintenance never duplicates generated enchantment lines");
         upgraded.removeEnchantment(enchant);upgraded=service.cleanRemovedEnchantment(upgraded);

@@ -19,13 +19,13 @@ public class GuideKnowledgeTest {
         var knowledge=new GuideKnowledge(config.getConfigurationSection("knowledge"),recipes);
         var coal=knowledge.find("where to get coal").getFirst();
         assertEquals("item:minecraft:coal",coal.id());
-        assertTrue(coal.facts().contains("Tatooine caves"));assertTrue(coal.facts().contains("pickaxe"));
+        for(String planet:java.util.List.of("Tatooine","Hoth","Mandalore","Naboo"))assertTrue(coal.facts().contains(planet));assertTrue(coal.facts().contains("pickaxe"));
         assertFalse(coal.facts().contains("<gray>"));assertFalse(coal.facts().contains("\\n"));
         assertEquals(coal.fallback(),knowledge.verifiedAnswer("where to get coal",knowledge.find("where to get coal")).orElseThrow());
         assertTrue(knowledge.verifiedAnswer("what should I do",knowledge.find("what should I do")).orElseThrow().contains("/tutorial"));
         assertTrue(knowledge.verifiedAnswer("how do saber upgrades work",knowledge.find("how do saber upgrades work")).isEmpty());
         var saber=knowledge.find("how to get saber").getFirst();
-        assertEquals("sabers",saber.id());assertTrue(saber.facts().contains("craft one at a crafting table"));assertTrue(saber.facts().contains("Ilum"));
+        assertEquals("sabers",saber.id());assertTrue(saber.facts().contains("craft one at a Saber Workbench"));assertTrue(saber.facts().contains("Ilum"));
         assertTrue(knowledge.find("how do I get a lightsaber").stream().noneMatch(n->n.id().equals("forge")));
         assertEquals("forge",knowledge.find("how do saber upgrades work").getFirst().id());
         assertEquals("item:blue_kyber",knowledge.find("where can I get blue kyber crystals").getFirst().id());
@@ -40,7 +40,7 @@ public class GuideKnowledgeTest {
         assertEquals("item:minecraft:coal",knowledge.find("what do I do with coal").getFirst().id());
         assertTrue(knowledge.verifiedAnswer("How does Fortune affect custom ore drops?",knowledge.find("How does Fortune affect custom ore drops?")).orElseThrow().contains("exactly one"));
         assertTrue(knowledge.verifiedAnswer("What happens to my gear when I die?",knowledge.find("What happens to my gear when I die?")).orElseThrow().contains("drops at the death site"));
-        assertEquals("item:saber_forge",knowledge.find("how do I craft a saber forge").getFirst().id());
+        assertEquals("item:saber_workbench",knowledge.find("how do I craft a saber workbench").getFirst().id());
         assertEquals("item:durasteel",knowledge.find("where can i find durastel").getFirst().id());
         assertTrue(knowledge.find("how do I craft robes helmet").getFirst().facts().contains("Banthas drop"));
         var base="I go to UW-Madison; where should I build my first MandoMC base?";

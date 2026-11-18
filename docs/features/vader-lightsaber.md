@@ -1,5 +1,7 @@
 # Feature: Darth Vader’s Lightsaber
 Status: regenerating durability deployed and server-verified; rendered client playtest pending
+
+The Saber Workbench revision replaces the old 10.5 damage, fixed throw damage, delayed recharge and material upgrades described in historical verification below. Current rules: [Saber Workbench and enchantments](saber-enchantments.md).
 Branch: bilal/vader-lightsaber (original throw); bilal/tusken-mobs (durability follow-up)
 
 ## Player experience

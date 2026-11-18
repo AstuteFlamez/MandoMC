@@ -18,6 +18,8 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     private net.mandomc.gameplay.ranks.RankService ranks;
     private net.mandomc.gameplay.admin.StaffMode staff;
     private net.mandomc.integrations.permissions.WorldEditRanks worldEditRanks;
+    private net.mandomc.gameplay.mobs.MobExperience mobExperience;
+    private net.mandomc.gameplay.spawners.MobSpawners spawners;
     private net.mandomc.gameplay.jawa.JawaTraders jawas;
     public net.mandomc.gameplay.jawa.JawaTraders jawas() { return jawas; }
     private net.mandomc.gameplay.credits.CreditService credits;
@@ -71,8 +73,10 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     private net.mandomc.gameplay.mobs.BosskDioxis bosskDioxis;
     private net.mandomc.integrations.weapons.BosskAim bosskAim;
     public net.mandomc.gameplay.mobs.BosskDioxis bosskDioxis(){return bosskDioxis;}
-    private net.mandomc.gameplay.saber.SaberForge forge;
-    public net.mandomc.gameplay.saber.SaberForge forge(){return forge;}
+    private net.mandomc.gameplay.saber.SaberWorkbench forge;
+    public net.mandomc.gameplay.saber.SaberWorkbench forge(){return forge;}
+    private net.mandomc.gameplay.enchantments.EnchantmentService enchantments;
+    public net.mandomc.gameplay.enchantments.EnchantmentService enchantments(){return enchantments;}
     private net.mandomc.gameplay.guide.ProtocolDroid droid;
     public net.mandomc.gameplay.guide.ProtocolDroid droid(){return droid;}
     private net.mandomc.gameplay.saber.SaberService sabers;
@@ -140,7 +144,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 worldEditRanks = new net.mandomc.integrations.permissions.WorldEditRanks(this, ranks);
             new net.mandomc.commands.RankCommands(root, ranks, language.getConfigurationSection("ranks"));
             credits = new net.mandomc.gameplay.credits.CreditService(this, loadFeature("economy/credits.yml"));
-            for (var resource : new String[] {"items/catalog.yml", "items/definitions/koth.yml", "items/definitions/vehicles.yml", "items/definitions/crates-sign.yml", "items/definitions/building-signs.yml", "items/definitions/vehicle-ammo.yml", "items/definitions/legacy.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/jabba.yml", "items/definitions/jabba-loot.yml", "items/definitions/dioxis.yml", "items/definitions/boba-equipment.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
+            for (var resource : new String[] {"items/catalog.yml", "items/definitions/spawners.yml", "items/definitions/koth.yml", "items/definitions/vehicles.yml", "items/definitions/crates-sign.yml", "items/definitions/building-signs.yml", "items/definitions/vehicle-ammo.yml", "items/definitions/legacy.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/jabba.yml", "items/definitions/jabba-loot.yml", "items/definitions/dioxis.yml", "items/definitions/boba-equipment.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
                 if (!new File(getDataFolder(), resource).isFile()) saveResource(resource, false);
             }
             // Add only missing badges and vendor registrations; preserve local overrides.
@@ -179,6 +183,8 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             sabers = new net.mandomc.gameplay.saber.SaberService(this, items,
                     net.mandomc.gameplay.saber.SaberSettings.read(saberConfig), language.getConfigurationSection("sabers"));
             saberProjectiles = new net.mandomc.integrations.weapons.SaberProjectiles(this, sabers);
+            enchantments = new net.mandomc.gameplay.enchantments.EnchantmentService(this, items, loadFeature("equipment/enchantments.yml"));
+            getLogger().info("Enchantments ready: approved table pool, Endurance, Recovery and book descriptions.");
             new net.mandomc.integrations.packs.SaberPack(this, saberConfig.getConfigurationSection("upstream-pack"));
             getLogger().info("Vader saber enabled: native melee, guard, reflection and bounded throws.");
             var combatConfig = loadFeature("combat/combat.yml");
@@ -229,6 +235,8 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                         net.mandomc.gameplay.mobs.JabbaDropsSettings.read(jabbaConfig));
                 getLogger().info("Jabba generic guard drops ready; dungeon spawning is not enabled.");
             }
+            mobExperience = new net.mandomc.gameplay.mobs.MobExperience(this, loadFeature("mobs/experience.yml"));
+            spawners = new net.mandomc.gameplay.spawners.MobSpawners(this, loadFeature("mobs/spawners.yml"));
             jawas = new net.mandomc.gameplay.jawa.JawaTraders(this, loadFeature("mobs/jawas.yml"), root);
             var mobConfig = loadFeature("mobs/spawning.yml");
             if (mobConfig.getBoolean("enabled", false)) {
@@ -284,9 +292,9 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             tutorial = new net.mandomc.gameplay.tutorial.InteractiveTutorial(this, loadFeature("tutorial/tutorial.yml"));
             staff = new net.mandomc.gameplay.admin.StaffMode(this, loadFeature("admin/staff.yml"));
             starterKit.tutorialRequired(false);
-            forge=new net.mandomc.gameplay.saber.SaberForge(this,loadFeature("equipment/saber-forge.yml"));
+            forge=new net.mandomc.gameplay.saber.SaberWorkbench(this,loadFeature("equipment/saber-workbench.yml"));
             droid=new net.mandomc.gameplay.guide.ProtocolDroid(this,loadFeature("guide/protocol-droid.yml"));
-            getLogger().info("Gameplay upgrades ready: recipe search, encounter components, KOTH equipment, Saber Forge and M4-ND.");
+            getLogger().info("Gameplay upgrades ready: recipe search, encounter components, KOTH equipment, Saber Workbench and M4-ND.");
             getLogger().info("Interactive tutorial ready: private worlds, isolated inventory and once-only completion rewards.");
             getLogger().info("Arrival enabled: protected Batuu spawn; /spawn and temporary /tutorial ready.");
         } catch (Exception | LinkageError error) {
@@ -314,9 +322,12 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     public void onDisable() {
         if (droid != null) droid.close();
         if (forge != null) forge.close();
+        if (enchantments != null) enchantments.close();
         if (staff != null) staff.close();
         if (tutorial != null) tutorial.close();
         if (hud != null) hud.close();
+        if (mobExperience != null) mobExperience.close();
+        if (spawners != null) spawners.close();
         if (jawas != null) jawas.close();
         if (credits != null) credits.close();
         if (worldEditRanks != null) worldEditRanks.close();

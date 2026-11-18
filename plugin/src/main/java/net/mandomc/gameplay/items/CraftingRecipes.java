@@ -18,6 +18,7 @@ public final class CraftingRecipes implements org.bukkit.event.Listener, AutoClo
     private org.bukkit.scheduler.BukkitTask vendorRegistration;
     private StonecutterRules stonecutterRules;
     private final List<NamespacedKey> keys = new ArrayList<>();
+    private final List<NamespacedKey> compatibilityKeys = new ArrayList<>();
     private final List<org.bukkit.inventory.Recipe> displaced = new ArrayList<>();
     private final List<RecipeDefinition> definitions;
     private final java.util.Set<String> hiddenResults;
@@ -78,6 +79,14 @@ public final class CraftingRecipes implements org.bukkit.event.Listener, AutoClo
             for (var recipe : pending) {
                 if (!Bukkit.addRecipe(recipe)) throw new IllegalStateException("Duplicate recipe: " + ((org.bukkit.Keyed) recipe).getKey());
                 keys.add(((org.bukkit.Keyed) recipe).getKey());
+                if (recipe instanceof ShapedRecipe shaped && shaped.getKey().getKey().equals("craft_saber_workbench")) {
+                    // Retain the old registry key while saved player recipe books migrate on join.
+                    var oldKey = new NamespacedKey(plugin, "craft_saber_forge");
+                    var legacy = new ShapedRecipe(oldKey, shaped.getResult()).shape(shaped.getShape());
+                    shaped.getChoiceMap().forEach((symbol, choice) -> { if (choice != null) legacy.setIngredient(symbol, choice); });
+                    if (!Bukkit.addRecipe(legacy)) throw new IllegalStateException("Duplicate legacy workbench recipe");
+                    compatibilityKeys.add(oldKey);
+                }
             }
         } catch (RuntimeException error) {
             close();
@@ -123,6 +132,7 @@ public final class CraftingRecipes implements org.bukkit.event.Listener, AutoClo
     }
 
     private void discover(org.bukkit.entity.Player player) {
+        compatibilityKeys.forEach(player::undiscoverRecipe);
         player.discoverRecipes(keys);
     }
 
@@ -192,6 +202,8 @@ public final class CraftingRecipes implements org.bukkit.event.Listener, AutoClo
         if (stonecutterRules != null) stonecutterRules.close();
         keys.forEach(Bukkit::removeRecipe);
         keys.clear();
+        compatibilityKeys.forEach(Bukkit::removeRecipe);
+        compatibilityKeys.clear();
         displaced.forEach(Bukkit::addRecipe);
         displaced.clear();
     }

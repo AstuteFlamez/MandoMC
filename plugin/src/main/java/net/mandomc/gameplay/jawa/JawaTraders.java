@@ -203,10 +203,10 @@ public final class JawaTraders implements Listener, AutoCloseable {
         var menu=new Menu(player,entity,true,buying?text("brown-title"):text("gray-buy-title","category",category.name()));
         var offers=buying?stock(entity):category.offers();
         for(int i=0;i<offers.size();i++) {
-            var offer=offers.get(i);var preview=item(offer);var meta=preview.getItemMeta();
+            var offer=offers.get(i);var preview=item(offer);if(!buying)preview.setAmount(1);var meta=preview.getItemMeta();
             var lore=new ArrayList<Component>(meta.hasLore()?meta.lore():List.of());lore.add(Component.empty());
-            lore.add(text("buy-price","amount",String.valueOf(offer.amount()),"price",CreditLedger.format(offer.price())));
-            lore.add(text("buy-hint"));meta.lore(lore);preview.setItemMeta(meta);
+            lore.add(text("buy-price","amount",buying?String.valueOf(offer.amount()):"1","price",CreditLedger.format(buying?offer.price():JawaPurchase.unitPrice(offer))));
+            lore.add(text(buying?"buy-hint":"gray-buy-hint"));meta.lore(lore);preview.setItemMeta(meta);
             menu.inventory.setItem(i,preview);menu.offers.put(i,offer);
         }
         var info=new ItemStack(Material.BOOK);var infoMeta=info.getItemMeta();
@@ -273,18 +273,28 @@ public final class JawaTraders implements Listener, AutoCloseable {
         if(!(event.getView().getTopInventory().getHolder() instanceof Menu menu))return;
         event.setCancelled(true);
         if(!(event.getWhoClicked() instanceof Player player) || !menu.viewer.equals(player.getUniqueId())
-                || event.getRawSlot()<0 || event.getRawSlot()>=36 || event.getClick()!=ClickType.LEFT)return;
+                || event.getRawSlot()<0 || event.getRawSlot()>=36
+                || event.getClick()!=ClickType.LEFT && event.getClick()!=ClickType.SHIFT_LEFT)return;
         if(event.getRawSlot()==32 && Bukkit.getEntity(menu.jawa) instanceof LivingEntity gray && gray(gray)) {
             Bukkit.getScheduler().runTask(plugin,()->{if(player.isOnline() && player.getOpenInventory().getTopInventory()==menu.inventory)buyer.open(player,gray);});return;
         }
         var offer=menu.offers.get(event.getRawSlot());if(offer==null)return;
         if(!(Bukkit.getEntity(menu.jawa) instanceof LivingEntity jawa) || (!brown(jawa)&&!gray(jawa)) || !canTrade(player,jawa))return;
         var stack=item(offer);
+        long price=offer.price();
+        if(gray(jawa)) {
+            int amount=event.getClick()==ClickType.SHIFT_LEFT?stack.getMaxStackSize():1;
+            stack.setAmount(amount);price=JawaPurchase.price(offer,amount);
+        } else if(event.getClick()!=ClickType.LEFT)return;
         if(!menu.buying && !player.getInventory().containsAtLeast(stack,stack.getAmount())){send(player,"missing-items");return;}
         if(menu.buying && !fits(player,stack)){send(player,"inventory-full");return;}
         // Auction escrow handles serialization, save failures, disconnects and claims after restart.
-        plugin.credits().auctions().supply(player,stack,offer.price(),menu.buying,()->{});
-        player.closeInventory();
+        plugin.credits().auctions().supply(player,stack,price,menu.buying,()->{
+            if(player.isOnline() && player.getOpenInventory().getTopInventory()==menu.inventory) {
+                var balance=menu.inventory.getItem(31);
+                balance.editMeta(meta->meta.displayName(text("balance","balance",CreditLedger.format(plugin.credits().ledger().balance(player.getUniqueId())))));
+            }
+        });
     }
     private boolean fits(Player player,ItemStack stack) {
         int room=0;

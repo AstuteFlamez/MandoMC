@@ -50,7 +50,7 @@ public class LegacyRecipesTest {
                 }
             }
         }
-        assertEquals(125, config.getConfigurationSection("recipes").getKeys(false).size());
+        assertEquals(126, config.getConfigurationSection("recipes").getKeys(false).size());
         assertEquals(12, config.getConfigurationSection("smelting").getKeys(false).size());
         assertEquals(70, config.getConfigurationSection("stonecutting").getKeys(false).size());
     }

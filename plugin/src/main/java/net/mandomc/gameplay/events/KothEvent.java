@@ -26,7 +26,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/** Adapted legacy hill/bossbar/boundary; rewards intentionally disabled until selected by the user. */
+/** Continuous contestant capture with global victory and durable crate-key delivery. */
 public final class KothEvent implements ManagedEvent, Listener {
     private final JavaPlugin plugin;
     private final KothSettings settings;
@@ -146,12 +146,13 @@ public final class KothEvent implements ManagedEvent, Listener {
                 var crates=java.util.Objects.requireNonNull(Bukkit.getServicesManager().load(net.mandomc.gameplay.crates.CrateService.class));
                 // End capture before payout: an IO exception must never retry a second key next tick.
                 stop(false);
+                announce("winner",winningPlayer,"");
                 crates.enqueueKey(recipient,rewardCrate,1);
                 recipient.saveData();
+                crates.claim(recipient);
                 announce("reward",winningPlayer,recipient.getName());
             } else announce("winner",winningPlayer,"");
             world.spawnParticle(Particle.END_ROD,settings.x(),settings.y()+1,settings.z(),40,.5,1,.5,.05);
-            // No chest/commands/economy mutation: reward selection is explicitly deferred.
             stop(false);
         }
     }

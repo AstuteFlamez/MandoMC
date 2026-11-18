@@ -11,14 +11,14 @@ import static org.junit.Assert.*;
 public class KothCrateTest {
     private YamlConfiguration config(){return YamlConfiguration.loadConfiguration(new InputStreamReader(
             getClass().getResourceAsStream("/crates/crates.yml"),StandardCharsets.UTF_8));}
-    @Test public void kothUsesTheSharedCrateDefinitionAndSavedVirtualKeys() {
+    @Test public void kothUsesTheSharedCrateDefinitionAndPhysicalKeys() {
         var crate=CrateDefinition.read("koth",config().getConfigurationSection("crates.koth"));
-        assertTrue(crate.virtual());assertEquals("koth_crate_key",crate.keyItem());
-        assertEquals(100,crate.rewards().total());assertEquals(12,crate.rewards().entries().size());
+        assertFalse(crate.virtual());assertEquals("koth_crate_key",crate.keyItem());
+        assertEquals(120,crate.rewards().total());assertEquals(15,crate.rewards().entries().size());
         assertEquals("se14c",crate.rewards().choose(0).item());
-        assertEquals("black_kyber",crate.rewards().choose(99).item());
-        var items=new java.util.HashSet<String>();for(int i=0;i<100;i++)items.add(crate.rewards().choose(i).item());
-        assertEquals(java.util.Set.of("se14c","a280","ee3","jawa_ionization_blaster","cycler_rifle","relby_v10","boba_jetpack","speederbike","uwing","xwing","tiefighter","black_kyber"),items);
+        assertTrue(crate.rewards().entries().stream().anyMatch(entry->entry.value().item().equals("black_kyber")));
+        var items=new java.util.HashSet<String>();for(int i=0;i<crate.rewards().total();i++)items.add(crate.rewards().choose(i).item());
+        assertEquals(java.util.Set.of("se14c","a280","ee3","jawa_ionization_blaster","cycler_rifle","relby_v10","boba_jetpack","speederbike","uwing","xwing","tiefighter","black_kyber","endurance_book","recovery_book","mending_book"),items);
     }
     @Test public void weightedRewardsUseExactBoundariesAndRejectInvalidTickets() {
         var pool=new WeightedPool<>(List.of(new WeightedPool.Entry<>("common",95),new WeightedPool.Entry<>("rare",5)));

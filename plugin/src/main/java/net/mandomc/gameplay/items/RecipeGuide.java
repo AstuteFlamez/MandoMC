@@ -86,7 +86,7 @@ public final class RecipeGuide implements Listener, AutoCloseable {
         int slot = 12;
         for (String category : recipes.guideDefinitions().stream().map(RecipeDefinition::category).distinct().sorted().toList()) {
             if (category.equals("materials")) continue;
-            var entries = recipes.guideDefinitions().stream().filter(r -> r.category().equals(category)).toList();
+            var entries = recipes.guideDefinitions().stream().filter(r -> matchesCategory(r, category)).toList();
             category(menu, slot, category, entries);
             slot++;
             if (slot % 9 == 8) slot += 2;
@@ -109,6 +109,7 @@ public final class RecipeGuide implements Listener, AutoCloseable {
 
     private static boolean matchesCategory(RecipeDefinition recipe, String category) {
         return category == null || recipe.category().equals(category)
+                || category.equals("lightsabers") && recipe.result().equals("saber_workbench")
                 || category.equals("materials") && java.util.Set.of("components", "metals").contains(recipe.category());
     }
 
@@ -185,9 +186,9 @@ public final class RecipeGuide implements Listener, AutoCloseable {
             }
         }
         menu.inventory.setItem(25, recipes.result(recipe));
-        button(menu, 23, recipe.stonecutting() ? Material.STONECUTTER : recipe.smelting()
+        button(menu, 23, recipe.category().equals("lightsabers") ? Material.SMITHING_TABLE : recipe.stonecutting() ? Material.STONECUTTER : recipe.smelting()
                         ? recipe.blasting() ? Material.BLAST_FURNACE : Material.FURNACE : Material.CRAFTING_TABLE,
-                recipe.stonecutting() ? "stonecutting" : recipe.smelting() ? recipe.blasting() ? "smelting" : "furnace"
+                recipe.category().equals("lightsabers") ? "saber-workbench" : recipe.stonecutting() ? "stonecutting" : recipe.smelting() ? recipe.blasting() ? "smelting" : "furnace"
                         : recipe.shapeless() ? "shapeless" : "crafting", "", p -> {});
         if (recipe.smelting()) button(menu, 32, Material.CLOCK, "smelting-time",
                 String.format(java.util.Locale.ROOT, "%.1f", recipe.cookTime() / 20.0), p -> {});

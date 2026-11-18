@@ -6,8 +6,28 @@
       "target": "agents/MandoMC-RedstoneAgent.jar"
     },
     {
+      "source": "server/datapacks/mandomc-jetpack/data/mandomc/enchantment/endurance.json",
+      "target": "dev_world/datapacks/mandomc-jetpack/data/mandomc/enchantment/endurance.json"
+    },
+    {
       "source": "server/datapacks/mandomc-jetpack/data/mandomc/enchantment/jetpack.json",
       "target": "dev_world/datapacks/mandomc-jetpack/data/mandomc/enchantment/jetpack.json"
+    },
+    {
+      "source": "server/datapacks/mandomc-jetpack/data/mandomc/enchantment/recovery.json",
+      "target": "dev_world/datapacks/mandomc-jetpack/data/mandomc/enchantment/recovery.json"
+    },
+    {
+      "source": "server/datapacks/mandomc-jetpack/data/mandomc/tags/item/enchantable/sabers.json",
+      "target": "dev_world/datapacks/mandomc-jetpack/data/mandomc/tags/item/enchantable/sabers.json"
+    },
+    {
+      "source": "server/datapacks/mandomc-jetpack/data/minecraft/tags/enchantment/in_enchanting_table.json",
+      "target": "dev_world/datapacks/mandomc-jetpack/data/minecraft/tags/enchantment/in_enchanting_table.json"
+    },
+    {
+      "source": "server/datapacks/mandomc-jetpack/data/minecraft/tags/item/enchantable/melee_weapon.json",
+      "target": "dev_world/datapacks/mandomc-jetpack/data/minecraft/tags/item/enchantable/melee_weapon.json"
     },
     {
       "source": "server/datapacks/mandomc-jetpack/pack.mcmeta",
@@ -74,6 +94,10 @@
       "target": "plugins/MandoMC/equipment/boba.yml"
     },
     {
+      "source": "server/config/common/mandomc/equipment/enchantments.yml",
+      "target": "plugins/MandoMC/equipment/enchantments.yml"
+    },
+    {
       "source": "plugin/src/main/resources/equipment/jetpack-chestplate.yml",
       "target": "plugins/MandoMC/equipment/jetpack-chestplate.yml"
     },
@@ -82,8 +106,8 @@
       "target": "plugins/MandoMC/equipment/jetpack-visual-tests.yml"
     },
     {
-      "source": "server/config/common/mandomc/equipment/saber-forge.yml",
-      "target": "plugins/MandoMC/equipment/saber-forge.yml"
+      "source": "server/config/common/mandomc/equipment/saber-workbench.yml",
+      "target": "plugins/MandoMC/equipment/saber-workbench.yml"
     },
     {
       "source": "server/config/common/mandomc/events/beskar.yml",
@@ -138,6 +162,10 @@
       "target": "plugins/MandoMC/items/definitions/dioxis.yml"
     },
     {
+      "source": "server/config/common/mandomc/items/definitions/enchantments.yml",
+      "target": "plugins/MandoMC/items/definitions/enchantments.yml"
+    },
+    {
       "source": "server/config/common/mandomc/items/definitions/jabba-loot.yml",
       "target": "plugins/MandoMC/items/definitions/jabba-loot.yml"
     },
@@ -172,6 +200,10 @@
     {
       "source": "server/config/common/mandomc/items/definitions/sabers.yml",
       "target": "plugins/MandoMC/items/definitions/sabers.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/items/definitions/spawners.yml",
+      "target": "plugins/MandoMC/items/definitions/spawners.yml"
     },
     {
       "source": "server/config/common/mandomc/items/definitions/tusken.yml",
@@ -238,6 +270,10 @@
       "target": "plugins/MandoMC/mobs/drops/massiff.yml"
     },
     {
+      "source": "server/config/common/mandomc/mobs/experience.yml",
+      "target": "plugins/MandoMC/mobs/experience.yml"
+    },
+    {
       "source": "plugin/src/main/resources/mobs/herd.yml",
       "target": "plugins/MandoMC/mobs/herd.yml"
     },
@@ -248,6 +284,10 @@
     {
       "source": "server/config/common/mandomc/mobs/rancor.yml",
       "target": "plugins/MandoMC/mobs/rancor.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/mobs/spawners.yml",
+      "target": "plugins/MandoMC/mobs/spawners.yml"
     },
     {
       "source": "server/config/common/mandomc/mobs/spawning.yml",

@@ -1,0 +1,228 @@
+{
+  "schema-version": 1,
+  "table-pool": [
+    "minecraft:aqua_affinity",
+    "minecraft:blast_protection",
+    "minecraft:depth_strider",
+    "minecraft:efficiency",
+    "minecraft:feather_falling",
+    "minecraft:fire_aspect",
+    "minecraft:fire_protection",
+    "minecraft:fortune",
+    "minecraft:knockback",
+    "minecraft:looting",
+    "minecraft:projectile_protection",
+    "minecraft:protection",
+    "minecraft:respiration",
+    "minecraft:sharpness",
+    "minecraft:silk_touch",
+    "minecraft:swift_sneak",
+    "minecraft:thorns",
+    "minecraft:unbreaking",
+    "mandomc:endurance",
+    "mandomc:recovery"
+  ],
+  "removed": [
+    "minecraft:luck_of_the_sea",
+    "minecraft:lure"
+  ],
+  "endurance-reduction-per-level": 0.06666666666666667,
+  "recovery-bonus-per-level": 0.25,
+  "books": {
+    "minecraft:aqua_affinity": {
+      "rarity": "common",
+      "description": "Mine faster underwater."
+    },
+    "minecraft:bane_of_arthropods": {
+      "rarity": "uncommon",
+      "description": "Deal more damage to arthropods."
+    },
+    "minecraft:binding_curse": {
+      "rarity": "rare",
+      "description": "Prevents removing the item while worn."
+    },
+    "minecraft:blast_protection": {
+      "rarity": "uncommon",
+      "description": "Reduces explosion damage."
+    },
+    "minecraft:breach": {
+      "rarity": "epic",
+      "description": "Mace attacks bypass some armor protection."
+    },
+    "minecraft:channeling": {
+      "rarity": "rare",
+      "description": "Call down lightning with a trident during thunderstorms."
+    },
+    "minecraft:density": {
+      "rarity": "rare",
+      "description": "Deal more mace smash damage after falling."
+    },
+    "minecraft:depth_strider": {
+      "rarity": "rare",
+      "description": "Move faster underwater."
+    },
+    "minecraft:efficiency": {
+      "rarity": "common",
+      "description": "Mine and dig faster."
+    },
+    "minecraft:feather_falling": {
+      "rarity": "uncommon",
+      "description": "Reduces fall damage."
+    },
+    "minecraft:fire_aspect": {
+      "rarity": "rare",
+      "description": "Set enemies on fire with melee attacks."
+    },
+    "minecraft:fire_protection": {
+      "rarity": "uncommon",
+      "description": "Reduces fire damage and burning time."
+    },
+    "minecraft:flame": {
+      "rarity": "rare",
+      "description": "Shoot burning arrows."
+    },
+    "minecraft:fortune": {
+      "rarity": "rare",
+      "description": "Increases eligible drops from mined blocks."
+    },
+    "minecraft:frost_walker": {
+      "rarity": "epic",
+      "description": "Freeze water beneath your feet."
+    },
+    "minecraft:impaling": {
+      "rarity": "uncommon",
+      "description": "Deal more trident damage to aquatic mobs."
+    },
+    "minecraft:infinity": {
+      "rarity": "epic",
+      "description": "Fire ordinary arrows without consuming them."
+    },
+    "minecraft:knockback": {
+      "rarity": "uncommon",
+      "description": "Push enemies farther away with melee attacks."
+    },
+    "minecraft:looting": {
+      "rarity": "rare",
+      "description": "Increases eligible mob drops."
+    },
+    "minecraft:loyalty": {
+      "rarity": "uncommon",
+      "description": "Thrown tridents return to you."
+    },
+    "minecraft:luck_of_the_sea": {
+      "rarity": "rare",
+      "description": "Improves fishing loot."
+    },
+    "minecraft:lunge": {
+      "rarity": "rare",
+      "description": "Lunge forward with a spear jab."
+    },
+    "minecraft:lure": {
+      "rarity": "uncommon",
+      "description": "Fish bite sooner."
+    },
+    "minecraft:mending": {
+      "rarity": "epic",
+      "description": "Collected experience repairs the item."
+    },
+    "minecraft:multishot": {
+      "rarity": "rare",
+      "description": "Fire several crossbow projectiles at once."
+    },
+    "minecraft:piercing": {
+      "rarity": "uncommon",
+      "description": "Crossbow arrows pass through multiple targets."
+    },
+    "minecraft:power": {
+      "rarity": "common",
+      "description": "Increases bow damage."
+    },
+    "minecraft:projectile_protection": {
+      "rarity": "uncommon",
+      "description": "Reduces projectile damage."
+    },
+    "minecraft:protection": {
+      "rarity": "common",
+      "description": "Reduces incoming damage."
+    },
+    "minecraft:punch": {
+      "rarity": "rare",
+      "description": "Arrows push targets farther away."
+    },
+    "minecraft:quick_charge": {
+      "rarity": "uncommon",
+      "description": "Load crossbows faster."
+    },
+    "minecraft:respiration": {
+      "rarity": "rare",
+      "description": "Breathe longer underwater."
+    },
+    "minecraft:riptide": {
+      "rarity": "rare",
+      "description": "Launch yourself with a trident while wet."
+    },
+    "minecraft:sharpness": {
+      "rarity": "uncommon",
+      "description": "Increases melee damage and saber throw damage."
+    },
+    "minecraft:silk_touch": {
+      "rarity": "epic",
+      "description": "Collect eligible blocks intact."
+    },
+    "minecraft:smite": {
+      "rarity": "uncommon",
+      "description": "Deal more damage to undead mobs."
+    },
+    "minecraft:soul_speed": {
+      "rarity": "rare",
+      "description": "Move faster on soul sand and soul soil."
+    },
+    "minecraft:sweeping_edge": {
+      "rarity": "rare",
+      "description": "Increases sword sweeping damage."
+    },
+    "minecraft:swift_sneak": {
+      "rarity": "epic",
+      "description": "Move faster while crouching."
+    },
+    "minecraft:thorns": {
+      "rarity": "rare",
+      "description": "Damages enemies that attack you."
+    },
+    "minecraft:unbreaking": {
+      "rarity": "uncommon",
+      "description": "Reduces ordinary equipment durability loss."
+    },
+    "minecraft:vanishing_curse": {
+      "rarity": "rare",
+      "description": "The item disappears when you die."
+    },
+    "minecraft:wind_burst": {
+      "rarity": "epic",
+      "description": "Bounce upward after a successful mace smash."
+    },
+    "mandomc:endurance": {
+      "rarity": "rare",
+      "description": "Blocking, reflecting and throwing use less saber charge."
+    },
+    "mandomc:recovery": {
+      "rarity": "rare",
+      "description": "Your saber constantly restores charge faster."
+    },
+    "mandomc:jetpack": {
+      "rarity": "rare",
+      "description": "Enables coal-powered flight while worn on a chestplate."
+    }
+  },
+  "messages": {
+    "denied": "<red>You cannot use this command.",
+    "usage": "<gray>/enchant <enchantment> <level> [player]",
+    "unknown": "<yellow>Unknown or removed enchantment: <value>",
+    "level": "<yellow>Use a whole-number level from 0 to 255. Level 0 removes the enchantment.",
+    "player": "<yellow>Name an online player when using this command from the console.",
+    "hold": "<yellow>Hold the item you want to enchant.",
+    "incompatible": "<yellow>This enchantment does not apply to that item.",
+    "jetpack-cap": "<yellow>Jetpack supports levels I and II.",
+    "done": "<aqua>Enchantment updated: <value>"
+  }
+}

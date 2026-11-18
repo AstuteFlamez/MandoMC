@@ -1,0 +1,15 @@
+schema-version: 1
+text:
+  title: '<dark_gray>Saber Workbench'
+  craft-title: '<dark_gray>Saber Crafting'
+  style-title: '<dark_gray>Saber Styles'
+  enchant-title: '<dark_gray>Saber Enchanting'
+  unsafe: '<yellow>Leave combat, dismount and stay near the Saber Workbench.'
+  craft: '<gold>Craft Sabers'
+  craft-description: '<gray>Assemble sabers and components in a crafting grid.'
+  style: '<gold>Style Sabers'
+  style-description: '<gray>Choose a saber style without losing enchantments.'
+  enchant: '<gold>Enchant Sabers'
+  enchant-description: '<gray>Combine books, enchant, repair or rename your saber.'
+  close: '<red>Close'
+  close-description: '<gray>Leave the Saber Workbench.'
