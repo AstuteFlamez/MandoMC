@@ -52,3 +52,7 @@ The workbench hub and its native screens use dark-gray titles that fit the vanil
 After synchronizing a filtered style recipe list, the pinned Paper adapter refreshes the client input slot through empty and back to its real contents. Minecraft 26.1.2 otherwise caches stonecutter options by input material, so shield-backed sabers can show empty or stale choices. This refresh does not mutate or consume the authoritative item. Mace Windu's saber offers Revan's redeemed style and Vernestra Rwoh's style. Switching saber families refreshes both client choices and server indices together.
 
 The native regression reproduces the empty Mace list with the previous adapter and passes 2,764 assertions with the fix, including ordered outbound-packet replay using the pinned client material-cache behavior, same-material family switches, both Mace outputs, metadata-preserving pickup and measured compact title/color checks.
+
+## Workbench recipe discovery
+
+The Workbench itself is crafted at an ordinary crafting table using five Durasteel, two Agrinium, one Circuit Board and one Smithing Table. Its existing recipe now appears under both Lightsabers and Tools in `/recipes`; `/recipes saber_workbench` opens it directly. The native recipe preview still labels the ordinary crafting table, so no Workbench is required to make the first Workbench. Native pickup consumes the exact ingredient layout and produces one station.

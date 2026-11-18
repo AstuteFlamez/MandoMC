@@ -65,7 +65,37 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         mando.forge().open(player,station); var top = player.getOpenInventory().getTopInventory();
         check(top.getItem(10).getType()==Material.CRAFTING_TABLE && top.getItem(13).getType()==Material.STONECUTTER && top.getItem(16).getType()==Material.ENCHANTED_BOOK,"Three workbench functions");
         checkTitle("Saber Workbench");
-        navigation(0);
+        workbenchRecipe();
+    }
+    private void workbenchRecipe() throws Exception {
+        player.closeInventory();player.getInventory().clear();
+        var view=MenuType.CRAFTING.builder().checkReachable(false).build(player);view.open();
+        var inventory=(CraftingInventory)view.getTopInventory();
+        String[] ids={"durasteel","circuit_board","durasteel","agrinium","minecraft:smithing_table","agrinium","durasteel","durasteel","durasteel"};
+        var matrix=new ItemStack[9];
+        for(int i=0;i<ids.length;i++) {matrix[i]=ids[i].startsWith("minecraft:")?new ItemStack(Material.SMITHING_TABLE):mando.items().create(ids[i]);matrix[i].setAmount(2);}
+        inventory.setMatrix(matrix);
+        // Exercise native recipe matching and PrepareItemCraftEvent; never inject a result.
+        var handle=menu();var craft=handle.getClass().getSuperclass().getDeclaredField("craftSlots");craft.setAccessible(true);
+        handle.getClass().getMethod("slotsChanged",Class.forName("net.minecraft.world.Container")).invoke(handle,craft.get(handle));
+        later(2,()->{
+            check(inventory.getResult()!=null&&"saber_workbench".equals(mando.items().identify(inventory.getResult())),"Workbench matches genuine ingredients in an ordinary crafting table");
+            check(inventory.getRecipe() instanceof org.bukkit.Keyed keyed&&keyed.getKey().getNamespace().equals("mandomc"),"Workbench uses a registered custom recipe");
+            click(0,"PICKUP");check("saber_workbench".equals(mando.items().identify(player.getItemOnCursor()))&&player.getItemOnCursor().getAmount()==1,"Native crafting pickup produces one workbench");
+            for(var item:inventory.getMatrix())check(item!=null&&item.getAmount()==1,"Workbench crafting consumes one of each ingredient slot");
+            player.setItemOnCursor(null);player.closeInventory();
+            check(Bukkit.dispatchCommand(player,"recipes saber_workbench"),"Direct workbench recipe command");
+            var guide=player.getOpenInventory().getTopInventory();check("saber_workbench".equals(mando.items().identify(guide.getItem(25))),"Workbench recipe preview has the obtainable station");
+            check(guide.getItem(23).getType()==Material.CRAFTING_TABLE,"Workbench itself is crafted at a crafting table, avoiding circular station requirements");
+            player.closeInventory();Bukkit.dispatchCommand(player,"recipes");guide=player.getOpenInventory().getTopInventory();
+            int category=-1;for(int i=0;i<guide.getSize();i++){var item=guide.getItem(i);if(item!=null&&plain(item.getItemMeta().displayName()).contains("Lightsabers"))category=i;}
+            check(category>=0,"Lightsabers category exists");click(category,"PICKUP");
+            later(2,()->{
+                var page=player.getOpenInventory().getTopInventory();
+                check(Arrays.stream(page.getContents()).filter(Objects::nonNull).anyMatch(item->"saber_workbench".equals(mando.items().identify(item))),"Workbench recipe is discoverable alongside saber recipes");
+                player.closeInventory();player.getInventory().clear();navigation(0);
+            });
+        });
     }
     private void navigation(int index) throws Exception {
         if(index==3){
