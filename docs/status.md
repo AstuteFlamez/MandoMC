@@ -1,5 +1,9 @@
 # Resume here
 
+## Spawner combining in verification (2026-11-17)
+
+Shift-right-click with matching spawners combines the held stack into a placed cage, up to 64, preserving excess in hand. Holograms use the persistent count; pickup returns the full amount. Each cycle attempts one creature per combined spawner while retaining the shared nearby cap. Transfers defer until interaction protection finishes and recheck clan permission, reach and held items. Native stacking/recovery/restart verification is in progress; the Java build passes. Current development has a newer workbench/menu/lore correction that must remain intact. Next action: finish native stack verification and deploy the tested scope while preserving the newer dev release.
+
 ## Spawner appearance follow-up deployed to development (2026-11-17)
 
 Placement hints explicitly allow unclaimed Wilderness and the player’s own clan claims. Spawner items and placed blocks clear the native pig; matching miniature creature rigs rotate inside cages with gold `1x Massiff`, `1x Dewback`, `1x Bantha` and `1x Jawa` holograms. Existing items/blocks migrate while keeping identity and custom names. Inert, unsaved previews clean up on break, chunk unload and shutdown. Herd scaling now applies only to actual horse-based animals, preserving cosmetic miniature scales.

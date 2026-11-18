@@ -26,7 +26,12 @@ public final class SpawnerItems {
             var updated=new ArrayList<>(lore);var template=items.create(id).getItemMeta().lore();
             for(int i=0;i<updated.size();i++)if(PlainTextComponentSerializer.plainText().serialize(updated.get(i))
                     .equals("Place in Wilderness. Break with a pickaxe to recover.")) {
-                updated.remove(i);updated.addAll(i,template.subList(template.size()-3,template.size()));i+=2;changed=true;
+                updated.remove(i);updated.addAll(i,template.subList(template.size()-4,template.size()));i+=3;changed=true;
+            }
+            String combine="Shift-right-click to combine matching spawners.";
+            boolean hint=updated.stream().anyMatch(line->PlainTextComponentSerializer.plainText().serialize(line).equals(combine));
+            if(!hint)for(int i=0;i<updated.size();i++)if(PlainTextComponentSerializer.plainText().serialize(updated.get(i)).equals("Break with a pickaxe to recover.")){
+                updated.add(i+1,template.getLast());changed=true;break;
             }
             if(changed){meta.lore(updated);item.setItemMeta(meta);}
         }
