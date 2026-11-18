@@ -1,5 +1,5 @@
 # Feature: Spawners and gameplay feedback
-Status: original release deployed to development; appearance follow-up verified
+Status: deployed to development, including creature previews and combined spawners
 Branch: bilal/spawners-event-fixes
 
 ## Player experience
@@ -8,6 +8,8 @@ The former Minerals gray Jawa at Batuu is now Spawners. Stock order is Massiff, 
 Gray-Jawa left-click buys one item. Shift-left-click buys the item's full native stack size, at 64 times the unit price for stackable goods. The inventory stays open on success and failure and its credit display updates after commitment. Existing bundle prices are divided by bundle quantity in integer cents, rounding up; brown component offers retain their configured bundles. All supply delivery continues through durable auction escrow, including insufficient funds, disconnects and full-inventory claims.
 
 Spawner blocks retain their type across chunk unload/restart. A nearby Survival/Adventure player activates one spawn attempt every 30 seconds, with a shared nearby cap of six of the same creature. All four use the existing themed mobs and loot. Suitable ground and clear space are required. Spawners can be placed in unclaimed Wilderness and your own clan’s claims, including Hoth. Hoth’s natural-mob suppression remains in force; only the explicitly authorized spawner creature is permitted. Break with any pickaxe to recover one spawner; no Silk Touch requirement. Other tools cannot destroy it. Creative removal gives no item. Spawn eggs cannot change its type. Ordinary protection cancellations remain authoritative. Each placed cage shows a rotating miniature of its matching existing creature model and a `1x Massiff`/`Dewback`/`Bantha`/`Jawa` hologram. The native pig preview is cleared from items and placed blocks; existing items and loaded spawners migrate automatically. Preview entities have no AI, hitbox, loot or persistence, appear within 32 blocks of a player, and are removed on break, unload or shutdown.
+
+Sneak and right-click a placed spawner with matching spawners in the main hand to combine the held stack, up to 64 per cage. Excess stays in hand; different species cannot combine. Normal right-click retains native placement. The hologram immediately shows the combined count, and the persistent block count defaults to one for older cages. Each cycle attempts one creature per combined spawner, bounded by the existing shared nearby cap of six. A pickaxe returns the full count as ordinary spawner items; Creative breaking still gives no drop. Zone, clan and interaction denials apply before the deferred one-tick transfer, with the held slot/item and reach rechecked. Duplicate interaction packets cannot reuse the consumed stack. No nearby placed cages are automatically removed.
 
 KOTH announces victory globally and delivers a physical key immediately. Full inventories retain delivery for `/crates claim`. Existing virtual keys remain usable, consumed before physical keys. Clan recipient selection remains one random eligible winning member inside the hill.
 
@@ -28,9 +30,11 @@ Run `scripts/add-planet-coal.py` using the pinned map-tools requirements, with `
 ## Verification
 `./scripts/build.sh` passes 383 Java tests in the combined Saber Workbench release; all 95 tooling/map checks pass. The appearance follow-up adds a 68-assertion native probe (`scripts/build-spawner-preview-probe.sh`) for matching miniature models, all four gold labels, legacy migration, preserved item metadata, clan placement and break/unload/shutdown cleanup. The combined Paper fixture passes 252 assertions, and an actual JVM restart passes 10 more for persisted spawner species and resumed tracking. The palace check verifies a real 6,000-tick scheduled task and invokes its callback on the server thread, rather than waiting five wall-clock minutes. The saber check round-trips the actual recipe packet and compares every permitted option against native selection.
 
+The stacking probe (`scripts/build-spawner-stack-probe.sh`) covers all four species, held-stack consumption, duplicate packets, mismatched types, offhand/normal clicks, early/late protection denials, own/rival claims, partial capacity, live multi-spawning under the shared cap, complete pickaxe recovery, legacy tooltip migration and actual JVM restart persistence.
+
 Unit tests cover proportional purchasing, spawner ordering/pricing, physical KOTH config and legacy source guidance, recipe resolution, coal overlay conflict/staff handling, cave depth/structure/ore exclusions and migration idempotence. A disposable Paper fixture covers real crafting, shop transactions, themed spawns, protection/recovery events, global KOTH delivery and palace cleanup.
 
 The private map rehearsal adds 2,125 Hoth, 12,503 Mandalore, 12,053 Naboo and 7,053 Tatooine coal blocks. Region records round-trip before any write; every changed file has a retained prior copy. The original gameplay release and coal migration are deployed to development. The appearance follow-up preserves that terrain and the newer Saber Workbench release; client appearance still needs owner review.
 
 ## Next action
-Deploy the verified appearance follow-up to development, preserving the existing coal migration and resource pack.
+Playtest all four creature previews, shift-right-click combining inside a clan claim, count holograms and full pickaxe recovery on development.

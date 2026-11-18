@@ -2,7 +2,10 @@ schema-version: 1
 interval-seconds: 30
 activation-range: 16
 nearby-cap: 6
+stack-limit: 64
 messages:
+  different-type: <red>Combine only matching spawner types.
+  stack-full: <yellow>This spawner is at its stack limit.
   label: <gold><count>x <mob>
   wilderness: <red>Place spawners in unclaimed Wilderness or your own clan’s claims.
   pickaxe: <yellow>Break this spawner with a pickaxe to recover it.

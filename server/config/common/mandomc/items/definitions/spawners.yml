@@ -12,6 +12,7 @@ items:
     - <yellow>Place in unclaimed Wilderness
     - <yellow>or your own clan’s claims.
     - <yellow>Break with a pickaxe to recover.
+    - <yellow>Shift-right-click to combine matching spawners.
   dewback_spawner:
     material: SPAWNER
     item-model: minecraft:spawner
@@ -24,6 +25,7 @@ items:
     - <yellow>Place in unclaimed Wilderness
     - <yellow>or your own clan’s claims.
     - <yellow>Break with a pickaxe to recover.
+    - <yellow>Shift-right-click to combine matching spawners.
   bantha_spawner:
     material: SPAWNER
     item-model: minecraft:spawner
@@ -36,6 +38,7 @@ items:
     - <yellow>Place in unclaimed Wilderness
     - <yellow>or your own clan’s claims.
     - <yellow>Break with a pickaxe to recover.
+    - <yellow>Shift-right-click to combine matching spawners.
   jawa_spawner:
     material: SPAWNER
     item-model: minecraft:spawner
@@ -48,3 +51,4 @@ items:
     - <yellow>Place in unclaimed Wilderness
     - <yellow>or your own clan’s claims.
     - <yellow>Break with a pickaxe to recover.
+    - <yellow>Shift-right-click to combine matching spawners.

@@ -22,6 +22,7 @@ import org.bukkit.scheduler.BukkitTask;
 /** Persistent native spawner blocks; all spawned creatures use the existing Mythic definitions. */
 public final class MobSpawners implements Listener, AutoCloseable {
     public static final NamespacedKey TYPE = new NamespacedKey("mandomc", "spawner_type_v1");
+    public static final NamespacedKey COUNT = new NamespacedKey("mandomc", "spawner_count_v1");
     public static final Map<String,String> TYPES = Map.of("massiff_spawner", "Massiff",
             "dewback_spawner", "Dewback", "bantha_spawner", "Bantha", "jawa_spawner", "JawaBrown");
     private record Site(UUID world, int x, int y, int z) {
@@ -39,15 +40,17 @@ public final class MobSpawners implements Listener, AutoCloseable {
     private final Map<String,Visual> visuals=new HashMap<>();
     private final Map<Site,Preview> previews=new HashMap<>();
     private final BukkitTask task,rotation;
-    private final int interval, range, cap;
+    private final int interval, range, cap, stackLimit;
     private final ConfigurationSection messages;
     private int clock;
+    private boolean closed;
 
     public MobSpawners(MandoPlugin plugin, ConfigurationSection config) throws ReflectiveOperationException {
         this.plugin=plugin;
         interval=config.getInt("interval-seconds");range=config.getInt("activation-range");cap=config.getInt("nearby-cap");
+        stackLimit=config.getInt("stack-limit",64);
         messages=Objects.requireNonNull(config.getConfigurationSection("messages"));
-        if(config.getInt("schema-version")!=1 || interval<10 || interval>600 || range<4 || range>32 || cap<1 || cap>16)
+        if(config.getInt("schema-version")!=1 || interval<10 || interval>600 || range<4 || range>32 || cap<1 || cap>16 || stackLimit<1 || stackLimit>64)
             throw new IllegalArgumentException("mobs/spawners.yml: invalid limits");
         for(String id:TYPES.keySet()){
             Objects.requireNonNull(plugin.items().create(id),"Missing spawner item "+id);
@@ -67,6 +70,9 @@ public final class MobSpawners implements Listener, AutoCloseable {
     private static boolean known(String id) {return id!=null && TYPES.containsKey(id);}
     private void tell(Player p,String key) { p.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage()
             .deserialize(Objects.requireNonNull(messages.getString(key)))); }
+    public static int count(CreatureSpawner state) {
+        return Math.clamp(state.getPersistentDataContainer().getOrDefault(COUNT,PersistentDataType.INTEGER,1),1,64);
+    }
     private String type(Block block) {
         return block.getState() instanceof CreatureSpawner spawner
                 ?spawner.getPersistentDataContainer().get(TYPE,PersistentDataType.STRING):null;
@@ -90,6 +96,7 @@ public final class MobSpawners implements Listener, AutoCloseable {
         String id=plugin.items().identify(e.getItemInHand());if(!known(id)||!e.canBuild())return;
         if(!(e.getBlock().getState() instanceof CreatureSpawner spawner))return;
         spawner.getPersistentDataContainer().set(TYPE,PersistentDataType.STRING,id);
+        spawner.getPersistentDataContainer().set(COUNT,PersistentDataType.INTEGER,1);
         spawner.setSpawnedType(null);spawner.setDelay(32767);spawner.update();
         sites.put(Site.of(e.getBlock()),clock+interval);
     }
@@ -106,8 +113,9 @@ public final class MobSpawners implements Listener, AutoCloseable {
         var site=Site.of(e.getBlock());sites.remove(site);removePreview(site);e.setDropItems(false);e.setExpToDrop(0);
         if(e.getPlayer().getGameMode()!=GameMode.CREATIVE) {
             var at=e.getBlock().getLocation().add(.5,.5,.5);
+            var recovered=plugin.items().create(id);recovered.setAmount(count((CreatureSpawner)e.getBlock().getState()));
             // Defer until native breaking has removed the spawner block.
-            Bukkit.getScheduler().runTask(plugin,()->at.getWorld().dropItemNaturally(at,plugin.items().create(id)));
+            Bukkit.getScheduler().runTask(plugin,()->at.getWorld().dropItemNaturally(at,recovered));
         }
     }
     @EventHandler(priority=EventPriority.HIGHEST)
@@ -116,6 +124,35 @@ public final class MobSpawners implements Listener, AutoCloseable {
     public void changeType(PlayerInteractEvent e) {
         if(e.getClickedBlock()!=null && known(type(e.getClickedBlock())) && e.getItem()!=null
                 && e.getItem().getType().name().endsWith("_SPAWN_EGG"))e.setCancelled(true);
+    }
+    @EventHandler(priority=EventPriority.HIGHEST)
+    public void combine(PlayerInteractEvent e) {
+        if(e.getAction()!=Action.RIGHT_CLICK_BLOCK||!e.getPlayer().isSneaking()||e.getClickedBlock()==null)return;
+        String id=type(e.getClickedBlock());String held=plugin.items().identify(e.getItem());
+        if(!known(id)||!known(held)||e.useInteractedBlock()==Event.Result.DENY||e.useItemInHand()==Event.Result.DENY)return;
+        // Prevent ordinary adjacent placement, including the redundant off-hand interaction.
+        e.setUseItemInHand(Event.Result.DENY);
+        if(e.getHand()!=org.bukkit.inventory.EquipmentSlot.HAND)return;
+        var player=e.getPlayer();var block=e.getClickedBlock();int slot=player.getInventory().getHeldItemSlot();
+        var expected=e.getItem().clone();
+        // Later protection listeners must finish before any block or inventory mutation.
+        Bukkit.getScheduler().runTask(plugin,()->{
+            if(closed||e.useInteractedBlock()==Event.Result.DENY||!player.isOnline()||!player.isSneaking()
+                    ||player.getWorld()!=block.getWorld()||player.getLocation().distanceSquared(block.getLocation().add(.5,.5,.5))>36
+                    ||player.getInventory().getHeldItemSlot()!=slot||!block.getWorld().isChunkLoaded(block.getX()>>4,block.getZ()>>4)||!id.equals(type(block)))return;
+            if(player.getGameMode()!=GameMode.SURVIVAL&&player.getGameMode()!=GameMode.CREATIVE)return;
+            var clans=Bukkit.getServicesManager().load(net.mandomc.gameplay.clans.ClanService.class);
+            if(!plugin.territories().edits(block.getLocation())||clans==null||!clans.canEdit(player,block.getLocation()))return;
+            var item=player.getInventory().getItemInMainHand();if(!item.equals(expected))return;
+            if(!id.equals(held)){tell(player,"different-type");return;}
+            var state=(CreatureSpawner)block.getState();int amount=Math.min(item.getAmount(),stackLimit-count(state));
+            if(amount<=0){tell(player,"stack-full");return;}
+            state.getPersistentDataContainer().set(COUNT,PersistentDataType.INTEGER,count(state)+amount);
+            if(!state.update())return;
+            if(player.getGameMode()!=GameMode.CREATIVE){item.setAmount(item.getAmount()-amount);player.getInventory().setItemInMainHand(item);}
+            clans.land().touch(net.mandomc.gameplay.clans.LandRestoration.chunk(block));
+            preview(Site.of(block),block,id);
+        });
     }
     @EventHandler public void loaded(ChunkLoadEvent e) {load(e.getChunk());}
     @EventHandler public void unloaded(ChunkUnloadEvent e) {
@@ -139,7 +176,9 @@ public final class MobSpawners implements Listener, AutoCloseable {
     private void preview(Site site,Block block,String id){
         var visual=visuals.get(id);var at=block.getLocation().add(.5,visual.baseHeight,.5);
         if(block.getWorld().getPlayers().stream().noneMatch(p->p.getLocation().distanceSquared(at)<=32*32)){removePreview(site);return;}
-        var previous=previews.get(site);if(previous!=null&&previous.valid())return;
+        var previous=previews.get(site);
+        Component title=title(id,count((CreatureSpawner)block.getState()));
+        if(previous!=null&&previous.valid()){if(!previous.label.text().equals(title))previous.label.text(title);return;}
         removePreview(site);if(!SpawnerModel.available(visual.model))return;
         var base=plugin.territories().spawnNpc(EntityType.ARMOR_STAND,at,()->at.getWorld().spawn(at,ArmorStand.class,e->{
             e.setVisible(false);e.setMarker(true);e.setGravity(false);e.setInvulnerable(true);e.setSilent(true);e.setCollidable(false);
@@ -149,9 +188,6 @@ public final class MobSpawners implements Listener, AutoCloseable {
         SpawnerModel rendered=null;TextDisplay label=null;
         try{
             rendered=new SpawnerModel(base,visual.model,visual.scale);
-            String name=id.equals("jawa_spawner")?"Jawa":TYPES.get(id);
-            Component title=net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(messages.getString("label","<gold><count>x <mob>"),
-                    net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed("count","1"),net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed("mob",name));
             label=at.getWorld().spawn(block.getLocation().add(.5,1.2,.5),TextDisplay.class,e->{
                 e.text(title);e.setPersistent(false);e.setInvulnerable(true);e.setBillboard(Display.Billboard.CENTER);e.setShadowed(true);
                 e.setDefaultBackground(false);e.setBackgroundColor(Color.fromARGB(0));e.setViewRange(.5f);
@@ -159,6 +195,12 @@ public final class MobSpawners implements Listener, AutoCloseable {
             });
             previews.put(site,new Preview(base,label,rendered));
         }catch(RuntimeException error){if(rendered!=null)rendered.close();base.remove();if(label!=null)label.remove();throw error;}
+    }
+    private Component title(String id,int count) {
+        String name=id.equals("jawa_spawner")?"Jawa":TYPES.get(id);
+        return net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(messages.getString("label","<gold><count>x <mob>"),
+                net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed("count",Integer.toString(count)),
+                net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed("mob",name));
     }
     private void tick() {
         clock++;
@@ -176,27 +218,30 @@ public final class MobSpawners implements Listener, AutoCloseable {
             if(!plugin.territories().edits(at) || world.getPlayers().stream().noneMatch(p->!p.isDead()
                     && (p.getGameMode()==GameMode.SURVIVAL || p.getGameMode()==GameMode.ADVENTURE)
                     && p.getLocation().distanceSquared(at)<=range*range))continue;
-            if(world.getNearbyEntities(at,range,range,range).stream().filter(LivingEntity.class::isInstance)
-                    .filter(e->TYPES.get(id).equals(mobs.type(e))).count()>=cap)continue;
-            for(int attempt=0;attempt<12;attempt++) {
-                var random=java.util.concurrent.ThreadLocalRandom.current();
-                var target=at.clone().add(random.nextInt(-4,5),random.nextInt(-1,2),random.nextInt(-4,5));
-                var floor=target.getBlock().getRelative(0,-1,0);
-                boolean clear=true;
-                // The largest shop creature is a Bantha. Require a full 3×3×3 free volume for all types.
-                for(int x=-1;x<=1;x++)for(int y=0;y<3;y++)for(int z=-1;z<=1;z++) {
-                    var b=target.getBlock().getRelative(x,y,z);
-                    if(!b.isPassable() || b.isLiquid() || !plugin.territories().edits(b.getLocation())
-                            || !world.getWorldBorder().isInside(b.getLocation()))clear=false;
+            long nearby=world.getNearbyEntities(at,range,range,range).stream().filter(LivingEntity.class::isInstance)
+                    .filter(e->TYPES.get(id).equals(mobs.type(e))).count();
+            int budget=Math.min(count((CreatureSpawner)block.getState()),Math.max(0,cap-(int)nearby));
+            for(int remaining=budget;remaining>0;remaining--){
+                for(int attempt=0;attempt<12;attempt++) {
+                    var random=java.util.concurrent.ThreadLocalRandom.current();
+                    var target=at.clone().add(random.nextInt(-4,5),random.nextInt(-1,2),random.nextInt(-4,5));
+                    var floor=target.getBlock().getRelative(0,-1,0);
+                    boolean clear=true;
+                    // The largest shop creature is a Bantha. Require a full 3×3×3 free volume for all types.
+                    for(int x=-1;x<=1;x++)for(int y=0;y<3;y++)for(int z=-1;z<=1;z++) {
+                        var b=target.getBlock().getRelative(x,y,z);
+                        if(!b.isPassable() || b.isLiquid() || !plugin.territories().edits(b.getLocation())
+                                || !world.getWorldBorder().isInside(b.getLocation()))clear=false;
+                    }
+                    if(!clear || !floor.getType().isSolid() || floor.getType()==Material.MAGMA_BLOCK
+                            || !world.getNearbyEntities(target,1.5,1.5,1.5).stream().noneMatch(LivingEntity.class::isInstance))continue;
+                    EntityType base=switch(id){case "massiff_spawner"->EntityType.ZOMBIE;case "jawa_spawner"->EntityType.PIG;default->EntityType.HORSE;};
+                    var mob=plugin.territories().spawnSpawner(base,target,()->mobs.spawn(TYPES.get(id),target,1));
+                    if(mob!=null && mob.isValid() && !mob.isDead() && mob instanceof Mob nativeMob)nativeMob.setRemoveWhenFarAway(true);
+                    break;
                 }
-                if(!clear || !floor.getType().isSolid() || floor.getType()==Material.MAGMA_BLOCK
-                        || !world.getNearbyEntities(target,1.5,1.5,1.5).stream().noneMatch(LivingEntity.class::isInstance))continue;
-                EntityType base=switch(id){case "massiff_spawner"->EntityType.ZOMBIE;case "jawa_spawner"->EntityType.PIG;default->EntityType.HORSE;};
-                var mob=plugin.territories().spawnSpawner(base,target,()->mobs.spawn(TYPES.get(id),target,1));
-                if(mob!=null && mob.isValid() && !mob.isDead() && mob instanceof Mob nativeMob)nativeMob.setRemoveWhenFarAway(true);
-                break;
             }
         }
     }
-    @Override public void close() {task.cancel();rotation.cancel();previews.values().forEach(Preview::close);previews.clear();sites.clear();HandlerList.unregisterAll(this);}
+    @Override public void close() {closed=true;task.cancel();rotation.cancel();previews.values().forEach(Preview::close);previews.clear();sites.clear();HandlerList.unregisterAll(this);}
 }
