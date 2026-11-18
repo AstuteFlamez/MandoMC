@@ -1,5 +1,55 @@
 # Resume here
 
+## C0-M5 active on both servers (2026-11-18)
+
+Main release `30e633c0678b324b655b45d9cbfb2ef22a326bb8` is deployed and activated.
+PRs #77 and #79 merged through dev; release PR #78 merged to main. All release
+checks, pack publication and the pinned SFTP upload passed. A deliberate panel
+restart activated the exact CI artifact. Startup verification passes Java/Paper,
+gameplay/voting markers, every managed hash and the 405-source exact-build M4-ND
+knowledge marker. Copied only the reviewed change to development, with complete
+stopped-runtime backups; unrelated code, binaries, settings, pack identity and private
+guide credentials are preserved. Development runs tested `4120bec0f04c`.
+
+The existing Discord bot/application/nickname are C0-M5, using the silver TC-14
+protocol-droid skin and an avatar rendered from its head pixels. Cloudflare's free
+Worker/D1 handles commands and durable state. Only the main Minecraft server runs
+the separate JDA 6.7.0 Gateway plugin; authenticated READY/Online is verified there.
+Both server snapshots are fresh. One real linked account is acknowledged by both
+bridges and Discord, with no pending target; its native main rank receipt and exactly
+one durable 5,000-credit reward receipt are verified without exposing identity/balance.
+The seven approved rank mappings and default Mando Citizen role remain in effect.
+
+C0-M5 stands safely five to ten blocks from M4-ND. Both titles have transparent
+backgrounds. Discord uses blue #5865F2 in chat and the linking hologram. The preferred
+invite is https://discord.gg/bruuZCG5Pk, carried by actual OPEN_URL events in both
+C0-M5 and M4-ND messages. New private codes are eight readable characters; players
+can copy the code or complete command. Outstanding older codes retain their expiry.
+Player instructions and Discord replies use MandoMC rather than deployment labels.
+M4-ND's installed main-build answers about joining, linking, reward and support pass.
+
+Ticket channels now use durable short names such as support-001 and bug-report-002.
+The old open ticket was closed during playtesting before a rename was needed; two
+recent closures have retained transcript attachments. Existing panel/control IDs,
+application/token and incoming webhook destinations are retained. Original MySQL
+read-only authentication failed with 1045, so legacy link ownership was not inferred;
+those players use the normal private linking proof again. No credentials are committed.
+
+Verification: 40 Worker tests, 390 gameplay/integration tests, four access tests and
+95 tooling checks pass (six existing environment skips). Disposable Paper passes six
+HTTPS reconciliation stages and once-only payout across retries/reload; copied Batuu
+passes 20 NPC/answer/client-click checks. A separate real Gateway test stopped cleanly
+before main activation. The unrelated catalog drift was only YAML formatting: every
+parsed value matched the prior release, and both original bytes/receipts and review
+records were retained before adopting its observed hash. No item values changed.
+
+Owner instruction: before any further shared-server restart, broadcast an in-game
+30-second warning and wait the full 30 seconds. This request arrived after the main
+restart had already completed; no further restart was performed.
+
+Next action: client-playtest the main-server C0-M5 link/copy flow and M4-ND Discord help.
+
+
 ## C0-M5 join/copy polish requested during playtest (2026-11-18)
 
 The first checked rollout is active on development and PR #77 is merged. The dev-to-main release is open as PR #78 and has not been activated. The owner requested the preferred invite https://discord.gg/bruuZCG5Pk, Discord blue in chat and the hologram, no deployment labels in player instructions, and codes that are both shorter and copyable. New codes use eight unambiguous Base32 characters with the existing expiry/throttle and backward compatibility for outstanding old codes. Added real join, code-copy and full-command-copy client events, including clickable M4-ND invite answers. All 40 Worker tests, 390 gameplay/integration plus four access tests, and 95 tooling checks pass (six existing environment skips). Copied Batuu passes 20 native checks including real OPEN_URL and both COPY_TO_CLIPBOARD client packets. Tickets now use durable short numbered names such as support-001 and bug-report-002; migration 0003 is applied. Next action: deploy the checked follow-up to development and include it in the queued main-server release.
