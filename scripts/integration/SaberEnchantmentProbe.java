@@ -61,12 +61,19 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         station = world.getBlockAt(-200,200,-200); station.setType(Material.SMITHING_TABLE,false);
         station.getChunk().getPersistentDataContainer().set(new NamespacedKey("mandomc","forge_-200_200_-200"),PersistentDataType.BYTE,(byte)1);
         check(mando.forge().station(station), "Existing placed forge migrates to workbench");
-        presentations(); rewardsAndMigration(); adminEnchant();
+        recipeMigration(); presentations(); rewardsAndMigration(); adminEnchant();
         mando.forge().open(player,station); var top = player.getOpenInventory().getTopInventory();
         check(top.getItem(10).getType()==Material.CRAFTING_TABLE && top.getItem(13).getType()==Material.STONECUTTER && top.getItem(16).getType()==Material.ENCHANTED_BOOK,"Three workbench functions");
         check(player.getOpenInventory().getTitle().contains("Saber Workbench"),"Workbench title");
         mando.forge().function(player,station,10);check(player.getOpenInventory().getTopInventory().getType()==org.bukkit.event.inventory.InventoryType.WORKBENCH,"Native crafting grid");
         table(); later(2,this::tableRolls);
+    }
+    private void recipeMigration() throws Exception {
+        var old=new NamespacedKey("mandomc","craft_saber_forge");var current=new NamespacedKey("mandomc","craft_saber_workbench");
+        check(Bukkit.getRecipe(old)!=null&&"saber_workbench".equals(mando.items().identify(Bukkit.getRecipe(old).getResult())),"Saved forge recipe resolves to new workbench");
+        player.discoverRecipe(old);var field=mando.getClass().getDeclaredField("craftingRecipes");field.setAccessible(true);
+        ((net.mandomc.gameplay.items.CraftingRecipes)field.get(mando)).join(new org.bukkit.event.player.PlayerJoinEvent(player,Component.empty()));
+        check(!player.hasDiscoveredRecipe(old)&&player.hasDiscoveredRecipe(current),"Recipe book replaces legacy key without duplicate entries");
     }
     private void presentations() {
         int vanilla = 0;
