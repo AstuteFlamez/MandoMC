@@ -86,7 +86,7 @@ public final class RecipeGuide implements Listener, AutoCloseable {
         int slot = 12;
         for (String category : recipes.guideDefinitions().stream().map(RecipeDefinition::category).distinct().sorted().toList()) {
             if (category.equals("materials")) continue;
-            var entries = recipes.guideDefinitions().stream().filter(r -> r.category().equals(category)).toList();
+            var entries = recipes.guideDefinitions().stream().filter(r -> matchesCategory(r, category)).toList();
             category(menu, slot, category, entries);
             slot++;
             if (slot % 9 == 8) slot += 2;
@@ -109,6 +109,7 @@ public final class RecipeGuide implements Listener, AutoCloseable {
 
     private static boolean matchesCategory(RecipeDefinition recipe, String category) {
         return category == null || recipe.category().equals(category)
+                || category.equals("lightsabers") && recipe.result().equals("saber_workbench")
                 || category.equals("materials") && java.util.Set.of("components", "metals").contains(recipe.category());
     }
 

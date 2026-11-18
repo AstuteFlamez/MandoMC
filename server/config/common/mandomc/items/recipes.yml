@@ -1940,7 +1940,7 @@
     "bantha_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in unclaimed Wilderness or your clan’s claims.\n<gray>Break with a pickaxe to recover it.\n<gray>Shift-right-click with matching spawners to combine up to 64.",
     "jawa_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in unclaimed Wilderness or your clan’s claims.\n<gray>Break with a pickaxe to recover it.\n<gray>Shift-right-click with matching spawners to combine up to 64.",
     "minecraft:obsidian": "<gray>Pour water over lava source blocks, then mine the obsidian with a Durasteel or Beskar pickaxe.",
-    "saber_workbench": "<gray>Craft with Durasteel, Agrinium, a Circuit Board and a Smithing Table.",
+    "saber_workbench": "<gray>Craft at a crafting table with 5 Durasteel, 2 Agrinium, 1 Circuit Board and 1 Smithing Table.\n<gray>Find it under Lightsabers or Tools in /recipes.",
     "endurance_book": "<gray>Enchant a book at an enchanting table, or open a Voting or KOTH Crate.",
     "recovery_book": "<gray>Enchant a book at an enchanting table, or open a Voting or KOTH Crate.",
     "mending_book": "<gray>Available as Mending I in the KOTH Crate. Not available from enchanting tables."
