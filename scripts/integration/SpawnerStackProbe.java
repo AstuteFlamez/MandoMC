@@ -43,7 +43,7 @@ public final class SpawnerStackProbe extends JavaPlugin {
     @Override public void onEnable(){later(180,this::start);}
     private void start()throws Exception{
         Files.deleteIfExists(getDataFolder().toPath().resolve("PASSED.txt"));
-        check(Bukkit.getPort()==25591,"Disposable fixture only");mando=(MandoPlugin)Bukkit.getPluginManager().getPlugin("MandoMC");
+        check(Set.of(25591,25593).contains(Bukkit.getPort()),"Disposable fixture only");mando=(MandoPlugin)Bukkit.getPluginManager().getPlugin("MandoMC");
         check(mando!=null&&mando.isEnabled()&&!(boolean)field(mando,"failed"),"Gameplay startup healthy");
         clans=Bukkit.getServicesManager().load(ClanService.class);check(clans!=null&&clans.available(),"Native clans ready");
         spawners=(MobSpawners)field(mando,"spawners");world=Bukkit.getWorld(NamespacedKey.minecraft("devworld"));
