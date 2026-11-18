@@ -130,6 +130,10 @@
       "target": "plugins/MandoMC/guide/protocol-droid.yml"
     },
     {
+      "source": "plugin/src/main/resources/integrations/discord.yml",
+      "target": "plugins/MandoMC/integrations/discord.yml"
+    },
+    {
       "source": "server/config/common/mandomc/interface/hud.yml",
       "target": "plugins/MandoMC/interface/hud.yml"
     },
@@ -228,6 +232,10 @@
     {
       "source": "server/config/common/mandomc/language/clans.yml",
       "target": "plugins/MandoMC/language/clans.yml"
+    },
+    {
+      "source": "plugin/src/main/resources/language/discord.yml",
+      "target": "plugins/MandoMC/language/discord.yml"
     },
     {
       "source": "server/config/common/mandomc/language/handbook.yml",

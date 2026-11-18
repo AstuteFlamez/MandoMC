@@ -35,6 +35,21 @@ jobs:
         run: python scripts/check-branch-policy.py
       - name: Prepare public compile API
         run: python scripts/prepare-ci.py
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: discord-bot/package-lock.json
+      - name: Check Discord Worker and optional companion
+        working-directory: discord-bot
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+        run: |
+          npm ci
+          npm test
+          npx wrangler deploy --dry-run --outdir .wrangler/dry-run
+          python -m pip install -r gateway/requirements.txt
+          python -m unittest discover -s gateway -p 'test_*.py' -v
       - name: Build plugin and test
         run: ./scripts/build.sh
       - name: Verify M4-ND knowledge for this exact release

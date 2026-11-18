@@ -1,0 +1,6 @@
+usage: "<gray>Run <aqua>/discord</aqua> in game to link your Discord account."
+requesting: "<gray>Requesting your Discord link code…"
+code: "<gray>In Discord, run <aqua>/link code:<code></aqua>. Your code expires in 10 minutes. Keep it private."
+linked: "<green>Your Minecraft account is already linked to Discord."
+cooldown: "<gray>Please wait 30 seconds before requesting another code."
+unavailable: "<gray>Discord linking is temporarily unavailable. Please try again later."

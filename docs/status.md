@@ -1,5 +1,38 @@
 # Resume here
 
+## Discord bot and bidirectional ranks implemented (2026-11-18)
+
+On `bilal/discord-bot-sync`, recreated MandoBot's link/baltop/players/ticket behavior
+inside `discord-bot/` for Cloudflare Workers/D1. Added optional Gateway companion for
+ordinary DM relay, join auto-role and presence. Reused the original ticket component
+IDs and supported adoption of old ticket channels in the configured guild/category.
+The original source has no custom webhook contract; existing incoming webhook URLs
+are untouched. The same Discord application/token can be reused, but the old MySQL
+backend is not silently replaced or imported.
+
+Minecraft `/discord` issues one-use, ten-minute account proof. The outbound bridge
+uses native CreditLedger snapshots and RankService writes, explicit matching role
+mappings, durable reconciliation intent, snapshot checks, bounded batches and retries.
+Both rank directions include offline UUIDs, preserve unrelated memberships and never
+change operator status. First link uses Minecraft's baseline. Integration defaults
+off; private credentials are excluded from source and deployments.
+
+Verification: 27 Worker tests and six companion tests pass. Java reactor passes
+383 gameplay/integration tests plus four access tests. Tooling passes 95 checks
+(six pre-existing environment-dependent skips), and the 1,196-entry resource pack
+build passes. Wrangler 4.164.0 bundles successfully; a real local Cloudflare runtime
+applies the D1 schema and verifies authenticated code/snapshot/sync routes. A disposable
+Paper 26.1.2 / Java 25 fixture passes six HTTPS stages for native offline rank persistence,
+managed-only merge, stale response rejection and outage recovery. Discord API calls
+are mocked; real guild role hierarchy, permissions, linking and tickets are not yet
+verified. CI includes the new bot checks. Public command notes and feature guidance
+are included in the exact-build M4-ND knowledge bundle.
+
+No Cloudflare resources, live Discord settings/roles/messages, production server files
+or webhooks were changed. Live activation needs the owner's Cloudflare account,
+Discord app credentials and approved guild/role/channel IDs. Next action: configure
+the Worker and verify one non-staff rank mapping with the existing Discord application.
+
 ## Workbench recipe discovery verified; combined production promotion in progress (2026-11-17)
 
 The owner requested keeping the existing five-Durasteel/two-Agrinium/Circuit-Board/Smithing-Table recipe, surfacing it in `/recipes` and promoting all completed saber/spawner/KOTH/Jabba/cave updates to production. PR #73 is merged into dev and includes the latest single-creature stacked-spawner timing and all previous saber fixes; PR #74 is consequently merged too. The Workbench now appears under Lightsabers as well as Tools, with exact crafting-table acquisition guidance. The isolated Paper suite passes 2,781 assertions, including native recipe matching without injecting a result, actual result pickup, exact ingredient consumption and browsing the Lightsabers category. The full Java build passes. Production receipt/drift checks and the separate cave migration are being prepared; production restart remains manual. Next action: deploy the recipe follow-up to dev, merge the checked release through dev/main, and stage the verified production files and offline cave migration.

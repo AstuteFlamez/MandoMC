@@ -1,0 +1,8 @@
+# Copy to .dev.vars (ignored). Set production values with wrangler secret put.
+DISCORD_TOKEN=
+DISCORD_PUBLIC_KEY=
+BRIDGE_SECRET=
+GATEWAY_SECRET=
+# IDs and RANK_ROLES belong in wrangler.jsonc; the registration script also needs:
+DISCORD_APPLICATION_ID=
+DISCORD_GUILD_ID=

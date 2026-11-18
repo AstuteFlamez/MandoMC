@@ -1,0 +1,17 @@
+{
+  "name": "mandomc-discord-bot",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "register": "node --env-file=.dev.vars scripts/register.js"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "devDependencies": {
+    "wrangler": "4.164.0"
+  }
+}

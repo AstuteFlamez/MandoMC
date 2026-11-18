@@ -1,5 +1,19 @@
 # Commands and shared teleport behavior
 
+## Optional Discord account linking
+
+When staff enable the Discord integration, run `/discord` in Minecraft to get a
+private code, then use `/link code:<code>` in the MandoMC Discord server. The code
+expires after ten minutes. Keep it private. `/link` without a code checks your link.
+If linking reports that it is unavailable, contact staff; this optional feature
+does not affect travel, credits or ordinary gameplay.
+
+Linked accounts can synchronize explicitly configured Minecraft ranks and Discord
+roles in both directions. Only staff-approved mappings participate. Discord also
+offers `/players`, `/baltop`, and private support tickets through `/ticket` or the
+ticket panel. Credits remain the native Minecraft balance; Discord cannot change
+them. See [Discord linking](features/discord-linking.md).
+
 ## Native administration and personal travel
 Essentials and Multiverse are replaced by MandoMC. See [native utilities](features/native-utilities.md) for syntax, limits, permissions and migration.
 

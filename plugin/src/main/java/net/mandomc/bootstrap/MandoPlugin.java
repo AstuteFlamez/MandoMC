@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MandoPlugin extends JavaPlugin implements Listener {
+    private net.mandomc.integrations.discord.DiscordBridge discord;
     private net.mandomc.gameplay.ranks.RankService ranks;
     private net.mandomc.gameplay.admin.StaffMode staff;
     private net.mandomc.integrations.permissions.WorldEditRanks worldEditRanks;
@@ -144,6 +145,24 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
                 worldEditRanks = new net.mandomc.integrations.permissions.WorldEditRanks(this, ranks);
             new net.mandomc.commands.RankCommands(root, ranks, language.getConfigurationSection("ranks"));
             credits = new net.mandomc.gameplay.credits.CreditService(this, loadFeature("economy/credits.yml"));
+            var discordDefaults = YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(
+                    Objects.requireNonNull(getResource("language/discord.yml")), java.nio.charset.StandardCharsets.UTF_8));
+            Objects.requireNonNull(getCommand("discord")).setExecutor((sender, command, label, args) -> {
+                sender.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage()
+                        .deserialize(discordDefaults.getString("unavailable")));
+                return true;
+            });
+            try {
+                var discordMessages = loadFeature("language/discord.yml");
+                discordMessages.setDefaults(discordDefaults);
+                var discordConfig = loadFeature("integrations/discord.yml");
+                if (discordConfig.getBoolean("enabled", false)) {
+                    discord = new net.mandomc.integrations.discord.DiscordBridge(this, ranks, credits, discordConfig, discordMessages);
+                    getLogger().info("Discord bridge ready: outbound account linking, status and explicit two-way rank synchronization.");
+                }
+            } catch (Exception error) {
+                getLogger().warning("Discord bridge could not start. Check its endpoint, role mapping and private secret; gameplay remains available.");
+            }
             for (var resource : new String[] {"items/catalog.yml", "items/definitions/spawners.yml", "items/definitions/koth.yml", "items/definitions/vehicles.yml", "items/definitions/crates-sign.yml", "items/definitions/building-signs.yml", "items/definitions/vehicle-ammo.yml", "items/definitions/legacy.yml", "items/definitions/robes.yml", "items/definitions/materials.yml", "items/definitions/sabers.yml", "items/definitions/tusken.yml", "items/definitions/jabba.yml", "items/definitions/jabba-loot.yml", "items/definitions/dioxis.yml", "items/definitions/boba-equipment.yml", "items/definitions/massiff.yml", "mobs/drops/massiff.yml", "items/definitions/dewback.yml", "mobs/drops/dewback.yml", "combat/sabers.yml"}) {
                 if (!new File(getDataFolder(), resource).isFile()) saveResource(resource, false);
             }
@@ -320,6 +339,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (discord != null) discord.close();
         if (droid != null) droid.close();
         if (forge != null) forge.close();
         if (enchantments != null) enchantments.close();
