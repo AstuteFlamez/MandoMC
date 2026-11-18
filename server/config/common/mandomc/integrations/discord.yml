@@ -1,0 +1,13 @@
+schema-version: 1
+enabled: true
+endpoint: https://mandomc-discord.mandomc-discord-bot.workers.dev
+interval-seconds: 30
+rank-roles:
+  builder: '1403828076084854855'
+  creator: '1572662041079058502'
+  mandalore: '1572662042324770828'
+  mandostudios: '1486598653442261012'
+  marshal: '1572662045508239622'
+  mod: '1400188397636817032'
+  warrior: '1572662046477258775'
+link-reward: '5000.00'

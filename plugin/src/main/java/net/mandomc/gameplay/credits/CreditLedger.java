@@ -10,6 +10,7 @@ public final class CreditLedger {
     public static final long MAX = 9_000_000_000_000_000L;
     private final Path file;
     private volatile Set<UUID> tutorialRewards = Set.of();
+    private volatile Set<UUID> discordRewards = Set.of();
     private volatile Set<String> tutorialSections = Set.of();
     private volatile Map<UUID, Long> balances;
     private volatile net.mandomc.gameplay.auction.AuctionBook auctions = net.mandomc.gameplay.auction.AuctionBook.empty();
@@ -28,6 +29,8 @@ public final class CreditLedger {
             validate(cents); result.put(UUID.fromString(id), cents);
         }
         tutorialSections = Set.copyOf(yaml.getStringList("tutorial-section-rewards"));
+        discordRewards = yaml.getStringList("discord-link-rewards").stream().map(UUID::fromString)
+                .collect(java.util.stream.Collectors.toUnmodifiableSet());
         tutorialRewards = yaml.getStringList("tutorial-rewards").stream().map(UUID::fromString)
                 .collect(java.util.stream.Collectors.toUnmodifiableSet());
         balances = Map.copyOf(result);
@@ -129,6 +132,16 @@ public final class CreditLedger {
         save(balances, auctions.complete(owner, ids));
     }
     public boolean tutorialRewarded(UUID owner) { return tutorialRewards.contains(owner); }
+    /** Balance and link receipt commit together; repeated bridge deliveries cannot mint credits twice. */
+    public synchronized boolean rewardDiscord(UUID owner, long cents) throws Exception {
+        validate(cents);
+        if (cents == 0 || discordRewards.contains(owner) || !balances.containsKey(owner)) return false;
+        if (balance(owner) > MAX - cents) throw new IllegalArgumentException("limit");
+        var updated = new HashMap<>(balances); updated.put(owner, balance(owner) + cents);
+        var receipts = new HashSet<>(discordRewards); receipts.add(owner);
+        save(updated, auctions, tutorialRewards, tutorialSections, Set.copyOf(receipts));
+        return true;
+    }
     public synchronized boolean rewardTutorial(UUID owner, long cents) throws Exception {
         validate(cents);
         if (tutorialRewards.contains(owner)) return false;
@@ -157,7 +170,11 @@ public final class CreditLedger {
         save(updated, market, rewards, tutorialSections);
     }
     private void save(Map<UUID, Long> updated, net.mandomc.gameplay.auction.AuctionBook market, Set<UUID> rewards, Set<String> sections) throws Exception {
+        save(updated, market, rewards, sections, discordRewards);
+    }
+    private void save(Map<UUID, Long> updated, net.mandomc.gameplay.auction.AuctionBook market, Set<UUID> rewards, Set<String> sections, Set<UUID> linkedRewards) throws Exception {
         var yaml = new YamlConfiguration(); yaml.set("schema-version", 1); yaml.createSection("balances");
+        yaml.set("discord-link-rewards", linkedRewards.stream().map(UUID::toString).sorted().toList());
         yaml.set("tutorial-section-rewards", sections.stream().sorted().toList());
         yaml.set("tutorial-rewards", rewards.stream().map(UUID::toString).sorted().toList());
         updated.forEach((id, cents) -> yaml.set("balances." + id, cents));
@@ -167,5 +184,6 @@ public final class CreditLedger {
         auctions = market;
         tutorialRewards = rewards;
         tutorialSections = sections;
+        discordRewards = linkedRewards;
     }
 }

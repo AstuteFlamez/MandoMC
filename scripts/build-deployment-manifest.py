@@ -12,6 +12,8 @@ def entries():
         'server.jar': 'redstone-agent/target/MandoMC-Launcher.jar',
         'plugins/update/MandoMC.jar': 'plugin/target/MandoMC.jar',
         'plugins/update/MandoAccess.jar': 'access/target/MandoAccess.jar',
+        'plugins/MandoDiscordGateway.jar': 'plugin/discord-gateway/target/MandoDiscordGateway.jar',
+        'plugins/MandoDiscordGateway/config.yml': 'server/config/common/discord-gateway.yml',
         'plugins/MandoAccess/config.yml': 'access/src/main/resources/config.yml',
         'agents/MandoMC-RedstoneAgent.jar': 'redstone-agent/target/MandoMC-RedstoneAgent.jar',
         'plugins/CoreProtect/config.yml': 'server/config/common/coreprotect.yml',

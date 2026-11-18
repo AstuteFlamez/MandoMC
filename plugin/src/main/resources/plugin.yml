@@ -6,6 +6,10 @@ author: AstuteFlamez
 description: MandoMC gameplay
 softdepend: [ packetevents, WorldEdit, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
+  discord:
+    description: Link your Minecraft and Discord accounts
+    usage: /discord
+    permission: mandomc.arrival
   enchant:
     description: Apply or remove an enchantment on a held item
     usage: /enchant <enchantment> <level> [player]

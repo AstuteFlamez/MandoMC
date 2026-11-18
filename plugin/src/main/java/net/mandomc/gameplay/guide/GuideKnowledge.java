@@ -96,6 +96,8 @@ public final class GuideKnowledge {
 
     public List<Note> find(String question) {
         String normalized = RecipeSearch.normalize(question);
+        if (normalized.matches(".*\\b(?:discord|c0 m5|link(?:ing)? (?:my |your |an? )?account|account link(?:ing)?|support ticket|linking reward)\\b.*"))
+            return topic("discord");
         var terms = GuideTerms.tokens(question).stream().map(GuideKnowledge::term)
                 .filter(t -> t.length() > 2 && !STOP_WORDS.contains(t)).distinct().toList();
         boolean changing = terms.stream().anyMatch(UPGRADE_WORDS::contains);
@@ -130,7 +132,7 @@ public final class GuideKnowledge {
     public Optional<String> verifiedAnswer(String question, List<Note> selected) {
         if (selected.isEmpty()) return Optional.empty();
         var first = selected.getFirst();
-        if (first.id().equals("beginner")) return Optional.of(first.fallback());
+        if (first.id().equals("beginner") || first.id().startsWith("discord")) return Optional.of(first.fallback());
         String normalized = RecipeSearch.normalize(question);
         if (first.id().equals("mining") && normalized.contains("fortune")) return Optional.of(first.fallback());
         if (first.id().equals("death") && normalized.matches(".*\\b(?:die|death|dying|killed)\\b.*"))

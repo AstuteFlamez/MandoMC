@@ -207,6 +207,10 @@ def payload(root=ROOT):
                 re.fullmatch(r'agents/MandoMC-RedstoneAgent-[a-f0-9]{64}\.jar', target) or
                 (target.startswith('plugins/MandoMC/') and target.endswith('.yml')) or
                 target == 'plugins/MandoAccess/config.yml' or
+                (target == 'plugins/MandoDiscordGateway.jar' and
+                 item['source'] == 'plugin/discord-gateway/target/MandoDiscordGateway.jar') or
+                (target == 'plugins/MandoDiscordGateway/config.yml' and
+                 item['source'] == 'server/config/common/discord-gateway.yml') or
                 target == 'plugins/CoreProtect/config.yml' or
                 target == 'plugins/VotingPlugin/VoteSites.yml' or
                 (target == 'plugins/VotingPlugin/Config.yml' and

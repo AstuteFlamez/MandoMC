@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mandomc-discord",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-11-18",
+  "workers_dev": true,
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "mandomc-discord",
+    "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+    "migrations_dir": "migrations"
+  }],
+  "vars": {
+    "DISCORD_APPLICATION_ID": "",
+    "DISCORD_GUILD_ID": "",
+    "LINKED_ROLE_ID": "",
+    "CITIZEN_ROLE_ID": "",
+    "TICKET_CATEGORY_ID": "",
+    "TICKET_LOG_CHANNEL_ID": "",
+    "STAFF_ROLE_IDS": "[]",
+    "RANK_ROLES": "{}"
+  }
+}
