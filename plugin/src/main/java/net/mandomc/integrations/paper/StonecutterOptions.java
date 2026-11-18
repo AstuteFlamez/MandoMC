@@ -11,9 +11,9 @@ import org.bukkit.inventory.view.StonecutterView;
 /** Pinned Paper 26.1.2 boundary: filter the same ordered recipe set on the wire and in the native menu. */
 public final class StonecutterOptions {
     private final Method server, manager, allRecipes, properties, entries, entryRecipe, recipeHolder, holderId,
-            identifier, selectInput, copy, menu, dataSet, broadcast, playerHandle, send;
-    private final Constructor<?> inputSet, packet;
-    private final Field visible, selected, connection;
+            identifier, selectInput, copy, menu, dataSet, broadcast, nextState, playerHandle, send;
+    private final Constructor<?> inputSet, packet, slotPacket;
+    private final Field visible, selected, containerId, emptyItem, connection;
     public StonecutterOptions() {
         try {
             var minecraftServer=Class.forName("net.minecraft.server.MinecraftServer");
@@ -34,12 +34,16 @@ public final class StonecutterOptions {
             holderId=holder.getMethod("id");identifier=key.getMethod("identifier");
             inputSet=set.getConstructor(List.class);selectInput=set.getMethod("selectByInput",nativeItem);
             packet=Class.forName("net.minecraft.network.protocol.game.ClientboundUpdateRecipesPacket").getConstructor(Map.class,set);
+            slotPacket=Class.forName("net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket")
+                    .getConstructor(int.class,int.class,int.class,nativeItem);
+            emptyItem=nativeItem.getField("EMPTY");
             copy=Class.forName("org.bukkit.craftbukkit.inventory.CraftItemStack").getMethod("asNMSCopy",ItemStack.class);
             menu=Class.forName("org.bukkit.craftbukkit.inventory.CraftInventoryView").getMethod("getHandle");
             visible=stonecutter.getDeclaredField("recipesForInput");visible.setAccessible(true);
             selected=stonecutter.getDeclaredField("selectedRecipeIndex");selected.setAccessible(true);
             dataSet=Class.forName("net.minecraft.world.inventory.DataSlot").getMethod("set",int.class);
             broadcast=baseMenu.getMethod("broadcastChanges");
+            nextState=baseMenu.getMethod("incrementStateId");containerId=baseMenu.getField("containerId");
             playerHandle=Class.forName("org.bukkit.craftbukkit.entity.CraftPlayer").getMethod("getHandle");
             connection=nativePlayer.getField("connection");send=listener.getMethod("send",Class.forName("net.minecraft.network.protocol.Packet"));
         } catch(ReflectiveOperationException e) {throw new IllegalStateException("Stonecutter options require pinned Paper 26.1.2",e);}
@@ -59,7 +63,14 @@ public final class StonecutterOptions {
             visible.set(handle,selectInput.invoke(options,copy.invoke(null,input)));
             dataSet.invoke(selected.get(handle),-1);
             view.getTopInventory().setResult(null);
-            send(player,owner,options);broadcast.invoke(handle);
+            send(player,owner,options);
+            // The 26.1.2 client rebuilds options only when the input MATERIAL changes. All sabers
+            // are shields, so replacing the recipe cache alone leaves an empty or stale style list.
+            // Refresh the client slot after its recipes, without touching the authoritative inventory.
+            var listener=connection.get(playerHandle.invoke(player));
+            for(var item:List.of(emptyItem.get(null),copy.invoke(null,input)))
+                send.invoke(listener,slotPacket.newInstance(containerId.getInt(handle),nextState.invoke(handle),0,item));
+            broadcast.invoke(handle);
         } catch(ReflectiveOperationException e) {throw new IllegalStateException("Cannot synchronize filtered stonecutter options",e);}
     }
     public void restore(Player player) {

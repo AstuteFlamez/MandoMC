@@ -9,7 +9,10 @@ items:
     category: tools
     lore:
     - <gray>Spawns Massiff mobs while you are nearby.
-    - <yellow>Place in Wilderness. Break with a pickaxe to recover.
+    - <yellow>Place in unclaimed Wilderness
+    - <yellow>or your own clan’s claims.
+    - <yellow>Break with a pickaxe to recover.
+    - <yellow>Shift-right-click to combine matching spawners.
   dewback_spawner:
     material: SPAWNER
     item-model: minecraft:spawner
@@ -19,7 +22,10 @@ items:
     category: tools
     lore:
     - <gray>Spawns Dewback mobs while you are nearby.
-    - <yellow>Place in Wilderness. Break with a pickaxe to recover.
+    - <yellow>Place in unclaimed Wilderness
+    - <yellow>or your own clan’s claims.
+    - <yellow>Break with a pickaxe to recover.
+    - <yellow>Shift-right-click to combine matching spawners.
   bantha_spawner:
     material: SPAWNER
     item-model: minecraft:spawner
@@ -29,7 +35,10 @@ items:
     category: tools
     lore:
     - <gray>Spawns Bantha mobs while you are nearby.
-    - <yellow>Place in Wilderness. Break with a pickaxe to recover.
+    - <yellow>Place in unclaimed Wilderness
+    - <yellow>or your own clan’s claims.
+    - <yellow>Break with a pickaxe to recover.
+    - <yellow>Shift-right-click to combine matching spawners.
   jawa_spawner:
     material: SPAWNER
     item-model: minecraft:spawner
@@ -39,4 +48,7 @@ items:
     category: tools
     lore:
     - <gray>Spawns Jawa mobs while you are nearby.
-    - <yellow>Place in Wilderness. Break with a pickaxe to recover.
+    - <yellow>Place in unclaimed Wilderness
+    - <yellow>or your own clan’s claims.
+    - <yellow>Break with a pickaxe to recover.
+    - <yellow>Shift-right-click to combine matching spawners.

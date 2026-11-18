@@ -37,3 +37,18 @@ Unit tests cover charge consumption, reservation, constant regeneration during c
 
 ## Pause note
 Development is running native-tested release `361eb26` with the verified hosted pack, matching bundled M4-ND knowledge and the deployed spawner/event release preserved. Saved recipe-book entries migrate without warnings or duplicate entries. Next action: client-playtest the Workbench, books and admin commands after reconnecting for the pack.
+
+## Workbench interaction and lore follow-up
+
+Native screen titles are supplied when each workstation menu is created, avoiding the unsupported title-change call. Transient workbench ownership is recorded before opening so staff Creative can use crafting, styles and enchanting while physical storage remains blocked. The actual button-packet path is tested in Survival and staff Creative.
+
+Applied enchantments now appear at the bottom of equipment lore, after the original description and controls with one blank separator. The shared formatter preserves item badges, notes, names, actual enchantment data and original hidden-enchantment intent. It also migrates former Jetpack rows, restores original lore/visibility after disenchanting and formats styled-saber previews. Enchanted books retain their badge header; any additional notes precede the final effect explanations. The native regression passes 2,721 assertions.
+
+
+## Compact titles and style refresh
+
+The workbench hub and its native screens use dark-gray titles that fit the vanilla panels: Saber Workbench, Saber Crafting, Saber Styles and Saber Enchanting. Button labels remain separate from window titles.
+
+After synchronizing a filtered style recipe list, the pinned Paper adapter refreshes the client input slot through empty and back to its real contents. Minecraft 26.1.2 otherwise caches stonecutter options by input material, so shield-backed sabers can show empty or stale choices. This refresh does not mutate or consume the authoritative item. Mace Windu's saber offers Revan's redeemed style and Vernestra Rwoh's style. Switching saber families refreshes both client choices and server indices together.
+
+The native regression reproduces the empty Mace list with the previous adapter and passes 2,764 assertions with the fix, including ordered outbound-packet replay using the pinned client material-cache behavior, same-material family switches, both Mace outputs, metadata-preserving pickup and measured compact title/color checks.

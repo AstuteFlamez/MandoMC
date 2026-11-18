@@ -22,6 +22,7 @@ public final class ItemPresentationRefresh implements Listener {
 
     public static boolean refresh(ItemCatalog items, ItemStack item) {
         if (BanthaHideMaterials.refresh(items, item)) return true;
+        if (net.mandomc.gameplay.spawners.SpawnerItems.refresh(items,item)) return true;
         String id = items.identify(item);
         if ("bantha_hide".equals(id)) return false;
         if (items.refreshMaterialBadge(item)) return true;
@@ -77,7 +78,7 @@ public final class ItemPresentationRefresh implements Listener {
     public void pickup(org.bukkit.event.entity.EntityPickupItemEvent event) {
         if (!(event.getEntity() instanceof org.bukkit.entity.Player)) return;
         var stack = event.getItem().getItemStack();
-        if ((LegacyFacilityLore.affected(items.identify(stack)) || items.material(stack)) && refresh(items, stack))
+        if ((LegacyFacilityLore.affected(items.identify(stack)) || items.material(stack) || net.mandomc.gameplay.spawners.SpawnerItems.known(items.identify(stack))) && refresh(items, stack))
             event.getItem().setItemStack(stack);
     }
 

@@ -15,11 +15,14 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
+import net.mandomc.integrations.models.SpawnerModel;
+import net.kyori.adventure.text.Component;
 import org.bukkit.scheduler.BukkitTask;
 
 /** Persistent native spawner blocks; all spawned creatures use the existing Mythic definitions. */
 public final class MobSpawners implements Listener, AutoCloseable {
     public static final NamespacedKey TYPE = new NamespacedKey("mandomc", "spawner_type_v1");
+    public static final NamespacedKey COUNT = new NamespacedKey("mandomc", "spawner_count_v1");
     public static final Map<String,String> TYPES = Map.of("massiff_spawner", "Massiff",
             "dewback_spawner", "Dewback", "bantha_spawner", "Bantha", "jawa_spawner", "JawaBrown");
     private record Site(UUID world, int x, int y, int z) {
@@ -28,33 +31,61 @@ public final class MobSpawners implements Listener, AutoCloseable {
     private final MandoPlugin plugin;
     private final MythicMobAccess mobs = new MythicMobAccess();
     private final Map<Site,Integer> sites = new HashMap<>();
-    private final BukkitTask task;
-    private final int interval, range, cap;
+    private static final NamespacedKey VISUAL=new NamespacedKey("mandomc","spawner_preview_v1");
+    private record Preview(ArmorStand base,TextDisplay label,SpawnerModel model) implements AutoCloseable {
+        boolean valid(){return base.isValid()&&label.isValid()&&model.valid();}
+        @Override public void close(){model.close();base.remove();label.remove();}
+    }
+    private record Visual(String model,double scale,double baseHeight) { }
+    private final Map<String,Visual> visuals=new HashMap<>();
+    private final Map<Site,Preview> previews=new HashMap<>();
+    private final BukkitTask task,rotation;
+    private final int interval, range, cap, stackLimit;
     private final ConfigurationSection messages;
     private int clock;
+    private boolean closed;
 
     public MobSpawners(MandoPlugin plugin, ConfigurationSection config) throws ReflectiveOperationException {
         this.plugin=plugin;
         interval=config.getInt("interval-seconds");range=config.getInt("activation-range");cap=config.getInt("nearby-cap");
+        stackLimit=config.getInt("stack-limit",64);
         messages=Objects.requireNonNull(config.getConfigurationSection("messages"));
-        if(config.getInt("schema-version")!=1 || interval<10 || interval>600 || range<4 || range>32 || cap<1 || cap>16)
+        if(config.getInt("schema-version")!=1 || interval<10 || interval>600 || range<4 || range>32 || cap<1 || cap>16 || stackLimit<1 || stackLimit>64)
             throw new IllegalArgumentException("mobs/spawners.yml: invalid limits");
-        for(String id:TYPES.keySet())Objects.requireNonNull(plugin.items().create(id),"Missing spawner item "+id);
+        for(String id:TYPES.keySet()){
+            Objects.requireNonNull(plugin.items().create(id),"Missing spawner item "+id);
+            var row=Objects.requireNonNull(config.getConfigurationSection("previews."+id),"Missing spawner preview "+id);
+            String model=row.getString("model","");double scale=row.getDouble("scale",0),height=row.getDouble("base-height",-1);
+            if(!model.matches("[a-z0-9_]+")||!Double.isFinite(scale)||scale<=0||scale>.5||!Double.isFinite(height)||height<.1||height>.8)
+                throw new IllegalArgumentException("mobs/spawners.yml: invalid preview "+id);
+            visuals.put(id,new Visual(model,scale,height));
+        }
         Bukkit.getPluginManager().registerEvents(this,plugin);
-        for(var world:Bukkit.getWorlds())for(var chunk:world.getLoadedChunks())load(chunk);
-        task=Bukkit.getScheduler().runTaskTimer(plugin,this::tick,20,20);
+        for(var world:Bukkit.getWorlds()){
+            cleanStale(world.getEntities());for(var chunk:world.getLoadedChunks())load(chunk);
+        }
+        task=Bukkit.getScheduler().runTaskTimer(plugin,this::tick,1,1);
+        rotation=Bukkit.getScheduler().runTaskTimer(plugin,()->previews.values().forEach(p->p.model.rotate((Bukkit.getCurrentTick()*1.5f)%360)),2,2);
     }
     private static boolean known(String id) {return id!=null && TYPES.containsKey(id);}
     private void tell(Player p,String key) { p.sendMessage(net.kyori.adventure.text.minimessage.MiniMessage.miniMessage()
             .deserialize(Objects.requireNonNull(messages.getString(key)))); }
+    public static int count(CreatureSpawner state) {
+        return Math.clamp(state.getPersistentDataContainer().getOrDefault(COUNT,PersistentDataType.INTEGER,1),1,64);
+    }
     private String type(Block block) {
         return block.getState() instanceof CreatureSpawner spawner
                 ?spawner.getPersistentDataContainer().get(TYPE,PersistentDataType.STRING):null;
     }
+    private int delayTicks(int count) {
+        return (interval*20+count-1)/count;
+    }
     private void load(Chunk chunk) {
         for(var state:chunk.getTileEntities())if(state instanceof CreatureSpawner spawner
                 && known(spawner.getPersistentDataContainer().get(TYPE,PersistentDataType.STRING)))
-            sites.put(Site.of(state.getBlock()),clock+interval);
+        {
+            hidePig(spawner);sites.put(Site.of(state.getBlock()),clock+delayTicks(count(spawner)));
+        }
     }
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void validate(BlockPlaceEvent e) {
@@ -68,8 +99,9 @@ public final class MobSpawners implements Listener, AutoCloseable {
         String id=plugin.items().identify(e.getItemInHand());if(!known(id)||!e.canBuild())return;
         if(!(e.getBlock().getState() instanceof CreatureSpawner spawner))return;
         spawner.getPersistentDataContainer().set(TYPE,PersistentDataType.STRING,id);
-        spawner.setSpawnedType(EntityType.PIG);spawner.setDelay(32767);spawner.update();
-        sites.put(Site.of(e.getBlock()),clock+interval);
+        spawner.getPersistentDataContainer().set(COUNT,PersistentDataType.INTEGER,1);
+        spawner.setSpawnedType(null);spawner.setDelay(32767);spawner.update();
+        sites.put(Site.of(e.getBlock()),clock+delayTicks(1));
     }
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void breakTool(BlockBreakEvent e) {
@@ -81,11 +113,12 @@ public final class MobSpawners implements Listener, AutoCloseable {
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
     public void broken(BlockBreakEvent e) {
         String id=type(e.getBlock());if(!known(id))return;
-        sites.remove(Site.of(e.getBlock()));e.setDropItems(false);e.setExpToDrop(0);
+        var site=Site.of(e.getBlock());sites.remove(site);removePreview(site);e.setDropItems(false);e.setExpToDrop(0);
         if(e.getPlayer().getGameMode()!=GameMode.CREATIVE) {
             var at=e.getBlock().getLocation().add(.5,.5,.5);
+            var recovered=plugin.items().create(id);recovered.setAmount(count((CreatureSpawner)e.getBlock().getState()));
             // Defer until native breaking has removed the spawner block.
-            Bukkit.getScheduler().runTask(plugin,()->at.getWorld().dropItemNaturally(at,plugin.items().create(id)));
+            Bukkit.getScheduler().runTask(plugin,()->at.getWorld().dropItemNaturally(at,recovered));
         }
     }
     @EventHandler(priority=EventPriority.HIGHEST)
@@ -95,24 +128,107 @@ public final class MobSpawners implements Listener, AutoCloseable {
         if(e.getClickedBlock()!=null && known(type(e.getClickedBlock())) && e.getItem()!=null
                 && e.getItem().getType().name().endsWith("_SPAWN_EGG"))e.setCancelled(true);
     }
+    @EventHandler(priority=EventPriority.HIGHEST)
+    public void combine(PlayerInteractEvent e) {
+        if(e.getAction()!=Action.RIGHT_CLICK_BLOCK||!e.getPlayer().isSneaking()||e.getClickedBlock()==null)return;
+        String id=type(e.getClickedBlock());String held=plugin.items().identify(e.getItem());
+        if(!known(id)||!known(held)||e.useInteractedBlock()==Event.Result.DENY||e.useItemInHand()==Event.Result.DENY)return;
+        // Prevent ordinary adjacent placement, including the redundant off-hand interaction.
+        e.setUseItemInHand(Event.Result.DENY);
+        if(e.getHand()!=org.bukkit.inventory.EquipmentSlot.HAND)return;
+        var player=e.getPlayer();var block=e.getClickedBlock();int slot=player.getInventory().getHeldItemSlot();
+        var expected=e.getItem().clone();
+        // Later protection listeners must finish before any block or inventory mutation.
+        Bukkit.getScheduler().runTask(plugin,()->{
+            if(closed||e.useInteractedBlock()==Event.Result.DENY||!player.isOnline()||!player.isSneaking()
+                    ||player.getWorld()!=block.getWorld()||player.getLocation().distanceSquared(block.getLocation().add(.5,.5,.5))>36
+                    ||player.getInventory().getHeldItemSlot()!=slot||!block.getWorld().isChunkLoaded(block.getX()>>4,block.getZ()>>4)||!id.equals(type(block)))return;
+            if(player.getGameMode()!=GameMode.SURVIVAL&&player.getGameMode()!=GameMode.CREATIVE)return;
+            var clans=Bukkit.getServicesManager().load(net.mandomc.gameplay.clans.ClanService.class);
+            if(!plugin.territories().edits(block.getLocation())||clans==null||!clans.canEdit(player,block.getLocation()))return;
+            var item=player.getInventory().getItemInMainHand();if(!item.equals(expected))return;
+            if(!id.equals(held)){tell(player,"different-type");return;}
+            var state=(CreatureSpawner)block.getState();int amount=Math.min(item.getAmount(),stackLimit-count(state));
+            if(amount<=0){tell(player,"stack-full");return;}
+            state.getPersistentDataContainer().set(COUNT,PersistentDataType.INTEGER,count(state)+amount);
+            if(!state.update())return;
+            if(player.getGameMode()!=GameMode.CREATIVE){item.setAmount(item.getAmount()-amount);player.getInventory().setItemInMainHand(item);}
+            clans.land().touch(net.mandomc.gameplay.clans.LandRestoration.chunk(block));
+            var site=Site.of(block);
+            sites.computeIfPresent(site,(ignored,due)->Math.min(due,clock+delayTicks(count(state))));
+            preview(site,block,id);
+        });
+    }
     @EventHandler public void loaded(ChunkLoadEvent e) {load(e.getChunk());}
-    @EventHandler public void unloaded(ChunkUnloadEvent e) {sites.keySet().removeIf(s->s.world.equals(e.getWorld().getUID())&&s.x>>4==e.getChunk().getX()&&s.z>>4==e.getChunk().getZ());}
+    @EventHandler public void unloaded(ChunkUnloadEvent e) {
+        for(var site:List.copyOf(sites.keySet()))if(site.world.equals(e.getWorld().getUID())&&site.x>>4==e.getChunk().getX()&&site.z>>4==e.getChunk().getZ()){
+            sites.remove(site);removePreview(site);
+        }
+    }
+    @EventHandler public void entitiesLoaded(EntitiesLoadEvent e){cleanStale(e.getEntities());}
+    private void cleanStale(List<Entity> entities){
+        for(var entity:entities)if(entity.getPersistentDataContainer().has(VISUAL)){
+            boolean active=previews.values().stream().anyMatch(p->p.base==entity||p.label==entity);
+            if(!active)SpawnerModel.removeStale(entity);
+        }
+    }
+    private void hidePig(CreatureSpawner spawner){
+        if(spawner.getSpawnedType()!=null || !spawner.getPotentialSpawns().isEmpty()){
+            spawner.setSpawnedType(null);spawner.setDelay(32767);spawner.update();
+        }
+    }
+    private void removePreview(Site site){var old=previews.remove(site);if(old!=null)old.close();}
+    private void preview(Site site,Block block,String id){
+        var visual=visuals.get(id);var at=block.getLocation().add(.5,visual.baseHeight,.5);
+        if(block.getWorld().getPlayers().stream().noneMatch(p->p.getLocation().distanceSquared(at)<=32*32)){removePreview(site);return;}
+        var previous=previews.get(site);
+        Component title=title(id,count((CreatureSpawner)block.getState()));
+        if(previous!=null&&previous.valid()){if(!previous.label.text().equals(title))previous.label.text(title);return;}
+        removePreview(site);if(!SpawnerModel.available(visual.model))return;
+        var base=plugin.territories().spawnNpc(EntityType.ARMOR_STAND,at,()->at.getWorld().spawn(at,ArmorStand.class,e->{
+            e.setVisible(false);e.setMarker(true);e.setGravity(false);e.setInvulnerable(true);e.setSilent(true);e.setCollidable(false);
+            e.setPersistent(false);e.setCanMove(false);e.setCanTick(false);e.setBasePlate(false);e.getPersistentDataContainer().set(VISUAL,PersistentDataType.BYTE,(byte)1);
+        }));
+        if(base==null||!base.isValid())return;
+        SpawnerModel rendered=null;TextDisplay label=null;
+        try{
+            rendered=new SpawnerModel(base,visual.model,visual.scale);
+            label=at.getWorld().spawn(block.getLocation().add(.5,1.2,.5),TextDisplay.class,e->{
+                e.text(title);e.setPersistent(false);e.setInvulnerable(true);e.setBillboard(Display.Billboard.CENTER);e.setShadowed(true);
+                e.setDefaultBackground(false);e.setBackgroundColor(Color.fromARGB(0));e.setViewRange(.5f);
+                e.getPersistentDataContainer().set(VISUAL,PersistentDataType.BYTE,(byte)1);
+            });
+            previews.put(site,new Preview(base,label,rendered));
+        }catch(RuntimeException error){if(rendered!=null)rendered.close();base.remove();if(label!=null)label.remove();throw error;}
+    }
+    private Component title(String id,int count) {
+        String name=id.equals("jawa_spawner")?"Jawa":TYPES.get(id);
+        return net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().deserialize(messages.getString("label","<gold><count>x <mob>"),
+                net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed("count",Integer.toString(count)),
+                net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed("mob",name));
+    }
     private void tick() {
         clock++;
         for(var entry:List.copyOf(sites.entrySet())) {
+            // Block/preview refresh stays once per second; only due cages need work between refreshes.
+            if(clock<entry.getValue()&&clock%20!=0)continue;
             var site=entry.getKey();var world=Bukkit.getWorld(site.world);
-            if(world==null || !world.isChunkLoaded(site.x>>4,site.z>>4)) {sites.remove(site);continue;}
-            if(clock<entry.getValue())continue;
-            sites.put(site,clock+interval);
+            if(world==null || !world.isChunkLoaded(site.x>>4,site.z>>4)) {sites.remove(site);removePreview(site);continue;}
             var block=world.getBlockAt(site.x,site.y,site.z);String id=type(block);
-            if(!known(id)) {sites.remove(site);continue;}
+            if(!known(id)) {sites.remove(site);removePreview(site);continue;}
+            if(block.getState() instanceof CreatureSpawner state)hidePig(state);
+            preview(site,block,id);
+            if(clock<entry.getValue())continue;
+            sites.put(site,clock+delayTicks(count((CreatureSpawner)block.getState())));
             if(block.getState() instanceof CreatureSpawner nativeSpawner){nativeSpawner.setDelay(32767);nativeSpawner.update();}
             var at=block.getLocation().add(.5,.5,.5);
             if(!plugin.territories().edits(at) || world.getPlayers().stream().noneMatch(p->!p.isDead()
                     && (p.getGameMode()==GameMode.SURVIVAL || p.getGameMode()==GameMode.ADVENTURE)
                     && p.getLocation().distanceSquared(at)<=range*range))continue;
-            if(world.getNearbyEntities(at,range,range,range).stream().filter(LivingEntity.class::isInstance)
-                    .filter(e->TYPES.get(id).equals(mobs.type(e))).count()>=cap)continue;
+            long nearby=world.getNearbyEntities(at,range,range,range).stream().filter(LivingEntity.class::isInstance)
+                    .filter(e->TYPES.get(id).equals(mobs.type(e))).count();
+            if(nearby>=cap)continue;
+            // One creature per due time. Stacking changes the delay, never the batch size.
             for(int attempt=0;attempt<12;attempt++) {
                 var random=java.util.concurrent.ThreadLocalRandom.current();
                 var target=at.clone().add(random.nextInt(-4,5),random.nextInt(-1,2),random.nextInt(-4,5));
@@ -133,5 +249,5 @@ public final class MobSpawners implements Listener, AutoCloseable {
             }
         }
     }
-    @Override public void close() {task.cancel();sites.clear();HandlerList.unregisterAll(this);}
+    @Override public void close() {closed=true;task.cancel();rotation.cancel();previews.values().forEach(Preview::close);previews.clear();sites.clear();HandlerList.unregisterAll(this);}
 }
