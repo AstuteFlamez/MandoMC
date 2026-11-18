@@ -20,7 +20,7 @@ public final class RepositorySnapshot {
     private static final Set<String> CODE_AREAS = Set.of(
             "arrival", "auction", "boba", "credits", "dungeon", "explosions", "leaderboards", "messaging",
             "territory", "trophies", "clans", "combat", "crates", "events", "herd", "ilum", "items", "jawa", "mining", "mobs",
-            "progression", "rules", "spawners", "saber", "travel", "tutorial", "vehicles", "worlds");
+            "progression", "enchantments", "spawners", "rules", "saber", "travel", "tutorial", "vehicles", "worlds");
     public record Source(String path, String sha256, int bytes) { }
     public record Manifest(String commit, boolean clean, String hash, Map<String, Source> sources) {
         public Manifest { sources = Map.copyOf(sources); }

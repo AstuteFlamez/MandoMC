@@ -1686,22 +1686,6 @@
         "L": "bantha_hide"
       }
     },
-    "saber_forge": {
-      "result": "saber_forge",
-      "amount": 1,
-      "category": "tools",
-      "shape": [
-        "DCD",
-        "ASA",
-        "DDD"
-      ],
-      "ingredients": {
-        "D": "durasteel",
-        "C": "circuit_board",
-        "A": "agrinium",
-        "S": "minecraft:smithing_table"
-      }
-    },
     "dark_saber": {
       "result": "dark_saber",
       "amount": 1,
@@ -1731,6 +1715,22 @@
         "B": "minecraft:book",
         "D": "durasteel",
         "O": "minecraft:obsidian"
+      }
+    },
+    "saber_workbench": {
+      "result": "saber_workbench",
+      "amount": 1,
+      "category": "tools",
+      "shape": [
+        "DCD",
+        "ASA",
+        "DDD"
+      ],
+      "ingredients": {
+        "D": "durasteel",
+        "C": "circuit_board",
+        "A": "agrinium",
+        "S": "minecraft:smithing_table"
       }
     }
   },
@@ -1923,7 +1923,6 @@
     "phrik": "<gray>Smelt one scrap in a normal furnace for one ingot.\n<gray>Also: possible KOTH Crate reward on Batuu.",
     "black_kyber": "<gray>Rarest KOTH Crate reward. Win KOTH on Hoth for a key.",
     "dark_saber": "<gray>Craft using Black Kyber from the KOTH Crate.",
-    "saber_forge": "<gray>Craft with Durasteel, Agrinium, a Circuit Board and a Smithing Table.",
     "se14c": "<gray>Available from the KOTH Crate; see /crates preview koth.",
     "a280": "<gray>Available from the KOTH Crate; see /crates preview koth.",
     "ee3": "<gray>Available from the KOTH Crate; see /crates preview koth.",
@@ -1940,7 +1939,11 @@
     "dewback_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in unclaimed Wilderness or your clan’s claims.\n<gray>Break with a pickaxe to recover it.",
     "bantha_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in unclaimed Wilderness or your clan’s claims.\n<gray>Break with a pickaxe to recover it.",
     "jawa_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in unclaimed Wilderness or your clan’s claims.\n<gray>Break with a pickaxe to recover it.",
-    "minecraft:obsidian": "<gray>Pour water over lava source blocks, then mine the obsidian with a Durasteel or Beskar pickaxe."
+    "minecraft:obsidian": "<gray>Pour water over lava source blocks, then mine the obsidian with a Durasteel or Beskar pickaxe.",
+    "saber_workbench": "<gray>Craft with Durasteel, Agrinium, a Circuit Board and a Smithing Table.",
+    "endurance_book": "<gray>Enchant a book at an enchanting table, or open a Voting or KOTH Crate.",
+    "recovery_book": "<gray>Enchant a book at an enchanting table, or open a Voting or KOTH Crate.",
+    "mending_book": "<gray>Available as Mending I in the KOTH Crate. Not available from enchanting tables."
   },
   "guide": {
     "title": "<gold>Recipes",
@@ -1999,7 +2002,8 @@
     "search-clear": "<yellow>Clear Search",
     "search-uses": "<aqua>Search: Uses this ingredient",
     "search-outputs": "<aqua>Search: Output names",
-    "search-empty": "<gray>No matching recipes. Click to edit."
+    "search-empty": "<gray>No matching recipes. Click to edit.",
+    "saber-workbench": "<gold>Saber Workbench"
   },
   "smelting": {
     "agrinium_from_raw": {

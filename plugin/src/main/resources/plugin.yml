@@ -6,6 +6,10 @@ author: AstuteFlamez
 description: MandoMC gameplay
 softdepend: [ packetevents, WorldEdit, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
+  enchant:
+    description: Apply or remove an enchantment on a held item
+    usage: /enchant <enchantment> <level> [player]
+    permission: mandomc.admin.enchant
   vehicle:
     description: Recall your deployed vehicle to your inventory
     usage: /vehicle recall
@@ -242,6 +246,8 @@ commands:
     usage: '/tpcancel'
     permission: mandomc.travel.tpcancel
 permissions:
+  mandomc.admin.enchant:
+    default: op
   mandomc.staff:
     default: op
   mandomc.crates.play:

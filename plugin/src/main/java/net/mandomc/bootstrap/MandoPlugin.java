@@ -73,8 +73,10 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     private net.mandomc.gameplay.mobs.BosskDioxis bosskDioxis;
     private net.mandomc.integrations.weapons.BosskAim bosskAim;
     public net.mandomc.gameplay.mobs.BosskDioxis bosskDioxis(){return bosskDioxis;}
-    private net.mandomc.gameplay.saber.SaberForge forge;
-    public net.mandomc.gameplay.saber.SaberForge forge(){return forge;}
+    private net.mandomc.gameplay.saber.SaberWorkbench forge;
+    public net.mandomc.gameplay.saber.SaberWorkbench forge(){return forge;}
+    private net.mandomc.gameplay.enchantments.EnchantmentService enchantments;
+    public net.mandomc.gameplay.enchantments.EnchantmentService enchantments(){return enchantments;}
     private net.mandomc.gameplay.guide.ProtocolDroid droid;
     public net.mandomc.gameplay.guide.ProtocolDroid droid(){return droid;}
     private net.mandomc.gameplay.saber.SaberService sabers;
@@ -181,6 +183,8 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             sabers = new net.mandomc.gameplay.saber.SaberService(this, items,
                     net.mandomc.gameplay.saber.SaberSettings.read(saberConfig), language.getConfigurationSection("sabers"));
             saberProjectiles = new net.mandomc.integrations.weapons.SaberProjectiles(this, sabers);
+            enchantments = new net.mandomc.gameplay.enchantments.EnchantmentService(this, items, loadFeature("equipment/enchantments.yml"));
+            getLogger().info("Enchantments ready: approved table pool, Endurance, Recovery and book descriptions.");
             new net.mandomc.integrations.packs.SaberPack(this, saberConfig.getConfigurationSection("upstream-pack"));
             getLogger().info("Vader saber enabled: native melee, guard, reflection and bounded throws.");
             var combatConfig = loadFeature("combat/combat.yml");
@@ -288,9 +292,9 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             tutorial = new net.mandomc.gameplay.tutorial.InteractiveTutorial(this, loadFeature("tutorial/tutorial.yml"));
             staff = new net.mandomc.gameplay.admin.StaffMode(this, loadFeature("admin/staff.yml"));
             starterKit.tutorialRequired(false);
-            forge=new net.mandomc.gameplay.saber.SaberForge(this,loadFeature("equipment/saber-forge.yml"));
+            forge=new net.mandomc.gameplay.saber.SaberWorkbench(this,loadFeature("equipment/saber-workbench.yml"));
             droid=new net.mandomc.gameplay.guide.ProtocolDroid(this,loadFeature("guide/protocol-droid.yml"));
-            getLogger().info("Gameplay upgrades ready: recipe search, encounter components, KOTH equipment, Saber Forge and M4-ND.");
+            getLogger().info("Gameplay upgrades ready: recipe search, encounter components, KOTH equipment, Saber Workbench and M4-ND.");
             getLogger().info("Interactive tutorial ready: private worlds, isolated inventory and once-only completion rewards.");
             getLogger().info("Arrival enabled: protected Batuu spawn; /spawn and temporary /tutorial ready.");
         } catch (Exception | LinkageError error) {
@@ -318,6 +322,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     public void onDisable() {
         if (droid != null) droid.close();
         if (forge != null) forge.close();
+        if (enchantments != null) enchantments.close();
         if (staff != null) staff.close();
         if (tutorial != null) tutorial.close();
         if (hud != null) hud.close();

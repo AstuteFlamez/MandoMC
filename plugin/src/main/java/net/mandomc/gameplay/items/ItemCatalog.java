@@ -27,6 +27,8 @@ public final class ItemCatalog {
     private Map<String, Entry> entries = Map.of();
     private Set<String> externalIds = Set.of();
     private Map<String, Set<String>> badgeTexts = Map.of();
+    private java.util.function.Consumer<ItemStack> presentation = item -> { };
+    private YamlConfiguration badgeConfig;
     private final java.util.function.BiFunction<String, String, ItemStack> externalFactory;
 
     public ItemCatalog(Path directory) {
@@ -88,6 +90,7 @@ public final class ItemCatalog {
             badges.put(category, Set.copyOf(texts));
         }
         badgeTexts = Map.copyOf(badges);
+        badgeConfig = presentation;
         entries = Collections.unmodifiableMap(candidate);
         externalIds = external == null ? Set.of() : Set.copyOf(external.getKeys(false));
     }
@@ -113,8 +116,16 @@ public final class ItemCatalog {
 
     /** Returns an independent item. Callers never receive a cached mutable template. */
     public ItemStack create(String id) {
-        var entry = entries.get(MetalMigration.ingotId(id));
-        return entry == null ? null : entry.factory().get().clone();
+        var entry = entries.get("saber_forge".equals(id) ? "saber_workbench" : MetalMigration.ingotId(id));
+        if (entry == null) return null;
+        var item = entry.factory().get().clone();
+        presentation.accept(item);
+        return item;
+    }
+
+    public void presentation(java.util.function.Consumer<ItemStack> update) { presentation = update; }
+    public Component badges(String rarity, String category) {
+        return text("<white>" + badge(badgeConfig, "rarities", rarity) + badge(badgeConfig, "categories", category));
     }
 
     public Set<String> ids() {
@@ -133,6 +144,7 @@ public final class ItemCatalog {
     public String identify(ItemStack item) {
         if (item == null || !item.hasItemMeta()) return null;
         String id = item.getItemMeta().getPersistentDataContainer().get(ITEM_ID, PersistentDataType.STRING);
+        if ("saber_forge".equals(id)) id = "saber_workbench";
         if (id == null || !entries.containsKey(id)) return null;
         return create(id).getType() == item.getType() ? id : null;
     }
@@ -154,6 +166,15 @@ public final class ItemCatalog {
         meta.setCustomModelDataComponent(modelData);
         meta.setItemModel(definition.itemModel());
         meta.getPersistentDataContainer().set(ITEM_ID, PersistentDataType.STRING, definition.id());
+        if (!definition.storedEnchantments().isEmpty()) {
+            var book = (org.bukkit.inventory.meta.EnchantmentStorageMeta) meta;
+            definition.storedEnchantments().forEach((key, level) -> {
+                var enchantment = org.bukkit.Registry.ENCHANTMENT.get(NamespacedKey.fromString(key));
+                if (enchantment == null || level > enchantment.getMaxLevel())
+                    throw new IllegalArgumentException(definition.id() + ": unknown enchantment or level " + key);
+                book.addStoredEnchant(enchantment, level, false);
+            });
+        }
         if (definition.attackDamage() != null) meta.addAttributeModifier(org.bukkit.attribute.Attribute.ATTACK_DAMAGE,
                 new org.bukkit.attribute.AttributeModifier(new NamespacedKey("mandomc", "item_damage"), definition.attackDamage() - 1,
                         org.bukkit.attribute.AttributeModifier.Operation.ADD_NUMBER, org.bukkit.inventory.EquipmentSlotGroup.MAINHAND));
@@ -161,6 +182,9 @@ public final class ItemCatalog {
                 new org.bukkit.attribute.AttributeModifier(new NamespacedKey("mandomc", "item_speed"), definition.attackSpeed() - 4,
                         org.bukkit.attribute.AttributeModifier.Operation.ADD_NUMBER, org.bukkit.inventory.EquipmentSlotGroup.MAINHAND));
         item.setItemMeta(meta);
+        if (definition.material() == org.bukkit.Material.SHIELD && definition.attackDamage() != null)
+            item.setData(io.papermc.paper.datacomponent.DataComponentTypes.ENCHANTABLE,
+                    io.papermc.paper.datacomponent.item.Enchantable.enchantable(15));
         if (definition.equipmentModel() != null || definition.headModel()) {
             EquipmentSlot slot = definition.material().getEquipmentSlot();
             if (!Set.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET).contains(slot)) {

@@ -11,10 +11,10 @@ public record SaberSettings(String itemId, String model, String hilt, double thr
     public static SaberSettings read(ConfigurationSection c) {
         if (c.getInt("schema-version") != 1) throw new IllegalArgumentException("combat/sabers.yml: expected schema-version 1");
         return new SaberSettings(text(c,"item-id"), text(c,"item-model"), text(c,"hilt-model"),
-                number(c,"throw-damage",0,100), (int)number(c,"throw-cooldown-ticks",1,1200),
+                optional(c,"throw-damage",0,0,100), (int)number(c,"throw-cooldown-ticks",1,1200),
                 number(c,"throw-range",1,32), number(c,"throw-speed",0.1,3), number(c,"throw-return-speed",0.1,4),
                 number(c,"throw-hit-radius",0.1,1), number(c,"guard-capacity",1,1000),
-                number(c,"guard-cooling-per-tick",0.01,10), (int)number(c,"guard-recovery-delay-ticks",0,400),
+                number(c,"guard-cooling-per-tick",0.01,10), (int)optional(c,"guard-recovery-delay-ticks",0,0,400),
                 (int)number(c,"overheat-ticks",1,1200), number(c,"block-half-angle-degrees",1,90),
                 (int)number(c,"reflection-limit",1,10),
                 optional(c, "throw-arc-width", 1.8, 0, 3), optional(c, "throw-arc-height", 0.65, 0, 2),

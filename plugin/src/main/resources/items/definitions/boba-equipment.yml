@@ -2,28 +2,30 @@ schema-version: 1
 items:
   boba_jetpack:
     material: ENCHANTED_BOOK
-    name: "<yellow>Jetpack I"
+    name: <yellow>Jetpack I
     custom-model-data: 0
     item-model: minecraft:enchanted_book
     rarity: rare
-    category: armor
+    category: enchantment
     lore:
-      - '<gray>Apply to a chestplate at an Agrinium Anvil.'
-      - '<gray>Combine two I books at an Agrinium Anvil for II.'
-      - ''
-      - '<yellow>[Double Sneak] Toggle thrust while worn'
-      - ''
-      - '<gray>I: 1 Coal / 0.1s. II: 1 Coal / 0.2s.'
+    - <gray>Apply to a chestplate at an Agrinium Anvil.
+    - <gray>Combine two I books at an Agrinium Anvil for II.
+    - ''
+    - <yellow>[Double Sneak] Toggle thrust while worn
+    - ''
+    - '<gray>I: 1 Coal / 0.1s. II: 1 Coal / 0.2s.'
+    stored-enchantments:
+      mandomc:jetpack: 1
   boba_flamethrower:
     material: BLAZE_ROD
-    name: "<gold>Boba Fett's Flamethrower"
+    name: <gold>Boba Fett's Flamethrower
     custom-model-data: 3102
     item-model: mandomc:equipment/boba_flamethrower
     rarity: rare
     category: weapons
     lore:
-      - '<gray>A wrist-mounted Mandalorian flame projector.'
-      - ''
-      - '<yellow>[Right Click] Flame burst'
-      - ''
-      - '<gray>Ammo: 1 Fire Charge / burst.'
+    - <gray>A wrist-mounted Mandalorian flame projector.
+    - ''
+    - <yellow>[Right Click] Flame burst
+    - ''
+    - '<gray>Ammo: 1 Fire Charge / burst.'

@@ -69,6 +69,15 @@ crates:
     - item: black_kyber
       amount: 1
       weight: 1
+    - item: endurance_book
+      amount: 1
+      weight: 8
+    - item: recovery_book
+      amount: 1
+      weight: 8
+    - item: mending_book
+      amount: 1
+      weight: 4
   vote:
     name: <aqua>Voting Crate
     key-item: vote_crate_key
@@ -90,6 +99,12 @@ crates:
     - item: white_kyber
       amount: 1
       weight: 2
+    - item: endurance_book
+      amount: 1
+      weight: 6
+    - item: recovery_book
+      amount: 1
+      weight: 6
 messages:
   block-hint: '<gray>Left-click: Preview <dark_gray>• <aqua>Right-click: Open'
   denied: <red>You cannot manage crate keys.

@@ -21,13 +21,13 @@ items:
     lore:
     - <gray>A rare crystal won at KOTH.
     - <gray>Required to craft the Darksaber.
-  saber_forge:
+  saber_workbench:
     material: SMITHING_TABLE
-    name: <gold>Saber Forge
+    name: <gold>Saber Workbench
     rarity: epic
     category: tools
     custom-model-data: 0
     item-model: minecraft:smithing_table
     lore:
-    - <gray>Place to upgrade your lightsabers.
-    - <yellow>Hold a saber and use the forge.
+    - <gray>Craft, style and enchant your lightsabers.
+    - <yellow>Place and use to open the Saber Workbench.

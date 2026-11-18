@@ -21,7 +21,8 @@
     "metals": "č",
     "tokens": "<gray>[Tokens]",
     "tools": "ĸ",
-    "trophies": "<font:mandomc:trophies></font>"
+    "trophies": "<font:mandomc:trophies></font>",
+    "enchantment": "<font:mandomc:enchantment></font>"
   },
   "external-items": {
     "e11": {

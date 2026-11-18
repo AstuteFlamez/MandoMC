@@ -5,7 +5,6 @@ import java.util.*;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.mandomc.bootstrap.MandoPlugin;
 import net.mandomc.gameplay.admin.StaffMode;
-import net.mandomc.gameplay.saber.SaberUpgrades;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -56,7 +55,7 @@ public final class DroidFeedbackProbe extends JavaPlugin {
         check(player.getOpenInventory().getTopInventory().getSize()==27,"native right-click opens forge while staff "+player.getGameMode());
     }
     private void click(int slot){var e=new InventoryClickEvent(player.getOpenInventory(),InventoryType.SlotType.CONTAINER,slot,ClickType.LEFT,InventoryAction.PICKUP_ALL);Bukkit.getPluginManager().callEvent(e);check(e.isCancelled(),"forge preview protected");}
-    private void paid(){check(SaberUpgrades.level(player.getInventory().getItem(0),"damage")==1,"staff upgrade committed");check(player.getInventory().getItem(1)==null || player.getInventory().getItem(1).isEmpty(),"temporary staff materials consumed");}
+    private void paid(){check(player.getOpenInventory().getTopInventory().getType()==InventoryType.WORKBENCH,"staff opens native saber crafting");check(player.getInventory().getItem(1)!=null&&player.getInventory().getItem(1).getAmount()==2,"opening workbench consumes no materials");}
     private void creativePaid(){paid();player.setGameMode(GameMode.SURVIVAL);prepare();interact();click(10);later(2,this::survivalPaid);}
     private void survivalPaid()throws Exception{
         paid();Bukkit.getPluginCommand("staff").execute(player,"staff",new String[]{"off"});

@@ -8,12 +8,13 @@ import org.bukkit.configuration.ConfigurationSection;
 
 /** Immutable content description; runtime items are built only after all files validate. */
 public record ItemDefinition(String id, Material material, String name, String rarity, String category,
-        List<String> lore, int customModelData, NamespacedKey itemModel, NamespacedKey equipmentModel, Double attackDamage, Double attackSpeed, Integer foodNutrition, boolean headModel) {
+        List<String> lore, int customModelData, NamespacedKey itemModel, NamespacedKey equipmentModel, Double attackDamage, Double attackSpeed, Integer foodNutrition, boolean headModel, java.util.Map<String, Integer> storedEnchantments) {
     private static final Set<String> KEYS = Set.of("material", "name", "rarity", "category", "lore",
-            "custom-model-data", "item-model", "equipment-model", "attack-damage", "attack-speed", "food-nutrition", "head-model");
+            "custom-model-data", "item-model", "equipment-model", "attack-damage", "attack-speed", "food-nutrition", "head-model", "stored-enchantments");
 
     public ItemDefinition {
         lore = List.copyOf(lore);
+        storedEnchantments = java.util.Map.copyOf(storedEnchantments);
     }
 
     public static ItemDefinition parse(String id, ConfigurationSection section, String source) {
@@ -52,10 +53,21 @@ public record ItemDefinition(String id, Material material, String name, String r
             throw new IllegalArgumentException(path + ": head-model requires a helmet without equipment-model");
         }
         var equipment = section.contains("equipment-model") ? key(section, "equipment-model", path) : null;
+        var enchants = new java.util.LinkedHashMap<String, Integer>();
+        if (section.contains("stored-enchantments")) {
+            var stored = section.getConfigurationSection("stored-enchantments");
+            if (material != Material.ENCHANTED_BOOK || stored == null || stored.getKeys(false).isEmpty())
+                throw new IllegalArgumentException(path + ": stored-enchantments requires an enchanted book");
+            for (String enchant : stored.getKeys(false)) {
+                if (NamespacedKey.fromString(enchant) == null || !enchant.contains(":" ) || !stored.isInt(enchant) || stored.getInt(enchant) < 1)
+                    throw new IllegalArgumentException(path + ": invalid stored enchantment " + enchant);
+                enchants.put(enchant, stored.getInt(enchant));
+            }
+        }
         return new ItemDefinition(id, material, required(section, "name", path),
                 required(section, "rarity", path), required(section, "category", path),
                 section.getStringList("lore"), modelData, key(section, "item-model", path), equipment,
-                number(section, "attack-damage", path, 1, 100), number(section, "attack-speed", path, 0.1, 4), nutrition, headModel);
+                number(section, "attack-damage", path, 1, 100), number(section, "attack-speed", path, 0.1, 4), nutrition, headModel, enchants);
     }
 
     private static Double number(ConfigurationSection section, String key, String path, double min, double max) {

@@ -67,7 +67,7 @@ public final class GuideKnowledge {
         for (String line : recipe.shape())
             for (char symbol : line.toCharArray())
                 if (symbol != ' ') counts.merge(recipe.ingredients().get(symbol), 1, Integer::sum);
-        String method = recipe.stonecutting() ? "a stonecutter (choose the style before upgrading the saber)"
+        String method = recipe.category().equals("lightsabers") ? "a Saber Workbench" : recipe.stonecutting() ? "a stonecutter"
                 : recipe.smelting() ? (recipe.blasting() ? "a blast furnace" : "a furnace") : "a crafting table";
         String ingredients = counts.entrySet().stream()
                 .map(entry -> entry.getValue() + " " + label(entry.getKey())).collect(Collectors.joining(", "));
