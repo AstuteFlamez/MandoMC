@@ -107,7 +107,8 @@ public final class StaffMode implements Listener, AutoCloseable {
     @EventHandler(priority = EventPriority.HIGHEST) public void death(PlayerDeathEvent e) { if (active(e.getEntity())) { e.getDrops().clear(); e.setKeepInventory(true); e.setDroppedExp(0); } }
     @EventHandler(priority = EventPriority.HIGHEST) public void open(InventoryOpenEvent e) {
         // Prevent temporary items leaking through personal or public storage. Administrative inspection uses its own permission-checked menu.
-        if (e.getPlayer() instanceof Player p && active(p) && e.getInventory().getLocation() != null) e.setCancelled(true);
+        if (e.getPlayer() instanceof Player p && active(p) && e.getInventory().getLocation() != null
+                && !(plugin.forge() != null && plugin.forge().ownsMenu(p, e.getView()))) e.setCancelled(true);
     }
     @Override public void close() { eligibility.cancel(); for (var player : List.copyOf(Bukkit.getOnlinePlayers())) disable(player); HandlerList.unregisterAll(this); }
 }

@@ -58,7 +58,8 @@ public final class StonecutterRules implements Listener, AutoCloseable {
         meta.getPersistentDataContainer().set(ItemCatalog.ITEM_ID, org.bukkit.persistence.PersistentDataType.STRING, recipe.result());
         meta.setItemModel(style.getItemModel()); meta.setCustomModelDataComponent(style.getCustomModelDataComponent());
         if (java.util.Objects.equals(meta.displayName(), source.getItemMeta().displayName())) meta.displayName(style.displayName());
-        meta.lore(style.lore()); result.setItemMeta(meta); return result;
+        meta.lore(style.lore()); result.setItemMeta(meta);
+        net.mandomc.gameplay.enchantments.EnchantmentLore.update(result); return result;
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void select(PlayerStonecutterRecipeSelectEvent event) {

@@ -48,7 +48,7 @@ public final class JetpackAnvilSmoke extends JavaPlugin implements org.bukkit.ev
         meta.lore(List.of(net.kyori.adventure.text.Component.text("Original lore")));
         meta.getPersistentDataContainer().set(new NamespacedKey("test","owned"),org.bukkit.persistence.PersistentDataType.STRING,"retained");
         ((org.bukkit.inventory.meta.ArmorMeta)meta).setTrim(new org.bukkit.inventory.meta.trim.ArmorTrim(org.bukkit.inventory.meta.trim.TrimMaterial.GOLD,org.bukkit.inventory.meta.trim.TrimPattern.SENTRY));
-        armor.setItemMeta(meta);
+        armor.setItemMeta(meta);net.mandomc.gameplay.enchantments.EnchantmentLore.update(armor);
         var upgraded=anvilProof(armor);
         actor.getInventory().setChestplate(upgraded);
         check(equipment.toggle(actor),"actual registered jetpack activates");
