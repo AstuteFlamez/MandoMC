@@ -17,6 +17,6 @@ public class DiscordGuidanceTest {
             assertTrue(question, answer.contains("C0-M5"));
         }
         var answer = knowledge.verifiedAnswer("how do I join the discord", knowledge.find("how do I join the discord")).orElseThrow();
-        assertTrue(answer.contains("https://discord.gg/3VrzUmNp6U"));
+        assertTrue(answer.contains("https://discord.gg/bruuZCG5Pk"));
     }
 }

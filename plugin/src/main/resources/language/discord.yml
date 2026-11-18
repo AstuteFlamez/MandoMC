@@ -1,7 +1,8 @@
-usage: "<gray>Run <aqua>/discord</aqua> in game to link your Discord account."
-reward: '<aqua>C0-M5 <dark_gray>» <green>Discord linked! <gold>5,000 credits <green>added to your balance.'
-requesting: "<gray>Requesting your Discord link code…"
-code: "<gray>Join <click:open_url:'https://discord.gg/3VrzUmNp6U'><aqua>our Discord</aqua></click>, then run <aqua>/link code:<code></aqua>. Your code expires in 10 minutes. Keep it private. Linking rewards <gold>5,000 credits</gold> once on production."
-linked: "<green>Your Minecraft account is already linked to Discord."
-cooldown: "<gray>Please wait 30 seconds before requesting another code."
-unavailable: "<gray>Discord linking is temporarily unavailable. Please try again later."
+invite-url: 'https://discord.gg/bruuZCG5Pk'
+usage: '<gray>Run <#5865F2>/discord</#5865F2> in game to link your Discord account.'
+reward: '<#5865F2>C0-M5 <dark_gray>» <green>Discord linked! <gold>5,000 credits <green>added to your balance.'
+requesting: '<gray>Requesting your Discord link code…'
+code: '<gray>Join <discord>, then use <aqua>/link code:</aqua><code> <dark_gray>(<copy-command>)<newline><gray>Click the code to copy it. Expires in 10 minutes; keep it private. <gold>5,000 credits <gray>for linking once.'
+linked: '<green>Your Minecraft account is already linked to Discord.'
+cooldown: '<gray>Please wait 30 seconds before requesting another code.'
+unavailable: '<gray>Discord linking is temporarily unavailable. Please try again later.'

@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {controlTicket, openTicket, panel, controls, ticketForChannel} from '../src/tickets.js';
+import {controlTicket, openTicket, panel, controls, ticketForChannel, ticketName} from '../src/tickets.js';
 import {environment, ids} from './helpers.js';
 
 test('legacy ticket custom IDs remain identical', () => {
@@ -19,12 +19,23 @@ test('tickets are private, persisted and deduplicated across process restarts', 
     return Response.json({id: 'message'});
   });
   const row = await openTicket(env, ids.user, 'Bug Report');
+  assert.equal(created[0].name,'bug-report-001');
   assert.equal(row.channel_id, ids.channel);
   const overwrites = created[0].permission_overwrites;
   assert.equal(overwrites.find(x => x.id === ids.guild).deny, '1024');
   assert.ok(overwrites.some(x => x.id === ids.user && x.type === 1));
   assert.equal((await openTicket(env, ids.user)).channel_id, ids.channel);
   assert.equal(created.length, 1);
+});
+test('ticket names stay readable and numbers persist independently of usernames and restarts', async () => {
+  const env = environment();
+  env.DB.sqlite.prepare('INSERT INTO tickets VALUES(?,?,?,?,?,NULL)').run('first',ids.user,ids.channel,'Support','open');
+  const first = await ticketForChannel(env,ids.channel);
+  assert.equal(ticketName(first.category,first.number),'support-001');
+  assert.equal((await ticketForChannel({...env},ids.channel)).number,first.number);
+  env.DB.sqlite.prepare('INSERT INTO tickets VALUES(?,?,?,?,?,NULL)').run('second',ids.staff,ids.log,'Player Report','open');
+  const second = await ticketForChannel(env,ids.log);
+  assert.equal(ticketName(second.category,second.number),'player-report-002');
 });
 test('existing old-bot channel is adopted instead of duplicated', async t => {
   const env = environment();

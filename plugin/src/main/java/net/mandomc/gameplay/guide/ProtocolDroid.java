@@ -107,7 +107,11 @@ public final class ProtocolDroid implements Listener,AutoCloseable {
     }
     @EventHandler public void quit(PlayerQuitEvent event){conversation.forget(event.getPlayer().getUniqueId());promptTicks.remove(event.getPlayer().getUniqueId());}
     private void fallback(Player player,List<GuideKnowledge.Note> notes,String reason){player.sendMessage(text(reason));reply(player,notes.getFirst().fallback());}
-    private void reply(Player player,String answer){player.sendMessage(text("reply","answer",answer));}
+    private void reply(Player player,String answer){
+        var content=net.mandomc.integrations.discord.DiscordMessages.decorate(Component.text(answer),
+                config.getString("discord-invite",net.mandomc.integrations.discord.DiscordMessages.DEFAULT_INVITE));
+        player.sendMessage(MiniMessage.miniMessage().deserialize(config.getString("text.reply"),Placeholder.component("answer",content)));
+    }
     public Location location(){return droid==null?null:droid.getLocation();}
     private void tick(){
         if(closed)return;

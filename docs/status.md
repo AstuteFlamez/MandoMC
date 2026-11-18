@@ -1,5 +1,9 @@
 # Resume here
 
+## C0-M5 join/copy polish requested during playtest (2026-11-18)
+
+The first checked rollout is active on development and PR #77 is merged. The dev-to-main release is open as PR #78 and has not been activated. The owner requested the preferred invite https://discord.gg/bruuZCG5Pk, Discord blue in chat and the hologram, no deployment labels in player instructions, and codes that are both shorter and copyable. New codes use eight unambiguous Base32 characters with the existing expiry/throttle and backward compatibility for outstanding old codes. Added real join, code-copy and full-command-copy client events, including clickable M4-ND invite answers. All 40 Worker tests, 390 gameplay/integration plus four access tests, and 95 tooling checks pass (six existing environment skips). Copied Batuu passes 20 native checks including real OPEN_URL and both COPY_TO_CLIPBOARD client packets. Tickets now use durable short numbered names such as support-001 and bug-report-002; migration 0003 is applied. Next action: deploy the checked follow-up to development and include it in the queued main-server release.
+
 ## C0-M5 hosting and both-server activation in progress (2026-11-18)
 
 The owner approved all seven explicit two-way mappings (Mando Studios, Server Mod,
