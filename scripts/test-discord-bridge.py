@@ -118,7 +118,7 @@ def main():
             if phase == 5 and player.get("ack") != 5:
                 state["failures"].append("Native rank acknowledgment was not committed with memberships")
             self.send({"updates": [{"uuid": UUID, "expected": player["ranks"], "ranks": target,
-                                   "revision": phase + 1, "signature": "disposable-native-fixture"}], "errors": []})
+                                   "revision": phase + 1, "signature": "disposable-native-fixture", "reward": True}], "errors": []})
             state["phase"] += 1
             if phase == 5:
                 (output / "complete").write_text("verified native snapshots\n")
@@ -141,7 +141,7 @@ def main():
     log = (output / "paper.log").read_text()
     if result.returncode or state["failures"] or "DISCORD_BRIDGE_PROBE_PASSED" not in log:
         raise SystemExit(f"Native bridge fixture failed: {state['failures']}; inspect {output / 'paper.log'}")
-    print("PASS: disposable Paper native bridge and all six HTTPS reconciliation stages")
+    print("PASS: disposable Paper native bridge, six HTTPS reconciliation stages and once-only durable 5,000-credit linking reward")
 
 
 if __name__ == "__main__":

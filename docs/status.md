@@ -26,7 +26,7 @@ link-row writes. Production alone runs the separate JDA 6.7.0 Paper Gateway plug
 
 Verification so far: 38 Worker tests pass; 388 gameplay/integration and four access
 tests pass. Disposable Paper passes six HTTPS reconciliation stages with durable
-rank receipts. A second disposable Paper instance loads the real Gateway dependency,
+rank receipts; the expanded fixture also checks repeated link-payout delivery and a ledger reload. A second disposable Paper instance loads the real Gateway dependency,
 authenticates the existing bot and observes Gateway READY/Online, then stops cleanly.
 Copied Batuu passes 16 native checks for both droids, clear supported placement, hologram spacing, transparent backgrounds, signed silver skin, real right-click proof invocation and exact M4-ND Discord answers. All 95 tooling checks pass (six existing environment skips). Worker migration 0002 and the updated
 Worker are deployed; live Minecraft runtimes are not yet changed. Next action: finish

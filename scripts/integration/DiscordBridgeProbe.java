@@ -25,6 +25,7 @@ public final class DiscordBridgeProbe extends JavaPlugin {
         try {
             ranks = new RankService(this, load("ranks/ranks.yml"));
             credits = new CreditService(this, load("economy/credits.yml"));
+            credits.ledger().initializeAccount(PLAYER, false, 0);
             ranks.change(PLAYER, Set.of("builder", "warrior"), saved -> {
                 if (!saved) { fail("Initial rank persistence"); return; }
                 try {
@@ -48,6 +49,8 @@ public final class DiscordBridgeProbe extends JavaPlugin {
                                 if (!stored.get(PLAYER).equals(ranks.memberships(PLAYER))) { fail("Durable rank acknowledgment"); return; }
                                 var receipts = RankService.readReceipts(getDataFolder().toPath().resolve("data/rank-users.yml"));
                                 if (receipts.get(PLAYER) == null || receipts.get(PLAYER).revision() < 5) { fail("Atomic broker receipt"); return; }
+                                var reloadedCredits = new net.mandomc.gameplay.credits.CreditLedger(getDataFolder().toPath().resolve("data/credits-data.yml"));
+                                if (reloadedCredits.balance(PLAYER) != 500000 || reloadedCredits.rewardDiscord(PLAYER, 500000)) { fail("Once-only durable 5,000-credit link reward"); return; }
                                 finished = true;
                                 getLogger().info("DISCORD_BRIDGE_PROBE_PASSED: native persistence, outbound memberships, managed merge, stale reply rejection, outage retry and offline UUID synchronization");
                                 Bukkit.shutdown(); return;
