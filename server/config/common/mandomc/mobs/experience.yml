@@ -1,0 +1,15 @@
+schema-version: 1
+mobs:
+  Massiff: 8
+  Bantha: 3
+  Dewback: 3
+  JawaBrown: 8
+  JawaGray: 0
+  TuskenRaiderSniper: 10
+  TuskenRaiderMelee: 10
+  GamorreanGuard: 12
+  QuarrenGuard: 12
+  TwilekGuard: 12
+  Bossk: 100
+  BobaFett: 100
+  Rancor: 200

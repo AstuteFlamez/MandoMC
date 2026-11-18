@@ -66,6 +66,7 @@ public final class SaberService implements Listener {
         final Vector targetOffset = new Vector();
         final SaberArc.Style style;
         final SaberMotion motion;
+        final double damage;
         SaberBlade.Pose blade;
         Mob target;
         Location location;
@@ -77,6 +78,8 @@ public final class SaberService implements Listener {
             this.owner = player;
             this.slot = player.getInventory().getHeldItemSlot();
             this.item = player.getInventory().getItem(slot).clone();
+            int sharpness = item.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.SHARPNESS);
+            this.damage = criticalDamage(player.getAttribute(org.bukkit.attribute.Attribute.ATTACK_DAMAGE).getValue(), sharpness);
             this.display = display;
             this.target = target;
             this.origin = display.getLocation();
@@ -109,7 +112,15 @@ public final class SaberService implements Listener {
         task=plugin.getServer().getScheduler().runTaskTimer(plugin,this::tick,1,1);
     }
     public SaberSettings settings() { return settings; }
-    private double upgradeBonus(ItemStack item,String track){return plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.forge()!=null?mando.forge().bonus(item,track):0;}
+    public static double criticalDamage(double attackDamage, int sharpness) {
+        return attackDamage * 1.5 + (sharpness > 0 ? .5 * sharpness + .5 : 0);
+    }
+    private double consumption(ItemStack item) {
+        return plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.enchantments()!=null ? mando.enchantments().consumption(item) : 1;
+    }
+    private double regeneration(ItemStack item) {
+        return plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.enchantments()!=null ? mando.enchantments().regeneration(item) : 1;
+    }
     public boolean isSaber(ItemStack item) {
         if (item == null || item.getType() != Material.SHIELD) return false;
         String id = catalog.identify(item);
@@ -125,7 +136,7 @@ public final class SaberService implements Listener {
     }
     public void reflected(Player p, double damage) { consumeGuard(p, damage); sound(p.getLocation(),"hit"); }
     private void consumeGuard(Player p, double damage) {
-        if(guard(p).hit(tick,settings,damage*Math.max(.1,1-upgradeBonus(p.getInventory().getItemInMainHand(),"guard")))) stun(p);
+        if(guard(p).hit(tick,settings,damage*consumption(p.getInventory().getItemInMainHand()))) stun(p);
         syncDurability(p);
     }
     private void stun(Player player) {
@@ -136,9 +147,10 @@ public final class SaberService implements Listener {
         player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.7f, 1.4f);
     }
     private void updateGuard(UUID owner, GuardState state) {
-        if (!state.cool(tick, settings)) return;
         Flight flight = flights.get(owner);
         Player player = flight == null ? Bukkit.getPlayer(owner) : flight.owner;
+        ItemStack item = flight != null ? flight.item : player == null ? null : player.getInventory().getItemInMainHand();
+        if (!state.cool(tick, settings, isSaber(item) ? regeneration(item) : 1)) return;
         if (player != null) stun(player);
     }
     private void syncDurability(Player player) {
@@ -277,7 +289,7 @@ public final class SaberService implements Listener {
     public boolean launch(Player p) {
         if(!isSaber(p.getInventory().getItemInMainHand())||busy(p)) return false;
         if(!allowed(p.getLocation())) {message(p,"safe-zone");return false;}
-        if(!training(p)&&!net.mandomc.gameplay.admin.StaffMode.active(p)&&!guard(p).canThrow(tick, settings)) {message(p,"tired-throw");return false;}
+        if(!training(p)&&!net.mandomc.gameplay.admin.StaffMode.active(p)&&!guard(p).canThrow(tick, settings, consumption(p.getInventory().getItemInMainHand()))) {message(p,"tired-throw");return false;}
         if(!net.mandomc.gameplay.admin.StaffMode.active(p)&&cooldowns.getOrDefault(p.getUniqueId(),0)>tick) {message(p,"tired-throw");return false;}
         ItemStack real=p.getInventory().getItemInMainHand();
         var display=p.getWorld().spawn(p.getEyeLocation(),ItemDisplay.class,d->{
@@ -289,7 +301,7 @@ public final class SaberService implements Listener {
         var flight=new Flight(p,display,findTarget(p),settings,settings.variants().get(catalog.identify(real)));flights.put(p.getUniqueId(),flight);
         display.setTransformation(flight.blade.transformation(flight.variant.center()));
         reserve(flight);p.clearActiveItem();
-        if (!training(p)) guard(p).thrown(settings);
+        if (!training(p)) guard(p).thrown(settings, consumption(flight.item));
         cooldowns.put(p.getUniqueId(),tick+(training(p)?0:settings.cooldown()));sound(p.getLocation(),"throw");
         if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null) mando.tutorial().saberThrown(p);
         return true;
@@ -486,7 +498,7 @@ public final class SaberService implements Listener {
             throwDamage.add(flight.owner.getUniqueId());
             try {
                 victim.setNoDamageTicks(0);
-                victim.damage(settings.throwDamage()+upgradeBonus(flight.item,"throw"), flight.owner);
+                victim.damage(flight.damage, flight.owner);
             } finally {
                 victim.setNoDamageTicks(immunity);
                 victim.setLastDamage(lastDamage);

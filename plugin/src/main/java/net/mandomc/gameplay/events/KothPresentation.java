@@ -61,6 +61,8 @@ final class KothPresentation {
     static void broadcast(Component template, Function<Player, Component> names, Component neutral) {
         String permission = org.bukkit.Server.BROADCAST_CHANNEL_USERS;
         var audience = recipients(Bukkit.getPluginManager().getPermissionSubscriptions(permission), permission);
+        audience.addAll(Bukkit.getOnlinePlayers());
+        audience.add(Bukkit.getConsoleSender());
         var event = new BroadcastMessageEvent(!Bukkit.isPrimaryThread(), render(template, neutral.insertion(NAME)), audience);
         if (!event.callEvent()) return;
         deliver(event, names, neutral);

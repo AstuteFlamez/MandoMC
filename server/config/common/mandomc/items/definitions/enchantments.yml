@@ -1,0 +1,47 @@
+{
+  "schema-version": 1,
+  "items": {
+    "endurance_book": {
+      "material": "ENCHANTED_BOOK",
+      "name": "<yellow>Endurance I",
+      "custom-model-data": 0,
+      "item-model": "minecraft:enchanted_book",
+      "rarity": "rare",
+      "category": "enchantment",
+      "stored-enchantments": {
+        "mandomc:endurance": 1
+      },
+      "lore": [
+        "<gray>Blocking, reflecting and throwing use less saber charge."
+      ]
+    },
+    "recovery_book": {
+      "material": "ENCHANTED_BOOK",
+      "name": "<yellow>Recovery I",
+      "custom-model-data": 0,
+      "item-model": "minecraft:enchanted_book",
+      "rarity": "rare",
+      "category": "enchantment",
+      "stored-enchantments": {
+        "mandomc:recovery": 1
+      },
+      "lore": [
+        "<gray>Your saber constantly restores charge faster."
+      ]
+    },
+    "mending_book": {
+      "material": "ENCHANTED_BOOK",
+      "name": "<yellow>Mending I",
+      "custom-model-data": 0,
+      "item-model": "minecraft:enchanted_book",
+      "rarity": "epic",
+      "category": "enchantment",
+      "stored-enchantments": {
+        "minecraft:mending": 1
+      },
+      "lore": [
+        "<gray>Collected experience repairs the item."
+      ]
+    }
+  }
+}

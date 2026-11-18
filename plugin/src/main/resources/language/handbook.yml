@@ -41,10 +41,13 @@ pages:
 - id: jawas
   topic: Jawa Shops
   heading: Jawa Shops
-  body: 'Brown Jawas: components on Tatooine. Basic parts plus random advanced finds; stock stays fixed.
+  body: 'Brown Jawas: components on Tatooine; fixed stock.
 
+    Batuu: gray shops sell supplies and spawners.
 
-    Seven titled gray Jawas at Batuu sell ordinary goods. Sell Goods buys salvage.'
+    Click: buy 1. Shift-click: a stack.
+
+    Sell Goods buys salvage.'
 - id: mining_materials
   topic: Mining & Materials
   heading: Mining & Materials
@@ -58,10 +61,13 @@ pages:
 - id: crafting
   topic: Crafting & /recipes
   heading: Crafting
-  body: 'Use /recipes. Search output names or toggle ingredient uses. Click inputs for sources.
+  body: 'Use /recipes to search items or ingredient uses.
 
 
-    Craft a Saber Forge for six upgrade points. Choose your saber style first.'
+    Saber Workbench: craft, style and enchant sabers.
+
+
+    Sharpness, Endurance and Recovery improve your saber.'
 - id: credits_auctions
   topic: Credits & /ah
   heading: Credits & Auctions

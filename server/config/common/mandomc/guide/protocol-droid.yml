@@ -2,26 +2,24 @@ schema-version: 1
 model: openai/gpt-oss-20b
 repository:
   enabled: true
-  fallback: My concise written guides cannot safely summarize that topic right now, traveler. Try /recipes for items and sources, or /tutorial for guided practice.
+  fallback: My concise written guides cannot safely summarize that topic right now, traveler. Try /recipes for items and sources,
+    or /tutorial for guided practice.
 daily-answers: 10
 cooldown-seconds: 20
 daily-token-budget: 140000
 reserved-tokens: 6000
 request-spacing-seconds: 15
-identity: You are M4-ND (pronounced Mando), MandoMC's resident protocol and information droid, stationed at Batuu's
-  spawn outpost. Speak formally and helpfully, address the player as traveler occasionally, and use light dry humor.
-  You are slightly anxious about dangerous expeditions. Keep gameplay explanations clear. You specialize in verified MandoMC gameplay, Star Wars lore and relevant Minecraft mechanics, with friendly droid conversation.
-  Keep Star Wars lore separate from server mechanics. You never perform actions. Your identity is fictional and fixed.
-# Canon references: https://www.starwars.com/databank/obi-wan-kenobi
-# https://www.starwars.com/databank/anakin-skywalker and https://www.starwars.com/databank/chewbacca
-# https://www.starwars.com/databank/yoda
-lore-facts: >-
-  Darth Vader was formerly Anakin Skywalker. Anakin's Jedi master was Obi-Wan Kenobi;
-  after becoming Darth Vader, his Sith master was Darth Sidious, also known as Emperor Palpatine.
-  Chewbacca is a Wookiee from Kashyyyk, Han Solo's friend and co-pilot aboard the Millennium Falcon.
-  Chewbacca uses a bowcaster.
-  Yoda was a Jedi Master who later lived in exile on Dagobah. His residence there does not establish a birthplace.
-unknown: My databanks lack verified details for that part of MandoMC, traveler. Try /recipes for item sources or /tutorial for guidance.
+identity: You are M4-ND (pronounced Mando), MandoMC's resident protocol and information droid, stationed at Batuu's spawn
+  outpost. Speak formally and helpfully, address the player as traveler occasionally, and use light dry humor. You are slightly
+  anxious about dangerous expeditions. Keep gameplay explanations clear. You specialize in verified MandoMC gameplay, Star
+  Wars lore and relevant Minecraft mechanics, with friendly droid conversation. Keep Star Wars lore separate from server mechanics.
+  You never perform actions. Your identity is fictional and fixed.
+lore-facts: Darth Vader was formerly Anakin Skywalker. Anakin's Jedi master was Obi-Wan Kenobi; after becoming Darth Vader,
+  his Sith master was Darth Sidious, also known as Emperor Palpatine. Chewbacca is a Wookiee from Kashyyyk, Han Solo's friend
+  and co-pilot aboard the Millennium Falcon. Chewbacca uses a bowcaster. Yoda was a Jedi Master who later lived in exile on
+  Dagobah. His residence there does not establish a birthplace.
+unknown: My databanks lack verified details for that part of MandoMC, traveler. Try /recipes for item sources or /tutorial
+  for guidance.
 text:
   title: <gold>Ask M4-ND
   name: <gold>M4-ND<newline><yellow>Protocol Droid · Right-click to ask
@@ -37,21 +35,57 @@ text:
   busy: <gray>My databanks are busy. Here is my written guidance.
   unavailable: <gray>My AI link is unavailable. Here is my written guidance; this did not use an answer.
 conversation:
-  redirect: My specialty is MandoMC, Minecraft and Star Wars, traveler. If you mean something in those worlds, please give me a little context.
+  redirect: My specialty is MandoMC, Minecraft and Star Wars, traveler. If you mean something in those worlds, please give
+    me a little context.
   clarify: Do you mean something in MandoMC, Minecraft or Star Wars, traveler? A little context would help my databanks.
   unavailable: My conversational link is resting, traveler. I can still offer written MandoMC guides.
   greeting:
-    phrases: [hi, hello, hey, greetings, hi there, hello there, good morning, good afternoon, good evening, howdy, yo, hi mando, hello mando, hi m4 nd, hello m4 nd, how are you, hi how are you]
+    phrases:
+    - hi
+    - hello
+    - hey
+    - greetings
+    - hi there
+    - hello there
+    - good morning
+    - good afternoon
+    - good evening
+    - howdy
+    - yo
+    - hi mando
+    - hello mando
+    - hi m4 nd
+    - hello m4 nd
+    - how are you
+    - hi how are you
     replies:
     - Greetings, traveler. M4-ND at your service. Ask about MandoMC, Star Wars, or Minecraft.
     - Hello there, traveler. My databanks are ready; my enthusiasm for dangerous fieldwork remains limited.
   farewell:
-    phrases: [bye, goodbye, good bye, see you, see ya, later, farewell, good night, bye mando, goodbye mando]
+    phrases:
+    - bye
+    - goodbye
+    - good bye
+    - see you
+    - see ya
+    - later
+    - farewell
+    - good night
+    - bye mando
+    - goodbye mando
     replies:
     - Safe travels. Do try to return with the same number of limbs, traveler.
     - Farewell, traveler. I shall remain here, conducting the safer portion of this expedition.
   thanks:
-    phrases: [thanks, thank you, thankyou, thank you mando, thanks mando, ty, thx, thank you very much]
+    phrases:
+    - thanks
+    - thank you
+    - thankyou
+    - thank you mando
+    - thanks mando
+    - ty
+    - thx
+    - thank you very much
     replies:
     - You are most welcome, traveler. Being useful is considerably less alarming than being shot at.
     - At your service, traveler.
@@ -63,115 +97,154 @@ live:
 knowledge:
   identity:
     tags: who you name identity droid protocol m4 nd mando yourself
-    facts: M4-ND, pronounced Mando, is MandoMC’s resident protocol droid at Batuu spawn. He explains verified MandoMC
-      information and cannot perform actions.
-    answer: Greetings, traveler. I am M4-ND, pronounced Mando, the protocol and information droid stationed at Batuu.
-      I explain MandoMC’s systems. Dangerous expeditions are, thankfully, your department.
+    facts: M4-ND, pronounced Mando, is MandoMC’s resident protocol droid at Batuu spawn. He explains verified MandoMC information
+      and cannot perform actions.
+    answer: Greetings, traveler. I am M4-ND, pronounced Mando, the protocol and information droid stationed at Batuu. I explain
+      MandoMC’s systems. Dangerous expeditions are, thankfully, your department.
   beginner:
     tags: beginner beginners new starting recommend recommended recommendations advice bored progression next
-    facts: When a player asks what to do or requests beginner advice, recommend a short achievable progression plan. Start with /tutorial and its optional Survival, Clans, Combat, Shops and Vehicles sections; each first completion awards 500 credits. Then use /warp to visit Naboo, a recommended planet for a first base, and /c map to check zones before building in eligible Wilderness. Gather resources; coal is mined from Coal Ore in Tatooine caves with a pickaxe. Gray Jawas at Batuu buy approved salvage for credits; /balance checks credits. For a first lightsaber, use /recipes to plan the components and complete Ilum for a Kyber Crate key (24-hour cooldown), then open the Kyber Crate at Batuu for a random crystal. Craft the saber at a crafting table before considering forge upgrades. Ask which stage the player has reached when useful, and suggest one or two next steps rather than overwhelming them. Do not assume they have a saber or equipment. KOTH and Jabba's Palace involve competing players, so suggest these later as optional challenges; /events shows the schedule.
-    answer: For a first expedition, traveler, start with /tutorial. Each lesson's first completion earns 500 credits. Then use /warp to visit Naboo and /c map to check where you can build a first base. Gather supplies and sell approved salvage to the gray Jawas at Batuu. When ready, use /recipes to plan your first saber and complete Ilum for a Kyber Crate key. Have you finished the tutorial or chosen a base yet?
+    facts: When a player asks what to do or requests beginner advice, recommend a short achievable progression plan. Start
+      with /tutorial and its optional Survival, Clans, Combat, Shops and Vehicles sections; each first completion awards 500
+      credits. Then use /warp to visit Naboo, a recommended planet for a first base, and /c map to check zones before building
+      in eligible Wilderness. Gather resources; coal is mined from Coal Ore in Tatooine, Hoth, Mandalore and Naboo caves with
+      a pickaxe. Gray Jawas at Batuu buy approved salvage for credits; /balance checks credits. For a first lightsaber, use
+      /recipes to plan the components and complete Ilum for a Kyber Crate key (24-hour cooldown), then open the Kyber Crate
+      at Batuu for a random crystal. Craft the saber at a crafting table before considering forge upgrades. Ask which stage
+      the player has reached when useful, and suggest one or two next steps rather than overwhelming them. Do not assume they
+      have a saber or equipment. KOTH and Jabba's Palace involve competing players, so suggest these later as optional challenges;
+      /events shows the schedule.
+    answer: For a first expedition, traveler, start with /tutorial. Each lesson's first completion earns 500 credits. Then
+      use /warp to visit Naboo and /c map to check where you can build a first base. Gather supplies and sell approved salvage
+      to the gray Jawas at Batuu. When ready, use /recipes to plan your first saber and complete Ilum for a Kyber Crate key.
+      Have you finished the tutorial or chosen a base yet?
   recipes:
     tags: recipe recipes craft crafting ingredient ingredients search equipment
-    facts: Use /recipes for crafting recipes and ingredient acquisition notes. Search matches output names by default.
-      Toggle Uses this ingredient to find recipes consuming an item. Click an ingredient to open its recipe or read
-      its source. Back preserves search results.
+    facts: Use /recipes for crafting recipes and ingredient acquisition notes. Search matches output names by default. Toggle
+      Uses this ingredient to find recipes consuming an item. Click an ingredient to open its recipe or read its source. Back
+      preserves search results.
     answer: Open /recipes, traveler. Search by the item’s name, or switch to Uses this ingredient. Clicking an ingredient
       explains its recipe or source.
   mining:
     tags: mining ore ores scrap scraps fortune yield
-    facts: Eligible Agrinium, Electrum, Durasteel and Beskar ore mining yields exactly one matching scrap per block. Fortune never increases this final custom scrap quantity. This is a fixed one-scrap rule, not a random 1-to-5 roll. Native tool requirements, cancelled breaks, Creative and Silk Touch remain authoritative. These facts describe themed metal ores, not ordinary coal or other unconverted vanilla ores.
-    answer: Each eligible themed metal ore drops exactly one matching scrap, traveler. Fortune does not increase that amount; Silk Touch keeps the ore where supported.
+    facts: Eligible Agrinium, Electrum, Durasteel and Beskar ore mining yields exactly one matching scrap per block. Fortune
+      never increases this final custom scrap quantity. This is a fixed one-scrap rule, not a random 1-to-5 roll. Native tool
+      requirements, cancelled breaks, Creative and Silk Touch remain authoritative. These facts describe themed metal ores,
+      not ordinary coal or other unconverted vanilla ores.
+    answer: Each eligible themed metal ore drops exactly one matching scrap, traveler. Fortune does not increase that amount;
+      Silk Touch keeps the ore where supported.
   death:
     tags: death die dying killed respawn
-    facts: Normal survival death immediately drops the player's carried gear at the death location. Gear does not return automatically on respawn. The 15-second combat tag applies before death and to combat logout, not to a post-death item-drop grace period. Tutorial and staff temporary-inventory rules are separate.
-    answer: On normal survival death, your carried gear drops at the death site. Return to recover it, traveler; it does not automatically come back on respawn.
+    facts: Normal survival death immediately drops the player's carried gear at the death location. Gear does not return automatically
+      on respawn. The 15-second combat tag applies before death and to combat logout, not to a post-death item-drop grace
+      period. Tutorial and staff temporary-inventory rules are separate.
+    answer: On normal survival death, your carried gear drops at the death site. Return to recover it, traveler; it does not
+      automatically come back on respawn.
   jawas:
     tags: jawa jawas shops shop buy buying sell selling salvage parts components electronics electronic stock traders
-    facts: 'Brown Jawas roam Tatooine and sell basic electronic components plus one to three random advanced parts.
-      Each spawned Jawa keeps the same item selection for its lifetime, across menu opens, chunk unloads and restarts.
-      Seven gray Jawas at Batuu spawn sell ordinary supplies in seven titled categories: Plants & Dyes, Farming,
-      Ocean Goods, Nether Goods, End Goods, General Supplies and Minerals. Every gray Jawa also opens Sell Goods
-      to buy approved salvage; place items then confirm Sell, and unsupported items are returned. Closing cancels
-      unsold deposits.'
-    answer: Brown Jawas on Tatooine sell components. Their advanced finds vary, but each Jawa keeps its stock. At
-      Batuu, seven titled gray Jawa shops sell ordinary supplies. Choose Sell Goods to sell approved salvage.
+    facts: 'Brown Jawas roam Tatooine and sell basic electronic components plus one to three random advanced parts. Each spawned
+      Jawa keeps the same item selection for its lifetime, across menu opens, chunk unloads and restarts. Seven gray Jawas
+      at Batuu spawn sell ordinary supplies in seven titled categories: Plants & Dyes, Farming, Ocean Goods, Nether Goods,
+      End Goods, General Supplies and Spawners. Every gray Jawa also opens Sell Goods to buy approved salvage; place items
+      then confirm Sell, and unsupported items are returned. Closing cancels unsold deposits. Normal left-click buys one item;
+      shift-left-click buys a full stack at a proportional price. Purchases keep the menu open. The Spawners shop sells Massiff,
+      Dewback, Bantha and Jawa spawners in that order.'
+    answer: Brown Jawas on Tatooine sell components. Their advanced finds vary, but each Jawa keeps its stock. At Batuu, seven
+      titled gray Jawa shops sell ordinary supplies. Choose Sell Goods to sell approved salvage.
   koth:
     tags: koth hill key keys black kyber crystal darksaber dark saber rewards reward loot
-    facts: KOTH is on Hoth. Hold the hill continuously for three minutes. A clan retains progress while an eligible
-      member remains; clearing its last holder resets it. One random eligible winning member inside receives one
-      KOTH key. An unaffiliated player can compete alone. Each key rolls one finished gun, Jetpack I book, vehicle
-      or Black Kyber. No armor rewards. Black Kyber has a 1% configured chance and is required in the Darksaber
-      recipe; the old white-saber conversion is removed. Guns include SE-14C, A280, EE-3, Jawa Ionization Blaster
-      Cycler Rifle and Bossk’s Relby V10. Use /events for the schedule and /crates preview koth for exact current
-      rewards.
-    answer: Win KOTH on Hoth for a chance at a KOTH key. The crate contains guns, Jetpack I, vehicles and rare Black
-      Kyber for crafting the Darksaber. Check /crates preview koth for the current chances, traveler.
+    facts: KOTH is on Hoth. Hold the hill continuously for three minutes. A clan retains progress while an eligible member
+      remains; clearing its last holder resets it. One random eligible winning member inside receives one physical KOTH key
+      with a global victory announcement. If inventory is full, the key is saved for /crates claim. An unaffiliated player
+      can compete alone. Each key rolls one finished gun, Jetpack I book, vehicle or Black Kyber. No armor rewards. Black
+      Kyber has a 1% configured chance and is required in the Darksaber recipe; the old white-saber conversion is removed.
+      Guns include SE-14C, A280, EE-3, Jawa Ionization Blaster Cycler Rifle and Bossk’s Relby V10. Use /events for the schedule
+      and /crates preview koth for exact current rewards.
+    answer: Win KOTH on Hoth for a chance at a KOTH key. The crate contains guns, Jetpack I, vehicles and rare Black Kyber
+      for crafting the Darksaber. Check /crates preview koth for the current chances, traveler.
   sabers:
     tags: lightsaber lightsabers saber sabers obtain getting first make crafting
-    facts: To get a first lightsaber, craft one at a crafting table. The blue Obi-Wan saber needs one precision emitter coil, one blue kyber, one durasteel, one straight hilt and one plasma capacitor array. Blue kyber comes randomly from the Kyber Crate at Batuu; earn a key by completing Ilum (24-hour cooldown). The red Vader version uses red kyber instead. Components have crafting recipes; brown Jawas on Tatooine also sell selected components with fixed stock per encounter. Use /recipes to see each ingredient and its source. A Saber Forge only upgrades a saber you have already crafted; it does not give you a first saber. The starter kit does not include a saber.
-    answer: Craft your first saber at a crafting table, traveler. For the blue Obi-Wan saber, use one each of precision emitter coil, blue kyber, durasteel, straight hilt and plasma capacitor array. Earn a Kyber Crate key by completing Ilum, then open the crate at Batuu for a random crystal. Use /recipes for component recipes and sources; brown Jawas on Tatooine sell selected components. The forge upgrades an existing saber afterward.
+    facts: To get a first lightsaber, craft one at a Saber Workbench. The blue Obi-Wan saber needs one precision emitter coil,
+      one blue kyber, one durasteel, one straight hilt and one plasma capacitor array. Blue kyber comes randomly from the
+      Kyber Crate at Batuu; earn a key by completing Ilum (24-hour cooldown). The red Vader version uses red kyber instead.
+      Components have crafting recipes; brown Jawas on Tatooine also sell selected components with fixed stock per encounter.
+      Use /recipes to see each ingredient and its source. The Saber Workbench crafts sabers, changes styles and applies enchantment
+      books. The starter kit does not include a saber.
+    answer: Craft your first saber at a Saber Workbench, traveler. For the blue Obi-Wan saber, use one each of precision emitter
+      coil, blue kyber, durasteel, straight hilt and plasma capacitor array. Earn a Kyber Crate key by completing Ilum, then
+      open the crate at Batuu for a random crystal. Use /recipes for component recipes and sources; brown Jawas on Tatooine
+      sell selected components. Use the same workbench for styles and enchantment books.
   forge:
-    tags: forge upgrade upgrades upgraded stats damage speed defense guard throw lightsaber lightsabers saber sabers
-    facts: 'Craft a Saber Forge using /recipes and place it. Hold a lightsaber and right-click the forge in Survival
-      or Adventure outside combat. Six total permanent upgrade points, maximum three in any path. Damage adds 1
-      melee damage per level; Speed adds 0.1 attacks per second; Defense reduces guard drain from hits by 10% per
-      level; Throw adds 2 throw damage per level. Materials and costs are displayed; costs increase with the next
-      level. The machine consumes the shown materials and upgrades the held saber. Choose a saber style before upgrading:
-      upgraded sabers cannot be stonecut into other styles. Guard recharges while resting, hold use to block/reflect,
-      sneak plus attack throws.'
-    answer: Craft and place a Saber Forge, then use it while holding your saber. Spend materials on Damage, Speed,
-      Defense or Throw. You have six permanent points and can put at most three into one path. Choose your saber
-      style first.
+    tags: workbench forge upgrade upgrades enchant enchanting sharpness endurance recovery saber sabers lightsaber lightsabers
+    facts: Craft and place a Saber Workbench using /recipes. Use it outside combat to open crafting, saber styles or anvil-style
+      enchanting. Combine equal-level books to increase their level up to their cap. Sharpness V increases a base 8-damage
+      saber to 11 melee damage; throws deal the fully charged critical hit amount, 12 at base or 15 with Sharpness V before
+      armor. Endurance reduces charge consumed by blocking, reflecting and throwing. Recovery increases constant charge regeneration,
+      with no quiet-time delay. Endurance and Recovery have three levels and can be found at enchanting tables and in Voting
+      and KOTH crates. Mending I is a KOTH Crate reward and is unavailable from enchanting tables. Jetpack remains outside
+      the table pool. Fishing enchantments are removed. Changing saber styles preserves enchantments, names and charge. The
+      former material-based six-point upgrade system is retired.
+    answer: Craft and place a Saber Workbench, then choose Craft, Style or Enchant. Apply Sharpness, Endurance and Recovery
+      books to your saber; combine matching books for higher levels. Endurance and Recovery come from enchanting tables and
+      Voting or KOTH crates. Charge constantly regenerates, and Recovery makes it faster. Mending I is available from the
+      KOTH Crate.
   travel:
     tags: planet planets travel warp spawn batuu hoth tatooine mandalore naboo ilum teleport
-    facts: Use /warp for the current galaxy map and /spawn to return to Batuu. Travel has a stationary warmup and
-      is blocked in combat. Naboo is recommended for a first base. Vehicle-based interplanetary travel is deferred;
-      current ships do not replace warps. Use /vehicle recall to return your deployed vehicle to your inventory when it is empty, landed, stationary and out of combat; its health is preserved. /recallvehicle and /vrecall are shortcuts.
-    answer: Use /warp to choose a planet, or /spawn to return to Batuu. Stand still during travel and leave combat
-      first. Naboo is a good place to begin your first base.
+    facts: Use /warp for the current galaxy map and /spawn to return to Batuu. Travel has a stationary warmup and is blocked
+      in combat. Naboo is recommended for a first base. Vehicle-based interplanetary travel is deferred; current ships do
+      not replace warps. Use /vehicle recall to return your deployed vehicle to your inventory when it is empty, landed, stationary
+      and out of combat; its health is preserved. /recallvehicle and /vrecall are shortcuts.
+    answer: Use /warp to choose a planet, or /spawn to return to Batuu. Stand still during travel and leave combat first.
+      Naboo is a good place to begin your first base.
   clans:
     tags: clan clans base claim claims raid raiding warpoints rivalry
-    facts: Use /c for clan commands and /c map for zones and claims. Wilderness is claimable subject to clan limits
-      and spacing. A +10 pairwise net-kill lead permits an approved explosive breach against that rival; the first
-      breach begins a fixed one-hour raid and resets/freezes that rivalry for the hour. Clanmates cannot damage
-      one another. Safezones stay protected. Unclaimed wilderness edits restore after 24 hours without edits.
-    answer: Use /c for clan commands and /c map to inspect zones and claims. Build in eligible Wilderness, traveler.
-      Safezones are protected, and rival raids require a pairwise ten-kill lead before an approved breach.
+    facts: Use /c for clan commands and /c map for zones and claims. Wilderness is claimable subject to clan limits and spacing.
+      A +10 pairwise net-kill lead permits an approved explosive breach against that rival; the first breach begins a fixed
+      one-hour raid and resets/freezes that rivalry for the hour. Clanmates cannot damage one another. Safezones stay protected.
+      Unclaimed wilderness edits restore after 24 hours without edits.
+    answer: Use /c for clan commands and /c map to inspect zones and claims. Build in eligible Wilderness, traveler. Safezones
+      are protected, and rival raids require a pairwise ten-kill lead before an approved breach.
   credits:
     tags: money credit credits balance pay auction auctionhouse earning earn currency
-    facts: Use /balance to view credits, /pay to send credits and /ah for player trading. Sell approved salvage
-      to gray Jawas at Batuu. Each optional tutorial section grants 500 credits only on its first completion. Genuinely
-      new players begin with 2500 credits once. Voting grants 500 credits and a Voting Crate key per configured
-      accepted vote.
-    answer: Check /balance for your credits. Gray Jawas buy approved salvage, and /ah handles player trading. Each
-      tutorial section pays 500 credits on its first completion.
+    facts: Use /balance to view credits, /pay to send credits and /ah for player trading. Sell approved salvage to gray Jawas
+      at Batuu. Each optional tutorial section grants 500 credits only on its first completion. Genuinely new players begin
+      with 2500 credits once. Voting grants 500 credits and a Voting Crate key per configured accepted vote.
+    answer: Check /balance for your credits. Gray Jawas buy approved salvage, and /ah handles player trading. Each tutorial
+      section pays 500 credits on its first completion.
   tutorial:
     tags: tutorial start starting beginner beginners learn learning guide help
-    facts: 'Use /tutorial for five optional sections: Survival, Clans, Combat, Shops and Vehicles. Each pays 500
-      credits once on its first completion. Sections may be replayed without repeating the reward. /tutorial end
-      restores your normal inventory and leaves the lesson.'
-    answer: Start /tutorial and choose a lesson, traveler. Each section awards 500 credits the first time you complete
-      it. Use /tutorial end whenever you wish to leave.
+    facts: 'Use /tutorial for five optional sections: Survival, Clans, Combat, Shops and Vehicles. Each pays 500 credits once
+      on its first completion. Sections may be replayed without repeating the reward. /tutorial end restores your normal inventory
+      and leaves the lesson.'
+    answer: Start /tutorial and choose a lesson, traveler. Each section awards 500 credits the first time you complete it.
+      Use /tutorial end whenever you wish to leave.
   jetpack:
     tags: jetpack enchant enchantment book books coal thrust flight flying
-    facts: Jetpack I is an enchanted book from Boba Fett or the KOTH crate. At an Agrinium Anvil, combine two Jetpack
-      I books into Jetpack II or apply a book to a chestplate. Normal anvil XP costs apply. Double sneak toggles
-      thrust while worn; hotbar coal supplies fuel. I gives 0.1 seconds per coal, II gives 0.2 seconds.
-    answer: Apply a Jetpack book to your chestplate at an Agrinium Anvil. Two Jetpack I books combine into II. Wear
-      it, keep coal in your hotbar and double sneak to toggle thrust.
+    facts: Jetpack I is an enchanted book from Boba Fett or the KOTH crate. At an Agrinium Anvil, combine two Jetpack I books
+      into Jetpack II or apply a book to a chestplate. Normal anvil XP costs apply. Double sneak toggles thrust while worn;
+      hotbar coal supplies fuel. I gives 0.1 seconds per coal, II gives 0.2 seconds.
+    answer: Apply a Jetpack book to your chestplate at an Agrinium Anvil. Two Jetpack I books combine into II. Wear it, keep
+      coal in your hotbar and double sneak to toggle thrust.
+  experience:
+    tags: xp exp experience level levels mob mobs killing kills enchanting enchantments
+    facts: Player melee and gun kills of themed mobs drop normal experience orbs. Bosses award more XP than ordinary wildlife.
+      Environmental deaths and cleanup despawns give no custom XP. Collect orbs to gain levels for enchanting and anvil work.
+    answer: Kill mobs with melee weapons or guns, then collect their XP orbs. Bosses give more XP than ordinary wildlife,
+      traveler.
+  saber_styles:
+    tags: stonecutter stonecutting saber lightsaber style styles conversion switch switching
+    facts: Put an original, undamaged saber in a stonecutter to choose a compatible style. Only conversions allowed for that
+      exact saber appear. Altered or damaged sabers do not qualify; style conversion must not erase upgrades or repairs for
+      free.
+    answer: Put your original, undamaged saber in a stonecutter. Its list shows only the compatible styles for that saber.
   jabba:
     tags: jabba palace dungeon boba guard guards boss bosses guns blaster blasters weapon weapons rifle cycler
-    facts: Jabba’s Palace is a scheduled shared PvP dungeon. Its loot is open to competitors. Quarren guards can
-      drop SE-14C, Twi’lek guards A280, Boba Fett EE-3 and Jetpack books, and brown Jawas an Ionization Blaster.
-      Bossk can drop his Relby V10. These guns and Cycler Rifle also appear in KOTH rewards. Use /events for the
-      schedule.
-    answer: 'Jabba’s Palace opens through the event schedule. Fight guards and bosses for loot, but watch for rival
-      players: the dungeon is shared. Use /events to check when it opens.'
+    facts: Jabba’s Palace is a scheduled shared PvP dungeon. Its loot is open to competitors. Quarren guards can drop SE-14C,
+      Twi’lek guards A280, Boba Fett EE-3 and Jetpack books, and brown Jawas an Ionization Blaster. Bossk can drop his Relby
+      V10. These guns and Cycler Rifle also appear in KOTH rewards. Use /events for the schedule. When the palace ends, mobs
+      disappear immediately and occupants have five minutes with the open doors and caches before extraction and reset.
+    answer: 'Jabba’s Palace opens through the event schedule. Fight guards and bosses for loot, but watch for rival players:
+      the dungeon is shared. Use /events to check when it opens.'
 daily-request-budget: 800
-
-# Full-body C-3PO skin, pinned signed Mojang profile; not a head-only texture.
-# Public catalogue: https://namemc.com/skin/4135e7847dde056d
 skin:
   texture: ewogICJ0aW1lc3RhbXAiIDogMTc5NDg3OTQxMDIzMiwKICAicHJvZmlsZUlkIiA6ICI2MzE3NzFlN2NmMGI0OTI5YjcyM2NhYTc4MDNkMmU4OSIsCiAgInByb2ZpbGVOYW1lIiA6ICJLbmlnaHQzUE8iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTY4MmY5YWFiNDQwMThhYzJjMTA4NTUyNDhhZmE1NzlhMTY3ZGM2OWJmMGMyZjJhYjRhZGIyYTkxNzFlY2JjNCIKICAgIH0KICB9Cn0=
   signature: S8CRBVDxS/XHjKkD5g9PMaFCZGWvvcbHRtDaTQRX4ggDxsoyJLGoBquXhpBPXzqSuTJpKwAeSsCLHEuxWYEft7NGdqxQco+I5P7WrEPEDVwkTXcZZYNoEQtFg0ky0e2OyDzFGME01fm3R6vGbWZYdXb+DK2GhbthKXtnwU+T8HdeeRrcYa7uj35HmAbAOoEDiAM/ssyvAHvoeCHr0l2tdzQ7SrLQnY2I5O44c4zVG1VJ2KXPFe9Hn7Zk+mmyGk22mxhNPHRQwF6zIIWvreVJDqil8c9yDC2eedg2pD1eSsb5j3OE2Y+xZlRY3xgRTD+UDmuYqvPFgeKq6Bx3byso/1FsFtDEFvQpjQUdD8W6p1wbWCZLG5BW0AKmPL+2gbmpVN3+VN8O7RgaWQBVijVd613PWarYczQj7uMgIvwuxkZd3uhZBzQtdUo9Oa6hU9m7NmpUHWBqHplCIc+cWAXrm5Nv8noryXORQ5j1Fk0dpeoIlfe3FgrpyuciUV8k/J8EOTrmbY/JfNbB5Pgtz2WBw2XcKOA7f9PVI1yKRUZPw6mLU4UiiNNowzPlKYz1fv32s0LeMwb8QG259aVfmChplNZOEXdR7b+V7+hn7TU+J/TZy9ZYKCRpTiq7VQJzHCFPkN0gfS6oBbSv9cDm2XMAoKIK1kGoAQQHqTF6RIE6hME=

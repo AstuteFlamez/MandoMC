@@ -388,9 +388,10 @@
   "messages": {
     "start": "<gold><bold>Jabba's Palace</bold> is open! <yellow>/warp tatooine",
     "caches": "<gold><count> supply caches deployed throughout the palace.",
-    "opened": "<aqua>Room <room> unlocked \u00bb blast doors opening",
+    "opened": "<aqua>Room <room> unlocked » blast doors opening",
     "complete": "<green>Jabba's Palace secured! The palace remains open until the operation ends.",
-    "stopped": "<yellow>The Jabba operation has ended. The palace is resetting.",
+    "stopped": "<yellow>Jabba’s Palace has ended. Mobs are gone; doors stay open for five minutes before extraction.",
     "looted": "<green>Supply cache recovered."
-  }
+  },
+  "exit-delay-seconds": 300
 }

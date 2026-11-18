@@ -10,11 +10,13 @@ import org.bukkit.entity.*;import org.bukkit.event.*;import org.bukkit.event.blo
 public final class JabbaEvent implements ManagedEvent,Listener,net.mandomc.gameplay.events.EventCaches {
  private record Cache(JabbaSettings.Chest spec,List<ItemStack> loot){}
  private final boolean broadcastStart;private final JavaPlugin plugin;private final ItemCatalog items;private final JabbaSettings settings;private final ConfigurationSection messages;private final MythicMobAccess mythic;private final DungeonProgress progress;private final Path journal;private final NamespacedKey ownerKey;private final String tag;
- private final Set<String> reserved=new HashSet<>();private final Set<UUID> owned=new HashSet<>();private final Map<String,Cache> caches=new HashMap<>();private final List<Chunk> chunks=new ArrayList<>();private World world;private NativeGates gates;private boolean running;private String run;private int spawnedAt;
+ private final Set<String> reserved=new HashSet<>();private final Set<UUID> owned=new HashSet<>();private final Map<String,Cache> caches=new HashMap<>();private final List<Chunk> chunks=new ArrayList<>();private World world;private NativeGates gates;private boolean running;private String run;private int spawnedAt;private boolean evacuating;private org.bukkit.scheduler.BukkitTask extraction;private final int exitDelay;
  public JabbaEvent(JavaPlugin plugin,ItemCatalog items,ConfigurationSection config) throws Exception {
   if(!"jabba".equals(config.getString("id")))throw new IllegalArgumentException("jabba: invalid event id");
   this.plugin=plugin;broadcastStart=config.getBoolean("broadcast-start",true);this.items=items;settings=JabbaSettings.read(config);progress=new DungeonProgress(settings.rooms().size());messages=config.getConfigurationSection("messages");
   for(String s:List.of("start","caches","opened","complete","stopped","looted"))if(messages==null||!messages.isString(s))throw new IllegalArgumentException("jabba: missing message "+s);
+  exitDelay=config.getInt("exit-delay-seconds",300);
+  if(exitDelay<1||exitDelay>600)throw new IllegalArgumentException("jabba: invalid exit-delay-seconds");
   mythic=new MythicMobAccess();journal=plugin.getDataFolder().toPath().resolve("jabba/"+settings.profile()+"-run.yml");ownerKey=new NamespacedKey(plugin,"jabba_run");tag="mandomc_jabba_"+settings.profile();
   recover();plugin.getServer().getPluginManager().registerEvents(this,plugin);
   plugin.getServer().getServicesManager().register(net.mandomc.gameplay.events.EventCaches.class,this,plugin,org.bukkit.plugin.ServicePriority.Normal);
@@ -28,7 +30,7 @@ public final class JabbaEvent implements ManagedEvent,Listener,net.mandomc.gamep
  private List<JabbaSettings.Chest> allChests(){return settings.rooms().stream().flatMap(r->r.chests().stream()).toList();}
  private String key(Location l){return l.getBlockX()+","+l.getBlockY()+","+l.getBlockZ();}
  public void start(){
-  if(running)throw new IllegalStateException("Jabba already running");world=Bukkit.getWorld(NamespacedKey.fromString(settings.world()));if(world==null)throw new IllegalStateException("Tatooine not loaded");
+  if(running||evacuating)throw new IllegalStateException("Jabba is running or its exit window is open");world=Bukkit.getWorld(NamespacedKey.fromString(settings.world()));if(world==null)throw new IllegalStateException("Tatooine not loaded");
   try {
    if(Files.isRegularFile(journal))recover();
    for(String id:settings.loot().keySet())if(!items.ids().contains(id)||items.create(id)==null)throw new IllegalStateException("Unknown Jabba loot "+id);
@@ -36,25 +38,25 @@ public final class JabbaEvent implements ManagedEvent,Listener,net.mandomc.gamep
    for(var c:allChests()){var b=c.pos().location(world).getBlock();if(!b.getType().isAir()&&b.getType()!=Material.CHEST)throw new IllegalStateException("Occupied stash coordinate "+c.pos().key());if(b.getState() instanceof Container container&&!container.getInventory().isEmpty())throw new IllegalStateException("Nonempty legacy chest at "+c.pos().key());}
    run=UUID.randomUUID().toString();saveJournal();running=true;progress.start();for(var c:allChests())c.pos().location(world).getBlock().setType(Material.AIR,false);gates.reset();spawnCaches();nearby("caches");
    if(broadcastStart)Bukkit.getServer().broadcast(text("start",1,0));openRoom();
-  }catch(Exception e){stop(false);throw new IllegalStateException("Cannot start Jabba: "+e.getMessage(),e);}
+  }catch(Exception e){cleanup(false);throw new IllegalStateException("Cannot start Jabba: "+e.getMessage(),e);}
  }
  private void openRoom(){var room=settings.rooms().get(progress.room()-1);nearby("opened");gates.open(room.gate(),room.movement(),()->{if(!running)return;try{spawnRoom();}catch(RuntimeException e){fail(e);}});}
  private void spawnRoom(){var room=settings.rooms().get(progress.room()-1);var ids=new ArrayList<UUID>();var random=ThreadLocalRandom.current();var guardTypes=List.of("GamorreanGuard","QuarrenGuard","TwilekGuard");
   for(var p:room.spawns())for(int i=0;i<room.count();i++){String type=room.mob().equals("guards")?guardTypes.get(random.nextInt(3)):room.mob();var entity=mythic.spawn(type,p.location(world).add(0.5,0,0.5),room.mob().equals("guards")?progress.room():1);owned.add(entity.getUniqueId());ids.add(entity.getUniqueId());entity.addScoreboardTag(tag);entity.getPersistentDataContainer().set(ownerKey,PersistentDataType.STRING,run);entity.setPersistent(true);if(entity instanceof Mob mob)mob.setRemoveWhenFarAway(false);mythic.persist(entity);}
   progress.spawned(ids);spawnedAt=Bukkit.getCurrentTick();saveJournal();
  }
- @EventHandler(priority=EventPriority.MONITOR) public void death(EntityDeathEvent e){if(!running)return;if(progress.died(e.getEntity().getUniqueId()))try{if(progress.phase()==DungeonProgress.Phase.OPENING)openRoom();else nearby("complete");}catch(RuntimeException error){fail(error);}}
+ @EventHandler(priority=EventPriority.MONITOR) public void death(EntityDeathEvent e){if(!running)return;if(progress.died(e.getEntity().getUniqueId()))try{if(progress.phase()==DungeonProgress.Phase.OPENING)openRoom();else {nearby("complete");stop(true);}}catch(RuntimeException error){fail(error);}}
  private List<ItemStack> roll(){var random=ThreadLocalRandom.current();double total=settings.loot().values().stream().mapToDouble(Double::doubleValue).sum();var out=new ArrayList<ItemStack>();for(int i=0,n=random.nextInt(1,4);i<n;i++){double r=random.nextDouble(total);for(var entry:settings.loot().entrySet()){r-=entry.getValue();if(r<0){out.add(Objects.requireNonNull(items.create(entry.getKey())));break;}}}return List.copyOf(out);}
  private void spawnCaches(){var prepared=new LinkedHashMap<String,Cache>();for(var spec:allChests())prepared.put(spec.pos().key(),new Cache(spec,roll()));
   for(var cache:prepared.values()){var b=cache.spec.pos().location(world).getBlock();if(!b.getType().isAir())throw new IllegalStateException("Stash position was obstructed: "+cache.spec.pos().key());b.setType(Material.CHEST,false);var data=(Directional)b.getBlockData();data.setFacing(cache.spec.face());b.setBlockData(data,false);}
   caches.putAll(prepared);
  }
- public boolean mayClaim(PlayerInteractEvent e){return running&&e.getAction()==Action.RIGHT_CLICK_BLOCK
+ public boolean mayClaim(PlayerInteractEvent e){return (running||evacuating)&&e.getAction()==Action.RIGHT_CLICK_BLOCK
   &&e.getHand()==EquipmentSlot.HAND&&e.getPlayer().getGameMode()!=GameMode.SPECTATOR
   &&e.getClickedBlock()!=null&&e.getClickedBlock().getWorld()==world&&e.getClickedBlock().getType()==Material.CHEST
   &&caches.containsKey(key(e.getClickedBlock().getLocation()));}
  @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true) public void click(PlayerInteractEvent e){
-  if(!running||e.getClickedBlock()==null||e.getClickedBlock().getWorld()!=world)return;
+  if((!running&&!evacuating)||e.getClickedBlock()==null||e.getClickedBlock().getWorld()!=world)return;
   String key=key(e.getClickedBlock().getLocation());var cache=caches.get(key);if(cache==null)return;
   boolean claim=mayClaim(e);e.setCancelled(true);if(!claim)return;
   var inventory=e.getPlayer().getInventory();var original=copy(inventory.getStorageContents());
@@ -84,12 +86,34 @@ public final class JabbaEvent implements ManagedEvent,Listener,net.mandomc.gamep
  private void fail(RuntimeException e){plugin.getLogger().log(java.util.logging.Level.SEVERE,"Jabba operation reset after error",e);stop(true);}
  private void saveJournal(){try{var c=new YamlConfiguration();c.set("world",settings.world());var plan=new ArrayList<>(gates.resetPlan());allChests().forEach(chest->plan.add(chest.pos().key()+"|minecraft:air"));reserved.clear();plan.forEach(row->reserved.add(row.split("\\|",2)[0]));c.set("cleanup",plan);c.set("entities",owned.stream().map(UUID::toString).toList());Files.createDirectories(journal.getParent());var tmp=journal.resolveSibling(journal.getFileName()+".tmp");c.save(tmp.toFile());Files.move(tmp,journal,StandardCopyOption.REPLACE_EXISTING,StandardCopyOption.ATOMIC_MOVE);}catch(Exception e){throw new IllegalStateException("Cannot checkpoint dungeon cleanup",e);}}
  private void recover() throws Exception {if(!Files.isRegularFile(journal))return;var c=new YamlConfiguration();c.load(journal.toFile());var w=Bukkit.getWorld(NamespacedKey.fromString(c.getString("world","")));if(w==null)throw new IllegalStateException("Cannot recover dungeon without its world");var plan=c.getStringList("cleanup");if(plan.size()>10000)throw new IllegalStateException("Oversized recovery plan");for(String row:plan){var a=row.split("\\|",2);reserved.add(a[0]);var pos=JabbaSettings.Pos.parse(a[0]);pos.location(w).getBlock().setBlockData(Bukkit.createBlockData(a[1]),false);}for(String id:c.getStringList("entities")){var entity=Bukkit.getEntity(UUID.fromString(id));if(entity!=null)mythic.remove(entity);}w.getEntities().stream().filter(e->e.getScoreboardTags().contains(tag)||e.getScoreboardTags().contains("mandomc_jabba_gate_"+settings.profile())).toList().forEach(mythic::remove);plugin.getLogger().info("Recovered interrupted Jabba operation: gates closed and caches/mobs cleared.");}
- public void stop(boolean announce){boolean wasRunning=running;running=false;try{
-   if(wasRunning){if(announce)nearby("stopped");
-    // Forced operation cleanup moves occupants outside before restoring solid gate panels.
-    for(var p:Bukkit.getOnlinePlayers())if(settings.contains(p.getLocation()))try{var exit=((net.mandomc.bootstrap.MandoPlugin)plugin).worlds().spawn(settings.world());if(plugin instanceof net.mandomc.bootstrap.MandoPlugin m)m.combat().clear(p);p.teleport(exit);}catch(RuntimeException error){plugin.getLogger().warning("Could not extract player before dungeon reset: "+error.getMessage());}
-    for(UUID id:owned){var e=Bukkit.getEntity(id);if(e!=null)mythic.remove(e);}for(var c:allChests())c.pos().location(world).getBlock().setType(Material.AIR,false);if(gates!=null)gates.reset();
+ public boolean evacuating(){return evacuating;}
+ public void stop(boolean announce){
+  if(!running)return;
+  running=false;evacuating=true;
+  for(UUID id:owned){var entity=Bukkit.getEntity(id);if(entity instanceof LivingEntity living && !living.isDead())mythic.remove(entity);}
+  owned.clear();
+  if(gates!=null)gates.holdOpen();
+  if(announce)nearby("stopped");
+  extraction=Bukkit.getScheduler().runTaskLater(plugin,()->{extraction=null;cleanup(false);},exitDelay*20L);
+ }
+ private void cleanup(boolean announce){boolean occupied=running||evacuating;running=false;evacuating=false;
+  if(extraction!=null){extraction.cancel();extraction=null;}
+  try{
+   if(occupied && announce)nearby("stopped");
+   if(occupied){
+    // Move occupants outside before restoring solid gate panels.
+    for(var p:Bukkit.getOnlinePlayers())if(settings.contains(p.getLocation())){
+     var exit=((net.mandomc.bootstrap.MandoPlugin)plugin).worlds().spawn(settings.world());
+     if(plugin instanceof net.mandomc.bootstrap.MandoPlugin m)m.combat().clear(p);
+     if(!p.teleport(exit))throw new IllegalStateException("Could not extract "+p.getUniqueId()+"; gates remain open for recovery");
+    }
    }
-  }catch(Exception e){plugin.getLogger().log(java.util.logging.Level.SEVERE,"Jabba cleanup checkpoint retained for recovery",e);}finally{if(gates!=null){gates.close();gates=null;}chunks.forEach(c->c.removePluginChunkTicket(plugin));chunks.clear();owned.clear();caches.clear();progress.reset();}}
- public void close(){stop(false);HandlerList.unregisterAll(this);plugin.getServer().getServicesManager().unregister(net.mandomc.gameplay.events.EventCaches.class,this);}
+   for(UUID id:owned){var e=Bukkit.getEntity(id);if(e!=null)mythic.remove(e);}
+   if(world!=null)for(var c:allChests())c.pos().location(world).getBlock().setType(Material.AIR,false);
+   if(gates!=null)gates.reset();
+   Files.deleteIfExists(journal);
+  }catch(Exception e){plugin.getLogger().log(java.util.logging.Level.SEVERE,"Jabba cleanup checkpoint retained for recovery",e);}
+  finally{if(gates!=null){gates.close();gates=null;}chunks.forEach(c->c.removePluginChunkTicket(plugin));chunks.clear();owned.clear();caches.clear();progress.reset();}
+ }
+ public void close(){cleanup(false);HandlerList.unregisterAll(this);plugin.getServer().getServicesManager().unregister(net.mandomc.gameplay.events.EventCaches.class,this);}
 }
