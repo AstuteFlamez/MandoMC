@@ -1,5 +1,5 @@
 # Feature: Saber Workbench and enchantment books
-Status: native verified; development deployment pending
+Status: deployed to development; client playtest pending
 Branch: bilal/saber-enchantments
 
 ## Player experience
@@ -33,7 +33,7 @@ Initial configurable balance: Endurance reduces consumption by 1/15 per level, c
 KOTH retains existing reward weights and adds Endurance I weight 8, Recovery I weight 8 and Mending I weight 4, bringing its total to 120. Voting adds Endurance I and Recovery I at weight 6 each, bringing its total to 112. These are weights, not percentages. One key still awards one reward.
 
 ## Verification
-Unit tests cover charge consumption, reservation, constant regeneration during combat/throws, exhaustion, tier scaling, critical damage and configuration. The isolated Paper fixture passed 2,677 native assertions covering all 43 vanilla plus three custom book presentations, 300 real table rolls, book/saber anvil operations, real result-pickup packets, material/XP consumption, style preservation, recipe station labels, removed-workbench pickup denial, admin permission/level overrides, native 11-damage Sharpness V melee and actual 15-damage throw contacts with all enchantments preserved on return. Native actor equipment/cooldown state is synchronized, the flight corridor is clear and its chunks have explicit tickets.
+Unit tests cover charge consumption, reservation, constant regeneration during combat/throws, exhaustion, tier scaling, critical damage and configuration. The isolated Paper fixture passed 2,679 native assertions covering all 43 vanilla plus three custom book presentations, 300 real table rolls, book/saber anvil operations, real result-pickup packets, material/XP consumption, style preservation, recipe station labels, removed-workbench pickup denial, admin permission/level overrides, native 11-damage Sharpness V melee and actual 15-damage throw contacts with all enchantments preserved on return. Native actor equipment/cooldown state is synchronized, the flight corridor is clear and its chunks have explicit tickets.
 
 ## Pause note
-Native verification passes. Next action: deploy the tested build and verified hosted resource pack to development, preserving the deployed spawner/event release.
+Development is running native-tested release `361eb26` with the verified hosted pack, matching bundled M4-ND knowledge and the deployed spawner/event release preserved. Saved recipe-book entries migrate without warnings or duplicate entries. Next action: client-playtest the Workbench, books and admin commands after reconnecting for the pack.
