@@ -51,7 +51,7 @@ public final class SpawnerStackProbe extends JavaPlugin {
         actors=new NativeProbePlayers("Stack");player=actors.create(new Location(world,-201.5,200,-199.5));player.setGameMode(GameMode.SURVIVAL);mando.ranks().apply(player);
         if(Boolean.getBoolean("mandomc.stack.restart")){
             for(int i=1;i<4;i++)check(count(i)==4,"Combined count persists through JVM restart "+ids.get(i));
-            tick();later(5,()->{for(int i=1;i<4;i++)label(i,4);finish(null);});return;
+            tick();int before=(int)field(spawners,"clock");later(25,()->{check((int)field(spawners,"clock")-before==25,"Spawner scheduler advances once per server tick");for(int i=1;i<4;i++)label(i,4);finish(null);});return;
         }
         var mobs=new net.mandomc.integrations.mobs.MythicMobAccess();
         for(var entity:world.getEntities())if(entity instanceof Item||net.mandomc.integrations.mobs.MythicMobAccess.TYPES.contains(mobs.type(entity)))entity.remove();
@@ -82,7 +82,7 @@ public final class SpawnerStackProbe extends JavaPlugin {
         near(i);hold(ids.get(i),3);var event=click(i,EquipmentSlot.HAND);
         check(event.useItemInHand()==Event.Result.DENY,"Combine blocks adjacent native placement "+ids.get(i));
         click(i,EquipmentSlot.HAND); // Duplicate packet before either deferred transaction commits.
-        later(2,()->{check(count(i)==4&&player.getInventory().getItemInMainHand().isEmpty(),"Exactly-once held-stack merge "+ids.get(i));label(i,4);combineType(i+1);});
+        later(2,()->{check(count(i)==4&&player.getInventory().getItemInMainHand().isEmpty(),"Exactly-once held-stack merge "+ids.get(i));check(remaining(i)<=150,"Combining shortens the current wait "+ids.get(i));label(i,4);combineType(i+1);});
     }
     private void normalAndOffhand()throws Exception{
         near(0);hold(ids.getFirst(),2);player.setSneaking(false);var normal=click(0,EquipmentSlot.HAND);
@@ -115,16 +115,47 @@ public final class SpawnerStackProbe extends JavaPlugin {
             });
         });
     }
+    private Object site(int i,Map<?,?> sites)throws Exception{
+        for(var site:sites.keySet())if((int)field(site,"x")==block(i).getX()&&(int)field(site,"y")==block(i).getY()
+                &&(int)field(site,"z")==block(i).getZ()&&field(site,"world").equals(world.getUID()))return site;
+        throw new AssertionError("Missing tracked cage "+i);
+    }
+    private int remaining(int i)throws Exception{
+        var sites=(Map<?,?>)field(spawners,"sites");return (int)sites.get(site(i,sites))-(int)field(spawners,"clock");
+    }
     @SuppressWarnings("unchecked") private void spawnBudget()throws Exception{
         near(0);var mobs=new net.mandomc.integrations.mobs.MythicMobAccess();
         for(var entity:world.getEntities())if("Massiff".equals(mobs.type(entity)))mobs.remove(entity);
-        var sites=(Map<Object,Integer>)field(spawners,"sites");sites.replaceAll((site,due)->0);tick();
-        long spawned=world.getLivingEntities().stream().filter(e->"Massiff".equals(mobs.type(e))).count();
-        check(spawned>1&&spawned<=6,"Stack creates multiple real creatures within existing shared cap: "+spawned);
-        sites.replaceAll((site,due)->0);tick();long after=world.getLivingEntities().stream().filter(e->"Massiff".equals(mobs.type(e))).count();
-        check(after<=6,"Repeated stacked spawning never exceeds nearby cap");
-        var chunk=block(0).getChunk();spawners.unloaded(new org.bukkit.event.world.ChunkUnloadEvent(chunk,true));spawners.loaded(new org.bukkit.event.world.ChunkLoadEvent(chunk,false));tick();
-        check(count(0)==64,"Combined count survives chunk tracking reload");label(0,64);
+        var sites=(Map<Object,Integer>)field(spawners,"sites");var first=site(0,sites);var chunk=block(0).getChunk();
+        int[] amounts={1,2,4,64},delays={600,300,150,10};
+        for(int i=0;i<amounts.length;i++){
+            var state=(CreatureSpawner)block(0).getState();state.getPersistentDataContainer().set(MobSpawners.COUNT,org.bukkit.persistence.PersistentDataType.INTEGER,amounts[i]);state.update();
+            spawners.loaded(new org.bukkit.event.world.ChunkLoadEvent(chunk,false));
+            check(remaining(0)==delays[i],"Loaded count "+amounts[i]+" schedules delay "+delays[i]+" ticks");
+        }
+        sites.replaceAll((site,due)->Integer.MAX_VALUE);sites.put(first,0);
+        long previous=0;
+        // Space can legitimately reject a random attempt, so retry whole due times, never early ticks.
+        for(int retry=0;retry<5&&previous==0;retry++){
+            sites.put(first,0);tick();previous=world.getLivingEntities().stream().filter(e->"Massiff".equals(mobs.type(e))).count();
+            check(previous<=1,"One due time never creates a group");
+        }
+        check(previous==1&&remaining(0)==10,"64 combined spawners produce one mob and schedule 0.5 seconds");
+        for(int step=0;step<9;step++)tick();
+        check(world.getLivingEntities().stream().filter(e->"Massiff".equals(mobs.type(e))).count()==1,"No spawn before the reduced delay elapses");
+        tick();
+        long after=world.getLivingEntities().stream().filter(e->"Massiff".equals(mobs.type(e))).count();
+        check(after-previous>=0&&after-previous<=1&&remaining(0)==10,"Next due time creates at most one and starts a fresh wait");previous=after;
+        for(int cycle=0;cycle<12;cycle++){
+            for(int step=0;step<10;step++)tick();
+            after=world.getLivingEntities().stream().filter(e->"Massiff".equals(mobs.type(e))).count();
+            check(after-previous>=0&&after-previous<=1,"Each accelerated cycle remains a single spawn");
+            check(after<=6,"Combined cages retain the exact shared six-mob cap");previous=after;
+        }
+        check(previous>1,"Reduced delays produce successive individual creatures");
+        spawners.unloaded(new org.bukkit.event.world.ChunkUnloadEvent(chunk,true));spawners.loaded(new org.bukkit.event.world.ChunkLoadEvent(chunk,false));
+        check(count(0)==64&&remaining(0)==10,"Chunk reload preserves combined count and reduced delay");
+        for(int step=0;step<20;step++)tick();label(0,64);
         var before=world.getEntitiesByClass(Item.class).stream().filter(e->ids.getFirst().equals(mando.items().identify(e.getItemStack()))).mapToInt(e->e.getItemStack().getAmount()).sum();
         var broken=new BlockBreakEvent(block(0),player);player.getInventory().setItemInMainHand(new ItemStack(Material.STONE_PICKAXE));Bukkit.getPluginManager().callEvent(broken);
         check(!broken.isCancelled()&&!broken.isDropItems(),"Native break delegates lossless custom recovery");block(0).setType(Material.AIR,false);

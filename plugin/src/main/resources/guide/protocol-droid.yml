@@ -147,7 +147,7 @@ knowledge:
       End Goods, General Supplies and Spawners. Every gray Jawa also opens Sell Goods to buy approved salvage; place items
       then confirm Sell, and unsupported items are returned. Closing cancels unsold deposits. Normal left-click buys one item;
       shift-left-click buys a full stack at a proportional price. Purchases keep the menu open. The Spawners shop sells Massiff,
-      Dewback, Bantha and Jawa spawners in that order. Spawners can be placed in unclaimed Wilderness and your own clan’s claims. Each placed spawner shows its creature model and a count label. Shift-right-click a placed spawner while holding matching spawners to combine the held stack, up to 64 per cage; excess stays in hand. Pickaxes return the full combined amount. Each cycle attempts one creature per combined spawner while preserving the shared nearby cap of six.'
+      Dewback, Bantha and Jawa spawners in that order. Spawners can be placed in unclaimed Wilderness and your own clan’s claims. Each placed spawner shows its creature model and a count label. Shift-right-click a placed spawner while holding matching spawners to combine the held stack, up to 64 per cage; excess stays in hand. Pickaxes return the full combined amount. Each spawn produces one creature. More combined spawners shorten the delay: 30 seconds for one, 15 seconds for two and 7.5 seconds for four, with the same shared nearby cap of six.'
     answer: Brown Jawas on Tatooine sell components. Their advanced finds vary, but each Jawa keeps its stock. At Batuu, seven
       titled gray Jawa shops sell ordinary supplies. Choose Sell Goods to sell approved salvage.
   koth:

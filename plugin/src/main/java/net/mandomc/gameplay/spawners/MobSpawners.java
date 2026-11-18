@@ -64,7 +64,7 @@ public final class MobSpawners implements Listener, AutoCloseable {
         for(var world:Bukkit.getWorlds()){
             cleanStale(world.getEntities());for(var chunk:world.getLoadedChunks())load(chunk);
         }
-        task=Bukkit.getScheduler().runTaskTimer(plugin,this::tick,20,20);
+        task=Bukkit.getScheduler().runTaskTimer(plugin,this::tick,1,1);
         rotation=Bukkit.getScheduler().runTaskTimer(plugin,()->previews.values().forEach(p->p.model.rotate((Bukkit.getCurrentTick()*1.5f)%360)),2,2);
     }
     private static boolean known(String id) {return id!=null && TYPES.containsKey(id);}
@@ -77,11 +77,14 @@ public final class MobSpawners implements Listener, AutoCloseable {
         return block.getState() instanceof CreatureSpawner spawner
                 ?spawner.getPersistentDataContainer().get(TYPE,PersistentDataType.STRING):null;
     }
+    private int delayTicks(int count) {
+        return (interval*20+count-1)/count;
+    }
     private void load(Chunk chunk) {
         for(var state:chunk.getTileEntities())if(state instanceof CreatureSpawner spawner
                 && known(spawner.getPersistentDataContainer().get(TYPE,PersistentDataType.STRING)))
         {
-            hidePig(spawner);sites.put(Site.of(state.getBlock()),clock+interval);
+            hidePig(spawner);sites.put(Site.of(state.getBlock()),clock+delayTicks(count(spawner)));
         }
     }
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
@@ -98,7 +101,7 @@ public final class MobSpawners implements Listener, AutoCloseable {
         spawner.getPersistentDataContainer().set(TYPE,PersistentDataType.STRING,id);
         spawner.getPersistentDataContainer().set(COUNT,PersistentDataType.INTEGER,1);
         spawner.setSpawnedType(null);spawner.setDelay(32767);spawner.update();
-        sites.put(Site.of(e.getBlock()),clock+interval);
+        sites.put(Site.of(e.getBlock()),clock+delayTicks(1));
     }
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void breakTool(BlockBreakEvent e) {
@@ -151,7 +154,9 @@ public final class MobSpawners implements Listener, AutoCloseable {
             if(!state.update())return;
             if(player.getGameMode()!=GameMode.CREATIVE){item.setAmount(item.getAmount()-amount);player.getInventory().setItemInMainHand(item);}
             clans.land().touch(net.mandomc.gameplay.clans.LandRestoration.chunk(block));
-            preview(Site.of(block),block,id);
+            var site=Site.of(block);
+            sites.computeIfPresent(site,(ignored,due)->Math.min(due,clock+delayTicks(count(state))));
+            preview(site,block,id);
         });
     }
     @EventHandler public void loaded(ChunkLoadEvent e) {load(e.getChunk());}
@@ -205,6 +210,8 @@ public final class MobSpawners implements Listener, AutoCloseable {
     private void tick() {
         clock++;
         for(var entry:List.copyOf(sites.entrySet())) {
+            // Block/preview refresh stays once per second; only due cages need work between refreshes.
+            if(clock<entry.getValue()&&clock%20!=0)continue;
             var site=entry.getKey();var world=Bukkit.getWorld(site.world);
             if(world==null || !world.isChunkLoaded(site.x>>4,site.z>>4)) {sites.remove(site);removePreview(site);continue;}
             var block=world.getBlockAt(site.x,site.y,site.z);String id=type(block);
@@ -212,7 +219,7 @@ public final class MobSpawners implements Listener, AutoCloseable {
             if(block.getState() instanceof CreatureSpawner state)hidePig(state);
             preview(site,block,id);
             if(clock<entry.getValue())continue;
-            sites.put(site,clock+interval);
+            sites.put(site,clock+delayTicks(count((CreatureSpawner)block.getState())));
             if(block.getState() instanceof CreatureSpawner nativeSpawner){nativeSpawner.setDelay(32767);nativeSpawner.update();}
             var at=block.getLocation().add(.5,.5,.5);
             if(!plugin.territories().edits(at) || world.getPlayers().stream().noneMatch(p->!p.isDead()
@@ -220,26 +227,25 @@ public final class MobSpawners implements Listener, AutoCloseable {
                     && p.getLocation().distanceSquared(at)<=range*range))continue;
             long nearby=world.getNearbyEntities(at,range,range,range).stream().filter(LivingEntity.class::isInstance)
                     .filter(e->TYPES.get(id).equals(mobs.type(e))).count();
-            int budget=Math.min(count((CreatureSpawner)block.getState()),Math.max(0,cap-(int)nearby));
-            for(int remaining=budget;remaining>0;remaining--){
-                for(int attempt=0;attempt<12;attempt++) {
-                    var random=java.util.concurrent.ThreadLocalRandom.current();
-                    var target=at.clone().add(random.nextInt(-4,5),random.nextInt(-1,2),random.nextInt(-4,5));
-                    var floor=target.getBlock().getRelative(0,-1,0);
-                    boolean clear=true;
-                    // The largest shop creature is a Bantha. Require a full 3×3×3 free volume for all types.
-                    for(int x=-1;x<=1;x++)for(int y=0;y<3;y++)for(int z=-1;z<=1;z++) {
-                        var b=target.getBlock().getRelative(x,y,z);
-                        if(!b.isPassable() || b.isLiquid() || !plugin.territories().edits(b.getLocation())
-                                || !world.getWorldBorder().isInside(b.getLocation()))clear=false;
-                    }
-                    if(!clear || !floor.getType().isSolid() || floor.getType()==Material.MAGMA_BLOCK
-                            || !world.getNearbyEntities(target,1.5,1.5,1.5).stream().noneMatch(LivingEntity.class::isInstance))continue;
-                    EntityType base=switch(id){case "massiff_spawner"->EntityType.ZOMBIE;case "jawa_spawner"->EntityType.PIG;default->EntityType.HORSE;};
-                    var mob=plugin.territories().spawnSpawner(base,target,()->mobs.spawn(TYPES.get(id),target,1));
-                    if(mob!=null && mob.isValid() && !mob.isDead() && mob instanceof Mob nativeMob)nativeMob.setRemoveWhenFarAway(true);
-                    break;
+            if(nearby>=cap)continue;
+            // One creature per due time. Stacking changes the delay, never the batch size.
+            for(int attempt=0;attempt<12;attempt++) {
+                var random=java.util.concurrent.ThreadLocalRandom.current();
+                var target=at.clone().add(random.nextInt(-4,5),random.nextInt(-1,2),random.nextInt(-4,5));
+                var floor=target.getBlock().getRelative(0,-1,0);
+                boolean clear=true;
+                // The largest shop creature is a Bantha. Require a full 3×3×3 free volume for all types.
+                for(int x=-1;x<=1;x++)for(int y=0;y<3;y++)for(int z=-1;z<=1;z++) {
+                    var b=target.getBlock().getRelative(x,y,z);
+                    if(!b.isPassable() || b.isLiquid() || !plugin.territories().edits(b.getLocation())
+                            || !world.getWorldBorder().isInside(b.getLocation()))clear=false;
                 }
+                if(!clear || !floor.getType().isSolid() || floor.getType()==Material.MAGMA_BLOCK
+                        || !world.getNearbyEntities(target,1.5,1.5,1.5).stream().noneMatch(LivingEntity.class::isInstance))continue;
+                EntityType base=switch(id){case "massiff_spawner"->EntityType.ZOMBIE;case "jawa_spawner"->EntityType.PIG;default->EntityType.HORSE;};
+                var mob=plugin.territories().spawnSpawner(base,target,()->mobs.spawn(TYPES.get(id),target,1));
+                if(mob!=null && mob.isValid() && !mob.isDead() && mob instanceof Mob nativeMob)nativeMob.setRemoveWhenFarAway(true);
+                break;
             }
         }
     }

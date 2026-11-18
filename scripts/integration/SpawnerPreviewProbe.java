@@ -59,7 +59,7 @@ public final class SpawnerPreviewProbe extends JavaPlugin {
         legacyState.getPersistentDataContainer().set(MobSpawners.TYPE,PersistentDataType.STRING,"massiff_spawner");legacyState.setSpawnedType(EntityType.PIG);legacyState.update();
         var load=MobSpawners.class.getDeclaredMethod("load",Chunk.class);load.setAccessible(true);load.invoke(spawners,legacyBlock.getChunk());
         check(((CreatureSpawner)legacyBlock.getState()).getSpawnedType()==null,"Existing pig block migrates on load");
-        check(SpawnerModel.available("massiff"),"Massiff blueprint ready");invoke(spawners,"tick");later(5,this::verifyPreviews);
+        check(SpawnerModel.available("massiff"),"Massiff blueprint ready");invoke(spawners,"tick");later(25,this::verifyPreviews);
     }
     private void verifyPreviews()throws Exception{
         var previews=(Map<?,?>)field(spawners,"previews");check(previews.size()>=5,"One visual and hologram per nearby spawner: previews="+previews.size()+" sites="+field(spawners,"sites")+" player="+player.getLocation()+" online="+player.isOnline()+" worldPlayers="+world.getPlayers().size());
@@ -80,7 +80,7 @@ public final class SpawnerPreviewProbe extends JavaPlugin {
         var chunk=world.getBlockAt(-206,200,-204).getChunk();
         spawners.unloaded(new org.bukkit.event.world.ChunkUnloadEvent(chunk,true));
         check(previews.size()<count,"Chunk unload removes owned previews");
-        var load=MobSpawners.class.getDeclaredMethod("load",Chunk.class);load.setAccessible(true);load.invoke(spawners,chunk);invoke(spawners,"tick");
+        var load=MobSpawners.class.getDeclaredMethod("load",Chunk.class);load.setAccessible(true);load.invoke(spawners,chunk);for(int i=0;i<20;i++)invoke(spawners,"tick");
         check(previews.size()==count,"Chunk reload restores one preview per spawner");
         var first=world.getBlockAt(-206,200,-204);int before=previews.size();var e=new BlockBreakEvent(first,player);player.getInventory().setItemInMainHand(new ItemStack(Material.STONE_PICKAXE));Bukkit.getPluginManager().callEvent(e);check(!e.isCancelled(),"Spawner pickaxe recovery remains permitted");first.setType(Material.AIR,false);
         check(previews.size()==before-1,"Breaking spawner immediately removes its visual and label");
