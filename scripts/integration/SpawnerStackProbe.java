@@ -60,10 +60,20 @@ public final class SpawnerStackProbe extends JavaPlugin {
             for(int y=200;y<207;y++)world.getBlockAt(x,y,z).setType(Material.AIR,false);
         }
         for(int i=0;i<4;i++){
+            var old=mando.items().create(ids.get(i));old.setAmount(7);var meta=old.getItemMeta();
+            meta.displayName(net.kyori.adventure.text.Component.text("Named cage"));
+            meta.lore(List.of(net.kyori.adventure.text.Component.text("Player note"),net.kyori.adventure.text.Component.text("Place in Wilderness. Break with a pickaxe to recover.")));old.setItemMeta(meta);
+            check(net.mandomc.gameplay.items.ItemPresentationRefresh.refresh(mando.items(),old),"Legacy controls migrate "+ids.get(i));
+            var lines=old.getItemMeta().lore().stream().map(PlainTextComponentSerializer.plainText()::serialize).toList();
+            check(old.getAmount()==7&&PlainTextComponentSerializer.plainText().serialize(old.getItemMeta().displayName()).equals("Named cage")
+                    &&lines.contains("Player note")&&lines.contains("Place in unclaimed Wilderness")&&lines.contains("Shift-right-click to combine matching spawners."),"Migration preserves notes/name/count and complete controls "+ids.get(i));
+            check(!net.mandomc.gameplay.items.ItemPresentationRefresh.refresh(mando.items(),old),"Control migration idempotent "+ids.get(i));
+            var recent=mando.items().create(ids.get(i));var recentMeta=recent.getItemMeta();var recentLore=new ArrayList<>(recentMeta.lore());recentLore.removeLast();recentMeta.lore(recentLore);recent.setItemMeta(recentMeta);
+            check(net.mandomc.gameplay.items.ItemPresentationRefresh.refresh(mando.items(),recent),"Previous release receives combine hint "+ids.get(i));
             var b=block(i);var before=b.getState();b.setType(Material.SPAWNER,false);
             var event=new BlockPlaceEvent(b,before,b.getRelative(0,-1,0),mando.items().create(ids.get(i)),player,true,EquipmentSlot.HAND);
             Bukkit.getPluginManager().callEvent(event);check(!event.isCancelled()&&count(i)==1,"New cage starts at one "+ids.get(i));
-            var old=(CreatureSpawner)b.getState();old.getPersistentDataContainer().remove(MobSpawners.COUNT);old.update();check(count(i)==1,"Old cage defaults to one "+ids.get(i));
+            var oldState=(CreatureSpawner)b.getState();oldState.getPersistentDataContainer().remove(MobSpawners.COUNT);oldState.update();check(count(i)==1,"Old cage defaults to one "+ids.get(i));
         }
         tick();combineType(0);
     }

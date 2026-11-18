@@ -2,7 +2,7 @@
 
 ## Spawner combining in verification (2026-11-17)
 
-Shift-right-click with matching spawners combines the held stack into a placed cage, up to 64, preserving excess in hand. Holograms use the persistent count; pickup returns the full amount. Each cycle attempts one creature per combined spawner while retaining the shared nearby cap. Transfers defer until interaction protection finishes and recheck clan permission, reach and held items. Native stacking/recovery/restart verification is in progress; the Java build passes. Current development has a newer workbench/menu/lore correction that must remain intact. Next action: finish native stack verification and deploy the tested scope while preserving the newer dev release.
+Shift-right-click with matching spawners combines the held stack into a placed cage, up to 64, preserving excess in hand. Holograms use the persistent count; pickup returns the full amount. Each cycle attempts one creature per combined spawner while retaining the shared nearby cap. Transfers defer until interaction protection finishes and recheck clan permission, reach and held items. The combined Java build passes 383 tests and all 95 tooling checks pass. An initial native run passes 39 stacking, permission, overflow, spawn-cap and full-recovery assertions; expanded tooltip migration and restart checks remain. The newer deployed workbench/menu/lore correction is included with no unrelated class changes. Next action: finish the native migration/restart checks and deploy the tested scope to development.
 
 ## Spawner appearance follow-up deployed to development (2026-11-17)
 
