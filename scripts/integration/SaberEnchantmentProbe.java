@@ -64,7 +64,7 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         recipeMigration(); presentations(); equipmentLore(); rewardsAndMigration(); adminEnchant();
         mando.forge().open(player,station); var top = player.getOpenInventory().getTopInventory();
         check(top.getItem(10).getType()==Material.CRAFTING_TABLE && top.getItem(13).getType()==Material.STONECUTTER && top.getItem(16).getType()==Material.ENCHANTED_BOOK,"Three workbench functions");
-        check(player.getOpenInventory().getTitle().contains("Saber Workbench"),"Workbench title");
+        checkTitle("Saber Workbench");
         navigation(0);
     }
     private void navigation(int index) throws Exception {
@@ -81,19 +81,25 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
             check(new ItemStack(Material.DIAMOND,3).equals(player.getInventory().getItem(8)),"Staff navigation preserves saved survival inventory");
             table();later(2,this::tableRolls);return;
         }
-        int[] slots={10,13,16};String[] labels={"Craft","Style","Enchant"};
+        int[] slots={10,13,16};String[] labels={"Saber Crafting","Saber Styles","Saber Enchanting"};
         org.bukkit.event.inventory.InventoryType[] types={org.bukkit.event.inventory.InventoryType.WORKBENCH,org.bukkit.event.inventory.InventoryType.STONECUTTER,org.bukkit.event.inventory.InventoryType.ANVIL};
         int choice=index%3;mando.forge().open(player,station);
         click(slots[choice],"PICKUP");
         later(2,()->{
             var view=player.getOpenInventory();
             check(view.getType()==types[choice],"Real menu-button packet opens "+labels[choice]+" in "+player.getGameMode());
-            check(view.getTitle().contains("Saber Workbench")&&view.getTitle().contains(labels[choice]),"Native menu receives title before opening: "+labels[choice]);
+            checkTitle(labels[choice]);
             var session=mando.forge().getClass().getDeclaredMethod("session",InventoryView.class);session.setAccessible(true);
             check(session.invoke(mando.forge(),view)!=null,"Opened native menu keeps workstation validation: "+labels[choice]);
             check(empty(player.getItemOnCursor()),"Navigation never extracts a menu icon");
             player.closeInventory();navigation(index+1);
         });
+    }
+    private void checkTitle(String expected) {
+        var title=player.getOpenInventory().title();
+        check(plain(title).equals(expected),"Compact window title: "+expected);
+        check(net.kyori.adventure.text.format.NamedTextColor.DARK_GRAY.equals(title.color()),"Readable dark-gray window title: "+expected);
+        check(net.mandomc.gameplay.tutorial.BookPageLayout.width(expected,false)<=124,"Window title fits native workstation: "+expected);
     }
     private void recipeMigration() throws Exception {
         var old=new NamespacedKey("mandomc","craft_saber_forge");var current=new NamespacedKey("mandomc","craft_saber_workbench");
@@ -235,9 +241,92 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
                 check(result.getEnchantmentLevel(recovery)==3&&result.getEnchantmentLevel(endurance)==3&&result.getEnchantmentLevel(Enchantment.SHARPNESS)==5,"Styles preserve all paid enchantments");
                 check(plain(result.getItemMeta().displayName()).equals("My Saber"),"Styles preserve renames");
                 click(1,"PICKUP");check("darth_maul_apprentice_lightsaber".equals(mando.items().identify(player.getItemOnCursor())),"Native style pickup returns selected identity");
-                check(empty(view.getTopInventory().getInputItem()),"Style consumes one input");player.setItemOnCursor(null);player.closeInventory();recipes();
+                check(empty(view.getTopInventory().getInputItem()),"Style consumes one input");player.setItemOnCursor(null);player.closeInventory();styleRefreshStart();
             });
         });
+    }
+    private Object clientRecipes;
+    private Material clientInput=Material.AIR;
+    private List<String> clientChoices=List.of();
+    private List<String> recipeIds(Object options) throws Exception {
+        var out=new ArrayList<String>();
+        for(var entry:(List<?>)options.getClass().getMethod("entries").invoke(options)) {
+            var recipe=entry.getClass().getMethod("recipe").invoke(entry);
+            var holder=(Optional<?>)recipe.getClass().getMethod("recipe").invoke(recipe);
+            if(holder.isPresent()) {
+                var key=holder.get().getClass().getMethod("id").invoke(holder.get());
+                out.add(key.getClass().getMethod("identifier").invoke(key).toString());
+            }
+        }
+        return out;
+    }
+    private void clientSlot(Object stack) throws Exception {
+        var nativeItem=Class.forName("net.minecraft.world.item.ItemStack");
+        var bukkit=(ItemStack)Class.forName("org.bukkit.craftbukkit.inventory.CraftItemStack").getMethod("asBukkitCopy",nativeItem).invoke(null,stack);
+        // Pinned 26.1.2 client StonecutterMenu.slotsChanged caches by material, not components.
+        if(clientInput==bukkit.getType())return;
+        clientInput=bukkit.getType();
+        clientChoices=recipeIds(clientRecipes.getClass().getMethod("selectByInput",nativeItem).invoke(clientRecipes,stack));
+    }
+    @SuppressWarnings("unchecked") private void replayStylePackets() throws Exception {
+        var f=NativeProbePlayers.class.getDeclaredField("channels");f.setAccessible(true);
+        var channel=((Map<UUID,io.netty.channel.embedded.EmbeddedChannel>)f.get(actors)).get(player.getUniqueId());channel.runPendingTasks();
+        int id=menu().getClass().getField("containerId").getInt(menu());Object packet;
+        while((packet=channel.readOutbound())!=null) {
+            var type=packet.getClass();
+            switch(type.getSimpleName()) {
+                case "ClientboundUpdateRecipesPacket" -> clientRecipes=type.getMethod("stonecutterRecipes").invoke(packet);
+                case "ClientboundContainerSetSlotPacket" -> {
+                    if((int)type.getMethod("getContainerId").invoke(packet)==id&&(int)type.getMethod("getSlot").invoke(packet)==0)
+                        clientSlot(type.getMethod("getItem").invoke(packet));
+                }
+                case "ClientboundContainerSetContentPacket" -> {
+                    if((int)type.getMethod("containerId").invoke(packet)==id)clientSlot(((List<?>)type.getMethod("items").invoke(packet)).getFirst());
+                }
+            }
+        }
+    }
+    private void styleRefreshStart() throws Exception {
+        actors.drain(player);
+        var server=Bukkit.getServer().getClass().getMethod("getServer").invoke(Bukkit.getServer());
+        var manager=server.getClass().getMethod("getRecipeManager").invoke(server);
+        clientRecipes=manager.getClass().getMethod("stonecutterRecipes").invoke(manager);
+        mando.forge().function(player,station,13);
+        later(2,()->{replayStylePackets();check(clientChoices.isEmpty(),"Empty Style screen has no options");styleRefresh(0);});
+    }
+    private void styleRefresh(int index) throws Exception {
+        String[] ids={"windu","vader","quigon","windu"};
+        var view=(StonecutterView)player.getOpenInventory();
+        var input=mando.items().create(ids[index]);input.addUnsafeEnchantment(recovery,3);
+        input.editMeta(meta->meta.displayName(Component.text("Keep my name")));
+        view.getTopInventory().setInputItem(input);
+        later(3,()->{
+            replayStylePackets();var expected=view.getRecipes().stream().map(r->r.getKey().toString()).toList();
+            check(!expected.isEmpty(),"Native style options exist for "+ids[index]);
+            check(clientChoices.equals(expected),"Client refreshes matching ordered styles for "+ids[index]+": "+clientChoices);
+            check(view.getTopInventory().getInputItem().equals(input),"Client refresh preserves authoritative input");
+            if(ids[index].equals("windu")) {
+                check(new HashSet<>(expected).equals(Set.of("mandomc:refinish_revan_redeemed_lightsaber","mandomc:refinish_vernestra_rwoh_lightsaber")),"Both purple Mace styles are available");
+                maceChoice(view,expected,0,()->styleRefreshNext(index,ids.length));return;
+            }
+            styleRefreshNext(index,ids.length);
+        });
+    }
+    private void maceChoice(StonecutterView view,List<String> expected,int choice,Work next) throws Exception {
+        check(button(choice),"Mace style selection "+choice);
+        later(2,()->{
+            var result=view.getTopInventory().getResult();
+            check(result!=null&&expected.get(choice).equals("mandomc:refinish_"+mando.items().identify(result)),"Mace preview agrees with client index "+choice);
+            check(result.getEnchantmentLevel(recovery)==3&&plain(result.getItemMeta().displayName()).equals("Keep my name"),"Mace preview preserves enchant and rename");
+            if(choice+1<expected.size())maceChoice(view,expected,choice+1,next);else next.run();
+        });
+    }
+    private void styleRefreshNext(int index,int total) throws Exception {
+        if(index+1<total){styleRefresh(index+1);return;}
+        var view=(StonecutterView)player.getOpenInventory();var expected=view.getTopInventory().getResult().clone();
+        click(1,"PICKUP");check(expected.equals(player.getItemOnCursor()),"Mace native pickup returns the chosen purple style with all metadata");
+        check(empty(view.getTopInventory().getInputItem()),"Mace style pickup consumes exactly one input");
+        player.setItemOnCursor(null);player.closeInventory();recipes();
     }
     private void recipes() {
         for(String id:List.of("vader","darth_maul_apprentice_lightsaber")) {

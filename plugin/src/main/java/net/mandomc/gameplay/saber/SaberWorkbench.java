@@ -93,7 +93,7 @@ public final class SaberWorkbench implements Listener, AutoCloseable {
         };
         if (builder == null) return;
         // Native workstations must receive their title at creation; changing it afterward can throw.
-        var title = text("title").append(Component.text(" · ")).append(text(slot == 10 ? "craft" : slot == 13 ? "style" : "enchant"));
+        var title = text(slot == 10 ? "craft-title" : slot == 13 ? "style-title" : "enchant-title");
         InventoryView view = builder.location(station.getLocation()).checkReachable(false).title(title).build(player);
         var session = new Session(station.getLocation(), view.getTopInventory());
         // InventoryOpenEvent must recognize this transient workbench view before staff isolation checks run.
