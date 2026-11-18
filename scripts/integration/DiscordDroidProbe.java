@@ -9,12 +9,18 @@ import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.plugin.java.JavaPlugin;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.mandomc.integrations.discord.DiscordMessages;
 
 /** Disposable copied-spawn check; never installed in shared development or production. */
 public final class DiscordDroidProbe extends JavaPlugin {
     private NativeProbePlayers actors;
     private int checks;
     private void check(boolean value, String why) { if (!value) throw new IllegalStateException(why); checks++; }
+    private boolean click(Component value, ClickEvent expected) {
+        return expected.equals(value.clickEvent()) || value.children().stream().anyMatch(child -> click(child,expected));
+    }
     @Override public void onEnable() { Bukkit.getScheduler().runTaskLater(this, this::run, 160); }
     private void run() {
         try {
@@ -42,10 +48,17 @@ public final class DiscordDroidProbe extends JavaPlugin {
             Bukkit.getPluginManager().callEvent(new PlayerInteractEntityEvent(player,body,EquipmentSlot.HAND));
             String clicked = actors.drain(player).stream().map(PlainTextComponentSerializer.plainText()::serialize).reduce("",(a,b)->a+b);
             check(clicked.contains("Requesting your Discord link code"), "Real right-click invokes existing private proof flow");
+            var messages = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.File(mando.getDataFolder(),"language/discord.yml"));
+            player.sendMessage(DiscordMessages.render(messages,"code","ABCD2345"));
+            var packets = actors.drain(player);
+            check(packets.stream().anyMatch(value -> click(value,ClickEvent.openUrl(DiscordMessages.DEFAULT_INVITE))), "Client packet retains preferred invite open-url");
+            check(packets.stream().anyMatch(value -> click(value,ClickEvent.copyToClipboard("ABCD2345"))), "Client packet copies short code");
+            check(packets.stream().anyMatch(value -> click(value,ClickEvent.copyToClipboard("/link code:ABCD2345"))), "Client packet copies complete command");
+            check(packets.stream().noneMatch(value -> PlainTextComponentSerializer.plainText().serialize(value).contains("production")), "No deployment labels in player instructions");
             for (String question : List.of("How do I join the discord?", "How do I link my account?", "How do I get the linking reward?", "How do I open a support ticket?")) {
                 mando.droid().ask(player, question);
                 String answer = actors.drain(player).stream().map(PlainTextComponentSerializer.plainText()::serialize).reduce("",(a,b)->a+b);
-                check(answer.contains("C0-M5") && answer.contains("5,000") && answer.contains("discord.gg/3VrzUmNp6U"), "Exact private Discord guidance: " + question);
+                check(answer.contains("C0-M5") && answer.contains("5,000") && answer.contains("discord.gg/bruuZCG5Pk") && !answer.contains("production"), "Exact private Discord guidance: " + question);
             }
             Files.writeString(Path.of(System.getProperty("probe.result")), "PASS: " + checks + " native droid, spacing, transparency, skin, click and M4-ND answer checks\n");
             getLogger().info("DISCORD_DROID_PROBE_PASSED: " + checks);

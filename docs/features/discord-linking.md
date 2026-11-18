@@ -6,14 +6,14 @@ Branch: bilal/discord-bot-sync
 C0-M5 is the silver protocol droid near M4-ND at Batuu spawn and the existing Discord bot. Right-click C0-M5 or run `/discord` in Minecraft and use
 the private code with `/link code:<code>` in the MandoMC Discord server. Successful
 linking associates one Minecraft account with one Discord account. `/link` checks
-whether the account is already linked. Join at https://discord.gg/3VrzUmNp6U. A verified link rewards 5,000 credits once per Minecraft UUID on production after that account has joined there. CreditLedger saves the balance and reward receipt atomically; retries, relinking checks and restarts cannot pay twice. Development does not pay the production reward.
+whether the account is already linked. Join at https://discord.gg/bruuZCG5Pk. A verified link rewards 5,000 credits once per Minecraft UUID on production after that account has joined there. CreditLedger saves the balance and reward receipt atomically; retries, relinking checks and restarts cannot pay twice. Development does not pay the production reward.
 
 Discord `/players` shows the latest online count; `/baltop` shows the native top ten balances. Both default to production and offer a development server option. Both become unavailable when the server's snapshot is stale. Players
 open support tickets with `/ticket` or a ticket panel, then talk to staff in a
-private ticket channel. The production Minecraft-hosted Gateway companion relays ordinary ticket DMs, assigns the default Mando Citizen role on joins and displays Online while production runs. Cloudflare interactions can keep working while the Gateway appears Offline.
+private ticket channel. Channel names use short durable numbers, such as `support-001` or `bug-report-002`, instead of long account identifiers. The production Minecraft-hosted Gateway companion relays ordinary ticket DMs, assigns the default Mando Citizen role on joins and displays Online while production runs. Cloudflare interactions can keep working while the Gateway appears Offline.
 
 ## Rules
-Codes expire after ten minutes and work once. Requesting another code invalidates
+New codes use eight easy-to-read characters. Click the code in Minecraft chat to copy it, or click Copy command for the complete Discord `/link` command. The Discord-blue invite opens https://discord.gg/bruuZCG5Pk. Codes expire after ten minutes and work once. Requesting another code invalidates
 the previous code; requests are limited to one per thirty seconds. A Minecraft UUID
 and Discord account can each have only one link. Account names alone cannot link
 accounts. Staff handle deliberate unlinking or migration of existing verified links.

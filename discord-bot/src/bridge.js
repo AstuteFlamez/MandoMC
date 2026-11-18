@@ -10,7 +10,8 @@ export async function issueCode(env, body) {
   if (!uuidPattern.test(body.uuid) || !/^[A-Za-z0-9_]{1,16}$/.test(body.username)) throw new UserError('Invalid account');
   const existing = await env.DB.prepare('SELECT discord_id FROM links WHERE uuid = ?').bind(body.uuid).first();
   if (existing) return {linked: true};
-  const code = [...crypto.getRandomValues(new Uint8Array(10))].map(n => n.toString(16).padStart(2, '0')).join('').toUpperCase();
+  const alphabet = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+  const code = [...crypto.getRandomValues(new Uint8Array(8))].map(n => alphabet[n & 31]).join('');
   await env.DB.batch([
     env.DB.prepare('DELETE FROM codes WHERE expires < ?').bind(nowSeconds()),
     env.DB.prepare('INSERT INTO codes(uuid, username, code_hash, expires) VALUES(?,?,?,?) ON CONFLICT(uuid) DO UPDATE SET username=excluded.username,code_hash=excluded.code_hash,expires=excluded.expires')
@@ -29,7 +30,9 @@ export async function linkAccount(env, user, code) {
     .bind(user, window).first();
   if (attempt.count > 5) throw new UserError('Too many attempts. Try again in a minute.');
   code = code.toUpperCase().trim();
-  if (!/^[A-F0-9]{20}$/.test(code)) throw new UserError('Invalid or expired code.');
+  if (code.replaceAll('-', '').length === 8) code = code.replaceAll('-', '').replaceAll('O', '0').replace(/[IL]/g, '1');
+  // Previously issued codes remain valid for their original ten-minute lifetime.
+  if (!/^(?:[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{8}|[A-F0-9]{20})$/.test(code)) throw new UserError('Invalid or expired code.');
   const hash = await digest(code);
   let result;
   try {
@@ -41,7 +44,7 @@ export async function linkAccount(env, user, code) {
   } catch { throw new UserError('This Minecraft or Discord account is already linked.'); }
   if (result[0].meta.changes !== 1) throw new UserError('Invalid or expired code.');
   // Roles are applied by the retrying bridge, so a transient Discord failure cannot consume a successful link.
-  return 'Account linked. Your roles will synchronize shortly. C0-M5 will credit your one-time 5,000-credit reward on the production server after your account has joined there.';
+  return 'Account linked. Your roles will synchronize shortly. C0-M5 will credit your one-time 5,000-credit reward after your Minecraft account has joined the server.';
 }
 
 async function syncPlayer(env, player, mapping, server) {

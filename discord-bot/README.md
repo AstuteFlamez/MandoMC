@@ -9,7 +9,7 @@ for Cloudflare Workers/D1 with a separate optional Minecraft-hosted Gateway plug
 The Worker serves `/link`, `/baltop`, `/players`, `/ticket`, `/ticket-panel`, ticket
 select/claim/close controls and the authenticated Minecraft bridge. Tickets are private
 Discord channels that their owner and configured staff can use directly. Links,
-single-use code hashes, sync intent and ticket ownership survive restarts in D1.
+single-use eight-character code hashes, sync intent and ticket ownership survive restarts in D1.
 Closing a ticket exports actual channel history to the log channel before deleting it.
 `/baltop` reads the native server’s top-ten snapshot. Verified linking grants 5,000 production credits once through CreditLedger’s atomic reward receipt; the Discord service cannot issue arbitrary balance changes.
 
@@ -221,3 +221,5 @@ and whether the log transcript exists. A ticket with 1,000+ messages is retained
 for manual export instead of being deleted with a truncated transcript.
 Cloudflare D1/SQLite transactions protect local identity and reservations; Discord
 and D1 are separate systems, so their mutations are not a distributed transaction.
+
+New codes contain 40 bits from the Web Crypto RNG using an unambiguous Base32 alphabet, expire after ten minutes, and retain the five-attempts-per-minute Discord-user limit. Existing 20-character codes remain redeemable until their original expiry. Minecraft chat carries explicit OPEN_URL and COPY_TO_CLIPBOARD events for the preferred invite, raw code and complete command. Player-facing labels call the public server MandoMC.

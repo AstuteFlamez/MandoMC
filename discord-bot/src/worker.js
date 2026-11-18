@@ -6,8 +6,8 @@ import {gatewayEvent} from './gateway.js';
 const json = (value, status = 200) => Response.json(value, {status, headers: {'Cache-Control': 'no-store'}});
 export const commands = [
   {name: 'link', description: 'Link or check your Minecraft account', options: [{name: 'code', description: 'The code from /discord in Minecraft', type: 3, required: false}]},
-  {name: 'baltop', description: 'View the richest players on MandoMC', options: [{type: 3, name: 'server', description: 'Defaults to production', choices: [{name: 'Production', value: 'production'}, {name: 'Development', value: 'development'}]}]},
-  {name: 'players', description: 'View the online player count', options: [{type: 3, name: 'server', description: 'Defaults to production', choices: [{name: 'Production', value: 'production'}, {name: 'Development', value: 'development'}]}]},
+  {name: 'baltop', description: 'View the richest players on MandoMC', options: [{type: 3, name: 'server', description: 'Defaults to MandoMC', choices: [{name: 'MandoMC', value: 'production'}, {name: 'Development', value: 'development'}]}]},
+  {name: 'players', description: 'View the online player count', options: [{type: 3, name: 'server', description: 'Defaults to MandoMC', choices: [{name: 'MandoMC', value: 'production'}, {name: 'Development', value: 'development'}]}]},
   {name: 'ticket', description: 'Open a support ticket'},
   {name: 'ticket-panel', description: 'Post the support ticket panel', default_member_permissions: '32'}
 ].map(command => ({...command, type: 1})); // Guild scope is set by the registration URL.
@@ -16,6 +16,7 @@ async function handleInteraction(env, interaction) {
   const user = interaction.member.user.id;
   const server = interaction.data.options?.find(option => option.name === 'server')?.value || 'production';
   if (!['production', 'development'].includes(server)) throw new UserError('Unknown server.');
+  const serverName = server === 'production' ? 'MandoMC' : 'Development';
   if (interaction.type === 3) {
     if (interaction.data.custom_id === 'ticket_select') {
       const ticket = await openTicket(env, user, interaction.data.values?.[0]);
@@ -28,12 +29,12 @@ async function handleInteraction(env, interaction) {
     case 'link': return {content: await linkAccount(env, user, interaction.data.options?.find(o => o.name === 'code')?.value)};
     case 'players': {
       const data = await snapshot(env, server);
-      return {content: data.stale ? `${server}: the server is offline or its status has not updated recently.` : `${server}: ${data.online} ${data.online === 1 ? 'player' : 'players'} online (${data.maximum} slots).`};
+      return {content: data.stale ? `${serverName}: the server is offline or its status has not updated recently.` : `${serverName}: ${data.online} ${data.online === 1 ? 'player' : 'players'} online (${data.maximum} slots).`};
     }
     case 'baltop': {
       const data = await snapshot(env, server);
       if (data.stale) throw new UserError('Economy data is unavailable until the server reconnects.');
-      return {embeds: [{title: `MandoMC Baltop — ${server}`, color: 0xFFD700, description: data.baltop.map((row, i) =>
+      return {embeds: [{title: `MandoMC Baltop — ${serverName}`, color: 0xFFD700, description: data.baltop.map((row, i) =>
         `${i + 1}. **${row.username.replaceAll('_', '\\_')}** — ${(row.cents / 100).toLocaleString('en-US', {minimumFractionDigits: 2})} credits`).join('\n') || 'No balance data yet.',
         footer: {text: 'MandoMC Economy • updated every 30 seconds'}}]};
     }

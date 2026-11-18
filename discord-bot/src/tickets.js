@@ -2,6 +2,16 @@ import {discord, message, notify} from './discord.js';
 import {idPattern, UserError} from './bridge.js';
 
 export const categories = ['Support', 'Bug Report', 'Player Report', 'Staff Application'];
+export function ticketName(category, number) {
+  if (!categories.includes(category) || !Number.isSafeInteger(number) || number < 1) throw new UserError('Invalid ticket number');
+  return `${category.toLowerCase().replaceAll(' ', '-')}-${String(number).padStart(3, '0')}`;
+}
+async function ticketNumber(env, id) {
+  const existing = await env.DB.prepare('SELECT number FROM ticket_numbers WHERE ticket_id=?').bind(id).first();
+  if (existing) return existing.number;
+  const row = await env.DB.prepare('INSERT INTO ticket_numbers(ticket_id) VALUES(?) ON CONFLICT(ticket_id) DO UPDATE SET ticket_id=excluded.ticket_id RETURNING number').bind(id).first();
+  return row.number;
+}
 export const controls = [{type: 1, components: [
   {type: 2, style: 3, label: 'Claim', custom_id: 'claim_ticket'},
   {type: 2, style: 4, label: 'Close', custom_id: 'close_ticket'}
@@ -33,8 +43,9 @@ export async function openTicket(env, user, category = 'Support') {
   let channel;
   try {
     const bot = await discord(env, '/users/@me');
+    const number = await ticketNumber(env, id);
     channel = await discord(env, `/guilds/${env.DISCORD_GUILD_ID}/channels`, 'POST', {
-      name: `ticket-${user}`, type: 0, parent_id: env.TICKET_CATEGORY_ID, topic: user,
+      name: ticketName(category, number), type: 0, parent_id: env.TICKET_CATEGORY_ID, topic: user,
       permission_overwrites: [
         {id: env.DISCORD_GUILD_ID, type: 0, deny: '1024', allow: '0'},
         {id: user, type: 1, allow: '68608', deny: '0'},
@@ -56,13 +67,15 @@ export async function openTicket(env, user, category = 'Support') {
 
 export async function ticketForChannel(env, channelId, adopt = false) {
   let row = await env.DB.prepare("SELECT * FROM tickets WHERE channel_id=? AND status!='closed'").bind(channelId).first();
-  if (row || !adopt) return row;
+  if (row) return {...row, number: await ticketNumber(env, row.id)};
+  if (!adopt) return null;
   const channel = await discord(env, `/channels/${channelId}`);
   // Old bot tickets stored the owner as the channel topic. Category + guild are mandatory.
   if (channel.guild_id !== env.DISCORD_GUILD_ID || channel.parent_id !== env.TICKET_CATEGORY_ID || !idPattern.test(channel.topic || '')) return null;
   await env.DB.prepare("INSERT OR IGNORE INTO tickets(id,discord_id,channel_id,category,status) VALUES(?,?,?,'Support','open')")
     .bind(crypto.randomUUID(), channel.topic, channelId).run();
-  return env.DB.prepare("SELECT * FROM tickets WHERE channel_id=? AND status!='closed'").bind(channelId).first();
+  row = await env.DB.prepare("SELECT * FROM tickets WHERE channel_id=? AND status!='closed'").bind(channelId).first();
+  return row ? {...row, number: await ticketNumber(env,row.id)} : null;
 }
 
 async function transcript(env, row) {

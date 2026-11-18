@@ -8,7 +8,7 @@ test('codes expire, replace earlier codes and are stored only as hashes', async 
   const env = environment();
   const first = await issueCode(env, {uuid, username: 'Mando'});
   const second = await issueCode(env, {uuid, username: 'Mando'});
-  assert.match(second.code, /^[0-9A-F]{20}$/);
+  assert.match(second.code, /^[0123456789ABCDEFGHJKMNPQRSTVWXYZ]{8}$/);
   assert.equal(env.DB.sqlite.prepare('SELECT * FROM codes').get().code_hash, await digest(second.code));
   await assert.rejects(linkAccount(env, ids.user, first.code), /Invalid or expired/);
   env.DB.sqlite.exec('UPDATE codes SET expires=0');
@@ -26,6 +26,14 @@ test('link attempts are throttled per Discord user', async () => {
   const env = environment();
   for (let i = 0; i < 5; i++) await assert.rejects(linkAccount(env, ids.user, 'invalid'), /Invalid or expired/);
   await assert.rejects(linkAccount(env, ids.user, 'invalid'), /Too many/);
+});
+test('short codes accept grouped typing and old issued codes still redeem', async () => {
+  const env = environment();
+  env.DB.sqlite.prepare('INSERT INTO codes VALUES(?,?,?,?)').run(uuid,'Mando',await digest('ABCD0123'),Math.floor(Date.now()/1000)+600);
+  assert.match(await linkAccount(env,ids.user,'abcd-ol23'),/Account linked/);
+  const legacy = environment();
+  legacy.DB.sqlite.prepare('INSERT INTO codes VALUES(?,?,?,?)').run(uuid,'Mando',await digest('ABCDEF0123456789ABCD'),Math.floor(Date.now()/1000)+600);
+  assert.match(await linkAccount(legacy,ids.user,'ABCDEF0123456789ABCD'),/Account linked/);
 });
 test('concurrent code redemption yields exactly one linked owner', async () => {
   const env = environment(); const code = await issueCode(env, {uuid, username: 'Mando'});

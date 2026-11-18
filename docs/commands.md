@@ -2,9 +2,9 @@
 
 ## C0-M5 and Discord account linking
 
-Join https://discord.gg/3VrzUmNp6U. Right-click the silver C0-M5 droid near M4-ND at Batuu spawn, or run `/discord` in Minecraft to get a
+Join https://discord.gg/bruuZCG5Pk. Right-click the silver C0-M5 droid near M4-ND at Batuu spawn, or run `/discord` in Minecraft to get a
 private code, then use `/link code:<code>` in the MandoMC Discord server. The code
-expires after ten minutes. Keep it private. `/link` without a code checks your link.
+has eight characters and expires after ten minutes. Click the code to copy it, or Copy command to copy the full `/link` command. The Discord-blue join link opens the invite. Keep your code private. `/link` without a code checks your link.
 If linking reports that it is unavailable, contact staff; this optional feature
 does not affect travel, credits or ordinary gameplay.
 

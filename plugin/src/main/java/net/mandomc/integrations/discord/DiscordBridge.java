@@ -60,7 +60,7 @@ public final class DiscordBridge implements AutoCloseable {
     }
 
     private void tell(Player player, String key, String code) {
-        player.sendMessage(MiniMessage.miniMessage().deserialize(messages.getString(key), Placeholder.unparsed("code", code)));
+        player.sendMessage(DiscordMessages.render(messages, key, code));
     }
 
     public void code(Player player) {
