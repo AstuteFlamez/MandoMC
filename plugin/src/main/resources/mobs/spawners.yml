@@ -3,5 +3,24 @@ interval-seconds: 30
 activation-range: 16
 nearby-cap: 6
 messages:
-  wilderness: <red>Place mob spawners in Wilderness where creatures can spawn.
+  label: <gold><count>x <mob>
+  wilderness: <red>Place spawners in unclaimed Wilderness or your own clan’s claims.
   pickaxe: <yellow>Break this spawner with a pickaxe to recover it.
+# Scale and vertical placement fit the existing creature meshes inside one cage.
+previews:
+  massiff_spawner:
+    model: massiff
+    scale: 0.28
+    base-height: 0.3425
+  dewback_spawner:
+    model: dewback
+    scale: 0.075
+    base-height: 0.4075
+  bantha_spawner:
+    model: bantha
+    scale: 0.08
+    base-height: 0.385
+  jawa_spawner:
+    model: jawa_brown
+    scale: 0.33
+    base-height: 0.2216
