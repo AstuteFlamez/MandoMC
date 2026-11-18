@@ -189,6 +189,8 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
     }
     private void combat() {
         player.closeInventory();player.getInventory().clear();player.setSneaking(false);player.setRotation(90,0);
+        // Earlier retained fixture probes leave display blocks in this arena; clear the flight corridor.
+        for(int x=-222;x<=-194;x++)for(int y=199;y<=207;y++)for(int z=-210;z<=-189;z++)world.getBlockAt(x,y,z).setType(Material.AIR,false);
         var saber=mando.items().create("vader");saber.addUnsafeEnchantment(Enchantment.SHARPNESS,5);
         saber.addUnsafeEnchantment(endurance,3);saber.addUnsafeEnchantment(recovery,3);
         player.getInventory().setItemInMainHand(saber);Bukkit.getPluginManager().registerEvents(this,this);
@@ -202,9 +204,10 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
             var mob=world.spawn(player.getLocation().add(-2,0,0),Husk.class);victim=mob;mob.setAI(false);mob.setGravity(false);
             mob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(200);mob.getAttribute(Attribute.ARMOR).setBaseValue(0);mob.setHealth(200);player.setFallDistance(0);player.attack(mob);
             check(Math.abs(mob.getHealth()-189)<1e-8,"Native fully charged Sharpness V melee deals eleven; health="+mob.getHealth());
-            mob.setNoDamageTicks(0);mob.teleport(player.getLocation().add(-6,0,0));mob.setVelocity(new org.bukkit.util.Vector());
+            mob.remove();mob=world.spawn(player.getLocation().add(-6,0,0),Husk.class);victim=mob;mob.setAI(false);mob.setGravity(false);
+            mob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(200);mob.getAttribute(Attribute.ARMOR).setBaseValue(0);mob.setHealth(200);
             check(mando.sabers().launch(player),"Native enchanted saber launches");
-            later(45,()->{
+            later(80,()->{
                 check(!throwHits.isEmpty(),"Actual throw contacts damage the target");
                 for(double damage:throwHits)check(Math.abs(damage-15)<1e-8,"Each throw contact equals full melee critical damage");
                 mando.sabers().finish(player.getUniqueId());
