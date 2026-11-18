@@ -19,12 +19,10 @@ public final class JetpackChestplate implements Listener, AutoCloseable {
     private final JavaPlugin plugin;
     private final ItemCatalog items;
     private final Enchantment enchantment;
-    private final JetpackTooltip tooltip;
     private final java.util.List<net.kyori.adventure.text.Component> ingredientLore;
     private final Set<NamespacedKey> recipes=new HashSet<>();
     public JetpackChestplate(JavaPlugin plugin,ItemCatalog items) {
         this.plugin=plugin;this.items=items;
-        tooltip=new JetpackTooltip(items);
         ingredientLore=items.create(BobaEquipment.JETPACK).getItemMeta().lore();
         enchantment=Registry.ENCHANTMENT.get(KEY);
         if(enchantment==null)throw new IllegalStateException("Install server/datapacks/mandomc-jetpack in the primary world's datapacks directory before startup: missing mandomc:jetpack enchantment");
@@ -73,7 +71,7 @@ public final class JetpackChestplate implements Listener, AutoCloseable {
         if(!meta.getPersistentDataContainer().has(PRIOR_GLIDER))
             meta.getPersistentDataContainer().set(PRIOR_GLIDER,PersistentDataType.BYTE,(byte)(result.hasData(DataComponentTypes.GLIDER)?1:0));
         meta.addEnchant(enchantment,target,true);result.setItemMeta(meta);result.setData(DataComponentTypes.GLIDER);
-        tooltip.update(result,enchantment);return result;
+        net.mandomc.gameplay.enchantments.EnchantmentLore.update(result);return result;
     }
     /** Validated combination helper retained for compatibility; live crafting routes are retired. */
     public ItemStack result(ItemStack[] matrix) {
@@ -93,10 +91,10 @@ public final class JetpackChestplate implements Listener, AutoCloseable {
     public ItemStack cleanRemovedEnchantment(ItemStack item) {
         if(item==null||item.getType().isAir()||upgraded(item))return item;
         var meta=item.getItemMeta();var prior=meta.getPersistentDataContainer().get(PRIOR_GLIDER,PersistentDataType.BYTE);
-        if(prior==null) { var result=item.clone();tooltip.update(result,enchantment);return result; }
+        if(prior==null) { var result=item.clone();net.mandomc.gameplay.enchantments.EnchantmentLore.update(result);return result; }
         var result=item.clone();meta=result.getItemMeta();meta.getPersistentDataContainer().remove(PRIOR_GLIDER);result.setItemMeta(meta);
         if(prior==0)result.resetData(DataComponentTypes.GLIDER);
-        tooltip.update(result,enchantment);return result;
+        net.mandomc.gameplay.enchantments.EnchantmentLore.update(result);return result;
     }
     /** Old offhand packs are ingredients now; remove only components the previous gear implementation owned. */
     public boolean maintain(ItemStack item) {
@@ -113,7 +111,7 @@ public final class JetpackChestplate implements Listener, AutoCloseable {
                 meta.removeItemFlags(ItemFlag.HIDE_STORED_ENCHANTS);item.setItemMeta(meta);
             }
         }
-        else if(upgraded(item))tooltip.update(item,enchantment);
+        else if(upgraded(item))net.mandomc.gameplay.enchantments.EnchantmentLore.update(item);
         else { var clean=cleanRemovedEnchantment(item);item.setItemMeta(clean.getItemMeta());
             if(!clean.hasData(DataComponentTypes.GLIDER))item.resetData(DataComponentTypes.GLIDER); }
         return !before.equals(item);

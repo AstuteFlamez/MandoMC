@@ -37,3 +37,9 @@ Unit tests cover charge consumption, reservation, constant regeneration during c
 
 ## Pause note
 Development is running native-tested release `361eb26` with the verified hosted pack, matching bundled M4-ND knowledge and the deployed spawner/event release preserved. Saved recipe-book entries migrate without warnings or duplicate entries. Next action: client-playtest the Workbench, books and admin commands after reconnecting for the pack.
+
+## Workbench interaction and lore follow-up
+
+Native screen titles are supplied when each workstation menu is created, avoiding the unsupported title-change call. Transient workbench ownership is recorded before opening so staff Creative can use crafting, styles and enchanting while physical storage remains blocked. The actual button-packet path is tested in Survival and staff Creative.
+
+Applied enchantments now appear at the bottom of equipment lore, after the original description and controls with one blank separator. The shared formatter preserves item badges, notes, names, actual enchantment data and original hidden-enchantment intent. It also migrates former Jetpack rows, restores original lore/visibility after disenchanting and formats styled-saber previews. Enchanted books retain their badge header; any additional notes precede the final effect explanations. The native regression passes 2,721 assertions.

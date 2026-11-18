@@ -1,5 +1,13 @@
 # Resume here
 
+## Workbench button fixes and bottom enchantment lore verified (2026-11-17)
+
+On `bilal/saber-workbench-menu-fix`, fixed the real-player workbench failures: native workstation titles are now assigned through MenuType builders before opening, and session ownership is registered before InventoryOpenEvent so staff Creative can use the transient workbench screens. Ordinary physical storage remains blocked in staff mode; cancelled opens clean up session ownership. Menu transitions and session matching use stable holder/container identity.
+
+One shared enchantment-lore formatter now puts applied vanilla/custom enchantments beneath original equipment descriptions and controls, with one separator and stable ordering. The old Jetpack-only formatter migrates into this footer. Item badges, player notes, renames, enchantment data and deliberately hidden enchants are preserved; removing enchants restores original lore and hide flags. Style previews use the same footer. Book notes precede the final enchantment explanations and multiple effects have clean spacing.
+
+The full Java build passes. The isolated Paper regression passes 2,721 assertions, including actual inventory-click packets for Craft/Style/Enchant in Survival and staff Creative, workstation session validation, blocked staff chest access, original inventory restoration, equipment/book footer ordering, idempotence, legacy Jetpack migration and the existing native crafting/enchanting/combat scenarios. Development deployment is pending; no pack change is needed. Next action: deploy the checked fix to development with a backup and normal restart, then verify clean startup.
+
 ## Saber Workbench and enchantments deployed to development (2026-11-17)
 
 Development is running the native-tested `361eb26` build after a complete stopped-runtime backup, scoped three-way configuration merges and a normal restart. The unified Saber Workbench replaces the prototype forge: native crafting, filtered saber styling and anvil-style enchanting; saber recipe pages show the Workbench station. Existing marked blocks/items, old material upgrades and saved recipe-book entries migrate. Styles retain enchantments, names, charge and repair history. The separate deployed spawner/event release and physical KOTH keys are preserved.

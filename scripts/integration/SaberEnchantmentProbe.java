@@ -61,12 +61,39 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         station = world.getBlockAt(-200,200,-200); station.setType(Material.SMITHING_TABLE,false);
         station.getChunk().getPersistentDataContainer().set(new NamespacedKey("mandomc","forge_-200_200_-200"),PersistentDataType.BYTE,(byte)1);
         check(mando.forge().station(station), "Existing placed forge migrates to workbench");
-        recipeMigration(); presentations(); rewardsAndMigration(); adminEnchant();
+        recipeMigration(); presentations(); equipmentLore(); rewardsAndMigration(); adminEnchant();
         mando.forge().open(player,station); var top = player.getOpenInventory().getTopInventory();
         check(top.getItem(10).getType()==Material.CRAFTING_TABLE && top.getItem(13).getType()==Material.STONECUTTER && top.getItem(16).getType()==Material.ENCHANTED_BOOK,"Three workbench functions");
         check(player.getOpenInventory().getTitle().contains("Saber Workbench"),"Workbench title");
-        mando.forge().function(player,station,10);check(player.getOpenInventory().getTopInventory().getType()==org.bukkit.event.inventory.InventoryType.WORKBENCH,"Native crafting grid");
-        table(); later(2,this::tableRolls);
+        navigation(0);
+    }
+    private void navigation(int index) throws Exception {
+        if(index==3){
+            player.closeInventory();player.getInventory().setItem(8,new ItemStack(Material.DIAMOND,3));player.setOp(true);Bukkit.dispatchCommand(player,"staff on");
+            check(net.mandomc.gameplay.admin.StaffMode.active(player)&&player.getGameMode()==GameMode.CREATIVE,"Staff creative navigation setup");
+            var chest=world.getBlockAt(-198,200,-200);chest.setType(Material.CHEST,false);
+            var blocked=player.openInventory(((org.bukkit.block.Chest)chest.getState()).getInventory());
+            check(blocked==null,"Staff storage remains blocked outside owned workbench screens");
+        }
+        if(index==6){
+            player.closeInventory();Bukkit.dispatchCommand(player,"staff off");player.setOp(false);
+            check(!net.mandomc.gameplay.admin.StaffMode.active(player)&&player.getGameMode()==GameMode.SURVIVAL,"Staff navigation restores original mode");
+            check(new ItemStack(Material.DIAMOND,3).equals(player.getInventory().getItem(8)),"Staff navigation preserves saved survival inventory");
+            table();later(2,this::tableRolls);return;
+        }
+        int[] slots={10,13,16};String[] labels={"Craft","Style","Enchant"};
+        org.bukkit.event.inventory.InventoryType[] types={org.bukkit.event.inventory.InventoryType.WORKBENCH,org.bukkit.event.inventory.InventoryType.STONECUTTER,org.bukkit.event.inventory.InventoryType.ANVIL};
+        int choice=index%3;mando.forge().open(player,station);
+        click(slots[choice],"PICKUP");
+        later(2,()->{
+            var view=player.getOpenInventory();
+            check(view.getType()==types[choice],"Real menu-button packet opens "+labels[choice]+" in "+player.getGameMode());
+            check(view.getTitle().contains("Saber Workbench")&&view.getTitle().contains(labels[choice]),"Native menu receives title before opening: "+labels[choice]);
+            var session=mando.forge().getClass().getDeclaredMethod("session",InventoryView.class);session.setAccessible(true);
+            check(session.invoke(mando.forge(),view)!=null,"Opened native menu keeps workstation validation: "+labels[choice]);
+            check(empty(player.getItemOnCursor()),"Navigation never extracts a menu icon");
+            player.closeInventory();navigation(index+1);
+        });
     }
     private void recipeMigration() throws Exception {
         var old=new NamespacedKey("mandomc","craft_saber_forge");var current=new NamespacedKey("mandomc","craft_saber_workbench");
@@ -90,6 +117,37 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         var mixed=book(Enchantment.LURE,1);var m=(EnchantmentStorageMeta)mixed.getItemMeta();m.addStoredEnchant(Enchantment.MENDING,1,false);mixed.setItemMeta(m);mando.enchantments().maintain(mixed);
         check(stored(mixed,Enchantment.LURE)==0&&stored(mixed,Enchantment.MENDING)==1,"Fishing removal preserves unrelated enchants");
         for(var e:List.of(endurance,recovery))check(book(e,3).getItemMeta().lore().stream().noneMatch(c->plain(c).matches(".*[0-9%].*")),"Custom descriptions omit numerical tuning");
+    }
+    private void equipmentLore() {
+        var saber=mando.items().create("vader");var original=saber.clone();var base=saber.getItemMeta().lore();
+        saber.addUnsafeEnchantment(Enchantment.SHARPNESS,5);saber.addUnsafeEnchantment(endurance,3);saber.addUnsafeEnchantment(recovery,3);
+        mando.enchantments().maintain(saber);var lore=saber.getItemMeta().lore();
+        check(lore.subList(0,base.size()).equals(base),"Saber badge, description and controls remain in their original order");
+        check(plain(lore.get(base.size())).isBlank(),"One clear separator precedes applied enchantments");
+        check(lore.size()==base.size()+4,"Saber footer contains exactly one row per enchantment");
+        check(plain(lore.getLast()).contains("Recovery")&&plain(lore.get(lore.size()-2)).contains("Endurance"),"Custom enchantments are at the bottom");
+        check(saber.getItemMeta().hasItemFlag(ItemFlag.HIDE_ENCHANTS),"Native above-lore enchantment block is hidden");
+        var once=saber.clone();mando.enchantments().maintain(saber);check(saber.equals(once),"Equipment footer updates without duplicates");
+        for(var enchant:List.copyOf(saber.getEnchantments().keySet()))saber.removeEnchantment(enchant);
+        mando.enchantments().maintain(saber);check(saber.equals(original),"Disenchanting restores original saber lore and visibility flags exactly");
+        var vanilla=new ItemStack(Material.DIAMOND_PICKAXE);vanilla.editMeta(meta->{meta.displayName(Component.text("Named pick"));meta.lore(List.of(Component.text("A player note"),Component.text("Use carefully")));});
+        var vanillaOriginal=vanilla.clone();vanilla.addUnsafeEnchantment(Enchantment.EFFICIENCY,4);mando.enchantments().maintain(vanilla);
+        check(plain(vanilla.getItemMeta().lore().get(0)).equals("A player note")&&plain(vanilla.getItemMeta().lore().getLast()).toLowerCase(Locale.ROOT).contains("efficiency"),"Vanilla equipment notes precede enchantments");
+        vanilla.removeEnchantment(Enchantment.EFFICIENCY);mando.enchantments().maintain(vanilla);check(vanilla.equals(vanillaOriginal),"Vanilla notes and renames restore exactly");
+        var hidden=new ItemStack(Material.DIAMOND_HELMET);hidden.addUnsafeEnchantment(Enchantment.PROTECTION,4);hidden.editMeta(meta->meta.addItemFlags(ItemFlag.HIDE_ENCHANTS));
+        var hiddenOriginal=hidden.clone();mando.enchantments().maintain(hidden);check(hidden.equals(hiddenOriginal),"Originally hidden enchantments remain hidden");
+        var chest=mando.items().create("beskar_chestplate");chest.addUnsafeEnchantment(Enchantment.PROTECTION,4);mando.enchantments().maintain(chest);
+        var chestOriginal=chest.clone();var upgraded=mando.bobaEquipment().chestplates().upgrade(chest);
+        check(upgraded.getItemMeta().lore().subList(0,chestOriginal.getItemMeta().lore().size()-2).equals(chestOriginal.getItemMeta().lore().subList(0,chestOriginal.getItemMeta().lore().size()-2)),"Jetpack preserves existing armor description");
+        var footer=upgraded.getItemMeta().lore();check(plain(footer.getLast()).toLowerCase(Locale.ROOT).contains("protection")&&plain(footer.get(footer.size()-2)).contains("Jetpack"),"Jetpack and vanilla enchants share the bottom footer");
+        var legacy=upgraded.clone();var meta=legacy.getItemMeta();var old=new ArrayList<>(chestOriginal.getItemMeta().lore());
+        old.removeIf(line->"mandomc:equipment-enchantments".equals(line.insertion()));old.add(2,Component.text("Jetpack I").insertion("mandomc:jetpack-tooltip"));
+        meta.lore(old);meta.getPersistentDataContainer().remove(new NamespacedKey("mandomc","enchants_prior_hide"));meta.getPersistentDataContainer().set(new NamespacedKey("mandomc","jetpack_prior_hide_enchants"),PersistentDataType.BYTE,(byte)0);legacy.setItemMeta(meta);
+        mando.enchantments().maintain(legacy);check(legacy.getItemMeta().lore().stream().noneMatch(line->"mandomc:jetpack-tooltip".equals(line.insertion())),"Old Jetpack lore migrates out of the description");
+        upgraded.removeEnchantment(Registry.ENCHANTMENT.get(new NamespacedKey("mandomc","jetpack")));upgraded=mando.bobaEquipment().chestplates().cleanRemovedEnchantment(upgraded);mando.enchantments().maintain(upgraded);
+        check(upgraded.equals(chestOriginal),"Removing Jetpack preserves the normal enchantment footer and armor components");
+        var noteBook=book(recovery,1);noteBook.editMeta(m->{var rows=new ArrayList<>(m.lore());rows.add(Component.text("Player book note"));m.lore(rows);});mando.enchantments().maintain(noteBook);
+        var bookLore=noteBook.getItemMeta().lore();check(plain(bookLore.get(2)).equals("Player book note")&&plain(bookLore.getLast()).contains("faster"),"Book notes precede the final enchantment explanation");
     }
     private void rewardsAndMigration() throws Exception {
         var config=org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.File(mando.getDataFolder(),"crates/crates.yml"));

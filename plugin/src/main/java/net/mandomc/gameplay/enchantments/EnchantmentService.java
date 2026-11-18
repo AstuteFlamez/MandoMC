@@ -70,21 +70,29 @@ public final class EnchantmentService implements Listener, AutoCloseable {
     public double consumption(ItemStack item) { return Math.max(.1, 1 - level(item, ENDURANCE) * config.getDouble("endurance-reduction-per-level")); }
     public double regeneration(ItemStack item) { return 1 + level(item, RECOVERY) * config.getDouble("recovery-bonus-per-level"); }
     public void decorate(ItemStack item) {
-        if (item == null || item.getType() != Material.ENCHANTED_BOOK || !(item.getItemMeta() instanceof EnchantmentStorageMeta meta)) return;
+        if (item == null || item.isEmpty()) return;
+        if (item.getType() != Material.ENCHANTED_BOOK) { EnchantmentLore.update(item); return; }
+        if (!(item.getItemMeta() instanceof EnchantmentStorageMeta meta)) return;
         var enchants = meta.getStoredEnchants(); if (enchants.isEmpty()) return;
         var entries = enchants.entrySet().stream().sorted(Comparator.comparing(e -> e.getKey().getKey().toString())).toList();
         String rarity = entries.stream().map(e -> config.getString("books." + e.getKey().getKey() + ".rarity", "rare"))
                 .max(Comparator.comparingInt(r -> List.of("common", "uncommon", "rare", "epic", "legendary", "mythic").indexOf(r))).orElse("rare");
         var lore = new ArrayList<Component>();
         lore.add(items.badges(rarity, "enchantment").insertion(ROW)); lore.add(Component.empty().insertion(ROW));
-        if (entries.size() > 1) for (var entry : entries) {
-            lore.add(entry.getKey().displayName(entry.getValue()).decoration(TextDecoration.ITALIC, false).insertion(ROW));
-            description(lore, entry.getKey());
-        } else description(lore, entries.getFirst().getKey());
-        // Retain foreign lore on ordinary books; retire the old Jetpack ingredient layout as a unit.
+        // Existing notes belong above the enchantment explanations, below the badge row.
         String id = meta.getPersistentDataContainer().get(ItemCatalog.ITEM_ID, PersistentDataType.STRING);
         if (meta.lore() != null && !Set.of("boba_jetpack", "endurance_book", "recovery_book", "mending_book").contains(Objects.requireNonNullElse(id, "")))
             for (var line : meta.lore()) if (!ROW.equals(line.insertion())) lore.add(line);
+        if (!lore.isEmpty() && !net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(lore.getLast()).isBlank())
+            lore.add(Component.empty().insertion(ROW));
+        if (entries.size() > 1) {
+            for (int index = 0; index < entries.size(); index++) {
+                if (index > 0) lore.add(Component.empty().insertion(ROW));
+                var entry = entries.get(index);
+                lore.add(entry.getKey().displayName(entry.getValue()).decoration(TextDecoration.ITALIC, false).insertion(ROW));
+                description(lore, entry.getKey());
+            }
+        } else description(lore, entries.getFirst().getKey());
         Component previous = meta.displayName();
         String generated = meta.getPersistentDataContainer().get(new NamespacedKey("mandomc", "book_name"), PersistentDataType.STRING);
         var plain = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText();

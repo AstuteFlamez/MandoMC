@@ -85,19 +85,34 @@ public final class SaberWorkbench implements Listener, AutoCloseable {
     }
     public void function(Player player, Block station, int slot) {
         if (!allowed(player, station)) { player.closeInventory(); return; }
-        InventoryView view = switch (slot) {
-            case 10 -> player.openWorkbench(station.getLocation(), true);
-            case 13 -> player.openStonecutter(station.getLocation(), true);
-            case 16 -> player.openAnvil(station.getLocation(), true);
+        var builder = switch (slot) {
+            case 10 -> MenuType.CRAFTING.builder();
+            case 13 -> MenuType.STONECUTTER.builder();
+            case 16 -> MenuType.ANVIL.builder();
             default -> null;
         };
-        if (view == null) return;
-        view.setTitle("Saber Workbench · " + (slot == 10 ? "Craft" : slot == 13 ? "Style" : "Enchant"));
-        sessions.put(player.getUniqueId(), new Session(station.getLocation(), view.getTopInventory()));
+        if (builder == null) return;
+        // Native workstations must receive their title at creation; changing it afterward can throw.
+        var title = text("title").append(Component.text(" · ")).append(text(slot == 10 ? "craft" : slot == 13 ? "style" : "enchant"));
+        InventoryView view = builder.location(station.getLocation()).checkReachable(false).title(title).build(player);
+        var session = new Session(station.getLocation(), view.getTopInventory());
+        // InventoryOpenEvent must recognize this transient workbench view before staff isolation checks run.
+        sessions.put(player.getUniqueId(), session);
+        try {
+            view.open();
+        } finally {
+            if (!view.getTopInventory().equals(player.getOpenInventory().getTopInventory()))
+                sessions.remove(player.getUniqueId(), session);
+        }
     }
     private Session session(InventoryView view) {
         var session = sessions.get(view.getPlayer().getUniqueId());
-        return session != null && session.inventory() == view.getTopInventory() ? session : null;
+        return session != null && session.inventory().equals(view.getTopInventory()) ? session : null;
+    }
+    public boolean ownsMenu(Player player, InventoryView view) {
+        var session = session(view);
+        return session != null && player.getUniqueId().equals(view.getPlayer().getUniqueId())
+                && allowed(player, session.station().getBlock());
     }
     @EventHandler public void click(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
@@ -106,7 +121,7 @@ public final class SaberWorkbench implements Listener, AutoCloseable {
             if (!menu.owner.equals(player.getUniqueId()) || !event.isLeftClick()) return;
             int slot = event.getRawSlot();
             Bukkit.getScheduler().runTask(plugin, () -> {
-                if (player.getOpenInventory().getTopInventory() != menu.inventory) return;
+                if (player.getOpenInventory().getTopInventory().getHolder() != menu) return;
                 if (slot == 26) player.closeInventory();
                 else function(player, menu.station.getBlock(), slot);
             }); return;
@@ -128,7 +143,7 @@ public final class SaberWorkbench implements Listener, AutoCloseable {
     }
     @EventHandler public void close(InventoryCloseEvent event) {
         var session = sessions.get(event.getPlayer().getUniqueId());
-        if (session != null && session.inventory() == event.getInventory()) sessions.remove(event.getPlayer().getUniqueId());
+        if (session != null && session.inventory().equals(event.getInventory())) sessions.remove(event.getPlayer().getUniqueId());
     }
     @Override public void close() {
         for (var id : List.copyOf(sessions.keySet())) { var player = Bukkit.getPlayer(id); if (player != null) player.closeInventory(); }
