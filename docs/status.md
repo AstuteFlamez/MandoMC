@@ -9,8 +9,7 @@ DM relay and join auto-role. Cloudflare free Worker/D1 is provisioned and author
 the existing Discord application routes signed interactions to it, with legacy ticket
 controls retained. Four new cosmetic rank roles were created with zero permissions.
 C0-M5’s bot username, guild nickname and matching rendered silver-droid avatar are
-applied to the existing bot; its internal Developer Portal application label remains
-MandoBot because Discord’s bot-token app API does not rename that label. No token reset
+applied to the existing bot. The Developer Portal application name is also C0-M5, with its saved name verified through Discord’s application API. No token reset
 or incoming-webhook changes occurred. Old MySQL refused read-only login (1045), so no
 legacy link ownership has been inferred or imported.
 
