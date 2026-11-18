@@ -177,6 +177,8 @@ public final class ItemCatalog {
             item.setData(io.papermc.paper.datacomponent.DataComponentTypes.FOOD,
                     food.toBuilder().nutrition(definition.foodNutrition()));
         }
+        if(net.mandomc.gameplay.spawners.SpawnerItems.known(definition.id()))
+            net.mandomc.gameplay.spawners.SpawnerItems.hideDefaultCreature(item);
         return item;
     }
 

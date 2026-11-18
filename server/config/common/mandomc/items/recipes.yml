@@ -1936,10 +1936,10 @@
     "xwing": "<gray>Available from the KOTH Crate; see /crates preview koth.",
     "tiefighter": "<gray>Available from the KOTH Crate; see /crates preview koth.",
     "minecraft:enchanting_table": "<gray>Craft with a book, two Durasteel ingots and four obsidian.\n<gray>Use /recipes to view the layout.",
-    "massiff_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in Wilderness; break with a pickaxe to recover it.",
-    "dewback_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in Wilderness; break with a pickaxe to recover it.",
-    "bantha_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in Wilderness; break with a pickaxe to recover it.",
-    "jawa_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in Wilderness; break with a pickaxe to recover it.",
+    "massiff_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in unclaimed Wilderness or your clan’s claims.\n<gray>Break with a pickaxe to recover it.",
+    "dewback_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in unclaimed Wilderness or your clan’s claims.\n<gray>Break with a pickaxe to recover it.",
+    "bantha_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in unclaimed Wilderness or your clan’s claims.\n<gray>Break with a pickaxe to recover it.",
+    "jawa_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in unclaimed Wilderness or your clan’s claims.\n<gray>Break with a pickaxe to recover it.",
     "minecraft:obsidian": "<gray>Pour water over lava source blocks, then mine the obsidian with a Durasteel or Beskar pickaxe."
   },
   "guide": {

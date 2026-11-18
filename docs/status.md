@@ -1,5 +1,9 @@
 # Resume here
 
+## Spawner appearance follow-up in verification (2026-11-17)
+
+Placement hints now explicitly allow unclaimed Wilderness and the player’s own clan claims. Spawner items and placed blocks clear the native pig; matching miniature creature rigs rotate inside cages with gold `1x Massiff`, `1x Dewback`, `1x Bantha` and `1x Jawa` holograms. Existing items/blocks migrate while keeping identity and custom names. Preview cleanup covers break, chunk unload and shutdown. Herd model scaling now applies only to actual horse-based animals, preserving cosmetic miniature scales. The Java build passes; focused Paper lifecycle and clan checks are in progress. The shared development runtime has a newer Saber Workbench release, so deployment must retain that source and configuration. Next action: finish the focused native checks and deploy the combined verified scope to development.
+
 ## Spawners and gameplay feedback deployed to development (2026-11-17)
 
 Development now runs the tested `f613fe2` build from draft PR #71 after a clean stop, full runtime backup, scoped deployment of the gameplay JAR and ten three-way-merged configurations, and a normal restart. Spawner shops/blocks, single-or-stack gray purchases, physical KOTH keys/global chat, the five-minute palace exit, actual decoration names, Durasteel enchanting-table crafting, filtered saber stonecutting and player melee/gun XP are ready for playtesting. The resource pack is unchanged.

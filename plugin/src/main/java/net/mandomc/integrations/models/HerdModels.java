@@ -52,6 +52,8 @@ public final class HerdModels implements Listener {
     }
 
     private void track(Entity entity, ActiveModel model, ModeledEntity modeled) {
+        // Decorative previews reuse these rigs without being live herd animals.
+        if (!(entity instanceof Horse)) return;
         String id = model.getBlueprint().getName();
         if (!"bantha".equals(id) && !"dewback".equals(id)) return;
         entity.getPersistentDataContainer().set(HerdAge.KIND, org.bukkit.persistence.PersistentDataType.STRING,
