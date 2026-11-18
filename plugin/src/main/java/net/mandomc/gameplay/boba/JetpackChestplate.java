@@ -58,6 +58,7 @@ public final class JetpackChestplate implements Listener, AutoCloseable {
         meta.setItemModel(NamespacedKey.minecraft("enchanted_book"));meta.setCustomModelData(null);
         meta.addItemFlags(ItemFlag.HIDE_STORED_ENCHANTS);meta.lore(ingredientLore);item.setItemMeta(meta);
         item.resetData(DataComponentTypes.GLIDER);item.resetData(DataComponentTypes.EQUIPPABLE);
+        if(plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.enchantments()!=null)mando.enchantments().decorate(item);
     }
     public ItemStack book(int level) {
         if(level<1||level>2)throw new IllegalArgumentException("Jetpack level must be I or II");

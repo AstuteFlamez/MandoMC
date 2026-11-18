@@ -1,0 +1,157 @@
+{
+  "word": "ENCHANTMENT",
+  "font": "mandomc:enchantment",
+  "glyph": "U+E000",
+  "size": [
+    132,
+    18
+  ],
+  "frame": "weapon.png",
+  "frameCenterColumn": 20,
+  "letters": [
+    {
+      "letter": "E",
+      "source": "material.png",
+      "sourceColumns": [
+        43,
+        51
+      ],
+      "targetColumns": [
+        9,
+        17
+      ],
+      "sourceSha256": "1dd001b0fd4e411e00da8de78edca3ea3fbc8e8c3bc415dd17da25eed6633f5d"
+    },
+    {
+      "letter": "N",
+      "source": "component.png",
+      "sourceColumns": [
+        61,
+        69
+      ],
+      "targetColumns": [
+        19,
+        27
+      ],
+      "sourceSha256": "7fc8a13a291261a548a376ed26a88c2f2ce4732399347ae0f2dcc511b81c5139"
+    },
+    {
+      "letter": "C",
+      "source": "component.png",
+      "sourceColumns": [
+        9,
+        17
+      ],
+      "targetColumns": [
+        29,
+        37
+      ],
+      "sourceSha256": "7fc8a13a291261a548a376ed26a88c2f2ce4732399347ae0f2dcc511b81c5139"
+    },
+    {
+      "letter": "H",
+      "source": "mythic.png",
+      "sourceColumns": [
+        45,
+        53
+      ],
+      "targetColumns": [
+        39,
+        47
+      ],
+      "sourceSha256": "a0377e7705b486d2c4d5508149c51e8165958915e140f6a45af470cc0306d8ba"
+    },
+    {
+      "letter": "A",
+      "source": "material.png",
+      "sourceColumns": [
+        21,
+        29
+      ],
+      "targetColumns": [
+        49,
+        57
+      ],
+      "sourceSha256": "1dd001b0fd4e411e00da8de78edca3ea3fbc8e8c3bc415dd17da25eed6633f5d"
+    },
+    {
+      "letter": "N",
+      "source": "component.png",
+      "sourceColumns": [
+        61,
+        69
+      ],
+      "targetColumns": [
+        59,
+        67
+      ],
+      "sourceSha256": "7fc8a13a291261a548a376ed26a88c2f2ce4732399347ae0f2dcc511b81c5139"
+    },
+    {
+      "letter": "T",
+      "source": "material.png",
+      "sourceColumns": [
+        31,
+        41
+      ],
+      "targetColumns": [
+        69,
+        79
+      ],
+      "sourceSha256": "1dd001b0fd4e411e00da8de78edca3ea3fbc8e8c3bc415dd17da25eed6633f5d"
+    },
+    {
+      "letter": "M",
+      "source": "material.png",
+      "sourceColumns": [
+        9,
+        19
+      ],
+      "targetColumns": [
+        81,
+        91
+      ],
+      "sourceSha256": "1dd001b0fd4e411e00da8de78edca3ea3fbc8e8c3bc415dd17da25eed6633f5d"
+    },
+    {
+      "letter": "E",
+      "source": "material.png",
+      "sourceColumns": [
+        43,
+        51
+      ],
+      "targetColumns": [
+        93,
+        101
+      ],
+      "sourceSha256": "1dd001b0fd4e411e00da8de78edca3ea3fbc8e8c3bc415dd17da25eed6633f5d"
+    },
+    {
+      "letter": "N",
+      "source": "component.png",
+      "sourceColumns": [
+        61,
+        69
+      ],
+      "targetColumns": [
+        103,
+        111
+      ],
+      "sourceSha256": "7fc8a13a291261a548a376ed26a88c2f2ce4732399347ae0f2dcc511b81c5139"
+    },
+    {
+      "letter": "T",
+      "source": "material.png",
+      "sourceColumns": [
+        31,
+        41
+      ],
+      "targetColumns": [
+        113,
+        123
+      ],
+      "sourceSha256": "1dd001b0fd4e411e00da8de78edca3ea3fbc8e8c3bc415dd17da25eed6633f5d"
+    }
+  ],
+  "newLetterPixels": false
+}

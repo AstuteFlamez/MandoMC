@@ -185,9 +185,9 @@ public final class RecipeGuide implements Listener, AutoCloseable {
             }
         }
         menu.inventory.setItem(25, recipes.result(recipe));
-        button(menu, 23, recipe.stonecutting() ? Material.STONECUTTER : recipe.smelting()
+        button(menu, 23, recipe.category().equals("lightsabers") ? Material.SMITHING_TABLE : recipe.stonecutting() ? Material.STONECUTTER : recipe.smelting()
                         ? recipe.blasting() ? Material.BLAST_FURNACE : Material.FURNACE : Material.CRAFTING_TABLE,
-                recipe.stonecutting() ? "stonecutting" : recipe.smelting() ? recipe.blasting() ? "smelting" : "furnace"
+                recipe.category().equals("lightsabers") ? "saber-workbench" : recipe.stonecutting() ? "stonecutting" : recipe.smelting() ? recipe.blasting() ? "smelting" : "furnace"
                         : recipe.shapeless() ? "shapeless" : "crafting", "", p -> {});
         if (recipe.smelting()) button(menu, 32, Material.CLOCK, "smelting-time",
                 String.format(java.util.Locale.ROOT, "%.1f", recipe.cookTime() / 20.0), p -> {});

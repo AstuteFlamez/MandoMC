@@ -3,7 +3,6 @@ schema-version: 1
 item-id: vader
 item-model: mandomc:sabers/vader
 hilt-model: mandomc:sabers/vader_hilt
-throw-damage: 8.0
 throw-cooldown-ticks: 40
 # Drain 51 of 100 charge over one second; require the same 51 charge to throw.
 throw-cost-percent: 51.0
@@ -26,8 +25,7 @@ guard-capacity: 100.0
 # Each incoming damage point consumes five guard points; throws require their full cost available.
 guard-damage-multiplier: 5.0
 guard-cooling-per-tick: 0.5
-# Five seconds without charge use or positive damage dealt/taken before repair starts.
-guard-recovery-delay-ticks: 100
+# Charge regenerates continuously, including while blocking and throwing.
 overheat-ticks: 80
 # At zero, stun all saber actions for this duration and immediately end any throw.
 block-half-angle-degrees: 80.0

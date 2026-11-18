@@ -91,26 +91,11 @@ public final class GameplayUpgradesProbe extends JavaPlugin {
     private void forge()throws Exception{
         forgeBlock=player.getLocation().clone().add(1,0,0).getBlock();forgeBlock.setType(Material.SMITHING_TABLE);
         forgeBlock.getChunk().getPersistentDataContainer().set(new NamespacedKey("mandomc","forge_"+forgeBlock.getX()+"_"+forgeBlock.getY()+"_"+forgeBlock.getZ()),PersistentDataType.BYTE,(byte)1);
-        check(mando.forge().station(forgeBlock),"native placed forge marker recognized");
-        player.getInventory().clear();player.getInventory().setHeldItemSlot(0);player.getInventory().setItem(0,mando.items().create("vader"));
-        mando.forge().open(player,forgeBlock);click(10);later(2,this::missingForge);
-    }
-    private void missingForge()throws Exception{
-        check(SaberUpgrades.spent(player.getInventory().getItem(0))==0,"missing materials do not upgrade");
-        var material=mando.items().create("beskar");material.setAmount(2);player.getInventory().setItem(1,material);click(10);later(2,this::damageUpgrade);
-    }
-    private void damageUpgrade()throws Exception{
-        var saber=player.getInventory().getItem(0);check(SaberUpgrades.level(saber,"damage")==1,"chosen damage upgrade persisted");check(player.getInventory().getItem(1)==null || player.getInventory().getItem(1).isEmpty(),"exact materials consumed");
-        check(SaberUpgrades.spent(saber)==1,"one point spent");check(mando.sabers().isSaber(saber),"upgraded item remains recognized saber");
-        var mods=saber.getItemMeta().getAttributeModifiers(org.bukkit.attribute.Attribute.ATTACK_DAMAGE);
-        check(mods.stream().anyMatch(m->m.getKey().equals(new NamespacedKey("mandomc","forge_damage")) && m.getAmount()==1),"actual melee damage attribute");
-        check(SaberUpgrades.level(ItemStack.deserializeBytes(saber.serializeAsBytes()),"damage")==1,"native item serialization retains upgrades");
-        var speed=mando.items().create("precision_emitter_coil");speed.setAmount(1);player.getInventory().setItem(1,speed);click(12);later(2,this::speedUpgrade);
-    }
-    private void speedUpgrade()throws Exception{
-        var saber=player.getInventory().getItem(0);check(SaberUpgrades.level(saber,"speed")==1,"speed upgrades independently");
-        check(saber.getItemMeta().getAttributeModifiers(org.bukkit.attribute.Attribute.ATTACK_SPEED).stream().anyMatch(m->m.getKey().equals(new NamespacedKey("mandomc","forge_speed")) && Math.abs(m.getAmount()-.1)<1e-9),"actual attack-speed attribute");
-        player.getInventory().setItem(1,new ItemStack(Material.DIAMOND,64));click(14);later(2,()->{check(SaberUpgrades.level(player.getInventory().getItem(0),"guard")==0,"wrong material cannot pay");droid();});
+        check(mando.forge().station(forgeBlock),"existing station opens Saber Workbench");
+        mando.forge().open(player,forgeBlock);var menu=player.getOpenInventory().getTopInventory();
+        check(menu.getItem(10).getType()==Material.CRAFTING_TABLE&&menu.getItem(13).getType()==Material.STONECUTTER&&menu.getItem(16).getType()==Material.ENCHANTED_BOOK,"workbench has crafting, style and enchanting");
+        mando.forge().function(player,forgeBlock,16);check(player.getOpenInventory() instanceof org.bukkit.inventory.view.AnvilView,"native anvil-style upgrades replace material points");
+        droid();
     }
     private void droid()throws Exception{
         player.closeInventory();var location=mando.droid().location();check(location!=null,"M4-ND spawned");

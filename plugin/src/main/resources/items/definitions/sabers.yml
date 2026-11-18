@@ -7,8 +7,8 @@ items:
     item-model: mandomc:sabers/ahsoka_tano_blue_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Ahsoka Tano's Lightsaber (Blue)."
       - ''
@@ -22,8 +22,8 @@ items:
     item-model: mandomc:sabers/ahsoka_tano_blue_shoto_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Ahsoka Tano's Shoto Lightsaber (Blue)."
       - ''
@@ -37,8 +37,8 @@ items:
     item-model: mandomc:sabers/ahsoka_tano_green_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Ahsoka Tano's Lightsaber (Green)."
       - ''
@@ -52,8 +52,8 @@ items:
     item-model: mandomc:sabers/ahsoka_tano_green_shoto_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Ahsoka Tano's Shoto Lightsaber (Green)."
       - ''
@@ -67,8 +67,8 @@ items:
     item-model: mandomc:sabers/ahsoka_tano_white_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Ahsoka Tano's Lightsaber (White)."
       - ''
@@ -82,8 +82,8 @@ items:
     item-model: mandomc:sabers/ahsoka_tano_white_shoto_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Ahsoka Tano's Shoto Lightsaber (White)."
       - ''
@@ -97,8 +97,8 @@ items:
     item-model: mandomc:sabers/anakin_skywalker_jedi_knight_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Anakin Skywalker's Lightsaber (Jedi Knight)."
       - ''
@@ -112,8 +112,8 @@ items:
     item-model: mandomc:sabers/anakin_skywalker_padawan_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Anakin Skywalker's Lightsaber (Padawan)."
       - ''
@@ -127,8 +127,8 @@ items:
     item-model: mandomc:sabers/anakin_skywalker_red_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Anakin Skywalker's Lightsaber (Red)."
       - ''
@@ -142,8 +142,8 @@ items:
     item-model: mandomc:sabers/asajj_ventress_assassin_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Asajj Ventress' Lightsaber (Assassin)."
       - ''
@@ -157,8 +157,8 @@ items:
     item-model: mandomc:sabers/asajj_ventress_assassin_shoto_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Asajj Ventress' Shoto Lightsaber (Assassin)."
       - ''
@@ -172,8 +172,8 @@ items:
     item-model: mandomc:sabers/asajj_ventress_double_blade_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Asajj Ventress' Lightsaber (Double Blade)."
       - ''
@@ -187,8 +187,8 @@ items:
     item-model: mandomc:sabers/ventress_yellow
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Asajj Ventress' Lightsaber (Yellow)."
       - ''
@@ -202,8 +202,8 @@ items:
     item-model: mandomc:sabers/baylan_skoll_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Baylan Skoll's Lightsaber."
       - ''
@@ -217,8 +217,8 @@ items:
     item-model: mandomc:sabers/blue_training_lightsaber
     rarity: common
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Training Lightsaber (Blue)."
       - ''
@@ -232,8 +232,8 @@ items:
     item-model: mandomc:sabers/cal_kestis_inquisitor_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Cal Kestis' Lightsaber (Inquisitor)."
       - ''
@@ -247,8 +247,8 @@ items:
     item-model: mandomc:sabers/cal_kestis_merged_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Cal Kestis' Lightsaber (Merged)."
       - ''
@@ -262,8 +262,8 @@ items:
     item-model: mandomc:sabers/cal_kestis_merged_shoto_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Cal Kestis' Shoto Lightsaber (Merged)."
       - ''
@@ -277,8 +277,8 @@ items:
     item-model: mandomc:sabers/cal_kestis_merged_split_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Cal Kestis' Split Lightsaber (Merged)."
       - ''
@@ -292,8 +292,8 @@ items:
     item-model: mandomc:sabers/cal_kestis_padawan_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Cal Kestis' Lightsaber (Padawan)."
       - ''
@@ -307,8 +307,8 @@ items:
     item-model: mandomc:sabers/cal_kestis_rebuild_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Cal Kestis' Lightsaber (Rebuild)."
       - ''
@@ -322,8 +322,8 @@ items:
     item-model: mandomc:sabers/cal_survivor_crossguard
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Cal Kestis' Lightsaber (Crossguard)."
       - ''
@@ -337,8 +337,8 @@ items:
     item-model: mandomc:sabers/cal_kestis_survivor_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Cal Kestis' Lightsaber (Survivor)."
       - ''
@@ -352,8 +352,8 @@ items:
     item-model: mandomc:sabers/cal_kestis_survivor_shoto_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Cal Kestis' Shoto Lightsaber (Survivor)."
       - ''
@@ -367,8 +367,8 @@ items:
     item-model: mandomc:sabers/cal_kestis_survivor_split_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Cal Kestis' Split Lightsaber (Survivor)."
       - ''
@@ -382,8 +382,8 @@ items:
     item-model: mandomc:sabers/caleb_dume_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Caleb Dume's Lightsaber."
       - ''
@@ -397,8 +397,8 @@ items:
     item-model: mandomc:sabers/cere_junda_jedi_knight_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Cere Junda's Lightsaber (Jedi Knight)."
       - ''
@@ -412,8 +412,8 @@ items:
     item-model: mandomc:sabers/count_dooku_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Count Dooku's Lightsaber."
       - ''
@@ -427,8 +427,8 @@ items:
     item-model: mandomc:sabers/dark_saber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Dark Saber."
       - ''
@@ -442,8 +442,8 @@ items:
     item-model: mandomc:sabers/darth_maul_apprentice_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Darth Maul's Lightsaber (Apprentice)."
       - ''
@@ -457,8 +457,8 @@ items:
     item-model: mandomc:sabers/darth_maul_reforged_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Darth Maul's Lightsaber (Reforged)."
       - ''
@@ -472,8 +472,8 @@ items:
     item-model: mandomc:sabers/darth_maul_reforged_shoto_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Darth Maul's Shoto Lightsaber (Reforged)."
       - ''
@@ -487,8 +487,8 @@ items:
     item-model: mandomc:sabers/darth_maul_reforged_split_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Darth Maul's Split Lightsaber (Reforged)."
       - ''
@@ -502,8 +502,8 @@ items:
     item-model: mandomc:sabers/darth_maul_vengeance_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Darth Maul's Lightsaber (Vengeance)."
       - ''
@@ -517,8 +517,8 @@ items:
     item-model: mandomc:sabers/vader
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Darth Vader's Lightsaber."
       - ''
@@ -532,8 +532,8 @@ items:
     item-model: mandomc:sabers/devon_izara_lightsaber
     rarity: uncommon
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Devon Izara's Lightsaber."
       - ''
@@ -547,8 +547,8 @@ items:
     item-model: mandomc:sabers/ezra_bridger_green_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Ezra Bridger's Lightsaber (Green)."
       - ''
@@ -562,8 +562,8 @@ items:
     item-model: mandomc:sabers/ezra_bridger_nomad_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Ezra Bridger's Lightsaber (Nomad)."
       - ''
@@ -577,8 +577,8 @@ items:
     item-model: mandomc:sabers/ezra_bridger_padawan_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Ezra Bridger's Lightsaber (Padawan)."
       - ''
@@ -592,8 +592,8 @@ items:
     item-model: mandomc:sabers/grand_inquisitor_crescent_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Grand Inquisitor's Lightsaber (Crescent)."
       - ''
@@ -607,8 +607,8 @@ items:
     item-model: mandomc:sabers/grand_inquisitor_full_ring_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Grand Inquisitor's Lightsaber (Full Ring)."
       - ''
@@ -622,8 +622,8 @@ items:
     item-model: mandomc:sabers/green_training_lightsaber
     rarity: common
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Training Lightsaber (Green)."
       - ''
@@ -637,8 +637,8 @@ items:
     item-model: mandomc:sabers/indara_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Indara's Lightsaber."
       - ''
@@ -652,8 +652,8 @@ items:
     item-model: mandomc:sabers/jaro_tapal_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Jaro Tapal's Lightsaber."
       - ''
@@ -667,8 +667,8 @@ items:
     item-model: mandomc:sabers/jecki_lon_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Jecki Lon's Lightsaber."
       - ''
@@ -682,8 +682,8 @@ items:
     item-model: mandomc:sabers/jod_na_nawood_discovered_lightsaber
     rarity: uncommon
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Jod Na Nawood's Lightsaber (Discovered)."
       - ''
@@ -697,8 +697,8 @@ items:
     item-model: mandomc:sabers/ki_adi_mundi_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Ki-Adi-Mundi's Lightsaber."
       - ''
@@ -712,8 +712,8 @@ items:
     item-model: mandomc:sabers/kylo_ren_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Kylo Ren's Lightsaber."
       - ''
@@ -727,8 +727,8 @@ items:
     item-model: mandomc:sabers/leia_organa_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Leia Organa's Lightsaber."
       - ''
@@ -742,8 +742,8 @@ items:
     item-model: mandomc:sabers/luke_skywalker_episode_4_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Luke Skywalker's Lightsaber (Episode IV)."
       - ''
@@ -757,8 +757,8 @@ items:
     item-model: mandomc:sabers/luke_skywalker_episode_5_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Luke Skywalker's Lightsaber (Episode V)."
       - ''
@@ -772,8 +772,8 @@ items:
     item-model: mandomc:sabers/luke_skywalker_jedi_knight_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Luke Skywalker's Lightsaber (Jedi Knight)."
       - ''
@@ -787,8 +787,8 @@ items:
     item-model: mandomc:sabers/windu
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Mace Windu's Lightsaber."
       - ''
@@ -802,8 +802,8 @@ items:
     item-model: mandomc:sabers/obi_wan_kenobi_jedi_knight_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Obi-Wan Kenobi's Lightsaber (Jedi Knight)."
       - ''
@@ -817,8 +817,8 @@ items:
     item-model: mandomc:sabers/obiwan
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Obi-Wan Kenobi's Lightsaber (Jedi Master)."
       - ''
@@ -832,8 +832,8 @@ items:
     item-model: mandomc:sabers/obi_wan_kenobi_padawan_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Obi-Wan Kenobi's Lightsaber (Padawan)."
       - ''
@@ -847,8 +847,8 @@ items:
     item-model: mandomc:sabers/pong_krell_blue_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Pong Krell's Lightsaber (Blue)."
       - ''
@@ -862,8 +862,8 @@ items:
     item-model: mandomc:sabers/pong_krell_green_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Pong Krell's Lightsaber (Green)."
       - ''
@@ -877,8 +877,8 @@ items:
     item-model: mandomc:sabers/qimir_dagger_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Qimir's Dagger Lightsaber."
       - ''
@@ -892,8 +892,8 @@ items:
     item-model: mandomc:sabers/qimir_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Qimir's Lightsaber."
       - ''
@@ -907,8 +907,8 @@ items:
     item-model: mandomc:sabers/qimir_split_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Qimir's Split Lightsaber."
       - ''
@@ -922,8 +922,8 @@ items:
     item-model: mandomc:sabers/quigon
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Qui-Gon Jinn's Lightsaber."
       - ''
@@ -937,8 +937,8 @@ items:
     item-model: mandomc:sabers/quinlan_vos_lightsaber
     rarity: epic
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Quinlan Vos' Lightsaber."
       - ''
@@ -952,8 +952,8 @@ items:
     item-model: mandomc:sabers/revan_fallen_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Revan's Lightsaber (Fallen)."
       - ''
@@ -967,8 +967,8 @@ items:
     item-model: mandomc:sabers/revan_redeemed_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Revan's Lightsaber (Redeemed)."
       - ''
@@ -982,8 +982,8 @@ items:
     item-model: mandomc:sabers/rey_blue_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Rey's Lightsaber (Blue)."
       - ''
@@ -997,8 +997,8 @@ items:
     item-model: mandomc:sabers/rey_reforged_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Rey's Lightsaber (Reforged)."
       - ''
@@ -1012,8 +1012,8 @@ items:
     item-model: mandomc:sabers/sabine_wren_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Sabine Wren's Lightsaber."
       - ''
@@ -1027,8 +1027,8 @@ items:
     item-model: mandomc:sabers/savage_opress_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Savage Opress' Lightsaber."
       - ''
@@ -1042,8 +1042,8 @@ items:
     item-model: mandomc:sabers/second_sister_crescent_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Second Sister's Lightsaber (Crescent)."
       - ''
@@ -1057,8 +1057,8 @@ items:
     item-model: mandomc:sabers/second_sister_full_ring_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Second Sister's Lightsaber (Full Ring)."
       - ''
@@ -1072,8 +1072,8 @@ items:
     item-model: mandomc:sabers/tak_rennod_discovered_lightsaber
     rarity: uncommon
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Tak Rennod's Lightsaber (Discovered)."
       - ''
@@ -1087,8 +1087,8 @@ items:
     item-model: mandomc:sabers/taron_malicos_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Taron Malicos' Lightsaber."
       - ''
@@ -1102,8 +1102,8 @@ items:
     item-model: mandomc:sabers/taron_malicos_shoto_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Taron Malicos' Shoto Lightsaber."
       - ''
@@ -1117,8 +1117,8 @@ items:
     item-model: mandomc:sabers/torbin_lightsaber
     rarity: uncommon
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Torbin's Lightsaber."
       - ''
@@ -1132,8 +1132,8 @@ items:
     item-model: mandomc:sabers/vernestra_rwoh_lightsaber
     rarity: rare
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Vernestra Rwoh's Lightsaber."
       - ''
@@ -1147,8 +1147,8 @@ items:
     item-model: mandomc:sabers/wim_discovered_lightsaber
     rarity: uncommon
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Wim's Lightsaber (Discovered)."
       - ''
@@ -1162,8 +1162,8 @@ items:
     item-model: mandomc:sabers/yoda_lightsaber
     rarity: legendary
     category: weapons
-    attack-damage: 10.5
-    attack-speed: 1.0
+    attack-damage: 8.0
+    attack-speed: 1.6
     lore:
       - "<gray>Yoda's Lightsaber."
       - ''
