@@ -1,5 +1,5 @@
 # Feature: Spawners and gameplay feedback
-Status: original release deployed to development; appearance follow-up verified
+Status: deployed to development, including creature previews and combined spawners
 Branch: bilal/spawners-event-fixes
 
 ## Player experience
@@ -37,4 +37,4 @@ Unit tests cover proportional purchasing, spawner ordering/pricing, physical KOT
 The private map rehearsal adds 2,125 Hoth, 12,503 Mandalore, 12,053 Naboo and 7,053 Tatooine coal blocks. Region records round-trip before any write; every changed file has a retained prior copy. The original gameplay release and coal migration are deployed to development. The appearance follow-up preserves that terrain and the newer Saber Workbench release; client appearance still needs owner review.
 
 ## Next action
-Deploy the verified appearance follow-up to development, preserving the existing coal migration and resource pack.
+Playtest all four creature previews, shift-right-click combining inside a clan claim, count holograms and full pickaxe recovery on development.
