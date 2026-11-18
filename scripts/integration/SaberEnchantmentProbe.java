@@ -55,6 +55,7 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         check(mando != null && mando.isEnabled(), "MandoMC enabled"); check(endurance != null && recovery != null, "Native custom registries");
         world = Bukkit.getWorld(NamespacedKey.minecraft("devworld")); check(world != null, "Fixture world");
         world.getWorldBorder().setCenter(0,0); world.getWorldBorder().setSize(1024);
+        for(int x=-14;x<=-11;x++)for(int z=-14;z<=-11;z++)world.getChunkAt(x,z).addPluginChunkTicket(this);
         actors = new NativeProbePlayers("Saber"); player = actors.create(new Location(world,-201.5,200,-199.5));
         player.setGameMode(GameMode.SURVIVAL); player.setLevel(100); player.getInventory().clear();
         station = world.getBlockAt(-200,200,-200); station.setType(Material.SMITHING_TABLE,false);
@@ -207,6 +208,11 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
             mob.remove();mob=world.spawn(player.getLocation().add(-6,0,0),Husk.class);victim=mob;mob.setAI(false);mob.setGravity(false);
             mob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(200);mob.getAttribute(Attribute.ARMOR).setBaseValue(0);mob.setHealth(200);
             check(mando.sabers().launch(player),"Native enchanted saber launches");
+            later(1,()->{
+                var mapField=mando.sabers().getClass().getDeclaredField("flights");mapField.setAccessible(true);var flights=(Map<?,?>)mapField.get(mando.sabers());var flight=flights.get(player.getUniqueId());
+                getLogger().info("FLIGHT DEBUG busy="+mando.sabers().busy(player)+" online="+player.isOnline()+" alive="+!player.isDead()+" hand="+player.getInventory().getItemInMainHand().getType()+" mob="+victim.getLocation()+" aim="+player.getEyeLocation().getDirection());
+                if(flight!=null)for(String key:List.of("age","target","location","damage")){var f=flight.getClass().getDeclaredField(key);f.setAccessible(true);getLogger().info("FLIGHT "+key+"="+f.get(flight));}
+            });
             later(80,()->{
                 check(!throwHits.isEmpty(),"Actual throw contacts damage the target");
                 for(double damage:throwHits)check(Math.abs(damage-15)<1e-8,"Each throw contact equals full melee critical damage");
