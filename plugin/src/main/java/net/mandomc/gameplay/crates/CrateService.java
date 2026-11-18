@@ -170,13 +170,13 @@ public final class CrateService implements Listener, CommandExecutor, AutoClosea
 
     public int keys(Player player, CrateDefinition crate) {
         if (crate.virtual()) return player.getPersistentDataContainer().getOrDefault(virtualKey(crate.id()), PersistentDataType.INTEGER,0);
-        int count=0;
+        int count=player.getPersistentDataContainer().getOrDefault(virtualKey(crate.id()), PersistentDataType.INTEGER,0);
         for (var item : player.getInventory().getStorageContents()) if (crate.keyItem().equals(items.identify(item))) count += item.getAmount();
         return count;
     }
     private void consume(Player player, CrateDefinition crate) {
-        if (crate.virtual()) {
-            int count=keys(player,crate);
+        if (crate.virtual() || player.getPersistentDataContainer().getOrDefault(virtualKey(crate.id()),PersistentDataType.INTEGER,0)>0) {
+            int count=player.getPersistentDataContainer().getOrDefault(virtualKey(crate.id()),PersistentDataType.INTEGER,0);
             if (count<1) throw new IllegalStateException("Key disappeared");
             player.getPersistentDataContainer().set(virtualKey(crate.id()),PersistentDataType.INTEGER,count-1);
         } else {

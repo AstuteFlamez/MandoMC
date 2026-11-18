@@ -1,0 +1,42 @@
+schema-version: 1
+items:
+  massiff_spawner:
+    material: SPAWNER
+    item-model: minecraft:spawner
+    custom-model-data: 0
+    name: <gold>Massiff Spawner
+    rarity: rare
+    category: tools
+    lore:
+    - <gray>Spawns Massiff mobs while you are nearby.
+    - <yellow>Place in Wilderness. Break with a pickaxe to recover.
+  dewback_spawner:
+    material: SPAWNER
+    item-model: minecraft:spawner
+    custom-model-data: 0
+    name: <gold>Dewback Spawner
+    rarity: rare
+    category: tools
+    lore:
+    - <gray>Spawns Dewback mobs while you are nearby.
+    - <yellow>Place in Wilderness. Break with a pickaxe to recover.
+  bantha_spawner:
+    material: SPAWNER
+    item-model: minecraft:spawner
+    custom-model-data: 0
+    name: <gold>Bantha Spawner
+    rarity: rare
+    category: tools
+    lore:
+    - <gray>Spawns Bantha mobs while you are nearby.
+    - <yellow>Place in Wilderness. Break with a pickaxe to recover.
+  jawa_spawner:
+    material: SPAWNER
+    item-model: minecraft:spawner
+    custom-model-data: 0
+    name: <gold>Jawa Spawner
+    rarity: rare
+    category: tools
+    lore:
+    - <gray>Spawns Jawa mobs while you are nearby.
+    - <yellow>Place in Wilderness. Break with a pickaxe to recover.

@@ -202,6 +202,10 @@
       "target": "plugins/MandoMC/items/definitions/sabers.yml"
     },
     {
+      "source": "server/config/common/mandomc/items/definitions/spawners.yml",
+      "target": "plugins/MandoMC/items/definitions/spawners.yml"
+    },
+    {
       "source": "server/config/common/mandomc/items/definitions/tusken.yml",
       "target": "plugins/MandoMC/items/definitions/tusken.yml"
     },
@@ -266,6 +270,10 @@
       "target": "plugins/MandoMC/mobs/drops/massiff.yml"
     },
     {
+      "source": "server/config/common/mandomc/mobs/experience.yml",
+      "target": "plugins/MandoMC/mobs/experience.yml"
+    },
+    {
       "source": "plugin/src/main/resources/mobs/herd.yml",
       "target": "plugins/MandoMC/mobs/herd.yml"
     },
@@ -276,6 +284,10 @@
     {
       "source": "server/config/common/mandomc/mobs/rancor.yml",
       "target": "plugins/MandoMC/mobs/rancor.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/mobs/spawners.yml",
+      "target": "plugins/MandoMC/mobs/spawners.yml"
     },
     {
       "source": "server/config/common/mandomc/mobs/spawning.yml",

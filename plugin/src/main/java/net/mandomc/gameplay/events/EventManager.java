@@ -74,7 +74,7 @@ public final class EventManager implements Listener, AutoCloseable {
     }
     /** Idle-only replacement validates all data before releasing the previous configuration. */
     public void reload() throws Exception {
-        if(active!=null) throw new IllegalStateException("An event is active");
+        if(active!=null || events.values().stream().anyMatch(e->e instanceof net.mandomc.gameplay.dungeon.JabbaEvent j && j.evacuating())) throw new IllegalStateException("An event or palace exit window is active");
         var nextConfig=read("events/schedule.yml");
         ZoneId nextZone=ZoneId.of(nextConfig.getString("scheduler.timezone",""));
         int nextMinute=nextConfig.getInt("scheduler.announcements.start-minute",-1);

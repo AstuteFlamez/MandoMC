@@ -19,7 +19,7 @@ public class GuideKnowledgeTest {
         var knowledge=new GuideKnowledge(config.getConfigurationSection("knowledge"),recipes);
         var coal=knowledge.find("where to get coal").getFirst();
         assertEquals("item:minecraft:coal",coal.id());
-        assertTrue(coal.facts().contains("Tatooine caves"));assertTrue(coal.facts().contains("pickaxe"));
+        for(String planet:java.util.List.of("Tatooine","Hoth","Mandalore","Naboo"))assertTrue(coal.facts().contains(planet));assertTrue(coal.facts().contains("pickaxe"));
         assertFalse(coal.facts().contains("<gray>"));assertFalse(coal.facts().contains("\\n"));
         assertEquals(coal.fallback(),knowledge.verifiedAnswer("where to get coal",knowledge.find("where to get coal")).orElseThrow());
         assertTrue(knowledge.verifiedAnswer("what should I do",knowledge.find("what should I do")).orElseThrow().contains("/tutorial"));

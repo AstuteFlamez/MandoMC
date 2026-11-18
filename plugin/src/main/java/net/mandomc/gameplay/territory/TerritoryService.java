@@ -29,6 +29,11 @@ public final class TerritoryService implements Listener, AutoCloseable {
     public <T> T spawnVehicle(Location location, java.util.function.Supplier<T> spawn) {
         return spawnManaged(org.bukkit.entity.EntityType.PIG, location, spawn);
     }
+    /** Player spawners work in buildable Wilderness, including Hoth's natural-mob-free wilderness. */
+    public <T> T spawnSpawner(org.bukkit.entity.EntityType type, Location location, java.util.function.Supplier<T> spawn) {
+        if (!edits(location)) throw new IllegalArgumentException("Spawner target must be Wilderness");
+        return spawnManaged(type, location, spawn);
+    }
     private <T> T spawnManaged(org.bukkit.entity.EntityType type, Location location, java.util.function.Supplier<T> spawn) {
         if (!org.bukkit.Bukkit.isPrimaryThread() || npcSpawn != null) throw new IllegalStateException("Managed spawn must be a single server-thread operation");
         npcSpawn = new NpcSpawn(type, location.clone());
