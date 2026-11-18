@@ -193,14 +193,16 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         saber.addUnsafeEnchantment(endurance,3);saber.addUnsafeEnchantment(recovery,3);
         player.getInventory().setItemInMainHand(saber);Bukkit.getPluginManager().registerEvents(this,this);
         later(25,()->{
+            // Socket-free actors do not receive normal client equipment/cooldown ticks.
             handle().getClass().getMethod("detectEquipmentUpdates").invoke(handle());
+            var strength=Class.forName("net.minecraft.world.entity.LivingEntity").getDeclaredField("attackStrengthTicker");strength.setAccessible(true);strength.setInt(handle(),100);
             check(Math.abs(player.getAttribute(Attribute.ATTACK_DAMAGE).getValue()-8)<1e-8,"Equipped native base damage");
             check(Math.abs(mando.enchantments().consumption(saber)-.8)<1e-8,"Endurance III effect bound to actual enchant");
             check(Math.abs(mando.enchantments().regeneration(saber)-1.75)<1e-8,"Recovery III effect bound to actual enchant");
             var mob=world.spawn(player.getLocation().add(-2,0,0),Husk.class);victim=mob;mob.setAI(false);mob.setGravity(false);
-            mob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(200);mob.setHealth(200);player.setFallDistance(0);player.attack(mob);
-            check(Math.abs(mob.getHealth()-189)<1e-8,"Native fully charged Sharpness V melee deals eleven");
-            mob.setNoDamageTicks(0);mob.teleport(player.getLocation().add(-6,0,0));
+            mob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(200);mob.getAttribute(Attribute.ARMOR).setBaseValue(0);mob.setHealth(200);player.setFallDistance(0);player.attack(mob);
+            check(Math.abs(mob.getHealth()-189)<1e-8,"Native fully charged Sharpness V melee deals eleven; health="+mob.getHealth());
+            mob.setNoDamageTicks(0);mob.teleport(player.getLocation().add(-6,0,0));mob.setVelocity(new org.bukkit.util.Vector());
             check(mando.sabers().launch(player),"Native enchanted saber launches");
             later(45,()->{
                 check(!throwHits.isEmpty(),"Actual throw contacts damage the target");
