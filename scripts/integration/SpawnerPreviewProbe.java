@@ -60,7 +60,7 @@ public final class SpawnerPreviewProbe extends JavaPlugin {
         invoke(spawners,"tick");later(5,this::verifyPreviews);
     }
     private void verifyPreviews()throws Exception{
-        var previews=(Map<?,?>)field(spawners,"previews");check(previews.size()>=5,"One visual and hologram per nearby spawner");
+        var previews=(Map<?,?>)field(spawners,"previews");check(previews.size()>=5,"One visual and hologram per nearby spawner: previews="+previews.size()+" sites="+field(spawners,"sites")+" player="+player.getLocation()+" online="+player.isOnline()+" worldPlayers="+world.getPlayers().size());
         var models=new HashSet<String>();var labels=new HashSet<String>();
         for(var p:previews.values()){
             var base=(ArmorStand)field(p,"base");var label=(TextDisplay)field(p,"label");var model=(SpawnerModel)field(p,"model");
