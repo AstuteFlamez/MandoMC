@@ -1717,6 +1717,21 @@
         "K": "black_kyber",
         "E": "energy_conduits"
       }
+    },
+    "enchanting_table": {
+      "result": "minecraft:enchanting_table",
+      "amount": 1,
+      "category": "utilities",
+      "shape": [
+        " B ",
+        "DOD",
+        "OOO"
+      ],
+      "ingredients": {
+        "B": "minecraft:book",
+        "D": "durasteel",
+        "O": "minecraft:obsidian"
+      }
     }
   },
   "sources": {
@@ -1801,7 +1816,7 @@
     "minecraft:raw_iron": "<gray>Retained legacy raw metal. Current Agrinium ores drop Agrinium Scraps.",
     "minecraft:clay_ball": "<gray>Tatooine caves: break clay for clay balls.\n<gray>Plastoid needs two separate clay-ball slots.",
     "minecraft:sand": "<gray>Tatooine: dig ordinary desert sand.\n<gray>Red sand does not replace sand in custom recipes.",
-    "minecraft:coal": "<gray>Tatooine caves: mine Coal Ore with a pickaxe.\n<gray>These recipes require coal, not charcoal.",
+    "minecraft:coal": "<gray>Mine Coal Ore in the caves of Tatooine, Hoth, Mandalore and Naboo.\n<gray>Use a pickaxe; ordinary coal tool and enchantment rules apply.",
     "minecraft:glass": "<gray>Smelt sand or red sand in a furnace.\n<gray>Sand source: Tatooine desert.",
     "#minecraft:planks": "<gray>Craft logs into planks; any wood type works.\n<gray>Saplings: gray Jawa shops at Batuu,\n<gray>Plants & Dyes category.",
     "agrinium_ore": "<gray>Mine matching Agrinium Ore with a suitable Silk Touch pickaxe.",
@@ -1836,7 +1851,7 @@
     "minecraft:stick": "<gray>Craft two planks vertically for four sticks.\n<gray>Saplings: gray Jawa shops at Batuu,\n<gray>Plants & Dyes category.",
     "minecraft:stone": "<gray>Smelt cobblestone, or mine stone with Silk Touch.\n<gray>Stone source: Tatooine or Hoth caves.",
     "minecraft:stone_pressure_plate": "<gray>Craft two stone blocks side by side.\n<gray>Stone source: Tatooine or Hoth caves.",
-    "minecraft:torch": "<gray>Craft coal or charcoal above a stick.\n<gray>Coal Ore: Tatooine caves; sticks from planks.",
+    "minecraft:torch": "<gray>Craft coal or charcoal above a stick.\n<gray>Coal Ore: caves on all four resource planets; sticks from planks.",
     "minecraft:yellow_dye": "<gray>Craft a dandelion into yellow dye.\n<gray>Dandelions: gray Jawa shops at Batuu,\n<gray>Plants & Dyes category.",
     "minecraft:paper": "<gray>Craft three sugar cane in a row for three paper.\n<gray>Sugar cane: gray Jawa shops at Batuu,\n<gray>Farming category.",
     "minecraft:string": "<gray>Spiders drop string; cut cobwebs with a sword.\n<gray>Also: gray Jawa shops at Batuu,\n<gray>General Supplies category.",
@@ -1919,7 +1934,13 @@
     "speederbike": "<gray>Available from the KOTH Crate; see /crates preview koth.",
     "uwing": "<gray>Available from the KOTH Crate; see /crates preview koth.",
     "xwing": "<gray>Available from the KOTH Crate; see /crates preview koth.",
-    "tiefighter": "<gray>Available from the KOTH Crate; see /crates preview koth."
+    "tiefighter": "<gray>Available from the KOTH Crate; see /crates preview koth.",
+    "minecraft:enchanting_table": "<gray>Craft with a book, two Durasteel ingots and four obsidian.\n<gray>Use /recipes to view the layout.",
+    "massiff_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in Wilderness; break with a pickaxe to recover it.",
+    "dewback_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in Wilderness; break with a pickaxe to recover it.",
+    "bantha_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in Wilderness; break with a pickaxe to recover it.",
+    "jawa_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in Wilderness; break with a pickaxe to recover it.",
+    "minecraft:obsidian": "<gray>Pour water over lava source blocks, then mine the obsidian with a Durasteel or Beskar pickaxe."
   },
   "guide": {
     "title": "<gold>Recipes",

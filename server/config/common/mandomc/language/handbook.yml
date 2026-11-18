@@ -41,10 +41,13 @@ pages:
 - id: jawas
   topic: Jawa Shops
   heading: Jawa Shops
-  body: 'Brown Jawas: components on Tatooine. Basic parts plus random advanced finds; stock stays fixed.
+  body: 'Brown Jawas: components on Tatooine; fixed stock.
 
+    Batuu: gray shops sell supplies and spawners.
 
-    Seven titled gray Jawas at Batuu sell ordinary goods. Sell Goods buys salvage.'
+    Click: buy 1. Shift-click: a stack.
+
+    Sell Goods buys salvage.'
 - id: mining_materials
   topic: Mining & Materials
   heading: Mining & Materials

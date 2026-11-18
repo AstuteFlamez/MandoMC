@@ -1,0 +1,7 @@
+schema-version: 1
+interval-seconds: 30
+activation-range: 16
+nearby-cap: 6
+messages:
+  wilderness: <red>Place mob spawners in Wilderness where creatures can spawn.
+  pickaxe: <yellow>Break this spawner with a pickaxe to recover it.

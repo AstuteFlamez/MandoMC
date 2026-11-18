@@ -25,6 +25,16 @@ public final class NativeGates implements AutoCloseable {
   moving.put(id,new Motion(id,displays,origins,delta,Bukkit.getCurrentTick(),done));world.playSound(origins.isEmpty()?world.getSpawnLocation():origins.getFirst(),Sound.BLOCK_PISTON_EXTEND,1,0.55f);
  }
  private void tick(){var completed=new ArrayList<Runnable>();for(var it=moving.values().iterator();it.hasNext();){var m=it.next();double t=Math.min(1,(Bukkit.getCurrentTick()-m.start)/(double)duration),p=t*t*(3-2*t);for(int i=0;i<m.displays.size();i++)m.displays.get(i).teleport(m.origins.get(i).clone().add(m.delta.x()*p,m.delta.y()*p,m.delta.z()*p));if(t>=1){m.displays.forEach(BlockDisplay::remove);panels.get(m.id).forEach(c->c.pos.location(world).getBlock().setType(Material.AIR,false));destinations.get(m.id).forEach(c->{var b=c.pos.location(world).getBlock();if(b.getType().isAir())b.setBlockData(c.data,false);});open.add(m.id);completed.add(m.done);it.remove();}}completed.forEach(Runnable::run);}
+ public void holdOpen(){
+  // Finish panels already in motion without invoking room-spawn callbacks during evacuation.
+  for(var motion:moving.values()){
+   motion.displays.forEach(BlockDisplay::remove);
+   panels.get(motion.id).forEach(c->c.pos.location(world).getBlock().setType(Material.AIR,false));
+   destinations.get(motion.id).forEach(c->{var b=c.pos.location(world).getBlock();if(b.getType().isAir())b.setBlockData(c.data,false);});
+   open.add(motion.id);
+  }
+  moving.clear();
+ }
  private void cancelMotions(){moving.values().forEach(m->m.displays.forEach(BlockDisplay::remove));moving.clear();}
  public void close(){task.cancel();cancelMotions();}
 }

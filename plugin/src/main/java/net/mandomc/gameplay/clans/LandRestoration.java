@@ -35,6 +35,7 @@ public final class LandRestoration implements AutoCloseable {
     private final JavaPlugin plugin;
     private final ExecutorService io;
     private final Path folder;
+    private final CoalTerrainOverlay coal;
     private final long delay;
     private final int budget;
     private final Predicate<ClanState.Chunk> claimed;
@@ -49,6 +50,7 @@ public final class LandRestoration implements AutoCloseable {
                            Predicate<ClanState.Chunk> claimed) throws Exception {
         this.plugin=plugin; this.io=io; this.delay=delay; this.budget=budget; this.claimed=claimed;
         folder=plugin.getDataFolder().toPath().resolve("data/land-baselines");
+        coal=new CoalTerrainOverlay(plugin.getDataFolder().toPath().resolve("data/coal-terrain.yml"));
         if (Files.exists(folder)) try (var paths=Files.list(folder)) {
             for (Path path:paths.filter(p->p.toString().endsWith(".gz")).toList()) {
                 Land land=read(path,false);
@@ -221,7 +223,8 @@ public final class LandRestoration implements AutoCloseable {
             if(cursor<0||cursor>=blocks.length)throw new IOException("Invalid restoration cursor");
             var land=new Land(chunk,min,max,blocks,due);land.cursor=cursor;
             int bytes=in.readInt();if(bytes<0||bytes>(blocks.length+7)/8)throw new IOException("Invalid staff mask");
-            land.staff.or(BitSet.valueOf(in.readNBytes(bytes)));return land;
+            land.staff.or(BitSet.valueOf(in.readNBytes(bytes)));
+            coal.apply(chunk,min,blocks,land.staff);return land;
         }
     }
     @Override public void close(){closed=true;task.cancel();}

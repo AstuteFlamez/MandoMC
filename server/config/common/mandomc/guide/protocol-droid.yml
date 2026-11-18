@@ -69,7 +69,7 @@ knowledge:
       I explain MandoMC’s systems. Dangerous expeditions are, thankfully, your department.
   beginner:
     tags: beginner beginners new starting recommend recommended recommendations advice bored progression next
-    facts: When a player asks what to do or requests beginner advice, recommend a short achievable progression plan. Start with /tutorial and its optional Survival, Clans, Combat, Shops and Vehicles sections; each first completion awards 500 credits. Then use /warp to visit Naboo, a recommended planet for a first base, and /c map to check zones before building in eligible Wilderness. Gather resources; coal is mined from Coal Ore in Tatooine caves with a pickaxe. Gray Jawas at Batuu buy approved salvage for credits; /balance checks credits. For a first lightsaber, use /recipes to plan the components and complete Ilum for a Kyber Crate key (24-hour cooldown), then open the Kyber Crate at Batuu for a random crystal. Craft the saber at a crafting table before considering forge upgrades. Ask which stage the player has reached when useful, and suggest one or two next steps rather than overwhelming them. Do not assume they have a saber or equipment. KOTH and Jabba's Palace involve competing players, so suggest these later as optional challenges; /events shows the schedule.
+    facts: When a player asks what to do or requests beginner advice, recommend a short achievable progression plan. Start with /tutorial and its optional Survival, Clans, Combat, Shops and Vehicles sections; each first completion awards 500 credits. Then use /warp to visit Naboo, a recommended planet for a first base, and /c map to check zones before building in eligible Wilderness. Gather resources; coal is mined from Coal Ore in Tatooine, Hoth, Mandalore and Naboo caves with a pickaxe. Gray Jawas at Batuu buy approved salvage for credits; /balance checks credits. For a first lightsaber, use /recipes to plan the components and complete Ilum for a Kyber Crate key (24-hour cooldown), then open the Kyber Crate at Batuu for a random crystal. Craft the saber at a crafting table before considering forge upgrades. Ask which stage the player has reached when useful, and suggest one or two next steps rather than overwhelming them. Do not assume they have a saber or equipment. KOTH and Jabba's Palace involve competing players, so suggest these later as optional challenges; /events shows the schedule.
     answer: For a first expedition, traveler, start with /tutorial. Each lesson's first completion earns 500 credits. Then use /warp to visit Naboo and /c map to check where you can build a first base. Gather supplies and sell approved salvage to the gray Jawas at Batuu. When ready, use /recipes to plan your first saber and complete Ilum for a Kyber Crate key. Have you finished the tutorial or chosen a base yet?
   recipes:
     tags: recipe recipes craft crafting ingredient ingredients search equipment
@@ -91,16 +91,17 @@ knowledge:
     facts: 'Brown Jawas roam Tatooine and sell basic electronic components plus one to three random advanced parts.
       Each spawned Jawa keeps the same item selection for its lifetime, across menu opens, chunk unloads and restarts.
       Seven gray Jawas at Batuu spawn sell ordinary supplies in seven titled categories: Plants & Dyes, Farming,
-      Ocean Goods, Nether Goods, End Goods, General Supplies and Minerals. Every gray Jawa also opens Sell Goods
+      Ocean Goods, Nether Goods, End Goods, General Supplies and Spawners. Every gray Jawa also opens Sell Goods
       to buy approved salvage; place items then confirm Sell, and unsupported items are returned. Closing cancels
-      unsold deposits.'
+      unsold deposits. Normal left-click buys one item; shift-left-click buys a full stack at a proportional price.
+      Purchases keep the menu open. The Spawners shop sells Massiff, Dewback, Bantha and Jawa spawners in that order.'
     answer: Brown Jawas on Tatooine sell components. Their advanced finds vary, but each Jawa keeps its stock. At
       Batuu, seven titled gray Jawa shops sell ordinary supplies. Choose Sell Goods to sell approved salvage.
   koth:
     tags: koth hill key keys black kyber crystal darksaber dark saber rewards reward loot
     facts: KOTH is on Hoth. Hold the hill continuously for three minutes. A clan retains progress while an eligible
       member remains; clearing its last holder resets it. One random eligible winning member inside receives one
-      KOTH key. An unaffiliated player can compete alone. Each key rolls one finished gun, Jetpack I book, vehicle
+      physical KOTH key with a global victory announcement. If inventory is full, the key is saved for /crates claim. An unaffiliated player can compete alone. Each key rolls one finished gun, Jetpack I book, vehicle
       or Black Kyber. No armor rewards. Black Kyber has a 1% configured chance and is required in the Darksaber
       recipe; the old white-saber conversion is removed. Guns include SE-14C, A280, EE-3, Jawa Ionization Blaster
       Cycler Rifle and Bossk’s Relby V10. Use /events for the schedule and /crates preview koth for exact current
@@ -160,12 +161,20 @@ knowledge:
       thrust while worn; hotbar coal supplies fuel. I gives 0.1 seconds per coal, II gives 0.2 seconds.
     answer: Apply a Jetpack book to your chestplate at an Agrinium Anvil. Two Jetpack I books combine into II. Wear
       it, keep coal in your hotbar and double sneak to toggle thrust.
+  experience:
+    tags: xp exp experience level levels mob mobs killing kills enchanting enchantments
+    facts: Player melee and gun kills of themed mobs drop normal experience orbs. Bosses award more XP than ordinary wildlife. Environmental deaths and cleanup despawns give no custom XP. Collect orbs to gain levels for enchanting and anvil work.
+    answer: Kill mobs with melee weapons or guns, then collect their XP orbs. Bosses give more XP than ordinary wildlife, traveler.
+  saber_styles:
+    tags: stonecutter stonecutting saber lightsaber style styles conversion switch switching
+    facts: Put an original, undamaged saber in a stonecutter to choose a compatible style. Only conversions allowed for that exact saber appear. Altered or damaged sabers do not qualify; style conversion must not erase upgrades or repairs for free.
+    answer: Put your original, undamaged saber in a stonecutter. Its list shows only the compatible styles for that saber.
   jabba:
     tags: jabba palace dungeon boba guard guards boss bosses guns blaster blasters weapon weapons rifle cycler
     facts: Jabba’s Palace is a scheduled shared PvP dungeon. Its loot is open to competitors. Quarren guards can
       drop SE-14C, Twi’lek guards A280, Boba Fett EE-3 and Jetpack books, and brown Jawas an Ionization Blaster.
       Bossk can drop his Relby V10. These guns and Cycler Rifle also appear in KOTH rewards. Use /events for the
-      schedule.
+      schedule. When the palace ends, mobs disappear immediately and occupants have five minutes with the open doors and caches before extraction and reset.
     answer: 'Jabba’s Palace opens through the event schedule. Fight guards and bosses for loot, but watch for rival
       players: the dungeon is shared. Use /events to check when it opens.'
 daily-request-budget: 800

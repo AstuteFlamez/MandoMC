@@ -9,17 +9,26 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.entity.Player;
+import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.view.StonecutterView;
 import org.bukkit.plugin.java.JavaPlugin;
 
-/** Keeps wire-visible and server recipe indices identical; exact ownership is checked at selection and take. */
+/** Show only eligible transformations; native consumption and exact selection/take guards remain authoritative. */
 public final class StonecutterRules implements Listener, AutoCloseable {
     private final ItemCatalog items;
+    private final JavaPlugin plugin;
+    private final net.mandomc.integrations.paper.StonecutterOptions options;
+    private record Seen(StonecutterView view,ItemStack input) { }
+    private final Map<java.util.UUID,Seen> viewers=new java.util.HashMap<>();
     private final String denied;
     private final Map<String, RecipeDefinition> recipes;
     public StonecutterRules(JavaPlugin plugin, ItemCatalog items, List<RecipeDefinition> definitions, String denied) {
-        this.denied = denied;
+        this.denied = denied;this.plugin=plugin;options=new net.mandomc.integrations.paper.StonecutterOptions();
         this.items = items;
         recipes = definitions.stream().filter(RecipeDefinition::stonecutting)
                 .collect(Collectors.toUnmodifiableMap(r -> "refinish_" + r.id(), r -> r));
@@ -32,6 +41,35 @@ public final class StonecutterRules implements Listener, AutoCloseable {
         var expected = items.create(recipe.ingredients().get('I'));
         return input != null && !input.isEmpty() && expected != null && input.isSimilar(expected);
     }
+    private void refresh(StonecutterView view) {
+        if(!(view.getPlayer() instanceof Player player))return;
+        var input=view.getTopInventory().getInputItem();
+        if(input==null)input=new ItemStack(org.bukkit.Material.AIR);
+        var previous=viewers.get(player.getUniqueId());
+        if(previous!=null && previous.view()==view && previous.input().isSimilar(input))return;
+        var current=input.clone();viewers.put(player.getUniqueId(),new Seen(view,current));
+        options.filter(player,view,current,key->{
+            var recipe=key.startsWith("mandomc:")?recipes.get(key.substring("mandomc:".length())):null;
+            return recipe==null || allowed(recipe,current);
+        });
+    }
+    @EventHandler(priority=EventPriority.HIGHEST)
+    public void prepare(PrepareResultEvent event) {
+        if(event.getView() instanceof StonecutterView view) {
+            var before=viewers.get(view.getPlayer().getUniqueId());refresh(view);
+            if(before!=viewers.get(view.getPlayer().getUniqueId()))event.setResult(null);
+        }
+    }
+    @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
+    public void opened(InventoryOpenEvent event) {
+        if(event.getView() instanceof StonecutterView view)
+            plugin.getServer().getScheduler().runTask(plugin,()->{if(view.getPlayer().getOpenInventory()==view)refresh(view);});
+    }
+    @EventHandler public void closed(InventoryCloseEvent event) {
+        if(event.getPlayer() instanceof Player player && event.getView() instanceof StonecutterView
+                && viewers.remove(player.getUniqueId())!=null)options.restore(player);
+    }
+    @EventHandler public void quit(PlayerQuitEvent event){viewers.remove(event.getPlayer().getUniqueId());}
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void select(PlayerStonecutterRecipeSelectEvent event) {
         var recipe = owned(event.getStonecuttingRecipe());
@@ -55,5 +93,8 @@ public final class StonecutterRules implements Listener, AutoCloseable {
             event.setCancelled(true); view.getTopInventory().setResult(null);
         }
     }
-    @Override public void close() { HandlerList.unregisterAll(this); }
+    @Override public void close() {
+        for(var id:List.copyOf(viewers.keySet())) {var player=org.bukkit.Bukkit.getPlayer(id);if(player!=null){options.restore(player);player.closeInventory();}}
+        viewers.clear();HandlerList.unregisterAll(this);
+    }
 }

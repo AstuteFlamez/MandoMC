@@ -11,9 +11,9 @@ import static org.junit.Assert.*;
 public class KothCrateTest {
     private YamlConfiguration config(){return YamlConfiguration.loadConfiguration(new InputStreamReader(
             getClass().getResourceAsStream("/crates/crates.yml"),StandardCharsets.UTF_8));}
-    @Test public void kothUsesTheSharedCrateDefinitionAndSavedVirtualKeys() {
+    @Test public void kothUsesTheSharedCrateDefinitionAndPhysicalKeys() {
         var crate=CrateDefinition.read("koth",config().getConfigurationSection("crates.koth"));
-        assertTrue(crate.virtual());assertEquals("koth_crate_key",crate.keyItem());
+        assertFalse(crate.virtual());assertEquals("koth_crate_key",crate.keyItem());
         assertEquals(100,crate.rewards().total());assertEquals(12,crate.rewards().entries().size());
         assertEquals("se14c",crate.rewards().choose(0).item());
         assertEquals("black_kyber",crate.rewards().choose(99).item());

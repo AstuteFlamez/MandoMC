@@ -228,22 +228,22 @@ shop:
       item: minecraft:ink_sac
       amount: 8
       price: '16'
-    redstone:
-      item: minecraft:redstone
-      amount: 16
-      price: '24'
-    lapis_lazuli:
-      item: minecraft:lapis_lazuli
-      amount: 16
-      price: '32'
-    gold_ingot:
-      item: minecraft:gold_ingot
-      amount: 8
-      price: '64'
-    copper_ingot:
-      item: minecraft:copper_ingot
-      amount: 16
-      price: '32'
+    massiff_spawner:
+      item: massiff_spawner
+      amount: 1
+      price: '100000'
+    dewback_spawner:
+      item: dewback_spawner
+      amount: 1
+      price: '150000'
+    bantha_spawner:
+      item: bantha_spawner
+      amount: 1
+      price: '200000'
+    jawa_spawner:
+      item: jawa_spawner
+      amount: 1
+      price: '300000'
     dirt:
       item: minecraft:dirt
       amount: 32
@@ -442,12 +442,12 @@ shop:
       - bone
       - ink_sac
     minerals:
-      name: Minerals
+      name: Spawners
       items:
-      - redstone
-      - lapis_lazuli
-      - gold_ingot
-      - copper_ingot
+      - massiff_spawner
+      - dewback_spawner
+      - bantha_spawner
+      - jawa_spawner
   components:
     basic:
       wiring_coil:
@@ -516,6 +516,7 @@ text:
   buy-price: <gray>Buy <white><amount> <gray>for <gold>$<price>
   sell-price: <gray>Sell <white><amount> <gray>for <gold>$<price>
   buy-hint: <yellow>Left-click to buy one bundle.
+  gray-buy-hint: <yellow>Left-click buys 1 · Shift-left-click buys a stack.
   sell-hint: <yellow>Left-click to sell one bundle.
   balance: '<gray>Credits: <gold>$<balance>'
   too-far: <red>Move closer to the Jawa.

@@ -30,7 +30,7 @@ crates:
   koth:
     name: <gold>KOTH Crate
     key-item: koth_crate_key
-    key-mode: virtual
+    key-mode: physical
     blocks: []
     rewards:
     - item: se14c
