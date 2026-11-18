@@ -1,5 +1,11 @@
 # Resume here
 
+## Compact workbench titles and Mace style refresh verified locally (2026-11-17)
+
+The hub and all three native workbench screens now use short dark-gray titles: Saber Workbench, Saber Crafting, Saber Styles and Saber Enchanting. The 26.1.2 stonecutter client caches options by input material; all sabers are shields, so a recipe-cache update alone can leave Mace with no styles. After filtered recipes, the adapter now refreshes only the client input slot through empty and back to its authoritative contents. No server inventory mutation or ingredient consumption occurs. Mace offers both Revan redeemed and Vernestra Rwoh styles.
+
+The full Java build passes (379 gameplay plus four access tests). The strengthened native regression reproduced the empty Mace list with the previously deployed adapter, then passed 2,764 assertions with the fix. Checks replay actual outbound recipe/inventory packets using the pinned client cache behavior, switch Mace/red/green/Mace inputs, verify client/server index agreement, select both purple outputs and take a real result while preserving name/enchantments. All four titles are checked for exact text, dark-gray color and native-font width, including Survival/staff navigation. The existing enchantment/lore/anvil/combat suite also passes. A newer independent stacked-spawner release reached dev during this work and must be integrated before the scoped backed-up deployment. Client visual confirmation remains pending. Next action: preserve the current spawner release, rebuild exact-source knowledge and deploy the validated workbench fix to dev.
+
 ## Workbench button fixes and bottom enchantment lore deployed to development (2026-11-17)
 
 On `bilal/saber-workbench-menu-fix`, fixed the real-player workbench failures: native workstation titles are now assigned through MenuType builders before opening, and session ownership is registered before InventoryOpenEvent so staff Creative can use the transient workbench screens. Ordinary physical storage remains blocked in staff mode; cancelled opens clean up session ownership. Menu transitions and session matching use stable holder/container identity.

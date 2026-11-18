@@ -1,6 +1,9 @@
 schema-version: 1
 text:
-  title: '<gold>Saber Workbench'
+  title: '<dark_gray>Saber Workbench'
+  craft-title: '<dark_gray>Saber Crafting'
+  style-title: '<dark_gray>Saber Styles'
+  enchant-title: '<dark_gray>Saber Enchanting'
   unsafe: '<yellow>Leave combat, dismount and stay near the Saber Workbench.'
   craft: '<gold>Craft Sabers'
   craft-description: '<gray>Assemble sabers and components in a crafting grid.'
