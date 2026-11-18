@@ -1,12 +1,12 @@
 # Resume here
 
-## Workbench button fixes and bottom enchantment lore verified (2026-11-17)
+## Workbench button fixes and bottom enchantment lore deployed to development (2026-11-17)
 
 On `bilal/saber-workbench-menu-fix`, fixed the real-player workbench failures: native workstation titles are now assigned through MenuType builders before opening, and session ownership is registered before InventoryOpenEvent so staff Creative can use the transient workbench screens. Ordinary physical storage remains blocked in staff mode; cancelled opens clean up session ownership. Menu transitions and session matching use stable holder/container identity.
 
 One shared enchantment-lore formatter now puts applied vanilla/custom enchantments beneath original equipment descriptions and controls, with one separator and stable ordering. The old Jetpack-only formatter migrates into this footer. Item badges, player notes, renames, enchantment data and deliberately hidden enchants are preserved; removing enchants restores original lore and hide flags. Style previews use the same footer. Book notes precede the final enchantment explanations and multiple effects have clean spacing.
 
-The full Java build passes. The isolated Paper regression passes 2,721 assertions, including actual inventory-click packets for Craft/Style/Enchant in Survival and staff Creative, workstation session validation, blocked staff chest access, original inventory restoration, equipment/book footer ordering, idempotence, legacy Jetpack migration and the existing native crafting/enchanting/combat scenarios. Development deployment is pending; no pack change is needed. Next action: deploy the checked fix to development with a backup and normal restart, then verify clean startup.
+The full Java build passes. The isolated Paper regression passes 2,721 assertions, including actual inventory-click packets for Craft/Style/Enchant in Survival and staff Creative, workstation session validation, blocked staff chest access, original inventory restoration, equipment/book footer ordering, idempotence, legacy Jetpack migration and the existing native crafting/enchanting/combat scenarios. Development is running the exact native-tested `68d54ee` build after a complete stopped-runtime backup and normal restart. Startup is clean, matching bundled M4-ND knowledge contains 404 sources, and all unrelated plugin binaries, the private credential and the active resource-pack bytes are preserved. The newer deployed spawner-preview release is included. PR #74 contains this fix and its code checks pass. Next action: reconnect and client-playtest the three workbench buttons and bottom enchantment lore.
 
 ## Spawner appearance follow-up verified (2026-11-17)
 
