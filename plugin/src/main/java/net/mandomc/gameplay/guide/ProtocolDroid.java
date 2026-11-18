@@ -126,7 +126,7 @@ public final class ProtocolDroid implements Listener,AutoCloseable {
                 e.setSilent(true);e.setPersistent(false);e.setRemoveWhenFarAway(false);e.setCollidable(false);e.setCanPickupItems(false);e.setCustomNameVisible(false);
             }));
             if(droid==null)return;
-            if(title!=null)title.remove();title=at.getWorld().spawn(at.clone().add(0,2.25,0),TextDisplay.class,t->{t.setPersistent(false);t.setBillboard(Display.Billboard.CENTER);t.setViewRange(.5f);t.setShadowed(true);t.text(text("name"));});
+            if(title!=null)title.remove();title=at.getWorld().spawn(at.clone().add(0,2.25,0),TextDisplay.class,t->{t.setPersistent(false);t.setBillboard(Display.Billboard.CENTER);t.setViewRange(.5f);t.setShadowed(true);t.setDefaultBackground(false);t.setBackgroundColor(Color.fromARGB(0,0,0,0));t.text(text("name"));});
         }
         var nearest=droid.getWorld().getPlayers().stream().filter(p->!p.isDead() && p.getGameMode()!=GameMode.SPECTATOR && p.getLocation().distanceSquared(droid.getLocation())<25).min(Comparator.comparingDouble(p->p.getLocation().distanceSquared(droid.getLocation())));
         nearest.ifPresent(p->{var delta=p.getEyeLocation().toVector().subtract(droid.getEyeLocation().toVector());var look=droid.getLocation().setDirection(delta);droid.setRotation(look.getYaw(),look.getPitch());droid.setBodyYaw(look.getYaw());});

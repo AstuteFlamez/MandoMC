@@ -1,18 +1,21 @@
 import {authorized, discord, message, verifySignature} from './discord.js';
 import {issueCode, linkAccount, saveSnapshot, snapshot, sync, UserError, uuidPattern, idPattern} from './bridge.js';
 import {controlTicket, openTicket, panel, staff, ticketForChannel} from './tickets.js';
+import {gatewayEvent} from './gateway.js';
 
 const json = (value, status = 200) => Response.json(value, {status, headers: {'Cache-Control': 'no-store'}});
 export const commands = [
   {name: 'link', description: 'Link or check your Minecraft account', options: [{name: 'code', description: 'The code from /discord in Minecraft', type: 3, required: false}]},
-  {name: 'baltop', description: 'View the richest players on MandoMC'},
-  {name: 'players', description: 'View the online player count'},
+  {name: 'baltop', description: 'View the richest players on MandoMC', options: [{type: 3, name: 'server', description: 'Defaults to production', choices: [{name: 'Production', value: 'production'}, {name: 'Development', value: 'development'}]}]},
+  {name: 'players', description: 'View the online player count', options: [{type: 3, name: 'server', description: 'Defaults to production', choices: [{name: 'Production', value: 'production'}, {name: 'Development', value: 'development'}]}]},
   {name: 'ticket', description: 'Open a support ticket'},
   {name: 'ticket-panel', description: 'Post the support ticket panel', default_member_permissions: '32'}
 ].map(command => ({...command, type: 1})); // Guild scope is set by the registration URL.
 
 async function handleInteraction(env, interaction) {
   const user = interaction.member.user.id;
+  const server = interaction.data.options?.find(option => option.name === 'server')?.value || 'production';
+  if (!['production', 'development'].includes(server)) throw new UserError('Unknown server.');
   if (interaction.type === 3) {
     if (interaction.data.custom_id === 'ticket_select') {
       const ticket = await openTicket(env, user, interaction.data.values?.[0]);
@@ -24,13 +27,13 @@ async function handleInteraction(env, interaction) {
   switch (interaction.data.name) {
     case 'link': return {content: await linkAccount(env, user, interaction.data.options?.find(o => o.name === 'code')?.value)};
     case 'players': {
-      const data = await snapshot(env);
-      return {content: data.stale ? 'The server is offline or its status has not updated recently.' : `${data.online} ${data.online === 1 ? 'player' : 'players'} online (${data.maximum} slots).`};
+      const data = await snapshot(env, server);
+      return {content: data.stale ? `${server}: the server is offline or its status has not updated recently.` : `${server}: ${data.online} ${data.online === 1 ? 'player' : 'players'} online (${data.maximum} slots).`};
     }
     case 'baltop': {
-      const data = await snapshot(env);
+      const data = await snapshot(env, server);
       if (data.stale) throw new UserError('Economy data is unavailable until the server reconnects.');
-      return {embeds: [{title: 'MandoMC Baltop', color: 0xFFD700, description: data.baltop.map((row, i) =>
+      return {embeds: [{title: `MandoMC Baltop — ${server}`, color: 0xFFD700, description: data.baltop.map((row, i) =>
         `${i + 1}. **${row.username.replaceAll('_', '\\_')}** — ${(row.cents / 100).toLocaleString('en-US', {minimumFractionDigits: 2})} credits`).join('\n') || 'No balance data yet.',
         footer: {text: 'MandoMC Economy • updated every 30 seconds'}}]};
     }
@@ -83,7 +86,9 @@ export default {
         return json({type: 5, data: {flags: isPublic ? 0 : 64}});
       }
       if (url.pathname.startsWith('/bridge/')) {
-        if (!await authorized(request, env.BRIDGE_SECRET)) return json({error: 'Unauthorized'}, 401);
+        const server = await authorized(request, env.BRIDGE_SECRET) ? 'production'
+          : await authorized(request, env.DEV_BRIDGE_SECRET) ? 'development' : null;
+        if (!server) return json({error: 'Unauthorized'}, 401);
         if (url.pathname === '/bridge/links' && request.method === 'GET') {
           const after = url.searchParams.get('after') || '';
           if (after && !uuidPattern.test(after)) throw new UserError('Invalid cursor');
@@ -95,12 +100,17 @@ export default {
         if (raw.length > 65536) return json({error: 'Too large'}, 413);
         const body = JSON.parse(raw);
         if (url.pathname === '/bridge/code') return json(await issueCode(env, body));
-        if (url.pathname === '/bridge/snapshot') return json(await saveSnapshot(env, body));
-        if (url.pathname === '/bridge/sync') return json(await sync(env, body));
+        if (url.pathname === '/bridge/snapshot') return json(await saveSnapshot(env, body, server));
+        if (url.pathname === '/bridge/sync') return json(await sync(env, body, server));
       }
       if (url.pathname.startsWith('/gateway/')) {
         if (!await authorized(request, env.GATEWAY_SECRET)) return json({error: 'Unauthorized'}, 401);
         if (url.pathname === '/gateway/status' && request.method === 'GET') return json(await snapshot(env));
+        if (url.pathname === '/gateway/event' && request.method === 'POST') {
+          const raw = await request.text();
+          if (raw.length > 65536) return json({error: 'Too large'}, 413);
+          return json(await gatewayEvent(env, JSON.parse(raw)));
+        }
         if (url.pathname === '/gateway/ticket' && request.method === 'POST') {
           const body = await request.json();
           if (body.user && idPattern.test(body.user)) return json(await openTicket(env, body.user));

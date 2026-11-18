@@ -25,6 +25,7 @@ public final class DiscordBridge implements AutoCloseable {
     private final ConfigurationSection messages;
     private final DiscordSettings settings;
     private final String secret;
+    private final long linkReward;
     private final HttpClient http;
     private final ExecutorService network;
     private final AtomicBoolean syncing = new AtomicBoolean();
@@ -39,6 +40,7 @@ public final class DiscordBridge implements AutoCloseable {
             ConfigurationSection config, ConfigurationSection messages) throws Exception {
         this.plugin = plugin; this.ranks = ranks; this.credits = credits; this.messages = messages;
         settings = DiscordSettings.read(config, ranks.catalog());
+        linkReward = net.mandomc.gameplay.credits.CreditLedger.amount(config.getString("link-reward", "5000.00"));
         String value = System.getenv("MANDOMC_DISCORD_BRIDGE_SECRET");
         if (value == null || value.isBlank()) {
             Path path = plugin.getDataFolder().toPath().resolve("private/discord-bridge-secret");
@@ -61,7 +63,7 @@ public final class DiscordBridge implements AutoCloseable {
         player.sendMessage(MiniMessage.miniMessage().deserialize(messages.getString(key), Placeholder.unparsed("code", code)));
     }
 
-    private void code(Player player) {
+    public void code(Player player) {
         UUID id = player.getUniqueId();
         long now = System.currentTimeMillis();
         if (now - codeCooldown.getOrDefault(id, 0L) < 30000) { tell(player, "cooldown", ""); return; }
@@ -89,7 +91,10 @@ public final class DiscordBridge implements AutoCloseable {
         List<UUID> ids = linked;
         for (int n = 0; n < Math.min(10, ids.size()); n++) {
             UUID id = ids.get(Math.floorMod(cursor++, ids.size()));
-            players.add(Map.of("uuid", id.toString(), "ranks", ranks.memberships(id)));
+            var view = ranks.discordView(id);
+            players.add(Map.of("uuid", id.toString(), "ranks", view.ranks(),
+                    "ack", view.receipt() == null ? 0L : view.receipt().revision(),
+                    "ack_signature", view.receipt() == null ? "" : view.receipt().signature()));
         }
         var top = new ArrayList<Map<String, Object>>();
         for (var entry : credits.ledger().top(10)) {
@@ -113,7 +118,7 @@ public final class DiscordBridge implements AutoCloseable {
                 for (int start = 0; start < players.size(); start += 2) {
                     var response = request("/bridge/sync", Map.of("mapping", settings.mapping(), "players", players.subList(start, Math.min(start + 2, players.size()))));
                     if (!response.getAsJsonArray("errors").isEmpty()) warn();
-                    for (var value : response.getAsJsonArray("updates")) if (!value.getAsJsonObject().has("absent")) updates.add(value.getAsJsonObject());
+                    for (var value : response.getAsJsonArray("updates")) if (value.getAsJsonObject().has("ranks")) updates.add(value.getAsJsonObject());
                 }
                 onMain(() -> apply(updates, 0));
             } catch (Exception error) { warn(); syncing.set(false); }
@@ -129,13 +134,26 @@ public final class DiscordBridge implements AutoCloseable {
         try {
             var update = updates.get(index); UUID id = UUID.fromString(update.get("uuid").getAsString());
             if (!linked.contains(id)) throw new IllegalArgumentException("Unlinked rank update");
+            if (update.has("reward") && update.get("reward").getAsBoolean()) {
+                credits.auctionTask(() -> credits.ledger().rewardDiscord(id, linkReward), (paid, error) -> {
+                    if (error != null) { warn(); return; }
+                    var player = Bukkit.getPlayer(id);
+                    if (Boolean.TRUE.equals(paid) && player != null) tell(player, "reward", "");
+                });
+            }
             var current = ranks.memberships(id);
             var next = DiscordSettings.merge(current, strings(update.getAsJsonArray("expected")),
                     strings(update.getAsJsonArray("ranks")), settings.mapping().keySet());
-            if (next == null || next.equals(current)) { apply(updates, index + 1); return; }
+            if (next == null) { apply(updates, index + 1); return; }
+            long revision = update.get("revision").getAsLong();
+            String signature = update.get("signature").getAsString();
+            var receipt = ranks.discordView(id).receipt();
+            if (next.equals(current) && receipt != null && receipt.revision() == revision && receipt.signature().equals(signature)) {
+                apply(updates, index + 1); return;
+            }
             // RankService rejects a concurrent save. The durable remote intent is retried next cycle.
-            ranks.change(id, next, saved -> {
-                if (saved) plugin.getLogger().info("Discord rank synchronization applied for " + id);
+            ranks.changeFromDiscord(id, next, revision, signature, saved -> {
+                if (saved && !next.equals(current)) plugin.getLogger().info("Discord rank synchronization applied for " + id);
                 apply(updates, index + 1);
             });
         } catch (RuntimeException error) { warn(); apply(updates, index + 1); }

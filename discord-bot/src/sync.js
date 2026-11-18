@@ -34,3 +34,44 @@ export function reconcile(game, discord, previous, mapping) {
   });
   return {signature, game, target};
 }
+
+/** One shared desired rank set, with independently acknowledged server snapshots.
+ * Production establishes the initial baseline; neither a new dev connection nor
+ * a delayed acknowledgment can replace a newer target from the other server.
+ */
+export function reconcileShared(game, discord, previous, mapping, server, ack = 0, ackSignature = '') {
+  const keys = Object.keys(mapping).sort();
+  const filter = values => canonical(values.filter(rank => keys.includes(rank)));
+  game = filter(game); discord = filter(discord);
+  const signature = JSON.stringify(Object.entries(mapping).sort(([a], [b]) => a.localeCompare(b)));
+  let state;
+  if (!previous || previous.signature !== signature) {
+    if (server !== 'production') return null;
+    state = {signature, revision: (previous?.revision || 0) + 1, target: game,
+      discordBaseline: game, discordApplied: false, sources: {}};
+  } else if (!previous.sources) {
+    state = {signature, revision: 1, target: previous.target, discordBaseline: previous.target,
+      discordApplied: previous.discordApplied !== false,
+      sources: {production: {game: previous.game, pending: previous.pending
+        ? {revision: 1, target: previous.target, expected: previous.game} : null}}};
+  } else state = structuredClone(previous);
+  const source = state.sources[server];
+  let baseline = source?.game;
+  if (source?.pending) {
+    const pending = source.pending;
+    if (ackSignature === signature && ack === pending.revision) baseline = pending.target;
+    else if (same(game, pending.target)) baseline = pending.target;
+    else if (same(game, pending.expected)) baseline = game; // Unapplied command: replay current shared target.
+    // A genuinely new local edit remains a change relative to the last observed game set.
+  }
+  const target = keys.filter(rank => {
+    if (baseline && game.includes(rank) !== baseline.includes(rank)) return game.includes(rank);
+    if (state.discordApplied && discord.includes(rank) !== state.discordBaseline.includes(rank)) return discord.includes(rank);
+    return state.target.includes(rank);
+  });
+  if (!same(target, state.target)) state.revision++;
+  state.target = target;
+  state.sources[server] = {game, pending: same(game, target) ? null
+    : {revision: state.revision, target, expected: game}};
+  return state;
+}

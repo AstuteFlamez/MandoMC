@@ -69,6 +69,7 @@ jobs:
           path: |
             plugin/target/MandoMC.jar
             access/target/MandoAccess.jar
+            plugin/discord-gateway/target/MandoDiscordGateway.jar
             redstone-agent/target/MandoMC-RedstoneAgent.jar
             redstone-agent/target/MandoMC-Launcher.jar
             resource-pack/build/MandoMC.zip

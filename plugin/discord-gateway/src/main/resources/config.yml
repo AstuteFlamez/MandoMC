@@ -1,0 +1,7 @@
+schema-version: 1
+enabled: false
+endpoint: "https://mandomc-discord.YOUR_SUBDOMAIN.workers.dev"
+guild-id: ""
+ticket-category-id: ""
+# Run exactly one instance, on production. Credentials stay outside managed config:
+# private/discord-token and private/gateway-secret inside this plugin's data folder.

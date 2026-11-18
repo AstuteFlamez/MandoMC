@@ -98,4 +98,6 @@ __pycache__/
 # Runtime AI credentials must never be published.
 **/groq-api-key
 **/discord-bridge-secret
+**/discord-token
+**/gateway-secret
 **/.dev.vars

@@ -115,7 +115,10 @@ def main():
                 state["phase"] += 1
                 self.send({"error": "simulated outage"}, 503)
                 return
-            self.send({"updates": [{"uuid": UUID, "expected": player["ranks"], "ranks": target}], "errors": []})
+            if phase == 5 and player.get("ack") != 5:
+                state["failures"].append("Native rank acknowledgment was not committed with memberships")
+            self.send({"updates": [{"uuid": UUID, "expected": player["ranks"], "ranks": target,
+                                   "revision": phase + 1, "signature": "disposable-native-fixture"}], "errors": []})
             state["phase"] += 1
             if phase == 5:
                 (output / "complete").write_text("verified native snapshots\n")

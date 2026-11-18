@@ -1,8 +1,8 @@
-# MandoMC Discord bot
+# C0-M5 — MandoMC Discord bot
 
 Recreates the behavior of [AstuteFlamez/MandoBot](https://github.com/AstuteFlamez/MandoBot)
 at commit `1bb68267e3dbca77e45b3cf303530e2ae5167bb2`, inside MandoMC. The source is rewritten
-for Cloudflare Workers/D1 with an optional Python Gateway companion.
+for Cloudflare Workers/D1 with a separate optional Minecraft-hosted Gateway plugin.
 
 ## What runs where
 
@@ -11,13 +11,28 @@ select/claim/close controls and the authenticated Minecraft bridge. Tickets are 
 Discord channels that their owner and configured staff can use directly. Links,
 single-use code hashes, sync intent and ticket ownership survive restarts in D1.
 Closing a ticket exports actual channel history to the log channel before deleting it.
-The bot never writes balances: `/baltop` reads the native server's top-ten snapshot.
+`/baltop` reads the native server’s top-ten snapshot. Verified linking grants 5,000 production credits once through CreditLedger’s atomic reward receipt; the Discord service cannot issue arbitrary balance changes.
 
-The optional `gateway/companion.py` restores ordinary DM-to-staff ticket relay,
-Mando Citizen assignment when members join, and the live Watching presence from the
-old bot. It requires an always-running Python process. It uses the same Discord
-application, does not register commands, and uses the Worker for durable ticket identity.
-Without it, all Worker commands, channel tickets and both directions of rank sync work.
+The production server runs `plugin/discord-gateway` as the optional Paper plugin
+MandoDiscordGateway. It uses JDA 6.7.0 to keep the existing bot Online, relay ticket
+DMs and assign Mando Citizen on member joins. Its token and bridge secret stay in
+`plugins/MandoDiscordGateway/private/discord-token` and `gateway-secret`, outside
+managed configuration and Git. Copy the reviewed `server/config/common/discord-gateway.yml`
+to its runtime config. Only production enables it; do not start a second Gateway
+companion. Paper loads the pinned public JDA dependency through its library loader.
+A Gateway/library failure affects this optional plugin independently of gameplay.
+The Python `gateway/companion.py` remains an alternative for another existing host;
+choose one companion. Cloudflare commands and channel tickets can keep working while
+the bot’s presence is Offline.
+
+Both Minecraft bridges use the same Worker and approved role mapping. The production
+credential is `BRIDGE_SECRET`; development uses distinct `DEV_BRIDGE_SECRET`. The
+credential determines the source; a request cannot impersonate the other server.
+Production initializes the shared rank target. Atomic per-server receipts distinguish
+old deliveries from fresh edits, and both servers converge on the same durable state.
+Snapshots are separate; `/players` and `/baltop` default to production and accept
+`server:development`. Only production receives link-reward authorization. The native
+ledger waits for the account’s first join before paying, preserving starter credits.
 
 ## Free hosting
 
@@ -28,13 +43,13 @@ HTTP interactions are an officially supported Discord-on-Workers deployment.
 The server pushes status every 30 seconds and polls linked members through Discord REST;
 no public Minecraft HTTP port, Discord Gateway connection or cron job is required.
 
-For a small guild this is designed to fit the free allowance. A normal bridge cycle uses
-two baseline Worker requests plus one request per two of up to ten linked accounts
-(at most five sync requests). Link-list pagination adds one request per 100 accounts.
-An ordinary 30-second cycle therefore uses 5,760–17,280 Worker requests/day for up to
-100 links, plus player interactions and optional companion requests. D1 state writes
-grow with actual polling; ten accounts polled every cycle consume about 57,600
-sync-state writes/day before other operations/index writes. Monitor actual usage.
+For a small guild this is designed to fit the free allowance. Each server uses two
+baseline Worker requests per cycle plus one per two of up to ten linked accounts
+(at most five sync requests), with link pagination adding one per 100 accounts.
+Two servers at a 30-second interval use 11,520–40,320 requests/day for up to 100 links,
+plus interactions, retries, Gateway presence polls and actual messages. Steady-state
+rank polling avoids rewriting unchanged link state. D1 still counts lease, snapshot
+and index writes; monitor actual daily usage as the guild grows.
 Requests fail when a free allowance is exhausted; synchronization retains game ranks
 and retries later. This repository does not enable a paid plan.
 
@@ -69,7 +84,7 @@ Sources checked 2026-11-18:
    identity and ticket panels. Copy its Public Key and current bot token privately.
    `DISCORD_TOKEN` retains the original bot's environment variable name.
 5. Set secrets with `npx wrangler secret put NAME`: `DISCORD_TOKEN`,
-   `DISCORD_PUBLIC_KEY`, `BRIDGE_SECRET`, and optionally `GATEWAY_SECRET`.
+   `DISCORD_PUBLIC_KEY`, `BRIDGE_SECRET`, `DEV_BRIDGE_SECRET`, and `GATEWAY_SECRET`.
    Generate different bridge/gateway secrets with `openssl rand -hex 32`.
    Never paste tokens into tracked config or chat. Local `.dev.vars` is ignored.
 6. Deploy with `npm run deploy`. Set the application's Interactions Endpoint URL

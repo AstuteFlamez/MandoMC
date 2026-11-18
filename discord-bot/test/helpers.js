@@ -1,9 +1,10 @@
 import {DatabaseSync} from 'node:sqlite';
-import {readFileSync} from 'node:fs';
+import {readFileSync, readdirSync} from 'node:fs';
 
 export function database() {
   const sqlite = new DatabaseSync(':memory:');
-  sqlite.exec(readFileSync(new URL('../migrations/0001_initial.sql', import.meta.url), 'utf8'));
+  for (const file of readdirSync(new URL('../migrations/', import.meta.url)).filter(name => name.endsWith('.sql')).sort())
+    sqlite.exec(readFileSync(new URL('../migrations/' + file, import.meta.url), 'utf8'));
   const wrap = (sql, params = []) => ({
     bind: (...values) => wrap(sql, values),
     first: async () => sqlite.prepare(sql).get(...params) || null,
@@ -24,6 +25,6 @@ export const uuid = '12345678-1234-1234-1234-123456789012';
 export function environment() {
   return {DB: database(), DISCORD_TOKEN: 'test-only', DISCORD_GUILD_ID: ids.guild, DISCORD_APPLICATION_ID: ids.app,
     RANK_ROLES: JSON.stringify({warrior: ids.role}), LINKED_ROLE_ID: ids.linked, CITIZEN_ROLE_ID: '',
-    BRIDGE_SECRET: 'a'.repeat(64), GATEWAY_SECRET: 'b'.repeat(64),
+    BRIDGE_SECRET: 'a'.repeat(64), DEV_BRIDGE_SECRET: 'd'.repeat(64), GATEWAY_SECRET: 'b'.repeat(64),
     TICKET_CATEGORY_ID: ids.category, TICKET_LOG_CHANNEL_ID: ids.log, STAFF_ROLE_IDS: JSON.stringify([ids.staff])};
 }

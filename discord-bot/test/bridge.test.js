@@ -38,7 +38,7 @@ test('snapshot freshness and native integer-cents bounds are enforced', async ()
   await saveSnapshot(env, {online: 2, maximum: 100, baltop: [{username: 'Mando', cents: 12345}]});
   assert.equal((await snapshot(env)).baltop[0].cents, 12345);
   assert.equal((await snapshot(env)).stale, false);
-  env.DB.sqlite.exec('UPDATE snapshots SET updated=0');
+  env.DB.sqlite.exec('UPDATE server_snapshots SET updated=0');
   assert.equal((await snapshot(env)).stale, true);
   await assert.rejects(saveSnapshot(env, {online: 0, maximum: 100, baltop: [{username: 'Bad', cents: 1.5}]}), /Invalid snapshot/);
 });

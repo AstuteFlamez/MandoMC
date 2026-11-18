@@ -18,7 +18,10 @@ public final class RankService implements Listener, AutoCloseable {
     private final JavaPlugin plugin;
     private final RankCatalog catalog;
     private final Path file;
-    private volatile Map<UUID, Set<String>> users;
+    public record DiscordReceipt(long revision, String signature) { }
+    public record DiscordView(Set<String> ranks, DiscordReceipt receipt) { }
+    private record MembershipState(Map<UUID, Set<String>> users, Map<UUID, DiscordReceipt> receipts) { }
+    private volatile MembershipState state;
     private final Map<UUID, PermissionAttachment> attachments = new HashMap<>();
     private final ExecutorService writer = Executors.newSingleThreadExecutor();
     private boolean saving;
@@ -29,7 +32,7 @@ public final class RankService implements Listener, AutoCloseable {
         this.plugin = plugin;
         catalog = new RankCatalog(config);
         file = plugin.getDataFolder().toPath().resolve("data/rank-users.yml");
-        users = read(file, catalog);
+        state = new MembershipState(read(file, catalog), readReceipts(file));
         Bukkit.getPluginManager().registerEvents(this, plugin);
         Bukkit.getOnlinePlayers().forEach(this::apply);
         refresh = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
@@ -53,21 +56,55 @@ public final class RankService implements Listener, AutoCloseable {
         return Map.copyOf(result);
     }
     public RankCatalog catalog() { return catalog; }
-    public Set<String> memberships(UUID id) { return users.getOrDefault(id, Set.of("default")); }
+    public static Map<UUID, DiscordReceipt> readReceipts(Path file) throws Exception {
+        if (!Files.exists(file)) return Map.of();
+        var yaml = new YamlConfiguration(); yaml.load(file.toFile());
+        var section = yaml.getConfigurationSection("discord-sync");
+        if (section == null) return Map.of();
+        var result = new HashMap<UUID, DiscordReceipt>();
+        for (String key : section.getKeys(false)) {
+            long revision = section.getLong(key + ".revision", -1);
+            String signature = section.getString(key + ".signature", "");
+            if (revision < 1 || signature.isBlank() || signature.length() > 1024)
+                throw new IllegalArgumentException("rank-users.yml: invalid Discord receipt");
+            result.put(UUID.fromString(key), new DiscordReceipt(revision, signature));
+        }
+        return Map.copyOf(result);
+    }
+    public DiscordView discordView(UUID id) {
+        var snapshot = state;
+        return new DiscordView(snapshot.users().getOrDefault(id, Set.of("default")), snapshot.receipts().get(id));
+    }
+    public Set<String> memberships(UUID id) { return state.users().getOrDefault(id, Set.of("default")); }
     public RankCatalog.Rank rank(Player player) { return catalog.primary(memberships(player.getUniqueId())); }
     public void change(UUID id, Set<String> ranks, Consumer<Boolean> done) {
+        change(id, ranks, null, done);
+    }
+    /** Membership and broker acknowledgment commit in one native atomic snapshot. */
+    public void changeFromDiscord(UUID id, Set<String> ranks, long revision, String signature, Consumer<Boolean> done) {
+        if (revision < 1 || signature.isBlank() || signature.length() > 1024) throw new IllegalArgumentException("Invalid Discord receipt");
+        change(id, ranks, new DiscordReceipt(revision, signature), done);
+    }
+    private void change(UUID id, Set<String> ranks, DiscordReceipt receipt, Consumer<Boolean> done) {
         ranks.forEach(catalog::get);
         if (saving || closed) { done.accept(false); return; }
         saving = true;
-        var next = new HashMap<>(users); next.put(id, Set.copyOf(ranks));
+        var previous = state;
+        var next = new HashMap<>(previous.users()); next.put(id, Set.copyOf(ranks));
+        var receipts = new HashMap<>(previous.receipts());
+        if (receipt != null) receipts.put(id, receipt);
         var yaml = new YamlConfiguration(); yaml.set("schema-version", 1); yaml.createSection("users");
         next.forEach((uuid, assigned) -> yaml.set("users." + uuid + ".ranks", assigned.stream().sorted().toList()));
+        receipts.forEach((uuid, value) -> {
+            yaml.set("discord-sync." + uuid + ".revision", value.revision());
+            yaml.set("discord-sync." + uuid + ".signature", value.signature());
+        });
         String snapshot = yaml.saveToString();
         writer.submit(() -> {
             boolean success = false;
             try {
                 net.mandomc.config.AtomicData.write(file, snapshot);
-                users = Map.copyOf(next); success = true;
+                state = new MembershipState(Map.copyOf(next), Map.copyOf(receipts)); success = true;
             } catch (Exception error) { plugin.getLogger().log(java.util.logging.Level.SEVERE, "Could not save rank-users.yml; change rejected", error); }
             boolean saved = success;
             if (!closed && plugin.isEnabled()) Bukkit.getScheduler().runTask(plugin, () -> {

@@ -46,6 +46,8 @@ public final class DiscordBridgeProbe extends JavaPlugin {
                                 if (!ranks.memberships(PLAYER).equals(Set.of("builder", "marshal"))) { fail("Final membership set"); return; }
                                 var stored = RankService.read(getDataFolder().toPath().resolve("data/rank-users.yml"), ranks.catalog());
                                 if (!stored.get(PLAYER).equals(ranks.memberships(PLAYER))) { fail("Durable rank acknowledgment"); return; }
+                                var receipts = RankService.readReceipts(getDataFolder().toPath().resolve("data/rank-users.yml"));
+                                if (receipts.get(PLAYER) == null || receipts.get(PLAYER).revision() < 5) { fail("Atomic broker receipt"); return; }
                                 finished = true;
                                 getLogger().info("DISCORD_BRIDGE_PROBE_PASSED: native persistence, outbound memberships, managed merge, stale reply rejection, outage retry and offline UUID synchronization");
                                 Bukkit.shutdown(); return;

@@ -1,0 +1,8 @@
+name: MandoDiscordGateway
+version: '1.0.0'
+main: net.mandomc.integrations.discord.gateway.GatewayPlugin
+api-version: '26.1.2'
+author: AstuteFlamez
+description: Production-hosted Discord presence and ticket relay; Cloudflare owns interactions and storage
+libraries:
+  - net.dv8tion:JDA:6.7.0

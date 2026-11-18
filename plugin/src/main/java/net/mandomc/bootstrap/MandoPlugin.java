@@ -16,6 +16,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MandoPlugin extends JavaPlugin implements Listener {
     private net.mandomc.integrations.discord.DiscordBridge discord;
+    private net.mandomc.integrations.discord.DiscordLinkDroid discordDroid;
+    public net.mandomc.integrations.discord.DiscordLinkDroid discordDroid() { return discordDroid; }
     private net.mandomc.gameplay.ranks.RankService ranks;
     private net.mandomc.gameplay.admin.StaffMode staff;
     private net.mandomc.integrations.permissions.WorldEditRanks worldEditRanks;
@@ -313,6 +315,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             starterKit.tutorialRequired(false);
             forge=new net.mandomc.gameplay.saber.SaberWorkbench(this,loadFeature("equipment/saber-workbench.yml"));
             droid=new net.mandomc.gameplay.guide.ProtocolDroid(this,loadFeature("guide/protocol-droid.yml"));
+            if (discord != null) discordDroid = new net.mandomc.integrations.discord.DiscordLinkDroid(this, discord, loadFeature("decor/discord-droid.yml"));
             getLogger().info("Gameplay upgrades ready: recipe search, encounter components, KOTH equipment, Saber Workbench and M4-ND.");
             getLogger().info("Interactive tutorial ready: private worlds, isolated inventory and once-only completion rewards.");
             getLogger().info("Arrival enabled: protected Batuu spawn; /spawn and temporary /tutorial ready.");
@@ -339,6 +342,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (discordDroid != null) discordDroid.close();
         if (discord != null) discord.close();
         if (droid != null) droid.close();
         if (forge != null) forge.close();

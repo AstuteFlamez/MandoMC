@@ -2,6 +2,7 @@ schema-version: 1
 enabled: false
 endpoint: "https://mandomc-discord.YOUR_SUBDOMAIN.workers.dev"
 interval-seconds: 30
+link-reward: '5000.00'
 # Explicit memberships only, with the same mapping in the Worker's RANK_ROLES.
 # Each mapped role can grant AND revoke its native rank. Staff ranks grant permissions;
 # approve those mappings deliberately. default, op status and unrelated ranks are never synced.

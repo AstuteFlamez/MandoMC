@@ -1,5 +1,39 @@
 # Resume here
 
+## C0-M5 hosting and both-server activation in progress (2026-11-18)
+
+The owner approved all seven explicit two-way mappings (Mando Studios, Server Mod,
+Build Team, Creator, Mandalore, Marshal, Warrior), Mando Citizen as default, activation
+on both servers, and the production Minecraft-hosted Gateway connection for Online,
+DM relay and join auto-role. Cloudflare free Worker/D1 is provisioned and authorized;
+the existing Discord application routes signed interactions to it, with legacy ticket
+controls retained. Four new cosmetic rank roles were created with zero permissions.
+C0-M5’s bot username, guild nickname and matching rendered silver-droid avatar are
+applied to the existing bot; its internal Developer Portal application label remains
+MandoBot because Discord’s bot-token app API does not rename that label. No token reset
+or incoming-webhook changes occurred. Old MySQL refused read-only login (1045), so no
+legacy link ownership has been inferred or imported.
+
+The owner additionally requested C0-M5 as a linking NPC near M4-ND, transparent M4-ND
+text backgrounds, a one-time 5,000-credit production linking reward, and M4-ND Discord
+guidance. Added a pinned signed silver TC-14 skin, exact head renderer, safe supported
+placement five to ten blocks from M4-ND, existing private proof on right-click, and
+atomic credit/reward receipts. Verified an existing non-expiring guild invite and
+added exact local guidance for joining, linking, rewards, sync and tickets. Both server
+bridges now use distinct credentials, shared rank intent with durable per-server ACKs,
+and separate status/baltop snapshots. Steady-state rank polling avoids unnecessary
+link-row writes. Production alone runs the separate JDA 6.7.0 Paper Gateway plugin.
+
+Verification so far: 38 Worker tests pass; 388 gameplay/integration and four access
+tests pass. Disposable Paper passes six HTTPS reconciliation stages with durable
+rank receipts. A second disposable Paper instance loads the real Gateway dependency,
+authenticates the existing bot and observes Gateway READY/Online, then stops cleanly.
+Copied Batuu passes 16 native checks for both droids, clear supported placement, hologram spacing, transparent backgrounds, signed silver skin, real right-click proof invocation and exact M4-ND Discord answers. All 95 tooling checks pass (six existing environment skips). Worker migration 0002 and the updated
+Worker are deployed; live Minecraft runtimes are not yet changed. Next action: finish
+native spawn verification, then roll out the checked build to dev and production
+through the normal promotion, backup and restart workflow.
+
+
 ## Cloudflare account connected in browser; deployment authorization pending (2026-11-18)
 
 Verified the owner is signed into the intended MandoMC Cloudflare account in the

@@ -42,6 +42,14 @@
       "target": "plugins/MandoAccess/config.yml"
     },
     {
+      "source": "plugin/discord-gateway/target/MandoDiscordGateway.jar",
+      "target": "plugins/MandoDiscordGateway.jar"
+    },
+    {
+      "source": "server/config/common/discord-gateway.yml",
+      "target": "plugins/MandoDiscordGateway/config.yml"
+    },
+    {
       "source": "server/config/common/mandomc/admin/staff.yml",
       "target": "plugins/MandoMC/admin/staff.yml"
     },
@@ -72,6 +80,10 @@
     {
       "source": "server/config/common/mandomc/crates/crates.yml",
       "target": "plugins/MandoMC/crates/crates.yml"
+    },
+    {
+      "source": "server/config/common/mandomc/decor/discord-droid.yml",
+      "target": "plugins/MandoMC/decor/discord-droid.yml"
     },
     {
       "source": "server/config/common/mandomc/decor/placements.yml",
@@ -130,7 +142,7 @@
       "target": "plugins/MandoMC/guide/protocol-droid.yml"
     },
     {
-      "source": "plugin/src/main/resources/integrations/discord.yml",
+      "source": "server/config/common/mandomc/integrations/discord.yml",
       "target": "plugins/MandoMC/integrations/discord.yml"
     },
     {

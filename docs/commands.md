@@ -1,8 +1,8 @@
 # Commands and shared teleport behavior
 
-## Optional Discord account linking
+## C0-M5 and Discord account linking
 
-When staff enable the Discord integration, run `/discord` in Minecraft to get a
+Join https://discord.gg/3VrzUmNp6U. Right-click the silver C0-M5 droid near M4-ND at Batuu spawn, or run `/discord` in Minecraft to get a
 private code, then use `/link code:<code>` in the MandoMC Discord server. The code
 expires after ten minutes. Keep it private. `/link` without a code checks your link.
 If linking reports that it is unavailable, contact staff; this optional feature
@@ -11,8 +11,7 @@ does not affect travel, credits or ordinary gameplay.
 Linked accounts can synchronize explicitly configured Minecraft ranks and Discord
 roles in both directions. Only staff-approved mappings participate. Discord also
 offers `/players`, `/baltop`, and private support tickets through `/ticket` or the
-ticket panel. Credits remain the native Minecraft balance; Discord cannot change
-them. See [Discord linking](features/discord-linking.md).
+ticket panel. Linking rewards 5,000 credits once on production after your Minecraft account has joined there. Rewards survive retries and restarts without repeating; balances remain owned by the native economy. Discord `/players` and `/baltop` offer a server option and default to production. See [Discord linking](features/discord-linking.md).
 
 ## Native administration and personal travel
 Essentials and Multiverse are replaced by MandoMC. See [native utilities](features/native-utilities.md) for syntax, limits, permissions and migration.
