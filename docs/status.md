@@ -1,5 +1,17 @@
 # Resume here
 
+## Cloudflare account connected in browser; deployment authorization pending (2026-11-18)
+
+Verified the owner is signed into the intended MandoMC Cloudflare account in the
+Mando Chrome profile and pinned the ignored deployment configuration to that account.
+All 27 Worker tests pass and the exact prepared hosting config bundles successfully.
+Opened the official Wrangler consent page with only user/account read, Worker-script
+write, D1 write and required background access. The computer-use confirmation policy
+requires owner approval for this new app access; approval was requested and no
+Authorize button has been clicked. No Cloudflare resources, billing plan or Discord
+settings changed. Next action: after owner approval, authorize Wrangler and provision
+the bot's free Worker/D1 service using the private prepared configuration and secrets.
+
 ## Original Discord token recovered and verified (2026-11-18)
 
 After the owner authorized a laptop file search, located the original MandoBot
