@@ -1,5 +1,26 @@
 # Resume here
 
+## Existing Discord configuration collected (2026-11-18)
+
+Read-only inspection of the owner's signed-in Discord and Developer Portal verified
+the existing MandoBot application, matching bot account, MandoMC guild, staff/Citizen/
+Linked role IDs, Tickets category, ticket-log channel and original ticket panel.
+Saved the verified IDs, public key and a prepared Worker configuration only in
+ignored owner-readable `.local/discord/`. Both the application webhook endpoint
+and Interactions Endpoint are blank; all three Gateway intents are already enabled.
+The bot's existing highest role has Administrator and is above the staff/link roles.
+No settings, credentials, roles, messages, channels or webhook URLs were changed.
+
+The role list does not contain Warrior, Marshal, Mandalore or Creator. Keep rank
+mapping empty until the intended mappings/role creation are selected. The existing
+token cannot be viewed again in the Developer Portal, and no reset was performed;
+the owner was asked for the original private `.env`/hosting configuration location.
+Cloudflare account/database setup and live guild checks remain unfinished.
+
+Draft PR #77 contains the implementation. Both push and PR Server checks pass for
+8993307; publication and production upload were skipped. Next action: recover the
+existing token from the owner's original private bot configuration without rotating it.
+
 ## Discord bot and bidirectional ranks implemented (2026-11-18)
 
 On `bilal/discord-bot-sync`, recreated MandoBot's link/baltop/players/ticket behavior
