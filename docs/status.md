@@ -14,7 +14,13 @@ The particle shader compiled and linked against the existing pinned client.
 Disposable Paper passed 2,834 assertions, including crafting, mining, wire power
 and drops, protected placement, enchanting, and armor trim.
 
-Next, publish the matching checked pack and apply the scoped development update.
+Development runs `e30fefe0b32f` with the matching public pack pinned. The
+30-second in-game warning, stopped backup, and restart completed. Paper startup,
+the deployed file hashes, and the 410-source M4-ND bundle verified. All 396
+gameplay and four access tests passed. Tooling ran 100 tests with seven skips.
+
+Next, reconnect with the updated pack to visually check the wire, sparks, and
+enchanting slot in the client.
 
 ## Electrum slot and wiring (2026-11-18)
 
