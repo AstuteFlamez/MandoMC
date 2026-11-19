@@ -19,7 +19,7 @@ WIRE_LEVELS = {
     'high': ('11|12|13|14|15', (255, 199, 72)),
 }
 CIRCUIT_SPRITES = {
-    'block': ('redstone_block', 'redstone_lamp', 'redstone_lamp_on', 'redstone_torch',
+    'block': ('redstone_lamp', 'redstone_lamp_on', 'redstone_torch',
               'redstone_torch_off', 'repeater', 'repeater_on', 'comparator', 'comparator_on',
               'observer_back', 'observer_back_on', 'target_side', 'target_top',
               'powered_rail', 'powered_rail_on', 'detector_rail', 'detector_rail_on',
@@ -92,7 +92,7 @@ def main(client):
     for folder, names in CIRCUIT_SPRITES.items():
         for name in names:
             path = f'minecraft/textures/{folder}/{name}.png'
-            texture = gold(sprite(path), all_pixels=folder == 'trims/color_palettes' or name == 'redstone_block')
+            texture = gold(sprite(path), all_pixels=folder == 'trims/color_palettes')
             if folder != 'trims/color_palettes':
                 texture = texture.resize((32, 32), Image.Resampling.NEAREST)
             write_sprite(path, texture)

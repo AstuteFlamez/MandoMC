@@ -12,7 +12,7 @@ Inventory views display an item rarity and category, including vanilla blocks. T
 
 ## Rules
 
-Tagged former Electrum Scrap, ingot and storage items migrate by quantity when inventories are opened, loaded or picked up. Existing vanilla dust stacks migrate to Electrum Dust on inventory access. Electrum Dust Blocks retain native circuit power and unpack into dust. Electrum Ingot Blocks are a separate storage item. New placed Electrum storage is tracked independently of waxed copper for mining and compaction. Placed waxed copper shares the Electrum storage texture with the current pack. Vanilla lapis has its ordinary uses outside the enchanting table.
+Tagged former Electrum Scrap, ingot and storage items migrate by quantity when inventories are opened, loaded or picked up. Existing vanilla dust stacks migrate to Electrum Dust on inventory access. Craft nine Electrum Dust into an Electrum Dust Block that powers nearby circuits and unpacks into nine dust. Electrum Ingot Blocks store ingots. Both blocks use the same 32 × 32 gold Electrum plate, with separate inventory names and recipes. New placed Electrum storage is tracked independently of waxed copper for mining and compaction. Placed waxed copper shares the Electrum storage texture with the current pack. Vanilla lapis has its ordinary uses outside the enchanting table.
 
 Staff mode retains its saved inventory, location and player state. Temporary workstations such as crafting tables, anvils and enchanting tables work in staff mode. Staff can inspect accessible storage while item transfers are blocked. Builder staff in Creative can make direct block edits in protected territory. Persistent economy actions keep their existing staff restrictions.
 

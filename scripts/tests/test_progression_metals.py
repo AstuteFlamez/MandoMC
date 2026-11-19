@@ -64,11 +64,28 @@ class ProgressionMetalTests(unittest.TestCase):
         paths.extend((ASSETS / 'mandomc/textures/particle').glob('electrum_wire_dust_*.png'))
         paths.extend(ASSETS / f'minecraft/textures/{folder}/{name}.png'
                      for folder in ('block', 'item') for name in assets.CIRCUIT_SPRITES[folder])
-        paths.append(ASSETS / 'mandomc/textures/item/legacy/metals/scraps/electrum_dust.png')
+        paths.extend((ASSETS / path) for path in (
+            'mandomc/textures/item/legacy/metals/scraps/electrum_dust.png',
+            'mandomc/textures/block/electrum_block.png',
+        ))
         self.assertEqual(46, len(paths))
         for path in paths:
             with Image.open(path) as sprite:
                 self.assertEqual((32, 32), sprite.size, path.name)
+
+    def test_both_electrum_blocks_use_the_same_storage_face(self):
+        def read(path):
+            return json.loads((ASSETS / path).read_text())
+
+        storage = 'mandomc:block/electrum_block'
+        solid_block = read('minecraft/blockstates/waxed_copper_block.json')
+        solid_item = read('mandomc/items/legacy/electrum_block.json')
+        dust_block = read('minecraft/models/block/redstone_block.json')
+        self.assertEqual(storage, solid_block['variants']['']['model'])
+        self.assertEqual(storage, solid_item['model']['model'])
+        self.assertEqual(storage, dust_block['parent'])
+        self.assertEqual(storage, read('mandomc/models/block/electrum_block.json')['textures']['all'])
+        self.assertFalse((ASSETS / 'minecraft/textures/block/redstone_block.png').exists())
 
     def test_metals_use_four_distinct_native_mineral_patterns(self):
         base = json.loads((ROOT / 'resource-pack/metal-block-sources.json').read_text())['blocks']

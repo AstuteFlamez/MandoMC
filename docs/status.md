@@ -1,5 +1,13 @@
 # Resume here
 
+## Electrum storage textures (2026-11-18)
+
+Electrum Dust Blocks and Electrum Ingot Blocks share the original 32 × 32 gold
+storage face in the world and inventory. Their names, crafting and power
+behavior remain distinct. The focused pack regression verifies the shared model.
+
+Next, apply the verified pack to development before promoting the release.
+
 ## Unified Electrum circuitry (2026-11-18)
 
 All sixteen original English names containing the old circuit material now use
