@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "mandomc:block/electrum_block"
+    }
+  }
+}

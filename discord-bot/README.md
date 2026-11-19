@@ -6,12 +6,15 @@ for Cloudflare Workers/D1 with a separate optional Minecraft-hosted Gateway plug
 
 ## What runs where
 
-The Worker serves `/link`, `/baltop`, `/players`, `/ticket`, `/ticket-panel`, ticket
+The Worker serves `/link`, `/leaderboard`, `/players`, `/ticket`, `/ticket-panel`, ticket
 select/claim/close controls and the authenticated Minecraft bridge. Tickets are private
 Discord channels that their owner and configured staff can use directly. Links,
 single-use eight-character code hashes, sync intent and ticket ownership survive restarts in D1.
 Closing a ticket exports actual channel history to the log channel before deleting it.
-`/baltop` reads the native server’s top-ten snapshot. Verified linking grants 5,000 production credits once through CreditLedger’s atomic reward receipt; the Discord service cannot issue arbitrary balance changes.
+`/leaderboard board:<board>` shows the native top ten for Credits, Player Kills or
+Ilum Time. A successful link sets the member's MandoMC server nickname to the
+Minecraft account name used for verification and grants 5,000 production credits
+once through CreditLedger’s atomic reward receipt.
 
 The production server runs `plugin/discord-gateway` as the optional Paper plugin
 MandoDiscordGateway. It uses JDA 6.7.0 to keep the existing bot Online, relay ticket
@@ -30,7 +33,7 @@ credential is `BRIDGE_SECRET`; development uses distinct `DEV_BRIDGE_SECRET`. Th
 credential determines the source; a request cannot impersonate the other server.
 Production initializes the shared rank target. Atomic per-server receipts distinguish
 old deliveries from fresh edits, and both servers converge on the same durable state.
-Snapshots are separate; `/players` and `/baltop` default to production and accept
+Snapshots are separate. `/players` and `/leaderboard` default to production and accept
 `server:development`. Only production receives link-reward authorization. The native
 ledger waits for the account’s first join before paying, preserving starter credits.
 
@@ -91,16 +94,16 @@ Sources checked 2026-11-18:
    to `https://<your-worker>.workers.dev/interactions` (the alias
    `/api/interactions` works too). Discord's signed PING should validate.
 7. Install the app in the guild with `bot` and `applications.commands` scopes.
-   Give it Manage Roles, Manage Channels, View Channels, Send Messages,
+   Give it Manage Roles, Manage Nicknames, Manage Channels, View Channels, Send Messages,
    Embed Links, Attach Files and Read Message History, in the ticket category
-   and log channel as appropriate. Place its role above every role it manages.
+   and log channel as appropriate. Place its role above the roles it manages and
+   the highest role of members whose nicknames it can set. Discord exempts the guild owner.
    It does not need Administrator. With the companion, enable Server Members
    and Message Content privileged intents too.
 8. Copy `.dev.vars.example` to `.dev.vars` and privately fill the token,
    application ID and guild ID. `npm run register` replaces this application's
-   guild command definitions with the five commands here. Existing global
-   commands are deliberately left untouched. Remove obsolete global definitions
-   in the Developer Portal only after checking the new guild commands.
+   guild command definitions with the five commands here and removes the legacy
+   global slash command `/baltop`. Other global commands are preserved.
 9. Post `/ticket-panel` or retain the old panel. Members can run `/ticket` even
    if no panel exists. Test with a non-staff member.
 
@@ -128,7 +131,7 @@ can grant and revoke that native rank, including its permissions. In particular,
 There are no automatic staff mappings. Operator status is never synchronized.
 
 After a normal server restart, a player runs `/discord` in Minecraft and uses
-`/link code:<code>` in the guild. Codes have 80 bits of random entropy, expire in
+`/link code:<code>` in the guild. Codes have 40 bits of random entropy, expire in
 ten minutes, are stored as hashes and can be redeemed once. Each Minecraft UUID
 and Discord account has at most one link. Five attempts/minute limit guessing.
 There is deliberately no user-facing unlink/relink shortcut that could leave old
@@ -152,8 +155,17 @@ normally converge within a few cycles; larger guilds take up to
 A departed Discord member is skipped, never treated as a rank removal. Missing
 permissions, rate limiting and network failures retain existing game ranks and retry.
 The server logs UUIDs for applied rank changes and rate-limited generic failures;
-tokens and link codes are never logged. `/players` and `/baltop` reject snapshots
-older than two minutes.
+tokens and link codes are never logged. `/players` and `/leaderboard` reject snapshots
+   older than two minutes.
+
+Apply D1 migration `0004_link_nickname.sql` before deploying the Worker revision
+that registers `/leaderboard`. Either Minecraft bridge can process pending
+nickname writes, with retries after network failures. Discord permission denials
+defer the next nickname attempt for one hour and leave rank and reward sync active.
+Existing links and nickname edits made after the initial sync stay in place. Credits
+remain available during a rolling update from the existing Minecraft bridge. Player
+Kills and Ilum Time appear when their Minecraft services are active on the updated
+server and its first new snapshot arrives.
 
 ## Existing bot compatibility and cutover
 
@@ -172,8 +184,8 @@ Portal. Do not rotate the existing token unless it is compromised.
 The old MySQL connection is not a webhook and D1 is not a drop-in MySQL server.
 This implementation does not silently change old DB settings, import unverifiable
 ownership records, or introduce a second economy writer. Old links require relinking
-unless staff explicitly migrates a trusted export. The original old `/baltop` still
-needs its old MySQL balance feed; the replacement reads the native credit snapshot.
+unless staff explicitly migrates a trusted export. The Credits board reads the
+native credit snapshot.
 Back up the database and keep the old process available for rollback. Stop it when
 switching live ownership to avoid duplicate Gateway DMs, auto-role handlers and
 command registration. Run only the new optional companion afterward.

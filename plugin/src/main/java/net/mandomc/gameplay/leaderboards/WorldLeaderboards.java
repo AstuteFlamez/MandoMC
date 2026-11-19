@@ -17,7 +17,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 /** Read-only views of native player statistics and the committed credit ledger. */
 public final class WorldLeaderboards implements AutoCloseable, Listener {
-    private record Row(UUID id, String name, long value) { }
+    public record Row(UUID id, String name, long value) { }
     private static final NamespacedKey TAG = new NamespacedKey("mandomc", "world_leaderboard");
     private final MandoPlugin plugin;
     private final YamlConfiguration config;
@@ -25,6 +25,7 @@ public final class WorldLeaderboards implements AutoCloseable, Listener {
     private final Map<String, TextDisplay> displays = new LinkedHashMap<>();
     private final Set<Chunk> chunks = new HashSet<>();
     private final BukkitTask ticker;
+    private List<Row> killLeaders = List.of();
     private boolean closed;
 
     public WorldLeaderboards(MandoPlugin plugin, YamlConfiguration config) {
@@ -66,6 +67,10 @@ public final class WorldLeaderboards implements AutoCloseable, Listener {
                 .limit(10).toList();
     }
 
+    public List<Row> killLeaders() {
+        return killLeaders;
+    }
+
     private Component message(String key, net.kyori.adventure.text.minimessage.tag.resolver.TagResolver... values) {
         return MiniMessage.miniMessage().deserialize(Objects.requireNonNull(config.getString("messages." + key)), values);
     }
@@ -86,8 +91,9 @@ public final class WorldLeaderboards implements AutoCloseable, Listener {
 
     public void refresh() {
         if (closed) return;
+        killLeaders = kills();
         for (String id : anchors.keySet()) {
-            var rows = id.equals("kills") ? kills() : plugin.credits().ledger().top(10).stream()
+            var rows = id.equals("kills") ? killLeaders : plugin.credits().ledger().top(10).stream()
                     .map(entry -> new Row(entry.getKey(), name(entry.getKey()), entry.getValue())).toList();
             List<Component> lines = new ArrayList<>(); int rank = 0;
             for (var row : rows) lines.add(message(id + "-row",

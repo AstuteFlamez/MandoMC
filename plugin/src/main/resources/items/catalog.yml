@@ -22,7 +22,9 @@
     "tokens": "<gray>[Tokens]",
     "tools": "ĸ",
     "trophies": "<font:mandomc:trophies></font>",
-    "enchantment": "<font:mandomc:enchantment></font>"
+    "enchantment": "<font:mandomc:enchantment></font>",
+    "blocks": "<font:mandomc:item_categories></font>",
+    "ammo": "ģ"
   },
   "external-items": {
     "e11": {

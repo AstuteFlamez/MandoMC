@@ -50,8 +50,10 @@ public class LegacyRecipesTest {
                 }
             }
         }
-        assertEquals(126, config.getConfigurationSection("recipes").getKeys(false).size());
-        assertEquals(12, config.getConfigurationSection("smelting").getKeys(false).size());
+        assertFalse(config.contains("recipes.bantha_hide_from_rabbit_hide"));
+        assertTrue(config.getStringList("replace-native").contains("minecraft:leather"));
+        assertEquals(125, config.getConfigurationSection("recipes").getKeys(false).size());
+        assertEquals(13, config.getConfigurationSection("smelting").getKeys(false).size());
         assertEquals(70, config.getConfigurationSection("stonecutting").getKeys(false).size());
     }
 

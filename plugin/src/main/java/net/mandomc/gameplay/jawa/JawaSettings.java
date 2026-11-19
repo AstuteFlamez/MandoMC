@@ -23,7 +23,7 @@ public record JawaSettings(List<String> worlds, int interval, int cap, int minim
                 || near<16 || far<near+4 || far>128 || lifetime<60 || lifetime>7200)
             throw new IllegalArgumentException("mobs/jawas.yml: invalid population or shop bounds");
         var supplies=offers(config,"shop.supplies"); var purchases=offers(config,"shop.purchases");
-        if (supplies.isEmpty() || purchases.isEmpty() || purchases.size()>28) throw new IllegalArgumentException("mobs/jawas.yml: invalid offer count");
+        if (supplies.isEmpty() || purchases.isEmpty()) throw new IllegalArgumentException("mobs/jawas.yml: invalid offer count");
         var definitions=Objects.requireNonNull(config.getConfigurationSection("shop.categories"),"mobs/jawas.yml: categories required");
         var byId=new HashMap<String,Offer>();for(var offer:supplies)byId.put(offer.id(),offer);
         var assigned=new HashSet<String>();var categories=new ArrayList<Category>();

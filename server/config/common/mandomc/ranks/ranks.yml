@@ -24,7 +24,7 @@ ranks:
     icon: "ħ"
     color: "#00AAAA"
     inherits: ["mandalore"]
-    permissions: ["mandomc.staff", "mandomc.travel.back", "mandomc.admin.fly", "mandomc.admin.gamemode", "mandomc.admin.mvtp", "mandomc.admin.speed", "mandomc.admin.flyspeed", "mandomc.travel.homes.unlimited", "minecraft.command.clear", "worldedit.*"]
+    permissions: ["mandomc.staff", "mandomc.travel.back", "mandomc.admin.fly", "mandomc.admin.gamemode", "mandomc.admin.mvtp", "mandomc.admin.speed", "mandomc.admin.flyspeed", "mandomc.travel.homes.unlimited", "minecraft.command.clear", "mandomc.territory.edit", "worldedit.*"]
   creator:
     name: Creator
     order: 3

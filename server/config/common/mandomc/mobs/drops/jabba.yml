@@ -19,6 +19,7 @@ drops:
     ammo-rolls: 20
   BobaFett:
     weapon: ee3
+    guarantee-equipment: true
     weapon-chance: 0.5
     ammo: standard_plasma_cells
     ammo-chance: 0.5

@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.mandomc.gameplay.items.ItemCatalog;
+import net.mandomc.gameplay.admin.StaffMode;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -77,7 +78,11 @@ public final class SurvivalRules implements Listener {
             if (type.isAlive()) disabledNaturalMobs.add(type);
         }
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        new net.mandomc.integrations.paper.RedstoneCircuitBoundary(plugin);
+        if ("26.1.2-v1".equals(System.getProperty("mandomc.redstone.agent"))) {
+            throw new IllegalStateException("Install the matching MandoMC launcher to enable redstone.");
+        }
+        plugin.getServer().getPluginManager().registerEvents(new net.mandomc.gameplay.items.ElectrumBlocks(items), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new net.mandomc.integrations.paper.ElectrumWirePlacement(items), plugin);
         plugin.getServer().getPluginManager().registerEvents(new net.mandomc.gameplay.items.OreDrops(items), plugin);
         plugin.getServer().getPluginManager().registerEvents(new net.mandomc.gameplay.items.MetalMaterials(items), plugin);
     }
@@ -138,6 +143,7 @@ public final class SurvivalRules implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void interact(PlayerInteractEvent event) {
+        if (StaffMode.active(event.getPlayer())) return;
         // RIGHT_CLICK_AIR often starts cancelled; use the two independent use results instead.
         boolean right = event.getAction().isRightClick();
         if (banned(event.getItem())) {
@@ -159,7 +165,7 @@ public final class SurvivalRules implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void melee(org.bukkit.event.entity.EntityDamageByEntityEvent event) {
-        if (event.getDamager() instanceof Player player && banned(player.getInventory().getItemInMainHand())) {
+        if (event.getDamager() instanceof Player player && !StaffMode.active(player) && banned(player.getInventory().getItemInMainHand())) {
             event.setCancelled(true);
             deny(player, "item-disabled");
         }
@@ -167,17 +173,17 @@ public final class SurvivalRules implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void shoot(org.bukkit.event.entity.EntityShootBowEvent event) {
-        if (event.getEntity() instanceof Player && banned(event.getBow())) event.setCancelled(true);
+        if (event.getEntity() instanceof Player player && !StaffMode.active(player) && banned(event.getBow())) event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void glide(EntityToggleGlideEvent event) {
-        if (elytras && event.isGliding()) event.setCancelled(true);
+        if (elytras && event.isGliding() && !(event.getEntity() instanceof Player player && StaffMode.active(player))) event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void consume(PlayerItemConsumeEvent event) {
-        if (banned(event.getItem())) {
+        if (!StaffMode.active(event.getPlayer()) && banned(event.getItem())) {
             event.setCancelled(true);
             deny(event.getPlayer(), "item-disabled");
         }
@@ -190,7 +196,8 @@ public final class SurvivalRules implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void launch(ProjectileLaunchEvent event) {
-        if (potions && event.getEntity() instanceof ThrownPotion) event.setCancelled(true);
+        if (potions && event.getEntity() instanceof ThrownPotion potion
+                && !(potion.getShooter() instanceof Player player && StaffMode.active(player))) event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -201,7 +208,8 @@ public final class SurvivalRules implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void effects(EntityPotionEffectEvent event) {
-        if (!potions || event.getNewEffect() == null) return;
+        if (!potions || event.getNewEffect() == null
+                || event.getEntity() instanceof Player player && StaffMode.active(player)) return;
         switch (event.getCause()) {
             case POTION_DRINK, POTION_SPLASH, AREA_EFFECT_CLOUD -> event.setCancelled(true);
             default -> { } // Food, beacons and plugin/mob abilities keep their own effects.
@@ -212,11 +220,12 @@ public final class SurvivalRules implements Listener {
     public void brew(BrewEvent event) { if (potions) event.setCancelled(true); }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void enchant(EnchantItemEvent event) { if (enchanting) event.setCancelled(true); }
+    public void enchant(EnchantItemEvent event) { if (enchanting && !StaffMode.active(event.getEnchanter())) event.setCancelled(true); }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void anvil(PrepareAnvilEvent event) {
-        if (!enchanting || event.getResult() == null) return;
+        if (!enchanting || event.getResult() == null
+                || event.getView().getPlayer() instanceof Player player && StaffMode.active(player)) return;
         var left = event.getInventory().getItem(0);
         var right = event.getInventory().getItem(1);
         boolean book = right != null && right.getItemMeta() instanceof EnchantmentStorageMeta meta
@@ -230,7 +239,8 @@ public final class SurvivalRules implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void craft(PrepareItemCraftEvent event) {
         var result = event.getInventory().getResult();
-        if (banned(result) || deniedArmorCraft(result, event.isRepair())) {
+        if (!(event.getView().getPlayer() instanceof Player player && StaffMode.active(player))
+                && (banned(result) || deniedArmorCraft(result, event.isRepair()))) {
             event.getInventory().setResult(null);
             return;
         }
@@ -278,7 +288,8 @@ public final class SurvivalRules implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void takeCraft(org.bukkit.event.inventory.CraftItemEvent event) {
-        if (deniedArmorCraft(event.getCurrentItem(), repairRecipe(event.getRecipe()))) {
+        if (!(event.getWhoClicked() instanceof Player player && StaffMode.active(player))
+                && deniedArmorCraft(event.getCurrentItem(), repairRecipe(event.getRecipe()))) {
             event.setCancelled(true);
         }
     }

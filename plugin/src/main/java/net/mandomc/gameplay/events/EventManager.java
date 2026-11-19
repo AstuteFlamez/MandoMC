@@ -116,9 +116,14 @@ public final class EventManager implements Listener, AutoCloseable {
             nextEvents.put(jabba.id(),jabba);
             nextEntries.put(jabba.id(),new EventRotation.Entry(jabba.id(),jabbaConfig.getInt("weight",-1),jabbaConfig.getInt("cooldown-cycles",-1),jabbaConfig.getBoolean("enabled",false)));
             var beskarConfig=read("events/beskar.yml");
+            if(beskarConfig.getInt("rotation-version")<1) {
+                if(beskarConfig.getInt("weight")==0) beskarConfig.set("weight",10);
+                beskarConfig.set("rotation-version",1);
+                beskarConfig.save(new File(plugin.getDataFolder(),"events/beskar.yml"));
+            }
             var beskar=new net.mandomc.gameplay.events.beskar.BeskarEvent(plugin,catalog,beskarConfig);
             nextEvents.put(beskar.id(),beskar);
-            nextEntries.put(beskar.id(),new EventRotation.Entry(beskar.id(),beskarConfig.getInt("weight",0),beskarConfig.getInt("cooldown-cycles",1),beskarConfig.getBoolean("enabled",false)));
+            nextEntries.put(beskar.id(),new EventRotation.Entry(beskar.id(),beskarConfig.getInt("weight",-1),beskarConfig.getInt("cooldown-cycles",1),beskarConfig.getBoolean("enabled",false)));
         } catch(Exception error) {nextEvents.values().forEach(ManagedEvent::close);throw error;}
         events.values().forEach(ManagedEvent::close);
         config=nextConfig;zone=nextZone;schedule=nextSchedule;startMinute=nextMinute;

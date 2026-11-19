@@ -125,6 +125,75 @@ public class ClanStateTest {
         assertTrue(state.claims.isEmpty());assertNull(state.member(a.leader));assertEquals(1,state.rivalries.size());
         assertEquals(1,state.score(b.id,c.id));
     }
+    @Test public void alliancesRequireExactlyFourAndShareTheirRecruitmentCapacity() {
+        var a = clan("Alpha");
+        var b = clan("Bravo");
+        var c = clan("Charlie");
+        assertEquals("ally-members", assertThrows(IllegalArgumentException.class,
+                () -> state.formAlliance(a, b, 1000)).getMessage());
+        var recruit = UUID.randomUUID();
+        state.join(a, recruit, 4, 1000);
+        state.join(b, UUID.randomUUID(), 4, 1000);
+        state.join(b, UUID.randomUUID(), 4, 1000);
+        assertEquals("ally-members", assertThrows(IllegalArgumentException.class,
+                () -> state.formAlliance(a, b, 1000)).getMessage());
+        state.kick(b, b.leader, b.members.stream().filter(id -> !id.equals(b.leader)).findFirst().orElseThrow());
+
+        state.formAlliance(a, b, 1000);
+        assertTrue(state.allied(a.id, b.id));
+        assertTrue(state.allied(b.id, a.id));
+        assertEquals("ally-limit", assertThrows(IllegalArgumentException.class,
+                () -> state.formAlliance(a, c, 1000)).getMessage());
+        assertEquals("ally-full", assertThrows(IllegalArgumentException.class,
+                () -> state.checkRecruitment(a, 4)).getMessage());
+        state.kick(a, a.leader, recruit);
+        state.checkRecruitment(a, 4);
+        state.checkRecruitment(b, 4);
+        state.join(b, UUID.randomUUID(), 4, 2000);
+        assertEquals("ally-full", assertThrows(IllegalArgumentException.class,
+                () -> state.join(a, recruit, 4, 2001)).getMessage());
+        assertTrue(state.endAlliance(a, b));
+        state.join(a, recruit, 4, 2002);
+    }
+
+    @Test public void alliancesCannotBeUsedToEndAnActiveRaidOrStartAnother() {
+        var a = clan("Alpha");
+        var b = clan("Bravo");
+        state.join(a, UUID.randomUUID(), 4, 1000);
+        state.join(b, UUID.randomUUID(), 4, 1000);
+        unlock(a, b);
+        assertTrue(state.breach(a.id, b.id, 3000, 1000, 10));
+        assertEquals("ally-active-raid", assertThrows(IllegalArgumentException.class,
+                () -> state.formAlliance(a, b, 3999)).getMessage());
+        for (int i = 0; i < 10; i++) state.kill(a.id, b.id, 4000 + i);
+        state.formAlliance(a, b, 5000);
+        state.kill(a.id, b.id, 5001);
+        assertEquals(10, state.score(a.id, b.id));
+        assertFalse(state.canRaid(a.id, b.id, 5001, 10));
+        assertFalse(state.breach(a.id, b.id, 5002, 1000, 10));
+        state.remove(b);
+        assertNull(state.ally(a));
+    }
+
+    @Test public void restartKeepsAnAllianceWithOpenRosterSlots() throws Exception {
+        var a = clan("Alpha");
+        var b = clan("Bravo");
+        var recruit = UUID.randomUUID();
+        state.join(a, recruit, 4, 1000);
+        state.join(b, UUID.randomUUID(), 4, 1000);
+        state.formAlliance(a, b, 2000);
+        state.kick(a, a.leader, recruit);
+        Path file = Files.createTempFile("clan-alliance-test", ".yml");
+        try {
+            Files.writeString(file, ClanStorage.encode(state));
+            var loaded = ClanStorage.load(file);
+            assertTrue(loaded.allied(a.id, b.id));
+            loaded.join(loaded.clans.get(a.id), recruit, 4, 3000);
+            assertEquals("ally-full", assertThrows(IllegalArgumentException.class,
+                    () -> loaded.checkRecruitment(loaded.clans.get(b.id), 4)).getMessage());
+        } finally { Files.deleteIfExists(file); }
+    }
+
     @Test public void restartPreservesClaimsMembershipAbandonmentHomeAndRaidDeadline() throws Exception {
         var a=clan("Alpha");var b=clan("Bravo");unlock(a,b);state.breach(a.id,b.id,3000,3600000,10);
         state.claim(a,new ClanState.Chunk("minecraft:test",-2,4),4,c->true);

@@ -12,6 +12,6 @@ name: SaberEnchantmentProbe
 version: '1'
 main: net.mandomc.verification.SaberEnchantmentProbe
 api-version: '26.1.2'
-depend: [MandoMC]
+depend: [MandoMC, packetevents]
 YAML
 "$JAVA_HOME/bin/jar" --create --file "$probe_dir/SaberEnchantmentProbe.jar" -C "$probe_dir/classes" .

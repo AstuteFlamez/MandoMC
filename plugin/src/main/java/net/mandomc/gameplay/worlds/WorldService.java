@@ -78,7 +78,13 @@ public final class WorldService implements Listener {
             if (!entry.weather()) { world.setStorm(false); world.setThundering(false); }
             plugin.getLogger().info("Loaded existing world " + key + " with MandoMC arrival settings.");
         }
+        Bukkit.getWorlds().forEach(world -> world.setGameRule(org.bukkit.GameRules.LOCATOR_BAR, false));
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+
+    @EventHandler
+    public void worldLoad(org.bukkit.event.world.WorldLoadEvent event) {
+        event.getWorld().setGameRule(org.bukkit.GameRules.LOCATOR_BAR, false);
     }
 
     private static double number(ConfigurationSection data, String path) {

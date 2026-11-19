@@ -37,5 +37,8 @@
     "recall-none": "<yellow>You have no deployed vehicle to recall.",
     "recall-temporary": "<yellow>Leave staff mode or your tutorial before recalling your survival vehicle.",
     "already-deployed": "<red>Pack your deployed vehicle or use /vehicle recall before placing another. The server vehicle limit may also be full."
+  },
+  "private-messages": {
+    "no-recent-target": "<red>Use /msg <player> <message> to start a conversation."
   }
 }

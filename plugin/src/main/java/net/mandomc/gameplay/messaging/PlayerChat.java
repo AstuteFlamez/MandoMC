@@ -51,7 +51,13 @@ public final class PlayerChat {
         return node;
     }
     public static Component render(RankCatalog.Rank rank, Component name, Component message) {
-        return displayName(rank, name).append(Component.text(" » ", NamedTextColor.DARK_GRAY))
+        return render(rank, name, message, null, null);
+    }
+    public static Component render(RankCatalog.Rank rank, Component name, Component message,
+                                   String clan, NamedTextColor clanColor) {
+        var display = displayName(rank, name);
+        if (clan != null) display = display.append(Component.text(" [" + clan + "]", clanColor));
+        return display.append(Component.text(" » ", NamedTextColor.DARK_GRAY))
                 .append(message.colorIfAbsent(NamedTextColor.GRAY));
     }
 }

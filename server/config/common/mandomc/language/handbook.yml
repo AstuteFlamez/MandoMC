@@ -87,7 +87,7 @@ pages:
 - id: clans_claims
   topic: Clans & Claims
   heading: Clans & Claims
-  body: 'Max 4 players; 4 chunks.
+  body: '4 players, 4 chunks.
 
     /c create <name>
 
@@ -99,8 +99,10 @@ pages:
 
     /c map
 
+    Leave one chunk between your claim and rivals or zones.
 
-    Leave a full empty chunk beside rival claims and protected zones.'
+    Wilderness resets after 24h
+    without edits.'
 - id: raids_warpoints
   topic: Raids & Warpoints
   heading: Raids & Warpoints

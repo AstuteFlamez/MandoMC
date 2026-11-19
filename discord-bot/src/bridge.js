@@ -4,10 +4,13 @@ import {digest, discord, DiscordError} from './discord.js';
 export class UserError extends Error {}
 export const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 export const idPattern = /^\d{17,20}$/;
+const usernamePattern = /^[A-Za-z0-9_]{1,16}$/;
 const nowSeconds = () => Math.floor(Date.now() / 1000);
 
 export async function issueCode(env, body) {
-  if (!uuidPattern.test(body.uuid) || !/^[A-Za-z0-9_]{1,16}$/.test(body.username)) throw new UserError('Invalid account');
+  if (!uuidPattern.test(body.uuid) || typeof body.username !== 'string' || !usernamePattern.test(body.username)) {
+    throw new UserError('Invalid account');
+  }
   const existing = await env.DB.prepare('SELECT discord_id FROM links WHERE uuid = ?').bind(body.uuid).first();
   if (existing) return {linked: true};
   const alphabet = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
@@ -37,14 +40,26 @@ export async function linkAccount(env, user, code) {
   let result;
   try {
     result = await env.DB.batch([
-      env.DB.prepare('INSERT INTO links(uuid,discord_id,username) SELECT uuid,?,username FROM codes WHERE code_hash=? AND expires>=?')
+      env.DB.prepare('INSERT INTO links(uuid,discord_id,username,nickname_sync_after) SELECT uuid,?,username,0 FROM codes WHERE code_hash=? AND expires>=?')
         .bind(user, hash, nowSeconds()),
       env.DB.prepare('DELETE FROM codes WHERE code_hash=? AND uuid IN (SELECT uuid FROM links WHERE discord_id=?)').bind(hash, user)
     ]);
   } catch { throw new UserError('This Minecraft or Discord account is already linked.'); }
   if (result[0].meta.changes !== 1) throw new UserError('Invalid or expired code.');
-  // Roles are applied by the retrying bridge, so a transient Discord failure cannot consume a successful link.
-  return 'Account linked. Your roles will synchronize shortly. C0-M5 will credit your one-time 5,000-credit reward after your Minecraft account has joined the server.';
+  // Durable pending state lets the bridge retry Discord updates after committing the link.
+  return 'Account linked. Your roles and Minecraft nickname will synchronize shortly. C0-M5 will credit your one-time 5,000-credit reward after your Minecraft account has joined the server.';
+}
+
+async function syncNickname(env, row, member, path) {
+  let next = null;
+  try {
+    if (member.nick !== row.username) await discord(env, path, 'PATCH', {nick: row.username});
+  } catch (error) {
+    if (!(error instanceof DiscordError) || error.status !== 403) return; // Retry transient failures next cycle.
+    next = nowSeconds() + 3600;
+    console.warn('C0-M5 could not set a nickname. Check Manage Nicknames and the Discord role hierarchy.');
+  }
+  await env.DB.prepare('UPDATE links SET nickname_sync_after=? WHERE uuid=?').bind(next, row.uuid).run();
 }
 
 async function syncPlayer(env, player, mapping, server) {
@@ -53,15 +68,24 @@ async function syncPlayer(env, player, mapping, server) {
   const row = await env.DB.prepare('SELECT * FROM links WHERE uuid=?').bind(player.uuid).first();
   if (!row) return null;
   const previous = row.state ? JSON.parse(row.state) : null;
-  if (server !== 'production' && (!previous || previous.signature !== JSON.stringify(Object.entries(mapping).sort(([a], [b]) => a.localeCompare(b)))))
-    return {uuid: player.uuid, awaiting_primary: true};
+  const awaitingPrimary = server !== 'production' && (!previous ||
+    previous.signature !== JSON.stringify(Object.entries(mapping).sort(([a], [b]) => a.localeCompare(b))));
+  const nicknamePending = row.nickname_sync_after != null && row.nickname_sync_after <= nowSeconds();
+  if (awaitingPrimary && !nicknamePending) return {uuid: player.uuid, awaiting_primary: true};
+  const memberPath = `/guilds/${env.DISCORD_GUILD_ID}/members/${row.discord_id}`;
   let member;
-  try { member = await discord(env, `/guilds/${env.DISCORD_GUILD_ID}/members/${row.discord_id}`); }
+  try { member = await discord(env, memberPath); }
   catch (error) {
     // A guild departure is not a demotion. Retain the link and all Minecraft memberships.
     if (error instanceof DiscordError && error.status === 404) return {uuid: player.uuid, absent: true};
     throw error;
   }
+  // The shared lease permits either bridge to apply the linked name before any role changes.
+  if (nicknamePending) {
+    try { await syncNickname(env, row, member, memberPath); }
+    catch { console.warn('C0-M5 could not save nickname sync progress; retrying next cycle.'); }
+  }
+  if (awaitingPrimary) return {uuid: player.uuid, awaiting_primary: true};
   const current = Object.keys(mapping).filter(rank => member.roles.includes(mapping[rank]));
   const state = reconcileShared(player.ranks, current, previous, mapping, server,
     Number.isSafeInteger(player.ack) ? player.ack : 0, player.ack_signature || '');
@@ -75,7 +99,7 @@ async function syncPlayer(env, player, mapping, server) {
     await env.DB.prepare('UPDATE links SET state=? WHERE uuid=?').bind(JSON.stringify(state), player.uuid).run();
   }
   for (const role of changes) {
-    await discord(env, `/guilds/${env.DISCORD_GUILD_ID}/members/${row.discord_id}/roles/${role}`, wanted.has(role) ? 'PUT' : 'DELETE');
+    await discord(env, `${memberPath}/roles/${role}`, wanted.has(role) ? 'PUT' : 'DELETE');
   }
   state.discordApplied = true;
   state.discordBaseline = state.target;
@@ -114,12 +138,19 @@ export async function sync(env, body, server = 'production') {
   }
 }
 
+function validBoard(rows, field, minimum = 0) {
+  return Array.isArray(rows) && rows.length <= 10 && rows.every(row =>
+    typeof row?.username === 'string' && usernamePattern.test(row.username) &&
+    Number.isSafeInteger(row[field]) && row[field] >= minimum);
+}
+
 export async function saveSnapshot(env, body, server = 'production') {
-  if (!Number.isInteger(body.online) || body.online < 0 || !Number.isInteger(body.maximum) || body.maximum < body.online ||
-      !Array.isArray(body.baltop) || body.baltop.length > 10 || body.baltop.some(row =>
-        !/^[A-Za-z0-9_]{1,16}$/.test(row.username) || !Number.isSafeInteger(row.cents) || row.cents < 0)) throw new UserError('Invalid snapshot');
+  const {online, maximum, baltop, kills, ilum} = body;
+  if (!Number.isInteger(online) || online < 0 || !Number.isInteger(maximum) || maximum < online ||
+      !validBoard(baltop, 'cents') || (kills !== undefined && !validBoard(kills, 'kills')) ||
+      (ilum !== undefined && !validBoard(ilum, 'millis', 1))) throw new UserError('Invalid snapshot');
   await env.DB.prepare('INSERT INTO server_snapshots(server,body,updated) VALUES(?,?,?) ON CONFLICT(server) DO UPDATE SET body=excluded.body,updated=excluded.updated')
-    .bind(server, JSON.stringify({online: body.online, maximum: body.maximum, baltop: body.baltop}), nowSeconds()).run();
+    .bind(server, JSON.stringify({online, maximum, baltop, kills, ilum}), nowSeconds()).run();
   await env.DB.batch([
     env.DB.prepare('DELETE FROM attempts WHERE window < ?').bind(Math.floor(nowSeconds() / 60) - 60),
     env.DB.prepare('DELETE FROM leases WHERE expires < ?').bind(Date.now())

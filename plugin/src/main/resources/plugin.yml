@@ -6,6 +6,14 @@ author: AstuteFlamez
 description: MandoMC gameplay
 softdepend: [ packetevents, WorldEdit, WeaponMechanics, MythicMobs, ModelEngine]
 commands:
+  msg:
+    description: Send a private message to an online player
+    usage: /msg <player> <message>
+    aliases: [tell, w]
+  reply:
+    description: Reply to your latest private message
+    usage: /reply <message>
+    aliases: [r]
   discord:
     description: Link your Minecraft and Discord accounts
     usage: /discord
@@ -47,8 +55,8 @@ commands:
     usage: /parkourfinish <player>
     permission: mandomc.parkour.admin
   c:
-    description: Manage your clan, claims and rivalries
-    usage: /c [create|invite|join|claim|home|warpoints|map]
+    description: Manage your clan, claims, alliances and rivalries
+    usage: /c [create|invite|join|claim|home|info|ally|unally|warpoints|map]
     aliases: [clan, cl]
     permission: mandomc.clan.map
   auctionhouse:

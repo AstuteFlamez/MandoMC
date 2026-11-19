@@ -35,7 +35,7 @@ public final class LandRestoration implements AutoCloseable {
     private final JavaPlugin plugin;
     private final ExecutorService io;
     private final Path folder;
-    private final CoalTerrainOverlay coal;
+    private final OreTerrainOverlay ores;
     private final long delay;
     private final int budget;
     private final Predicate<ClanState.Chunk> claimed;
@@ -50,7 +50,9 @@ public final class LandRestoration implements AutoCloseable {
                            Predicate<ClanState.Chunk> claimed) throws Exception {
         this.plugin=plugin; this.io=io; this.delay=delay; this.budget=budget; this.claimed=claimed;
         folder=plugin.getDataFolder().toPath().resolve("data/land-baselines");
-        coal=new CoalTerrainOverlay(plugin.getDataFolder().toPath().resolve("data/coal-terrain.yml"));
+        var data=plugin.getDataFolder().toPath().resolve("data");
+        var oreTerrain=data.resolve("planet-ore-terrain.yml");
+        ores=new OreTerrainOverlay(Files.exists(oreTerrain)?oreTerrain:data.resolve("coal-terrain.yml"));
         if (Files.exists(folder)) try (var paths=Files.list(folder)) {
             for (Path path:paths.filter(p->p.toString().endsWith(".gz")).toList()) {
                 Land land=read(path,false);
@@ -129,6 +131,16 @@ public final class LandRestoration implements AutoCloseable {
     public void inherit(ClanState.Chunk from,ClanState.Chunk to) {
         var source=lands.get(from);var target=lands.get(to);
         if(source!=null&&target!=null&&source.due>target.due){target.due=source.due;checkpoint(target);}
+    }
+    public void inherit(Set<ClanState.Chunk> chunks) {
+        var affected = chunks.stream().map(lands::get).filter(java.util.Objects::nonNull).toList();
+        long latest = affected.stream().mapToLong(land -> land.due).max().orElse(0);
+        for (var land : affected) {
+            if (land.due < latest) {
+                land.due = latest;
+                checkpoint(land);
+            }
+        }
     }
     public void release(ClanState.Chunk chunk, boolean immediate) {
         var land=lands.get(chunk);
@@ -224,7 +236,7 @@ public final class LandRestoration implements AutoCloseable {
             var land=new Land(chunk,min,max,blocks,due);land.cursor=cursor;
             int bytes=in.readInt();if(bytes<0||bytes>(blocks.length+7)/8)throw new IOException("Invalid staff mask");
             land.staff.or(BitSet.valueOf(in.readNBytes(bytes)));
-            coal.apply(chunk,min,blocks,land.staff);return land;
+            ores.apply(chunk,min,blocks,land.staff);return land;
         }
     }
     @Override public void close(){closed=true;task.cancel();}

@@ -87,7 +87,7 @@ crates:
     - item: agrinium_scrap
       amount: 8
       weight: 40
-    - item: electrum_scrap
+    - item: electrum_dust
       amount: 8
       weight: 30
     - item: durasteel_scrap

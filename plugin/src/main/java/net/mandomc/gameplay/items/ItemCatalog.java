@@ -23,7 +23,7 @@ public final class ItemCatalog {
     public static final NamespacedKey ITEM_ID = new NamespacedKey("mandomc", "item_id");
     private final Path directory;
     private final MiniMessage mini = MiniMessage.miniMessage();
-    private record Entry(String category, java.util.function.Supplier<ItemStack> factory) { }
+    private record Entry(String category, String rarity, java.util.function.Supplier<ItemStack> factory) { }
     private Map<String, Entry> entries = Map.of();
     private Set<String> externalIds = Set.of();
     private Map<String, Set<String>> badgeTexts = Map.of();
@@ -60,7 +60,7 @@ public final class ItemCatalog {
         var candidate = new LinkedHashMap<String, Entry>();
         for (var definition : definitions.values()) {
             var template = build(definition, presentation);
-            candidate.put(definition.id(), new Entry(definition.category(), template::clone));
+            candidate.put(definition.id(), new Entry(definition.category(), definition.rarity(), template::clone));
         }
         var external = presentation.getConfigurationSection("external-items");
         if (external != null) {
@@ -76,7 +76,7 @@ public final class ItemCatalog {
                         || !category.matches("[a-z0-9_]+")) {
                     throw new IllegalArgumentException("items/catalog.yml: invalid external item fields for " + id);
                 }
-                if (candidate.putIfAbsent(id, new Entry(category, () -> externalFactory.apply(kind, vendorId))) != null) {
+                if (candidate.putIfAbsent(id, new Entry(category, "common", () -> externalFactory.apply(kind, vendorId))) != null) {
                     throw new IllegalArgumentException("items/catalog.yml: duplicate item ID " + id);
                 }
             }
@@ -116,7 +116,11 @@ public final class ItemCatalog {
 
     /** Returns an independent item. Callers never receive a cached mutable template. */
     public ItemStack create(String id) {
-        var entry = entries.get("saber_forge".equals(id) ? "saber_workbench" : MetalMigration.ingotId(id));
+        var entry = entries.get(switch (id == null ? "" : id) {
+            case "saber_forge" -> "saber_workbench";
+            case "electrum_scrap" -> "electrum_dust";
+            default -> MetalMigration.ingotId(id);
+        });
         if (entry == null) return null;
         var item = entry.factory().get().clone();
         presentation.accept(item);
@@ -126,6 +130,17 @@ public final class ItemCatalog {
     public void presentation(java.util.function.Consumer<ItemStack> update) { presentation = update; }
     public Component badges(String rarity, String category) {
         return text("<white>" + badge(badgeConfig, "rarities", rarity) + badge(badgeConfig, "categories", category));
+    }
+
+    public Map<String, Component> catalogBadges() {
+        var result = new LinkedHashMap<String, Component>();
+        entries.forEach((id, entry) -> result.put(id, badges(entry.rarity(), entry.category())));
+        return Map.copyOf(result);
+    }
+
+    public Set<String> badgeRows() {
+        return badgeTexts.values().stream().flatMap(Set::stream)
+                .collect(java.util.stream.Collectors.toUnmodifiableSet());
     }
 
     public Set<String> ids() {

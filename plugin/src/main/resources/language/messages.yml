@@ -185,3 +185,6 @@ boba-equipment:
   offhand-full: '<yellow>Empty your offhand before equipping a jetpack.'
   inventory-full: '<yellow>Make space in your inventory before removing the jetpack.'
   missing-pack: '<yellow>You need a jetpack in your inventory.'
+
+private-messages:
+  no-recent-target: '<red>Use /msg <player> <message> to start a conversation.'

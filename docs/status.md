@@ -1,5 +1,81 @@
 # Resume here
 
+## Electrum storage textures (2026-11-18)
+
+Electrum Dust Blocks and Electrum Ingot Blocks share the original 32 × 32 gold
+storage face in the world and inventory. Their names, crafting and power
+behavior remain distinct. The focused pack regression verifies the shared model.
+
+Next, apply the verified pack to development before promoting the release.
+
+## Unified Electrum circuitry (2026-11-18)
+
+All sixteen original English names containing the old circuit material now use
+Electrum. One Electrum Dust stack serves circuit recipes, wiring, gold armor trim
+and enchanting. Old native dust converts at its existing quantity. Wires return
+the same material when broken, and compacted dust blocks unpack into dust. Intact
+Silk Touch ore remains the furnace source for ingots.
+
+The pack assigns four gold wire brightness levels using native geometry for all
+sixteen states. Circuit accents, the dust sprite, and spark frames are 32 × 32.
+The particle shader compiled and linked against the existing pinned client.
+Disposable Paper passed 2,834 assertions, including crafting, mining, wire power
+and drops, protected placement, enchanting, and armor trim.
+
+Development runs `e30fefe0b32f` with the matching public pack pinned. The
+30-second in-game warning, stopped backup, and restart completed. Paper startup,
+the deployed file hashes, and the 410-source M4-ND bundle verified. All 396
+gameplay and four access tests passed. Tooling ran 100 tests with seven skips.
+
+Next, reconnect with the updated pack to visually check the wire, sparks, and
+enchanting slot in the client.
+
+## Electrum slot and wiring (2026-11-18)
+
+The enchanting slot uses the actual 32 × 32 Electrum Dust silhouette in gray.
+Electrum Dust places ordinary redstone wire and pays one dust per successful
+placement. Both wire sources share the gold wire and spark palette. Electrum
+Dust is no longer a furnace input for ingots. Silk Touch Electrum Ore and its
+deepslate variant still smelt into an ingot.
+
+Disposable Paper passes 2,828 assertions, including native placement, power,
+drops, cancellation, regular ore yields, enchanting, and both new recipes.
+The pinned terrain and particle shaders compile and link. The build passes all
+396 gameplay and four access tests. The 98 toolkit tests pass with seven skips.
+
+Development runs `765c0a6a1573` with the matching public pack verified and pinned.
+The scoped config and JAR hashes and exact-build M4-ND startup passed after the
+30-second in-game warning, stopped backup, and restart.
+
+Next action: reconnect with the updated pack to check the slot hint and wire colors in the client.
+
+## Gameplay feedback and C0-M5 leaderboard (2026-11-18)
+
+The development branch contains the gameplay, economy, clan, UI, resource-pack
+and C0-M5 updates from playtest feedback. Electrum Dust is a 32 × 32 asset and
+both ore variants drop exactly one dust even with Fortune III. Disposable Paper
+passes 2,819 gameplay and enchantment assertions and 38 encounter assertions.
+A separate clan probe covers actual /msg and /r packets, the foreign clan menu,
+alliances, and piston protection and wilderness restoration. The frozen-world
+terrain rehearsal preserved 3,141 original snapshots and verified 20,616 intended
+block changes over 218.9 million checked states. All 396 gameplay, four access,
+45 Discord Worker and 97 tooling checks pass, with seven tooling environment skips.
+
+Development runs `d56a3f4574fb` with the matching published and pinned resource pack.
+After the full 30-second in-game warning and a clean stop, the backed-up terrain
+migration applied 20,616 block changes. Paper startup, the scoped files and the
+410-source M4-ND knowledge bundle verified. GitHub Server checks passed. Production
+Minecraft remains on its current release.
+
+C0-M5's additive D1 migration and Worker update are active. Discord registration
+has the Credits, Player Kills and Ilum Time choices and no global or guild /baltop.
+Both bridges report fresh data. All three boards are available for Development.
+Its Ilum board currently has no recorded entries. Production provides Credits
+until its Minecraft bridge is promoted. C0-M5 has Manage Nicknames and will set
+the verified IGN for new links. A fresh live link was not performed during rollout.
+
+Next action: client-playtest the development pack and complete one new Discord link.
+
 ## C0-M5 join/copy polish requested during playtest (2026-11-18)
 
 The first checked rollout is active on development and PR #77 is merged. The dev-to-main release is open as PR #78 and has not been activated. The owner requested the preferred invite https://discord.gg/bruuZCG5Pk, Discord blue in chat and the hologram, no deployment labels in player instructions, and codes that are both shorter and copyable. New codes use eight unambiguous Base32 characters with the existing expiry/throttle and backward compatibility for outstanding old codes. Added real join, code-copy and full-command-copy client events, including clickable M4-ND invite answers. All 40 Worker tests, 390 gameplay/integration plus four access tests, and 95 tooling checks pass (six existing environment skips). Copied Batuu passes 20 native checks including real OPEN_URL and both COPY_TO_CLIPBOARD client packets. Tickets now use durable short numbered names such as support-001 and bug-report-002; migration 0003 is applied. Next action: deploy the checked follow-up to development and include it in the queued main-server release.

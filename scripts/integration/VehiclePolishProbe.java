@@ -68,14 +68,10 @@ public final class VehiclePolishProbe extends JavaPlugin {
             seats.setAccessible(true);
             var menu = ((InventoryHolder) seats.newInstance(plugin.vehicles(), id)).getInventory();
             check(
-                    menu.getItem(13).getType() == Material.GRAY_STAINED_GLASS_PANE,
-                    "no nonexistent passenger button: " + type);
-            check(
-                    menu.getItem(15).getType()
-                            == (type.equals("uwing")
-                                    ? Material.CROSSBOW
-                                    : Material.GRAY_STAINED_GLASS_PANE),
-                    "gunner button matches seats: " + type);
+                    Arrays.stream(menu.getContents()).filter(Objects::nonNull)
+                            .filter(it -> it.getType() == Material.PLAYER_HEAD).count()
+                            == (type.equals("uwing") ? 8 : 1),
+                    "menu shows a button for each existing seat: " + type);
             check(
                     net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
                             .plainText()
@@ -138,9 +134,6 @@ public final class VehiclePolishProbe extends JavaPlugin {
         var id = ids.get(3);
         var entity = plugin.vehicles().entity(id);
         check(plugin.vehicles().mount(owner, id, true), "U-wing pilot mounts");
-        check(
-                !plugin.vehicles().mount(owner, id, VehicleModels.Seat.GUNNER),
-                "one player cannot occupy pilot and gunner simultaneously");
         check(shoot(owner).isCancelled(), "U-wing pilot firing denied before shot");
         var gunner = nativeTestPlayer(world, entity.getLocation());
         players.add(gunner);
@@ -148,9 +141,6 @@ public final class VehiclePolishProbe extends JavaPlugin {
                 plugin.vehicles().mount(gunner, id, VehicleModels.Seat.GUNNER),
                 "unrelated gunner allowed");
         check(!shoot(gunner).isCancelled(), "U-wing gunner firing allowed");
-        check(
-                !plugin.vehicles().mount(players.get(1), id, VehicleModels.Seat.PASSENGER),
-                "U-wing has no actual passenger seat");
         var manager =
                 ModelEngineAPI.getModeledEntity(entity)
                         .getModels()
@@ -159,6 +149,22 @@ public final class VehiclePolishProbe extends JavaPlugin {
                         .next()
                         .getMountManager()
                         .orElseThrow();
+        var passengers = new ArrayList<Player>();
+        var occupied = new HashSet<>();
+        for (int index = 1; index <= 6; index++) {
+            var passenger = nativeTestPlayer(world, entity.getLocation());
+            players.add(passenger);
+            passengers.add(passenger);
+            check(plugin.vehicles().mount(passenger, id, VehicleModels.Seat.PASSENGER),
+                    "U-wing passenger mounts cabin seat " + index);
+            check(shoot(passenger).isCancelled(), "cabin passenger firing denied before shot");
+            occupied.add(manager.getPassengerSeatMap().get(passenger));
+        }
+        check(occupied.size() == 6 && !occupied.contains(null), "six distinct passenger seats hold riders together");
+        var extra = nativeTestPlayer(world, entity.getLocation());
+        players.add(extra);
+        check(!plugin.vehicles().mount(extra, id, VehicleModels.Seat.PASSENGER), "full cabin rejects a seventh rider");
+        passengers.forEach(manager::dismountPassenger);
         manager.dismountDriver();
         check(!plugin.vehicles().pack(owner, id), "real gunner occupancy prevents packing");
         manager.dismountPassenger(gunner);
