@@ -9,7 +9,6 @@ import net.kyori.adventure.title.Title;
 import org.bukkit.Location;
 import net.mandomc.gameplay.clans.ClanService;
 import org.bukkit.scheduler.BukkitTask;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import org.bukkit.entity.Player;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.*;
@@ -106,11 +105,8 @@ public final class TerritoryService implements Listener, AutoCloseable {
     }
     public Component label(Player player) { return label(identity(player,player.getLocation())); }
     private Component label(TerritoryIdentity identity) {
-        String key = identity.relation() == TerritoryIdentity.Relation.NONE
-                ? "titles." + identity.zone().name().toLowerCase(java.util.Locale.ROOT)
-                : "titles.claim-" + identity.relation().name().toLowerCase(java.util.Locale.ROOT);
-        return MiniMessage.miniMessage().deserialize(language.getString(key,key),
-                Placeholder.unparsed("clan",identity.name()));
+        if (identity.owner() != null) return Component.text(identity.name(), identity.relation().color());
+        return message("titles." + identity.zone().name().toLowerCase(java.util.Locale.ROOT));
     }
     public void announce(Player player) {
         if (net.mandomc.gameplay.tutorial.TutorialInventory.active(player)

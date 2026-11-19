@@ -49,12 +49,15 @@ public final class JetpackChestplate implements Listener, AutoCloseable {
     private void writeBook(ItemStack item,int level) {
         item.setType(Material.ENCHANTED_BOOK);
         var meta=(org.bukkit.inventory.meta.EnchantmentStorageMeta)item.getItemMeta();
+        boolean existingBook=meta.hasStoredEnchant(enchantment);
         for(var old:meta.getStoredEnchants().keySet())meta.removeStoredEnchant(old);
         meta.addStoredEnchant(enchantment,level,true);
         meta.displayName(net.kyori.adventure.text.Component.text("Jetpack "+(level==2?"II":"I"),net.kyori.adventure.text.format.NamedTextColor.YELLOW)
                 .decoration(net.kyori.adventure.text.format.TextDecoration.ITALIC,false));
         meta.setItemModel(NamespacedKey.minecraft("enchanted_book"));meta.setCustomModelData(null);
-        meta.addItemFlags(ItemFlag.HIDE_STORED_ENCHANTS);meta.lore(ingredientLore);item.setItemMeta(meta);
+        meta.addItemFlags(ItemFlag.HIDE_STORED_ENCHANTS);
+        if(!existingBook)meta.lore(ingredientLore);
+        item.setItemMeta(meta);
         item.resetData(DataComponentTypes.GLIDER);item.resetData(DataComponentTypes.EQUIPPABLE);
         if(plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.enchantments()!=null)mando.enchantments().decorate(item);
     }

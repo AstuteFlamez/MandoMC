@@ -106,7 +106,7 @@ knowledge:
     facts: When a player asks what to do or requests beginner advice, recommend a short achievable progression plan. Start
       with /tutorial and its optional Survival, Clans, Combat, Shops and Vehicles sections; each first completion awards 500
       credits. Then use /warp to visit Naboo, a recommended planet for a first base, and /c map to check zones before building
-      in eligible Wilderness. Gather resources; coal is mined from Coal Ore in Tatooine, Hoth, Mandalore and Naboo caves with
+      in eligible Wilderness. Gather resources; coal is mined from Coal Ore in Tatooine, Hoth and Naboo caves with
       a pickaxe. Gray Jawas at Batuu buy approved salvage for credits; /balance checks credits. For a first lightsaber, use
       /recipes to plan the components and complete Ilum for a Kyber Crate key (24-hour cooldown), then open the Kyber Crate
       at Batuu for a random crystal. Craft the saber at a crafting table before considering forge upgrades. Ask which stage
@@ -125,13 +125,15 @@ knowledge:
     answer: Open /recipes, traveler. Search by the item’s name, or switch to Uses this ingredient. Clicking an ingredient
       explains its recipe or source.
   mining:
-    tags: mining ore ores scrap scraps fortune yield
-    facts: Eligible Agrinium, Electrum, Durasteel and Beskar ore mining yields exactly one matching scrap per block. Fortune
-      never increases this final custom scrap quantity. This is a fixed one-scrap rule, not a random 1-to-5 roll. Native tool
-      requirements, cancelled breaks, Creative and Silk Touch remain authoritative. These facts describe themed metal ores,
-      not ordinary coal or other unconverted vanilla ores.
-    answer: Each eligible themed metal ore drops exactly one matching scrap, traveler. Fortune does not increase that amount;
-      Silk Touch keeps the ore where supported.
+    tags: mining ore ores scrap scraps dust fortune yield
+    facts: Agrinium, Electrum and Durasteel have the same relative rarity in the mineable wilderness of Tatooine, Hoth,
+      Mandalore and Naboo. Agrinium is the most common of the three, followed by Electrum, then Durasteel. Beskar Ore is
+      available in the Mandalore mine during Beskar Rush. Coal Ore is found in Tatooine, Hoth and Naboo. Each themed ore
+      drops one matching material, Electrum Dust for Electrum Ore and scraps for the other themed ores. Fortune adds none.
+      Native tools, protection and Silk Touch still apply.
+    answer: Each themed ore gives exactly one matching material, traveler. Electrum gives dust and the others give scraps.
+      Fortune adds none. Agrinium, Electrum and Durasteel occur on the four resource planets. Beskar Ore appears on Mandalore
+      during Beskar Rush.
   death:
     tags: death die dying killed respawn
     facts: Normal survival death immediately drops the player's carried gear at the death location. Gear does not return automatically
@@ -144,7 +146,9 @@ knowledge:
     facts: 'Brown Jawas roam Tatooine and sell basic electronic components plus one to three random advanced parts. Each spawned
       Jawa keeps the same item selection for its lifetime, across menu opens, chunk unloads and restarts. Seven gray Jawas
       at Batuu spawn sell ordinary supplies in seven titled categories: Plants & Dyes, Farming, Ocean Goods, Nether Goods,
-      End Goods, General Supplies and Spawners. Every gray Jawa also opens Sell Goods to buy approved salvage; place items
+      End Goods, General Supplies and Spawners. Buy bamboo from Plants & Dyes and cactus or sugar cane from Farming.
+      General Supplies sells Redstone Dust for working circuits. All gray Jawas pay 20 credits per 16 bamboo, 28 credits
+      per 16 cactus and 24 credits per 16 sugar cane. Every gray Jawa opens Sell Goods to buy approved goods; place items
       then confirm Sell, and unsupported items are returned. Closing cancels unsold deposits. Normal left-click buys one item;
       shift-left-click buys a full stack at a proportional price. Purchases keep the menu open. The Spawners shop sells Massiff,
       Dewback, Bantha and Jawa spawners in that order. Spawners can be placed in unclaimed Wilderness and your own clan’s
@@ -184,7 +188,7 @@ knowledge:
       saber to 11 melee damage; throws deal the fully charged critical hit amount, 12 at base or 15 with Sharpness V before
       armor. Endurance reduces charge consumed by blocking, reflecting and throwing. Recovery increases constant charge regeneration,
       with no quiet-time delay. Endurance and Recovery have three levels and can be found at enchanting tables and in Voting
-      and KOTH crates. Mending I is a KOTH Crate reward and is unavailable from enchanting tables. Jetpack remains outside
+      and KOTH crates. Enchanting tables consume Electrum Dust mined from Electrum Ore. Mending I is a KOTH Crate reward and is unavailable from enchanting tables. Jetpack remains outside
       the table pool. Fishing enchantments are removed. Changing saber styles preserves enchantments, names and charge. The
       former material-based six-point upgrade system is retired.
     answer: Craft and place a Saber Workbench, then choose Craft, Style or Enchant. Apply Sharpness, Endurance and Recovery
@@ -243,28 +247,30 @@ knowledge:
   jabba:
     tags: jabba palace dungeon boba guard guards boss bosses guns blaster blasters weapon weapons rifle cycler
     facts: Jabba’s Palace is a scheduled shared PvP dungeon. Its loot is open to competitors. Quarren guards can drop SE-14C,
-      Twi’lek guards A280, Boba Fett EE-3 and Jetpack books, and brown Jawas an Ionization Blaster. Bossk can drop his Relby
-      V10. These guns and Cycler Rifle also appear in KOTH rewards. Use /events for the schedule. When the palace ends, mobs
+      Twi’lek guards can drop an A280, and brown Jawas can drop an Ionization Blaster. Boba always drops at least one of his
+      EE-3, jetpack or flamethrower. Bossk always drops 12 to 20 Dioxis Grenades and can also drop his Relby V10. Rancor
+      always drops its skull. These guns and Cycler Rifle also appear in KOTH rewards. Use /events for the schedule. When the palace ends, mobs
       disappear immediately and occupants have five minutes with the open doors and caches before extraction and reset.
     answer: 'Jabba’s Palace opens through the event schedule. Fight guards and bosses for loot, but watch for rival players:
       the dungeon is shared. Use /events to check when it opens.'
   discord:
     tags: discord join invite server community link linking account accounts c0 m5 c0-m5 mandobot reward rewards 5000 support
-      ticket tickets roles sync synchronization citizen
+      ticket tickets roles sync synchronization citizen nickname discord-leaderboard
     facts: C0-M5 is the silver protocol droid beside M4-ND at Batuu spawn and the MandoMC Discord bot. The official existing
       non-expiring invite is https://discord.gg/bruuZCG5Pk. Right-click C0-M5 or run /discord in Minecraft, then use /link
       code:<code> in the MandoMC Discord server. Codes expire in ten minutes and must stay private. A successful verified
       link pays 5,000 credits once per Minecraft account, after the Minecraft account has joined the server; repeat clicks,
       retries and restarts do not pay again. Mando Citizen is the default role. Approved Minecraft ranks and Discord roles
-      synchronize in both directions on both servers; unrelated roles and operator status stay unchanged. Discord /players
-      and /baltop default to MandoMC and offer a development server option. Use /ticket, the existing ticket panel, or DM
+      synchronize in both directions on both servers. C0-M5 sets your Discord server nickname to the verified Minecraft
+      name on a successful link. Discord /leaderboard board:<board> shows Credits, Player Kills or Ilum Time. It and
+      /players default to MandoMC and offer a development server option. Use /ticket, the existing ticket panel, or DM
       C0-M5 for support. Staff can claim and close tickets, with a transcript saved before closing. C0-M5 shows Online while
       the Minecraft server is running; Cloudflare commands can still work while the bot appears Offline.
     answer: Join our Discord at https://discord.gg/bruuZCG5Pk, traveler. C0-M5, the silver protocol droid near me at Batuu
       spawn, handles linking. Right-click C0-M5 or use /discord, then enter /link code:<code> in our Discord. Keep that ten-minute
       code private. Linking awards 5,000 credits once after your Minecraft account has joined the server; repeating it does
-      not pay again. Approved ranks sync both ways on both servers. For support, use /ticket, the ticket panel or a DM to
-      C0-M5.
+      not pay again. C0-M5 sets your Discord server nickname to your Minecraft name. For support, use /ticket, the ticket
+      panel or a DM to C0-M5.
 daily-request-budget: 800
 skin:
   texture: ewogICJ0aW1lc3RhbXAiIDogMTc5NDg3OTQxMDIzMiwKICAicHJvZmlsZUlkIiA6ICI2MzE3NzFlN2NmMGI0OTI5YjcyM2NhYTc4MDNkMmU4OSIsCiAgInByb2ZpbGVOYW1lIiA6ICJLbmlnaHQzUE8iLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTY4MmY5YWFiNDQwMThhYzJjMTA4NTUyNDhhZmE1NzlhMTY3ZGM2OWJmMGMyZjJhYjRhZGIyYTkxNzFlY2JjNCIKICAgIH0KICB9Cn0=

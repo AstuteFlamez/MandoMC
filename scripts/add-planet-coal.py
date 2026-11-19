@@ -5,12 +5,13 @@ Requires scripts/map_tools/requirements.txt plus PyYAML. Dry-run by default.
 Use --apply only against a stopped runtime; native session locks are acquired first.
 Every modified region and the prior overlay are backed up before replacement.
 """
-import argparse, base64, collections, fcntl, gzip, hashlib, io, json, os, struct, sys
+import argparse, collections, fcntl, hashlib, json, os, sys
 from pathlib import Path
 import numpy as np
 import yaml
 from scipy import ndimage
 sys.path.insert(0, str(Path(__file__).resolve().parent/'map_tools'))
+from frozen_land import baseline
 from native_world import NativeWorld, records, parse, encode, write_records, block_name, unpack, packed, palette_tag, T
 
 HOSTS={'stone','deepslate','tuff','andesite','diorite','granite','sandstone','packed_ice','blue_ice','ice'}
@@ -18,20 +19,6 @@ AIR={'air','cave_air','void_air'}
 WORLDS={'minecraft:tatooine_review','minecraft:hoth','minecraft:mandalore_review','minecraft:naboo'}
 
 def digest(raw): return hashlib.sha256(raw).hexdigest()
-
-def baseline(path):
-    stream=io.BytesIO(gzip.decompress(path.read_bytes()))
-    def integer(): return struct.unpack('>i',stream.read(4))[0]
-    def text(): return stream.read(struct.unpack('>H',stream.read(2))[0]).decode('utf-8')
-    if integer()!=1: raise ValueError('Unsupported baseline')
-    world=text();cx=integer();cz=integer();lo=integer();hi=integer();stream.read(12)
-    palette=[text() for _ in range(integer())]
-    ids=np.frombuffer(stream.read((hi-lo)*256*4),dtype='>i4')
-    mask=stream.read(integer())
-    meta=path.with_name(path.name+'.meta')
-    if meta.exists(): mask=base64.b64decode(meta.read_text().splitlines()[2])
-    staff=np.unpackbits(np.frombuffer(mask,dtype=np.uint8),bitorder='little')
-    return lo, palette, ids, staff
 
 def candidates(volume,names,seed):
     """Only cave-exposed natural rock, 12 blocks below terrain; no ores, tile entities or structures."""

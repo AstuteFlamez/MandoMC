@@ -2,7 +2,7 @@
 
 Player outcome: `/recipes` → Utilities exposes the existing native leather utility recipes with Bantha Hide ingredients.
 
-The 26.1.2 native recipe data supplies the exact shapes, quantities and shaped/shapeless modes for books, item frames, bundles, all sixteen colored harnesses and four rabbit hides → one Bantha Hide. These twenty registrations replace their corresponding native keys; there is one recipe per route. Existing saddle registration remains Utilities with its existing agrinium cost. Bantha Hide retains native LEATHER material matching and its persistent catalog identity. Harness recoloring remains native.
+The 26.1.2 native recipe data supplies the exact shapes, quantities and shaped/shapeless modes for books, item frames, bundles, and all sixteen colored harnesses. These nineteen registrations replace their corresponding native keys. The native four-rabbit-hide recipe is disabled. Existing saddle registration remains Utilities with its existing agrinium cost. Bantha Hide retains native LEATHER material matching and its persistent catalog identity. Harness recoloring remains native.
 
 Desert Robes stay in Armor. Ordinary leather armor and leather horse armor retain the existing vanilla armor crafting restriction; no new gear recipes or policy bypasses are introduced. Indirect book/frame derivatives and armor dyeing are unchanged.
 

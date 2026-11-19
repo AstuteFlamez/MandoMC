@@ -1,11 +1,14 @@
 package net.mandomc.gameplay.clans;
 
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.mandomc.gameplay.territory.TerritoryIdentity;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
@@ -22,8 +25,13 @@ public final class ClanMenu implements Listener, AutoCloseable {
     private static final class View implements InventoryHolder {
         final UUID player;
         final Inventory inventory;
+        UUID target;
         int page;
-        View(Player player){this.player=player.getUniqueId();inventory=Bukkit.createInventory(this,54,text("Clans",NamedTextColor.GOLD));}
+        View(Player player, UUID target) {
+            this.player = player.getUniqueId();
+            this.target = target;
+            inventory = Bukkit.createInventory(this, 54, text("Clans", NamedTextColor.GOLD));
+        }
         @Override public Inventory getInventory(){return inventory;}
     }
     private final JavaPlugin plugin;
@@ -43,20 +51,30 @@ public final class ClanMenu implements Listener, AutoCloseable {
     }
     private static Component text(String value,NamedTextColor color){return Component.text(value,color).decoration(TextDecoration.ITALIC,false);}
     private static ItemStack item(Material type,String name,String... lore){
-        var item=new ItemStack(type);var meta=item.getItemMeta();meta.displayName(text(name,NamedTextColor.GOLD));
+        return item(type, name, NamedTextColor.GOLD, lore);
+    }
+    private static ItemStack item(Material type, String name, NamedTextColor color, String... lore) {
+        var item=new ItemStack(type);var meta=item.getItemMeta();meta.displayName(text(name,color));
         meta.lore(Arrays.stream(lore).map(line->text(line,NamedTextColor.GRAY)).toList());item.setItemMeta(meta);return item;
     }
-    public void open(Player player){
+    public void open(Player player) { open(player, null); }
+
+    public void open(Player player, UUID target) {
         var cursor=player.getItemOnCursor();
         if(cursor!=null&&!cursor.isEmpty()){player.sendMessage(clans.message("menu-busy"));return;}
         var top=player.getOpenInventory().getTopInventory();
-        if(top.getHolder() instanceof View existing&&existing.player.equals(player.getUniqueId())){render(existing);return;}
+        if (top.getHolder() instanceof View existing && existing.player.equals(player.getUniqueId())) {
+            if (!Objects.equals(existing.target, target)) existing.page = 0;
+            existing.target = target;
+            render(existing);
+            return;
+        }
         // Opening from another workstation can return ingredients and drop them when storage is full.
         if(!(top instanceof CraftingInventory crafting)
                 || Arrays.stream(crafting.getMatrix()).anyMatch(stack->stack!=null&&!stack.isEmpty())){
             player.sendMessage(clans.message("menu-busy"));return;
         }
-        var view=new View(player);views.put(view.player,view);render(view);
+        var view=new View(player,target);views.put(view.player,view);render(view);
         player.openInventory(view.inventory);
     }
     public String playerName(UUID id){
@@ -82,21 +100,53 @@ public final class ClanMenu implements Listener, AutoCloseable {
     }
     private void render(View view){
         var player=Bukkit.getPlayer(view.player);if(player==null){views.remove(view.player);return;}
-        var clan=clans.member(player);var background=item(Material.GRAY_STAINED_GLASS_PANE," ");
+        var state = clans.state();
+        var viewerClan = clans.member(player);
+        var clan = view.target == null ? viewerClan : state.clans.get(view.target);
+        var background = item(Material.GRAY_STAINED_GLASS_PANE, " ");
+        var backgroundMeta = background.getItemMeta();
+        backgroundMeta.setHideTooltip(true);
+        background.setItemMeta(backgroundMeta);
         var entries=new HashMap<Integer,ItemStack>();
         entries.put(49,item(Material.BOOK,"Clan help","Click for /c help.","Use explicit commands for management."));
-        if(clan==null){
+        if (clan == null && view.target != null) {
+            entries.put(4, item(Material.WHITE_BANNER, "Clan unavailable", "Use /c to return to your own clan."));
+        } else if(clan==null){
             entries.put(4,item(Material.WHITE_BANNER,"No clan","Create or join a clan to build a shared base."));
             entries.put(20,item(Material.WRITABLE_BOOK,"Create a clan","/c create <name>","Up to "+clans.settings().members()+" players and "+clans.settings().chunks()+" chunks."));
             entries.put(24,item(Material.PLAYER_HEAD,"Join a clan","An officer or leader can invite you.","/c join <clan>","New members start as Recruit."));
         }else{
-            var role=clans.state().role(clan,view.player);
-            entries.put(4,item(Material.WHITE_BANNER,clan.name,clan.abandonedAt==0?"Active clan":"Public loot: disbanding cannot be cancelled."));
-            entries.put(10,item(Material.COMPASS,"Your role: "+role.label(),"Leader > Officer > Member > Recruit","Recruits cannot use or break clan storage."));
+            var viewerId = viewerClan == null ? null : viewerClan.id;
+            var relation = TerritoryIdentity.clanRelation(viewerId, clan.id, state.allied(viewerId, clan.id));
+            boolean own = relation == TerritoryIdentity.Relation.OWN;
+            var ally = state.ally(clan);
+            entries.put(4, item(Material.WHITE_BANNER, clan.name, relation.color(),
+                    clan.abandonedAt == 0 ? "Active clan" : "Public loot: disbanding cannot be cancelled."));
+            if (own) {
+                var role = state.role(clan, view.player);
+                entries.put(10, item(Material.COMPASS, "Your role: " + role.label(),
+                        "Leader > Officer > Member > Recruit", "Recruits cannot use or break clan storage."));
+            } else {
+                entries.put(10, item(Material.COMPASS, "Clan roles",
+                        "Leader > Officer > Member > Recruit", "See the roster for assigned roles."));
+            }
             entries.put(12,item(Material.PAPER,"Members: "+clan.members.size()+"/"+clans.settings().members(),clan.members.size()>clans.settings().members()?"Over limit: new joins are paused.":"Roster below shows roles and online status."));
             long count=clans.state().claims.values().stream().filter(clan.id::equals).count();
             entries.put(14,item(Material.GRASS_BLOCK,"Claims: "+count+"/"+clans.settings().chunks(),"New claims must share an edge.","Leave a full empty chunk from rivals/zones.","/c map shows current land."));
-            entries.put(16,item(Material.ENDER_PEARL,"Clan home",clan.home==null?"Not set: leader uses /c sethome.":worldName(clan.home.world())+" "+(int)Math.floor(clan.home.x())+", "+(int)Math.floor(clan.home.y())+", "+(int)Math.floor(clan.home.z()),"/c home uses normal travel rules."));
+            if (own) {
+                entries.put(16, item(Material.ENDER_PEARL, "Clan home", clan.home == null
+                        ? "Not set: leader uses /c sethome."
+                        : worldName(clan.home.world()) + " " + (int) Math.floor(clan.home.x()) + ", "
+                                + (int) Math.floor(clan.home.y()) + ", " + (int) Math.floor(clan.home.z()),
+                        "/c home uses normal travel rules."));
+            } else {
+                entries.put(16, item(Material.ENDER_PEARL, "Clan home",
+                        clan.home == null ? "Not set." : "Available to clan members."));
+            }
+            if (ally != null) {
+                entries.put(20, item(Material.BLUE_BANNER, "Ally: " + ally.name, NamedTextColor.BLUE,
+                        "Shared roster: " + (clan.members.size() + ally.members.size()) + "/" + ClanState.ALLIANCE_MEMBERS));
+            }
             var rivals=new ArrayList<String>();long now=System.currentTimeMillis();
             var rivalEntries=new ArrayList<>(clans.state().rivalries.entrySet());
             rivalEntries.sort(Comparator.<Map.Entry<ClanState.Pair,ClanState.Rivalry>>comparingInt(entry->entry.getValue().activeUntil()>now?0:1)
@@ -109,7 +159,13 @@ public final class ClanMenu implements Listener, AutoCloseable {
                         : rival.name+": "+clans.state().score(clan.id,id)+" warpoints";
                 rivals.add(status);
             }
-            entries.put(22,item(Material.IRON_SWORD,"Warpoints & raids",rivals.isEmpty()?new String[]{"No rival warpoints or active raids.","+10 starts explosive raid eligibility.","/c warpoints <clan>"}:rivals.stream().limit(6).toArray(String[]::new)));
+            var sword = item(Material.IRON_SWORD, "Warpoints & raids", rivals.isEmpty()
+                    ? new String[]{"No rival warpoints or active raids.", "+10 starts explosive raid eligibility.",
+                            "/c warpoints <clan>"}
+                    : rivals.stream().limit(6).toArray(String[]::new));
+            sword.setData(DataComponentTypes.TOOLTIP_DISPLAY,
+                    TooltipDisplay.tooltipDisplay().addHiddenComponents(DataComponentTypes.ATTRIBUTE_MODIFIERS));
+            entries.put(22, sword);
             var members=new ArrayList<>(clan.members);
             members.sort(Comparator.comparingInt((UUID id)->clans.state().role(clan,id).ordinal()).reversed().thenComparing(UUID::toString));
             int pages=Math.max(1,(members.size()+17)/18);view.page=Math.max(0,Math.min(view.page,pages-1));

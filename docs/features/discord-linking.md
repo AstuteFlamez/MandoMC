@@ -8,7 +8,7 @@ the private code with `/link code:<code>` in the MandoMC Discord server. Success
 linking associates one Minecraft account with one Discord account. `/link` checks
 whether the account is already linked. Join at https://discord.gg/bruuZCG5Pk. A verified link rewards 5,000 credits once per Minecraft UUID on production after that account has joined there. CreditLedger saves the balance and reward receipt atomically; retries, relinking checks and restarts cannot pay twice. Development does not pay the production reward.
 
-Discord `/players` shows the latest online count; `/baltop` shows the native top ten balances. Both default to production and offer a development server option. Both become unavailable when the server's snapshot is stale. Players
+The first successful link sets the member's Discord server nickname to their verified Minecraft name. Discord `/players` shows the latest online count. Use `/leaderboard board:<board>` to check the native top ten for Credits, Player Kills or Ilum Time. Both commands default to production, offer a development server option, and require a fresh server snapshot. Players
 open support tickets with `/ticket` or a ticket panel, then talk to staff in a
 private ticket channel. Channel names use short durable numbers, such as `support-001` or `bug-report-002`, instead of long account identifiers. The production Minecraft-hosted Gateway companion relays ordinary ticket DMs, assigns the default Mando Citizen role on joins and displays Online while production runs. Cloudflare interactions can keep working while the Gateway appears Offline.
 

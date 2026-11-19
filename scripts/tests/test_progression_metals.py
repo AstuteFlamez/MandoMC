@@ -25,7 +25,11 @@ class ProgressionMetalTests(unittest.TestCase):
         labels = json.loads((ASSETS / 'minecraft/lang/en_us.json').read_text())
         self.assertEqual('Electrum Ore', labels['block.minecraft.redstone_ore'])
         self.assertEqual('Deepslate Electrum Ore', labels['block.minecraft.deepslate_redstone_ore'])
-        self.assertEqual('Electrum Block', labels['block.minecraft.redstone_block'])
+        self.assertNotIn('block.minecraft.redstone_block', labels)
+        self.assertNotIn('item.minecraft.redstone', labels)
+        self.assertEqual('1 Electrum Dust', labels['container.enchant.lapis.one'])
+        for name in ['item/redstone.png', 'block/redstone_block.png']:
+            self.assertFalse((ASSETS / 'minecraft/textures' / name).exists())
         self.assertNotIn('block.minecraft.copper_block', labels)
 
     def test_metals_use_four_distinct_native_mineral_patterns(self):
@@ -39,7 +43,7 @@ class ProgressionMetalTests(unittest.TestCase):
         self.assertIn('gold_ore', sources['electrum'])
         self.assertIn('diamond_ore', sources['durasteel'])
         self.assertIn('emerald_ore', sources['beskar'])
-        block = next(row for row in progression if row['target'].endswith('/redstone_block.png'))
+        block = next(row for row in progression if row['target'].endswith('/electrum_block.png'))
         self.assertEqual(block['artSource'], 'art-sources/electrum-block-32.png')
 
     def test_deepslate_and_electrum_stone_shadows_use_visible_gray_floor(self):

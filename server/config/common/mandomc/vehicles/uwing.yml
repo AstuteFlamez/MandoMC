@@ -14,6 +14,7 @@ boost:
   cooldown-ticks: 80
 sound: mandomc:vehicles.tie_fighter_fly
 sound-ticks: 420
-passenger-seats: []
+passenger-seat-layout: 1
+passenger-seats: [passenger_1, passenger_2, passenger_3, passenger_4, passenger_5, passenger_6]
 gunner-seats:
 - seatone

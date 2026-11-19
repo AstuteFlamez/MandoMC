@@ -51,15 +51,33 @@ test('snapshot freshness and native integer-cents bounds are enforced', async ()
   await assert.rejects(saveSnapshot(env, {online: 0, maximum: 100, baltop: [{username: 'Bad', cents: 1.5}]}), /Invalid snapshot/);
 });
 
+test('native leaderboard snapshots distinguish empty and unavailable boards and validate new rows', async () => {
+  const env = environment();
+  const base = {online: 0, maximum: 100, baltop: []};
+  await saveSnapshot(env, base);
+  assert.equal((await snapshot(env)).ilum, undefined);
+  await saveSnapshot(env, {...base, kills: [], ilum: [{username: 'Fast_Runner', millis: 61234}]});
+  const data = await snapshot(env);
+  assert.deepEqual(data.kills, []);
+  assert.deepEqual(data.ilum, [{username: 'Fast_Runner', millis: 61234}]);
+  await assert.rejects(saveSnapshot(env, {...base, ilum: [{username: 'Fast_Runner', millis: 0}]}), /Invalid snapshot/);
+  await assert.rejects(saveSnapshot(env, {...base, kills: [{username: '<@123>', kills: 2}]}), /Invalid snapshot/);
+  await assert.rejects(saveSnapshot(env, {...base, kills: [null]}), /Invalid snapshot/);
+});
+
 test('end-to-end bidirectional sync, lost replies, partial failure and departures', async t => {
   const env = environment(); const code = await issueCode(env, {uuid, username: 'Mando'});
   await linkAccount(env, ids.user, code.code);
-  let roles = ['101010101010101010'], absent = false, failRole = false;
+  let roles = ['101010101010101010'], nick = null, absent = false, failRole = false;
   const calls = [];
   t.mock.method(globalThis, 'fetch', async (url, options) => {
     calls.push({url, options});
     if (absent) return Response.json({}, {status: 404});
-    if (options.method === 'GET') return Response.json({roles});
+    if (options.method === 'GET') return Response.json({roles, nick});
+    if (options.method === 'PATCH') {
+      nick = JSON.parse(options.body).nick;
+      return Response.json({roles, nick});
+    }
     const role = url.split('/').at(-1);
     if (failRole) return Response.json({}, {status: 429});
     if (options.method === 'PUT') roles = [...new Set([...roles, role])];
@@ -69,6 +87,7 @@ test('end-to-end bidirectional sync, lost replies, partial failure and departure
   const send = ranks => sync(env, {mapping: JSON.parse(env.RANK_ROLES), players: [{uuid, ranks}]});
   await send(['default']);
   assert.ok(roles.includes(ids.linked));
+  assert.equal(nick, 'Mando');
   roles.push(ids.role);
   const grant = await send(['default']);
   assert.deepEqual(grant.updates[0].ranks, ['warrior']);
@@ -85,7 +104,58 @@ test('end-to-end bidirectional sync, lost replies, partial failure and departure
   assert.ok(roles.includes('101010101010101010')); // unrelated role preserved
   absent = true;
   assert.deepEqual((await send(['default', 'warrior'])).updates[0], {uuid, absent: true});
-  assert.ok(calls.every(call => !call.url.includes('/members/') || !call.options.body));
+  assert.ok(calls.filter(call => call.url.includes('/roles/')).every(call => !call.options.body));
+  const nicknameWrites = calls.filter(call => call.options.method === 'PATCH');
+  assert.equal(nicknameWrites.length, 1);
+  assert.deepEqual(JSON.parse(nicknameWrites[0].options.body), {nick: 'Mando'});
+});
+test('nickname retries preserve rank and reward sync and respect permission backoff', async t => {
+  const env = environment();
+  const code = await issueCode(env, {uuid, username: 'Linked_IGN'});
+  await linkAccount(env, ids.user, code.code);
+  let status = 429, patches = 0, nick = 'Previous nickname';
+  t.mock.method(console, 'warn', () => {});
+  t.mock.method(globalThis, 'fetch', async (_url, options) => {
+    if (options.method === 'GET') return Response.json({roles: [ids.linked], nick});
+    assert.equal(options.method, 'PATCH');
+    patches++;
+    if (status !== 200) return Response.json({}, {status});
+    nick = JSON.parse(options.body).nick;
+    return Response.json({nick});
+  });
+  const send = () => sync(env, {mapping: JSON.parse(env.RANK_ROLES), players: [{uuid, ranks: []}]});
+  assert.equal((await send()).updates[0].reward, true);
+  status = 403;
+  assert.equal((await send()).updates[0].reward, true);
+  assert.equal(patches, 2);
+  status = 200;
+  await send();
+  assert.equal(patches, 2);
+  env.DB.sqlite.exec('UPDATE links SET nickname_sync_after=0');
+  await send();
+  assert.equal(nick, 'Linked_IGN');
+  assert.equal(patches, 3);
+  nick = 'Manually picked';
+  await send();
+  assert.equal(patches, 3);
+  assert.equal(nick, 'Manually picked');
+});
+test('development can set the nickname before production initializes rank sync', async t => {
+  const env = environment();
+  const code = await issueCode(env, {uuid, username: 'Mando'});
+  await linkAccount(env, ids.user, code.code);
+  const writes = [];
+  t.mock.method(globalThis, 'fetch', async (url, options) => {
+    if (options.method === 'GET') return Response.json({roles: []});
+    writes.push({url, method: options.method, body: options.body});
+    return Response.json({});
+  });
+  const result = await sync(env, {mapping: JSON.parse(env.RANK_ROLES), players: [{uuid, ranks: ['warrior']}]},
+    'development');
+  assert.deepEqual(result.updates, [{uuid, awaiting_primary: true}]);
+  assert.deepEqual(writes, [{url: `https://discord.com/api/v10/guilds/${ids.guild}/members/${ids.user}`, method: 'PATCH',
+    body: '{"nick":"Mando"}'}]);
+  assert.equal(env.DB.sqlite.prepare('SELECT nickname_sync_after FROM links').get().nickname_sync_after, null);
 });
 test('mismatched mapping and oversized batches fail before Discord access', async () => {
   const env = environment();

@@ -61,7 +61,7 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         station = world.getBlockAt(-200,200,-200); station.setType(Material.SMITHING_TABLE,false);
         station.getChunk().getPersistentDataContainer().set(new NamespacedKey("mandomc","forge_-200_200_-200"),PersistentDataType.BYTE,(byte)1);
         check(mando.forge().station(station), "Existing placed forge migrates to workbench");
-        recipeMigration(); presentations(); equipmentLore(); rewardsAndMigration(); adminEnchant();
+        recipeMigration(); presentations(); equipmentLore(); rewardsAndMigration(); adminEnchant(); economyAndRedstone(); crateChances(); inventoryBadges();
         mando.forge().open(player,station); var top = player.getOpenInventory().getTopInventory();
         check(top.getItem(10).getType()==Material.CRAFTING_TABLE && top.getItem(13).getType()==Material.STONECUTTER && top.getItem(16).getType()==Material.ENCHANTED_BOOK,"Three workbench functions");
         checkTitle("Saber Workbench");
@@ -102,13 +102,23 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
             player.closeInventory();player.getInventory().setItem(8,new ItemStack(Material.DIAMOND,3));player.setOp(true);Bukkit.dispatchCommand(player,"staff on");
             check(net.mandomc.gameplay.admin.StaffMode.active(player)&&player.getGameMode()==GameMode.CREATIVE,"Staff creative navigation setup");
             var chest=world.getBlockAt(-198,200,-200);chest.setType(Material.CHEST,false);
-            var blocked=player.openInventory(((org.bukkit.block.Chest)chest.getState()).getInventory());
-            check(blocked==null,"Staff storage remains blocked outside owned workbench screens");
+            var storage=((org.bukkit.block.Chest)chest.getState()).getInventory();
+            storage.setItem(0,new ItemStack(Material.COAL,12));
+            check(player.openInventory(storage)!=null,"Staff can inspect shared storage");
+            click(0,"PICKUP");
+            check(storage.getItem(0).getAmount()==12&&empty(player.getItemOnCursor()),"Staff inventory stays separate from shared storage");
+            player.closeInventory();
+            var table=world.getBlockAt(-198,200,-199);
+            table.setType(Material.ENCHANTING_TABLE,false);
+            check(player.openEnchanting(table.getLocation(),true)!=null,"Staff can use a real enchanting table");
+            player.closeInventory();
+            player.teleport(player.getLocation().add(0,2,0));
         }
         if(index==6){
             player.closeInventory();Bukkit.dispatchCommand(player,"staff off");player.setOp(false);
             check(!net.mandomc.gameplay.admin.StaffMode.active(player)&&player.getGameMode()==GameMode.SURVIVAL,"Staff navigation restores original mode");
             check(new ItemStack(Material.DIAMOND,3).equals(player.getInventory().getItem(8)),"Staff navigation preserves saved survival inventory");
+            check(player.getLocation().getY()==200,"Staff off restores the saved location");
             table();later(2,this::tableRolls);return;
         }
         int[] slots={10,13,16};String[] labels={"Saber Crafting","Saber Styles","Saber Enchanting"};
@@ -215,6 +225,83 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         check(recovery.getMaxLevel()==3&&endurance.getMaxLevel()==3,"Admin overrides do not change survival caps");
         player.setOp(false);
     }
+    private void inventoryBadges() throws Exception {
+        var field=mando.getClass().getDeclaredField("inventoryBadges");field.setAccessible(true);
+        var view=field.get(mando);
+        var packetStack=com.github.retrooper.packetevents.protocol.item.ItemStack.class;
+        var present=view.getClass().getDeclaredMethod("present",packetStack);present.setAccessible(true);
+        var loreType=com.github.retrooper.packetevents.protocol.component.ComponentTypes.LORE;
+        for (var material : List.of(Material.STONE,Material.IRON_SWORD,Material.CACTUS,Material.BREAD,Material.ELYTRA)) {
+            var source=io.github.retrooper.packetevents.util.SpigotConversionUtil.fromBukkitItemStack(new ItemStack(material));
+            var decorated=(com.github.retrooper.packetevents.protocol.item.ItemStack)present.invoke(view,source);
+            var lore=decorated.getComponent(loreType).orElseThrow().getLines();
+            check(source.getComponentOr(loreType,com.github.retrooper.packetevents.protocol.component.builtin.item.ItemLore.EMPTY)
+                    .getLines().isEmpty()&&lore.size()==1,"Client-only item badge: "+material);
+            if(material==Material.STONE)check(plain(lore.getFirst()).equals(plain(mando.items().badges("common","blocks"))),
+                    "Vanilla stone displays the Common Block badges");
+            check(present.invoke(view,decorated)==decorated,"Client badge decoration is idempotent");
+        }
+        var custom=io.github.retrooper.packetevents.util.SpigotConversionUtil.fromBukkitItemStack(mando.items().create("electrum_dust"));
+        check(present.invoke(view,custom)==custom,"Catalog dust keeps exactly one original badge row");
+    }
+
+    private void crateChances() {
+        check(Bukkit.dispatchCommand(player,"crates preview koth"),"KOTH crate preview opens");
+        var books=Arrays.stream(player.getOpenInventory().getTopInventory().getContents())
+                .filter(Objects::nonNull).filter(item->item.getType()==Material.ENCHANTED_BOOK).toList();
+        check(books.size()>=3,"KOTH preview includes new enchantment books");
+        for (var book : books) {
+            check(book.getItemMeta().lore().stream().anyMatch(line->plain(line).contains("%")),"Preview book shows its chance: "+mando.items().identify(book));
+            mando.enchantments().maintain(book);
+            check(book.getItemMeta().lore().stream().anyMatch(line->plain(line).contains("%")),"Book maintenance keeps the chance");
+        }
+        player.closeInventory();
+    }
+
+    private void economyAndRedstone() {
+        check(Bukkit.getWorlds().stream().noneMatch(w -> Boolean.TRUE.equals(w.getGameRuleValue(GameRules.LOCATOR_BAR))),
+                "No world sends the player locator bar");
+        check(Bukkit.getRecipe(NamespacedKey.minecraft("leather"))==null
+                && Bukkit.getRecipe(new NamespacedKey("mandomc","craft_bantha_hide_from_rabbit_hide"))==null,
+                "Neither version of the rabbit-hide recipe remains");
+        check(Bukkit.getRecipe(NamespacedKey.minecraft("redstone_block"))!=null
+                && Bukkit.getRecipe(NamespacedKey.minecraft("redstone"))!=null,"Native redstone compacts and unpacks");
+        var source=world.getBlockAt(-206,200,-204);
+        var lamp=source.getRelative(org.bukkit.block.BlockFace.EAST);
+        source.setType(Material.AIR,false);
+        lamp.setType(Material.REDSTONE_LAMP);
+        source.setType(Material.REDSTONE_BLOCK);
+        check(lamp.isBlockIndirectlyPowered(),"A redstone block supplies native signal to the adjacent lamp");
+        var dust=mando.items().create("electrum_dust");
+        var smelt=Bukkit.getRecipe(new NamespacedKey("mandomc","smelt_electrum_from_dust"));
+        check(smelt instanceof FurnaceRecipe furnace && furnace.getInputChoice().test(dust)
+                && !furnace.getInputChoice().test(new ItemStack(Material.LAPIS_LAZULI))
+                && "electrum".equals(mando.items().identify(furnace.getResult())),"Electrum has an exact one-dust smelting recipe");
+        var old=new ItemStack(Material.ECHO_SHARD,13);
+        old.editMeta(meta->meta.getPersistentDataContainer().set(net.mandomc.gameplay.items.ItemCatalog.ITEM_ID,
+                PersistentDataType.STRING,"electrum_scrap"));
+        var migrated=new net.mandomc.gameplay.items.MetalMaterials(mando.items()).canonical(old);
+        check(migrated.getAmount()==13&&"electrum_dust".equals(mando.items().identify(migrated)),"Old tagged scrap keeps its quantity");
+        var plainRedstone=new ItemStack(Material.REDSTONE,3);
+        check(new net.mandomc.gameplay.items.MetalMaterials(mando.items()).canonical(plainRedstone).equals(plainRedstone),
+                "Vanilla redstone no longer becomes Electrum");
+        var expectedName=plain(dust.getItemMeta().displayName());
+        check(expectedName.equals("Electrum Dust"),"Mined ingredient is named Electrum Dust");
+        var pickaxe=new ItemStack(Material.IRON_PICKAXE);
+        pickaxe.addEnchantment(Enchantment.FORTUNE,3);
+        player.getInventory().setItemInMainHand(pickaxe);
+        for (var mineral : List.of(Material.REDSTONE_ORE,Material.DEEPSLATE_REDSTONE_ORE)) {
+            var ore=world.getBlockAt(-202,200,-200);
+            ore.setType(mineral,false);
+            check(player.breakBlock(ore),"Real Fortune III break of "+mineral);
+            var drops=world.getNearbyEntities(ore.getLocation().add(.5,.5,.5),1.5,1.5,1.5).stream()
+                    .filter(org.bukkit.entity.Item.class::isInstance).map(org.bukkit.entity.Item.class::cast).toList();
+            check(drops.size()==1 && drops.getFirst().getItemStack().getAmount()==1
+                    && "electrum_dust".equals(mando.items().identify(drops.getFirst().getItemStack())),
+                    "One Electrum Dust after native Fortune III mining of "+mineral);
+            drops.forEach(org.bukkit.entity.Item::remove);
+        }
+    }
     private void table() {
         player.closeInventory(); var center=station.getLocation().add(0,0,5);center.getBlock().setType(Material.ENCHANTING_TABLE,false);
         for(int x=-2;x<=2;x++)for(int z=-2;z<=2;z++)if(Math.abs(x)==2||Math.abs(z)==2)center.clone().add(x,0,z).getBlock().setType(Material.BOOKSHELF,false);
@@ -222,14 +309,17 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
     }
     private void tableRolls() throws Exception {
         var view=(EnchantmentView)player.getOpenInventory();var seen=new HashSet<Enchantment>();
+        view.getTopInventory().setItem(0,new ItemStack(Material.BOOK));
+        view.getTopInventory().setItem(1,new ItemStack(Material.LAPIS_LAZULI,64));
+        check(Arrays.stream(view.getOffers()).noneMatch(Objects::nonNull)&&!button(0),"Vanilla lapis never buys an enchantment");
         for(int seed=1;seed<=300;seed++) {
-            player.setLevel(100);view.setEnchantmentSeed(seed);view.getTopInventory().setItem(0,new ItemStack(Material.BOOK));view.getTopInventory().setItem(1,new ItemStack(Material.LAPIS_LAZULI,64));
+            player.setLevel(100);view.setEnchantmentSeed(seed);view.getTopInventory().setItem(0,new ItemStack(Material.BOOK));var dust=mando.items().create("electrum_dust");dust.setAmount(64);view.getTopInventory().setItem(1,dust);
             var offers=view.getOffers();int choice=offers[2]!=null?2:offers[1]!=null?1:0;check(offers[choice]!=null,"Native book offer");
             for(var offer:offers)if(offer!=null)check(mando.enchantments().tableAllowed(offer.getEnchantment()),"Only approved offers: "+offer.getEnchantment().getKey());
             check(button(choice),"Native table transaction");var result=view.getTopInventory().getItem(0);
             check(result.getItemMeta() instanceof EnchantmentStorageMeta,"Native enchanted book output");
             for(var enchant:((EnchantmentStorageMeta)result.getItemMeta()).getStoredEnchants().keySet()) {check(mando.enchantments().tableAllowed(enchant),"No hidden excluded enchants");seen.add(enchant);}
-            check(player.getLevel()==100-choice-1&&view.getTopInventory().getItem(1).getAmount()==63-choice,"Native table charges XP and lapis");
+            check(player.getLevel()==100-choice-1&&view.getTopInventory().getItem(1).getAmount()==63-choice,"Native table charges XP and Electrum Dust");
         }
         check(seen.contains(endurance)&&seen.contains(recovery)&&seen.contains(Enchantment.SWIFT_SNEAK),"Custom and Swift Sneak books genuinely roll");
         view.getTopInventory().setItem(0,mando.items().create("vader"));check(Arrays.stream(view.getOffers()).anyMatch(Objects::nonNull),"Shield-based saber is enchantable");

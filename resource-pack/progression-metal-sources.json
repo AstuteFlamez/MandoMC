@@ -2,7 +2,7 @@
   "schema-version": 1,
   "source": "Official Faithful 32x 26.1-june-2026 Fj5GKJnf",
   "license": "src/faithful-license.txt",
-  "scope": "Native iron/Agrinium and redstone/Electrum presentation. Electrum replaces nonoxidizing redstone; lit/unlit ores share native texture aliases. Agrinium uses Faithful iron mineral clusters; Electrum uses gold clusters. The Electrum storage face is an original generated metal plate. Block states and placed shapes remain native.",
+  "scope": "Native iron/Agrinium and redstone/Electrum presentation. Electrum Ore replaces the redstone ore visual; vanilla redstone components retain their own assets. Agrinium uses Faithful iron mineral clusters; Electrum uses gold clusters. The Electrum storage face is an original generated metal plate. Block states and placed shapes remain native.",
   "textures": [
     {
       "target": "minecraft/textures/block/iron_ore.png",
@@ -102,7 +102,7 @@
         0.23
       ],
       "shadowFloorLuma": 96,
-      "outputSha256": "933f736f2b19198bd3faa8a2390b25e7059e31c04fe6ba3a92d92b0f08daa3f4"
+      "outputSha256": "0cbb05d9d698abb3e327a1f1b18b9bf221c55a68249d8611b093b25e7390b039"
     },
     {
       "target": "minecraft/textures/block/deepslate_redstone_ore.png",
@@ -117,18 +117,13 @@
         0.23
       ],
       "shadowFloorLuma": 80,
-      "outputSha256": "6a2f080b309a2d5345aadbf905f8e13a78e90f14fd13e8a486b965c948888ce3"
+      "outputSha256": "dbe6d2556d409d43b210cfcf6a3a5a603b214563cba3a5b71b8593dddc7b3e7d"
     },
     {
-      "target": "minecraft/textures/block/redstone_block.png",
+      "target": "mandomc/textures/block/electrum_block.png",
       "artSource": "art-sources/electrum-block-32.png",
-      "sourceSha256": "c7f1e908551dfd07f275c44cf4c7923ca29c338e3f0e07bb1a594bee4a91d136",
-      "outputSha256": "c7f1e908551dfd07f275c44cf4c7923ca29c338e3f0e07bb1a594bee4a91d136"
-    },
-    {
-      "target": "minecraft/textures/item/redstone.png",
-      "localSource": "mandomc/textures/item/legacy/metals/ingots/electrum.png",
-      "outputSha256": "a63707f74a4ad2e703ea4410755d51ce46b4bd11da1136ec15d87b68bef0c741"
+      "sourceSha256": "999357c0aa46c428702f9b51e50b0be87af6da42591c59a1b0d49276666d6712",
+      "outputSha256": "999357c0aa46c428702f9b51e50b0be87af6da42591c59a1b0d49276666d6712"
     },
     {
       "target": "mandomc/textures/item/tools/agrinium_pickaxe.png",

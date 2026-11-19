@@ -4,6 +4,9 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
+import net.mandomc.gameplay.clans.ClanService;
+import net.mandomc.gameplay.messaging.PlayerChat;
+import net.mandomc.gameplay.territory.TerritoryIdentity;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -169,8 +172,16 @@ public final class RankService implements Listener, AutoCloseable {
     public void chat(io.papermc.paper.event.player.AsyncChatEvent event) {
         // Paper retains message signatures and the existing event recipients; only the renderer changes.
         var rank = rank(event.getPlayer());
-        event.renderer((source, name, message, viewer) ->
-                net.mandomc.gameplay.messaging.PlayerChat.render(rank, name, message));
+        var clans = Bukkit.getServicesManager().load(ClanService.class);
+        var snapshot = clans == null ? null : clans.chatSnapshot();
+        var clan = snapshot == null ? null : snapshot.member(event.getPlayer().getUniqueId());
+        event.renderer((source, name, message, viewer) -> {
+            if (clan == null) return PlayerChat.render(rank, name, message);
+            var viewerClan = viewer instanceof Player player ? snapshot.member(player.getUniqueId()) : null;
+            var relation = TerritoryIdentity.clanRelation(viewerClan == null ? null : viewerClan.id(), clan.id(),
+                    viewerClan != null && snapshot.allied(viewerClan, clan));
+            return PlayerChat.render(rank, name, message, clan.name(), relation.color());
+        });
     }
     @EventHandler(priority = EventPriority.LOWEST) public void join(PlayerJoinEvent event) { apply(event.getPlayer()); }
     @EventHandler(priority = EventPriority.MONITOR) public void quit(PlayerQuitEvent event) { remove(event.getPlayer()); }

@@ -1,5 +1,21 @@
 # Resume here
 
+## Gameplay feedback and C0-M5 leaderboard (2026-11-18)
+
+The development branch contains the gameplay, economy, clan, UI, resource-pack
+and C0-M5 updates from playtest feedback. Electrum Dust is a 32 × 32 asset and
+both ore variants drop exactly one dust even with Fortune III. Disposable Paper
+passes 2,819 gameplay and enchantment assertions and 38 encounter assertions.
+A separate clan probe covers actual /msg and /r packets, the foreign clan menu,
+alliances, and piston protection and wilderness restoration. The frozen-world
+terrain rehearsal preserved 3,141 original snapshots and verified 20,616 intended
+block changes over 218.9 million checked states. All 396 gameplay, four access,
+45 Discord Worker and 97 tooling checks pass, with seven tooling environment skips.
+
+Next action: publish and pin the exact resource pack for development, deploy the
+matching code and scoped configs with the stopped-world ore migration, and
+activate the compatible Discord Worker and slash command.
+
 ## C0-M5 join/copy polish requested during playtest (2026-11-18)
 
 The first checked rollout is active on development and PR #77 is merged. The dev-to-main release is open as PR #78 and has not been activated. The owner requested the preferred invite https://discord.gg/bruuZCG5Pk, Discord blue in chat and the hologram, no deployment labels in player instructions, and codes that are both shorter and copyable. New codes use eight unambiguous Base32 characters with the existing expiry/throttle and backward compatibility for outstanding old codes. Added real join, code-copy and full-command-copy client events, including clickable M4-ND invite answers. All 40 Worker tests, 390 gameplay/integration plus four access tests, and 95 tooling checks pass (six existing environment skips). Copied Batuu passes 20 native checks including real OPEN_URL and both COPY_TO_CLIPBOARD client packets. Tickets now use durable short numbered names such as support-001 and bug-report-002; migration 0003 is applied. Next action: deploy the checked follow-up to development and include it in the queued main-server release.

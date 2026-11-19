@@ -51,7 +51,15 @@ shop:
     bamboo:
       item: minecraft:bamboo
       amount: 8
-      price: '20'
+      price: '48'
+    cactus:
+      item: minecraft:cactus
+      amount: 8
+      price: '48'
+    redstone:
+      item: minecraft:redstone
+      amount: 16
+      price: '60'
     wheat_seeds:
       item: minecraft:wheat_seeds
       amount: 8
@@ -79,7 +87,7 @@ shop:
     sugar_cane:
       item: minecraft:sugar_cane
       amount: 8
-      price: '20'
+      price: '48'
     cocoa_beans:
       item: minecraft:cocoa_beans
       amount: 4
@@ -260,111 +268,123 @@ shop:
     sand:
       item: minecraft:sand
       amount: 64
-      price: '2'
+      price: '2.50'
     sandstone:
       item: minecraft:sandstone
       amount: 64
-      price: '3'
+      price: '3.75'
     cobblestone:
       item: minecraft:cobblestone
       amount: 64
-      price: '3'
+      price: '3.75'
     cobbled_deepslate:
       item: minecraft:cobbled_deepslate
       amount: 64
-      price: '4'
+      price: '5.00'
     gravel:
       item: minecraft:gravel
       amount: 64
-      price: '4'
+      price: '5.00'
     clay_ball:
       item: minecraft:clay_ball
       amount: 32
-      price: '4'
+      price: '5.00'
     snow_block:
       item: minecraft:snow_block
       amount: 32
-      price: '3'
+      price: '3.75'
     ice:
       item: minecraft:ice
       amount: 32
-      price: '3'
+      price: '3.75'
     rotten_flesh:
       item: minecraft:rotten_flesh
       amount: 16
-      price: '3'
+      price: '3.75'
     bone:
       item: minecraft:bone
       amount: 16
-      price: '6'
+      price: '7.50'
     string:
       item: minecraft:string
       amount: 16
-      price: '6'
+      price: '7.50'
     feather:
       item: minecraft:feather
       amount: 16
-      price: '4'
+      price: '5.00'
     ink_sac:
       item: minecraft:ink_sac
       amount: 8
-      price: '4'
+      price: '5.00'
     coal:
       item: minecraft:coal
       amount: 16
-      price: '5'
+      price: '6.25'
     agrinium:
       item: agrinium
       amount: 8
-      price: '12'
+      price: '15.00'
     durasteel:
       item: durasteel
       amount: 1
-      price: '12'
+      price: '15.00'
     bantha_hide:
       item: bantha_hide
       amount: 8
-      price: '8'
+      price: '10.00'
     raw_agrinium:
       item: raw_agrinium
       amount: 8
-      price: '6'
+      price: '7.50'
     agrinium_scrap:
       item: agrinium_scrap
       amount: 8
-      price: '6'
+      price: '7.50'
     durasteel_scrap:
       item: durasteel_scrap
       amount: 4
-      price: '8'
-    electrum_scrap:
-      item: electrum_scrap
+      price: '10.00'
+    electrum_dust:
+      item: electrum_dust
       amount: 8
-      price: '6'
+      price: '7.50'
     electrum:
       item: electrum
       amount: 8
-      price: '12'
+      price: '15.00'
     wiring_coil:
       item: wiring_coil
       amount: 1
-      price: '4'
+      price: '5.00'
     basic_power_cell:
       item: basic_power_cell
       amount: 1
-      price: '4'
+      price: '5.00'
     rough_power_cell:
       item: rough_power_cell
       amount: 1
-      price: '4'
+      price: '5.00'
     basic_emitter_coil:
       item: basic_emitter_coil
       amount: 1
-      price: '4'
+      price: '5.00'
     makeshift_recoil_buffer:
       item: makeshift_recoil_buffer
       amount: 1
-      price: '4'
+      price: '5.00'
+    bamboo:
+      item: minecraft:bamboo
+      amount: 16
+      price: '20'
+    cactus:
+      item: minecraft:cactus
+      amount: 16
+      price: '28'
+    sugar_cane:
+      item: minecraft:sugar_cane
+      amount: 16
+      price: '24'
   categories:
     saplings:
       name: Plants & Dyes
@@ -399,6 +419,7 @@ shop:
       - melon_seeds
       - pumpkin_seeds
       - sugar_cane
+      - cactus
       - cocoa_beans
       - dirt
       - grass_block
@@ -441,6 +462,7 @@ shop:
       - feather
       - bone
       - ink_sac
+      - redstone
     minerals:
       name: Spawners
       items:

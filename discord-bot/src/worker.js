@@ -4,10 +4,34 @@ import {controlTicket, openTicket, panel, staff, ticketForChannel} from './ticke
 import {gatewayEvent} from './gateway.js';
 
 const json = (value, status = 200) => Response.json(value, {status, headers: {'Cache-Control': 'no-store'}});
+const servers = {
+  production: 'MandoMC',
+  development: 'Development'
+};
+const serverOption = {type: 3, name: 'server', description: 'Defaults to MandoMC',
+  choices: Object.entries(servers).map(([value, name]) => ({name, value}))};
+const formatTime = millis => {
+  const minutes = Math.floor(millis / 60000);
+  const seconds = String(Math.floor(millis / 1000) % 60).padStart(2, '0');
+  return `${minutes}:${seconds}.${String(millis % 1000).padStart(3, '0')}`;
+};
+const formatCredits = cents => {
+  const amount = BigInt(cents);
+  const whole = (amount / 100n).toLocaleString('en-US');
+  return `${whole}.${String(amount % 100n).padStart(2, '0')} credits`;
+};
+const boards = {
+  credits: {name: 'Credits', rows: 'baltop', format: row => formatCredits(row.cents)},
+  kills: {name: 'Player Kills', rows: 'kills',
+    format: row => `${row.kills.toLocaleString('en-US')} ${row.kills === 1 ? 'kill' : 'kills'}`},
+  ilum: {name: 'Ilum Time', rows: 'ilum', format: row => formatTime(row.millis)}
+};
 export const commands = [
   {name: 'link', description: 'Link or check your Minecraft account', options: [{name: 'code', description: 'The code from /discord in Minecraft', type: 3, required: false}]},
-  {name: 'baltop', description: 'View the richest players on MandoMC', options: [{type: 3, name: 'server', description: 'Defaults to MandoMC', choices: [{name: 'MandoMC', value: 'production'}, {name: 'Development', value: 'development'}]}]},
-  {name: 'players', description: 'View the online player count', options: [{type: 3, name: 'server', description: 'Defaults to MandoMC', choices: [{name: 'MandoMC', value: 'production'}, {name: 'Development', value: 'development'}]}]},
+  {name: 'leaderboard', description: 'View a MandoMC leaderboard', options: [
+    {type: 3, name: 'board', description: 'Choose a leaderboard', required: true,
+      choices: Object.entries(boards).map(([value, {name}]) => ({name, value}))}, serverOption]},
+  {name: 'players', description: 'View the online player count', options: [serverOption]},
   {name: 'ticket', description: 'Open a support ticket'},
   {name: 'ticket-panel', description: 'Post the support ticket panel', default_member_permissions: '32'}
 ].map(command => ({...command, type: 1})); // Guild scope is set by the registration URL.
@@ -15,8 +39,8 @@ export const commands = [
 async function handleInteraction(env, interaction) {
   const user = interaction.member.user.id;
   const server = interaction.data.options?.find(option => option.name === 'server')?.value || 'production';
-  if (!['production', 'development'].includes(server)) throw new UserError('Unknown server.');
-  const serverName = server === 'production' ? 'MandoMC' : 'Development';
+  if (!Object.hasOwn(servers, server)) throw new UserError('Unknown server.');
+  const serverName = servers[server];
   if (interaction.type === 3) {
     if (interaction.data.custom_id === 'ticket_select') {
       const ticket = await openTicket(env, user, interaction.data.values?.[0]);
@@ -31,12 +55,20 @@ async function handleInteraction(env, interaction) {
       const data = await snapshot(env, server);
       return {content: data.stale ? `${serverName}: the server is offline or its status has not updated recently.` : `${serverName}: ${data.online} ${data.online === 1 ? 'player' : 'players'} online (${data.maximum} slots).`};
     }
-    case 'baltop': {
+    case 'leaderboard': {
+      const selected = interaction.data.options?.find(option => option.name === 'board')?.value;
+      if (!Object.hasOwn(boards, selected)) throw new UserError('Choose Credits, Player Kills, or Ilum Time.');
+      const board = boards[selected];
       const data = await snapshot(env, server);
-      if (data.stale) throw new UserError('Economy data is unavailable until the server reconnects.');
-      return {embeds: [{title: `MandoMC Baltop — ${serverName}`, color: 0xFFD700, description: data.baltop.map((row, i) =>
-        `${i + 1}. **${row.username.replaceAll('_', '\\_')}** — ${(row.cents / 100).toLocaleString('en-US', {minimumFractionDigits: 2})} credits`).join('\n') || 'No balance data yet.',
-        footer: {text: 'MandoMC Economy • updated every 30 seconds'}}]};
+      if (data.stale) throw new UserError('Leaderboard data is unavailable until the server reconnects.');
+      const rows = data[board.rows];
+      if (!rows) throw new UserError(`${board.name} is currently unavailable on ${serverName}.`);
+      return {embeds: [{
+        title: `${board.name} — ${serverName}`,
+        color: 0xFFD700,
+        description: rows.map((row, i) =>
+          `${i + 1}. **${row.username.replaceAll('_', '\\_')}** — ${board.format(row)}`).join('\n') || 'No entries yet.'
+      }]};
     }
     case 'ticket': {
       const ticket = await openTicket(env, user);
@@ -83,7 +115,7 @@ export default {
             interaction.application_id !== env.DISCORD_APPLICATION_ID) return json({type: 4, data: {content: 'Use this bot in the MandoMC server.', flags: 64}});
         if (![2, 3].includes(interaction.type)) return json({type: 4, data: {content: 'Unsupported interaction.', flags: 64}});
         ctx.waitUntil(complete(env, interaction));
-        const isPublic = interaction.type === 2 && ['baltop', 'players'].includes(interaction.data.name);
+        const isPublic = interaction.type === 2 && ['leaderboard', 'players'].includes(interaction.data.name);
         return json({type: 5, data: {flags: isPublic ? 0 : 64}});
       }
       if (url.pathname.startsWith('/bridge/')) {

@@ -99,7 +99,7 @@ holograms:
   create: <gold>Make a home with your clan<newline><white>/c create <name><newline><gray>This practice clan will
     not affect your real clan.
   claim: <gold>Protect your base<newline><white>Walk along the path to X 48–63.<newline><yellow>/c claim<newline><gray>Leave
-    one empty chunk beside protected land.
+    one empty chunk beside protected land.<newline><gray>Unclaimed wilderness resets after 24 hours without edits.
   disband: <gold>Your practice chunk is claimed<newline><white>/c disband<newline><gray>Disbanding removes the practice
     clan and its claim.
   combat: '<gold>Blaster practice<newline><white>Defeat the Gamorrean, Quarren and Twi’lek targets.<newline><yellow>Use:

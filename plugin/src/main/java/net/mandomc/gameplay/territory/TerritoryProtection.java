@@ -126,7 +126,13 @@ public final class TerritoryProtection implements Listener {
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void flow(BlockFromToEvent e){if(territories.mechanisms(e.getBlock().getLocation()))return;if(blocked(e.getBlock())||blocked(e.getToBlock()))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void pistonExtend(BlockPistonExtendEvent e){if(territories.mechanisms(e.getBlock().getLocation()))return;if(blocked(e.getBlock())||blocked(e.getBlock().getRelative(e.getDirection()))||e.getBlocks().stream().anyMatch(b->blocked(b)||blocked(b.getRelative(e.getDirection()))))e.setCancelled(true);}
+    public void pistonExtend(BlockPistonExtendEvent event) { piston(event); }
+
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void pistonRetract(BlockPistonRetractEvent e){if(territories.mechanisms(e.getBlock().getLocation()))return;if(blocked(e.getBlock())||blocked(e.getBlock().getRelative(e.getDirection()))||e.getBlocks().stream().anyMatch(b->blocked(b)||blocked(b.getRelative(e.getDirection()))))e.setCancelled(true);}
+    public void pistonRetract(BlockPistonRetractEvent event) { piston(event); }
+
+    private void piston(BlockPistonEvent event) {
+        if (!territories.mechanisms(event.getBlock().getLocation())
+                && PistonBlocks.affected(event).stream().anyMatch(this::blocked)) event.setCancelled(true);
+    }
 }

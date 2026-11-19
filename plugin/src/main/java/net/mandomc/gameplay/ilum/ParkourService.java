@@ -62,7 +62,7 @@ public final class ParkourService implements Listener, AutoCloseable {
     private static final NamespacedKey PREVIOUS_TEAM = new NamespacedKey("mandomc","ilum_team");
     private static final NamespacedKey PREVIOUS_COLLISION = new NamespacedKey("mandomc","ilum_collision");
     private static final NamespacedKey INSPECT_MODE = new NamespacedKey("mandomc","ilum_inspect_mode");
-    private record Best(String name,long millis) { }
+    public record Best(String name,long millis) { }
     private final MandoPlugin plugin;
     private final CrateService crates;
     private final YamlConfiguration config;
@@ -513,17 +513,27 @@ public final class ParkourService implements Listener, AutoCloseable {
             if(millis>0)bests.put(id,new Best(entry.get("name").toString(),millis));
         }
     }
-    private List<Map.Entry<UUID,Best>> top() {return bests.entrySet().stream().sorted(java.util.Comparator.comparingLong(e->e.getValue().millis())).limit(10).toList();}
+    public List<Best> bestTimes() {
+        return bests.entrySet().stream()
+                .sorted(java.util.Comparator.<Map.Entry<UUID, Best>>comparingLong(entry -> entry.getValue().millis())
+                        .thenComparing(Map.Entry::getKey))
+                .limit(10).map(Map.Entry::getValue).toList();
+    }
     private void showTop(Player player) {
         send(player,"top-title");int rank=0;
-        for(var entry:top())send(player,"top-row","rank",Integer.toString(++rank),"name",entry.getValue().name(),"time",format(entry.getValue().millis()));
+        for (var best : bestTimes()) {
+            send(player, "top-row", "rank", Integer.toString(++rank), "name", best.name(), "time", format(best.millis()));
+        }
         if(rank==0)send(player,"empty-top");
     }
     private void updateLeaderboard() {
         if(leaderboard==null||!leaderboard.isValid())return;
         leaderboard.setDefaultBackground(false);leaderboard.setBackgroundColor(org.bukkit.Color.fromARGB(0));
         List<Component> rows=new ArrayList<>();int rank=0;
-        for(var entry:top())rows.add(message("leaderboard-row","rank",Integer.toString(++rank),"name",entry.getValue().name(),"time",format(entry.getValue().millis())));
+        for (var best : bestTimes()) {
+            rows.add(message("leaderboard-row", "rank", Integer.toString(++rank), "name", best.name(),
+                    "time", format(best.millis())));
+        }
         leaderboard.text(net.mandomc.gameplay.leaderboards.LeaderboardLayout.render(
                 message("leaderboard-title"),message("leaderboard-subtitle"),rows,
                 slot->message("leaderboard-empty-row","rank",Integer.toString(slot))));

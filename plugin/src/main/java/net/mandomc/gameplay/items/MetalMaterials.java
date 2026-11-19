@@ -21,7 +21,6 @@ public final class MetalMaterials implements Listener {
             java.util.Map.entry(Material.DIAMOND_BLOCK, "durasteel_block"),
             java.util.Map.entry(Material.DIAMOND_ORE, "durasteel_ore"),
             java.util.Map.entry(Material.DEEPSLATE_DIAMOND_ORE, "deepslate_durasteel_ore"),
-            java.util.Map.entry(Material.REDSTONE_BLOCK, "electrum_block"),
             java.util.Map.entry(Material.REDSTONE_ORE, "electrum_ore"),
             java.util.Map.entry(Material.DEEPSLATE_REDSTONE_ORE, "deepslate_electrum_ore"),
             java.util.Map.entry(Material.NETHERITE_BLOCK, "beskar_block"),
@@ -37,6 +36,17 @@ public final class MetalMaterials implements Listener {
         if (original == null || original.isEmpty()) return original;
         String id = original.hasItemMeta()
                 ? original.getItemMeta().getPersistentDataContainer().get(ItemCatalog.ITEM_ID, PersistentDataType.STRING) : null;
+        String replacementId = switch (id == null ? "" : id) {
+            case "electrum_scrap" -> "electrum_dust";
+            case "electrum" -> original.getType() == Material.COPPER_INGOT ? null : id;
+            case "electrum_block" -> original.getType() == Material.WAXED_COPPER_BLOCK ? null : id;
+            default -> null;
+        };
+        if (replacementId != null) {
+            var replacement = items.create(replacementId);
+            replacement.setAmount(original.getAmount());
+            return replacement;
+        }
         if (MetalMigration.isSheet(id)) {
             var replacement = items.create(MetalMigration.ingotId(id));
             replacement.setAmount(original.getAmount());
@@ -64,10 +74,8 @@ public final class MetalMaterials implements Listener {
         }
         String metal = switch (original.getType()) {
             case IRON_INGOT -> "agrinium";
-            case REDSTONE -> "electrum";
-            case COPPER_INGOT -> "electrum".equals(id) ? id : null;
             // Migrate the old catalog bases without losing stable IDs or quantities.
-            case ECHO_SHARD -> "agrinium".equals(id) || "electrum".equals(id) ? id : null;
+            case ECHO_SHARD -> "agrinium".equals(id) ? id : null;
             default -> null;
         };
         if (metal == null || original.hasItemMeta() && !metal.equals(id)) return original;

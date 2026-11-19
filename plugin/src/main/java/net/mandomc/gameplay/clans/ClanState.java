@@ -4,6 +4,8 @@ import java.util.*;
 
 /** Main-thread clan authority. Stable clan IDs also identify pairwise rivalries. */
 public final class ClanState {
+    public static final int ALLIANCE_MEMBERS = 4;
+
     public record Chunk(String world, int x, int z) {
         public boolean near(Chunk other) {
             return world.equals(other.world) && Math.abs((long)x - other.x) <= 1
@@ -31,6 +33,48 @@ public final class ClanState {
     public final Map<UUID, Clan> clans = new LinkedHashMap<>();
     public final Map<Chunk, UUID> claims = new LinkedHashMap<>();
     public final Map<Pair, Rivalry> rivalries = new LinkedHashMap<>();
+    final Set<Pair> alliances = new LinkedHashSet<>();
+
+    public boolean allied(UUID first, UUID second) {
+        return first != null && second != null && alliances.contains(Pair.of(first, second));
+    }
+
+    public Clan ally(Clan clan) {
+        for (var pair : alliances) {
+            if (pair.first().equals(clan.id)) return clans.get(pair.second());
+            if (pair.second().equals(clan.id)) return clans.get(pair.first());
+        }
+        return null;
+    }
+
+    public void checkAlliance(Clan clan, Clan target, long now) {
+        if (clan == target) throw new IllegalArgumentException("ally-self");
+        if (clan.abandonedAt != 0 || target.abandonedAt != 0) throw new IllegalArgumentException("abandoned");
+        if (allied(clan.id, target.id)) throw new IllegalArgumentException("already-allies");
+        if (ally(clan) != null || ally(target) != null) throw new IllegalArgumentException("ally-limit");
+        if (clan.members.size() + target.members.size() != ALLIANCE_MEMBERS)
+            throw new IllegalArgumentException("ally-members");
+        var raid = rivalries.get(Pair.of(clan.id, target.id));
+        if (raid != null && raid.activeUntil() > now) throw new IllegalArgumentException("ally-active-raid");
+    }
+
+    public void formAlliance(Clan clan, Clan target, long now) {
+        checkAlliance(clan, target, now);
+        alliances.add(Pair.of(clan.id, target.id));
+    }
+
+    public boolean endAlliance(Clan clan, Clan target) {
+        return alliances.remove(Pair.of(clan.id, target.id));
+    }
+
+    public void checkRecruitment(Clan clan, int limit) {
+        if (clan.abandonedAt != 0) throw new IllegalArgumentException("abandoned");
+        var partner = ally(clan);
+        if (partner != null && clan.members.size() + partner.members.size() >= ALLIANCE_MEMBERS)
+            throw new IllegalArgumentException("ally-full");
+        if (clan.members.size() >= limit) throw new IllegalArgumentException("member-limit");
+    }
+
     public Clan member(UUID player) {
         return clans.values().stream().filter(c -> c.members.contains(player)).findFirst().orElse(null);
     }
@@ -46,8 +90,7 @@ public final class ClanState {
     }
     public void join(Clan clan, UUID player, int limit, long now) {
         if (member(player) != null) throw new IllegalArgumentException("already-member");
-        if (clan.abandonedAt != 0) throw new IllegalArgumentException("abandoned");
-        if (clan.members.size() >= limit) throw new IllegalArgumentException("member-limit");
+        checkRecruitment(clan, limit);
         clan.members.add(player);clan.roles.put(player,ClanRole.RECRUIT); clan.lastActive = now;
     }
     public ClanRole role(Clan clan, UUID player) {
@@ -124,7 +167,7 @@ public final class ClanState {
         return rivalry == null ? 0 : a.equals(pair.first) ? rivalry.score : -rivalry.score;
     }
     public void kill(UUID attacker, UUID defender, long now) {
-        if (attacker.equals(defender)) return;
+        if (attacker.equals(defender) || allied(attacker, defender)) return;
         var pair = Pair.of(attacker, defender);
         var old = rivalries.getOrDefault(pair, new Rivalry(0,null,0));
         if (old.activeUntil > now) return;
@@ -132,7 +175,7 @@ public final class ClanState {
         rivalries.put(pair, new Rivalry(next, null, 0));
     }
     public boolean canRaid(UUID attacker, UUID defender, long now, int threshold) {
-        if (attacker == null || attacker.equals(defender)) return false;
+        if (attacker == null || attacker.equals(defender) || allied(attacker, defender)) return false;
         var rivalry = rivalries.get(Pair.of(attacker, defender));
         if (rivalry != null && rivalry.activeUntil > now) return attacker.equals(rivalry.activeAttacker);
         return score(attacker, defender) >= threshold;
@@ -149,5 +192,6 @@ public final class ClanState {
     public void remove(Clan clan) {
         clans.remove(clan.id); claims.values().removeIf(clan.id::equals);
         rivalries.keySet().removeIf(p -> p.first.equals(clan.id) || p.second.equals(clan.id));
+        alliances.removeIf(p -> p.first.equals(clan.id) || p.second.equals(clan.id));
     }
 }

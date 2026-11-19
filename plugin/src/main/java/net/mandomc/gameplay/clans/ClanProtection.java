@@ -1,6 +1,7 @@
 package net.mandomc.gameplay.clans;
 
 import java.util.*;
+import net.mandomc.gameplay.territory.PistonBlocks;
 import net.mandomc.gameplay.territory.TerritoryService;
 import org.bukkit.GameMode;
 import org.bukkit.block.*;
@@ -72,11 +73,11 @@ final class ClanProtection implements Listener {
             return;
         }
         String mechanism = b.getType().name();
-        if (territory.mechanisms(b.getLocation()) && (mechanism.endsWith("_BUTTON")
+        var owner=clans.owner(b.getLocation());
+        if (owner == null && territory.mechanisms(b.getLocation()) && (mechanism.endsWith("_BUTTON")
                 || mechanism.endsWith("_PRESSURE_PLATE") || mechanism.endsWith("_DOOR")
                 || mechanism.endsWith("_TRAPDOOR") || b.getType() == org.bukkit.Material.LEVER)) return;
         // Doors, redstone and physical/tool interactions cannot modify a rival's base.
-        var owner=clans.owner(b.getLocation());
         if(!clans.canEdit(e.getPlayer(),b.getLocation())&&(owner==null||owner.abandonedAt==0)) {
             e.setUseInteractedBlock(Event.Result.DENY);return;
         }
@@ -142,13 +143,40 @@ final class ClanProtection implements Listener {
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void spread(BlockSpreadEvent e){if(!propagated(e.getSource(),e.getBlock()))e.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void piston(BlockPistonExtendEvent e){
-        if(!propagated(e.getBlock(),e.getBlock().getRelative(e.getDirection()))||e.getBlocks().stream()
-                .anyMatch(b->!propagated(e.getBlock(),b)||!propagated(b,b.getRelative(e.getDirection()))))e.setCancelled(true);
-    }
+    public void piston(BlockPistonExtendEvent event) { checkPiston(event); }
+
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void pistonBack(BlockPistonRetractEvent e){if(e.getBlocks().stream()
-            .anyMatch(b->!propagated(e.getBlock(),b)||!propagated(b,b.getRelative(e.getDirection()))))e.setCancelled(true);}
+    public void pistonBack(BlockPistonRetractEvent event) { checkPiston(event); }
+
+    private void checkPiston(BlockPistonEvent event) {
+        var blocks = PistonBlocks.affected(event);
+        var land = clans.land();
+        var chunks = new HashSet<ClanState.Chunk>();
+        for (var block : blocks) {
+            if (!automated(event.getBlock(), block)) {
+                event.setCancelled(true);
+                return;
+            }
+            chunks.add(LandRestoration.chunk(block));
+        }
+        // Untracked permissive worlds can run their built-in machinery. A move that touches frozen
+        // wilderness needs a durable original for every affected chunk.
+        if (chunks.stream().anyMatch(land::hasBaseline) && !chunks.stream().allMatch(land::ready))
+            event.setCancelled(true);
+    }
+
+    @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
+    public void pistonExtended(BlockPistonExtendEvent event) { journalPiston(event); }
+
+    @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
+    public void pistonRetracted(BlockPistonRetractEvent event) { journalPiston(event); }
+
+    private void journalPiston(BlockPistonEvent event) {
+        var chunks = new HashSet<ClanState.Chunk>();
+        for (var block : PistonBlocks.affected(event)) chunks.add(LandRestoration.chunk(block));
+        if (chunks.size() > 1) clans.land().inherit(chunks);
+    }
+
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void dispense(BlockDispenseEvent e){
         if(e.getBlock().getBlockData() instanceof org.bukkit.block.data.Directional d

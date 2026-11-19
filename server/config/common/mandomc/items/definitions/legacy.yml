@@ -1269,25 +1269,26 @@
       ],
       "item-model": "mandomc:legacy/durasteel"
     },
-    "electrum_scrap": {
-      "material": "ECHO_SHARD",
-      "name": "<gold>Electrum Scrap",
+    "electrum_dust": {
+      "material": "LAPIS_LAZULI",
+      "name": "<gold>Electrum Dust",
       "custom-model-data": 255,
       "rarity": "uncommon",
       "category": "metals",
       "lore": [
+        "<gray>Fuel for enchanting tables.",
         "<gray>Smelt in a normal furnace for one ingot."
       ],
-      "item-model": "mandomc:legacy/electrum_scrap"
+      "item-model": "mandomc:legacy/electrum_dust"
     },
     "electrum": {
-      "material": "REDSTONE",
-      "name": "<gold>Electrum",
+      "material": "COPPER_INGOT",
+      "name": "<gold>Electrum Ingot",
       "custom-model-data": 205,
       "rarity": "uncommon",
       "category": "metals",
       "lore": [
-        "<gray>A conductive golden alloy."
+        "<gray>A golden alloy used in equipment recipes."
       ],
       "item-model": "mandomc:legacy/electrum"
     },
@@ -1646,8 +1647,8 @@
       "item-model": "minecraft:deepslate_diamond_ore"
     },
     "electrum_block": {
-      "material": "REDSTONE_BLOCK",
-      "name": "<gray>Electrum Block",
+      "material": "WAXED_COPPER_BLOCK",
+      "name": "<gold>Electrum Block",
       "rarity": "uncommon",
       "category": "materials",
       "lore": [
@@ -1655,15 +1656,15 @@
         "<gray>Craft back into nine matching ingots."
       ],
       "custom-model-data": 0,
-      "item-model": "minecraft:redstone_block"
+      "item-model": "mandomc:legacy/electrum_block"
     },
     "electrum_ore": {
       "material": "REDSTONE_ORE",
-      "name": "<gray>Electrum Ore",
+      "name": "<gold>Electrum Ore",
       "rarity": "uncommon",
       "category": "materials",
       "lore": [
-        "<gray>Mining yields Electrum Scraps.",
+        "<gray>Mining yields Electrum Dust.",
         "<gray>Silk Touch preserves this ore block."
       ],
       "custom-model-data": 0,
@@ -1671,11 +1672,11 @@
     },
     "deepslate_electrum_ore": {
       "material": "DEEPSLATE_REDSTONE_ORE",
-      "name": "<gray>Deepslate Electrum Ore",
+      "name": "<gold>Deepslate Electrum Ore",
       "rarity": "uncommon",
       "category": "materials",
       "lore": [
-        "<gray>Mining yields Electrum Scraps.",
+        "<gray>Mining yields Electrum Dust.",
         "<gray>Silk Touch preserves this ore block."
       ],
       "custom-model-data": 0,

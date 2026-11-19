@@ -16,7 +16,9 @@ collapsing toward the floor. Existing coordinates and ranking data are preserved
 
 ## Rules and ownership
 `WorldLeaderboards` reads native PLAYER_KILLS statistics and the committed CreditLedger top ten.
-ParkourService remains the sole Ilum record owner. LeaderboardLayout only composes the fixed
+ParkourService remains the sole Ilum record owner. C0-M5's `/leaderboard` reads the same ranked
+data through read-only bridge snapshots for Credits, Player Kills and Ilum Time.
+LeaderboardLayout only composes the fixed
 presentation; it does not write rankings, scores, balances, rewards or locations.
 
 World displays refresh every ten seconds and one tick after a player death. Refresh retains

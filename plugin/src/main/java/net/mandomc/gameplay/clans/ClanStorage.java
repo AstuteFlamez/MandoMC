@@ -29,6 +29,8 @@ final class ClanStorage {
             if (e.getValue().activeAttacker()!=null) row.put("attacker",e.getValue().activeAttacker().toString());
             return row;
         }).toList());
+        yaml.set("alliances", state.alliances.stream().map(pair -> Map.of("first", pair.first().toString(),
+                "second", pair.second().toString())).toList());
         return yaml.saveToString();
     }
     static ClanState load(Path path) throws Exception {
@@ -71,6 +73,16 @@ final class ClanStorage {
                 throw new IllegalArgumentException("Invalid rivalry");
             state.rivalries.put(new ClanState.Pair(first,second), new ClanState.Rivalry((int)number(row,"score"),
                     row.containsKey("attacker")?id(row,"attacker"):null,number(row,"until")));
+        }
+        for (var row : yaml.getMapList("alliances")) {
+            UUID first = id(row, "first"), second = id(row, "second");
+            var a = state.clans.get(first);
+            var b = state.clans.get(second);
+            if (a == null || b == null || first.compareTo(second) >= 0 || a.abandonedAt != 0 || b.abandonedAt != 0
+                    || state.ally(a) != null || state.ally(b) != null
+                    || a.members.size() + b.members.size() > ClanState.ALLIANCE_MEMBERS)
+                throw new IllegalArgumentException("Invalid clan alliance");
+            state.alliances.add(new ClanState.Pair(first, second));
         }
         return state;
     }

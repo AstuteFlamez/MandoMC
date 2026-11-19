@@ -11,11 +11,9 @@
   "block.minecraft.raw_iron_block": "Raw Agrinium Block",
   "block.minecraft.redstone_ore": "Electrum Ore",
   "block.minecraft.deepslate_redstone_ore": "Deepslate Electrum Ore",
-  "block.minecraft.redstone_block": "Electrum Block",
   "item.minecraft.iron_ingot": "Agrinium",
   "item.minecraft.raw_iron": "Raw Agrinium",
   "item.minecraft.iron_nugget": "Agrinium Nugget",
-  "item.minecraft.redstone": "Electrum",
   "block.minecraft.activator_rail": "Agrinium Activator Rail",
   "block.minecraft.anvil": "Agrinium Anvil",
   "block.minecraft.blast_furnace": "Agrinium Blast Furnace",
@@ -44,5 +42,7 @@
   "block.minecraft.tripwire_hook": "Agrinium Tripwire Hook",
   "block.minecraft.chipped_anvil": "Chipped Agrinium Anvil",
   "block.minecraft.damaged_anvil": "Damaged Agrinium Anvil",
-  "item.minecraft.leather": "Bantha Hide"
+  "item.minecraft.leather": "Bantha Hide",
+  "container.enchant.lapis.one": "1 Electrum Dust",
+  "container.enchant.lapis.many": "%s Electrum Dust"
 }

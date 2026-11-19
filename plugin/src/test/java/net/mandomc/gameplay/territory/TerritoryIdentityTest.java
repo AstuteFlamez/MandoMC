@@ -1,12 +1,13 @@
 package net.mandomc.gameplay.territory;
 
 import java.util.UUID;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.mandomc.gameplay.clans.ClanState;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class TerritoryIdentityTest {
-    @Test public void claimsUseViewerRelationAndOnlyTheActualRaidedDefendersTurnRed() {
+    @Test public void claimsUseViewerRelationAndIdentifyActiveRaidedDefenders() {
         var state = new ClanState();
         var attacker = state.create("Attackers",UUID.randomUUID(),0);
         var defender = state.create("Defenders",UUID.randomUUID(),0);
@@ -23,6 +24,21 @@ public class TerritoryIdentityTest {
         assertEquals(TerritoryIdentity.Relation.OWN,TerritoryIdentity.read(wild,defender,defender,state,101).relation());
         assertEquals(TerritoryIdentity.Relation.OTHER,TerritoryIdentity.read(wild,defender,attacker,state,1100).relation());
         assertEquals(TerritoryIdentity.Relation.OTHER,TerritoryIdentity.read(wild,defender,null,state,101).relation());
+    }
+    @Test public void alliesUseTheSamePerspectiveAndColorInChatAndTerritory() {
+        var state = new ClanState();
+        var first = state.create("First", UUID.randomUUID(), 0);
+        var second = state.create("Second", UUID.randomUUID(), 0);
+        var third = state.create("Third", UUID.randomUUID(), 0);
+        state.join(first, UUID.randomUUID(), 4, 0);
+        state.join(second, UUID.randomUUID(), 4, 0);
+        state.formAlliance(first, second, 1);
+        var wild = TerritoryPolicy.Zone.WILDERNESS;
+        assertEquals(NamedTextColor.GREEN, TerritoryIdentity.read(wild, first, first, state, 1).relation().color());
+        assertEquals(NamedTextColor.RED, TerritoryIdentity.read(wild, first, third, state, 1).relation().color());
+        var alliedClaim = TerritoryIdentity.read(wild, first, second, state, 1).relation();
+        assertEquals(NamedTextColor.BLUE, alliedClaim.color());
+        assertEquals(alliedClaim, TerritoryIdentity.clanRelation(second.id, first.id, true));
     }
     @Test public void identityIgnoresChunkButChangesForOwnerMembershipAndStaticZones() {
         var state = new ClanState();var a=state.create("First",UUID.randomUUID(),0);var b=state.create("Second",UUID.randomUUID(),0);

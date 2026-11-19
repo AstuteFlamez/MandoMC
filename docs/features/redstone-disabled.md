@@ -1,4 +1,6 @@
 # Feature: Disable redstone circuits
+
+Superseded by the November 18 gameplay update. Paper now runs native redstone, with the ordinary territory and clan protections. Replace the installed launcher and agent together when activating this update.
 Status: live, verified 2026-11-12
 Branch: bilal/redstone-disabled
 

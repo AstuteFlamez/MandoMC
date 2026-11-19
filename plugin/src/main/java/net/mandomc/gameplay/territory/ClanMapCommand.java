@@ -67,24 +67,36 @@ public final class ClanMapCommand implements CommandExecutor, TabCompleter {
                 "<gray>Border: <white><size> × <size> <gray>blocks; edge chunks are clipped."),
                 net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed("size",String.format(java.util.Locale.ROOT,"%.0f",border.getSize()))));
         player.sendMessage(message("orientation"));
+        var clans = pluginClans();
+        var clanState = clans == null ? null : clans.state();
+        var viewerClan = clans == null ? null : clans.member(player);
+        long now = System.currentTimeMillis();
+        var plugin = org.bukkit.plugin.java.JavaPlugin.getProvidingPlugin(ClanMapCommand.class);
+        var tutorial = plugin instanceof net.mandomc.bootstrap.MandoPlugin mando ? mando.tutorial() : null;
         for (int z = atlas.minZ(); z <= atlas.maxZ(); z++) {
             Component row = Component.text(String.format(java.util.Locale.ROOT, "%3d ", z), NamedTextColor.GRAY);
             for (int x = atlas.minX(); x <= atlas.maxX(); x++) {
                 char zone = atlas.zone(x, z);
                 boolean here = x == playerX && z == playerZ;
-                var clans=pluginClans();
-                var owner=clans==null?null:clans.state().owner(new net.mandomc.gameplay.clans.ClanState.Chunk(world,x,z));
-                var ownerPlugin = org.bukkit.plugin.java.JavaPlugin.getProvidingPlugin(ClanMapCommand.class);
-                String practice = ownerPlugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null
-                        ? mando.tutorial().practiceClaim(player, world, x, z) : null;
-                var color = here ? NamedTextColor.YELLOW : owner!=null || practice!=null ? NamedTextColor.LIGHT_PURPLE : switch (zone) {
-                    case 'S' -> net.kyori.adventure.text.format.TextColor.color(0xFFAA00);
-                    case 'W' -> NamedTextColor.DARK_RED;
-                    default -> NamedTextColor.DARK_GRAY;
+                var staticZone = switch (zone) {
+                    case 'S' -> TerritoryPolicy.Zone.SAFEZONE;
+                    case 'W' -> TerritoryPolicy.Zone.WARZONE;
+                    default -> TerritoryPolicy.Zone.WILDERNESS;
                 };
-                String zoneKey = switch (zone) { case 'S' -> "safezone"; case 'W' -> "warzone"; default -> "wilderness"; };
-                Component hover = owner==null?message(zoneKey):Component.text(owner.name,NamedTextColor.LIGHT_PURPLE);
-                if (practice != null) hover = Component.text(practice, NamedTextColor.LIGHT_PURPLE);
+                var owner = clanState == null ? null
+                        : clanState.owner(new net.mandomc.gameplay.clans.ClanState.Chunk(world, x, z));
+                var identity = TerritoryIdentity.read(staticZone, owner, viewerClan, clanState, now);
+                String practice = tutorial == null ? null : tutorial.practiceClaim(player, world, x, z);
+                var relation = practice == null ? identity.relation() : TerritoryIdentity.Relation.OWN;
+                var color = here ? NamedTextColor.YELLOW : relation != TerritoryIdentity.Relation.NONE
+                        ? relation.color() : switch (staticZone) {
+                            case SAFEZONE -> NamedTextColor.GOLD;
+                            case WARZONE -> NamedTextColor.DARK_RED;
+                            case WILDERNESS -> NamedTextColor.DARK_GRAY;
+                        };
+                Component hover = relation == TerritoryIdentity.Relation.NONE
+                        ? message(staticZone.name().toLowerCase(java.util.Locale.ROOT))
+                        : Component.text(practice == null ? identity.name() : practice, relation.color());
                 hover=hover
                         .append(Component.text(" | " + x + ", " + z + "\nX " + (x * 16) + ".." + (x * 16 + 15)
                                 + " | Z " + (z * 16) + ".." + (z * 16 + 15), NamedTextColor.WHITE));
@@ -111,9 +123,7 @@ public final class ClanMapCommand implements CommandExecutor, TabCompleter {
                 + " | X " + atlas.minX() + ".." + atlas.maxX() + " | Z " + atlas.minZ() + ".." + atlas.maxZ(), NamedTextColor.WHITE)));
         if (policy.wholeWorldSafe(world)) player.sendMessage(message("whole-world-safezone"));
         if (!atlas.contains(playerX, playerZ)) player.sendMessage(message("outside"));
-        var plugin = org.bukkit.plugin.java.JavaPlugin.getProvidingPlugin(ClanMapCommand.class);
-        if (plugin instanceof net.mandomc.bootstrap.MandoPlugin mando && mando.tutorial() != null)
-            mando.tutorial().mapShown(player);
+        if (tutorial != null) tutorial.mapShown(player);
         return true;
     }
 

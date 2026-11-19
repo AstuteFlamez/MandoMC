@@ -43,6 +43,15 @@ public class JawaSettingsTest {
         assertTrue(items.containsAll(List.of("bantha_hide","agrinium","durasteel","wiring_coil")));
         for(String item:List.of("minecraft:iron_ore","minecraft:iron_ingot","minecraft:diamond","minecraft:leather"))assertFalse(items.contains(item));
     }
+    @Test public void allThreeCashCropsHaveStockAndBuybackRates() {
+        var settings = JawaSettings.read(config());
+        var payouts = Map.of("minecraft:bamboo", 2000L, "minecraft:cactus", 2800L, "minecraft:sugar_cane", 2400L);
+        for (var entry : payouts.entrySet()) {
+            assertTrue(settings.supplies().stream().anyMatch(offer -> offer.item().equals(entry.getKey())));
+            assertTrue(settings.purchases().stream().anyMatch(offer -> offer.item().equals(entry.getKey())
+                    && offer.amount() == 16 && offer.price() == entry.getValue()));
+        }
+    }
     @Test public void grayBuybackCannotProfitFromTheSameBrownBundle(){
         var settings=JawaSettings.read(config());
         for(var sell:java.util.stream.Stream.of(settings.supplies(),settings.basicComponents(),settings.advancedComponents()).flatMap(List::stream).toList())for(var buy:settings.purchases())if(sell.item().equals(buy.item()))
