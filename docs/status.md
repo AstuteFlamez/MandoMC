@@ -1,12 +1,38 @@
 # Resume here
 
+## Electrum Dust smelting (2026-11-18)
+
+One Electrum Dust now smelts into one Electrum Ingot in a normal furnace.
+The regular and deepslate Electrum Ore recipes still smelt intact ore into
+ingots. The recipe guide prefers the dust recipe, and M4-ND covers both paths.
+
+Next, verify native furnace behavior and roll out the checked build.
+
 ## Electrum storage textures (2026-11-18)
 
 Electrum Dust Blocks and Electrum Ingot Blocks share the original 32 × 32 gold
 storage face in the world and inventory. Their names, crafting and power
-behavior remain distinct. The focused pack regression verifies the shared model.
+behavior remain distinct. The pack regression and pinned client model routes
+verify the shared texture. All 400 Java tests pass. Tooling ran 101 tests with
+seven environment skips.
 
-Next, apply the verified pack to development before promoting the release.
+Development runs `399327383d31`. Paper restarted after the 30-second warning
+and a stopped backup, then loaded the exact 410-source M4-ND bundle and the
+hash-verified published pack. PR #80 merged the checked source into dev.
+
+PR #81 merged the identical source tree into main as `a8668c59d4e8`.
+Production CI, pack publication and upload passed. Independent readback verified
+all 146 managed paths, the exact 410-source M4-ND bundle and the anonymous pack
+download. The production receipt shows the new JAR queued for activation.
+PebbleHost currently requires panel sign-in.
+
+The private terrain rehearsal compared 217,939,968 block states, preserved 3,354
+frozen originals and verified 20,528 intended ore replacements. It used a live
+download for planning. The full client visual check and production activation
+are pending.
+
+Next, once signed in to PebbleHost, stop after the in-game warning, apply the
+ore migration from a fresh stopped copy, start, and verify the active release.
 
 ## Unified Electrum circuitry (2026-11-18)
 

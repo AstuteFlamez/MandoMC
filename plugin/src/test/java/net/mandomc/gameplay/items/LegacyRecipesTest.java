@@ -53,7 +53,14 @@ public class LegacyRecipesTest {
         assertFalse(config.contains("recipes.bantha_hide_from_rabbit_hide"));
         assertTrue(config.getStringList("replace-native").contains("minecraft:leather"));
         assertEquals(125, config.getConfigurationSection("recipes").getKeys(false).size());
-        assertEquals(13, config.getConfigurationSection("smelting").getKeys(false).size());
+        assertEquals(14, config.getConfigurationSection("smelting").getKeys(false).size());
+        var electrum = RecipeDefinition.parseSmelting("electrum_from_dust",
+                config.getConfigurationSection("smelting.electrum_from_dust"));
+        assertEquals("electrum_dust", electrum.ingredients().get('I'));
+        assertEquals("electrum", electrum.result());
+        assertEquals(1, electrum.amount());
+        assertFalse(electrum.blasting());
+        assertEquals(electrum.id(), config.getString("guide.preferred-recipes.electrum"));
         assertEquals(70, config.getConfigurationSection("stonecutting").getKeys(false).size());
     }
 
