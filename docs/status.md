@@ -12,9 +12,20 @@ terrain rehearsal preserved 3,141 original snapshots and verified 20,616 intende
 block changes over 218.9 million checked states. All 396 gameplay, four access,
 45 Discord Worker and 97 tooling checks pass, with seven tooling environment skips.
 
-Next action: publish and pin the exact resource pack for development, deploy the
-matching code and scoped configs with the stopped-world ore migration, and
-activate the compatible Discord Worker and slash command.
+Development runs `d56a3f4574fb` with the matching published and pinned resource pack.
+After the full 30-second in-game warning and a clean stop, the backed-up terrain
+migration applied 20,616 block changes. Paper startup, the scoped files and the
+410-source M4-ND knowledge bundle verified. GitHub Server checks passed. Production
+Minecraft remains on its current release.
+
+C0-M5's additive D1 migration and Worker update are active. Discord registration
+has the Credits, Player Kills and Ilum Time choices and no global or guild /baltop.
+Both bridges report fresh data. All three boards are available for Development.
+Its Ilum board currently has no recorded entries. Production provides Credits
+until its Minecraft bridge is promoted. C0-M5 has Manage Nicknames and will set
+the verified IGN for new links. A fresh live link was not performed during rollout.
+
+Next action: client-playtest the development pack and complete one new Discord link.
 
 ## C0-M5 join/copy polish requested during playtest (2026-11-18)
 
