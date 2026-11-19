@@ -62,6 +62,39 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         station.getChunk().getPersistentDataContainer().set(new NamespacedKey("mandomc","forge_-200_200_-200"),PersistentDataType.BYTE,(byte)1);
         check(mando.forge().station(station), "Existing placed forge migrates to workbench");
         recipeMigration(); presentations(); equipmentLore(); rewardsAndMigration(); adminEnchant(); economyAndRedstone(); crateChances(); inventoryBadges();
+        electrumFurnaces();
+    }
+
+    private FurnaceInventory fillFurnace(int x, ItemStack input) {
+        var block = world.getBlockAt(x, 200, -215);
+        block.setType(Material.AIR, false);
+        block.setType(Material.FURNACE, false);
+        var inventory = ((org.bukkit.block.Furnace) block.getState()).getInventory();
+        inventory.setSmelting(input);
+        inventory.setFuel(new ItemStack(Material.COAL));
+        return inventory;
+    }
+
+    private void electrumFurnaces() {
+        var dust = fillFurnace(-215, mando.items().create("electrum_dust").asQuantity(2));
+        var lapis = fillFurnace(-214, new ItemStack(Material.LAPIS_LAZULI));
+        var ore = fillFurnace(-213, mando.items().create("electrum_ore"));
+        var deepslate = fillFurnace(-212, mando.items().create("deepslate_electrum_ore"));
+        later(235, () -> {
+            var ingot = mando.items().create("electrum");
+            check(ingot.equals(dust.getResult()) && dust.getSmelting().getAmount() == 1,
+                    "A normal furnace consumes one Electrum Dust and produces one catalog ingot");
+            check(empty(lapis.getResult()) && new ItemStack(Material.LAPIS_LAZULI).equals(lapis.getSmelting()),
+                    "Ordinary lapis stays in the furnace input");
+            for (var furnace : List.of(ore, deepslate)) {
+                check(ingot.equals(furnace.getResult()) && empty(furnace.getSmelting()),
+                        "The native furnace still turns intact Silk Touch ore into one ingot");
+            }
+            continueWorkbench();
+        });
+    }
+
+    private void continueWorkbench() throws Exception {
         mando.forge().open(player,station); var top = player.getOpenInventory().getTopInventory();
         check(top.getItem(10).getType()==Material.CRAFTING_TABLE && top.getItem(13).getType()==Material.STONECUTTER && top.getItem(16).getType()==Material.ENCHANTED_BOOK,"Three workbench functions");
         checkTitle("Saber Workbench");
@@ -273,8 +306,12 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         source.setType(Material.REDSTONE_BLOCK);
         check(lamp.isBlockIndirectlyPowered(),"A redstone block supplies native signal to the adjacent lamp");
         var dust=mando.items().create("electrum_dust");
-        check(Bukkit.getRecipe(new NamespacedKey("mandomc","smelt_electrum_from_dust"))==null,
-                "Dust-to-ingot furnace recipe was removed");
+        var dustRecipe = Bukkit.getRecipe(new NamespacedKey("mandomc", "smelt_electrum_from_dust"));
+        check(dustRecipe instanceof FurnaceRecipe furnace
+                        && furnace.getInputChoice().test(dust)
+                        && !furnace.getInputChoice().test(new ItemStack(Material.LAPIS_LAZULI))
+                        && mando.items().create("electrum").equals(furnace.getResult()),
+                "Electrum Dust is the custom input for the one-ingot furnace recipe");
         check(Bukkit.getRecipe(NamespacedKey.minecraft("redstone_from_smelting_redstone_ore"))==null,
                 "No vanilla recipe shadows intact ore smelting");
         for (String crust : List.of("", "deepslate_")) {
@@ -283,7 +320,7 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
                     && furnace.getInputChoice().test(mando.items().create(crust+"electrum_ore"))
                     && !furnace.getInputChoice().test(dust)
                     && "electrum".equals(mando.items().identify(furnace.getResult())),
-                    "Intact "+crust+"Electrum Ore can smelt into ingot, while dust cannot");
+                    "Intact "+crust+"Electrum Ore retains its own ingot recipe");
         }
         nativeElectrumWire(dust);
         var renamedDust=dust.asQuantity(4);
