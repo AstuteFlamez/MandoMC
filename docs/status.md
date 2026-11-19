@@ -6,7 +6,22 @@ One Electrum Dust now smelts into one Electrum Ingot in a normal furnace.
 The regular and deepslate Electrum Ore recipes still smelt intact ore into
 ingots. The recipe guide prefers the dust recipe, and M4-ND covers both paths.
 
-Next, verify native furnace behavior and roll out the checked build.
+Development runs `b24c112964d0` with the verified Electrum block pack. Paper
+passed 2,838 native checks, including real furnace output and consumption,
+intact ore smelting and ordinary lapis rejection. The 400 Java tests passed.
+Tooling ran 101 tests with seven skips. The exact 410-source development M4-ND
+bundle is active.
+
+PR #84 promoted the identical source tree as `ce3c94650998`. It is active on
+production after the in-game warning and clean PebbleHost stop and start.
+The stopped terrain audit compared 217,939,968 block states across four worlds
+and preserved 3,354 frozen originals. All 20,528 intended ore changes were
+applied and read back with backups retained. The public Minecraft endpoint
+responds and the 146 managed files, matching 32 × 32 Electrum pack, and exact
+410-source M4-ND startup marker verified. Representative acquisition and
+Fortune answers passed against the production artifact.
+
+Next, check the block appearance in a Minecraft client during normal play.
 
 ## Electrum storage textures (2026-11-18)
 
@@ -23,16 +38,13 @@ hash-verified published pack. PR #80 merged the checked source into dev.
 PR #81 merged the identical source tree into main as `a8668c59d4e8`.
 Production CI, pack publication and upload passed. Independent readback verified
 all 146 managed paths, the exact 410-source M4-ND bundle and the anonymous pack
-download. The production receipt shows the new JAR queued for activation.
-PebbleHost currently requires panel sign-in.
+download. This build was queued while panel access was pending. The combined
+smelting release above superseded that queued build and activated its pack.
 
 The private terrain rehearsal compared 217,939,968 block states, preserved 3,354
 frozen originals and verified 20,528 intended ore replacements. It used a live
-download for planning. The full client visual check and production activation
-are pending.
-
-Next, once signed in to PebbleHost, stop after the in-game warning, apply the
-ore migration from a fresh stopped copy, start, and verify the active release.
+download for planning. The combined release above used a fresh stopped copy for
+the production migration.
 
 ## Unified Electrum circuitry (2026-11-18)
 
