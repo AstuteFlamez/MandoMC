@@ -82,6 +82,7 @@ public final class SurvivalRules implements Listener {
             throw new IllegalStateException("Install the matching MandoMC launcher to enable redstone.");
         }
         plugin.getServer().getPluginManager().registerEvents(new net.mandomc.gameplay.items.ElectrumBlocks(items), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new net.mandomc.integrations.paper.ElectrumWirePlacement(items), plugin);
         plugin.getServer().getPluginManager().registerEvents(new net.mandomc.gameplay.items.OreDrops(items), plugin);
         plugin.getServer().getPluginManager().registerEvents(new net.mandomc.gameplay.items.MetalMaterials(items), plugin);
     }

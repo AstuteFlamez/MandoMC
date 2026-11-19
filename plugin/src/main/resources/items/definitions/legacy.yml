@@ -1277,7 +1277,7 @@
       "category": "metals",
       "lore": [
         "<gray>Fuel for enchanting tables.",
-        "<gray>Smelt in a normal furnace for one ingot."
+        "<gray>Place as redstone wire."
       ],
       "item-model": "mandomc:legacy/electrum_dust"
     },

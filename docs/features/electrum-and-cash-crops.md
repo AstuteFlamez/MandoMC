@@ -4,7 +4,7 @@ Branch: bilal/nov18-gameplay-feedback
 
 ## Player experience
 
-Mine Electrum Ore with an iron or better pickaxe for one Electrum Dust. Use dust at an enchanting table, or smelt it one-for-one into ingots for equipment and storage recipes. The resource pack updates the enchanting slot, cost text and Electrum palette. General Supplies on Batuu sells vanilla Redstone Dust. Redstone circuits use ordinary protection rules.
+Mine Electrum Ore with an iron or better pickaxe for one Electrum Dust. Use dust at an enchanting table or place it as ordinary redstone wire. The empty enchanting slot shows a gray impression of the exact Electrum Dust sprite. Smelt intact Electrum Ore collected with Silk Touch to make ingots for equipment and storage recipes. General Supplies on Batuu sells vanilla Redstone Dust. Both sources of wire share the gold palette and spark effect, use ordinary protection rules and return Redstone Dust on break.
 
 Batuu's Plants & Dyes Jawa sells bamboo. The Farming Jawa sells cactus and sugar cane. Sell these crops at any gray Jawa for 20, 28 and 24 credits per 16, respectively. Other existing gray Jawa sell rates rose by 25%. Each crop costs 6 credits to buy, so reselling purchases alone loses credits.
 

@@ -32,6 +32,14 @@ class ProgressionMetalTests(unittest.TestCase):
             self.assertFalse((ASSETS / 'minecraft/textures' / name).exists())
         self.assertNotIn('block.minecraft.copper_block', labels)
 
+    def test_electrum_slot_uses_the_grayscale_dust_silhouette(self):
+        from PIL import Image
+        source = Image.open(ASSETS / 'mandomc/textures/item/legacy/metals/scraps/electrum_dust.png').convert('RGBA')
+        hint = Image.open(ASSETS / 'minecraft/textures/gui/sprites/container/slot/lapis_lazuli.png').convert('RGBA')
+        self.assertEqual((32, 32), hint.size)
+        self.assertEqual(source.getchannel('A').tobytes(), hint.getchannel('A').tobytes())
+        self.assertTrue(all(r == g == b for r, g, b, a in hint.get_flattened_data() if a))
+
     def test_metals_use_four_distinct_native_mineral_patterns(self):
         base = json.loads((ROOT / 'resource-pack/metal-block-sources.json').read_text())['blocks']
         progression = json.loads((ROOT / 'resource-pack/progression-metal-sources.json').read_text())['textures']

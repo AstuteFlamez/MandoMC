@@ -1,5 +1,20 @@
 # Resume here
 
+## Electrum slot and wiring (2026-11-18)
+
+The enchanting slot uses the actual 32 × 32 Electrum Dust silhouette in gray.
+Electrum Dust places ordinary redstone wire and pays one dust per successful
+placement. Both wire sources share the gold wire and spark palette. Electrum
+Dust is no longer a furnace input for ingots. Silk Touch Electrum Ore and its
+deepslate variant still smelt into an ingot.
+
+Disposable Paper passes 2,828 assertions, including native placement, power,
+drops, cancellation, regular ore yields, enchanting, and both new recipes.
+The pinned terrain and particle shaders compile and link. The build passes all
+396 gameplay and four access tests. The 98 toolkit tests pass with seven skips.
+
+Next action: publish the matching pack and activate the scoped update on development.
+
 ## Gameplay feedback and C0-M5 leaderboard (2026-11-18)
 
 The development branch contains the gameplay, economy, clan, UI, resource-pack

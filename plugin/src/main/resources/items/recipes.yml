@@ -1795,7 +1795,7 @@
     "beskar_scrap": "<gray>Mandalore mine: 10 nodes during Beskar Rush.\n<gray>Mine active nodes for one scrap each.\n<gray>Also a possible KOTH Crate reward on Batuu.\n<gray>Crate key: winning clan reward from KOTH on Hoth.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
     "cortosis_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
     "durasteel_scrap": "<gray>Tatooine, Hoth, Mandalore and Naboo caves: mine Durasteel Ore.\n<gray>Use an iron-or-better pickaxe; one scrap.\n<gray>Fortune adds none; Silk Touch keeps the ore.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
-    "electrum_dust": "<gray>Mine Electrum Ore in resource planet caves with iron or better.\n<gray>Fortune adds none; Silk Touch keeps the ore.\n<gray>Use at an enchanting table or smelt into an ingot.",
+    "electrum_dust": "<gray>Mine Electrum Ore in resource planet caves with iron or better.\n<gray>Fortune adds none; Silk Touch keeps the ore.\n<gray>Use at an enchanting table or place as redstone wire.",
     "lommite_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
     "mandalorian_iron_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
     "neuranium_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
@@ -1872,7 +1872,7 @@
     "circuit_board": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "durasteel": "<gray>Smelt one Durasteel Scrap in a normal furnace.\n<gray>One scrap produces one ingot.\n<gray>Scrap source: Tatooine, Hoth, Mandalore and Naboo caves.\n<gray>Also: possible KOTH Crate reward on Batuu.",
     "durasteel_block": "<gray>Craft nine Durasteel ingots into one block.\n<gray>Ore source: Tatooine, Hoth, Mandalore and Naboo caves.",
-    "electrum": "<gray>Smelt one Electrum Dust for one ingot.\n<gray>Electrum Ore is found on all four resource planets.",
+    "electrum": "<gray>Smelt either Electrum Ore variant mined with Silk Touch.\n<gray>Electrum Ore is found on all four resource planets.",
     "electrum_block": "<gray>Craft nine Electrum ingots into one storage block.",
     "energy_conduits": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
     "fang_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
@@ -1972,7 +1972,7 @@
     ],
     "preferred-recipes": {
       "agrinium": "agrinium_from_scrap",
-      "electrum": "electrum_from_dust",
+      "electrum": "electrum_from_ore",
       "durasteel": "durasteel_from_scrap",
       "beskar": "beskar_from_scrap",
       "aurodium": "aurodium_from_scrap",
@@ -2043,9 +2043,17 @@
       "experience": 0.7,
       "category": "metals"
     },
-    "electrum_from_dust": {
+    "electrum_from_ore": {
       "result": "electrum",
-      "input": "electrum_dust",
+      "input": "electrum_ore",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
+      "category": "metals"
+    },
+    "electrum_from_deepslate_ore": {
+      "result": "electrum",
+      "input": "deepslate_electrum_ore",
       "furnace": "furnace",
       "cook-time": 200,
       "experience": 0.7,

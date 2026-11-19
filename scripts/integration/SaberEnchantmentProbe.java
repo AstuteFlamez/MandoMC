@@ -258,7 +258,7 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         player.closeInventory();
     }
 
-    private void economyAndRedstone() {
+    private void economyAndRedstone() throws Exception {
         check(Bukkit.getWorlds().stream().noneMatch(w -> Boolean.TRUE.equals(w.getGameRuleValue(GameRules.LOCATOR_BAR))),
                 "No world sends the player locator bar");
         check(Bukkit.getRecipe(NamespacedKey.minecraft("leather"))==null
@@ -273,10 +273,28 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         source.setType(Material.REDSTONE_BLOCK);
         check(lamp.isBlockIndirectlyPowered(),"A redstone block supplies native signal to the adjacent lamp");
         var dust=mando.items().create("electrum_dust");
-        var smelt=Bukkit.getRecipe(new NamespacedKey("mandomc","smelt_electrum_from_dust"));
-        check(smelt instanceof FurnaceRecipe furnace && furnace.getInputChoice().test(dust)
-                && !furnace.getInputChoice().test(new ItemStack(Material.LAPIS_LAZULI))
-                && "electrum".equals(mando.items().identify(furnace.getResult())),"Electrum has an exact one-dust smelting recipe");
+        check(Bukkit.getRecipe(new NamespacedKey("mandomc","smelt_electrum_from_dust"))==null,
+                "Dust-to-ingot furnace recipe was removed");
+        for (String crust : List.of("", "deepslate_")) {
+            var smelt=Bukkit.getRecipe(new NamespacedKey("mandomc","smelt_electrum_from_"+crust+"ore"));
+            check(smelt instanceof FurnaceRecipe furnace
+                    && furnace.getInputChoice().test(mando.items().create(crust+"electrum_ore"))
+                    && !furnace.getInputChoice().test(dust)
+                    && "electrum".equals(mando.items().identify(furnace.getResult())),
+                    "Intact "+crust+"Electrum Ore can smelt into ingot, while dust cannot");
+        }
+        nativeElectrumWire(dust);
+        var renamedDust=dust.asQuantity(4);
+        renamedDust.editMeta(meta -> {
+            meta.displayName(Component.text("Saved dust"));
+            var lore=new ArrayList<>(meta.lore());
+            lore.set(lore.size()-1, Component.text("Smelt in a normal furnace for one ingot."));
+            meta.lore(lore);
+        });
+        var refreshed=new net.mandomc.gameplay.items.MetalMaterials(mando.items()).canonical(renamedDust);
+        check(refreshed.getAmount()==4&&plain(refreshed.getItemMeta().displayName()).equals("Saved dust")
+                && plain(refreshed.getItemMeta().lore().getLast()).equals("Place as redstone wire."),
+                "Existing Electrum Dust gains the current hint without losing its name or quantity");
         var old=new ItemStack(Material.ECHO_SHARD,13);
         old.editMeta(meta->meta.getPersistentDataContainer().set(net.mandomc.gameplay.items.ItemCatalog.ITEM_ID,
                 PersistentDataType.STRING,"electrum_scrap"));
@@ -302,6 +320,63 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
             drops.forEach(org.bukkit.entity.Item::remove);
         }
     }
+    private void nativeElectrumWire(ItemStack dust) throws Exception {
+        var support=world.getBlockAt(-203,199,-202);
+        var placed=support.getRelative(0,1,0);
+        support.setType(Material.STONE,false);
+        placed.setType(Material.AIR,false);
+        var held=dust.asQuantity(3);
+        player.getInventory().setItemInMainHand(held);
+        useTop(support);
+        check(placed.getType()==Material.REDSTONE_WIRE,"Electrum Dust uses native redstone placement");
+        check(player.getInventory().getItemInMainHand().equals(dust.asQuantity(2)),"Placement consumes exactly one dust");
+
+        var power=placed.getRelative(1,0,0);
+        power.setType(Material.REDSTONE_BLOCK);
+        check(((org.bukkit.block.data.type.RedstoneWire)placed.getBlockData()).getPower()==15,"Placed wire carries native power");
+        check(player.breakBlock(placed),"Placed wire breaks natively");
+        var drops=world.getNearbyEntities(placed.getLocation().add(.5,.5,.5),1,1,1).stream()
+                .filter(org.bukkit.entity.Item.class::isInstance).map(org.bukkit.entity.Item.class::cast).toList();
+        check(drops.size()==1&&drops.getFirst().getItemStack().equals(new ItemStack(Material.REDSTONE)),
+                "Placed Electrum returns ordinary redstone dust");
+        drops.forEach(org.bukkit.entity.Item::remove);
+        power.setType(Material.AIR);
+
+        var rejected = new org.bukkit.event.Listener() { };
+        Bukkit.getPluginManager().registerEvent(org.bukkit.event.block.BlockPlaceEvent.class, rejected,
+                org.bukkit.event.EventPriority.LOW, (listener, e) -> {
+                    if (e instanceof org.bukkit.event.block.BlockPlaceEvent place && place.getBlockPlaced().equals(placed)) {
+                        place.setCancelled(true);
+                    }
+                }, this);
+        try {
+            useTop(support);
+            check(placed.getType().isAir()&&player.getInventory().getItemInMainHand().equals(dust.asQuantity(2)),
+                    "Native block-place cancellation prevents Electrum placement and consumption");
+        } finally { org.bukkit.event.HandlerList.unregisterAll(rejected); }
+    }
+
+    private void useTop(org.bukkit.block.Block support) throws Exception {
+        var nativePlayer=handle();
+        var mode=nativePlayer.getClass().getField("gameMode").get(nativePlayer);
+        var level=world.getClass().getMethod("getHandle").invoke(world);
+        var vecType=Class.forName("net.minecraft.world.phys.Vec3");
+        var posType=Class.forName("net.minecraft.core.BlockPos");
+        var direction=Class.forName("net.minecraft.core.Direction");
+        var hitType=Class.forName("net.minecraft.world.phys.BlockHitResult");
+        var handType=Class.forName("net.minecraft.world.InteractionHand");
+        var vec=vecType.getConstructor(double.class,double.class,double.class)
+                .newInstance(support.getX()+.5,support.getY()+1.,support.getZ()+.5);
+        var pos=posType.getConstructor(int.class,int.class,int.class)
+                .newInstance(support.getX(),support.getY(),support.getZ());
+        var hit=hitType.getConstructor(vecType,direction,posType,boolean.class)
+                .newInstance(vec,direction.getField("UP").get(null),pos,false);
+        var nativeItem=nativePlayer.getClass().getMethod("getMainHandItem").invoke(nativePlayer);
+        mode.getClass().getMethod("useItemOn",Class.forName("net.minecraft.server.level.ServerPlayer"),
+                Class.forName("net.minecraft.world.level.Level"),Class.forName("net.minecraft.world.item.ItemStack"),handType,hitType)
+                .invoke(mode,nativePlayer,level,nativeItem,handType.getField("MAIN_HAND").get(null),hit);
+    }
+
     private void table() {
         player.closeInventory(); var center=station.getLocation().add(0,0,5);center.getBlock().setType(Material.ENCHANTING_TABLE,false);
         for(int x=-2;x<=2;x++)for(int z=-2;z<=2;z++)if(Math.abs(x)==2||Math.abs(z)==2)center.clone().add(x,0,z).getBlock().setType(Material.BOOKSHELF,false);

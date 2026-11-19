@@ -14,6 +14,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 /** Native-backed ingots keep ordinary material recipes while custom recipes require exact catalog metadata. */
 public final class MetalMaterials implements Listener {
+    private static final String OLD_ELECTRUM_DUST_HINT = "Smelt in a normal furnace for one ingot.";
     public static final java.util.Map<Material, String> FORMS = java.util.Map.ofEntries(
             java.util.Map.entry(Material.IRON_BLOCK, "agrinium_block"),
             java.util.Map.entry(Material.IRON_ORE, "agrinium_ore"),
@@ -45,6 +46,22 @@ public final class MetalMaterials implements Listener {
         if (replacementId != null) {
             var replacement = items.create(replacementId);
             replacement.setAmount(original.getAmount());
+            return original.equals(replacement) ? original : replacement;
+        }
+        if ("electrum_dust".equals(id)) {
+            var meta = original.getItemMeta();
+            var lore = meta.lore();
+            if (lore == null) return original;
+            var plain = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText();
+            if (lore.stream().noneMatch(line -> plain.serialize(line).equals(OLD_ELECTRUM_DUST_HINT))) {
+                return original;
+            }
+            var updated = items.create(id).getItemMeta().lore().getLast();
+            var refreshedLore = lore.stream()
+                    .map(line -> plain.serialize(line).equals(OLD_ELECTRUM_DUST_HINT) ? updated : line).toList();
+            meta.lore(refreshedLore);
+            var replacement = original.clone();
+            replacement.setItemMeta(meta);
             return replacement;
         }
         if (MetalMigration.isSheet(id)) {
