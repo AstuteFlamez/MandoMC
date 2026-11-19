@@ -8,8 +8,10 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /** Owns native crafting registration and the recipe data displayed by the player guide. */
@@ -19,6 +21,7 @@ public final class CraftingRecipes implements org.bukkit.event.Listener, AutoClo
     private StonecutterRules stonecutterRules;
     private final List<NamespacedKey> keys = new ArrayList<>();
     private final List<NamespacedKey> compatibilityKeys = new ArrayList<>();
+    private final List<NamespacedKey> electrumKeys = new ArrayList<>();
     private final List<org.bukkit.inventory.Recipe> displaced = new ArrayList<>();
     private final List<RecipeDefinition> definitions;
     private final java.util.Set<String> hiddenResults;
@@ -88,6 +91,7 @@ public final class CraftingRecipes implements org.bukkit.event.Listener, AutoClo
                     compatibilityKeys.add(oldKey);
                 }
             }
+            registerElectrumCircuits();
         } catch (RuntimeException error) {
             close();
             throw error;
@@ -129,6 +133,56 @@ public final class CraftingRecipes implements org.bukkit.event.Listener, AutoClo
                 }
             }.runTaskTimer(plugin, 1, 1);
         }
+    }
+
+    private void registerElectrumCircuits() {
+        var originals = new ArrayList<Recipe>();
+        Bukkit.recipeIterator().forEachRemaining(recipe -> {
+            if (recipe instanceof ShapedRecipe shaped && shaped.getKey().getNamespace().equals("minecraft")
+                    && shaped.getChoiceMap().values().stream().anyMatch(CraftingRecipes::usesDust)) {
+                originals.add(shaped);
+            } else if (recipe instanceof ShapelessRecipe shapeless && shapeless.getKey().getNamespace().equals("minecraft")
+                    && shapeless.getChoiceList().stream().anyMatch(CraftingRecipes::usesDust)) {
+                originals.add(shapeless);
+            }
+        });
+        for (Recipe original : originals) {
+            Recipe replacement;
+            NamespacedKey key;
+            if (original instanceof ShapedRecipe shaped) {
+                key = shaped.getKey();
+                var copy = new ShapedRecipe(key, shaped.getResult()).shape(shaped.getShape());
+                copy.setGroup(shaped.getGroup());
+                copy.setCategory(shaped.getCategory());
+                shaped.getChoiceMap().forEach((symbol, choice) -> {
+                    if (choice != null) copy.setIngredient(symbol, circuitChoice(choice));
+                });
+                replacement = copy;
+            } else {
+                var shapeless = (ShapelessRecipe) original;
+                key = shapeless.getKey();
+                var copy = new ShapelessRecipe(key, shapeless.getResult());
+                copy.setGroup(shapeless.getGroup());
+                copy.setCategory(shapeless.getCategory());
+                shapeless.getChoiceList().forEach(choice -> copy.addIngredient(circuitChoice(choice)));
+                replacement = copy;
+            }
+            if (!Bukkit.removeRecipe(key)) throw new IllegalStateException("Missing circuit recipe: " + key);
+            displaced.add(original);
+            if (!Bukkit.addRecipe(replacement)) throw new IllegalStateException("Unable to update circuit recipe: " + key);
+            electrumKeys.add(key);
+        }
+    }
+
+    private static boolean usesDust(RecipeChoice choice) {
+        return choice instanceof RecipeChoice.MaterialChoice materials && materials.getChoices().contains(Material.REDSTONE);
+    }
+
+    private RecipeChoice circuitChoice(RecipeChoice choice) {
+        if (!(choice instanceof RecipeChoice.MaterialChoice materials) || !usesDust(choice)) return choice;
+        var choices = new ArrayList<>(materials.getChoices().stream().map(ItemStack::new).toList());
+        choices.add(Objects.requireNonNull(items.create("electrum_dust")));
+        return new RecipeChoice.ExactChoice(choices);
     }
 
     private void discover(org.bukkit.entity.Player player) {
@@ -204,6 +258,8 @@ public final class CraftingRecipes implements org.bukkit.event.Listener, AutoClo
         keys.clear();
         compatibilityKeys.forEach(Bukkit::removeRecipe);
         compatibilityKeys.clear();
+        electrumKeys.forEach(Bukkit::removeRecipe);
+        electrumKeys.clear();
         displaced.forEach(Bukkit::addRecipe);
         displaced.clear();
     }

@@ -20,6 +20,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
     public net.mandomc.integrations.discord.DiscordLinkDroid discordDroid() { return discordDroid; }
     private net.mandomc.gameplay.ranks.RankService ranks;
     private net.mandomc.gameplay.admin.StaffMode staff;
+    private net.mandomc.integrations.paper.InventoryBadges inventoryBadges;
     private net.mandomc.integrations.permissions.WorldEditRanks worldEditRanks;
     private net.mandomc.gameplay.mobs.MobExperience mobExperience;
     private net.mandomc.gameplay.spawners.MobSpawners spawners;
@@ -190,7 +191,10 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
             itemCommands = new net.mandomc.commands.ItemCommand(this, items, language, root);
             try {
                 items.reload();
-            new net.mandomc.gameplay.items.ItemPresentationRefresh(this, items);
+                new net.mandomc.gameplay.items.ItemPresentationRefresh(this, items);
+                if (getServer().getPluginManager().isPluginEnabled("packetevents")) {
+                    inventoryBadges = new net.mandomc.integrations.paper.InventoryBadges(items);
+                }
                 getLogger().info("Loaded " + items.ids().size() + " custom items.");
             } catch (Exception error) {
                 getLogger().severe("Custom items unavailable; repair config and /mandomc items reload: " + error.getMessage());
@@ -342,6 +346,7 @@ public final class MandoPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (inventoryBadges != null) inventoryBadges.close();
         if (discordDroid != null) discordDroid.close();
         if (discord != null) discord.close();
         if (droid != null) droid.close();

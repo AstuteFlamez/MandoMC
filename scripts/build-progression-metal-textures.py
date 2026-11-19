@@ -56,17 +56,12 @@ def main():
             write(f'minecraft/textures/block/{rock}redstone_ore.png',
                   f'assets/minecraft/textures/block/{template}.png', 'electrum', True, not rock)
         source = ROOT / 'resource-pack/art-sources/electrum-block-32.png'
-        dest = ASSETS / 'minecraft/textures/block/redstone_block.png'
+        dest = ASSETS / 'mandomc/textures/block/electrum_block.png'
         assert Image.open(source).size == (32, 32)
+        dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_bytes(source.read_bytes())
         records.append({'target': str(dest.relative_to(ASSETS)), 'artSource': 'art-sources/electrum-block-32.png',
                         'sourceSha256': hashlib.sha256(source.read_bytes()).hexdigest(),
-                        'outputSha256': hashlib.sha256(dest.read_bytes()).hexdigest()})
-        source = ASSETS / 'mandomc/textures/item/legacy/metals/ingots/electrum.png'
-        dest = ASSETS / 'minecraft/textures/item/redstone.png'
-        dest.parent.mkdir(parents=True, exist_ok=True)
-        dest.write_bytes(source.read_bytes())
-        records.append({'target': str(dest.relative_to(ASSETS)), 'localSource': str(source.relative_to(ASSETS)),
                         'outputSha256': hashlib.sha256(dest.read_bytes()).hexdigest()})
 
     # Recolor only the blue metal head; preserve each wooden handle and all transparency exactly.
@@ -96,7 +91,7 @@ def main():
     output = ROOT / 'resource-pack/progression-metal-sources.json'
     output.write_text(json.dumps({'schema-version': 1, 'source': 'Official Faithful 32x 26.1-june-2026 Fj5GKJnf',
         'license': 'src/faithful-license.txt', 'scope': 'Native iron/Agrinium and redstone/Electrum presentation. '
-        'Electrum replaces nonoxidizing redstone; lit/unlit ores share native texture aliases. Agrinium uses Faithful iron mineral clusters; Electrum uses gold clusters. The Electrum storage face is an original generated metal plate. Block states and placed shapes remain native.',
+        'Electrum Ore replaces the redstone ore visual; vanilla redstone components retain their own assets. Agrinium uses Faithful iron mineral clusters; Electrum uses gold clusters. The Electrum storage face is an original generated metal plate. Block states and placed shapes remain native.',
         'textures': records}, indent=2) + '\n')
     print(f'Built {len(records)} Agrinium/Electrum texture aliases without changing prior metal art.')
 

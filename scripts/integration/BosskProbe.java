@@ -215,12 +215,14 @@ public final class BosskProbe extends JavaPlugin {
     }
     private void drops() {
         var mob=MythicBukkit.inst().getAPIHelper().getMythicMobInstance(boss);Set<Integer> amounts=new HashSet<>();
+        int total=0;
         for(int i=0;i<1000;i++){
             var event=new io.lumine.mythic.bukkit.events.MythicMobDeathEvent(mob,null,new ArrayList<>());Bukkit.getPluginManager().callEvent(event);
             if(event.getDrops().size()!=1)throw new AssertionError("Unexpected Bossk adapter drop count");
-            var item=event.getDrops().getFirst();if(!"dioxis_grenade".equals(plugin.items().identify(item))||item.getAmount()<1||item.getAmount()>3)throw new AssertionError("Wrong grenade death loot");amounts.add(item.getAmount());
+            var item=event.getDrops().getFirst();if(!"dioxis_grenade".equals(plugin.items().identify(item))||item.getAmount()<12||item.getAmount()>20)throw new AssertionError("Wrong grenade death loot");amounts.add(item.getAmount());total+=item.getAmount();
         }
-        check(amounts.equals(Set.of(1,2,3)),"Bossk consistently drops exactly 1–3 usable catalog grenades");
+        check(amounts.size()==9&&Math.abs(total/1000.0-16)<0.4,
+                "Bossk drops 12–20 usable catalog grenades, with a mean near 16");
     }
     private void burst() throws Exception {
         enemy.teleport(boss.getLocation().add(0,0,10));select();shots.clear();start=Bukkit.getCurrentTick();cast("BosskBurst");cooldown();

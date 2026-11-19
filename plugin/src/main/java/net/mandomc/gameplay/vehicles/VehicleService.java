@@ -105,13 +105,18 @@ public final class VehicleService implements Listener, AutoCloseable {
                 data.set("health", 50);
                 data.save(new java.io.File(plugin.getDataFolder(), path));
             }
-            if (id.equals("uwing") && !data.contains("gunner-seats")) {
+            if (id.equals("uwing") && data.getInt("passenger-seat-layout") < 1) {
                 var seats = new ArrayList<>(data.getStringList("passenger-seats"));
-                if (seats.remove("seatone")) {
-                    data.set("passenger-seats", seats);
+                if (!data.contains("gunner-seats") && seats.remove("seatone")) {
                     data.set("gunner-seats", List.of("seatone"));
-                    data.save(new java.io.File(plugin.getDataFolder(), path));
                 }
+                if (seats.isEmpty()) try (var reader = new java.io.InputStreamReader(
+                        Objects.requireNonNull(plugin.getResource(path)), java.nio.charset.StandardCharsets.UTF_8)) {
+                    seats.addAll(YamlConfiguration.loadConfiguration(reader).getStringList("passenger-seats"));
+                }
+                data.set("passenger-seats", seats);
+                data.set("passenger-seat-layout", 1);
+                data.save(new java.io.File(plugin.getDataFolder(), path));
             }
             definitions.put(id, VehicleDefinition.read(id, data));
         }

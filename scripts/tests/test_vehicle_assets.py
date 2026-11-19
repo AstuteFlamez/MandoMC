@@ -37,3 +37,23 @@ class VehicleAssetsTests(unittest.TestCase):
         for sound in ('speederbike_drive', 'xwing_fly', 'tie_fighter_fly'):
             self.assertIn(f'vehicles.{sound}', sounds)
             self.assertTrue((PACK / f'assets/mandomc/sounds/vehicles/{sound}.ogg').is_file())
+
+    def test_uwing_cabin_seats_use_existing_mount_convention(self):
+        blueprint = ROOT / 'server/config/common/modelengine/blueprints/uwing.bbmodel'
+        model = json.loads(blueprint.read_text())
+        groups = {group['name']: group for group in model['groups']}
+        body = next(node for node in model['outliner'] if node['uuid'] == groups['body']['uuid'])
+        empty_children = {node['uuid'] for node in body['children']
+                          if isinstance(node, dict) and not node['children']}
+        seats = [f'passenger_{index}' for index in range(1, 7)]
+        for config in ('plugin/src/main/resources', 'server/config/common/mandomc'):
+            row = next(line for line in (ROOT / config / 'vehicles/uwing.yml').read_text().splitlines()
+                       if line.startswith('passenger-seats:'))
+            self.assertEqual(seats, row.partition('[')[2].rstrip(']').split(', '))
+        targets = [groups[f'p_{seat}'] for seat in seats]
+        self.assertEqual({(-6, 14, -14), (-6, 14, 0), (-6, 14, 14),
+                          (6, 14, -14), (6, 14, 0), (6, 14, 14)},
+                         {tuple(target['origin']) for target in targets})
+        for group in [groups['mount'], groups['p_seatone'], *targets]:
+            self.assertIn(group['uuid'], empty_children)
+            self.assertTrue(group['export'])

@@ -112,7 +112,8 @@ def check_model_aliases(path, visiting=None):
         parent_path = SOURCE / 'assets' / namespace / 'models' / (name + '.json')
         if parent_path.is_file():
             textures.update(check_model_aliases(parent_path, visiting | {path}))
-    textures.update(data.get('textures', {}))
+    textures.update({key: value['sprite'] if isinstance(value, dict) else value
+                     for key, value in data.get('textures', {}).items()})
     references = list(textures.values())
     for element in data.get('elements', []):
         references.extend(face['texture'] for face in element.get('faces', {}).values() if 'texture' in face)

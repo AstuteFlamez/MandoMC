@@ -8,10 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ClanCommands implements CommandExecutor, TabCompleter, AutoCloseable {
+    private static final long INVITE_MILLIS = 300_000;
     private record Invitation(UUID clan, long expires) {}
+    private record AllianceRequest(UUID target, UUID leader, long expires) {}
     private final ClanService clans;
     private final TeleportService travel;
     private final Map<UUID,Invitation> invites=new HashMap<>();
+    private final Map<UUID,AllianceRequest> allianceRequests = new HashMap<>();
     private final CommandExecutor map;
     private final ClanMenu menu;
     public ClanCommands(JavaPlugin plugin,ClanService clans,TeleportService travel) {
@@ -42,10 +45,9 @@ public final class ClanCommands implements CommandExecutor, TabCompleter, AutoCl
             if(action.equals("info")) {
                 if(args.length>2)throw new IllegalArgumentException("usage");
                 var target=args.length==2?state.named(args[1]):clan;
-                if(target==null)throw new IllegalArgumentException("unknown-clan");
-                p.sendMessage(clans.message("info","clan",target.name,"members",target.members.size()+"/"+clans.settings().members(),
-                        "claims",state.claims.values().stream().filter(target.id::equals).count()+"/"+clans.settings().chunks(),
-                        "status",target.abandonedAt==0?"Active":"Public loot"));return true;
+                if(target==null)throw new IllegalArgumentException(args.length == 2 ? "unknown-clan" : "not-member");
+                menu.open(p, target == clan ? null : target.id);
+                return true;
             }
             if(clan==null)throw new IllegalArgumentException("not-member");
             if(action.equals("warpoints")) {
@@ -65,7 +67,7 @@ public final class ClanCommands implements CommandExecutor, TabCompleter, AutoCl
             var role=state.role(clan,p.getUniqueId());
             if(Set.of("invite","kick","claim","unclaim","unclaimall").contains(action)) {
                 if(role==null||!role.manages())throw new IllegalArgumentException("not-manager");
-            }else if(Set.of("leader","disband","sethome","promote","demote").contains(action)) {
+            }else if(Set.of("leader","disband","sethome","promote","demote","ally","unally").contains(action)) {
                 if(role!=ClanRole.LEADER)throw new IllegalArgumentException("not-leader");
             }else throw new IllegalArgumentException("usage");
             switch(action) {
@@ -73,10 +75,20 @@ public final class ClanCommands implements CommandExecutor, TabCompleter, AutoCl
                     length(args,2);var target=Bukkit.getPlayerExact(args[1]);
                     if(target==null||!p.canSee(target))throw new IllegalArgumentException("unknown-player");
                     if(clans.member(target)!=null)throw new IllegalArgumentException("already-member");
-                    if(clan.members.size()>=clans.settings().members())throw new IllegalArgumentException("member-limit");
-                    invites.put(target.getUniqueId(),new Invitation(clan.id,now+300000));
+                    state.checkRecruitment(clan, clans.settings().members());
+                    invites.put(target.getUniqueId(),new Invitation(clan.id,now+INVITE_MILLIS));
                     target.sendMessage(clans.message("invitation","clan",clan.name));
                     p.sendMessage(clans.message("invited","player",target.getName(),"clan",clan.name));
+                }
+                case "ally", "unally" -> {
+                    length(args, 2);
+                    var target = state.named(args[1]);
+                    if (target == null) throw new IllegalArgumentException("unknown-clan");
+                    if (action.equals("ally")) ally(p, clan, target, now);
+                    else {
+                        if (!state.endAlliance(clan, target)) throw new IllegalArgumentException("not-allies");
+                        allianceChanged(p, clan, target, "alliance-ended");
+                    }
                 }
                 case "kick", "leader", "promote", "demote" -> {
                     length(args,2);
@@ -123,20 +135,59 @@ public final class ClanCommands implements CommandExecutor, TabCompleter, AutoCl
                 case "disband" -> {
                     length(args,1);
                     for(var e:List.copyOf(state.claims.entrySet()))if(e.getValue().equals(clan.id))clans.land().release(e.getKey(),false);
-                    state.remove(clan);clans.saved(p,"disbanded","clan",clan.name);
+                    state.remove(clan);allianceRequests.remove(clan.id);clans.saved(p,"disbanded","clan",clan.name);
                 }
                 default -> throw new IllegalArgumentException("usage");
             }
         }catch(IllegalArgumentException error){p.sendMessage(clans.message(error.getMessage()));}
         return true;
     }
+    private void ally(Player player, ClanState.Clan own, ClanState.Clan target, long now) {
+        var state = clans.state();
+        state.checkAlliance(own, target, now);
+        allianceRequests.values().removeIf(request -> request.expires() <= now);
+        var reciprocal = allianceRequests.get(target.id);
+        if (reciprocal != null && reciprocal.target().equals(own.id) && reciprocal.leader().equals(target.leader)) {
+            state.formAlliance(own, target, now);
+            allianceRequests.remove(own.id);
+            allianceRequests.remove(target.id);
+            allianceChanged(player, own, target, "alliance-formed");
+            return;
+        }
+        allianceRequests.put(own.id, new AllianceRequest(target.id, own.leader, now + INVITE_MILLIS));
+        player.sendMessage(clans.message("alliance-requested", "clan", target.name));
+        var leader = Bukkit.getPlayer(target.leader);
+        if (leader != null) leader.sendMessage(clans.message("alliance-request", "clan", own.name));
+    }
+
+    private void allianceChanged(Player player, ClanState.Clan own, ClanState.Clan target, String message) {
+        clans.save().whenComplete((ignored, error) -> {
+            var plugin = JavaPlugin.getProvidingPlugin(ClanCommands.class);
+            if (!plugin.isEnabled()) return;
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                if (error != null) {
+                    player.sendMessage(clans.message("failed"));
+                    return;
+                }
+                for (var member : own.members) {
+                    var online = Bukkit.getPlayer(member);
+                    if (online != null) online.sendMessage(clans.message(message, "clan", target.name));
+                }
+                for (var member : target.members) {
+                    var online = Bukkit.getPlayer(member);
+                    if (online != null) online.sendMessage(clans.message(message, "clan", own.name));
+                }
+            });
+        });
+    }
+
     private void help(CommandSender sender){clans.help().forEach(sender::sendMessage);}
     @Override public void close(){menu.close();}
     private static void length(String[] args,int count){if(args.length!=count)throw new IllegalArgumentException("usage");}
     @Override public List<String> onTabComplete(CommandSender sender,Command cmd,String label,String[] args) {
         List<String> choices=args.length==1?List.of("help","map","create","invite","join","leave","kick","leader","promote","demote","disband",
-                "claim","unclaim","unclaimall","sethome","home","info","warpoints"):args.length==2?
-                Set.of("join","info","warpoints").contains(args[0].toLowerCase(Locale.ROOT))?
+                "claim","unclaim","unclaimall","sethome","home","info","warpoints","ally","unally"):args.length==2?
+                Set.of("join","info","warpoints","ally","unally").contains(args[0].toLowerCase(Locale.ROOT))?
                         clans.state().clans.values().stream().map(c->c.name).toList():
                         Bukkit.getOnlinePlayers().stream().filter(p->!(sender instanceof Player viewer)||viewer.canSee(p)).map(Player::getName).toList():List.of();
         return choices.stream().filter(s->s.toLowerCase(Locale.ROOT).startsWith(args[args.length-1].toLowerCase(Locale.ROOT))).toList();

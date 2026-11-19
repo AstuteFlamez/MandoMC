@@ -2,7 +2,8 @@ schema-version: 1
 id: beskar
 enabled: true
 display-name: Beskar Rush
-weight: 0
+weight: 10
+rotation-version: 1
 cooldown-cycles: 1
 world: minecraft:mandalore_review
 maximum-seconds: 3300

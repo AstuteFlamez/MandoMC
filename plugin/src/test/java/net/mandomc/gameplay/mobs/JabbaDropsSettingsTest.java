@@ -26,10 +26,19 @@ public class JabbaDropsSettingsTest {
                 long parts=drops.stream().filter(rule.salvage().pool()::contains).count();
                 assertTrue(parts>=rule.salvage().minimum() && parts<=rule.salvage().maximum());
                 assertTrue(drops.stream().filter(rule.weapon()::equals).count() <= 1);
+                if (rule.guaranteeEquipment()) {
+                    assertTrue(drops.contains(rule.weapon())
+                            || rule.extras().stream().anyMatch(extra -> drops.contains(extra.item())));
+                }
                 weapons += drops.stream().filter(rule.weapon()::equals).count();
                 ammo += drops.stream().filter(rule.ammo()::equals).count();
             }
-            assertEquals(10000 * rule.weaponChance(), weapons, Math.max(1, 6 * Math.sqrt(10000 * rule.weaponChance() * (1-rule.weaponChance()))));
+            double rate = rule.weaponChance();
+            if (rule.guaranteeEquipment()) {
+                rate += (1 - rate) * rule.extras().stream().mapToDouble(extra -> 1 - extra.chance())
+                        .reduce(1.0, (a, b) -> a * b);
+            }
+            assertEquals(10000 * rate, weapons, Math.max(1, 6 * Math.sqrt(10000 * rate * (1 - rate))));
             assertEquals(10000 * rule.ammoRolls() * rule.ammoChance(), ammo,
                     Math.max(1, 6 * Math.sqrt(10000 * rule.ammoRolls() * rule.ammoChance() * (1 - rule.ammoChance()))));
         }

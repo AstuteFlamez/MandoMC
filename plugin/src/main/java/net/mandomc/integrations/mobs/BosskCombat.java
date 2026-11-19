@@ -22,7 +22,12 @@ public final class BosskCombat implements Listener {
         var api=vendor.getClass().getMethod("getAPIHelper").invoke(vendor);var active=api.getClass().getMethod("getMythicMobInstance",Entity.class);
         var activeClass=Class.forName("io.lumine.mythic.core.mobs.ActiveMob",true,loader);var registry=activeClass.getMethod("getAuraRegistry");var hasAura=registry.getReturnType().getMethod("hasAura",String.class);
         Bukkit.getPluginManager().registerEvent(death,this,EventPriority.HIGH,(l,e)->{
-            try {if("Bossk".equals(name.invoke(deathType.invoke(e)))){var item=items.create("dioxis_grenade");if(item==null)throw new IllegalStateException("Missing dioxis grenade item");item.setAmount(ThreadLocalRandom.current().nextInt(1,4));((List<ItemStack>)drops.invoke(e)).add(item);}}
+            try {
+                if (!"Bossk".equals(name.invoke(deathType.invoke(e)))) return;
+                var item = Objects.requireNonNull(items.create("dioxis_grenade"), "Missing dioxis grenade item");
+                item.setAmount(ThreadLocalRandom.current().nextInt(12, 21));
+                ((List<ItemStack>) drops.invoke(e)).add(item);
+            }
             catch(ReflectiveOperationException|RuntimeException ex){plugin.getLogger().log(java.util.logging.Level.SEVERE,"Bossk grenade drop failed",ex);}
         },plugin);
         Bukkit.getPluginManager().registerEvent(EntityDamageByEntityEvent.class,this,EventPriority.MONITOR,(l,e)->{

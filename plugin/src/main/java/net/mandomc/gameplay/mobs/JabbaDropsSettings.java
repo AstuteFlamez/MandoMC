@@ -17,20 +17,21 @@ public record JabbaDropsSettings(Map<String, Drop> mobs) {
         public Salvage { pool = List.copyOf(pool); }
     }
     public record Drop(String weapon, double weaponChance, String ammo, double ammoChance, int ammoRolls,
-            Salvage salvage, List<Extra> extras) {
+            Salvage salvage, List<Extra> extras, boolean guaranteeEquipment) {
         public Drop { extras = List.copyOf(extras); }
         public Drop(String weapon, double weaponChance, String ammo, double ammoChance, int ammoRolls) {
-            this(weapon, weaponChance, ammo, ammoChance, ammoRolls, new Salvage(List.of(), 0, 0), List.of());
+            this(weapon, weaponChance, ammo, ammoChance, ammoRolls, new Salvage(List.of(), 0, 0), List.of(), false);
         }
         public Drop(String weapon, double weaponChance, String ammo, double ammoChance, int ammoRolls, Salvage salvage) {
-            this(weapon, weaponChance, ammo, ammoChance, ammoRolls, salvage, List.of());
+            this(weapon, weaponChance, ammo, ammoChance, ammoRolls, salvage, List.of(), false);
         }
         public Drop(String weapon, double weaponChance, String ammo, double ammoChance, int ammoRolls, List<Extra> extras) {
-            this(weapon, weaponChance, ammo, ammoChance, ammoRolls, new Salvage(List.of(), 0, 0), extras);
+            this(weapon, weaponChance, ammo, ammoChance, ammoRolls, new Salvage(List.of(), 0, 0), extras, false);
         }
         public List<String> roll(RandomGenerator random) {
             var result = new ArrayList<String>();
-            if (random.nextDouble() < weaponChance) result.add(weapon);
+            boolean hasEquipment = random.nextDouble() < weaponChance;
+            if (hasEquipment) result.add(weapon);
             for (int i = 0; i < ammoRolls; i++) {
                 if (random.nextDouble() < ammoChance) result.add(ammo);
             }
@@ -38,7 +39,12 @@ public record JabbaDropsSettings(Map<String, Drop> mobs) {
                 int count = random.nextInt(salvage.minimum(), salvage.maximum() + 1);
                 for (int i = 0; i < count; i++) result.add(salvage.pool().get(random.nextInt(salvage.pool().size())));
             }
-            for (var extra : extras) if (random.nextDouble() < extra.chance()) result.add(extra.item());
+            for (var extra : extras) {
+                if (random.nextDouble() >= extra.chance()) continue;
+                result.add(extra.item());
+                hasEquipment = true;
+            }
+            if (guaranteeEquipment && !hasEquipment) result.add(weapon);
             return List.copyOf(result);
         }
     }
@@ -60,9 +66,11 @@ public record JabbaDropsSettings(Map<String, Drop> mobs) {
             String ammo = rule.getString("ammo", "");
             double weaponChance = rule.getDouble("weapon-chance", Double.NaN);
             double ammoChance = rule.getDouble("ammo-chance", 0);
+            boolean guaranteeEquipment = rule.getBoolean("guarantee-equipment", mob.equals("BobaFett"));
             int rolls = rule.getInt("ammo-rolls", -1);
             if (!weapon.matches("[a-z0-9_]+") || !chance(weaponChance) || !chance(ammoChance)
                     || !rule.isInt("ammo-rolls") || rolls < 0 || rolls > 64
+                    || (rule.contains("guarantee-equipment") && !rule.isBoolean("guarantee-equipment"))
                     || (rolls > 0 && !ammo.matches("[a-z0-9_]+"))) {
                 throw new IllegalArgumentException("mobs/drops/jabba.yml: invalid items, chances (0–1) or ammo-rolls (0–64) for " + mob);
             }
@@ -81,7 +89,7 @@ public record JabbaDropsSettings(Map<String, Drop> mobs) {
                     || minimum < 1 || maximum < minimum || maximum > 8))
                 throw new IllegalArgumentException("mobs/drops/jabba.yml: invalid salvage pool/count for " + mob);
             result.put(mob, new Drop(weapon, weaponChance, ammo, ammoChance, rolls,
-                    new Salvage(pool, minimum, maximum), extras));
+                    new Salvage(pool, minimum, maximum), extras, guaranteeEquipment));
         }
         return new JabbaDropsSettings(result);
     }

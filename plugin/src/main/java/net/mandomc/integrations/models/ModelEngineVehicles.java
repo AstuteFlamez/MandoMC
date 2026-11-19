@@ -168,9 +168,10 @@ public final class ModelEngineVehicles implements VehicleModels, Listener {
             var manager = active.getMountManager().orElseThrow();
             var result = new ArrayList<SeatStatus>();
             result.add(new SeatStatus("pilot", Seat.PILOT, driver()));
-            for (Seat role : List.of(Seat.PASSENGER, Seat.GUNNER)) {
+            for (Seat role : List.of(Seat.GUNNER, Seat.PASSENGER)) {
                 for (String id : role == Seat.GUNNER ? definition.gunners() : definition.passengers()) {
                     var bone = manager.getSeat(id).orElse(null);
+                    if (bone == null) continue;
                     Player occupant = manager.getPassengerSeatMap().entrySet().stream()
                             .filter(entry -> entry.getValue() == bone && entry.getKey() instanceof Player)
                             .map(entry -> (Player) entry.getKey()).findFirst().orElse(null);

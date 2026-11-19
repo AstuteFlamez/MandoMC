@@ -13,6 +13,7 @@ import org.bukkit.event.*;
 import org.bukkit.event.player.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.*;
+import org.bukkit.inventory.InventoryView;
 
 /** Staff inventory is disposable; survival inventory is committed before privileges change. */
 public final class StaffMode implements Listener, AutoCloseable {
@@ -57,7 +58,11 @@ public final class StaffMode implements Listener, AutoCloseable {
         if (player.isDead() || player.isInsideVehicle() || plugin.vehicles().mountedType(player) != null
                 || plugin.combat().tagged(player) || TutorialInventory.active(player)
                 || plugin.credits().auctions().pending(player)) { send(player, "busy"); return; }
-        for (String key : List.of("crate_pending", "auction_escrow_v1", "jawa_sell_custody_v1"))
+        if (player.getPersistentDataContainer().has(net.mandomc.gameplay.crates.CrateService.PENDING)) {
+            send(player, "busy");
+            return;
+        }
+        for (String key : List.of("auction_escrow_v1", "jawa_sell_custody_v1"))
             if (player.getPersistentDataContainer().has(new NamespacedKey("mandomc", key))) { send(player, "busy"); return; }
         if (ParkourInventory.stored(player)) {
             var parkour = Bukkit.getServicesManager().load(ParkourService.class);
@@ -85,8 +90,6 @@ public final class StaffMode implements Listener, AutoCloseable {
             player.setItemOnCursor(null);
             plugin.admin().god(player, false); plugin.admin().vanish(player, false);
             StaffInventory.restore(player);
-            player.setGameMode(GameMode.SURVIVAL); player.setAllowFlight(false); player.setInvulnerable(false);
-            player.setWalkSpeed(.2f); player.setFlySpeed(.1f);
             plugin.ranks().apply(player);
             player.saveData(); player.updateCommands(); send(player, "disabled");
         } finally { changing.remove(player.getUniqueId()); }
@@ -105,10 +108,35 @@ public final class StaffMode implements Listener, AutoCloseable {
     @EventHandler(priority = EventPriority.HIGHEST) public void pickup(EntityPickupItemEvent e) { if (e.getEntity() instanceof Player p && active(p)) e.setCancelled(true); }
     @EventHandler(priority = EventPriority.HIGHEST) public void damage(EntityDamageEvent e) { if (e.getEntity() instanceof Player p && active(p)) e.setCancelled(true); }
     @EventHandler(priority = EventPriority.HIGHEST) public void death(PlayerDeathEvent e) { if (active(e.getEntity())) { e.getDrops().clear(); e.setKeepInventory(true); e.setDroppedExp(0); } }
-    @EventHandler(priority = EventPriority.HIGHEST) public void open(InventoryOpenEvent e) {
-        // Prevent temporary items leaking through personal or public storage. Administrative inspection uses its own permission-checked menu.
-        if (e.getPlayer() instanceof Player p && active(p) && e.getInventory().getLocation() != null
-                && !(plugin.forge() != null && plugin.forge().ownsMenu(p, e.getView()))) e.setCancelled(true);
+    private boolean persistent(InventoryView view) {
+        var top = view.getTopInventory();
+        if (top instanceof org.bukkit.inventory.HorseInventory) return true;
+        return switch (top.getType()) {
+            case ENDER_CHEST, BARREL, SHULKER_BOX, DISPENSER, DROPPER, HOPPER, FURNACE,
+                    BLAST_FURNACE, SMOKER, BREWING, CHISELED_BOOKSHELF, CRAFTER,
+                    BEACON, JUKEBOX, LECTERN -> true;
+            default -> top.getHolder() instanceof org.bukkit.block.Container
+                    || top.getHolder() instanceof org.bukkit.block.DoubleChest
+                    || top.getHolder() instanceof org.bukkit.entity.Entity
+                    && top.getType() != InventoryType.MERCHANT;
+        };
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void click(InventoryClickEvent event) {
+        if (!(event.getWhoClicked() instanceof Player player) || !active(player)
+                || !persistent(event.getView())) return;
+        // Inspect real storage without transferring items between it and the disposable inventory.
+        if (event.getClickedInventory() == event.getView().getTopInventory() || event.isShiftClick()
+                || event.getAction() == InventoryAction.COLLECT_TO_CURSOR) event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void drag(InventoryDragEvent event) {
+        if (event.getWhoClicked() instanceof Player player && active(player) && persistent(event.getView())
+                && event.getRawSlots().stream().anyMatch(slot -> slot < event.getView().getTopInventory().getSize())) {
+            event.setCancelled(true);
+        }
     }
     @Override public void close() { eligibility.cancel(); for (var player : List.copyOf(Bukkit.getOnlinePlayers())) disable(player); HandlerList.unregisterAll(this); }
 }

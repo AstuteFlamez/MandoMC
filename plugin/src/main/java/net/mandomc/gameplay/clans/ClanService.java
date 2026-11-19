@@ -27,6 +27,17 @@ public final class ClanService implements Listener, AutoCloseable {
     private final ExecutorService io=Executors.newSingleThreadExecutor(r->new Thread(r,"MandoMC-clan-storage"));
     private final Path path;
     private final ClanState state;
+    private volatile ChatSnapshot chatSnapshot;
+
+    public record ChatClan(UUID id, String name) {}
+
+    public record ChatSnapshot(Map<UUID, ChatClan> memberships, Set<ClanState.Pair> alliances) {
+        public ChatClan member(UUID player) { return memberships.get(player); }
+
+        public boolean allied(ChatClan first, ChatClan second) {
+            return alliances.contains(ClanState.Pair.of(first.id(), second.id()));
+        }
+    }
     private final LandRestoration land;
     private final BukkitTask ticker;
     private final ClanProtection protection;
@@ -36,6 +47,7 @@ public final class ClanService implements Listener, AutoCloseable {
         this.plugin=plugin;this.territory=territory;this.language=language;settings=ClanSettings.read(config);
         path=plugin.getDataFolder().toPath().resolve("data/clans.yml");
         state=ClanStorage.load(path);
+        updateChatSnapshot();
         land=new LandRestoration(plugin,io,settings.resetMillis(),settings.restoreBudget(),
                 c->state.owner(c)!=null||!territory.policy().wildernessChunk(c.world(),c.x(),c.z()));
         for(var chunk:state.claims.keySet())if(!land.hasBaseline(chunk))
@@ -47,6 +59,16 @@ public final class ClanService implements Listener, AutoCloseable {
         ticker=Bukkit.getScheduler().runTaskTimer(plugin,this::tick,20,1200);
     }
     public ClanState state(){return state;}
+    public ChatSnapshot chatSnapshot() { return chatSnapshot; }
+
+    private void updateChatSnapshot() {
+        var membership = new HashMap<UUID, ChatClan>();
+        for (var clan : state.clans.values()) {
+            var identity = new ChatClan(clan.id, clan.name);
+            for (var player : clan.members) membership.put(player, identity);
+        }
+        chatSnapshot = new ChatSnapshot(Map.copyOf(membership), Set.copyOf(state.alliances));
+    }
     public ClanSettings settings(){return settings;}
     public LandRestoration land(){return land;}
     public boolean available(){return !failed&&!closed;}
@@ -65,7 +87,12 @@ public final class ClanService implements Listener, AutoCloseable {
     public boolean friendly(Entity source,Entity target) {
         if(settings.friendlyFire()||!(target instanceof Player victim))return false;
         Player player=attacker(source);if(player==null||player.equals(victim))return false;
-        var clan=member(player);return clan!=null&&clan.members.contains(victim.getUniqueId());
+        return sameSide(player, victim);
+    }
+    private boolean sameSide(Player source, Player target) {
+        var own = member(source);
+        var other = member(target);
+        return own != null && other != null && (own == other || state.allied(own.id, other.id));
     }
     public boolean canEdit(Player p,Location l) {
         var owner=owner(l);
@@ -143,6 +170,7 @@ public final class ClanService implements Listener, AutoCloseable {
                 && world.getWorldBorder().isInside(new Location(world,c.x()*16+15.5,world.getMinHeight(),c.z()*16+15.5));
     }
     public CompletableFuture<Void> save() {
+        updateChatSnapshot();
         String snapshot=ClanStorage.encode(state);
         return CompletableFuture.runAsync(()->{
             try{AtomicData.write(path,snapshot);}catch(Exception error){throw new CompletionException(error);}
@@ -164,6 +192,8 @@ public final class ClanService implements Listener, AutoCloseable {
                 // Check elapsed inactivity BEFORE returning members can refresh it.
                 if(now-clan.lastActive>=settings.inactiveMillis()) {
                     clan.abandonedAt=now;dirty=true;
+                    var ally = state.ally(clan);
+                    if (ally != null) state.endAlliance(clan, ally);
                     String locations=state.claims.entrySet().stream().filter(e->e.getValue().equals(clan.id))
                             .map(e->e.getKey().world()+" X "+(e.getKey().x()*16)+" Z "+(e.getKey().z()*16))
                             .collect(java.util.stream.Collectors.joining("; "));
@@ -197,7 +227,7 @@ public final class ClanService implements Listener, AutoCloseable {
         if(settings.friendlyFire()||!(e.getEntity() instanceof Player victim))return;
         Player p=attacker(e.getDamageSource().getCausingEntity());if(p==null)p=attacker(e.getDamager());
         if(p==null||p.equals(victim))return;
-        var clan=member(p);if(clan!=null&&clan.members.contains(victim.getUniqueId()))e.setCancelled(true);
+        if (sameSide(p, victim)) e.setCancelled(true);
     }
     @EventHandler(priority=EventPriority.MONITOR)
     public void death(PlayerDeathEvent e) {

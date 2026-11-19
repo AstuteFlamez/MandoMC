@@ -7,9 +7,12 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.mandomc.gameplay.credits.CreditService;
+import net.mandomc.gameplay.ilum.ParkourService;
+import net.mandomc.gameplay.leaderboards.WorldLeaderboards;
 import net.mandomc.gameplay.ranks.RankService;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
@@ -19,6 +22,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 /** Only immutable snapshots cross the network executor. RankService remains the sole rank writer. */
 public final class DiscordBridge implements AutoCloseable {
     private static final Gson JSON = new Gson();
+    private static final Pattern PLAYER_NAME = Pattern.compile("[A-Za-z0-9_]{1,16}");
     private final JavaPlugin plugin;
     private final RankService ranks;
     private final CreditService credits;
@@ -96,12 +100,7 @@ public final class DiscordBridge implements AutoCloseable {
                     "ack", view.receipt() == null ? 0L : view.receipt().revision(),
                     "ack_signature", view.receipt() == null ? "" : view.receipt().signature()));
         }
-        var top = new ArrayList<Map<String, Object>>();
-        for (var entry : credits.ledger().top(10)) {
-            String name = Bukkit.getOfflinePlayer(entry.getKey()).getName();
-            if (name != null) top.add(Map.of("username", name, "cents", entry.getValue()));
-        }
-        var snapshot = Map.of("online", Bukkit.getOnlinePlayers().size(), "maximum", Bukkit.getMaxPlayers(), "baltop", top);
+        var snapshot = leaderboardSnapshot();
         network.submit(() -> {
             try {
                 request("/bridge/snapshot", snapshot);
@@ -123,6 +122,31 @@ public final class DiscordBridge implements AutoCloseable {
                 onMain(() -> apply(updates, 0));
             } catch (Exception error) { warn(); syncing.set(false); }
         });
+    }
+
+    private Map<String, Object> leaderboardSnapshot() {
+        var balances = new ArrayList<Map<String, Object>>();
+        for (var entry : credits.ledger().top(10)) {
+            String name = Bukkit.getOfflinePlayer(entry.getKey()).getName();
+            if (name != null && PLAYER_NAME.matcher(name).matches()) {
+                balances.add(Map.of("username", name, "cents", entry.getValue()));
+            }
+        }
+        Map<String, Object> snapshot = new HashMap<>();
+        snapshot.put("online", Bukkit.getOnlinePlayers().size());
+        snapshot.put("maximum", Bukkit.getMaxPlayers());
+        snapshot.put("baltop", List.copyOf(balances)); // Compatible with a Worker on the previous release.
+        var boards = Bukkit.getServicesManager().load(WorldLeaderboards.class);
+        if (boards != null) {
+            snapshot.put("kills", boards.killLeaders().stream().filter(row -> PLAYER_NAME.matcher(row.name()).matches())
+                    .map(row -> Map.of("username", row.name(), "kills", row.value())).toList());
+        }
+        var parkour = Bukkit.getServicesManager().load(ParkourService.class);
+        if (parkour != null) {
+            snapshot.put("ilum", parkour.bestTimes().stream().filter(row -> PLAYER_NAME.matcher(row.name()).matches())
+                    .map(row -> Map.of("username", row.name(), "millis", row.millis())).toList());
+        }
+        return Map.copyOf(snapshot);
     }
 
     private static Set<String> strings(JsonArray values) {

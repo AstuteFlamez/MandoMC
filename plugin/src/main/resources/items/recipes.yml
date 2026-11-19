@@ -1534,18 +1534,6 @@
         "X": "bantha_hide"
       }
     },
-    "bantha_hide_from_rabbit_hide": {
-      "result": "bantha_hide",
-      "amount": 1,
-      "category": "utilities",
-      "shape": [
-        "##",
-        "##"
-      ],
-      "ingredients": {
-        "#": "minecraft:rabbit_hide"
-      }
-    },
     "bantha_light_blue_harness": {
       "result": "minecraft:light_blue_harness",
       "amount": 1,
@@ -1736,7 +1724,7 @@
   },
   "sources": {
     "vote_crate_key": "<gray>Not currently obtainable through crafting or loot.",
-    "bantha_hide": "<gray>Tatooine: Banthas drop 1–3 hides.\n<gray>gray Jawa shops at Batuu: General Supplies.\n<gray>Also craft four rabbit hides; click for recipe.",
+    "bantha_hide": "<gray>Tatooine: Banthas drop 1–3 hides.\n<gray>gray Jawa shops at Batuu: General Supplies.",
     "purple_xwing": "<gray>Not currently obtainable through crafting or loot.",
     "money_note": "<gray>Not currently obtainable through crafting or loot.",
     "cortosis_alloy_frame": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
@@ -1802,12 +1790,12 @@
     "pathfinder_crate_key": "<gray>Not currently obtainable through crafting or loot.",
     "voyager_crate_key": "<gray>Not currently obtainable through crafting or loot.",
     "wayfarer_crate_key": "<gray>Not currently obtainable through crafting or loot.",
-    "agrinium_scrap": "<gray>Tatooine and Naboo caves: mine Agrinium Ore.\n<gray>Use a stone-or-better pickaxe; one scrap.\n<gray>Fortune adds none; Silk Touch keeps the ore.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "agrinium_scrap": "<gray>Tatooine, Hoth, Mandalore and Naboo caves: mine Agrinium Ore.\n<gray>Use a stone-or-better pickaxe; one scrap.\n<gray>Fortune adds none; Silk Touch keeps the ore.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
     "aurodium_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
     "beskar_scrap": "<gray>Mandalore mine: 10 nodes during Beskar Rush.\n<gray>Mine active nodes for one scrap each.\n<gray>Also a possible KOTH Crate reward on Batuu.\n<gray>Crate key: winning clan reward from KOTH on Hoth.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
     "cortosis_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
-    "durasteel_scrap": "<gray>Tatooine and Naboo caves: mine Durasteel Ore.\n<gray>Use a iron-or-better pickaxe; one scrap.\n<gray>Fortune adds none; Silk Touch keeps the ore.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
-    "electrum_scrap": "<gray>Hoth and Naboo caves: mine Electrum Ore.\n<gray>Use a iron-or-better pickaxe; one scrap.\n<gray>Fortune adds none; Silk Touch keeps the ore.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "durasteel_scrap": "<gray>Tatooine, Hoth, Mandalore and Naboo caves: mine Durasteel Ore.\n<gray>Use an iron-or-better pickaxe; one scrap.\n<gray>Fortune adds none; Silk Touch keeps the ore.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
+    "electrum_dust": "<gray>Mine Electrum Ore in resource planet caves with iron or better.\n<gray>Fortune adds none; Silk Touch keeps the ore.\n<gray>Use at an enchanting table or place as Electrum Wire.\n<gray>Also sold by General Supplies at Batuu.",
     "lommite_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
     "mandalorian_iron_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
     "neuranium_scrap": "<gray>Not currently obtainable through crafting or loot.\n<gray>Smelt in a normal furnace: one scrap = one ingot.",
@@ -1816,7 +1804,7 @@
     "minecraft:raw_iron": "<gray>Retained legacy raw metal. Current Agrinium ores drop Agrinium Scraps.",
     "minecraft:clay_ball": "<gray>Tatooine caves: break clay for clay balls.\n<gray>Plastoid needs two separate clay-ball slots.",
     "minecraft:sand": "<gray>Tatooine: dig ordinary desert sand.\n<gray>Red sand does not replace sand in custom recipes.",
-    "minecraft:coal": "<gray>Mine Coal Ore in the caves of Tatooine, Hoth, Mandalore and Naboo.\n<gray>Use a pickaxe; ordinary coal tool and enchantment rules apply.",
+    "minecraft:coal": "<gray>Mine Coal Ore in the caves of Tatooine, Hoth and Naboo.\n<gray>Use a pickaxe; ordinary coal tool and enchantment rules apply.",
     "minecraft:glass": "<gray>Smelt sand or red sand in a furnace.\n<gray>Sand source: Tatooine desert.",
     "#minecraft:planks": "<gray>Craft logs into planks; any wood type works.\n<gray>Saplings: gray Jawa shops at Batuu,\n<gray>Plants & Dyes category.",
     "agrinium_ore": "<gray>Mine matching Agrinium Ore with a suitable Silk Touch pickaxe.",
@@ -1845,7 +1833,7 @@
     "minecraft:orange_dye": "<gray>Combine red dye and yellow dye.\n<gray>Flowers: gray Jawa shops at Batuu,\n<gray>Plants & Dyes category.",
     "minecraft:purple_dye": "<gray>Combine red dye and blue dye.\n<gray>gray Jawa shops at Batuu: Plants & Dyes\n<gray>and Minerals for flowers and lapis.",
     "minecraft:red_dye": "<gray>Craft a poppy into red dye.\n<gray>Poppies: gray Jawa shops at Batuu,\n<gray>Plants & Dyes category.",
-    "minecraft:redstone_torch": "<gray>Craft Electrum above a stick.\n<gray>Electrum Ore: deeper Hoth caves.",
+    "minecraft:redstone_torch": "<gray>Craft Electrum Dust above a stick.\n<gray>Buy dust from General Supplies at Batuu or mine Electrum Ore.",
     "minecraft:smooth_stone": "<gray>Smelt cobblestone into stone, then smelt again.\n<gray>Stone source: Tatooine or Hoth caves.",
     "minecraft:soul_torch": "<gray>Craft coal or charcoal, a stick and Soul Sand.\n<gray>Soul Sand: gray Jawa shops at Batuu,\n<gray>Nether Goods category.",
     "minecraft:stick": "<gray>Craft two planks vertically for four sticks.\n<gray>Saplings: gray Jawa shops at Batuu,\n<gray>Plants & Dyes category.",
@@ -1872,8 +1860,8 @@
     "minecraft:red_wool": "<gray>Dye white wool red, or shear red sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
     "minecraft:white_wool": "<gray>Craft four string in a square for white wool.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
     "minecraft:yellow_wool": "<gray>Dye white wool yellow, or shear yellow sheep.\n<gray>White wool can be crafted from four string.\n<gray>String: gray Jawa shops at Batuu, General Supplies.",
-    "agrinium": "<gray>Smelt one Agrinium Scrap in a normal furnace.\n<gray>One scrap produces one ingot.\n<gray>Scrap source: Tatooine and Naboo caves.\n<gray>Also: possible KOTH Crate reward on Batuu.",
-    "agrinium_block": "<gray>Craft nine Agrinium ingots into one block.\n<gray>Ore source: Tatooine caves.",
+    "agrinium": "<gray>Smelt one Agrinium Scrap in a normal furnace.\n<gray>One scrap produces one ingot.\n<gray>Scrap source: Tatooine, Hoth, Mandalore and Naboo caves.\n<gray>Also: possible KOTH Crate reward on Batuu.",
+    "agrinium_block": "<gray>Craft nine Agrinium ingots into one block.\n<gray>Ore source: Tatooine, Hoth, Mandalore and Naboo caves.",
     "ahsoka_tano_white_lightsaber": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "alloy_plating": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "barrel_liner": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
@@ -1881,10 +1869,10 @@
     "beskar_block": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.\n<gray>Scrap source: Mandalore mine during Beskar Rush.",
     "blue_kyber": "<gray>Random Kyber Crate reward on Batuu.\n<gray>Earn a key by completing Ilum (24h cooldown).",
     "circuit_board": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
-    "durasteel": "<gray>Smelt one Durasteel Scrap in a normal furnace.\n<gray>One scrap produces one ingot.\n<gray>Scrap source: Tatooine and Naboo caves.\n<gray>Also: possible KOTH Crate reward on Batuu.",
-    "durasteel_block": "<gray>Craft nine Durasteel ingots into one block.\n<gray>Ore source: Tatooine caves.",
-    "electrum": "<gray>Smelt one Electrum Scrap in a normal furnace.\n<gray>One scrap produces one ingot.\n<gray>Scrap source: Hoth and Naboo caves.",
-    "electrum_block": "<gray>Craft nine Electrum ingots into one block.\n<gray>Ore source: Hoth deeper stone caves.",
+    "durasteel": "<gray>Smelt one Durasteel Scrap in a normal furnace.\n<gray>One scrap produces one ingot.\n<gray>Scrap source: Tatooine, Hoth, Mandalore and Naboo caves.\n<gray>Also: possible KOTH Crate reward on Batuu.",
+    "durasteel_block": "<gray>Craft nine Durasteel ingots into one block.\n<gray>Ore source: Tatooine, Hoth, Mandalore and Naboo caves.",
+    "electrum": "<gray>Smelt either Electrum Ore variant mined with Silk Touch.\n<gray>Electrum Ore is found on all four resource planets.",
+    "electrum_block": "<gray>Craft nine Electrum ingots into one storage block.",
     "energy_conduits": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
     "fang_hilt": "<gray>Craft at a crafting table.\n<gray>Click to see the ingredients and quantities.",
     "fusion_coil_stabilizer": "<gray>Craft with /recipes or find a brown Jawa selling it on Tatooine. Stock varies per encounter.",
@@ -1934,7 +1922,7 @@
     "uwing": "<gray>Available from the KOTH Crate; see /crates preview koth.",
     "xwing": "<gray>Available from the KOTH Crate; see /crates preview koth.",
     "tiefighter": "<gray>Available from the KOTH Crate; see /crates preview koth.",
-    "minecraft:enchanting_table": "<gray>Craft with a book, two Durasteel ingots and four obsidian.\n<gray>Use /recipes to view the layout.",
+    "minecraft:enchanting_table": "<gray>Craft with a book, two Durasteel ingots and four obsidian.\n<gray>Fuel with Electrum Dust.",
     "massiff_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in unclaimed Wilderness or your clan’s claims.\n<gray>Break with a pickaxe to recover it.\n<gray>Shift-right-click with matching spawners to combine up to 64.",
     "dewback_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in unclaimed Wilderness or your clan’s claims.\n<gray>Break with a pickaxe to recover it.\n<gray>Shift-right-click with matching spawners to combine up to 64.",
     "bantha_spawner": "<gray>Buy from the Spawners gray Jawa on Batuu.\n<gray>Place in unclaimed Wilderness or your clan’s claims.\n<gray>Break with a pickaxe to recover it.\n<gray>Shift-right-click with matching spawners to combine up to 64.",
@@ -1983,7 +1971,7 @@
     ],
     "preferred-recipes": {
       "agrinium": "agrinium_from_scrap",
-      "electrum": "electrum_from_scrap",
+      "electrum": "electrum_from_ore",
       "durasteel": "durasteel_from_scrap",
       "beskar": "beskar_from_scrap",
       "aurodium": "aurodium_from_scrap",
@@ -2054,9 +2042,17 @@
       "experience": 0.7,
       "category": "metals"
     },
-    "electrum_from_scrap": {
+    "electrum_from_ore": {
       "result": "electrum",
-      "input": "electrum_scrap",
+      "input": "electrum_ore",
+      "furnace": "furnace",
+      "cook-time": 200,
+      "experience": 0.7,
+      "category": "metals"
+    },
+    "electrum_from_deepslate_ore": {
+      "result": "electrum",
+      "input": "deepslate_electrum_ore",
       "furnace": "furnace",
       "cook-time": 200,
       "experience": 0.7,
@@ -2456,6 +2452,10 @@
     }
   },
   "replace-native": [
+    "minecraft:redstone_from_blasting_deepslate_redstone_ore",
+    "minecraft:redstone_from_blasting_redstone_ore",
+    "minecraft:redstone_from_smelting_deepslate_redstone_ore",
+    "minecraft:redstone_from_smelting_redstone_ore",
     "minecraft:activator_rail",
     "minecraft:anvil",
     "minecraft:blast_furnace",
@@ -2490,8 +2490,6 @@
     "minecraft:netherite_ingot_from_netherite_block",
     "minecraft:raw_iron",
     "minecraft:raw_iron_block",
-    "minecraft:redstone",
-    "minecraft:redstone_block",
     "minecraft:black_harness",
     "minecraft:blue_harness",
     "minecraft:book",

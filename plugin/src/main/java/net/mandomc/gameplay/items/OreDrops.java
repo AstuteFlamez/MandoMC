@@ -20,7 +20,7 @@ public final class OreDrops implements Listener {
     private final Map<UUID, Tool> tools = new HashMap<>();
     public OreDrops(ItemCatalog items) {
         this.items = items;
-        for (String id : List.of("durasteel_scrap", "electrum_scrap", "agrinium_scrap", "beskar_scrap"))
+        for (String id : List.of("durasteel_scrap", "electrum_dust", "agrinium_scrap", "beskar_scrap"))
             Objects.requireNonNull(items.create(id), "Missing ore loot item: " + id);
     }
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -36,7 +36,7 @@ public final class OreDrops implements Listener {
     public void drop(BlockDropItemEvent event) {
         Material ore = event.getBlockState().getType(); Material expected; String id;
         if (durasteelOre(ore)) { expected = Material.DIAMOND; id = "durasteel_scrap"; }
-        else if (electrumOre(ore)) { expected = Material.REDSTONE; id = "electrum_scrap"; }
+        else if (electrumOre(ore)) { expected = Material.REDSTONE; id = "electrum_dust"; }
         else if (ore == Material.IRON_ORE || ore == Material.DEEPSLATE_IRON_ORE) { expected = Material.RAW_IRON; id = "agrinium_scrap"; }
         else if (ore == Material.NETHER_GOLD_ORE) { expected = Material.GOLD_NUGGET; id = "beskar_scrap"; }
         else if (ore == Material.ANCIENT_DEBRIS) {

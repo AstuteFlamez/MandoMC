@@ -48,9 +48,26 @@ public final class BobaProbe extends JavaPlugin {
  private void dodge(){boss.setRotation(0,0);var before=boss.getLocation();cast("Boba_dodge");later(6,()->{getLogger().info("Dodge displacement="+boss.getLocation().distance(before)+" velocity="+boss.getVelocity()+" valid="+boss.isValid());check(boss.getLocation().distanceSquared(before)>0.1,"legacy dodge moves Boba");boss.teleport(new Location(world,910.5,301,910.5));boss.setVelocity(new org.bukkit.util.Vector());burst();});}
  private void burst(){cast("Boba_burst_shot");later(55,()->{check(shots==10,"legacy five paired burst releases emit ten projectiles: "+shots);shots=0;maxY=boss.getY();cast("Boba_jump_shot");later(55,()->{check(shots==2,"legacy jump shot emits its paired projectiles");check(maxY>301.3,"legacy jetpack jump lifts Boba: "+maxY);flame();});});}
  private void flame(){boss.teleport(new Location(world,910.5,301,910.5,0,0));boss.setVelocity(new org.bukkit.util.Vector());enemy.teleport(new Location(world,910.5,301,913.5));enemy.setHealth(10);enemy.setFireTicks(0);cast("Boba_flamethrower");later(40,()->{check(enemy.getFireTicks()>0 || enemy.getHealth()<10,"legacy flame projectile hits and ignites nearby target");later(45,()->{getLogger().info("BOBA PROBE PASSED: "+checks+" assertions");cleanup();});});}
- private void drops(){var mob=MythicBukkit.inst().getAPIHelper().getMythicMobInstance(boss);int weapons=0,cells=0;
-  for(int i=0;i<1000;i++){var e=new io.lumine.mythic.bukkit.events.MythicMobDeathEvent(mob,null,new ArrayList<>());Bukkit.getPluginManager().callEvent(e);int w=0,a=0;for(var item:e.getDrops()){var id=WeaponMechanicsAPI.getWeaponTitle(item);if("EE3".equals(id))w+=item.getAmount();else if(item.isSimilar(plugin.items().create("standard_plasma_cells")))a+=item.getAmount();else throw new AssertionError("Unexpected Boba loot "+id);}if(w>1||a>20)throw new AssertionError("Bad configured Boba loot bounds");weapons+=w;cells+=a;}
-  check(weapons>400&&weapons<600,"legacy half-chance EE-3 death drop");check(cells>9500&&cells<10500,"twenty independent half-chance plasma-cell rolls average ten");}
+ private void drops(){
+  var mob=MythicBukkit.inst().getAPIHelper().getMythicMobInstance(boss);
+  int weapons=0,cells=0;
+  for(int i=0;i<1000;i++){
+   var event=new io.lumine.mythic.bukkit.events.MythicMobDeathEvent(mob,null,new ArrayList<>());
+   Bukkit.getPluginManager().callEvent(event);
+   int weaponCount=0,cellCount=0,equipmentCount=0;
+   for(var item:event.getDrops()){
+    String id=plugin.items().identify(item);
+    if("EE3".equals(WeaponMechanicsAPI.getWeaponTitle(item)))weaponCount+=item.getAmount();
+    else if("standard_plasma_cells".equals(id))cellCount+=item.getAmount();
+    else if(Set.of("boba_jetpack","boba_flamethrower").contains(id))equipmentCount+=item.getAmount();
+    else throw new AssertionError("Unexpected Boba loot "+id);
+   }
+   if(weaponCount>1||cellCount>20||weaponCount+equipmentCount<1)throw new AssertionError("Bad configured Boba loot bounds");
+   weapons+=weaponCount;cells+=cellCount;
+  }
+  check(weapons>820&&weapons<940,"EE-3 falls back when all equipment rolls miss");
+  check(cells>9500&&cells<10500,"twenty independent half-chance plasma-cell rolls average ten");
+ }
  private void select(){var api=MythicBukkit.inst().getAPIHelper();boss.setTarget(enemy);api.addThreat(boss,enemy,100);api.getMythicMobInstance(boss).setTarget(BukkitAdapter.adapt(enemy));}
  private void suppress(){var a=MythicBukkit.inst().getAPIHelper().getMythicMobInstance(boss);a.setSkillCooldownMillis((io.lumine.mythic.core.skills.AbstractSkill)MythicBukkit.inst().getSkillManager().getSkill("Boba_bobafett_attack").orElseThrow(),600000);}
  private void cast(String s){check(MythicBukkit.inst().getAPIHelper().castSkill(boss,s,boss.getLocation(),List.of(enemy),List.of(),1),"cast "+s);}

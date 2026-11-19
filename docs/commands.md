@@ -112,14 +112,21 @@ Quantity update: `/mmc give <item> [quantity]` and `/mmc give <player> <item> [q
 `/survival`, `/warp earth`, `/warp survival` and `/warp SurvivalWorld` are retired. Galaxy Map and `/warp` completion offer Batuu, Hoth and Tatooine. `/spawn` still returns to protected Batuu. This supersedes earlier Survival travel examples above.
 
 ## Native clan map
-`/c map` (`/clan map`, `/cl map`) shows every Mandalore chunk in a north-up chat grid. Orange is safezone, dark red is warzone, gray is wilderness and yellow `+` marks your current chunk. Hover for zone, chunk coordinates and block bounds. Requires `mandomc.clan.map` (default true). Other worlds show a clear unmapped message. This command loads no terrain. Its zone policy also drives native protection and entry titles. Batuu is safezone everywhere; its grid follows the player. Mandalore displays the complete 500×500 map. Membership and claims remain deferred.
+`/c map` displays a north-up chunk grid. Orange marks safezone, dark red marks warzone, gray marks wilderness and the yellow `+` marks your chunk. Claims appear green for your clan, light red for other clans and blue for an ally. Hover for the owner, chunk coordinates and block bounds. The map reads the same territory and claim rules as entry titles and loads no terrain.
 
-## Native clans and KOTH crate (deployed)
-`/c` (`/clan`, `/cl`) supports create, invite, join, leave, kick, leader, disband, claim, unclaim, sethome, home, info, warpoints and map. Names use 3–16 letters/digits/underscores. Claims and homes require clan leadership; home travel is available to members. `/crates preview koth`, `/crates keys`, `/crates open koth` and `/crates claim` use the shared crate engine. See [native clans](features/native-clans.md).
+## Native clans and KOTH crate
+
+`/c` (`/clan`, `/cl`) opens your roster and clan information. `/c info <clan>` opens another clan’s roster, land count and rivalries. `/c help` lists management commands. Clan names use 3–16 letters, digits or underscores. Both leaders run `/c ally <clan>` within five minutes when the two rosters have exactly four players between them. An allied pair shares four member slots. Either leader can use `/c unally <clan>` to end the alliance.
+
+`/crates preview koth`, `/crates keys`, `/crates open koth` and `/crates claim` use the shared crate engine. [Native clans](features/native-clans.md)
+
+## Private messages
+
+Send a private message to an online player with `/msg <player> <message>`. Use `/reply <message>` or `/r <message>` to reach the last player you exchanged a private message with.
 
 ## Staff mode
 
-`/staff [on|off]` (alias `/staffmode`) switches between the saved survival inventory and an empty Creative staff inventory. `/gms` and other gamemode changes keep staff mode active; use `/staff off` to restore the saved survival inventory. Staff permissions, including `/back`, require active staff mode; ordinary permissions apply while off. `/parkour checkpoint <1-4>` is a staff-mode-only Ilum testing shortcut. Console `staff revokeop <online-player>` revokes an imported vanilla operator entitlement; native rank membership is separate. See [development playtest fixes](features/dev-playtest-fixes.md) for recovery and acceptance checks.
+`/staff [on|off]` (alias `/staffmode`) switches between the saved survival inventory and an empty Creative staff inventory. `/gms` and other gamemode changes keep staff mode active; use `/staff off` to restore the saved inventory, location and player state. Staff mode can use crafting tables, anvils, enchanting tables and other temporary workstations. Accessible shared storage opens for inspection. Staff permissions, including `/back`, require active staff mode; ordinary permissions apply while off. `/parkour checkpoint <1-4>` is a staff-mode-only Ilum testing shortcut. Console `staff revokeop <online-player>` revokes an imported vanilla operator entitlement; native rank membership is separate. See [development playtest fixes](features/dev-playtest-fixes.md) for recovery and acceptance checks.
 
 ### M4-ND and recipe search
 `/ask [question]` opens M4-ND's private question dialog or asks a question directly. M4-ND explains verified MandoMC gameplay, discusses Star Wars lore and relevant Minecraft mechanics, and offers friendly droid conversation. Unrelated factual questions receive a brief redirect; mixed questions retain their supported part. AI replies have a daily/cooldown allowance; greetings, written gameplay guidance and direct own-balance/current-event answers remain available without AI quota. Right-click M4-ND at Cassian's former spawn position for the same interface. `/recipes` includes native text search and an ingredient-use toggle; Back preserves the search.

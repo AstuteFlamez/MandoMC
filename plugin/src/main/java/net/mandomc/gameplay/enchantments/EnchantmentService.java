@@ -79,10 +79,11 @@ public final class EnchantmentService implements Listener, AutoCloseable {
                 .max(Comparator.comparingInt(r -> List.of("common", "uncommon", "rare", "epic", "legendary", "mythic").indexOf(r))).orElse("rare");
         var lore = new ArrayList<Component>();
         lore.add(items.badges(rarity, "enchantment").insertion(ROW)); lore.add(Component.empty().insertion(ROW));
-        // Existing notes belong above the enchantment explanations, below the badge row.
         String id = meta.getPersistentDataContainer().get(ItemCatalog.ITEM_ID, PersistentDataType.STRING);
-        if (meta.lore() != null && !Set.of("boba_jetpack", "endurance_book", "recovery_book", "mending_book").contains(Objects.requireNonNullElse(id, "")))
-            for (var line : meta.lore()) if (!ROW.equals(line.insertion())) lore.add(line);
+        var previousLore = meta.lore();
+        if (previousLore != null && (id == null || previousLore.stream().anyMatch(line -> ROW.equals(line.insertion())))) {
+            for (var line : previousLore) if (!ROW.equals(line.insertion())) lore.add(line);
+        }
         if (!lore.isEmpty() && !net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(lore.getLast()).isBlank())
             lore.add(Component.empty().insertion(ROW));
         if (entries.size() > 1) {
@@ -168,7 +169,23 @@ public final class EnchantmentService implements Listener, AutoCloseable {
     private void refresh(Inventory inventory) {
         for (int slot = 0; slot < inventory.getSize(); slot++) { var item = inventory.getItem(slot); if (maintain(item)) inventory.setItem(slot, item); }
     }
+    private boolean electrum(ItemStack fuel) {
+        return "electrum_dust".equals(items.identify(fuel));
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void prepareEnchant(org.bukkit.event.enchantment.PrepareItemEnchantEvent event) {
+        if (event.getEnchanter().getGameMode() == GameMode.CREATIVE) return;
+        var fuel = ((EnchantingInventory) event.getInventory()).getSecondary();
+        if (fuel != null && !fuel.isEmpty() && !electrum(fuel)) event.setCancelled(true);
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true) public void enchant(EnchantItemEvent event) {
+        var fuel = ((EnchantingInventory) event.getInventory()).getSecondary();
+        if (event.getEnchanter().getGameMode() != GameMode.CREATIVE && !electrum(fuel)) {
+            event.setCancelled(true);
+            return;
+        }
         event.getEnchantsToAdd().keySet().removeIf(enchant -> !tableAllowed(enchant));
         if (event.getEnchantsToAdd().isEmpty()) event.setCancelled(true);
         else Bukkit.getScheduler().runTask(plugin, () -> { refresh(event.getInventory()); refresh(event.getEnchanter().getInventory()); });
