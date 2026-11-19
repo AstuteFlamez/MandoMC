@@ -13,7 +13,11 @@ drops, cancellation, regular ore yields, enchanting, and both new recipes.
 The pinned terrain and particle shaders compile and link. The build passes all
 396 gameplay and four access tests. The 98 toolkit tests pass with seven skips.
 
-Next action: publish the matching pack and activate the scoped update on development.
+Development runs `765c0a6a1573` with the matching public pack verified and pinned.
+The scoped config and JAR hashes and exact-build M4-ND startup passed after the
+30-second in-game warning, stopped backup, and restart.
+
+Next action: reconnect with the updated pack to check the slot hint and wire colors in the client.
 
 ## Gameplay feedback and C0-M5 leaderboard (2026-11-18)
 
