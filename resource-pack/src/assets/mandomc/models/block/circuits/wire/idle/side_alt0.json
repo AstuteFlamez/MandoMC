@@ -1,0 +1,9 @@
+{
+  "parent": "mandomc:block/circuits/wire/idle/side_alt",
+  "textures": {
+    "line": {
+      "sprite": "mandomc:block/circuits/wire/idle/line0",
+      "force_translucent": true
+    }
+  }
+}

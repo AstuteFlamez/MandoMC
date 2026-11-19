@@ -83,7 +83,7 @@ public final class GuideKnowledge {
     }
 
     private static String label(String id) {
-        return id.replace("minecraft:", "").replace('_', ' ');
+        return RecipeSearch.nativeDisplayName(id, id.replace("minecraft:", "").replace('_', ' '));
     }
 
     private static String term(String value) {

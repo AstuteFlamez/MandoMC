@@ -7,14 +7,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ArmorMeta;
+import org.bukkit.inventory.meta.trim.ArmorTrim;
+import org.bukkit.inventory.meta.trim.TrimMaterial;
 import org.bukkit.persistence.PersistentDataType;
 
 /** Native-backed ingots keep ordinary material recipes while custom recipes require exact catalog metadata. */
 public final class MetalMaterials implements Listener {
-    private static final String OLD_ELECTRUM_DUST_HINT = "Smelt in a normal furnace for one ingot.";
+    private static final java.util.Set<String> OLD_ELECTRUM_DUST_HINTS = java.util.Set.of(
+            "Smelt in a normal furnace for one ingot.", "Place as redstone wire.");
     public static final java.util.Map<Material, String> FORMS = java.util.Map.ofEntries(
             java.util.Map.entry(Material.IRON_BLOCK, "agrinium_block"),
             java.util.Map.entry(Material.IRON_ORE, "agrinium_ore"),
@@ -39,6 +44,7 @@ public final class MetalMaterials implements Listener {
                 ? original.getItemMeta().getPersistentDataContainer().get(ItemCatalog.ITEM_ID, PersistentDataType.STRING) : null;
         String replacementId = switch (id == null ? "" : id) {
             case "electrum_scrap" -> "electrum_dust";
+            case "" -> original.getType() == Material.REDSTONE && !original.hasItemMeta() ? "electrum_dust" : null;
             case "electrum" -> original.getType() == Material.COPPER_INGOT ? null : id;
             case "electrum_block" -> original.getType() == Material.WAXED_COPPER_BLOCK ? null : id;
             default -> null;
@@ -53,12 +59,12 @@ public final class MetalMaterials implements Listener {
             var lore = meta.lore();
             if (lore == null) return original;
             var plain = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText();
-            if (lore.stream().noneMatch(line -> plain.serialize(line).equals(OLD_ELECTRUM_DUST_HINT))) {
+            if (lore.stream().noneMatch(line -> OLD_ELECTRUM_DUST_HINTS.contains(plain.serialize(line)))) {
                 return original;
             }
             var updated = items.create(id).getItemMeta().lore().getLast();
             var refreshedLore = lore.stream()
-                    .map(line -> plain.serialize(line).equals(OLD_ELECTRUM_DUST_HINT) ? updated : line).toList();
+                    .map(line -> OLD_ELECTRUM_DUST_HINTS.contains(plain.serialize(line)) ? updated : line).toList();
             meta.lore(refreshedLore);
             var replacement = original.clone();
             replacement.setItemMeta(meta);
@@ -112,6 +118,18 @@ public final class MetalMaterials implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void craft(PrepareItemCraftEvent event) {
         event.getInventory().setResult(canonical(event.getInventory().getResult()));
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void smith(PrepareSmithingEvent event) {
+        if (!"electrum_dust".equals(items.identify(event.getInventory().getInputMineral()))) return;
+        var result = event.getResult();
+        if (result == null || !(result.getItemMeta() instanceof ArmorMeta armor) || !armor.hasTrim()) return;
+        var trim = armor.getTrim();
+        if (!TrimMaterial.LAPIS.equals(trim.getMaterial())) return;
+        armor.setTrim(new ArmorTrim(TrimMaterial.REDSTONE, trim.getPattern()));
+        result.setItemMeta(armor);
+        event.setResult(result);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

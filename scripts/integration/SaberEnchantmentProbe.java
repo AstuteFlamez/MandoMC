@@ -275,6 +275,8 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         var dust=mando.items().create("electrum_dust");
         check(Bukkit.getRecipe(new NamespacedKey("mandomc","smelt_electrum_from_dust"))==null,
                 "Dust-to-ingot furnace recipe was removed");
+        check(Bukkit.getRecipe(NamespacedKey.minecraft("redstone_from_smelting_redstone_ore"))==null,
+                "No vanilla recipe shadows intact ore smelting");
         for (String crust : List.of("", "deepslate_")) {
             var smelt=Bukkit.getRecipe(new NamespacedKey("mandomc","smelt_electrum_from_"+crust+"ore"));
             check(smelt instanceof FurnaceRecipe furnace
@@ -293,7 +295,7 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         });
         var refreshed=new net.mandomc.gameplay.items.MetalMaterials(mando.items()).canonical(renamedDust);
         check(refreshed.getAmount()==4&&plain(refreshed.getItemMeta().displayName()).equals("Saved dust")
-                && plain(refreshed.getItemMeta().lore().getLast()).equals("Place as redstone wire."),
+                && plain(refreshed.getItemMeta().lore().getLast()).equals("Use in circuitry or place as Electrum Wire."),
                 "Existing Electrum Dust gains the current hint without losing its name or quantity");
         var old=new ItemStack(Material.ECHO_SHARD,13);
         old.editMeta(meta->meta.getPersistentDataContainer().set(net.mandomc.gameplay.items.ItemCatalog.ITEM_ID,
@@ -301,25 +303,58 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         var migrated=new net.mandomc.gameplay.items.MetalMaterials(mando.items()).canonical(old);
         check(migrated.getAmount()==13&&"electrum_dust".equals(mando.items().identify(migrated)),"Old tagged scrap keeps its quantity");
         var plainRedstone=new ItemStack(Material.REDSTONE,3);
-        check(new net.mandomc.gameplay.items.MetalMaterials(mando.items()).canonical(plainRedstone).equals(plainRedstone),
-                "Vanilla redstone no longer becomes Electrum");
+        check(new net.mandomc.gameplay.items.MetalMaterials(mando.items()).canonical(plainRedstone).equals(dust.asQuantity(3)),
+                "Legacy redstone dust preserves its quantity as Electrum Dust");
+        var circuit = new ItemStack[9];
+        Arrays.fill(circuit, dust);
+        check(Bukkit.craftItemResult(circuit,world,player).getResult().getType()==Material.REDSTONE_BLOCK,
+                "The actual native compaction recipe uses nine Electrum Dust");
+        Arrays.fill(circuit,null);
+        circuit[4]=new ItemStack(Material.REDSTONE_BLOCK);
+        check(Bukkit.craftItemResult(circuit,world,player).getResult().equals(dust.asQuantity(9)),
+                "The native block unpacks into nine Electrum Dust");
+        circuit[4]=dust;
+        circuit[7]=new ItemStack(Material.STICK);
+        check(Bukkit.craftItemResult(circuit,world,player).getResult().getType()==Material.REDSTONE_TORCH,
+                "The actual native torch recipe accepts Electrum Dust");
+        circuit[4]=new ItemStack(Material.LAPIS_LAZULI);
+        check(Bukkit.getCraftingRecipe(circuit,world)==null,"Ordinary lapis is not a circuit ingredient");
+        var smith=MenuType.SMITHING.builder().checkReachable(false).build(player);
+        smith.open();
+        var smithing=(SmithingInventory)smith.getTopInventory();
+        smithing.setInputTemplate(new ItemStack(Material.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE));
+        smithing.setInputEquipment(mando.items().create("beskar_chestplate"));
+        smithing.setInputMineral(dust);
+        check(smithing.getResult()!=null && smithing.getResult().getItemMeta() instanceof ArmorMeta trimmed
+                && trimmed.hasTrim() && trimmed.getTrim().getMaterial().equals(org.bukkit.inventory.meta.trim.TrimMaterial.REDSTONE),
+                "Electrum Dust makes a gold Electrum trim instead of a blue lapis trim");
+        player.closeInventory();
         var expectedName=plain(dust.getItemMeta().displayName());
         check(expectedName.equals("Electrum Dust"),"Mined ingredient is named Electrum Dust");
         var pickaxe=new ItemStack(Material.IRON_PICKAXE);
         pickaxe.addEnchantment(Enchantment.FORTUNE,3);
         player.getInventory().setItemInMainHand(pickaxe);
-        for (var mineral : List.of(Material.REDSTONE_ORE,Material.DEEPSLATE_REDSTONE_ORE)) {
-            var ore=world.getBlockAt(-202,200,-200);
-            ore.setType(mineral,false);
-            check(player.breakBlock(ore),"Real Fortune III break of "+mineral);
-            var drops=world.getNearbyEntities(ore.getLocation().add(.5,.5,.5),1.5,1.5,1.5).stream()
-                    .filter(org.bukkit.entity.Item.class::isInstance).map(org.bukkit.entity.Item.class::cast).toList();
-            check(drops.size()==1 && drops.getFirst().getItemStack().getAmount()==1
-                    && "electrum_dust".equals(mando.items().identify(drops.getFirst().getItemStack())),
-                    "One Electrum Dust after native Fortune III mining of "+mineral);
-            drops.forEach(org.bukkit.entity.Item::remove);
-        }
+        var ore=world.getBlockAt(-202,200,-200);
+        var recordedDrops=new ArrayList<org.bukkit.entity.Item>();
+        var capture=new org.bukkit.event.Listener(){};
+        Bukkit.getPluginManager().registerEvent(org.bukkit.event.block.BlockDropItemEvent.class, capture,
+                org.bukkit.event.EventPriority.MONITOR, (listener, event) -> {
+                    if (event instanceof org.bukkit.event.block.BlockDropItemEvent drop && drop.getBlock().equals(ore)) {
+                        recordedDrops.addAll(drop.getItems());
+                    }
+                }, this, true);
+        try {
+            for (var mineral : List.of(Material.REDSTONE_ORE,Material.DEEPSLATE_REDSTONE_ORE)) {
+                ore.setType(mineral,false);
+                recordedDrops.clear();
+                check(player.breakBlock(ore),"Real Fortune III break of "+mineral);
+                check(recordedDrops.size()==1 && recordedDrops.getFirst().getItemStack().equals(dust),
+                        "Exactly one Electrum Dust from the native ore drop transaction for "+mineral);
+                recordedDrops.forEach(org.bukkit.entity.Item::remove);
+            }
+        } finally { org.bukkit.event.HandlerList.unregisterAll(capture); }
     }
+
     private void nativeElectrumWire(ItemStack dust) throws Exception {
         var support=world.getBlockAt(-203,199,-202);
         var placed=support.getRelative(0,1,0);
@@ -337,8 +372,8 @@ public final class SaberEnchantmentProbe extends JavaPlugin implements org.bukki
         check(player.breakBlock(placed),"Placed wire breaks natively");
         var drops=world.getNearbyEntities(placed.getLocation().add(.5,.5,.5),1,1,1).stream()
                 .filter(org.bukkit.entity.Item.class::isInstance).map(org.bukkit.entity.Item.class::cast).toList();
-        check(drops.size()==1&&drops.getFirst().getItemStack().equals(new ItemStack(Material.REDSTONE)),
-                "Placed Electrum returns ordinary redstone dust");
+        check(drops.size()==1&&drops.getFirst().getItemStack().equals(dust),
+                "Placed wire returns the same Electrum Dust");
         drops.forEach(org.bukkit.entity.Item::remove);
         power.setType(Material.AIR);
 

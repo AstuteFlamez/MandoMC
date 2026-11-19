@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-/** Runs Paper's ordinary wire placement transaction while the player holds the enchantment ingredient. */
+/** Runs Paper's ordinary wire placement transaction while the player holds Electrum Dust. */
 public final class ElectrumWirePlacement implements Listener {
     private final ItemCatalog items;
     private final Method playerHandle, worldHandle, asNativeCopy, useOn, consumesAction;

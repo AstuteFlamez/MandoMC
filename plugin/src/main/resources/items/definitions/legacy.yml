@@ -1277,7 +1277,7 @@
       "category": "metals",
       "lore": [
         "<gray>Fuel for enchanting tables.",
-        "<gray>Place as redstone wire."
+        "<gray>Use in circuitry or place as Electrum Wire."
       ],
       "item-model": "mandomc:legacy/electrum_dust"
     },
@@ -1648,7 +1648,7 @@
     },
     "electrum_block": {
       "material": "WAXED_COPPER_BLOCK",
-      "name": "<gold>Electrum Block",
+      "name": "<gold>Electrum Ingot Block",
       "rarity": "uncommon",
       "category": "materials",
       "lore": [

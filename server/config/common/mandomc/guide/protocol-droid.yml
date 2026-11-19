@@ -130,7 +130,7 @@ knowledge:
       Mandalore and Naboo. Agrinium is the most common of the three, followed by Electrum, then Durasteel. Beskar Ore is
       available in the Mandalore mine during Beskar Rush. Coal Ore is found in Tatooine, Hoth and Naboo. Each themed ore
       drops one matching material, Electrum Dust for Electrum Ore and scraps for the other themed ores. Fortune adds none.
-      Native tools, protection and Silk Touch still apply. Place Electrum Dust as redstone wire or use it at enchanting tables.
+      Native tools, protection and Silk Touch still apply. Use Electrum Dust in circuit recipes, place it as Electrum Wire, or fuel enchanting tables.
       Smelt either intact Electrum Ore variant collected with Silk Touch into an ingot.
     answer: Each themed ore gives exactly one matching material, traveler. Electrum gives dust and the others give scraps.
       Fortune adds none. Agrinium, Electrum and Durasteel occur on the four resource planets. Beskar Ore appears on Mandalore
@@ -148,7 +148,7 @@ knowledge:
       Jawa keeps the same item selection for its lifetime, across menu opens, chunk unloads and restarts. Seven gray Jawas
       at Batuu spawn sell ordinary supplies in seven titled categories: Plants & Dyes, Farming, Ocean Goods, Nether Goods,
       End Goods, General Supplies and Spawners. Buy bamboo from Plants & Dyes and cactus or sugar cane from Farming.
-      General Supplies sells Redstone Dust for working circuits. All gray Jawas pay 20 credits per 16 bamboo, 28 credits
+      General Supplies sells Electrum Dust for circuitry and enchanting. All gray Jawas pay 20 credits per 16 bamboo, 28 credits
       per 16 cactus and 24 credits per 16 sugar cane. Every gray Jawa opens Sell Goods to buy approved goods; place items
       then confirm Sell, and unsupported items are returned. Closing cancels unsold deposits. Normal left-click buys one item;
       shift-left-click buys a full stack at a proportional price. Purchases keep the menu open. The Spawners shop sells Massiff,

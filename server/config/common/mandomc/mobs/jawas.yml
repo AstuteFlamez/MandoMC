@@ -326,7 +326,7 @@
         "price": "48"
       },
       "redstone": {
-        "item": "minecraft:redstone",
+        "item": "electrum_dust",
         "amount": 16,
         "price": "60"
       }

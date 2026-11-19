@@ -1,5 +1,21 @@
 # Resume here
 
+## Unified Electrum circuitry (2026-11-18)
+
+All sixteen original English names containing the old circuit material now use
+Electrum. One Electrum Dust stack serves circuit recipes, wiring, gold armor trim
+and enchanting. Old native dust converts at its existing quantity. Wires return
+the same material when broken, and compacted dust blocks unpack into dust. Intact
+Silk Touch ore remains the furnace source for ingots.
+
+The pack assigns four gold wire brightness levels using native geometry for all
+sixteen states. Circuit accents, the dust sprite, and spark frames are 32 × 32.
+The particle shader compiled and linked against the existing pinned client.
+Disposable Paper passed 2,834 assertions, including crafting, mining, wire power
+and drops, protected placement, enchanting, and armor trim.
+
+Next, publish the matching checked pack and apply the scoped development update.
+
 ## Electrum slot and wiring (2026-11-18)
 
 The enchanting slot uses the actual 32 × 32 Electrum Dust silhouette in gray.

@@ -25,11 +25,14 @@ class ProgressionMetalTests(unittest.TestCase):
         labels = json.loads((ASSETS / 'minecraft/lang/en_us.json').read_text())
         self.assertEqual('Electrum Ore', labels['block.minecraft.redstone_ore'])
         self.assertEqual('Deepslate Electrum Ore', labels['block.minecraft.deepslate_redstone_ore'])
-        self.assertNotIn('block.minecraft.redstone_block', labels)
-        self.assertNotIn('item.minecraft.redstone', labels)
+        self.assertEqual('Electrum Dust Block', labels['block.minecraft.redstone_block'])
+        self.assertEqual('Electrum Dust', labels['item.minecraft.redstone'])
+        self.assertEqual('Electrum Wire', labels['block.minecraft.redstone_wire'])
+        self.assertTrue(all('redstone' not in value.lower() for value in labels.values()))
         self.assertEqual('1 Electrum Dust', labels['container.enchant.lapis.one'])
-        for name in ['item/redstone.png', 'block/redstone_block.png']:
-            self.assertFalse((ASSETS / 'minecraft/textures' / name).exists())
+        vanilla_dust = json.loads((ASSETS / 'minecraft/items/redstone.json').read_text())
+        catalog_dust = json.loads((ASSETS / 'mandomc/items/legacy/electrum_dust.json').read_text())
+        self.assertEqual(vanilla_dust, catalog_dust)
         self.assertNotIn('block.minecraft.copper_block', labels)
 
     def test_electrum_slot_uses_the_grayscale_dust_silhouette(self):
@@ -39,6 +42,33 @@ class ProgressionMetalTests(unittest.TestCase):
         self.assertEqual((32, 32), hint.size)
         self.assertEqual(source.getchannel('A').tobytes(), hint.getchannel('A').tobytes())
         self.assertTrue(all(r == g == b for r, g, b, a in hint.get_flattened_data() if a))
+
+    def test_wire_uses_gold_models_for_every_signal_strength(self):
+        wire = json.loads((ASSETS / 'minecraft/blockstates/redstone_wire.json').read_text())
+        tiers = {int(power) for part in wire['multipart']
+                 for power in part['when']['AND'][0]['power'].split('|')}
+        self.assertEqual(set(range(16)), tiers)
+        for part in wire['multipart']:
+            model = ASSETS / (part['apply']['model'].replace(':', '/models/', 1) + '.json')
+            self.assertTrue(model.is_file(), model)
+            self.assertNotIn('tintindex', model.read_text())
+
+    def test_electrum_visible_sprites_are_32_pixels_square(self):
+        import importlib.util
+        from PIL import Image
+        tool = ROOT / 'scripts/build-electrum-wire-assets.py'
+        spec = importlib.util.spec_from_file_location('electrum_assets', tool)
+        assets = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(assets)
+        paths = list((ASSETS / 'mandomc/textures/block/circuits/wire').rglob('*.png'))
+        paths.extend((ASSETS / 'mandomc/textures/particle').glob('electrum_wire_dust_*.png'))
+        paths.extend(ASSETS / f'minecraft/textures/{folder}/{name}.png'
+                     for folder in ('block', 'item') for name in assets.CIRCUIT_SPRITES[folder])
+        paths.append(ASSETS / 'mandomc/textures/item/legacy/metals/scraps/electrum_dust.png')
+        self.assertEqual(46, len(paths))
+        for path in paths:
+            with Image.open(path) as sprite:
+                self.assertEqual((32, 32), sprite.size, path.name)
 
     def test_metals_use_four_distinct_native_mineral_patterns(self):
         base = json.loads((ROOT / 'resource-pack/metal-block-sources.json').read_text())['blocks']
