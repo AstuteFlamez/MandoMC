@@ -1,5 +1,13 @@
 # Resume here
 
+## Electrum Dust smelting (2026-11-18)
+
+One Electrum Dust now smelts into one Electrum Ingot in a normal furnace.
+The regular and deepslate Electrum Ore recipes still smelt intact ore into
+ingots. The recipe guide prefers the dust recipe, and M4-ND covers both paths.
+
+Next, verify native furnace behavior and roll out the checked build.
+
 ## Electrum storage textures (2026-11-18)
 
 Electrum Dust Blocks and Electrum Ingot Blocks share the original 32 × 32 gold

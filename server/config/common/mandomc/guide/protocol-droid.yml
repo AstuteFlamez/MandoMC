@@ -131,7 +131,8 @@ knowledge:
       available in the Mandalore mine during Beskar Rush. Coal Ore is found in Tatooine, Hoth and Naboo. Each themed ore
       drops one matching material, Electrum Dust for Electrum Ore and scraps for the other themed ores. Fortune adds none.
       Native tools, protection and Silk Touch still apply. Use Electrum Dust in circuit recipes, place it as Electrum Wire, or fuel enchanting tables.
-      Smelt either intact Electrum Ore variant collected with Silk Touch into an ingot.
+      Smelt one Electrum Dust in a normal furnace for one Electrum Ingot. Either intact Electrum Ore variant collected
+      with Silk Touch also smelts into one ingot.
     answer: Each themed ore gives exactly one matching material, traveler. Electrum gives dust and the others give scraps.
       Fortune adds none. Agrinium, Electrum and Durasteel occur on the four resource planets. Beskar Ore appears on Mandalore
       during Beskar Rush.
