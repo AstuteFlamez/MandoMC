@@ -158,7 +158,8 @@ public final class BarrelPreviewProbe extends JavaPlugin {
         firstGhost = ghost;
         bluePose = ghost.getLocation();
         blueTransform = ghost.getTransformation();
-        check(bluePose.equals(base.getLocation().add(.5,.5,.5)), "upright barrel centered above support");
+        check(bluePose.toVector().equals(base.getLocation().add(.5,.5,.5).toVector()), "barrel centered above support");
+        panelToward(ghost, BlockFace.NORTH);
         check(owner.canSee(ghost) && !observer.canSee(ghost), "owner-only Paper visibility");
         check(sawSpawn(owner, ghost), "owner received preview spawn packet");
         check(!sawSpawn(observer, ghost), "observer received no preview spawn packet");
@@ -267,14 +268,28 @@ public final class BarrelPreviewProbe extends JavaPlugin {
         check(entry() != null && entry().cells().size() == 2 && base.getType() == Material.BARRIER
                 && upper.getType() == Material.BARRIER, "journal installed entire two-block footprint");
         check(owner.getInventory().getItemInMainHand().isEmpty() && observer.canSee(display), "one consumed and real barrel public");
+        panelToward(display, BlockFace.NORTH);
         check(sawSpawn(observer, display), "same observer received the permanent barrel spawn");
         placements.breakTrophy(owner, entry());
         later(30, () -> {
             check(entry() == null && base.isEmpty() && upper.isEmpty(), "both cells released");
             check(Arrays.stream(owner.getInventory().getContents()).anyMatch(barrel::equals), "recovered exact fuel state");
-            owner.getInventory().clear();
-            owner.getInventory().setItemInMainHand(barrel.clone());
-            // Reset the post-placement target lock by looking away, then look back and disconnect.
+            verifyNextFacing(0);
+        });
+    }
+
+    private void panelToward(ItemDisplay display, BlockFace side) {
+        // The north UV is the orange panel. The pinned item renderer rotates it 180 degrees
+        // before applying entity yaw, so the outward panel normal equals the Bukkit look vector.
+        check(display.getLocation().getDirection().dot(side.getDirection()) > .9999,
+                "orange panel must face " + side + " (display yaw " + display.getYaw() + ")");
+    }
+
+    private void verifyNextFacing(int index) throws Exception {
+        var sides = List.of(BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST);
+        owner.getInventory().clear();
+        owner.getInventory().setItemInMainHand(barrel.clone());
+        if (index == sides.size()) {
             face(owner, owner.getEyeLocation().add(0, 5, 0));
             later(4, () -> {
                 face(owner, floor.getLocation().add(.5,.6,.5));
@@ -283,8 +298,27 @@ public final class BarrelPreviewProbe extends JavaPlugin {
                     actors.close();
                     actors = null;
                     check(!ghost.isValid() && displays().isEmpty(), "quit cleared preview immediately");
-                    getLogger().info("BARREL PREVIEW PASSED " + checks + " checks");
+                    getLogger().info("BARREL PREVIEW PASSED " + checks + " checks including all four panel facings");
                     Bukkit.getPluginManager().disablePlugin(this);
+                });
+            });
+            return;
+        }
+        var side = sides.get(index);
+        var position = floor.getLocation().add(.5,-.8,.5).add(side.getDirection().multiply(3));
+        var handle = owner.getClass().getMethod("getHandle").invoke(owner);
+        handle.getClass().getMethod("setPos", double.class,double.class,double.class)
+                .invoke(handle,position.getX(),position.getY(),position.getZ());
+        face(owner, floor.getLocation().add(.5,.6,.5));
+        later(5, () -> {
+            panelToward(only("placement/blue/legacy/rhydonium_barrel_three"), side);
+            click();
+            later(25, () -> {
+                panelToward(only("legacy/rhydonium_barrel_three"), side);
+                placements.breakTrophy(owner, entry());
+                later(25, () -> {
+                    check(entry() == null && base.isEmpty() && upper.isEmpty(), "test barrel recovered");
+                    verifyNextFacing(index + 1);
                 });
             });
         });

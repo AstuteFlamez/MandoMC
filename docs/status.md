@@ -1,5 +1,9 @@
 # Resume here
 
+## Barrel front orientation (2026-11-21)
+
+The north UV of the Rhydonium model contains the orange front panel. The shared placement plan now snaps the panel toward the placer for every fuel level. Existing barrels retain their saved yaw. The dev-copy rehearsal passed 77 checks, including the orange face direction on each preview and placed barrel from all four sides. Next, activate the checked build on shared development.
+
 ## Private oversized-block placement preview (2026-11-21)
 
 The Rhydonium Barrel now uses the durable custom-block placement flow, the archived upright two-cell mount and the five existing fuel models. Aiming and clicking evaluate every occupied cell against obstructions, reservations, borders, territory and clan permissions. The player's private display uses translucent blue or red versions of the placed model.

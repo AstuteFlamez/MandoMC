@@ -19,7 +19,9 @@ final class RhydoniumBarrel implements PreviewBlock {
     @Override public String messages() { return "barrel-text."; }
     @Override public Block site(Block clicked, BlockFace face) { return clicked.getRelative(BlockFace.UP); }
     @Override public PlacementPlan plan(TrophyJournal.Cell site, BlockFace face, float playerYaw) {
-        return new PlacementPlan(site, 0, TrophyJournal.Face.UP, width(), height());
+        // ItemDisplay renders the model's north (orange panel) face toward entity yaw.
+        int towardPlayer = Math.floorMod(Math.round(playerYaw / 90f) + 2, 4) * 90;
+        return new PlacementPlan(site, towardPlayer, TrophyJournal.Face.UP, width(), height());
     }
 
     static int stage(int current, int maximum) {
