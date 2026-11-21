@@ -1,5 +1,9 @@
 # Resume here
 
+## Full Rhydonium barrel texture (2026-11-21)
+
+The full barrel uses the approved 32-pixels-per-block artwork for its held and placed model and both translucent placement previews. The published-pack build strips image metadata. Its decoded pixels match the approved artwork, and the other 1,329 entries match the previous dev ZIP byte for byte. The pack tooling suite passed with eight environment skips. Next, inspect the full barrel on dev after reconnecting.
+
 ## Barrel front orientation (2026-11-21)
 
 The north UV of the Rhydonium model contains the orange front panel. The shared placement plan now snaps the panel toward the placer for every fuel level. Existing barrels retain their saved yaw. The dev-copy rehearsal passed 77 checks, including the orange face direction on each preview and placed barrel from all four sides. Shared development is running the checked `de9c14151e0d` build. All 68 live checks passed, including the four facings on preview and placement. The full Java build passed 403 tests. Next, collect player feedback on barrel placement.

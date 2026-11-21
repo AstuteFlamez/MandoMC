@@ -285,6 +285,7 @@
     {
       "sourcePath": "assets/minecraft/textures/custom/fuels/rhydonium_full_barrel.png",
       "sourceSha256": "09b2ea6fdb6d2f1f92005a4bda5e162f275b7de70acf33db2be953baca28fa2a",
+      "adaptation": "Approved 32-pixels-per-block repaint of the recovered full barrel on its original UV layout. The blue and red full-barrel placement sprites derive from this artwork.",
       "destination": "assets/mandomc/textures/item/legacy/fuels/rhydonium_full_barrel.png"
     },
     {
