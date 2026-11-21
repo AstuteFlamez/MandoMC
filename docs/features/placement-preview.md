@@ -1,6 +1,6 @@
 # Oversized block placement
 
-Hold a Rhydonium Barrel and aim at a block within reach. An upright blue barrel shows where it will stand. A red barrel means that space is occupied or protected. Right-click a blue site to place one barrel. Break either half to recover the original item, including its fuel state.
+Hold a Rhydonium Barrel and aim at a block within reach. An upright blue barrel shows where it will stand. Its orange front panel faces the placer, snapping to the nearest cardinal direction. A red barrel means that space is occupied or protected. Right-click a blue site to place one barrel. Break either half to recover the original item, including its fuel state.
 
 The barrel occupies the two cells above the clicked block and uses the archive's empty, quarter, half, three-quarter and full thresholds. Preview and permanent display use the same placed-model key and grid pose. Preview materials inherit each model and replace its texture with a tinted, translucent version.
 

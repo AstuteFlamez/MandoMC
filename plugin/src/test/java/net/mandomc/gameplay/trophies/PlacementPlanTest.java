@@ -7,6 +7,16 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class PlacementPlanTest {
+    @Test public void panelFacesOppositeTheNearestCardinalLookDirection() {
+        var barrel = new RhydoniumBarrel();
+        var site = new Cell("minecraft:devworld", 0, 64, 0);
+        float[] looks = {0, 44.99f, 45, 90, 135, 180, -135, -90, -45, 360, -360};
+        int[] towardPlayer = {180, 180, 270, 270, 0, 0, 90, 90, 180, 180, 180};
+        for (int i = 0; i < looks.length; i++) {
+            assertEquals(towardPlayer[i], barrel.plan(site, org.bukkit.block.BlockFace.UP, looks[i]).yaw());
+        }
+    }
+
     @Test public void percentThresholdsMatchPlacedFuelStages() {
         int[] units = {-1, 0, 124, 125, 249, 250, 374, 375, 499, 500, Integer.MAX_VALUE};
         int[] expected = {0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4};
