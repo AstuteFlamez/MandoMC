@@ -17,7 +17,10 @@ public final class RancorTrophyDrops implements Listener {
     public RancorTrophyDrops(JavaPlugin plugin,ItemCatalog items)throws ReflectiveOperationException {
         try{new RancorTrophies(plugin,items,(player,location)->{
             var territory=NativeTerritoryAccess.current();
-            return territory!=null&&(territory.edits(location)||player.getGameMode()==GameMode.CREATIVE&&player.hasPermission("mandomc.territory.edit"));
+            if (territory == null) return false;
+            if (player.getGameMode() == GameMode.CREATIVE && player.hasPermission("mandomc.territory.edit")) return true;
+            var clans = Bukkit.getServicesManager().load(net.mandomc.gameplay.clans.ClanService.class);
+            return territory.edits(location) && net.mandomc.gameplay.clans.ClanProtection.mayPlace(clans, player, location);
         });}catch(Exception error){throw new IllegalStateException("Cannot initialize Rancor trophy custody",error);}
         var vendor=Bukkit.getPluginManager().getPlugin("MythicMobs");
         var type=(Class<? extends Event>)Class.forName("io.lumine.mythic.bukkit.events.MythicMobDeathEvent",true,vendor.getClass().getClassLoader());

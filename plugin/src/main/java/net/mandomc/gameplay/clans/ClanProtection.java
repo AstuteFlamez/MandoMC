@@ -14,7 +14,7 @@ import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.*;
 
 /** Ownership checks are independent from static zones. Existing cancellations always win. */
-final class ClanProtection implements Listener {
+public final class ClanProtection implements Listener {
     private final ClanService clans;
     private final TerritoryService territory;
     ClanProtection(ClanService clans,TerritoryService territory){this.clans=clans;this.territory=territory;}
@@ -23,15 +23,23 @@ final class ClanProtection implements Listener {
         if(net.mandomc.gameplay.events.EventMining.allowed(block,p))return true;
         if(staff(p)){clans.land().staffEdit(block);return true;}
         if(!clans.canEdit(p,block.getLocation())){p.sendActionBar(clans.message("protected"));return false;}
-        if(p.getGameMode()!=GameMode.SURVIVAL)return true;
-        // DevWorld is the development sandbox, outside the frozen planet wilderness scope.
-        // Clan ownership and territory protection still apply before this exemption.
-        if(block.getWorld().getKey().equals(org.bukkit.NamespacedKey.minecraft("devworld"))
-                || net.mandomc.gameplay.tutorial.TutorialInventory.world(block.getWorld()))return true;
-        if(!clans.land().prepare(block.getWorld(),block.getX()>>4,block.getZ()>>4)) {
+        if (!baselineReady(clans, p, block.getLocation())) {
             p.sendActionBar(clans.message("unprepared"));return false;
         }
         return true;
+    }
+
+    /** Read-only counterpart to the native placement listener, safe to run while aiming. */
+    public static boolean mayPlace(ClanService clans, Player player, org.bukkit.Location location) {
+        return clans != null && clans.canEdit(player, location) && baselineReady(clans, player, location);
+    }
+
+    private static boolean baselineReady(ClanService clans, Player player, org.bukkit.Location location) {
+        var world = location.getWorld();
+        return player.getGameMode() != GameMode.SURVIVAL
+                || world.getKey().equals(org.bukkit.NamespacedKey.minecraft("devworld"))
+                || net.mandomc.gameplay.tutorial.TutorialInventory.world(world)
+                || clans.land().prepare(world, location.getBlockX() >> 4, location.getBlockZ() >> 4);
     }
     private void touch(Player p,Block b){if(!net.mandomc.gameplay.tutorial.TutorialInventory.world(b.getWorld()) && p.getGameMode()==GameMode.SURVIVAL)clans.land().touch(LandRestoration.chunk(b));}
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
