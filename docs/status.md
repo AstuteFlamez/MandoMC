@@ -1,5 +1,13 @@
 # Resume here
 
+## Private oversized-block placement preview (2026-11-21)
+
+The Rhydonium Barrel now uses the durable custom-block placement flow, the archived upright two-cell mount and the five existing fuel models. Aiming and clicking evaluate every occupied cell against obstructions, reservations, borders, territory and clan permissions. The player's private display uses translucent blue or red versions of the placed model.
+
+A two-player Paper rehearsal compared preview and placed transforms, checked the upper-cell obstruction and exact hand retention, and traced the entity spawn packets. The observer received the installed barrel alone. A wider footprint also rejected its claimed outer cell. See [placement preview](features/placement-preview.md).
+
+Next, activate and repeat the acceptance checks on the shared development runtime.
+
 ## Electrum Dust smelting (2026-11-18)
 
 One Electrum Dust now smelts into one Electrum Ingot in a normal furnace.
