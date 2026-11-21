@@ -2,7 +2,7 @@
 
 ## Barrel front orientation (2026-11-21)
 
-The north UV of the Rhydonium model contains the orange front panel. The shared placement plan now snaps the panel toward the placer for every fuel level. Existing barrels retain their saved yaw. The dev-copy rehearsal passed 77 checks, including the orange face direction on each preview and placed barrel from all four sides. Next, activate the checked build on shared development.
+The north UV of the Rhydonium model contains the orange front panel. The shared placement plan now snaps the panel toward the placer for every fuel level. Existing barrels retain their saved yaw. The dev-copy rehearsal passed 77 checks, including the orange face direction on each preview and placed barrel from all four sides. Shared development is running the checked `de9c14151e0d` build. All 68 live checks passed, including the four facings on preview and placement. The full Java build passed 403 tests. Next, collect player feedback on barrel placement.
 
 ## Private oversized-block placement preview (2026-11-21)
 
