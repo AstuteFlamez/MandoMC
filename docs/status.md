@@ -1,5 +1,11 @@
 # Resume here
 
+## First-join starter kit and Tatooine placement (2026-11-22)
+
+New players receive 64 Dewback Legs, 64 dirt, 16 grass blocks, all 11 items in the vanilla saplings tag, and a blue Training Lightsaber with four base melee damage. Desert Robes equip on delivery. Existing armor stays equipped and the corresponding robe goes into storage. The once-only marker and full-inventory retry still apply.
+
+The development build passed 403 Java tests and 30 native Paper checks. The latter exercised first-join delivery, the catalog food and saplings, armor slots, post-refresh saber damage, occupied slots and atomic retries. The Rebel Pilot and Boba Fett are at their captured Tatooine positions in the local development world. Next, capture Bossk's location.
+
 ## Full Rhydonium barrel texture (2026-11-21)
 
 The full barrel uses the approved 32-pixels-per-block artwork for its held and placed model and both translucent placement previews. The published-pack build strips image metadata. Its decoded pixels match the approved artwork, and the other 1,329 entries match the previous dev ZIP byte for byte. The pack tooling suite passed with eight environment skips. Next, inspect the full barrel on dev after reconnecting.
