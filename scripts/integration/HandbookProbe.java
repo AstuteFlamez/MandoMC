@@ -116,7 +116,7 @@ public final class HandbookProbe extends JavaPlugin {
             check(actor.getPersistentDataContainer().has(granted) && !actor.getPersistentDataContainer().has(pending), "Complete kit commits once-only marker");
             check(inventory.contains(Material.STONE_PICKAXE) && inventory.contains(Material.STONE_AXE)
                     && inventory.contains(Material.STONE_SHOVEL) && inventory.contains(Material.STONE_HOE)
-                    && inventory.contains(Material.COOKED_BEEF, 64), "Original material kit retained");
+                    && inventory.containsAtLeast(mando.items().create("dewback_leg"), 64), "Original material kit retained");
             for (String name : List.of("robes_helmet", "robes_chestplate", "robes_leggings", "robes_boots")) {
                 var robe = mando.items().create(name);
                 check(robe.isSimilar(inventory.getItem(robe.getType().getEquipmentSlot())), "Wearing " + name);

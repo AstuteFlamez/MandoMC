@@ -18,7 +18,7 @@ Death loses only what the player carries. Respawn priority is group home, then a
 
 Combat blocks voluntary teleporting. Logging out while in combat causes death, with the normal carried-item loss. An uncancelled positive-damage player/mob or player/player hit refreshes a 15-second tag for involved players. Show the remaining time to one decimal on the scoreboard. Clean server shutdowns are exempt from logout punishment.
 
-The first join grants a stone pickaxe, axe, shovel and hoe, 64 steak, 64 dirt, 16 grass blocks, one of each of the 11 vanilla saplings, a blue Training Lightsaber with four base melee damage, an E-11 and 64 standard plasma cells. The four Desert Robes pieces equip in empty armor slots. Any piece for an occupied slot goes into storage. Equipment is granted only once, not on subsequent joins or deaths. Genuinely new accounts start with 2,500 credits exactly once; returning balances are preserved.
+The first join grants a stone pickaxe, axe, shovel and hoe, 64 Dewback Legs, 64 dirt, 16 grass blocks, one of each of the 11 vanilla saplings, a blue Training Lightsaber with four base melee damage, an E-11 and 64 standard plasma cells. The four Desert Robes pieces equip in empty armor slots. Any piece for an occupied slot goes into storage. Equipment is granted only once, not on subsequent joins or deaths. Genuinely new accounts start with 2,500 credits exactly once; returning balances are preserved.
 
 The first friends playtest should bring the in-scope gameplay systems together in a rough, integrated version. The development slices below are incremental building and checking steps toward that target. The precise content depth for each system still needs agreement; force powers and resource planets are excluded for now.
 

@@ -32,6 +32,9 @@ public final class StarterKitProbe extends JavaPlugin {
             later(() -> {
                 check(inventory.containsAtLeast(new ItemStack(Material.DIRT), 64) && !inventory.containsAtLeast(new ItemStack(Material.DIRT), 65), "64 dirt");
                 check(inventory.containsAtLeast(new ItemStack(Material.GRASS_BLOCK), 16) && !inventory.containsAtLeast(new ItemStack(Material.GRASS_BLOCK), 17), "16 grass");
+                var leg = mando.items().create("dewback_leg");
+                check(inventory.containsAtLeast(leg, 64) && !inventory.containsAtLeast(leg, 65), "64 catalog Dewback Legs");
+                check(!inventory.containsAtLeast(new ItemStack(Material.COOKED_BEEF), 1), "no plain steak");
                 var saplings = Bukkit.getTag(Tag.REGISTRY_ITEMS, NamespacedKey.minecraft("saplings"), Material.class);
                 for (var sapling : saplings.getValues()) {
                     var stack = new ItemStack(sapling);

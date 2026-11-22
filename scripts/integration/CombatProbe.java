@@ -101,7 +101,7 @@ public final class CombatProbe extends JavaPlugin {
         check(fresh.getInventory().getItem(20).getAmount() == 7, "kit preserves existing inventory");
         for (Material type : List.of(Material.STONE_PICKAXE, Material.STONE_AXE, Material.STONE_SHOVEL, Material.STONE_HOE))
             check(count(fresh, item -> item.getType() == type) == 1, "kit gives one " + type);
-        check(count(fresh, item -> item.getType() == Material.COOKED_BEEF) == 64, "kit gives 64 steak");
+        check(count(fresh, item -> "dewback_leg".equals(plugin.items().identify(item))) == 64, "kit gives 64 Dewback Legs");
         for (String id : List.of("robes_helmet", "robes_chestplate", "robes_leggings", "robes_boots"))
             check(count(fresh, item -> id.equals(plugin.items().identify(item))) == 1, "kit gives " + id);
         check(count(fresh, item -> "E11".equals(WeaponMechanicsAPI.getWeaponTitle(item))) == 1, "kit gives vendor E11");
