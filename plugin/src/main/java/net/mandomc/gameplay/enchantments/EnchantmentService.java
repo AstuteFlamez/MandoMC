@@ -26,6 +26,7 @@ import org.bukkit.persistence.PersistentDataType;
 public final class EnchantmentService implements Listener, AutoCloseable {
     public static final NamespacedKey ENDURANCE = new NamespacedKey("mandomc", "endurance");
     public static final NamespacedKey RECOVERY = new NamespacedKey("mandomc", "recovery");
+    private static final NamespacedKey STARTER_SABER = new NamespacedKey("mandomc", "starter_saber");
     private static final String ROW = "mandomc:enchantment-book";
     private final MandoPlugin plugin;
     private final ItemCatalog items;
@@ -147,15 +148,28 @@ public final class EnchantmentService implements Listener, AutoCloseable {
             meta.getPersistentDataContainer().remove(ItemCatalog.ITEM_ID);
         item.setItemMeta(meta);
     }
-    private void migrateSaber(ItemStack item) {
-        var meta = item.getItemMeta();
+    public static void markStarterSaber(ItemStack item) {
+        item.editMeta(meta -> {
+            meta.getPersistentDataContainer().set(STARTER_SABER, PersistentDataType.BYTE, (byte) 1);
+            restoreSaberAttributes(meta);
+        });
+    }
+
+    private static void restoreSaberAttributes(org.bukkit.inventory.meta.ItemMeta meta) {
+        // The player supplies one base damage point. A starter saber adds three, like a wooden sword.
+        double damageBonus = meta.getPersistentDataContainer().has(STARTER_SABER) ? 3 : 7;
         for (var attribute : List.of(Attribute.ATTACK_DAMAGE, Attribute.ATTACK_SPEED)) {
             var mods = meta.getAttributeModifiers(attribute);
             if (mods != null) for (var modifier : List.copyOf(mods)) if (modifier.getKey().getNamespace().equals("mandomc")
                     && Set.of("item_damage", "item_speed", "forge_damage", "forge_speed").contains(modifier.getKey().getKey())) meta.removeAttributeModifier(attribute, modifier);
             meta.addAttributeModifier(attribute, new AttributeModifier(new NamespacedKey("mandomc", attribute == Attribute.ATTACK_DAMAGE ? "item_damage" : "item_speed"),
-                    attribute == Attribute.ATTACK_DAMAGE ? 7 : -2.4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
+                    attribute == Attribute.ATTACK_DAMAGE ? damageBonus : -2.4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.MAINHAND));
         }
+    }
+
+    private void migrateSaber(ItemStack item) {
+        var meta = item.getItemMeta();
+        restoreSaberAttributes(meta);
         int damage = legacy(meta, "damage"), guard = legacy(meta, "guard"), recovery = Math.max(legacy(meta, "throw"), legacy(meta, "speed"));
         addLegacy(meta, Enchantment.SHARPNESS, damage); addLegacy(meta, Registry.ENCHANTMENT.get(ENDURANCE), guard); addLegacy(meta, Registry.ENCHANTMENT.get(RECOVERY), recovery);
         for (String track : List.of("damage", "guard", "throw", "speed")) meta.getPersistentDataContainer().remove(new NamespacedKey("mandomc", "forge_" + track));

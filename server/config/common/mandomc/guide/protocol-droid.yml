@@ -107,15 +107,15 @@ knowledge:
       with /tutorial and its optional Survival, Clans, Combat, Shops and Vehicles sections; each first completion awards 500
       credits. Then use /warp to visit Naboo, a recommended planet for a first base, and /c map to check zones before building
       in eligible Wilderness. Gather resources; coal is mined from Coal Ore in Tatooine, Hoth and Naboo caves with
-      a pickaxe. Gray Jawas at Batuu buy approved salvage for credits; /balance checks credits. For a first lightsaber, use
+      a pickaxe. Gray Jawas at Batuu buy approved salvage for credits; /balance checks credits. The first-join kit gives a blue Training Lightsaber with four base melee damage. For a stronger saber, use
       /recipes to plan the components and complete Ilum for a Kyber Crate key (24-hour cooldown), then open the Kyber Crate
-      at Batuu for a random crystal. Craft the saber at a crafting table before considering forge upgrades. Ask which stage
+      at Batuu for a random crystal. Craft the saber at a Saber Workbench. Ask which stage
       the player has reached when useful, and suggest one or two next steps rather than overwhelming them. Do not assume they
       have a saber or equipment. KOTH and Jabba's Palace involve competing players, so suggest these later as optional challenges;
       /events shows the schedule.
     answer: For a first expedition, traveler, start with /tutorial. Each lesson's first completion earns 500 credits. Then
       use /warp to visit Naboo and /c map to check where you can build a first base. Gather supplies and sell approved salvage
-      to the gray Jawas at Batuu. When ready, use /recipes to plan your first saber and complete Ilum for a Kyber Crate key.
+      to the gray Jawas at Batuu. When ready, use /recipes to plan a stronger saber and complete Ilum for a Kyber Crate key.
       Have you finished the tutorial or chosen a base yet?
   recipes:
     tags: recipe recipes craft crafting ingredient ingredients search equipment
@@ -173,13 +173,13 @@ knowledge:
       for crafting the Darksaber. Check /crates preview koth for the current chances, traveler.
   sabers:
     tags: lightsaber lightsabers saber sabers obtain getting first make crafting
-    facts: To get a first lightsaber, craft one at a Saber Workbench. The blue Obi-Wan saber needs one precision emitter coil,
+    facts: New players receive a blue Training Lightsaber in their starter kit. It deals four base melee damage. Craft stronger sabers at a Saber Workbench. The blue Obi-Wan saber needs one precision emitter coil,
       one blue kyber, one durasteel, one straight hilt and one plasma capacitor array. Blue kyber comes randomly from the
       Kyber Crate at Batuu; earn a key by completing Ilum (24-hour cooldown). The red Vader version uses red kyber instead.
       Components have crafting recipes; brown Jawas on Tatooine also sell selected components with fixed stock per encounter.
       Use /recipes to see each ingredient and its source. The Saber Workbench crafts sabers, changes styles and applies enchantment
-      books. The starter kit does not include a saber.
-    answer: Craft your first saber at a Saber Workbench, traveler. For the blue Obi-Wan saber, use one each of precision emitter
+      books.
+    answer: Your first-join kit includes a blue Training Lightsaber, traveler. Craft stronger sabers at a Saber Workbench. For the blue Obi-Wan saber, use one each of precision emitter
       coil, blue kyber, durasteel, straight hilt and plasma capacitor array. Earn a Kyber Crate key by completing Ilum, then
       open the crate at Batuu for a random crystal. Use /recipes for component recipes and sources; brown Jawas on Tatooine
       sell selected components. Use the same workbench for styles and enchantment books.
