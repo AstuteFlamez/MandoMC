@@ -96,7 +96,7 @@ public final class CombatProbe extends JavaPlugin {
     }
     private void verifyKit() throws Exception {
         Player fresh = player(point);
-        fresh.getInventory().setItem(20, new ItemStack(Material.DIRT, 7));
+        fresh.getInventory().setItem(20, new ItemStack(Material.DIAMOND, 7));
         check(plugin.starterKit().grant(fresh), "complete starter kit grants");
         check(fresh.getInventory().getItem(20).getAmount() == 7, "kit preserves existing inventory");
         for (Material type : List.of(Material.STONE_PICKAXE, Material.STONE_AXE, Material.STONE_SHOVEL, Material.STONE_HOE))

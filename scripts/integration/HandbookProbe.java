@@ -117,7 +117,11 @@ public final class HandbookProbe extends JavaPlugin {
             check(inventory.contains(Material.STONE_PICKAXE) && inventory.contains(Material.STONE_AXE)
                     && inventory.contains(Material.STONE_SHOVEL) && inventory.contains(Material.STONE_HOE)
                     && inventory.contains(Material.COOKED_BEEF, 64), "Original material kit retained");
-            for (String name : List.of("robes_helmet", "robes_chestplate", "robes_leggings", "robes_boots", "e11", "standard_plasma_cells")) {
+            for (String name : List.of("robes_helmet", "robes_chestplate", "robes_leggings", "robes_boots")) {
+                var robe = mando.items().create(name);
+                check(robe.isSimilar(inventory.getItem(robe.getType().getEquipmentSlot())), "Wearing " + name);
+            }
+            for (String name : List.of("e11", "standard_plasma_cells")) {
                 check(Arrays.stream(inventory.getStorageContents()).filter(Objects::nonNull)
                         .anyMatch(i -> i.isSimilar(mando.items().create(name))), "Original generated kit item " + name);
             }
@@ -135,8 +139,8 @@ public final class HandbookProbe extends JavaPlugin {
                     actor.getPersistentDataContainer().remove(granted);
                     kit.join(new org.bukkit.event.player.PlayerJoinEvent(returning(), net.kyori.adventure.text.Component.empty()));
                     check(!actor.getPersistentDataContainer().has(pending), "Established unmarked player is not treated as first join");
-                    // Eleven free slots fit the old kit, but not the new twelve-item kit.
-                    for (int i = 0; i < 25; i++) inventory.setItem(i, new ItemStack(Material.DIAMOND, 64));
+                    // With a helmet already worn the kit needs 23 storage slots, including the handbook.
+                    for (int i = 0; i < 14; i++) inventory.setItem(i, new ItemStack(Material.DIAMOND, 64));
                     inventory.setHelmet(new ItemStack(Material.IRON_HELMET));
                     inventory.setItemInOffHand(new ItemStack(Material.EMERALD, 7));
                     var fullBefore = copy(inventory.getContents());
@@ -144,7 +148,7 @@ public final class HandbookProbe extends JavaPlugin {
                     later(() -> {
                         equal(fullBefore, inventory.getContents(), "Insufficient room for handbook defers entire kit atomically");
                         check(!actor.getPersistentDataContainer().has(granted) && actor.getPersistentDataContainer().has(pending), "Failed first join retains pending retry");
-                        inventory.setItem(24, null);
+                        inventory.setItem(13, null);
                         kit.join(new org.bukkit.event.player.PlayerJoinEvent(returning(), net.kyori.adventure.text.Component.empty()));
                         later(() -> {
                             check(handbooks() == 1 && actor.getPersistentDataContainer().has(granted), "Pending reconnect grants complete kit after freeing slot");
@@ -173,8 +177,8 @@ public final class HandbookProbe extends JavaPlugin {
         var before = copy(inventory.getContents());
         check(!mando.starterKit().grant(actor), "Existing book/full storage defers kit");
         equal(before, inventory.getContents(), "Failed kit does not refresh existing handbook or overwrite gear");
-        for (int i = 25; i < 36; i++) inventory.setItem(i, null);
-        check(mando.starterKit().grant(actor), "Existing book leaves eleven slots sufficient for kit");
+        for (int i = 15; i < 36; i++) inventory.setItem(i, null);
+        check(mando.starterKit().grant(actor), "Existing book leaves 21 slots sufficient for kit");
         check(handbooks() == 3, "Existing handbook stack reused without duplicates");
         var current = offhand ? inventory.getItemInOffHand() : inventory.getItem(0);
         check(((BookMeta) current.getItemMeta()).getPageCount() == 11, "Existing handbook refreshed to current eleven pages");

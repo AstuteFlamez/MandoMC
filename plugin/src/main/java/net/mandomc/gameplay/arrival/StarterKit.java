@@ -1,7 +1,10 @@
 package net.mandomc.gameplay.arrival;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Set;
+import net.mandomc.gameplay.enchantments.EnchantmentService;
 import net.mandomc.gameplay.items.ItemCatalog;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
@@ -11,12 +14,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /** Grants one complete kit on first join; never grants again after death or reconnect. */
 public final class StarterKit implements Listener {
+    private static final Set<EquipmentSlot> ARMOR_SLOTS = Set.of(
+            EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
     private record Entry(String item, int amount, boolean custom) { }
     private final JavaPlugin plugin;
     private final ItemCatalog catalog;
@@ -68,6 +74,8 @@ public final class StarterKit implements Listener {
         if ((net.mandomc.gameplay.tutorial.TutorialInventory.active(player) || net.mandomc.gameplay.admin.StaffMode.active(player))) return false;
         if (player.getPersistentDataContainer().has(granted)) return false;
         var kit = new ArrayList<ItemStack>();
+        var armor = new EnumMap<EquipmentSlot, ItemStack>(EquipmentSlot.class);
+        var inventory = player.getInventory();
         try {
             for (Entry entry : entries) {
                 var item = entry.custom() ? catalog.create(entry.item())
@@ -75,7 +83,14 @@ public final class StarterKit implements Listener {
                 if (item == null || item.isEmpty()) throw new IllegalStateException("unavailable item " + entry.item());
                 if (entry.amount() > item.getMaxStackSize()) throw new IllegalStateException("amount exceeds stack size for " + entry.item());
                 item.setAmount(entry.amount());
-                kit.add(item);
+                if (entry.item().equals("blue_training_lightsaber")) EnchantmentService.markStarterSaber(item);
+                var slot = item.getType().getEquipmentSlot();
+                if (ARMOR_SLOTS.contains(slot) && item.getAmount() == 1 && inventory.getItem(slot).isEmpty()
+                        && !armor.containsKey(slot)) {
+                    armor.put(slot, item);
+                } else {
+                    kit.add(item);
+                }
             }
             // First joins normally have an empty inventory. Check a copy so no partial kit is ever issued.
             var trial = plugin.getServer().createInventory(null, 36);
@@ -104,7 +119,8 @@ public final class StarterKit implements Listener {
             if (!trial.addItem(kit.stream().map(ItemStack::clone).toArray(ItemStack[]::new)).isEmpty()) {
                 return false;
             }
-            player.getInventory().setStorageContents(trial.getContents());
+            inventory.setStorageContents(trial.getContents());
+            armor.forEach(inventory::setItem);
             if (refreshedOffhand != null) player.getInventory().setItemInOffHand(refreshedOffhand);
             player.getPersistentDataContainer().set(granted, PersistentDataType.BYTE, (byte) 1);
             player.getPersistentDataContainer().remove(pending);
