@@ -27,7 +27,10 @@ public class GuideKnowledgeTest {
         assertTrue(knowledge.verifiedAnswer("what should I do",knowledge.find("what should I do")).orElseThrow().contains("/tutorial"));
         assertTrue(knowledge.verifiedAnswer("how do saber upgrades work",knowledge.find("how do saber upgrades work")).isEmpty());
         var saber=knowledge.find("how to get saber").getFirst();
-        assertEquals("sabers",saber.id());assertTrue(saber.facts().contains("craft one at a Saber Workbench"));assertTrue(saber.facts().contains("Ilum"));
+        assertEquals("sabers", saber.id());
+        assertTrue(saber.facts().contains("blue Training Lightsaber in their starter kit"));
+        assertTrue(saber.facts().contains("Craft stronger sabers at a Saber Workbench"));
+        assertTrue(saber.facts().contains("Ilum"));
         assertTrue(knowledge.find("how do I get a lightsaber").stream().noneMatch(n->n.id().equals("forge")));
         assertEquals("forge",knowledge.find("how do saber upgrades work").getFirst().id());
         assertEquals("item:blue_kyber",knowledge.find("where can I get blue kyber crystals").getFirst().id());

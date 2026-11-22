@@ -30,7 +30,7 @@ public final class StarterKitProbe extends JavaPlugin {
             inventory.clear();
             mando.starterKit().join(new PlayerJoinEvent(player, Component.empty()));
             later(() -> {
-                check(inventory.contains(Material.DIRT, 64) && !inventory.containsAtLeast(new ItemStack(Material.DIRT), 65), "64 dirt");
+                check(inventory.containsAtLeast(new ItemStack(Material.DIRT), 64) && !inventory.containsAtLeast(new ItemStack(Material.DIRT), 65), "64 dirt");
                 check(inventory.containsAtLeast(new ItemStack(Material.GRASS_BLOCK), 16) && !inventory.containsAtLeast(new ItemStack(Material.GRASS_BLOCK), 17), "16 grass");
                 var saplings = Bukkit.getTag(Tag.REGISTRY_ITEMS, NamespacedKey.minecraft("saplings"), Material.class);
                 for (var sapling : saplings.getValues()) {
