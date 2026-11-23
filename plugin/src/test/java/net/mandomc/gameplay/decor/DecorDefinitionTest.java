@@ -18,21 +18,32 @@ public class DecorDefinitionTest {
         assertEquals(8,values.stream().filter(DecorDefinition::npc).count());
         for(var value:values)if(value.npc()){assertTrue(value.dialogue().size()>=3);assertTrue(value.voices().isEmpty());assertEquals(List.of("idle"),value.animations());}
     }
-    @Test public void brownTrioRetainsSavedCenterAndSceneryOnlyContract(){
-        var trio=definitions().stream().filter(d->d.id().startsWith("brown_jawa_")).toList();assertEquals(3,trio.size());
-        for(var d:trio){assertEquals("minecraft:spawnworld",d.world());assertEquals(93,d.y(),0);assertEquals("jawa_brown",d.model());
-            assertEquals(1.5,Math.hypot(d.x()+4.216087537153815,d.z()-33.4909486110643),1e-10);assertTrue(d.voices().isEmpty());assertTrue(d.npc());}
-        for(int i=0;i<3;i++)for(int j=i+1;j<3;j++)assertEquals(Math.sqrt(6.75),Math.hypot(trio.get(i).x()-trio.get(j).x(),trio.get(i).z()-trio.get(j).z()),1e-10);
+    @Test public void capturedCharactersAndShipsUseTheirOwnWorlds() {
+        for (var d : definitions()) {
+            assertEquals(d.npc() ? "minecraft:tatooine_review" : "minecraft:spawnworld", d.world());
+            if (d.id().startsWith("brown_jawa_")) {
+                assertEquals("jawa_brown", d.model());
+                assertEquals(69, d.y(), 0);
+                assertTrue(d.npc());
+            }
+        }
+        var byId = definitions().stream().collect(java.util.stream.Collectors.toMap(DecorDefinition::id, d -> d));
+        var quarren = byId.get("point6_quarren");
+        var twilek = byId.get("point7_twilek");
+        assertEquals(quarren.x(), twilek.x(), 0);
+        assertEquals(quarren.z(), twilek.z(), 0);
+        assertEquals(quarren.yaw(), twilek.yaw(), 0);
+        assertEquals(-2.975476778477544, byId.get("point3_boba_fett").x(), 0);
     }
-    @Test public void forwardOffsetUsesImmutableCaptureOnce(){
-        var yaml=YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(getClass().getResourceAsStream("/decor/placements.yml"),java.nio.charset.StandardCharsets.UTF_8));
-        var data=yaml.getMapList("placements").stream().filter(m->"point3_boba_fett".equals(m.get("id"))).findFirst().orElseThrow();
-        var first=DecorDefinition.read(data);var second=DecorDefinition.read(data);
-        assertEquals(first,second);
-        assertEquals(13.699999988079071-Math.sin(Math.toRadians(92.54987))*.1875,first.x(),1e-12);
-        assertEquals(20.836308565903398+Math.cos(Math.toRadians(92.54987))*.1875,first.z(),1e-12);
-        assertEquals(93,first.y(),0);assertEquals(2.1386168f,first.pitch(),0);
-        assertEquals(13.699999988079071,((Number)((Map<?,?>)data.get("location")).get("x")).doubleValue(),0);
+
+    @Test public void legacyForwardOffsetIsAppliedOnlyOnce() {
+        var row = Map.of("id", "example", "name", "Guard", "type", "guard", "model", "guard",
+                "mode", "stationary_idle", "scale", 1, "forward-offset-pixels", 3,
+                "location", Map.of("world", "minecraft:spawnworld", "x", 10, "y", 93, "z", 8, "yaw", 90, "pitch", 0));
+        var first = DecorDefinition.read(row);
+        assertEquals(first, DecorDefinition.read(row));
+        assertEquals(10 - 3.0 / 16, first.x(), 1e-12);
+        assertEquals(8, first.z(), 1e-12);
     }
     @Test public void nonfiniteOrOutOfContractDataIsRejected(){
         var d=definitions().getFirst();

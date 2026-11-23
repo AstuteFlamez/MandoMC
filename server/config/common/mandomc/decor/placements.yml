@@ -36,19 +36,17 @@ placements:
   animations:
   - dismount
 - id: point3_boba_fett
-  # Baseline capture remains immutable; three model pixels forward along saved yaw.
-  forward-offset-pixels: 3
   name: Boba Fett
   type: boba_fett
   model: boba_fett
   scale: 1
   location:
-    world: minecraft:spawnworld
-    x: 13.699999988079071
-    y: 93.0
-    z: 20.836308565903398
-    yaw: 92.54987
-    pitch: 2.1386168
+    world: minecraft:tatooine_review
+    x: -2.975476778477544
+    y: 69.0
+    z: 25.244927467525834
+    yaw: -168.52399
+    pitch: -5.7000604
   mode: stationary_idle
   animations:
   - idle
@@ -62,12 +60,12 @@ placements:
   model: bossk
   scale: 1
   location:
-    world: minecraft:spawnworld
-    x: 14.37886593560656
-    y: 93.0
-    z: 19.492625355917877
-    yaw: 80.54982
-    pitch: -1.1614023
+    world: minecraft:tatooine_review
+    x: -3.8845166350205775
+    y: 69.0
+    z: 26.748158929259723
+    yaw: -168.81804
+    pitch: -6.3177643
   mode: stationary_idle
   animations:
   - idle
@@ -81,12 +79,12 @@ placements:
   model: gamorrean_guard
   scale: 1
   location:
-    world: minecraft:spawnworld
-    x: -54.76367544627096
-    y: 96.0
-    z: -18.549852054947298
-    yaw: -57.600037
-    pitch: 4.238596
+    world: minecraft:tatooine_review
+    x: 6.751711033303527
+    y: 69.0
+    z: 33.487800658899545
+    yaw: 177.98206
+    pitch: -0.15001537
   mode: stationary_idle
   animations:
   - idle
@@ -100,12 +98,12 @@ placements:
   model: quarren_guard
   scale: 1
   location:
-    world: minecraft:spawnworld
-    x: -14.573530431857867
-    y: 93.0
-    z: 7.47932286486537
-    yaw: -150.60008
-    pitch: -1.7614032
+    world: minecraft:tatooine_review
+    x: 7.691226387623283
+    y: 69.0
+    z: 32.71120515251589
+    yaw: 90.532196
+    pitch: -1.975894e-05
   mode: stationary_idle
   animations:
   - idle
@@ -119,12 +117,12 @@ placements:
   model: twilek_guard
   scale: 1
   location:
-    world: minecraft:spawnworld
-    x: -10.95147900673488
-    y: 93.0
-    z: 9.391972808180382
-    yaw: -154.19997
-    pitch: -0.8614033
+    world: minecraft:tatooine_review
+    x: 7.691226387623283
+    y: 69.0
+    z: 32.71120515251589
+    yaw: 90.532196
+    pitch: -1.975894e-05
   mode: stationary_idle
   animations:
   - idle
@@ -167,12 +165,12 @@ placements:
   model: jawa_brown
   scale: 1
   location:
-    world: minecraft:spawnworld
-    x: -5.403046981270816
-    y: 93.0
-    z: 34.40807852444705
-    yaw: -127.69224500000001
-    pitch: 0
+    world: minecraft:tatooine_review
+    x: -10.269762979497308
+    y: 69.0
+    z: 23.01225737704602
+    yaw: -90.80133
+    pitch: 2.4000113
   mode: stationary_idle
   animations:
   - idle
@@ -187,12 +185,12 @@ placements:
   model: jawa_brown
   scale: 1
   location:
-    world: minecraft:spawnworld
-    x: -4.416865618655401
-    y: 93.0
-    z: 32.00444662250574
-    yaw: -7.692244999999957
-    pitch: 0
+    world: minecraft:tatooine_review
+    x: -8.74784573349142
+    y: 69.0
+    z: 22.977562944256523
+    yaw: 43.298767
+    pitch: -2.8500159
   mode: stationary_idle
   animations:
   - idle
@@ -207,12 +205,12 @@ placements:
   model: jawa_brown
   scale: 1
   location:
-    world: minecraft:spawnworld
-    x: -2.8283500115352265
-    y: 93.0
-    z: 34.0603206862401
-    yaw: 112.30775500000004
-    pitch: 0
+    world: minecraft:tatooine_review
+    x: -9.714998338273855
+    y: 69.0
+    z: 25.127274520240462
+    yaw: 159.09851
+    pitch: 5.850005
   mode: stationary_idle
   animations:
   - idle
