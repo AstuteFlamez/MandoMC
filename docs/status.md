@@ -1,10 +1,16 @@
 # Resume here
 
+## Captured Tatooine NPCs (2026-11-22)
+
+The Tatooine placements cover the Rebel Pilot, Boba Fett, Bossk, the Gamorrean Guard, Quarren, Twi’lek, the three dialogue Jawas, C0-M5 and M4-ND. Each uses its captured position and facing. Quarren and Twi’lek share one spot. C0-M5 supports a fixed anchor and retains relative placement for older configurations.
+
+The dev-copy Paper check found exactly one of each captured NPC at its saved coordinates and checked the active owners. It also found the seven shop Jawas and three ambient massiffs on Batuu. All 403 Java tests passed. Next, playtest the overlapping dialogue NPCs and the two droids on Tatooine.
+
 ## First-join starter kit and Tatooine placement (2026-11-22)
 
 New players receive 64 Dewback Legs, 64 dirt, 16 grass blocks, all 11 items in the vanilla saplings tag, and a blue Training Lightsaber with four base melee damage. Desert Robes equip on delivery. Existing armor stays equipped and the corresponding robe goes into storage. The once-only marker and full-inventory retry still apply.
 
-The development build passed 403 Java tests and 30 native Paper checks. The latter exercised first-join delivery, the catalog food and saplings, armor slots, post-refresh saber damage, occupied slots and atomic retries. The Rebel Pilot and Boba Fett are at their captured Tatooine positions in the local development world. Next, capture Bossk's location.
+The development build passed 403 Java tests and 30 native Paper checks. The latter exercised first-join delivery, the catalog food and saplings, armor slots, post-refresh saber damage, occupied slots and atomic retries. The Rebel Pilot and Boba Fett are at their captured Tatooine positions in the local development world. The remaining captures are recorded above.
 
 ## Full Rhydonium barrel texture (2026-11-21)
 

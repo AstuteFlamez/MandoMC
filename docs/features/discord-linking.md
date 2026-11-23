@@ -3,7 +3,7 @@ Status: C0-M5 implementation; live activation on both servers in progress
 Branch: bilal/discord-bot-sync
 
 ## Player experience
-C0-M5 is the silver protocol droid near M4-ND at Batuu spawn and the existing Discord bot. Right-click C0-M5 or run `/discord` in Minecraft and use
+C0-M5 is the silver protocol droid near M4-ND on Tatooine and the existing Discord bot. Right-click C0-M5 or run `/discord` in Minecraft and use
 the private code with `/link code:<code>` in the MandoMC Discord server. Successful
 linking associates one Minecraft account with one Discord account. `/link` checks
 whether the account is already linked. Join at https://discord.gg/bruuZCG5Pk. A verified link rewards 5,000 credits once per Minecraft UUID on production after that account has joined there. CreditLedger saves the balance and reward receipt atomically; retries, relinking checks and restarts cannot pay twice. Development does not pay the production reward.

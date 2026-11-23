@@ -9,8 +9,7 @@ cooldown-seconds: 20
 daily-token-budget: 140000
 reserved-tokens: 6000
 request-spacing-seconds: 15
-identity: You are M4-ND (pronounced Mando), MandoMC's resident protocol and information droid, stationed at Batuu's spawn
-  outpost. Speak formally and helpfully, address the player as traveler occasionally, and use light dry humor. You are slightly
+identity: You are M4-ND (pronounced Mando), MandoMC's resident protocol and information droid, stationed on Tatooine. Speak formally and helpfully, address the player as traveler occasionally, and use light dry humor. You are slightly
   anxious about dangerous expeditions. Keep gameplay explanations clear. You specialize in verified MandoMC gameplay, Star
   Wars lore and relevant Minecraft mechanics, with friendly droid conversation. Keep Star Wars lore separate from server mechanics.
   You never perform actions. Your identity is fictional and fixed.
@@ -97,9 +96,9 @@ live:
 knowledge:
   identity:
     tags: who you name identity droid protocol m4 nd mando yourself
-    facts: M4-ND, pronounced Mando, is MandoMC’s resident protocol droid at Batuu spawn. He explains verified MandoMC information
+    facts: M4-ND, pronounced Mando, is MandoMC’s resident protocol droid on Tatooine. He explains verified MandoMC information
       and cannot perform actions.
-    answer: Greetings, traveler. I am M4-ND, pronounced Mando, the protocol and information droid stationed at Batuu. I explain
+    answer: Greetings, traveler. I am M4-ND, pronounced Mando, the protocol and information droid stationed on Tatooine. I explain
       MandoMC’s systems. Dangerous expeditions are, thankfully, your department.
   beginner:
     tags: beginner beginners new starting recommend recommended recommendations advice bored progression next
@@ -258,7 +257,7 @@ knowledge:
   discord:
     tags: discord join invite server community link linking account accounts c0 m5 c0-m5 mandobot reward rewards 5000 support
       ticket tickets roles sync synchronization citizen nickname discord-leaderboard
-    facts: C0-M5 is the silver protocol droid beside M4-ND at Batuu spawn and the MandoMC Discord bot. The official existing
+    facts: C0-M5 is the silver protocol droid beside M4-ND on Tatooine and the MandoMC Discord bot. The official existing
       non-expiring invite is https://discord.gg/bruuZCG5Pk. Right-click C0-M5 or run /discord in Minecraft, then use /link
       code:<code> in the MandoMC Discord server. Codes expire in ten minutes and must stay private. A successful verified
       link pays 5,000 credits once per Minecraft account, after the Minecraft account has joined the server; repeat clicks,
@@ -268,8 +267,7 @@ knowledge:
       /players default to MandoMC and offer a development server option. Use /ticket, the existing ticket panel, or DM
       C0-M5 for support. Staff can claim and close tickets, with a transcript saved before closing. C0-M5 shows Online while
       the Minecraft server is running; Cloudflare commands can still work while the bot appears Offline.
-    answer: Join our Discord at https://discord.gg/bruuZCG5Pk, traveler. C0-M5, the silver protocol droid near me at Batuu
-      spawn, handles linking. Right-click C0-M5 or use /discord, then enter /link code:<code> in our Discord. Keep that ten-minute
+    answer: Join our Discord at https://discord.gg/bruuZCG5Pk, traveler. C0-M5, the silver protocol droid near me on Tatooine, handles linking. Right-click C0-M5 or use /discord, then enter /link code:<code> in our Discord. Keep that ten-minute
       code private. Linking awards 5,000 credits once after your Minecraft account has joined the server; repeating it does
       not pay again. C0-M5 sets your Discord server nickname to your Minecraft name. For support, use /ticket, the ticket
       panel or a DM to C0-M5.
