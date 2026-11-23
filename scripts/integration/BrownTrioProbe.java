@@ -74,8 +74,8 @@ public final class BrownTrioProbe extends JavaPlugin {
     private void capture(Player p){for(String id:bodies.keySet())heads.put(id,rotation(id,p));}
     private void verifyLook(Player p)throws Exception{
         for(String id:bodies.keySet()){
-            check(decor.lookTarget(id)==null,"Jawa keeps its conversation facing beside a player");
-            check(Math.abs(heads.get(id).dot(rotation(id,p)))>.99,"Visible brown head keeps facing the group as the observer moves");
+            check(p.getUniqueId().equals(decor.lookTarget(id)),"Jawa tracks the nearby player");
+            check(Math.abs(heads.get(id).dot(rotation(id,p)))<.94,"Visible brown head turns as the observer moves");
         }
         check(decor.bases().size()==12,"Twelve scenery anchors after model recovery");
         var at=decor.bases().get(bodies.keySet().iterator().next()).getLocation();
