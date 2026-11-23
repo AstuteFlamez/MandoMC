@@ -6,7 +6,7 @@ Bossk, the Gamorrean Guard, the Twi’lek and M4-ND use their recaptured positio
 
 M4-ND and C0-M5 face each other by default, as do Bossk and Boba Fett. All four turn toward nearby players and return to their idle directions when the players leave. The Rebel Pilot, Boba Fett and C0-M5 retain their captured Tatooine positions. C0-M5 also supports relative placement for older configurations.
 
-The prior placement rehearsal and dev restart found exactly one of each of the eleven NPCs on Tatooine and all seven shop Jawas and three massiffs on Batuu. All 404 Java tests and 73 native Jawa checks passed, including visible head orientation as an observer moved, dialogue on all three models and model recovery. Next, check the closer Jawa group and watch each pair return to its partner after walking away.
+A Paper rehearsal with a moving player verified that all three Jawa heads follow the player and that both pairs turn toward the player and return to their partner. All 405 Java tests, 102 tooling tests, and 73 native Jawa checks passed. The placement check found all eleven selected NPCs on Tatooine and the seven shop Jawas and three massiffs on Batuu. Next, playtest the two-block Jawa spacing on dev.
 
 ## First-join starter kit and Tatooine placement (2026-11-22)
 
