@@ -105,7 +105,7 @@ public final class DecorService implements Listener,AutoCloseable {
             if(!base.getWorld().equals(at.getWorld())||base.getLocation().distanceSquared(at)>.000001){
                 internalTeleports.add(base.getUniqueId());try{base.teleport(at);}finally{internalTeleports.remove(base.getUniqueId());}
             }
-            if(definition.npc()){
+            if(definition.tracksPlayers()){
                 var candidates=at.getWorld().getPlayers().stream()
                         .filter(p->p.getGameMode()!=GameMode.SPECTATOR&&p.isOnline()&&!p.isDead())
                         .filter(p->p.getMetadata("vanished").stream().noneMatch(v->v.asBoolean()))

@@ -61,11 +61,11 @@ placements:
   scale: 1
   location:
     world: minecraft:tatooine_review
-    x: -3.8845166350205775
+    x: -1.3781529461352295
     y: 69.0
-    z: 26.748158929259723
-    yaw: -168.81804
-    pitch: -6.3177643
+    z: 25.2889864725289
+    yaw: -174.50409
+    pitch: -6.1500144
   mode: stationary_idle
   animations:
   - idle
@@ -80,11 +80,11 @@ placements:
   scale: 1
   location:
     world: minecraft:tatooine_review
-    x: 6.751711033303527
+    x: 6.714235977306154
     y: 69.0
-    z: 33.487800658899545
-    yaw: 177.98206
-    pitch: -0.15001537
+    z: 33.93112666778392
+    yaw: -141.05318
+    pitch: -1.8000135
   mode: stationary_idle
   animations:
   - idle
@@ -118,11 +118,11 @@ placements:
   scale: 1
   location:
     world: minecraft:tatooine_review
-    x: 7.691226387623283
+    x: 6.664946982406175
     y: 69.0
-    z: 32.71120515251589
-    yaw: 90.532196
-    pitch: -1.975894e-05
+    z: 31.66066072249994
+    yaw: -44.15335
+    pitch: -0.9000122
   mode: stationary_idle
   animations:
   - idle
@@ -166,12 +166,12 @@ placements:
   scale: 1
   location:
     world: minecraft:tatooine_review
-    x: -10.269762979497308
+    x: -10.777536
     y: 69.0
-    z: 23.01225737704602
-    yaw: -90.80133
-    pitch: 2.4000113
-  mode: stationary_idle
+    z: 23.012878
+    yaw: -60
+    pitch: 0
+  mode: conversation
   animations:
   - idle
   dialogue:
@@ -186,12 +186,12 @@ placements:
   scale: 1
   location:
     world: minecraft:tatooine_review
-    x: -8.74784573349142
+    x: -8.377536
     y: 69.0
-    z: 22.977562944256523
-    yaw: 43.298767
-    pitch: -2.8500159
-  mode: stationary_idle
+    z: 23.012878
+    yaw: 60
+    pitch: 0
+  mode: conversation
   animations:
   - idle
   dialogue:
@@ -206,12 +206,12 @@ placements:
   scale: 1
   location:
     world: minecraft:tatooine_review
-    x: -9.714998338273855
+    x: -9.577536
     y: 69.0
-    z: 25.127274520240462
-    yaw: 159.09851
-    pitch: 5.850005
-  mode: stationary_idle
+    z: 25.091339
+    yaw: 180
+    pitch: 0
+  mode: conversation
   animations:
   - idle
   dialogue:

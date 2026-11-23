@@ -30,10 +30,28 @@ public class DecorDefinitionTest {
         var byId = definitions().stream().collect(java.util.stream.Collectors.toMap(DecorDefinition::id, d -> d));
         var quarren = byId.get("point6_quarren");
         var twilek = byId.get("point7_twilek");
-        assertEquals(quarren.x(), twilek.x(), 0);
-        assertEquals(quarren.z(), twilek.z(), 0);
-        assertEquals(quarren.yaw(), twilek.yaw(), 0);
+        assertTrue(Math.hypot(quarren.x() - twilek.x(), quarren.z() - twilek.z()) > 1);
+        assertEquals(6.664946982406175, twilek.x(), 0);
+        assertEquals(-44.15335f, twilek.yaw(), 0);
         assertEquals(-2.975476778477544, byId.get("point3_boba_fett").x(), 0);
+    }
+
+    @Test public void jawaConversationFacesInwardAtEachCorner() {
+        var all = definitions();
+        var jawas = all.stream().filter(d -> d.model().equals("jawa_brown")).toList();
+        assertEquals(3, jawas.size());
+        double cx = jawas.stream().mapToDouble(DecorDefinition::x).average().orElseThrow();
+        double cz = jawas.stream().mapToDouble(DecorDefinition::z).average().orElseThrow();
+        for (int i = 0; i < jawas.size(); i++) {
+            var jawa = jawas.get(i);
+            var next = jawas.get((i + 1) % jawas.size());
+            assertEquals(2.4, Math.hypot(jawa.x() - next.x(), jawa.z() - next.z()), 0.00001);
+            double inward = Math.toDegrees(Math.atan2(jawa.x() - cx, cz - jawa.z()));
+            assertEquals(0, Math.IEEEremainder(inward - jawa.yaw(), 360), 0.001);
+            assertEquals(0, jawa.pitch(), 0);
+            assertFalse(jawa.tracksPlayers());
+        }
+        for (var d : all) if (!jawas.contains(d)) assertEquals(d.npc(), d.tracksPlayers());
     }
 
     @Test public void legacyForwardOffsetIsAppliedOnlyOnce() {

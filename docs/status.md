@@ -1,10 +1,12 @@
 # Resume here
 
-## Captured Tatooine NPCs (2026-11-22)
+## Tatooine NPC placements (2026-11-22)
 
-The Tatooine placements cover the Rebel Pilot, Boba Fett, Bossk, the Gamorrean Guard, Quarren, Twi’lek, the three dialogue Jawas, C0-M5 and M4-ND. Each uses its captured position and facing. Quarren and Twi’lek share one spot. C0-M5 supports a fixed anchor and retains relative placement for older configurations.
+Bossk, the Gamorrean Guard, the Twi’lek and M4-ND use their recaptured positions and facings. Quarren and the Twi’lek now stand apart. The three brown dialogue Jawas stand 2.4 blocks apart in a triangle around the center of their previous Tatooine positions. Their heads and bodies face inward as players pass. Right-clicking each Jawa still gives its own dialogue.
 
-The dev-copy Paper check found exactly one of each captured NPC at its saved coordinates and checked the active owners. It also found the seven shop Jawas and three ambient massiffs on Batuu. All 403 Java tests passed. Next, playtest the overlapping dialogue NPCs and the two droids on Tatooine.
+The Rebel Pilot, Boba Fett and C0-M5 retain their captured Tatooine anchors. C0-M5 also supports relative placement for older configurations.
+
+Both the Paper rehearsal and the live dev restart found exactly one of each of the eleven NPCs on Tatooine and all seven shop Jawas and three massiffs on Batuu. All 404 Java tests and 73 native Jawa checks passed, including visible head orientation as an observer moved, dialogue on all three models and model recovery. Next, walk around the trio on dev to judge the spacing in game.
 
 ## First-join starter kit and Tatooine placement (2026-11-22)
 
