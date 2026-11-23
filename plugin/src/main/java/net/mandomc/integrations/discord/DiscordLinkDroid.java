@@ -4,6 +4,7 @@ import java.util.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.mandomc.bootstrap.MandoPlugin;
+import net.mandomc.gameplay.guide.DroidLook;
 import net.mandomc.gameplay.travel.SavedLocation;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -92,12 +93,7 @@ public final class DiscordLinkDroid implements Listener, AutoCloseable {
             });
             plugin.getLogger().info("C0-M5 linking droid ready in " + anchor.getWorld().getKey() + ".");
         }
-        var nearest = body.getWorld().getPlayers().stream().filter(p -> !p.isDead() && p.getGameMode() != GameMode.SPECTATOR
-                && p.getLocation().distanceSquared(anchor) < 25).min(Comparator.comparingDouble(p -> p.getLocation().distanceSquared(anchor)));
-        nearest.ifPresent(player -> {
-            var look = anchor.clone().setDirection(player.getEyeLocation().toVector().subtract(body.getEyeLocation().toVector()));
-            body.setRotation(look.getYaw(), look.getPitch()); body.setBodyYaw(look.getYaw());
-        });
+        DroidLook.update(body, anchor);
     }
     @EventHandler(priority = EventPriority.HIGHEST) public void interact(PlayerInteractEntityEvent event) {
         if (body == null || !event.getRightClicked().getUniqueId().equals(body.getUniqueId())) return;

@@ -36,7 +36,7 @@ public class DecorDefinitionTest {
         assertEquals(-2.975476778477544, byId.get("point3_boba_fett").x(), 0);
     }
 
-    @Test public void jawaConversationFacesInwardAtEachCorner() {
+    @Test public void jawasTrackPlayersAndRestFacingInward() {
         var all = definitions();
         var jawas = all.stream().filter(d -> d.model().equals("jawa_brown")).toList();
         assertEquals(3, jawas.size());
@@ -45,13 +45,24 @@ public class DecorDefinitionTest {
         for (int i = 0; i < jawas.size(); i++) {
             var jawa = jawas.get(i);
             var next = jawas.get((i + 1) % jawas.size());
-            assertEquals(2.4, Math.hypot(jawa.x() - next.x(), jawa.z() - next.z()), 0.00001);
+            assertEquals(2.0, Math.hypot(jawa.x() - next.x(), jawa.z() - next.z()), 0.00001);
             double inward = Math.toDegrees(Math.atan2(jawa.x() - cx, cz - jawa.z()));
             assertEquals(0, Math.IEEEremainder(inward - jawa.yaw(), 360), 0.001);
             assertEquals(0, jawa.pitch(), 0);
-            assertFalse(jawa.tracksPlayers());
+            assertTrue(jawa.tracksPlayers());
         }
         for (var d : all) if (!jawas.contains(d)) assertEquals(d.npc(), d.tracksPlayers());
+    }
+
+    @Test public void bountyHuntersRestFacingEachOther() {
+        var all = definitions();
+        var boba = all.stream().filter(d -> d.type().equals("boba_fett")).findFirst().orElseThrow();
+        var bossk = all.stream().filter(d -> d.type().equals("bossk")).findFirst().orElseThrow();
+        double towardsBossk = Math.toDegrees(Math.atan2(boba.x() - bossk.x(), bossk.z() - boba.z()));
+        assertEquals(0, Math.IEEEremainder(boba.yaw() - towardsBossk, 360), 0.001);
+        assertEquals(0, Math.IEEEremainder(bossk.yaw() - towardsBossk - 180, 360), 0.001);
+        assertEquals(0, boba.pitch(), 0);
+        assertEquals(0, bossk.pitch(), 0);
     }
 
     @Test public void legacyForwardOffsetIsAppliedOnlyOnce() {

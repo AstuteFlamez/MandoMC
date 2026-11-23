@@ -2,11 +2,11 @@
 
 ## Tatooine NPC placements (2026-11-22)
 
-Bossk, the Gamorrean Guard, the Twi’lek and M4-ND use their recaptured positions and facings. Quarren and the Twi’lek now stand apart. The three brown dialogue Jawas stand 2.4 blocks apart in a triangle around the center of their previous Tatooine positions. Their heads and bodies face inward as players pass. Right-clicking each Jawa still gives its own dialogue.
+Bossk, the Gamorrean Guard, the Twi’lek and M4-ND use their recaptured positions and facings. Quarren and the Twi’lek now stand apart. The three brown dialogue Jawas stand two blocks apart in a triangle around the same center. They face inward at rest and turn toward nearby players. Right-clicking each Jawa still gives its own dialogue.
 
-The Rebel Pilot, Boba Fett and C0-M5 retain their captured Tatooine anchors. C0-M5 also supports relative placement for older configurations.
+M4-ND and C0-M5 face each other by default, as do Bossk and Boba Fett. All four turn toward nearby players and return to their idle directions when the players leave. The Rebel Pilot, Boba Fett and C0-M5 retain their captured Tatooine positions. C0-M5 also supports relative placement for older configurations.
 
-Both the Paper rehearsal and the live dev restart found exactly one of each of the eleven NPCs on Tatooine and all seven shop Jawas and three massiffs on Batuu. All 404 Java tests and 73 native Jawa checks passed, including visible head orientation as an observer moved, dialogue on all three models and model recovery. Next, walk around the trio on dev to judge the spacing in game.
+The prior placement rehearsal and dev restart found exactly one of each of the eleven NPCs on Tatooine and all seven shop Jawas and three massiffs on Batuu. All 404 Java tests and 73 native Jawa checks passed, including visible head orientation as an observer moved, dialogue on all three models and model recovery. Next, check the closer Jawa group and watch each pair return to its partner after walking away.
 
 ## First-join starter kit and Tatooine placement (2026-11-22)
 

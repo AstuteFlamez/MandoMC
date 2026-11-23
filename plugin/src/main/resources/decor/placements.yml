@@ -45,8 +45,8 @@ placements:
     x: -2.975476778477544
     y: 69.0
     z: 25.244927467525834
-    yaw: -168.52399
-    pitch: -5.7000604
+    yaw: -88.42001
+    pitch: 0
   mode: stationary_idle
   animations:
   - idle
@@ -64,8 +64,8 @@ placements:
     x: -1.3781529461352295
     y: 69.0
     z: 25.2889864725289
-    yaw: -174.50409
-    pitch: -6.1500144
+    yaw: 91.57999
+    pitch: 0
   mode: stationary_idle
   animations:
   - idle
@@ -166,12 +166,12 @@ placements:
   scale: 1
   location:
     world: minecraft:tatooine_review
-    x: -10.777536
+    x: -10.577536
     y: 69.0
-    z: 23.012878
+    z: 23.128348
     yaw: -60
     pitch: 0
-  mode: conversation
+  mode: stationary_idle
   animations:
   - idle
   dialogue:
@@ -186,12 +186,12 @@ placements:
   scale: 1
   location:
     world: minecraft:tatooine_review
-    x: -8.377536
+    x: -8.577536
     y: 69.0
-    z: 23.012878
+    z: 23.128348
     yaw: 60
     pitch: 0
-  mode: conversation
+  mode: stationary_idle
   animations:
   - idle
   dialogue:
@@ -208,10 +208,10 @@ placements:
     world: minecraft:tatooine_review
     x: -9.577536
     y: 69.0
-    z: 25.091339
+    z: 24.860399
     yaw: 180
     pitch: 0
-  mode: conversation
+  mode: stationary_idle
   animations:
   - idle
   dialogue:
