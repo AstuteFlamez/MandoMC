@@ -38,7 +38,17 @@ One Electrum Dust now smelts into one Electrum Ingot in a normal furnace.
 The regular and deepslate Electrum Ore recipes still smelt intact ore into
 ingots. The recipe guide prefers the dust recipe, and M4-ND covers both paths.
 
-Next, verify native furnace behavior and roll out the checked build.
+Development ran `b24c112964d0` with the verified Electrum pack. The native
+Paper checks covered furnace output and consumption, intact ore smelting, and
+ordinary lapis rejection.
+
+PR #84 promoted the same source tree to production as `ce3c94650998`. After the
+in-game warning and a clean stop, the stopped-world migration applied and read
+back all 20,528 ore replacements, preserving 3,354 frozen originals and retaining
+backups. Startup verification covered the 146 managed paths, the matching
+Electrum pack, and the exact 410-source M4-ND knowledge bundle. Representative
+acquisition and Fortune answers passed. Next, check the block appearance in a
+Minecraft client during normal play.
 
 ## Electrum storage textures (2026-11-18)
 
@@ -55,16 +65,8 @@ hash-verified published pack. PR #80 merged the checked source into dev.
 PR #81 merged the identical source tree into main as `a8668c59d4e8`.
 Production CI, pack publication and upload passed. Independent readback verified
 all 146 managed paths, the exact 410-source M4-ND bundle and the anonymous pack
-download. The production receipt shows the new JAR queued for activation.
-PebbleHost currently requires panel sign-in.
-
-The private terrain rehearsal compared 217,939,968 block states, preserved 3,354
-frozen originals and verified 20,528 intended ore replacements. It used a live
-download for planning. The full client visual check and production activation
-are pending.
-
-Next, once signed in to PebbleHost, stop after the in-game warning, apply the
-ore migration from a fresh stopped copy, start, and verify the active release.
+download. The later Electrum Dust smelting release above superseded this
+queued build and activated the pack using a fresh, stopped production snapshot.
 
 ## Unified Electrum circuitry (2026-11-18)
 
@@ -171,6 +173,18 @@ native spawn verification, then roll out the checked build to dev and production
 through the normal promotion, backup and restart workflow.
 
 
+## C0-M5 rollout verified on development and production (2026-11-18)
+
+PRs #77 and #79 integrated the Discord linking updates into dev, and PR #78
+promoted them as `30e633c0678b`. A checked restart activated the exact production
+build and its 405-source M4-ND knowledge bundle. Development ran `4120bec0f04c`
+after a backed-up, scoped deployment. Both servers acknowledged a real account
+link, and production verified one 5,000-credit reward. The production Gateway
+reported ready and online. Copyable one-use codes and numbered ticket channels
+were verified. Next, client-playtest linking and copy actions alongside M4-ND's
+Discord help. Follow the shared-server warning in the
+[production runbook](production-workflow.md) before any restart.
+
 ## Cloudflare account connected in browser; deployment authorization pending (2026-11-18)
 
 Verified the owner is signed into the intended MandoMC Cloudflare account in the
@@ -256,9 +270,23 @@ or webhooks were changed. Live activation needs the owner's Cloudflare account,
 Discord app credentials and approved guild/role/channel IDs. Next action: configure
 the Worker and verify one non-staff rank mapping with the existing Discord application.
 
-## Workbench recipe discovery verified; combined production promotion in progress (2026-11-17)
+## Workbench recipe discovery and production coal migration verified (2026-11-17)
 
-The owner requested keeping the existing five-Durasteel/two-Agrinium/Circuit-Board/Smithing-Table recipe, surfacing it in `/recipes` and promoting all completed saber/spawner/KOTH/Jabba/cave updates to production. PR #73 is merged into dev and includes the latest single-creature stacked-spawner timing and all previous saber fixes; PR #74 is consequently merged too. The Workbench now appears under Lightsabers as well as Tools, with exact crafting-table acquisition guidance. The isolated Paper suite passes 2,781 assertions, including native recipe matching without injecting a result, actual result pickup, exact ingredient consumption and browsing the Lightsabers category. The full Java build passes. Production receipt/drift checks and the separate cave migration are being prepared; production restart remains manual. Next action: deploy the recipe follow-up to dev, merge the checked release through dev/main, and stage the verified production files and offline cave migration.
+The Workbench recipe keeps five Durasteel, two Agrinium, one Circuit Board and
+one Smithing Table. It appears under Lightsabers and Tools in `/recipes`, and
+`/recipes saber_workbench` opens it directly. Native checks verified ingredient
+consumption and output pickup at a regular crafting table. PRs #73–75 integrated
+the combined release into dev, and PR #76 promoted it to `main` as `14935f2`.
+The production upload verified 141 managed files and the matching pack and
+404-source knowledge bundle.
+
+A fresh stopped production snapshot passed the terrain audit over 217,055,232
+block states in 2,208 chunks. The separate migration added 33,652 coal blocks
+across Hoth, Mandalore, Naboo and Tatooine. All 16 region files and the restoration
+overlay were installed and read back, with source-region backups retained.
+The audit preserved 3,301 frozen originals and verified claims and territory
+hashes. The November 17 handoff recorded the files ready for the owner's
+restart.
 
 ## Single-mob spawner speed deployed to development (2026-11-17)
 

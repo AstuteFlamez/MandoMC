@@ -19,6 +19,9 @@ resource pack publishes before upload. The production environment accepts `main`
 and pull requests cannot access its secret. The workflow sends no power or
 reload commands. Click **Restart** in PebbleHost to activate an uploaded build.
 
+Before restarting either shared server, broadcast an in-game 30-second warning
+and wait the full 30 seconds before stopping or restarting the server.
+
 ## Work on your computer
 
 Use the `production-integration` checkout containing this document as the new clean
