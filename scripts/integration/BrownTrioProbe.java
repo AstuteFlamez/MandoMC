@@ -25,7 +25,7 @@ public final class BrownTrioProbe extends JavaPlugin {
         for(var d:decor.definitions())if(d.id().startsWith("brown_jawa_")){
             var active=decor.model(d.id()).active();check(active.getBlueprint().getName().equals("jawa_brown"),"Original brown rig, not gray buyer model");
             var head=active.getBone("head").orElseThrow();check(!head.getImmutableBoneBehaviors().get(com.ticxo.modelengine.api.model.bone.BoneBehaviorTypes.HEAD).isHidden()&&head.getBoneBehavior(com.ticxo.modelengine.api.model.bone.BoneBehaviorTypes.HEAD).orElseThrow().isLocal(),"Real local visible-head behavior");
-            var at=d.location();check(at.getWorld().getBlockAt(at.getBlockX(),92,at.getBlockZ()).getType().isSolid()&&at.getBlock().isEmpty()&&at.clone().add(0,1,0).getBlock().isEmpty(),"Actual standing floor and full body clearance");
+            var at=d.location();check(at.clone().subtract(0,1,0).getBlock().getType().isSolid()&&at.getBlock().isEmpty()&&at.clone().add(0,1,0).getBlock().isEmpty(),"Actual standing floor and full body clearance");
         }
         later(10,this::click);
     }
@@ -73,7 +73,10 @@ public final class BrownTrioProbe extends JavaPlugin {
     }
     private void capture(Player p){for(String id:bodies.keySet())heads.put(id,rotation(id,p));}
     private void verifyLook(Player p)throws Exception{
-        for(String id:bodies.keySet())check(Math.abs(heads.get(id).dot(rotation(id,p)))<.94,"Visible brown head/body turns toward moved observer");
+        for(String id:bodies.keySet()){
+            check(p.getUniqueId().equals(decor.lookTarget(id)),"Jawa tracks the nearby player");
+            check(Math.abs(heads.get(id).dot(rotation(id,p)))<.94,"Visible brown head turns as the observer moves");
+        }
         check(decor.bases().size()==12,"Twelve scenery anchors after model recovery");
         var at=decor.bases().get(bodies.keySet().iterator().next()).getLocation();
         var territory=Bukkit.getServicesManager().load(net.mandomc.gameplay.territory.TerritoryService.class);

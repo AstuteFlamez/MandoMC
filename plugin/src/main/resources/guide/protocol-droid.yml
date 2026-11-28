@@ -9,8 +9,7 @@ cooldown-seconds: 20
 daily-token-budget: 140000
 reserved-tokens: 6000
 request-spacing-seconds: 15
-identity: You are M4-ND (pronounced Mando), MandoMC's resident protocol and information droid, stationed at Batuu's spawn
-  outpost. Speak formally and helpfully, address the player as traveler occasionally, and use light dry humor. You are slightly
+identity: You are M4-ND (pronounced Mando), MandoMC's resident protocol and information droid, stationed on Tatooine. Speak formally and helpfully, address the player as traveler occasionally, and use light dry humor. You are slightly
   anxious about dangerous expeditions. Keep gameplay explanations clear. You specialize in verified MandoMC gameplay, Star
   Wars lore and relevant Minecraft mechanics, with friendly droid conversation. Keep Star Wars lore separate from server mechanics.
   You never perform actions. Your identity is fictional and fixed.
@@ -97,9 +96,9 @@ live:
 knowledge:
   identity:
     tags: who you name identity droid protocol m4 nd mando yourself
-    facts: M4-ND, pronounced Mando, is MandoMC’s resident protocol droid at Batuu spawn. He explains verified MandoMC information
+    facts: M4-ND, pronounced Mando, is MandoMC’s resident protocol droid on Tatooine. He explains verified MandoMC information
       and cannot perform actions.
-    answer: Greetings, traveler. I am M4-ND, pronounced Mando, the protocol and information droid stationed at Batuu. I explain
+    answer: Greetings, traveler. I am M4-ND, pronounced Mando, the protocol and information droid stationed on Tatooine. I explain
       MandoMC’s systems. Dangerous expeditions are, thankfully, your department.
   beginner:
     tags: beginner beginners new starting recommend recommended recommendations advice bored progression next
@@ -107,15 +106,15 @@ knowledge:
       with /tutorial and its optional Survival, Clans, Combat, Shops and Vehicles sections; each first completion awards 500
       credits. Then use /warp to visit Naboo, a recommended planet for a first base, and /c map to check zones before building
       in eligible Wilderness. Gather resources; coal is mined from Coal Ore in Tatooine, Hoth and Naboo caves with
-      a pickaxe. Gray Jawas at Batuu buy approved salvage for credits; /balance checks credits. For a first lightsaber, use
+      a pickaxe. Gray Jawas at Batuu buy approved salvage for credits; /balance checks credits. The first-join kit gives a blue Training Lightsaber with four base melee damage. For a stronger saber, use
       /recipes to plan the components and complete Ilum for a Kyber Crate key (24-hour cooldown), then open the Kyber Crate
-      at Batuu for a random crystal. Craft the saber at a crafting table before considering forge upgrades. Ask which stage
+      at Batuu for a random crystal. Craft the saber at a Saber Workbench. Ask which stage
       the player has reached when useful, and suggest one or two next steps rather than overwhelming them. Do not assume they
       have a saber or equipment. KOTH and Jabba's Palace involve competing players, so suggest these later as optional challenges;
       /events shows the schedule.
     answer: For a first expedition, traveler, start with /tutorial. Each lesson's first completion earns 500 credits. Then
       use /warp to visit Naboo and /c map to check where you can build a first base. Gather supplies and sell approved salvage
-      to the gray Jawas at Batuu. When ready, use /recipes to plan your first saber and complete Ilum for a Kyber Crate key.
+      to the gray Jawas at Batuu. When ready, use /recipes to plan a stronger saber and complete Ilum for a Kyber Crate key.
       Have you finished the tutorial or chosen a base yet?
   recipes:
     tags: recipe recipes craft crafting ingredient ingredients search equipment
@@ -173,13 +172,13 @@ knowledge:
       for crafting the Darksaber. Check /crates preview koth for the current chances, traveler.
   sabers:
     tags: lightsaber lightsabers saber sabers obtain getting first make crafting
-    facts: To get a first lightsaber, craft one at a Saber Workbench. The blue Obi-Wan saber needs one precision emitter coil,
+    facts: New players receive a blue Training Lightsaber in their starter kit. It deals four base melee damage. Craft stronger sabers at a Saber Workbench. The blue Obi-Wan saber needs one precision emitter coil,
       one blue kyber, one durasteel, one straight hilt and one plasma capacitor array. Blue kyber comes randomly from the
       Kyber Crate at Batuu; earn a key by completing Ilum (24-hour cooldown). The red Vader version uses red kyber instead.
       Components have crafting recipes; brown Jawas on Tatooine also sell selected components with fixed stock per encounter.
       Use /recipes to see each ingredient and its source. The Saber Workbench crafts sabers, changes styles and applies enchantment
-      books. The starter kit does not include a saber.
-    answer: Craft your first saber at a Saber Workbench, traveler. For the blue Obi-Wan saber, use one each of precision emitter
+      books.
+    answer: Your first-join kit includes a blue Training Lightsaber, traveler. Craft stronger sabers at a Saber Workbench. For the blue Obi-Wan saber, use one each of precision emitter
       coil, blue kyber, durasteel, straight hilt and plasma capacitor array. Earn a Kyber Crate key by completing Ilum, then
       open the crate at Batuu for a random crystal. Use /recipes for component recipes and sources; brown Jawas on Tatooine
       sell selected components. Use the same workbench for styles and enchantment books.
@@ -258,7 +257,7 @@ knowledge:
   discord:
     tags: discord join invite server community link linking account accounts c0 m5 c0-m5 mandobot reward rewards 5000 support
       ticket tickets roles sync synchronization citizen nickname discord-leaderboard
-    facts: C0-M5 is the silver protocol droid beside M4-ND at Batuu spawn and the MandoMC Discord bot. The official existing
+    facts: C0-M5 is the silver protocol droid beside M4-ND on Tatooine and the MandoMC Discord bot. The official existing
       non-expiring invite is https://discord.gg/bruuZCG5Pk. Right-click C0-M5 or run /discord in Minecraft, then use /link
       code:<code> in the MandoMC Discord server. Codes expire in ten minutes and must stay private. A successful verified
       link pays 5,000 credits once per Minecraft account, after the Minecraft account has joined the server; repeat clicks,
@@ -268,8 +267,7 @@ knowledge:
       /players default to MandoMC and offer a development server option. Use /ticket, the existing ticket panel, or DM
       C0-M5 for support. Staff can claim and close tickets, with a transcript saved before closing. C0-M5 shows Online while
       the Minecraft server is running; Cloudflare commands can still work while the bot appears Offline.
-    answer: Join our Discord at https://discord.gg/bruuZCG5Pk, traveler. C0-M5, the silver protocol droid near me at Batuu
-      spawn, handles linking. Right-click C0-M5 or use /discord, then enter /link code:<code> in our Discord. Keep that ten-minute
+    answer: Join our Discord at https://discord.gg/bruuZCG5Pk, traveler. C0-M5, the silver protocol droid near me on Tatooine, handles linking. Right-click C0-M5 or use /discord, then enter /link code:<code> in our Discord. Keep that ten-minute
       code private. Linking awards 5,000 credits once after your Minecraft account has joined the server; repeating it does
       not pay again. C0-M5 sets your Discord server nickname to your Minecraft name. For support, use /ticket, the ticket
       panel or a DM to C0-M5.

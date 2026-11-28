@@ -4,6 +4,8 @@ import java.util.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.mandomc.bootstrap.MandoPlugin;
+import net.mandomc.gameplay.guide.DroidLook;
+import net.mandomc.gameplay.travel.SavedLocation;
 import org.bukkit.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
@@ -17,6 +19,7 @@ public final class DiscordLinkDroid implements Listener, AutoCloseable {
     private final MandoPlugin plugin;
     private final DiscordBridge bridge;
     private final YamlConfiguration config;
+    private final SavedLocation fixedAnchor;
     private final org.bukkit.scheduler.BukkitTask task;
     private Mannequin body;
     private TextDisplay title;
@@ -26,6 +29,11 @@ public final class DiscordLinkDroid implements Listener, AutoCloseable {
         this.plugin = plugin; this.bridge = bridge; this.config = config;
         if (config.getInt("schema-version") != 1 || config.getString("skin.texture", "").isBlank()
                 || config.getString("skin.signature", "").isBlank()) throw new IllegalArgumentException("C0-M5 requires a pinned signed skin");
+        var site = config.getConfigurationSection("anchor");
+        if (site == null && config.contains("anchor")) throw new IllegalArgumentException("C0-M5 anchor must be a location");
+        fixedAnchor = site == null ? null : new SavedLocation(site.getString("world", ""),
+                site.getDouble("x", Double.NaN), site.getDouble("y", Double.NaN), site.getDouble("z", Double.NaN),
+                (float) site.getDouble("yaw", Double.NaN), (float) site.getDouble("pitch", Double.NaN));
         Bukkit.getPluginManager().registerEvents(this, plugin);
         task = Bukkit.getScheduler().runTaskTimer(plugin, this::tick, 20, 10);
     }
@@ -51,14 +59,20 @@ public final class DiscordLinkDroid implements Listener, AutoCloseable {
                 && site.getWorld().getNearbyEntities(site, 2, 2, 2).stream().noneMatch(e -> e instanceof Mannequin))
                 .findFirst().orElse(null);
     }
+    private Location spawnLocation() {
+        if (fixedAnchor != null) {
+            if (Bukkit.getWorld(NamespacedKey.fromString(fixedAnchor.world())) == null) return null;
+            return fixedAnchor.resolve();
+        }
+        Location guide = plugin.droid() == null ? null : plugin.droid().location();
+        return guide == null ? null : placement(guide, config.getDouble("offset.x", 6), config.getDouble("offset.z", 0));
+    }
     private void tick() {
         if (body == null || !body.isValid() || title == null || !title.isValid()) {
             if (body != null) body.remove(); if (title != null) title.remove();
             if (anchor == null) {
-                Location guide = plugin.droid() == null ? null : plugin.droid().location();
-                if (guide == null) return;
-                anchor = placement(guide, config.getDouble("offset.x", 6), config.getDouble("offset.z", 0));
-                if (anchor == null) return; // Never carve terrain or spawn inside a building.
+                anchor = spawnLocation();
+                if (anchor == null) return;
                 ticket = anchor.getChunk(); ticket.addPluginChunkTicket(plugin);
             }
             body = plugin.territories().spawnNpc(EntityType.MANNEQUIN, anchor,
@@ -77,14 +91,9 @@ public final class DiscordLinkDroid implements Listener, AutoCloseable {
                 entity.setBillboard(Display.Billboard.CENTER); entity.setShadowed(true); entity.setPersistent(false);
                 entity.setInvulnerable(true); entity.setGravity(false); entity.setViewRange(.5f);
             });
-            plugin.getLogger().info("C0-M5 linking droid ready, safely spaced from M4-ND.");
+            plugin.getLogger().info("C0-M5 linking droid ready in " + anchor.getWorld().getKey() + ".");
         }
-        var nearest = body.getWorld().getPlayers().stream().filter(p -> !p.isDead() && p.getGameMode() != GameMode.SPECTATOR
-                && p.getLocation().distanceSquared(anchor) < 25).min(Comparator.comparingDouble(p -> p.getLocation().distanceSquared(anchor)));
-        nearest.ifPresent(player -> {
-            var look = anchor.clone().setDirection(player.getEyeLocation().toVector().subtract(body.getEyeLocation().toVector()));
-            body.setRotation(look.getYaw(), look.getPitch()); body.setBodyYaw(look.getYaw());
-        });
+        DroidLook.update(body, anchor);
     }
     @EventHandler(priority = EventPriority.HIGHEST) public void interact(PlayerInteractEntityEvent event) {
         if (body == null || !event.getRightClicked().getUniqueId().equals(body.getUniqueId())) return;

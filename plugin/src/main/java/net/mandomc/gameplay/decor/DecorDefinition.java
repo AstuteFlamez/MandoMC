@@ -31,6 +31,9 @@ public record DecorDefinition(String id,String name,String type,String model,dou
                 text(at,"world"),number(at,"x")-Math.sin(angle)*pixels/16,number(at,"y"),number(at,"z")+Math.cos(angle)*pixels/16,(float)number(at,"yaw"),(float)number(at,"pitch"),list(data,"animations"),list(data,"voices"),list(data,"dialogue"));
     }
     public boolean npc(){return !dialogue.isEmpty();}
+    public boolean tracksPlayers() {
+        return npc() && !"conversation".equals(mode);
+    }
     public Location location(){
         var target=Bukkit.getWorld(NamespacedKey.fromString(world));
         if(target==null)throw new IllegalStateException("Missing decorative world "+world);

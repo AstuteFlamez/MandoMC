@@ -29,8 +29,15 @@ public final class DiscordDroidProbe extends JavaPlugin {
             var first = mando.droid().location(); var linking = mando.discordDroid();
             check(first != null && linking != null && linking.location() != null, "Both real droids spawned");
             var second = linking.location();
-            check(first.getWorld().equals(second.getWorld()), "Same Batuu spawn world");
-            check(second.distanceSquared(first) >= 25 && second.distanceSquared(first) <= 100, "Holograms spaced five to ten blocks");
+            var cfg = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.File(mando.getDataFolder(), "decor/discord-droid.yml"));
+            if (cfg.isConfigurationSection("anchor")) {
+                check(second.getWorld().getKey().toString().equals(cfg.getString("anchor.world")), "Captured droid world");
+                var expected = new Location(second.getWorld(), cfg.getDouble("anchor.x"), cfg.getDouble("anchor.y"), cfg.getDouble("anchor.z"));
+                check(second.distanceSquared(expected) < 1e-10, "C0-M5 stands at its own captured anchor");
+            } else {
+                check(first.getWorld().equals(second.getWorld()), "Legacy offset uses M4-ND's world");
+                check(second.distanceSquared(first) >= 25 && second.distanceSquared(first) <= 100, "Legacy offset spacing");
+            }
             check(second.getBlock().isPassable() && second.clone().add(0,1,0).getBlock().isPassable(), "Clear head/body space");
             check(second.clone().subtract(0,.1,0).getBlock().getType().isSolid(), "Supported ground");
             var titles = first.getWorld().getNearbyEntities(first,1,3,1).stream().filter(e -> e instanceof TextDisplay).map(e -> (TextDisplay)e).toList();

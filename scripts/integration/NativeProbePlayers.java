@@ -26,13 +26,16 @@ public final class NativeProbePlayers implements AutoCloseable {
         serverPlayers=(List<Object>)list.getClass().getMethod("getPlayers").invoke(list);
     }
     public Player create(Location location)throws Exception{return create(location,UUID.randomUUID());}
-    public Player create(Location location,UUID playerId)throws Exception{
+    public Player createTracked(Location location)throws Exception{return create(location,UUID.randomUUID(),true);}
+    public Player create(Location location,UUID playerId)throws Exception{return create(location,playerId,false);}
+    private Player create(Location location,UUID playerId,boolean tracked)throws Exception{
         Class<?> serverClass=Class.forName("net.minecraft.server.MinecraftServer"),levelClass=Class.forName("net.minecraft.server.level.ServerLevel"),
                 profileClass=Class.forName("com.mojang.authlib.GameProfile"),infoClass=Class.forName("net.minecraft.server.level.ClientInformation"),playerClass=Class.forName("net.minecraft.server.level.ServerPlayer");
         Object server=Bukkit.getServer().getClass().getMethod("getServer").invoke(Bukkit.getServer()),level=location.getWorld().getClass().getMethod("getHandle").invoke(location.getWorld());
         Object profile=profileClass.getConstructor(UUID.class,String.class).newInstance(playerId,prefix+players.size());
         Object handle=playerClass.getConstructor(serverClass,levelClass,profileClass,infoClass).newInstance(server,level,profile,infoClass.getMethod("createDefault").invoke(null));
         Class.forName("net.minecraft.world.entity.Entity").getField("valid").setBoolean(handle,true);
+        if (tracked) playerClass.getMethod("moonrise$setRealPlayer", boolean.class).invoke(handle, true);
         Class<?> flow=Class.forName("net.minecraft.network.protocol.PacketFlow"),connectionType=Class.forName("net.minecraft.network.Connection");
         Object connection=connectionType.getConstructor(flow).newInstance(flow.getField("SERVERBOUND").get(null));
         var channel=new EmbeddedChannel();var channelField=connectionType.getDeclaredField("channel");channelField.setAccessible(true);channelField.set(connection,channel);
@@ -48,10 +51,17 @@ public final class NativeProbePlayers implements AutoCloseable {
         online.put(player.getUniqueId(),handle);names.put(player.getName().toLowerCase(Locale.ROOT),handle);serverPlayers.add(handle);level.getClass().getMethod("addNewPlayer",playerClass).invoke(level,handle);
         player.setGravity(false);player.setGameMode(GameMode.ADVENTURE);return player;
     }
+    public List<Object> drainPackets(Player player) {
+        var channel = channels.get(player.getUniqueId());
+        channel.runPendingTasks();
+        var packets = new ArrayList<>();
+        Object packet;
+        while ((packet = channel.readOutbound()) != null) packets.add(packet);
+        return packets;
+    }
     public List<Component> drain(Player player)throws Exception{
-        channels.get(player.getUniqueId()).runPendingTasks();
-        var out=new ArrayList<Component>();Object packet;
-        while((packet=channels.get(player.getUniqueId()).readOutbound())!=null){
+        var out=new ArrayList<Component>();
+        for (var packet : drainPackets(player)) {
             if(!packet.getClass().getName().equals("net.minecraft.network.protocol.game.ClientboundSystemChatPacket")){
                 otherPackets.computeIfAbsent(player.getUniqueId(),id->new ArrayList<>()).add(packet.getClass().getName());continue;
             }
@@ -68,7 +78,7 @@ public final class NativeProbePlayers implements AutoCloseable {
             player.closeInventory();Object handle=handles.get(player.getUniqueId());online.remove(player.getUniqueId());names.remove(player.getName().toLowerCase(Locale.ROOT));serverPlayers.remove(handle);
             for(var world:Bukkit.getWorlds()){Object level=world.getClass().getMethod("getHandle").invoke(world);((List<Object>)level.getClass().getMethod("players").invoke(level)).remove(handle);}
             handle.getClass().getMethod("discard").invoke(handle);
-            var channel=channels.get(player.getUniqueId());Object queued;
+            var channel=channels.get(player.getUniqueId());channel.runPendingTasks();channel.flush();Object queued;
             while((queued=channel.readOutbound())!=null)io.netty.util.ReferenceCountUtil.release(queued);
             if(channel.isOpen())channel.close();
         }catch(Exception error){throw new IllegalStateException("Native actor cleanup failed",error);}

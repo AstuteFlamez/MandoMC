@@ -25,6 +25,7 @@ public final class ProtocolDroid implements Listener,AutoCloseable {
     private final ScheduledExecutorService worker=Executors.newSingleThreadScheduledExecutor(r->{var t=new Thread(r,"MandoMC-guide");t.setDaemon(true);return t;});
     private final Map<UUID,Integer> promptTicks=new HashMap<>();
     private final Set<UUID> pending=new HashSet<>();private final Map<String,GroqBrain.Answer> cache=new ConcurrentHashMap<>();
+    private Location idleAnchor;
     private Mannequin droid;private TextDisplay title;private long nextRequest;private volatile boolean closed;private volatile boolean storageHealthy=true;
     private final org.bukkit.scheduler.BukkitTask ticker;
     public ProtocolDroid(MandoPlugin plugin,YamlConfiguration config) throws Exception{
@@ -130,10 +131,10 @@ public final class ProtocolDroid implements Listener,AutoCloseable {
                 e.setSilent(true);e.setPersistent(false);e.setRemoveWhenFarAway(false);e.setCollidable(false);e.setCanPickupItems(false);e.setCustomNameVisible(false);
             }));
             if(droid==null)return;
+            idleAnchor=site;
             if(title!=null)title.remove();title=at.getWorld().spawn(at.clone().add(0,2.25,0),TextDisplay.class,t->{t.setPersistent(false);t.setBillboard(Display.Billboard.CENTER);t.setViewRange(.5f);t.setShadowed(true);t.setDefaultBackground(false);t.setBackgroundColor(Color.fromARGB(0,0,0,0));t.text(text("name"));});
         }
-        var nearest=droid.getWorld().getPlayers().stream().filter(p->!p.isDead() && p.getGameMode()!=GameMode.SPECTATOR && p.getLocation().distanceSquared(droid.getLocation())<25).min(Comparator.comparingDouble(p->p.getLocation().distanceSquared(droid.getLocation())));
-        nearest.ifPresent(p->{var delta=p.getEyeLocation().toVector().subtract(droid.getEyeLocation().toVector());var look=droid.getLocation().setDirection(delta);droid.setRotation(look.getYaw(),look.getPitch());droid.setBodyYaw(look.getYaw());});
+        DroidLook.update(droid, idleAnchor);
     }
     @EventHandler(priority=EventPriority.HIGHEST) public void interact(PlayerInteractEntityEvent event){if(droid!=null && event.getRightClicked().getUniqueId().equals(droid.getUniqueId())){event.setCancelled(true);if(event.getHand()==EquipmentSlot.HAND)Bukkit.getScheduler().runTask(plugin,()->prompt(event.getPlayer()));}}
     @EventHandler(priority=EventPriority.HIGHEST) public void interactAt(PlayerInteractAtEntityEvent event){interact(event);}

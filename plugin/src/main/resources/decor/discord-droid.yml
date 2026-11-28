@@ -1,5 +1,12 @@
 schema-version: 1
 title: <#5865F2>C0-M5</#5865F2><newline><white>Link <#5865F2>Discord</#5865F2> · <gold>5,000 credits
+anchor:
+  world: minecraft:tatooine_review
+  x: -3.614769490424664
+  y: 71.0
+  z: 8.400103629444844
+  yaw: 23.667609
+  pitch: 0
 offset:
   x: 6.0
   z: 0.0

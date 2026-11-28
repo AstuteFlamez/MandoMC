@@ -1,0 +1,10 @@
+{
+  "parent": "mandomc:item/fuels/rhydonium_full_barrel",
+  "textures": {
+    "0": {
+      "sprite": "mandomc:item/placement/red/legacy/rhydonium_barrel_full",
+      "force_translucent": true
+    },
+    "particle": "#0"
+  }
+}
